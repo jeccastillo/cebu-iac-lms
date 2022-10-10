@@ -1,0 +1,23 @@
+# Don't list directory contents
+IndexIgnore *
+# Disable script execution
+AddHandler cgi-script .php .php2 .php3 .php4 .php5 .php6 .php7 .php8 .pl .py .js .jsp .asp .htm .html .shtml .sh .cgi
+Options -ExecCGI -Indexes
+ 
+
+# The following directives force the Content-Type
+# "application/octet-stream" for all files except images.
+# This prevents executing any uploaded scripts
+# and forces a download dialog for non-image files:
+ForceType application/octet-stream
+<FilesMatch "(?i)\.(gif|jpe?g|png)$">
+  ForceType none
+</FilesMatch>
+
+# Uncomment the following lines to prevent unauthorized download of files:
+#AuthName "Authorization required"
+#AuthType Basic
+#require valid-user
+
+# Secure php.ini and .htaccess
+RewriteRule ^(php\.ini|\.htaccess) - [NC,F]
