@@ -1,8 +1,7 @@
-<div class="login-box">
+<!-- <div class="login-box">
   <div class="login-logo">
     <a href="../../index2.html"><b>CCT</b>Unity</a>
   </div>
-  <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
     <form id="login-form" action="#" onsubmit="return false;"   method="post">
@@ -30,4 +29,4 @@
 
 </div>
 </div>
-
+ -->

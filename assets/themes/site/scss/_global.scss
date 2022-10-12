@@ -1,0 +1,296 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700;900&display=swap");
+/* The side navigation menu */
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 9999; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 120px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  flex-direction: column;
+}
+
+.sidenav li {
+  display: block;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.custom-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left 0.5s;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+
+.box {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  float: left;
+}
+
+.img-btn {
+  transition: all 1s ease;
+}
+
+.img-btn:hover {
+  -webkit-filter: brightness(80%);
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.horrizontal-nav {
+  transition: all 1s ease;
+}
+
+.shadowed {
+  background-color: #fff;
+  transition: background-color 0.5s ease;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+}
+
+.rotate {
+  transition: all 0.8s linear;
+}
+.rotate.start-rot {
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.img-bounce {
+  transform: translatey(0px);
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-30px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+.anchor-section {
+  &:before {
+    display: block;
+    content: " ";
+    margin-top: -80px;
+    height: 80px;
+    visibility: hidden;
+  }
+}
+
+.join-iac-bg {
+  background-image: url("../images/home/join-iacademy/bg.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img-slide-up-container .item {
+  position: relative;
+  overflow-y: hidden;
+  box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.1);
+  color: #fff;
+
+  h3 {
+    margin: 0;
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    line-height: 1;
+
+    span {
+      font-weight: lighter;
+      font-size: 15px;
+    }
+  }
+
+  a.anc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+
+    &:hover,
+    &:focus {
+      ~ .item__overlay {
+        transform: translate3d(0, 0, 0);
+        height: 55%;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+}
+
+.item__overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  transition: transform 500ms;
+  transform: translate3d(0, calc(100% - 4.5rem), 0);
+  background-color: #014fb38f;
+  padding: 1rem;
+  text-align: left;
+  font-weight: lighter;
+  font-size: 14px;
+}
+
+.item__body {
+  flex-grow: 1;
+
+  p {
+    margin: 0;
+  }
+}
+
+.hover-line:after,
+.hover-line:before {
+  display: block;
+  content: "";
+  border-bottom: solid 3px $primary;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+.hover-line:before {
+  position: absolute;
+  bottom: 1.2em;
+  left: 0;
+  width: 100%;
+}
+.ef2:hover:after {
+  transition-delay: 150ms;
+}
+
+.hover-line:hover:after,
+.hover-line:hover:before {
+  transform: scaleX(1);
+}
+
+.body-container {
+  background: #014fb3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 0;
+  z-index: 9998;
+  opacity: 0.4;
+  transition: 0.5s;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .bouncy-div {
+    img {
+      max-width: 18%;
+      transition: all 0.6s;
+    }
+  }
+}
+
+@media screen and (max-width: 1045px) {
+  a.anc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+
+    &:hover,
+    &:focus {
+      ~ .item__overlay {
+        transform: translate3d(0, 0, 0);
+        height: 85% !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .img-slide-up-container a.anc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+
+    &:hover,
+    &:focus {
+      ~ .item__overlay {
+        transform: translate3d(0, 0, 0);
+        height: 57% !important;
+      }
+    }
+  }
+}

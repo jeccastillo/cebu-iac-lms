@@ -38,7 +38,8 @@
 | asdsadsds
 */
 
-$route['default_controller'] = "unity";
+$route['default_controller'] = "site";
+// $route['default_controller'] = "unity";
 $route['404_override'] = '';
 $route['login'] = "users/login";
 

@@ -1,0 +1,64 @@
+.bg-primary {
+  background: $primary;
+}
+
+.bg-pink {
+  background-color: $pink;
+}
+
+.bg-shs {
+  background-color: $shs;
+}
+
+.bg-soc {
+  background-color: $soc;
+}
+
+.bg-sobla {
+  background-color: $sobla;
+}
+
+.bg-soda {
+  background-color: $soda;
+}
+
+.color-primary {
+  color: $primary;
+}
+
+.color-shs {
+  color: $shs;
+}
+
+.color-soc {
+  color: $soc;
+}
+
+.color-sobla {
+  color: $sobla;
+}
+.color-soda {
+  color: soda;
+}
+
+.btn {
+  color: #fff;
+  white-space: nowrap;
+  border-radius: 30px;
+  padding: 7px 17px;
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.animate__animated.animate__zoomIn {
+  --animate-duration: 0.3s;
+}
+
+.animate__animated.animate__slideInUp {
+  --animate-duration: 0.5s;
+}
+
+.animate__animated.animate__bounce {
+  --animate-duration: 3s;
+}
