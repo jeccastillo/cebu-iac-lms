@@ -1,6 +1,6 @@
-<!-- <div class="login-box">
+<div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>CCT</b>Unity</a>
+    <a href="../../index2.html"><b>iACADEMY</b>Cebu</a>
   </div>
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
@@ -15,6 +15,7 @@
 
                     <select class="form-control" id="login-type">
                         <option value="faculty">Faculty Login</option>
+                        <option value="student">Admissions</option>
                         <option value="student">Student Login</option>
                     </select>
 
@@ -29,6 +30,6 @@
 
 </div>
 </div>
- -->
+
 
  
