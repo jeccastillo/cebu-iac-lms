@@ -82,6 +82,3 @@
 
     </form>
 </div>
-
-</div>
-</div>

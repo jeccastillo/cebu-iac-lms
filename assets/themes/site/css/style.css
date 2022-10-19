@@ -202,6 +202,37 @@ body {
   opacity: 0.4;
   transition: 0.5s; }
 
+.btn {
+  background-image: linear-gradient(to right, #5e88d4 0%, #3969ce 100%);
+  border-radius: 40px;
+  box-sizing: border-box;
+  color: #fff;
+  display: block;
+  height: 60px;
+  letter-spacing: 1px;
+  margin: 0 auto;
+  padding: 4px;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  text-decoration: none;
+  z-index: 2;
+  margin-top: 0.5rem;
+  font-weight: normal;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3), 0px -1px 0px rgba(0, 0, 0, 0.7); }
+
+.btn:hover {
+  background-color: red; }
+
+.btn span {
+  align-items: center;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  transition: background 0.5s ease;
+  width: 100%; }
+
 @media screen and (max-height: 450px) {
   .sidenav {
     padding-top: 15px; }

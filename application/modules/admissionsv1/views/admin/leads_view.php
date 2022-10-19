@@ -1,12 +1,12 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Subject
+            Leads
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Subject</a></li>
-            <li class="active">View All Subjects</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Leads</a></li>
+            <li class="active">View All Leads</li>
         </ol>
     </section>
     <div class="content">
@@ -16,7 +16,7 @@
         </div>
         <div class="box box-solid box-danger">
             <div class="box-header">
-                <h3 class="box-title">Subjects</h3>
+                <h3 class="box-title">Leads</h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">

@@ -1,25 +1,10 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+class AdmissionsV1 extends CI_Controller {
 
-	
-class AdmissionsV2 extends CI_Controller {
-
-	
-    function __construct() {
-        parent::__construct();
-		/*--------------THEMES-----------------------*/
-		// $this->config->load('themes');
-		// $theme = $this->config->item('users');
-		// $theme = 'unity';
-			
-		// $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";
-		// $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
-		// $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";		
-		// $this->theme = $theme;
-		// $this->data['logged_in'] = $this->session->userdata('user_logged');
-
+	public function __construct()
+	{
+		parent::__construct();
 		$this->config->load('themes');		
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
@@ -62,25 +47,74 @@ class AdmissionsV2 extends CI_Controller {
         
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
         $this->data['page'] = "subjects";
-		
-
     }
-	
-	
-    public function index() {
+    
+    
+    public function view_all_leads()
+    {
+        if($this->faculty_logged_in())
+        {
+            $this->data['page'] = "view_leads";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/leads_view",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/subjects_conf",$this->data); 
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url());  
+    }
+    
+   
+    
+    public function faculty_logged_in()
+    {
+        if($this->session->userdata('faculty_logged'))
+            return true;
+        else
+            return false;
+    }
+    
+    
+    public function is_admin()
+    {
+         $admin = $this->session->userdata('intUserLevel');
+        if($admin == 1 || $this->is_super_admin())
+            return true;
+        else
+            return false;
+    }
+    
+    public function is_super_admin()
+    {
+         $admin = $this->session->userdata('intUserLevel');
+        if($admin == 2)
+            return true;
+        else
+            return false;
+    }
+    
+    public function is_registrar()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 3)
+            return true;
+        else
+            return false;
         
-        $this->load->view('common/header',$this->data);        
-		$this->load->view('studentApplication',$this->data);
-		$this->load->view('common/footer',$this->data);
     }
-
-	 public function lead_list() {
+    
+    public function is_admissions()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 5)
+            return true;
+        else
+            return false;
         
-        $this->load->view('common/header',$this->data);        
-		$this->load->view('leadList',$this->data);
-		$this->load->view('common/footer',$this->data);
     }
 
-   }
 
-?>
+}
