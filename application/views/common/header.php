@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/ionicons.min.css">
     <link href="<?php echo base_url(); ?>assets/lib/adminlte/css/iCheck/all.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/AdminLTE.min.css">
+    <link rel="icon" href="https://iacademy.edu.ph/assets/img/fav_new.png">
     <?php 
     switch($user['intUserLevel'] ){
         case 0:

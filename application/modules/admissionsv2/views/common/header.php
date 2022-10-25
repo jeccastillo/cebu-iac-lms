@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/bootstrap.min.css">    
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/AdminLTE.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/font-awesome.min.css">   
-
+<link rel="icon" href="https://iacademy.edu.ph/assets/img/fav_new.png">
 <link rel="stylesheet" href="<?php echo $css_dir; ?>style.css">
 <!-----END CSS------------------------------------------->
 <!--[if IE]>
