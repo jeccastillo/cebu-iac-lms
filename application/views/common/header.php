@@ -167,7 +167,8 @@
                 <li class="header">Main Menu</li>
 
                 <li class="<?php echo (isset($page) && $page=="dashboard")?'active':''; ?>"><a
-                        href="<?php echo base_url() ?>"><i class="fa fa-home text-green"></i> <span>Dashboard</span></a>
+                        href="<?php echo base_url() ?>unity/faculty_dashboard"><i class="fa fa-home text-green"></i>
+                        <span>Dashboard</span></a>
                 </li>
 
                 <li class="<?php echo (isset($page) && $page=="my_profile")?'active':''; ?>"><a
