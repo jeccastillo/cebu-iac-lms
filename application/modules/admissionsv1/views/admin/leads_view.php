@@ -1,22 +1,22 @@
-<div class="content-wrapper">
-    <section class="content-header">
+<div class="content-wrapper ">
+    <section class="content-header container ">
         <h1>
-            Leads
+            Student Applicants
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Leads</a></li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
             <li class="active">View All Leads</li>
         </ol>
     </section>
-    <div class="content">
+    <div class="content mcontainer container">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
         </div>
-        <div class="box box-solid box-danger">
+        <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Leads</h3>
+                <h3 class="box-title">Student Applicants</h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">

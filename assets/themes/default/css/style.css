@@ -1,103 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap");
+
 @font-face {
-    font-family: Ubuntu;
-    src: url(../fonts/Ubuntu-Regular.ttf);
-}
-@font-face {
-    font-family: Ubuntu;
-    src: url(../fonts/Ubuntu-Bold.ttf);
-    font-weight:700;
+  font-family: Ubuntu;
+  src: url(../fonts/Ubuntu-Regular.ttf);
 }
 @font-face {
-    font-family: Ubuntu;
-    src: url(../fonts/Ubuntu-Light.ttf);
-    font-weight:300;
+  font-family: Ubuntu;
+  src: url(../fonts/Ubuntu-Bold.ttf);
+  font-weight: 700;
+}
+@font-face {
+  font-family: Ubuntu;
+  src: url(../fonts/Ubuntu-Light.ttf);
+  font-weight: 300;
 }
 
-body
-{
-    background: #222d32;
-    font-family: "Ubuntu","sans-serif";
+body {
+  background: #222d32;
+  /* font-family: "Ubuntu","sans-serif"; */
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
 }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: "Ubuntu","sans-serif";
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+/* .h6 {
+  font-family: "Ubuntu", "sans-serif";
 }
-.main-header .logo
-{
-    font-family: "Ubuntu","sans-serif";
+.main-header .logo {
+  font-family: "Ubuntu", "sans-serif";
+} */
+
+div.dataTables_filter input {
+  border-radius: 5px;
+}
+.main-header > .navbar > .sidebar-toggle {
+  z-index: 9999;
+  position: relative;
+}
+input.app {
+  margin-bottom: 1em;
+  border: 0;
+  border-bottom: 1px dashed #999;
+  width: 90%;
 }
 
-div.dataTables_filter input
-{
-    border-radius: 5px;
+.has-error {
+  border-color: #900 !important;
 }
-.main-header > .navbar > .sidebar-toggle
-{
-    z-index: 9999;
-    position: relative;
-}
-input.app
-{
-    margin-bottom: 1em;
-    border: 0;
-    border-bottom: 1px dashed #999;
-    width: 90%;
+.text-error {
+  color: #900;
+  float: right;
+  margin-left: 12px;
+  height: 10px;
+  font-size: 0.8em;
 }
 
-.has-error
-{
-    border-color:#900 !important;
+.box-header {
+  padding-bottom: 1em;
+  border-bottom: 1px solid #f2f2f2;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
 }
-.text-error
-{
-    color:#900;
-    float: right;
-    margin-left: 12px;
-    height:10px;
-    font-size:.8em;
-}
-
-.box-header
-{
-    padding-bottom: 1em;
-    border-bottom: 1px solid #f2f2f2;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-.gen-instructions
-{
-    text-align: left;
-    text-transform: none;
-    font-weight: normal;
-    
+.gen-instructions {
+  text-align: left;
+  text-transform: none;
+  font-weight: normal;
 }
 
-
-.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
-    color: #ccc;
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover {
+  color: #ccc;
 }
 
 .bordered-info > div > div {
-    border:1px solid #d2d2d2;
-    border-bottom:0;
-    padding:4px;
-    color:#3a3a3a;
-    
+  border: 1px solid #d2d2d2;
+  border-bottom: 0;
+  padding: 4px;
+  color: #3a3a3a;
 }
 
-.bordered-info > div > div:first-child{
-    border-right:0;
+.bordered-info > div > div:first-child {
+  border-right: 0;
 }
 
-.bordered-info > div:last-child{
-    border-bottom:1px solid #d2d2d2;
+.bordered-info > div:last-child {
+  border-bottom: 1px solid #d2d2d2;
 }
 
 .admission-info {
-    color: red;
+  color: red;
 }
 .main-title {
-    text-align: center;
-    
+  text-align: center;
 }
