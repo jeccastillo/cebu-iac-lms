@@ -80,6 +80,12 @@ class AdmissionsV2 extends CI_Controller {
 		$this->load->view('leadList',$this->data);
 		$this->load->view('common/footer',$this->data);
     }
+    public function calendar() {
+        
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('calendar',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
 
    }
 

@@ -183,13 +183,13 @@
 
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
                     <a href="#">
-                        <i class="ion ion-email"></i> <span>Leads</span>
+                        <i class="ion ion-email"></i> <span>Student Applicants</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>admissionsv1/view_all_leads"
-                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Leads</a></li>
+                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
                     </ul>
 
                 </li>
