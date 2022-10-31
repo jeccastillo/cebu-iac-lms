@@ -10,7 +10,7 @@
                             'Submit Details',
                             'form',
                             request,
-                            'admissions/student-informations/end'
+                            'admissions/student-info'
                         )
                     " method="post">
         <div class="col-md-6">
@@ -21,7 +21,8 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail2">Re-type Email</label>
-                    <input type="email"  v-model="request.email_confirmation" class="form-control" id="exampleInputEmail2" required>
+                    <input type="email" v-model="request.email_confirmation" class="form-control"
+                        id="exampleInputEmail2" required>
                     <small>( You won't receive our Admissions Letter if this is incorrect )</small>
                 </div>
                 <div class="form-group">
@@ -34,7 +35,7 @@
                 </div>
                 <div class="form-group">
                     <label>Last Name</label>
-                    <input type="text" v-model="request.last_name"  class="form-control" required>
+                    <input type="text" v-model="request.last_name" class="form-control" required>
                 </div>
 
             </div>
@@ -45,62 +46,40 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Mobile Number</label>
-                    <input type="number" v-model="request.number"  class="form-control" id="" required>
+                    <input type="number" v-model="request.number" class="form-control" id="" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Telephone Number</label>
-                    <input type="number" v-model="request.telephone_number"  class="form-control" id="">
+                    <input type="number" v-model="request.telephone_number" class="form-control" id="">
                     <span>&nbsp</span>
                 </div>
                 <div class="form-group">
                     <label>Address</label>
-                    <input type="text" class="form-control" id="" v-model="request.address" >
+                    <input type="text" class="form-control" id="" v-model="request.address">
                 </div>
                 <div class="form-group">
                     <label>Birthday</label>
-                    <input type="date" class="form-control" required v-model="request.birtdate" >
+                    <input type="date" class="form-control" required v-model="request.birtdate">
                 </div>
                 <div class="form-group">
                     <label>Previous School</label>
-                    <input type="text" class="form-control" required v-model="request.previous_school" >
+                    <input type="text" class="form-control" required v-model="request.previous_school">
                 </div>
                 <div class="form-group" v-if="types && programs">
-                    <label for=""
-                        >Applying for <span class="text-danger">*</span>
+                    <label for="">Applying for <span class="text-danger">*</span>
                     </label>
-                    <div
-                        class="d-flex align-items-center font-14"
-                        v-for="t in types"
-                        :key="t.id"
-                    >
-                        <input
-                            type="checkbox"
-                            class="mr-2 admissions_submission_cb"
-                            @click="filterProgram(t.type)"
-                            name=""
-                            :value="t.id"
-                            required
-                        />
+                    <div class="d-flex align-items-center font-14" v-for="t in types" :key="t.id">
+                        <input type="checkbox" class="mr-2 admissions_submission_cb" @click="filterProgram(t.type)"
+                            name="" :value="t.id" required />
                         {{ t.title }}
                     </div>
                 </div>
                 <div class="form-group" v-if="request.type_id">
-                    <label for=""
-                        >Desired Program
+                    <label for="">Desired Program
                         <span class="text-danger">*</span>
                     </label>
-                    <div
-                        class="d-flex align-items-center font-14"
-                        v-for="t in programs_group"
-                        :key="t.id"
-                    >
-                        <input
-                            type="checkbox"
-                            class="mr-2 admissions_submission_pg"
-                            name=""
-                            :value="t.id"
-                            required
-                        />
+                    <div class="d-flex align-items-center font-14" v-for="t in programs_group" :key="t.id">
+                        <input type="checkbox" class="mr-2 admissions_submission_pg" name="" :value="t.id" required />
                         {{ t.title }}
                     </div>
                 </div>
@@ -119,52 +98,59 @@
 </div>
 
 <style>
-    .swal2-popup {
-  font-size: 1.6rem !important;
+.swal2-popup {
+    font-size: 1.6rem !important;
 }
 </style>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css" integrity="sha512-5aabpGaXyIfdaHgByM7ZCtgSoqg51OAt8XWR2FHr/wZpTCea7ByokXbMX2WSvosioKvCfAGDQLlGDzuU6Nm37Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css"
+    integrity="sha512-5aabpGaXyIfdaHgByM7ZCtgSoqg51OAt8XWR2FHr/wZpTCea7ByokXbMX2WSvosioKvCfAGDQLlGDzuU6Nm37Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 <!-- <script type="text/javascript" type="module" src="<?php echo base_url(); ?>assets/themes/default/js/mixins.js"></script> -->
 
-<script >
-  
+<script>
 new Vue({
     el: "#adminssions-form",
     data: {
-    request: {
+        request: {
             type_id: "",
             date_of_birth: ""
         },
-     programs:[],
-     programs_group: [],
-     types:[]
+        programs: [],
+        programs_group: [],
+        types: []
     },
     mounted() {
 
         axios
-        .get( api_url + 'admissions/student-informations/programs' , {
-          headers: { Authorization: `Bearer ${window.token}` },
-        })
+            .get(api_url + 'admissions/student-info/programs', {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                },
+            })
 
-        .then((data) => {
-          this.programs =  data.data.data;
-        })
-        .catch((e) => {
-          console.log("error");
-        });
+            .then((data) => {
+                this.programs = data.data.data;
+            })
+            .catch((e) => {
+                console.log("error");
+            });
 
         axios
-        .get( api_url + 'admissions/student-informations/types' , {
-          headers: { Authorization: `Bearer ${window.token}` },
-        })
-        .then((data) => {
-          this.types =  data.data.data;
+            .get(api_url + 'admissions/student-informations/types', {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                },
+            })
+            .then((data) => {
+                this.types = data.data.data;
                 setTimeout(() => {
                     $(".admissions_submission_cb").on("click", e => {
                         $(".admissions_submission_cb")
@@ -183,17 +169,17 @@ new Vue({
                         }
                     });
                 }, 500);
-        })
-        .catch((e) => {
-          console.log("error");
-        });
-        
+            })
+            .catch((e) => {
+                console.log("error");
+            });
+
     },
 
     methods: {
-        submitForm : function () {
-             alert(1);
-             console.log(this.request);
+        submitForm: function() {
+            alert(1);
+            console.log(this.request);
         },
 
         filterProgram: function(type) {
@@ -221,46 +207,47 @@ new Vue({
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
-        Swal.fire({
-            title: title,
-            text:
-                "Are you sure you want to " + type + " this " + text + "?",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            imageWidth: 100,
-            icon:"question",
-            cancelButtonText: "No, cancel!",
-            showCloseButton: true,
-            showLoaderOnConfirm: true
-        }).then(result => {
-            if (result.value) {
-                this.is_done = false;
-                $(".modal").modal("hide");
+            Swal.fire({
+                title: title,
+                text: "Are you sure you want to " + type + " this " + text + "?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true
+            }).then(result => {
+                if (result.value) {
+                    this.is_done = false;
+                    $(".modal").modal("hide");
 
-                axios
-                    .post(api_url + url, data, {
-                        headers: { Authorization: `Bearer ${window.token}` }
-                    })
-                    .then(data => {
-                        this.is_done = true;
-
-                        if (data.data.success) {
-                            // this.successMessageApi(data.data.message);
-
-                            if (redirect) {
-                                window.location.href = "#/" + redirect;
-                            } else {
-                                location.reload();
+                    axios
+                        .post(api_url + url, data, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
                             }
-                        } else {
-                            this.failedMessageApi(data.data.message);
-                        }
-                    });
-            } else {
-                this.noChangesApi();
-            }
-        });
-    },
+                        })
+                        .then(data => {
+                            this.is_done = true;
+
+                            if (data.data.success) {
+                                // this.successMessageApi(data.data.message);
+
+                                if (redirect) {
+                                    window.location.href = "#/" + redirect;
+                                } else {
+                                    location.reload();
+                                }
+                            } else {
+                                this.failedMessageApi(data.data.message);
+                            }
+                        });
+                } else {
+                    this.noChangesApi();
+                }
+            });
+        },
     },
 });
 </script>
