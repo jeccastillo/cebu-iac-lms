@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>CCTUnity</title>
+    <title>iACADEMY-Cebu</title>
     <!-----CSS----------------------------------------------->
     <link rel="stylesheet"
         href="<?php echo base_url(); ?>assets/lib/adminlte/css/jQueryUI/jquery-ui-1.10.3.custom.min.css">
