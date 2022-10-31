@@ -194,6 +194,22 @@
 
                 </li>
 
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa-book fa"></i> <span>Subjects</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="add_subject")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>subject/add_subject" style="margin-left: 10px;"><i
+                                    class="ion ion-ios-plus-empty"></i> Add a subject</a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_subjects")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>subject/view_all_subjects" style="margin-left: 10px;"><i
+                                    class="fa fa-book"></i> View Subjects</a></li>
+
+                    </ul>
+                </li>
+
 
             </ul>
         </section>

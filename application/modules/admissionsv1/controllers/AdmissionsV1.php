@@ -66,6 +66,19 @@ class AdmissionsV1 extends CI_Controller {
         else
             redirect(base_url());  
     }
+
+
+    public function view_lead($id) {
+        if($this->faculty_logged_in())
+            {
+               
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_lead",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/subjects_conf",$this->data); 
+        }
+    }
     
    
     
