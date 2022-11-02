@@ -30,6 +30,13 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	   public function student_application() {
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('student_application',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
+
    }
 
 ?>
