@@ -48,6 +48,12 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function article_details() {
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('article_details',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
 
    }
 

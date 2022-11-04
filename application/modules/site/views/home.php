@@ -44,7 +44,7 @@
                                 <h1 class="text-5xl font-[900] text-center color-primary">
                                     iACADEMY Cebu
                                 </h1>
-                                <a href="" class="w-full">
+                                <a href="#se-section" class="w-full">
                                     <img src="<?php echo $img_dir; ?>cebu/home/ btn-arrow copy.png"
                                         class="img-btn block mx-auto mt-5" />
                                 </a>
@@ -57,7 +57,7 @@
         </section>
 
         <!--se start -->
-        <section class="bg-gray-50">
+        <section class="bg-gray-50 anchor-section" id="se-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px]">
@@ -74,10 +74,24 @@
                 <div class="lg:w-2/4 relative w-full">
                     <div class="owl-carousel-inner owl-carousel relative z-2 owl-se">
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/se/1.png" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/se/2.png" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/se/3.png" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/se/4.png" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/se/5.png" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                     </div>
                 </div>
@@ -103,10 +117,24 @@
                 <div class="lg:w-2/4 relative w-full">
                     <div class="owl-carousel-inner owl-carousel relative z-2 owl-gd">
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/gd/1.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/gd/2.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/gd/3.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/gd/4.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/gd/5.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                     </div>
                 </div>
@@ -129,10 +157,24 @@
                 <div class="lg:w-2/4 relative w-full">
                     <div class="owl-carousel-inner owl-carousel relative z-2 owl-ani">
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/ani/1.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/ani/2.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/ani/3.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/ani/4.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/ani/5.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                     </div>
                 </div>
@@ -158,10 +200,28 @@
                 <div class="lg:w-2/4 relative w-full">
                     <div class="owl-carousel-inner owl-carousel relative z-2 owl-mma">
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/mma/1.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                         <div class="inner-carousel-item md:flex items-center">
-                            <img src="https://dummyimage.com/300/ccc/fff" class="mx-auto block" alt="" title="" />
+                            <img src="<?php echo $img_dir; ?>home/course/mma/2.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/3.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/4.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/5.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/6.jpg" class="mx-auto block" alt=""
+                                title="" />
                         </div>
                     </div>
                 </div>
