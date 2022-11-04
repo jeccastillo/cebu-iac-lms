@@ -249,7 +249,7 @@
                 </div>
 
                 <div class="flex items-center my-6">
-                    <a href="" class="block mx-auto">
+                    <a href="<?php echo base_url(); ?>site/student_application" class="block mx-auto">
                         <img src="<?php echo $img_dir; ?>cebu/home/ btn-ApplyNow.png" class="img-btn" alt="">
                     </a>
                 </div>
