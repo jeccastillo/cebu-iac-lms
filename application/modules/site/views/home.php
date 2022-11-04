@@ -66,8 +66,9 @@
                             Sofware <br />
                             Engineering
                         </h1>
-                        <a href="" class="btn img-btn mt-4">
-                            <span>View Curriculum</span>
+                        <a href="<?php echo base_url(); ?>site/articles?type=Sofware Engineering"
+                            class=" btn img-btn mt-4">
+                            <span>View Articles</span>
                         </a>
                     </div>
                 </div>
@@ -109,8 +110,9 @@
                             Game <br />
                             Development?
                         </h1>
-                        <a href="" class="btn img-btn mt-4">
-                            <span>View Curriculum</span>
+                        <a href="<?php echo base_url(); ?>site/articles?type=Game Development"
+                            class=" btn img-btn mt-4">
+                            <span>View Articles</span>
                         </a>
                     </div>
                 </div>
@@ -149,8 +151,8 @@
                     <div class="py-[100px]">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">Animation</h1>
-                        <a href="" class="btn img-btn mt-4">
-                            <span>View Curriculum</span>
+                        <a href="<?php echo base_url(); ?>site/articles?type=Animation" class=" btn img-btn mt-4">
+                            <span>View Articles</span>
                         </a>
                     </div>
                 </div>
@@ -192,8 +194,9 @@
                             Multimedia <br />
                             Arts & Design
                         </h1>
-                        <a href="" class="btn img-btn mt-4">
-                            <span>View Curriculum</span>
+                        <a href="<?php echo base_url(); ?>site/articles?type=Multimedia Arts & Design"
+                            class=" btn img-btn mt-4">
+                            <span>View Articles</span>
                         </a>
                     </div>
                 </div>

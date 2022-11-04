@@ -18,10 +18,10 @@
                 <hr class="w-100 h-[4px] bg-blue-700 my-5">
 
                 <img v-if="news.type == 'blog'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
-                    :src="news.header_image" alt="" class="mb-2 img-fluid mx-auto d-block">
+                    :src="news.header_image" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
                 <div class="d-block mx-auto logo_single_page_ mb-2 mt-2">
                     <img v-if="news.type == 'external'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
-                        :src="news.logo" alt="" class="mb-2 img-fluid mx-auto d-block">
+                        :src="news.logo" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
                 </div>
                 <div class="news__content__text mt-12" id="news__content__text" v-html="news.content"></div>
 
@@ -43,6 +43,8 @@
                 </div>
             </div>
         </div>
+
+        <hr class="w-100 h-[4px] bg-blue-700 my-5">
 
         <div class="text-right news__details_back mt-5 col-lg-12" v-if="!loader_spinner">
             <a v-if="news.type == 'internal'" href="<?php echo base_url(); ?>homev4/latest_news"
