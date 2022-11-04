@@ -14,9 +14,8 @@
                 <div class="lg:w-1/3 p-3 md:w-1/2 w-full" v-for="article in all_news">
                     <div class="h-full bg-white rounded-lg border border-gray-200 shadow-md ">
                         <div
-                            class="h-[220px] w-full   block mx-auto flex items-center bg-no-repeat bg-center bg-cover bg-[url('https://i.ibb.co/b7kG8JF/bg-art.jpg')]">
-                            <img class="rounded-t-lg max-w-full h-auto h-[170px] mx-auto block" :src="article.image_url"
-                                alt="" />
+                            class="h-[220px] w-full rounded-t-lg   block mx-auto flex items-center bg-no-repeat bg-center bg-cover bg-[url('https://i.ibb.co/b7kG8JF/bg-art.jpg')]">
+                            <img class=" max-w-full h-auto h-[170px] mx-auto block" :src="article.image_url" alt="" />
                         </div>
                         <hr>
                         <div class="p-5">
