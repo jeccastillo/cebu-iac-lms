@@ -75,6 +75,10 @@ img {
 .news__content__text * {
     font-family: 'Poppins' !important;
 }
+
+p {
+    margin-bottom: 1rem;
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
