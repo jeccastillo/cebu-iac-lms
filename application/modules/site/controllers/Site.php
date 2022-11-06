@@ -60,6 +60,12 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function applicant_calendar() {
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('student_applicants/calendar',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
 
    }
 
