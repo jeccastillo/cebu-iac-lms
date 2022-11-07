@@ -26,8 +26,7 @@
             </li>
 
             <li>
-                <a class="hover-line inline-block" target="_blank"
-                    href="http://localhost:3310/iacademynew/homev4/about">About
+                <a class="hover-line inline-block" target="_blank" href="https://iacademy.edu.ph/homev4/about">About
                     iACADEMY</a>
             </li>
         </ul>
