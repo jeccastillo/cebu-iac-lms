@@ -53,5 +53,7 @@
         <a href="<?php echo base_url(); ?>site/student_application">
             <img src="<?php echo $img_dir; ?>btn-apply.png" class="w-[170px] img-btn" alt="" />
         </a>
-        <img src="<?php echo $img_dir; ?> logo.png" class="h-[50px] hidden md:block" alt="" />
+        <a href="<?php echo base_url(); ?>"> <img src=" <?php echo $img_dir; ?> logo.png"
+                class="h-[50px] hidden md:block" alt="" /></a>
+
     </div>
