@@ -108,6 +108,7 @@ new Vue({
     el: "#admissions-form",
     data: {
         date_selected: "",
+        time_scheduled: [],
         date_selected_formatted: "",
         request: {
             from: "",
@@ -132,9 +133,23 @@ new Vue({
         },
 
         logEvents: function(event, data) {
-            console.log(event, data);
+            // console.log(event, data);
             this.date_selected = moment(data).format("MMMM DD, YYYY");
             this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
+
+            axios
+                .get(api_url + 'admissions/calendar-schedule/' + this.date_selected_formatted, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    },
+                })
+
+                .then((data) => {
+                    this.time_scheduled = data.data.data;
+                })
+                .catch((e) => {
+                    console.log("error");
+                });
 
 
             toggleModal()
