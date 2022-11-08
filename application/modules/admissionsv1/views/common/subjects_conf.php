@@ -13,9 +13,8 @@ $(document).ready(function() {
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsv1/view_lead/' +
-                        row[0] + '">Edit</a></li><li><a href="#" rel="' + row[0] +
-                        '" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>subject/subject_viewer/' +
-                        row[0] + '">View</a></li></ul></div>';
+                        row[0] +
+                        '">View Details</a></li></ul></div>';
                 }
             },
             {
@@ -48,7 +47,7 @@ $(document).ready(function() {
                             if (ret.message == "failed") {
                                 $("#alert-text").html('<b>Alert! ' + code +
                                     '</b> cannot be deleted it is connected to classlist.'
-                                    )
+                                )
                                 $(".alert").show();
                                 setTimeout(function() {
                                     $(".alert").hide('fade', {}, 500)

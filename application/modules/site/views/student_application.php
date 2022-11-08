@@ -69,7 +69,7 @@
                            </label>
                            <input
                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="text" required v-model="request.email">
+                               type="email" required v-model="request.email">
                        </div>
                    </div>
 
@@ -80,7 +80,7 @@
                            </label>
                            <input
                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="text" required v-model="request.email_confirmation">
+                               type="email" required v-model="request.email_confirmation">
                        </div>
                    </div>
 
@@ -325,7 +325,7 @@ new Vue({
             });
 
         axios
-            .get(api_url + 'admissions/student-informations/types', {
+            .get(api_url + 'admissions/student-info/types', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -359,7 +359,6 @@ new Vue({
 
     methods: {
         submitForm: function() {
-            alert(1);
             console.log(this.request);
         },
 
@@ -388,6 +387,45 @@ new Vue({
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
+            // Swal.fire({
+            //     title: title,
+            //     text: "Are you sure you want to " + type + " this " + text + "?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true
+            // }).then(result => {
+            //     if (result.value) {
+            //         this.is_done = false;
+            //         axios
+            //             .post(api_url + url, data, {
+            //                 headers: {
+            //                     Authorization: `Bearer ${window.token}`
+            //                 }
+            //             })
+            //             .then(data => {
+            //                 this.is_done = true;
+
+            //                 if (data.data.success) {
+            //                     // this.successMessageApi(data.data.message);
+
+            //                     if (redirect) {
+            //                         window.location.href = "#/" + redirect;
+            //                     } else {
+            //                         location.reload();
+            //                     }
+            //                 } else {
+            //                     this.failedMessageApi(data.data.message);
+            //                 }
+            //             });
+            //     } else {
+            //         this.noChangesApi();
+            //     }
+            // });
+
             Swal.fire({
                 title: title,
                 text: "Are you sure you want to " + type + " this " + text + "?",
@@ -397,13 +435,9 @@ new Vue({
                 icon: "question",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
-                showLoaderOnConfirm: true
-            }).then(result => {
-                if (result.value) {
-                    this.is_done = false;
-                    $(".modal").modal("hide");
-
-                    axios
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios
                         .post(api_url + url, data, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
@@ -421,13 +455,33 @@ new Vue({
                                     location.reload();
                                 }
                             } else {
-                                this.failedMessageApi(data.data.message);
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
                             }
                         });
-                } else {
-                    this.noChangesApi();
-                }
-            });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                // if (result.isConfirmed) {
+                //     Swal.fire({
+                //         icon: result?.value.data.success ? "success" : "error",
+                //         html: result?.value.data.message,
+                //         allowOutsideClick: false,
+                //     }).then(() => {
+                //         if (reload && result?.value.data.success) {
+                //             if (reload == "reload") {
+                //                 location.reload();
+                //             } else {
+                //                 window.location.href = reload;
+                //             }
+                //         }
+                //     });
+                // }
+            })
+
         },
     },
 });
