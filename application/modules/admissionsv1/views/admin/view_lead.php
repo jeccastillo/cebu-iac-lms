@@ -10,7 +10,7 @@
         </ol>
     </section>
     <div class="content  container">
-        <form action="">
+        <form action="" @submit.prevent="updateStatus">
             <div class="box ">
                 <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
                     <h3 class="box-title text-left">Juan Dela Cruz - Details </h3>
@@ -106,7 +106,7 @@
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>
                         <div class="row">
                             <div class="text-muted mt-1 col-sm-5">
-                                <select name="" class="form-control" required id="">
+                                <select name="" class="form-control" required id="select-update-status">
                                     <option value="" disabled selected>--select--</option>
                                     <option value="new">New</option>
                                     <option value="for_interview">For Interview</option>
@@ -362,10 +362,66 @@ new Vue({
                 console.log(error);
             })
 
+
     },
 
     methods: {
 
+        updateStatus: function() {
+
+
+            Swal.fire({
+                title: 'Update Details',
+                text: "Are you sure you want to update?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+
+                    return axios
+                        .post(api_url + 'admissions/student-info/' + this.slug, {
+                            status: $("#select-update-status").val()
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            if (data.data.success) {
+                                // this.successMessageApi(data.data.message);
+                                location.reload();
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                // if (result.isConfirmed) {
+                //     Swal.fire({
+                //         icon: result?.value.data.success ? "success" : "error",
+                //         html: result?.value.data.message,
+                //         allowOutsideClick: false,
+                //     }).then(() => {
+                //         if (reload && result?.value.data.success) {
+                //             if (reload == "reload") {
+                //                 location.reload();
+                //             } else {
+                //                 window.location.href = reload;
+                //             }
+                //         }
+                //     });
+                // }
+            })
+        }
 
 
     }

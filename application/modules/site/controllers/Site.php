@@ -66,6 +66,12 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function admissions_student_payment() {
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('student_applicants/payment',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
 
    }
 
