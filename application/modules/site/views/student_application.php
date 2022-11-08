@@ -163,20 +163,20 @@
                        </div>
                    </div>
 
-                   <div class="mb-6" hidden>
+                   <div class="mb-6">
                        <div class="md:w-4/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
                            <div class="d-flex align-items-center" v-for="t in types" :key="t.id">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb"
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
                                    @click="filterProgram(t.type)" name="" :value="t.id" required />
-                               {{ t.title }}
+                               <label :for="'progId-' + t.id"> {{ t.title }}</label>
                            </div>
                        </div>
                    </div>
 
-                   <div class="mb-6">
+                   <!-- <div class="mb-6 hidden">
                        <div class="md:w-4/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
@@ -202,7 +202,7 @@
                                Multimedia Arts and Design
                            </div>
                        </div>
-                   </div>
+                   </div> -->
 
                    <div class="mb-6">
                        <div class="md:w-4/5">
@@ -406,44 +406,7 @@ new Vue({
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
-            // Swal.fire({
-            //     title: title,
-            //     text: "Are you sure you want to " + type + " this " + text + "?",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Yes",
-            //     imageWidth: 100,
-            //     icon: "question",
-            //     cancelButtonText: "No, cancel!",
-            //     showCloseButton: true,
-            //     showLoaderOnConfirm: true
-            // }).then(result => {
-            //     if (result.value) {
-            //         this.is_done = false;
-            //         axios
-            //             .post(api_url + url, data, {
-            //                 headers: {
-            //                     Authorization: `Bearer ${window.token}`
-            //                 }
-            //             })
-            //             .then(data => {
-            //                 this.is_done = true;
 
-            //                 if (data.data.success) {
-            //                     // this.successMessageApi(data.data.message);
-
-            //                     if (redirect) {
-            //                         window.location.href = "#/" + redirect;
-            //                     } else {
-            //                         location.reload();
-            //                     }
-            //                 } else {
-            //                     this.failedMessageApi(data.data.message);
-            //                 }
-            //             });
-            //     } else {
-            //         this.noChangesApi();
-            //     }
-            // });
 
             Swal.fire({
                 title: title,
@@ -466,13 +429,15 @@ new Vue({
                             this.is_done = true;
 
                             if (data.data.success) {
-                                // this.successMessageApi(data.data.message);
 
-                                if (redirect) {
-                                    window.location.href = "#/" + redirect;
-                                } else {
-                                    location.reload();
-                                }
+                                Swal.fire({
+                                    title: "SUCCESS",
+                                    text: data.data.message,
+                                    type: "success"
+                                }).then(function() {
+                                    window.location = "/";
+                                });
+
                             } else {
                                 Swal.fire(
                                     'Failed!',
@@ -484,21 +449,9 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
-                // if (result.isConfirmed) {
-                //     Swal.fire({
-                //         icon: result?.value.data.success ? "success" : "error",
-                //         html: result?.value.data.message,
-                //         allowOutsideClick: false,
-                //     }).then(() => {
-                //         if (reload && result?.value.data.success) {
-                //             if (reload == "reload") {
-                //                 location.reload();
-                //             } else {
-                //                 window.location.href = reload;
-                //             }
-                //         }
-                //     });
-                // }
+                if (result.isConfirmed) {
+                    //    
+                }
             })
 
         },

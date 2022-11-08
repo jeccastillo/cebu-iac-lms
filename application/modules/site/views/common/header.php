@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="<?php echo base_url() ?>assets/themes/site/images/fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css"
         integrity="sha512-5aabpGaXyIfdaHgByM7ZCtgSoqg51OAt8XWR2FHr/wZpTCea7ByokXbMX2WSvosioKvCfAGDQLlGDzuU6Nm37Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />s
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

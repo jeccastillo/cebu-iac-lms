@@ -108,7 +108,7 @@
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">
                             Game <br />
-                            Development?
+                            Development
                         </h1>
                         <a href="<?php echo base_url(); ?>site/articles?type=Game Development"
                             class=" btn img-btn mt-4">
