@@ -36,7 +36,7 @@
                                <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                    class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3">
+                               <div class="w-[200px] my-3 block mx-auto">
                                    <input ref="file_id"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
@@ -48,7 +48,7 @@
                                <img src="<?php echo $img_dir; ?>admissions/form/nso.png"
                                    class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3">
+                               <div class="w-[200px] my-3 block mx-auto">
                                    <input ref="file_nso"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
@@ -61,7 +61,7 @@
                                <img src="<?php echo $img_dir; ?>admissions/form/2x2.png"
                                    class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3">
+                               <div class="w-[200px] my-3 block mx-auto">
                                    <input ref="file_2x2"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
@@ -72,7 +72,7 @@
                </div>
 
 
-               <div class="text-center">
+               <div class="text-center" v-if="slug">
                    <button type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
                            class="max-w-full h-auto mx-auto block img-btn"></button>
                </div>
@@ -144,7 +144,9 @@ new Vue({
                                     text: data.data.message,
                                     type: "success"
                                 }).then(function() {
-                                    window.location = "/awesome";
+                                    window.location =
+                                        "<?php echo base_url();?>site/admissions_student_payment/" +
+                                        this.slug;
                                 });
 
                             } else {
@@ -153,8 +155,9 @@ new Vue({
                                     data.data.message,
                                     'error'
                                 )
-                                // window.location = "<?php echo base_url();?>site/awesome/" +
-                                //     this.slug;
+                                window.location =
+                                    "<?php echo base_url();?>site/admissions_student_payment/" +
+                                    this.slug;
                             }
                         });
                 },

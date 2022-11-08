@@ -1,6 +1,17 @@
+<link href="https://unpkg.com/vue-cal@legacy/dist/vuecal.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/vue2-datepicker/index.css">
+
 <script src="https://unpkg.com/vue@legacy"></script>
 <script src="https://unpkg.com/vue-cal@legacy"></script>
-<link href="https://unpkg.com/vue-cal@legacy/dist/vuecal.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@1.9.7/dist/build.min.js"></script> -->
+<script src="https://unpkg.com/vue2-datepicker/index.min.js"></script>
+<script src="https://unpkg.com/vue2-datepicker/locale/zh-cn.js"></script>
+
+<script>
+window.moment || document.write(
+    '\x3Cscript src="assets/plugins/moment/moment.min.js" type="text/javascript">\x3C/script>')
+</script>
 
 
 <div id="admissions-form" style="margin-top:150px">
@@ -14,73 +25,57 @@
 
 
     <div id="modal" class="hidden relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <!--
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  -->
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <!--
-        Modal panel, show/hide based on modal state.
-
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      -->
-                <form
+                <form @submit.prevent="submitSchedule"
                     class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div
                                 class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                                 <!-- Heroicon name: outline/exclamation-triangle -->
-                                <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 10.5v3.75m-9.303 3.376C1.83 19.126 2.914 21 4.645 21h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 4.88c-.866-1.501-3.032-1.501-3.898 0L2.697 17.626zM12 17.25h.007v.008H12v-.008z" />
-                                </svg>
+
                             </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
                                     {{date_selected}}</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                        elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                        ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                                        non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                                <div class="mt-12">
+                                    <p class="mb-3">
+                                        Scheduled Time:
+                                    </p>
+
+                                    <ul class=" text-gray-500">
+                                        <li v-for="x in 8">09:00 AM - 10: AM </li>
+                                    </ul>
+
                                 </div>
 
 
-                                <div class="mt-10 mb-6">
+                                <div class="form-group mt-6">
                                     <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                        Date <span class="text-red-500">*</span>
+                                        From <span class="text-red-500">*</span>
                                     </label>
-                                    <input
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="date" required v-model="request.date">
+                                    <date-picker :time-picker-options="
+                                                        reserve_time_picker_options
+                                                    " v-model="request.from" type="time" lang="en" format="hh:mm A"
+                                        @change="checkTime" placeholder="HH:MM AM"
+                                        input-class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                    </date-picker>
                                 </div>
 
-                                <div class="mb-6">
+                                <div class="form-group mt-6">
                                     <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                        Time <span class="text-red-500">*</span>
+                                        To <span class="text-red-500">*</span>
                                     </label>
-                                    <input
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="time" required v-model="request.time">
+                                    <date-picker :time-picker-options="
+                                                        reserve_time_picker_options
+                                                    " v-model="request.to" type="time" lang="en" format="hh:mm A"
+                                        placeholder="HH:MM AM" @change="checkTime"
+                                        input-class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                    </date-picker>
                                 </div>
+
 
 
                             </div>
@@ -100,6 +95,7 @@
 
 </div>
 
+
 <script>
 function toggleModal() {
     document.getElementById('modal').classList.toggle('hidden')
@@ -112,52 +108,17 @@ new Vue({
     el: "#admissions-form",
     data: {
         date_selected: "",
-        request: {},
-        events: [{
-                start: '2018-11-19 10:35',
-                end: '2018-11-19 11:30',
-                title: 'Doctor appointment'
-            },
-            {
-                start: '2018-11-19 18:30',
-                end: '2018-11-19 19:15',
-                title: 'Dentist appointment'
-            },
-            {
-                start: '2018-11-20 18:30',
-                end: '2018-11-20 20:30',
-                title: 'Crossfit'
-            },
-            {
-                start: '2018-11-21 11:00',
-                end: '2018-11-21 13:00',
-                title: 'Brunch with Jane'
-            },
-            {
-                start: '2018-11-21 19:30',
-                end: '2018-11-21 23:00',
-                title: 'Swimming lesson'
-            },
-            {
-                start: '2019-09-30 19:30',
-                end: '2019-09-30 23:00',
-                title: 'Swimming lesson'
-            },
-            {
-                start: "2018-11-19 12:00",
-                end: "2018-11-19 14:00",
-                title: "LUNCH",
-                class: "lunch",
-                background: true
-            },
-            {
-                start: "2018-11-20 12:00",
-                end: "2018-11-20 14:00",
-                title: "LUNCH",
-                class: "lunch",
-                background: true
-            }
-        ],
+        date_selected_formatted: "",
+        request: {
+            from: "",
+            to: ""
+        },
+        reserve_time_picker_options: {
+            start: "08:00",
+            step: "00:30",
+            end: "17:00"
+        },
+        events: [],
         tags: ['foo', 'bar']
     },
     mounted() {
@@ -172,22 +133,101 @@ new Vue({
 
         logEvents: function(event, data) {
             console.log(event, data);
-            this.date_selected = data;
+            this.date_selected = moment(data).format("MMMM DD, YYYY");
+            this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
+
 
             toggleModal()
         },
 
-        submitForm: function() {
-            alert();
+        submitSchedule: function() {
+
+
+
+            this.request.reservation_form = this.date_selected_formatted + " " + moment(this.request.from,
+                "h:mm A").format("HH:mm");
+
+            this.request.reservation_to = this.date_selected_formatted + " " + moment(this.request.to,
+                "h:mm A").format("HH:mm");
+
+
+            Swal.fire({
+                title: "Submit Schedule",
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios
+                        .post(api_url + 'admissions/scheduless', this.request, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.is_done = true;
+
+                            if (data.data.success) {
+
+                                Swal.fire({
+                                    title: "SUCCESS",
+                                    text: data.data.message,
+                                    type: "success"
+                                }).then(function() {
+                                    window.location =
+                                        "<?php echo base_url();?>site/admissions_student_payment/" +
+                                        this.slug;
+                                });
+
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                                window.location =
+                                    "<?php echo base_url();?>site/admissions_student_payment/" +
+                                    this.slug;
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {}
+            })
         },
 
         toggleModal: function() {
             document.getElementById('modal').classList.toggle('hidden')
+        },
+
+        checkTime: function() {
+
+            if (this.request.from && this.request.to) {
+                if (this.request.from >= this.request.to) {
+                    Swal.fire(
+                        'Failed!',
+                        "Invalid time, please select valid time.",
+                        'error'
+                    )
+
+                    this.request.to = "";
+
+                }
+            }
+
+
         }
+
     },
 
     components: {
-        'vue-cal': vuecal
+        'vue-cal': vuecal,
+        'date-picker': DatePicker
     },
 
 

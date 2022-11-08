@@ -602,3 +602,8 @@ html {
   max-height: 100vh;
   padding: 1em;
 }
+
+.mx-datepicker {
+  width: 100% !important;
+  font-size: inherit !important;
+}

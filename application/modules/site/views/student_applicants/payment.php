@@ -68,7 +68,7 @@
                         </label>
                         <input
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.first_name">
+                            type="text" required v-model="request.last_name">
                     </div>
                 </div>
 
@@ -235,7 +235,7 @@ new Vue({
     },
     mounted() {
         axios
-            .get(api_url + 'finance/payment-modes?count_content=100', {
+            .get(api_url + 'payments/modes?count_content=100', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -302,7 +302,7 @@ new Vue({
                 "student_number": "10010059",
                 "first_name": this.request.first_name,
                 "last_name": this.request.last_name,
-                "contact_number": this.request.contact_number,
+                "contact_number": this.request.number,
                 "email": this.request.email,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
@@ -333,7 +333,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     return axios
-                        .post(api_url + 'sasasa', this.payload, {
+                        .post(api_url + 'payments', this.payload, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
@@ -344,7 +344,6 @@ new Vue({
                             if (data.data.success) {
 
                                 if (!this.selected_mode_of_payment.is_nonbank) {
-                                    // window.open(data.data.payment_link,'_blank');
                                     this.redirect_link = data.data.payment_link;
 
                                     setTimeout(() => {
@@ -352,9 +351,7 @@ new Vue({
                                             .click();
                                     }, 500);
 
-                                } else {
-                                    // location.reload();
-                                }
+                                } else {}
                             } else {
                                 Swal.fire(
                                     'Failed!',
@@ -366,21 +363,9 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
-                // if (result.isConfirmed) {
-                //     Swal.fire({
-                //         icon: result?.value.data.success ? "success" : "error",
-                //         html: result?.value.data.message,
-                //         allowOutsideClick: false,
-                //     }).then(() => {
-                //         if (reload && result?.value.data.success) {
-                //             if (reload == "reload") {
-                //                 location.reload();
-                //             } else {
-                //                 window.location.href = reload;
-                //             }
-                //         }
-                //     });
-                // }
+                if (result.isConfirmed) {
+
+                }
             })
         }
     }
