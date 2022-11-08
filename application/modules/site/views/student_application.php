@@ -163,7 +163,7 @@
                        </div>
                    </div>
 
-                   <div class="mb-6">
+                   <div class="mb-6" hidden>
                        <div class="md:w-4/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
@@ -172,6 +172,34 @@
                                <input type="checkbox" class="mr-2 admissions_submission_cb"
                                    @click="filterProgram(t.type)" name="" :value="t.id" required />
                                {{ t.title }}
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="mb-6">
+                       <div class="md:w-4/5">
+                           <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                               Applying For <span class="text-red-500">*</span>
+                           </label>
+                           <div class="d-flex align-items-center">
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
+                                   required />
+                               Software Engineering
+                           </div>
+                           <div class="d-flex align-items-center">
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
+                                   required />
+                               Game Development
+                           </div>
+                           <div class="d-flex align-items-center">
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
+                                   required />
+                               Animation
+                           </div>
+                           <div class="d-flex align-items-center">
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
+                                   required />
+                               Multimedia Arts and Design
                            </div>
                        </div>
                    </div>

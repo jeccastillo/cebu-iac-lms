@@ -343,10 +343,17 @@ new Vue({
 
                             if (data.data.success) {
 
-                                if (redirect) {
-                                    window.location.href = "#/" + redirect;
+                                if (!this.selected_mode_of_payment.is_nonbank) {
+                                    // window.open(data.data.payment_link,'_blank');
+                                    this.redirect_link = data.data.payment_link;
+
+                                    setTimeout(() => {
+                                        document.getElementById("payment_link")
+                                            .click();
+                                    }, 500);
+
                                 } else {
-                                    location.reload();
+                                    // location.reload();
                                 }
                             } else {
                                 Swal.fire(
