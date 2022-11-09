@@ -9,7 +9,7 @@
         </div>
 
         <div v-else>
-            <h2 class="px-4 color-primary text-3xl font-bold mb-4">{{type}} Articles</h2>
+            <h2 class="px-4 color-primary text-3xl font-bold mb-4">{{type_name}} Articles</h2>
             <div class="md:flex flex-wrap">
                 <div class="lg:w-1/3 p-3 md:w-1/2 w-full" v-for="article in all_news">
                     <div class="h-full bg-white rounded-lg border border-gray-200 shadow-md ">
@@ -77,7 +77,8 @@ new Vue({
     data: {
         all_news: [],
         loader_spinner: true,
-        type: ''
+        type: '',
+        type_name: '',
     },
 
     mounted() {
@@ -85,6 +86,16 @@ new Vue({
         var url_string = window.location.href;
         var url = new URL(url_string);
         this.type = url.searchParams.get("type");
+
+        if (this.type == 'se') {
+            this.type_name = 'Software Engineering'
+        } else if (this.type == 'gd') {
+            this.type_name = 'Game Development'
+        } else if (this.type == 'animation') {
+            this.type_name = 'Animation'
+        } else if (this.type == 'mma') {
+            this.type_name = 'Multimedia Arts & Design'
+        }
 
 
         $('.latest_news_filter li a').on('click', function() {
@@ -97,10 +108,12 @@ new Vue({
 
     methods: {
 
+
         filterNews: function(type) {
             this.all_news = [];
             this.loader_spinner = true;
-            axios.get(api_url + 'osea/external-news?count_content=15')
+            axios.get(api_url_article + 'osea/external-news?count_content=15&branch=Cebu&course=' + this
+                    .type)
                 .then((data) => {
                     this.all_news = data.data.data;
                     this.loader_spinner = false;

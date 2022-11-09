@@ -66,8 +66,7 @@
                             Sofware <br />
                             Engineering
                         </h1>
-                        <a href="<?php echo base_url(); ?>site/articles?type=Sofware Engineering"
-                            class=" btn img-btn mt-4">
+                        <a href="<?php echo base_url(); ?>site/articles?type=se" class=" btn img-btn mt-4">
                             <span>View Articles</span>
                         </a>
                     </div>
@@ -110,8 +109,7 @@
                             Game <br />
                             Development
                         </h1>
-                        <a href="<?php echo base_url(); ?>site/articles?type=Game Development"
-                            class=" btn img-btn mt-4">
+                        <a href="<?php echo base_url(); ?>site/articles?type=gd" class=" btn img-btn mt-4">
                             <span>View Articles</span>
                         </a>
                     </div>
@@ -151,7 +149,7 @@
                     <div class="py-[100px]">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">Animation</h1>
-                        <a href="<?php echo base_url(); ?>site/articles?type=Animation" class=" btn img-btn mt-4">
+                        <a href="<?php echo base_url(); ?>site/articles?type=animation" class=" btn img-btn mt-4">
                             <span>View Articles</span>
                         </a>
                     </div>
@@ -194,8 +192,7 @@
                             Multimedia <br />
                             Arts & Design
                         </h1>
-                        <a href="<?php echo base_url(); ?>site/articles?type=Multimedia Arts & Design"
-                            class=" btn img-btn mt-4">
+                        <a href="<?php echo base_url(); ?>site/articles?type=mma" class=" btn img-btn mt-4">
                             <span>View Articles</span>
                         </a>
                     </div>

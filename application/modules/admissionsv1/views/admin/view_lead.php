@@ -33,7 +33,7 @@
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
-                            Juan G. Dela Cruz
+                            {{request.first_name + ' ' + request.last_name}}
                         </p>
                         <hr>
                     </div>
@@ -41,7 +41,7 @@
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                         <p class="text-muted">
-                            juandelacruz@gmail.com
+                            {{ request.email }}
                         </p>
                         <hr>
                     </div>
@@ -49,7 +49,7 @@
                     <div>
                         <strong><i class="fa fa-phone margin-r-5"></i> Mobile Number</strong>
                         <p class="text-muted">
-                            091278212545
+                            {{request.mobile_number}}
                         </p>
                         <hr>
                     </div>
@@ -57,7 +57,7 @@
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i> Telephone Number</strong>
                         <p class="text-muted">
-                            +18 091278212545
+                            {{request.tel_number}}
                         </p>
                         <hr>
                     </div>
@@ -65,7 +65,7 @@
                     <div>
                         <strong><i class="fa fa-location-arrow margin-r-5"></i> Address</strong>
                         <p class="text-muted">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                            {{request.address}}
                         </p>
                         <hr>
                     </div>
@@ -73,7 +73,7 @@
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Birthday</strong>
                         <p class="text-muted">
-                            May 01, 1998
+                            {{request.birthday}}
                         </p>
                         <hr>
                     </div>
@@ -81,7 +81,7 @@
                     <div>
                         <strong><i class="fa fa-home margin-r-5"></i> Previous School</strong>
                         <p class="text-muted">
-                            Lorem Ipsum State University
+                            {{request.previous_school}}
                         </p>
                         <hr>
                     </div>
@@ -89,15 +89,15 @@
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Student Type</strong>
                         <p class="text-muted">
-                            Under Graduate - Transferee
+                            {{request.student_type_title}}
                         </p>
                         <hr>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <strong><i class="fa fa-bookmark margin-r-5"></i>Desired Program</strong>
                         <p class="text-muted">
-                            MMA - Animation
+                            {{request.student_type_title}}
                         </p>
                         <hr>
                     </div>
