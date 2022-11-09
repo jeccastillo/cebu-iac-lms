@@ -321,11 +321,10 @@ new Vue({
                     "id": 1
                 }],
                 "total_price_without_charge": this.total_single_without_charge,
-                "student_number": "10010059",
-                "first_name": this.request.first_name,
-                "last_name": this.request.last_name,
-                "contact_number": this.request.number,
-                "email": this.request.email,
+                "first_name": this.student.first_name,
+                "last_name": this.student.last_name,
+                "contact_number": this.student.mobile_number,
+                "email": this.student.email,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
                 "delivery_region_id": null,
@@ -335,8 +334,10 @@ new Vue({
                 "total_price_with_charge": this.total_single,
                 "charge": parseFloat(this.new_charge),
                 "mode_of_release": null,
-                "mailing_fee": 0
+                "mailing_fee": 0,
+                "student_information_id": this.student.id
             }
+
 
             console.log(this.payload)
 

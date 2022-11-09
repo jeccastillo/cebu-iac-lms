@@ -31,13 +31,14 @@
                            <span class="font-bold"> Great! </span> Next, is to upload your initial requirements:
                        </p>
 
-                       <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]">
+                       <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                           v-if="request.email">
                            <div class="md-w-1/3">
                                <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                    class="max-w-full h-auto mx-auto block">
 
                                <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_id"
+                                   <input ref="file_id" @change="uploadReq('school_id')"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
                                </div>
@@ -49,7 +50,7 @@
                                    class="max-w-full h-auto mx-auto block">
 
                                <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_nso"
+                                   <input ref="file_nso" @change="uploadReq('psa')"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
                                </div>
@@ -62,7 +63,7 @@
                                    class="max-w-full h-auto mx-auto block">
 
                                <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_2x2"
+                                   <input ref="file_2x2" @change="uploadReq('2x2')"
                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                        type="file" required>
                                </div>
@@ -72,7 +73,7 @@
                </div>
 
 
-               <div class="text-center" v-if="slug">
+               <div class="text-center" v-if="request.email">
                    <button type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
                            class="max-w-full h-auto mx-auto block img-btn"></button>
                </div>
@@ -93,9 +94,29 @@ new Vue({
         programs: [],
         programs_group: [],
         types: [],
+        uploads: {
+            requirements: [{
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                }
+            ]
+        },
         slug: '<?php echo $this->uri->segment('3'); ?>'
     },
     mounted() {
+
+        axios.get(api_url + 'admissions/student-info/' + this.slug)
+            .then((data) => {
+                this.request = data.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
     },
 
@@ -103,17 +124,6 @@ new Vue({
 
 
         submitPost: function() {
-
-            let file_id = this.$refs.file_id.files[0];
-            let file_nso = this.$refs.file_nso.files[0];
-            let file_2x2 = this.$refs.file_2x2.files[0];
-
-            var formData = "";
-            formData = new FormData();
-            formData.append("file_id", file_id);
-            formData.append("file_nso", file_nso);
-            formData.append("file_2x2", file_2x2);
-            formData.append("student_information_id", this.slug);
 
 
 
@@ -129,7 +139,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     return axios
-                        .post(api_url + 'admissions/student-info/requirements', formData, {
+                        .post(api_url + 'admissions/student-info/requirements', this.uploads, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
@@ -140,10 +150,10 @@ new Vue({
                             if (data.data.success) {
 
                                 Swal.fire({
-                                    title: "SUCCESS",
+                                    title: "Success!",
                                     text: data.data.message,
-                                    type: "success"
-                                }).then(function() {
+                                    icon: "success"
+                                }).then(d => {
                                     window.location =
                                         "<?php echo base_url();?>site/admissions_student_payment/" +
                                         this.slug;
@@ -155,9 +165,9 @@ new Vue({
                                     data.data.message,
                                     'error'
                                 )
-                                window.location =
-                                    "<?php echo base_url();?>site/admissions_student_payment/" +
-                                    this.slug;
+                                // window.location =
+                                // "<?php echo base_url();?>site/admissions_student_payment/" +
+                                // this.slug;
                             }
                         });
                 },
@@ -167,6 +177,69 @@ new Vue({
             })
 
         },
-    },
+
+        uploadReq: function(type) {
+
+            let formDataUp = "";
+            formDataUp = new FormData();
+
+            let file = '';
+
+            if (type == 'school_id') {
+                file = this.$refs.file_id.files[0];
+            } else if (type == 'psa') {
+                file = this.$refs.file_nso.files[0];
+            } else if (type == '2x2') {
+                file = this.$refs.file_2x2.files[0];
+            } else {
+                file = '';
+            }
+
+            formDataUp.append("file", file);
+            formDataUp.append("type", type);
+            formDataUp.append("slug", this.slug);
+
+            console.log(formDataUp);
+
+            axios
+                .post(api_url + 'admissions/student-info/upload',
+                    formDataUp, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                .then(data => {
+                    if (data.data.success) {
+                        // this.successMessageApi(data.data.message);
+                        // location.reload();
+                        Swal.fire(
+                            'Success!',
+                            data.data.message,
+                            'success'
+                        )
+
+                        if (type == 'school_id')
+                            this.uploads.requirements[0].file_id = data.data.data.id;
+                        if (type == 'psa')
+                            this.uploads.requirements[1].file_id = data.data.data.id;
+                        if (type == '2x2')
+                            this.uploads.requirements[2].file_id = data.data.data.id;
+
+                        this.uploads.slug = this.slug;
+
+
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            data.data.message,
+                            'error'
+                        )
+                    }
+                });
+
+
+
+        }
+    }
 });
    </script>

@@ -264,8 +264,8 @@ $(document).ready(function() {
     getOnlineUsers();
     // get_messages();
 
-    setInterval("get_messages()", 5000);
-    setInterval("getOnlineUsers()", 20000);
+    // setInterval("get_messages()", 5000);
+    // setInterval("getOnlineUsers()", 20000);
 
     $('#addStudentCourse').change(function() {
         load_curriculum();
@@ -530,7 +530,7 @@ $(document).ready(function() {
 
     $("#select-sem-dept").change(function(e) {
         document.location = "<?php echo base_url(); ?>unity/view_classlist_archive_dept/" + $(this)
-        .val();
+            .val();
 
     });
 
@@ -542,7 +542,7 @@ $(document).ready(function() {
     });
     $("#select-sem-report1").change(function(e) {
         document.location = "<?php echo base_url(); ?>unity/registered_students_report/" + $(this)
-    .val();
+            .val();
 
     });
 
@@ -693,7 +693,7 @@ $(document).ready(function() {
                             "</div><div class='col-xs-3 subject-units'>" + ret.subjects[
                                 i].strUnits +
                             "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
-                            );
+                        );
                         if (ret.subjects[i].classlists.length > 0) {
                             var str = "<div><select class='form-control' name='section-" +
                                 ret.subjects[i].intID +
@@ -789,7 +789,7 @@ $(document).ready(function() {
                             "</div><div class='col-xs-3 subject-units'>" + ret.subjects[
                                 i].strUnits +
                             "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
-                            );
+                        );
 
 
                         total_units = parseInt(total_units) + parseInt(ret.subjects[i]
@@ -886,14 +886,14 @@ $(document).ready(function() {
                         .strDescription + "</div><div class='col-xs-3 subject-units'>" +
                         ret.subject.strUnits +
                         "</div><div class='col-xs-3'><a class='btn remove-subject-loaded2 btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
-                        );
+                    );
 
 
                     $("#subject-to-add option[value='" + subjectID + "']").remove();
                     reset_sections($("#strAcademicYear").val());
                     if ($("#enumScholarship").val() == "paying")
                         total_units = parseInt(total_units) + parseInt(ret.subject
-                        .strUnits);
+                            .strUnits);
 
                     if ($("#enumScholarship").val() == "paying") {
                         $("#total-units").val(parseInt(total_units) * parseInt(
@@ -949,7 +949,7 @@ $(document).ready(function() {
     $("#submit-ay").click(function(e) {
         var submit_sy = confirm(
             "Are you sure you want to switch school year? All students will be set to inactive status and all subjects will be finalized"
-            );
+        );
         if (submit_sy) {
             $("#set-ay-form").submit();
         }

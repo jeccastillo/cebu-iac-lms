@@ -18,7 +18,7 @@
 
                 <div class="box-body" style="padding:2rem">
                     <div>
-                        <strong><i class="fa fa-sitemap margin-r-5"></i> Current Status</strong>
+                        <strong><i class="fa fa-sitemap margin-r-5"></i>ALL Status</strong>
                         <p>
                             <span class="label label-danger">New</span>
                             <span class="label label-primary">For Interview</span>
@@ -27,6 +27,14 @@
                             <span class="label label-info">For Reservation</span>
                             <span class="label label-success">Reserved</span>
                             <span class="label label-danger">Rejected</span>
+                        </p>
+                        <hr>
+                    </div>
+
+                    <div>
+                        <strong><i class="fa fa-sitemap margin-r-5"></i> Current Status</strong>
+                        <p class="text-muted">
+                            {{request.status}}
                         </p>
                         <hr>
                     </div>
@@ -74,7 +82,7 @@
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Birthday</strong>
                         <p class="text-muted">
-                            {{request.birthday}}
+                            {{request.date_of_birth}}
                         </p>
                         <hr>
                     </div>
@@ -82,7 +90,7 @@
                     <div>
                         <strong><i class="fa fa-home margin-r-5"></i> Previous School</strong>
                         <p class="text-muted">
-                            {{request.previous_school}}
+                            {{request.school}}
                         </p>
                         <hr>
                     </div>
@@ -425,13 +433,16 @@ new Vue({
                 preConfirm: (login) => {
 
                     return axios
-                        .post(api_url + 'admissions/student-info/' + this.slug, {
-                            status: $("#select-update-status").val()
-                        }, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
+                        .post(api_url + 'admissions/student-info/' + this.slug +
+                            '/update-status', {
+                                status: this.update_status,
+                                remarks: this.status_remarks,
+                                admissions_officer: 'Admissions Officer'
+                            }, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
                         .then(data => {
                             if (data.data.success) {
                                 // this.successMessageApi(data.data.message);
