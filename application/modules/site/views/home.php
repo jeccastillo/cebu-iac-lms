@@ -60,7 +60,7 @@
         <section class="bg-gray-50 anchor-section" id="se-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
-                    <div class="py-[100px]">
+                    <div class="py-[100px] md:text-center lg:text-left">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">
                             Sofware <br />
@@ -103,7 +103,7 @@
         <section>
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
-                    <div class="py-[100px]">
+                    <div class="py-[100px] md:text-center lg:text-left">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">
                             Game <br />
@@ -146,7 +146,7 @@
         <section class="bg-gray-50">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
-                    <div class="py-[100px]">
+                    <div class="py-[100px] md:text-center lg:text-left">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">Animation</h1>
                         <a href="<?php echo base_url(); ?>site/articles?type=animation" class=" btn img-btn mt-4">
@@ -186,7 +186,7 @@
         <section>
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
-                    <div class="py-[100px]">
+                    <div class="py-[100px] md:text-center lg:text-left">
                         <!-- <h1 class="text-2xl">What’s going on in</h1> -->
                         <h1 class="text-5xl color-primary font-black">
                             Multimedia <br />

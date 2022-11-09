@@ -10,7 +10,7 @@
         </ol>
     </section>
     <div class="content  container">
-        <form action="" @submit.prevent="updateStatus">
+        <form action="">
             <div class="box ">
                 <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
                     <h3 class="box-title text-left">Juan Dela Cruz - Details </h3>
@@ -22,7 +22,8 @@
                         <p>
                             <span class="label label-danger">New</span>
                             <span class="label label-primary">For Interview</span>
-                            <span class="label label-warning">Scheduled</span>
+                            <span class="label label-warning">Waiting For Interview</span>
+                            <!-- <span class="label label-warning">Scheduled</span> -->
                             <span class="label label-info">For Reservation</span>
                             <span class="label label-success">Reserved</span>
                             <span class="label label-danger">Rejected</span>
@@ -102,7 +103,7 @@
                         <hr>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>
                         <div class="row">
                             <div class="text-muted mt-1 col-sm-5">
@@ -117,213 +118,254 @@
                             </div>
                         </div>
                         <hr>
-                    </div>
+                    </div> -->
 
                     <div class="text-right">
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="button" data-toggle="modal" @click="update_status = 'For Interview'"
+                            data-target="#myModal" class=" btn
+                            btn-primary">For
+                            Interview</button>
+                        <button type="button" @click="update_status = 'For Reservation'" data-toggle="modal"
+                            data-target="#myModal" class=" btn btn-info">For
+                            Reservation</button>
+                        <button type="button" data-toggle="modal" @click="update_status = 'Reject'"
+                            data-target="#myModal" class=" btn
+                            btn-danger">Reject</button>
                     </div>
 
                 </div>
 
             </div>
 
+    </div>
 
-            <!-- for status Update -->
-            <div class="row">
 
-                <!-- for interview -->
-                <div class="col-lg-4">
-                    <div class="box box-primary">
-                        <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
-                            <h3 class="box-title text-left text-primary">For Interview</h3>
+    <!-- for status Update -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- for interview -->
+            <div class="col-lg-4">
+                <div class="box box-primary">
+                    <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-primary">For Interview</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i>Schedule</strong>
+                            <p class="text-muted">
+                                December 10, 2022 10:-00 AM
+                            </p>
+                            <hr>
                         </div>
 
-                        <div class="box-body" style="padding:2rem">
-                            <div>
-                                <strong><i class="fa fa-calendar margin-r-5"></i>Schedule</strong>
-                                <p class="text-muted">
-                                    December 10, 2022 10:-00 AM
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                                <p class="text-muted">
-                                    Pedro Biglang Awa
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                                <p class="text-muted">
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </p>
-                                <hr>
-                            </div>
-
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
+                            <p class="text-muted">
+                                Pedro Biglang Awa
+                            </p>
+                            <hr>
                         </div>
+
+                        <div>
+                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
+                            <p class="text-muted">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            </p>
+                            <hr>
+                        </div>
+
                     </div>
                 </div>
-                <!-- end -->
-
-                <!-- for scheduled -->
-                <div class="col-lg-4">
-                    <div class="box box-warning">
-                        <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                            <h3 class="box-title text-left text-warning">Scheduled</h3>
-                        </div>
-
-                        <div class="box-body" style="padding:2rem">
-                            <div>
-                                <strong><i class="fa fa-calendar margin-r-5"></i>Date</strong>
-                                <p class="text-muted">
-                                    December 10, 2022 10:-00 AM
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                                <p class="text-muted">
-                                    Pedro Biglang Awa
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                                <p class="text-muted">
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </p>
-                                <hr>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- end -->
-
-                <!-- for reservation -->
-                <div class="col-lg-4">
-                    <div class="box box-info">
-                        <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                            <h3 class="box-title text-left text-info">For Reservation</h3>
-                        </div>
-
-                        <div class="box-body" style="padding:2rem">
-                            <div>
-                                <strong><i class="fa fa-money margin-r-5"></i>Reservation Fee</strong>
-                                <p class="text-muted">
-                                    ₱700
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                                <p class="text-muted">
-                                    Pedro Biglang Awa
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                                <p class="text-muted">
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </p>
-                                <hr>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- end -->
-
-                <!-- reserved -->
-                <div class="col-lg-4">
-                    <div class="box box-success">
-                        <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                            <h3 class="box-title text-left text-success">Reserved</h3>
-                        </div>
-
-                        <div class="box-body" style="padding:2rem">
-                            <div>
-                                <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
-                                <p class="text-muted">
-                                    December 15, 2022 10:-00 AM
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                                <p class="text-muted">
-                                    Pedro Biglang Awa
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                                <p class="text-muted">
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </p>
-                                <hr>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end -->
-
-                <!-- rejected -->
-                <div class="col-lg-4">
-                    <div class="box box-danger">
-                        <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                            <h3 class="box-title text-left text-danger">Rejected</h3>
-                        </div>
-
-                        <div class="box-body" style="padding:2rem">
-                            <div>
-                                <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
-                                <p class="text-muted">
-                                    December 15, 2022 10:-00 AM
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                                <p class="text-muted">
-                                    Pedro Biglang Awa
-                                </p>
-                                <hr>
-                            </div>
-
-                            <div>
-                                <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                                <p class="text-muted">
-                                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </p>
-                                <hr>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end -->
-
             </div>
             <!-- end -->
+
+            <!-- for scheduled -->
+            <div class="col-lg-4">
+                <div class="box box-warning">
+                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-warning">Waiting for Reservation</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i>Date</strong>
+                            <p class="text-muted">
+                                December 10, 2022 10:-00 AM
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
+                            <p class="text-muted">
+                                Pedro Biglang Awa
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
+                            <p class="text-muted">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            </p>
+                            <hr>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end -->
+
+            <!-- for reservation -->
+            <div class="col-lg-4">
+                <div class="box box-info">
+                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-info">For Reservation</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-money margin-r-5"></i>Reservation Fee</strong>
+                            <p class="text-muted">
+                                ₱700
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
+                            <p class="text-muted">
+                                Pedro Biglang Awa
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
+                            <p class="text-muted">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            </p>
+                            <hr>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end -->
+
+            <!-- reserved -->
+            <div class="col-lg-4">
+                <div class="box box-success">
+                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-success">Reserved</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
+                            <p class="text-muted">
+                                December 15, 2022 10:-00 AM
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
+                            <p class="text-muted">
+                                Pedro Biglang Awa
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
+                            <p class="text-muted">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end -->
+
+            <!-- rejected -->
+            <div class="col-lg-4">
+                <div class="box box-danger">
+                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-danger">Rejected</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
+                            <p class="text-muted">
+                                December 15, 2022 10:-00 AM
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
+                            <p class="text-muted">
+                                Pedro Biglang Awa
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
+                            <p class="text-muted">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end -->
+
+        </div>
+        <!-- end -->
+        </form>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{update_status}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Remarks <span class="text-danger">*</span> </label>
+                        <textarea class="form-control" v-model="status_remarks" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -339,16 +381,16 @@ new Vue({
     data: {
         request: {},
         loader_spinner: true,
-        type: '',
+        type: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
+        update_status: "",
+        status_remarks: ""
     },
 
     mounted() {
 
         let url_string = window.location.href;
         let url = new URL(url_string);
-        // let slug = url.searchParams.get("slug");
-        console.log(this.slug);
 
 
 
@@ -371,7 +413,7 @@ new Vue({
 
 
             Swal.fire({
-                title: 'Update Details',
+                title: 'Update Status',
                 text: "Are you sure you want to update?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",

@@ -26,8 +26,7 @@
                             Admissions
                         </h1>
                         <h1 class="text-4xl uppercase text-center color-primary">
-
-                            {{ payment_type == 'admissions_student_payment_reservation' ? 'Payment for Reservation Fee' : payment_type == 'admissions_student_payment' ? 'Payment for Application Fee' : '' }}
+                            Payment for Reservation Fee
                         </h1>
                     </div>
                     <p class="max-w-[800px] color-primary mt-[60px]">
@@ -37,7 +36,7 @@
         </div>
     </div>
 
-    <div class="custom-container" v-if="student.first_name">
+    <div class="custom-container">
         <form @submit.prevent="submitPayment">
             <div class="flex flex-wrap">
                 <div class="mb-6 md:w-4/12 p-2">
@@ -141,10 +140,7 @@
                     <table class="table" style="width:100%">
                         <tbody>
                             <tr v-if="item">
-                                <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
-                                    'Application Fee'
-                                    }}
-                                </td>
+                                <td>Reservation Fee</td>
                                 <td>₱ {{ item_details.price }}</td>
                             </tr>
 
@@ -224,7 +220,7 @@ new Vue({
         payment_modes_nonbanks: [],
         selected_items: [],
         item_details: {
-            price: this.payment_type == 'admissions_student_payment_reservation' ? 1000 : 700
+            price: 700
         },
         item: {}, //single order
         selected_mode_of_payment: {},
@@ -243,7 +239,6 @@ new Vue({
         total_price_cart_with_charge: 0,
         payload: {},
         slug: "<?php echo $this->uri->segment('3'); ?>",
-        payment_type: "<?php echo $this->uri->segment('2'); ?>",
     },
     mounted() {
         axios
