@@ -55,7 +55,7 @@
         $skin = 'skin-purple-light';
         break;
         case 5:
-        $skin = 'skin-blue-light';
+        $skin = 'skin-black';
         break;
         case 6:
         $skin = 'skin-yellow-light';
@@ -175,7 +175,8 @@
                 </div>
                 <div class="pull-left info">
                     <p> <?php echo $user['strFirstname']; ?></p>
-                    <i class="fa fa-users text-green"></i> <?php echo switch_user_level($user['intUserLevel']); ?>
+                    <i class="fa fa-users text-green"></i> <small>
+                        <?php echo switch_user_level($user['intUserLevel']); ?></small>
                 </div>
             </div>
 
@@ -212,21 +213,26 @@
 
                 </li>
 
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
+
+                <?php if($user['intUserLevel'] == 2): ?>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="admin")?'active':''; ?>">
                     <a href="#">
-                        <i class="fa-book fa"></i> <span>Subjects</span>
+                        <i class="fa fa-circle text-muted"></i> <span>Admin</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="add_subject")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>subject/add_subject" style="margin-left: 10px;"><i
-                                    class="ion ion-ios-plus-empty"></i> Add a subject</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_subjects")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>subject/view_all_subjects" style="margin-left: 10px;"><i
-                                    class="fa fa-book"></i> View Subjects</a></li>
+
+
+                        <li class="<?php echo (isset($page) && $page=="add_faculty")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>faculty/add_faculty" style="margin-left: 10px;"><i
+                                    class="ion ion-android-person-add"></i> Add Users</a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>faculty/view_all_faculty" style="margin-left: 10px;"><i
+                                    class="ion ion-eye"></i> View Users</a></li>
 
                     </ul>
                 </li>
+                <?php endif; ?>
 
 
             </ul>

@@ -223,8 +223,9 @@ new Vue({
         city_delivery: [],
         payment_modes_nonbanks: [],
         selected_items: [],
+        payment_type: "<?php echo $this->uri->segment('2'); ?>",
         item_details: {
-            price: this.payment_type == 'admissions_student_payment_reservation' ? 1000 : 700
+            price: this.payment_type == 'admissions_student_payment_reservation' ? 1000 : 10000
         },
         item: {}, //single order
         selected_mode_of_payment: {},
@@ -243,9 +244,9 @@ new Vue({
         total_price_cart_with_charge: 0,
         payload: {},
         slug: "<?php echo $this->uri->segment('3'); ?>",
-        payment_type: "<?php echo $this->uri->segment('2'); ?>",
     },
     mounted() {
+        console.log(this.payment_type);
         axios
             .get(api_url + 'payments/modes?count_content=100', {
                 headers: {

@@ -45,9 +45,14 @@ window.moment || document.write(
                                         Scheduled Time:
                                     </p>
 
-                                    <ul class=" text-gray-500">
-                                        <li v-for="x in 8">09:00 AM - 10: AM </li>
+                                    <ul class=" text-gray-500" v-if="time_scheduled.length > 0">
+                                        <li v-for="time in time_scheduled">{{time.time_from + ' - ' + time.time_to}}
+                                        </li>
                                     </ul>
+
+                                    <span v-else>
+                                        No reserved scheduled for this date.
+                                    </span>
 
                                 </div>
 
@@ -146,7 +151,7 @@ new Vue({
             this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
 
             axios
-                .get(api_url + 'admissions/calendar-schedule/' + this.date_selected_formatted, {
+                .get(api_url + 'interview-schedules/' + this.date_selected_formatted, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     },
@@ -169,11 +174,23 @@ new Vue({
 
 
 
-            this.request.reservation_form = this.date_selected_formatted + " " + moment(this.request.from,
-                "h:mm A").format("HH:mm");
+            // this.request.reservation_form = this.date_selected_formatted + " " + moment(this.request.from,
+            //     "h:mm A").format("HH:mm");
 
-            this.request.reservation_to = this.date_selected_formatted + " " + moment(this.request.to,
+            // this.request.reservation_to = this.date_selected_formatted + " " + moment(this.request.to,
+            //     "h:mm A").format("HH:mm");
+
+            this.request.date = this.date_selected_formatted;
+            this.request.time_from = moment(this.request.from,
                 "h:mm A").format("HH:mm");
+            this.request.time_to = moment(this.request.to,
+                "h:mm A").format("HH:mm");
+            this.request.slug = this.slug;
+
+            console.log(this.request);
+            moment(this.request.to, "h:mm A").format("HH:mm");
+
+
 
 
             Swal.fire({
@@ -188,7 +205,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     return axios
-                        .post(api_url + 'admissions/scheduless', this.request, {
+                        .post(api_url + 'interview-schedules', this.request, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
@@ -201,11 +218,12 @@ new Vue({
                                 Swal.fire({
                                     title: "SUCCESS",
                                     text: data.data.message,
-                                    type: "success"
-                                }).then(function() {
-                                    window.location =
-                                        "<?php echo base_url();?>site/admissions_student_payment/" +
-                                        this.slug;
+                                    icon: "success"
+                                }).then(res => {
+                                    // window.location =
+                                    //     "<?php echo base_url();?>site/admissions_student_payment_reservation/" +
+                                    //     this.slug;
+                                    window.location.href = "/"
                                 });
 
                             } else {
@@ -214,9 +232,7 @@ new Vue({
                                     data.data.message,
                                     'error'
                                 )
-                                window.location =
-                                    "<?php echo base_url();?>site/admissions_student_payment/" +
-                                    this.slug;
+
                             }
                         });
                 },

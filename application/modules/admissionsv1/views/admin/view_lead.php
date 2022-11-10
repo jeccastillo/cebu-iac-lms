@@ -139,6 +139,35 @@
                         <hr>
                     </div>
 
+                    <div v-if="request.schedule_date">
+                        <div class="">
+                            <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
+                                    class=" text-primary">Interview Schedule
+                                </span>
+                            </strong>
+
+                            <hr>
+                        </div>
+
+                        <div v-if="request.uploaded_requirements.length > 0">
+                            <strong><i class="fa fa-home margin-r-5"></i> Date</strong>
+                            <p class="text-muted">
+                                {{request.schedule_date}}
+                            </p>
+                            <hr>
+                        </div>
+
+                        <div v-if="request.uploaded_requirements.length > 0">
+                            <strong><i class="fa fa-home margin-r-5"></i> Time</strong>
+                            <p class="text-muted">
+                                {{request.schedule_time_from}} - {{request.schedule_time_to}}
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+
+
+
 
 
                     <!-- <div>
@@ -179,6 +208,39 @@
     </div>
 
     <div class="container">
+
+        <div class="row">
+
+            <!-- for interview -->
+            <div class="col-lg-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
+                        <h3 class="box-title text-left text-primary">Payments Made</h3>
+                    </div>
+
+                    <div class="box-body" style="padding:2rem">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Total Payment</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="payment in request.payments">
+                                    <td>{{payment.description}}</td>
+                                    <td>₱ {{payment.total_amount_due}}</td>
+                                    <td>{{payment.status}}</td>
+                                    <td>{{payment.status == 'Paid' ? payment.date_paid : payment.date_expired  }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
 
