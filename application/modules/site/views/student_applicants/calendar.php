@@ -64,7 +64,10 @@ window.moment || document.write(
                                     <date-picker :time-picker-options="
                                                         reserve_time_picker_options
                                                     " v-model="request.from" type="time" lang="en" format="hh:mm A"
-                                        @change="checkTime" placeholder="HH:MM AM"
+                                        @change="checkTime" placeholder="HH:MM AM" :input-attr="{
+                                                    required: true,
+                                                    id: 'time_from'
+                                                }"
                                         input-class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                                     </date-picker>
                                 </div>
@@ -76,11 +79,13 @@ window.moment || document.write(
                                     <date-picker :time-picker-options="
                                                         reserve_time_picker_options
                                                     " v-model="request.to" type="time" lang="en" format="hh:mm A"
-                                        placeholder="HH:MM AM" @change="checkTime"
+                                        placeholder="HH:MM AM" @change="checkTime" :input-attr="{
+                                                    required: true,
+                                                    id: 'time_to'
+                                                }"
                                         input-class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                                     </date-picker>
                                 </div>
-
 
 
                             </div>
@@ -119,6 +124,7 @@ new Vue({
             from: "",
             to: ""
         },
+        value5: "",
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -147,8 +153,22 @@ new Vue({
 
         logEvents: function(event, data) {
             // console.log(event, data);
+
+            let today = moment(new Date()).format("YYYY-MM-DD");
+            console.log(today)
             this.date_selected = moment(data).format("MMMM DD, YYYY");
             this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
+
+            if (this.date_selected_formatted <= today) {
+                Swal.fire(
+                    'Failed!',
+                    "Unable to select pass date and today's date. Please try other dates. ",
+                    'error'
+                )
+                return false;
+            }
+
+
 
             axios
                 .get(api_url + 'interview-schedules/' + this.date_selected_formatted, {
@@ -174,22 +194,14 @@ new Vue({
 
 
 
-            // this.request.reservation_form = this.date_selected_formatted + " " + moment(this.request.from,
-            //     "h:mm A").format("HH:mm");
 
-            // this.request.reservation_to = this.date_selected_formatted + " " + moment(this.request.to,
-            //     "h:mm A").format("HH:mm");
+            let time_from = moment(this.request.from).format('LT');
+            let time_to = moment(this.request.to).format('LT');
 
             this.request.date = this.date_selected_formatted;
-            this.request.time_from = moment(this.request.from,
-                "h:mm A").format("HH:mm");
-            this.request.time_to = moment(this.request.to,
-                "h:mm A").format("HH:mm");
             this.request.slug = this.slug;
-
-            console.log(this.request);
-            moment(this.request.to, "h:mm A").format("HH:mm");
-
+            this.request.time_from = moment(time_from, ["h:mm A"]).format("HH:mm")
+            this.request.time_to = moment(time_to, ["h:mm A"]).format("HH:mm")
 
 
 
@@ -220,10 +232,8 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(res => {
-                                    // window.location =
-                                    //     "<?php echo base_url();?>site/admissions_student_payment_reservation/" +
-                                    //     this.slug;
-                                    window.location.href = "/"
+                                    window.location =
+                                        "<?php echo base_url();?>site"
                                 });
 
                             } else {
@@ -260,6 +270,8 @@ new Vue({
 
                 }
             }
+
+            console.log(moment().toDate().getTime())
 
 
         }
