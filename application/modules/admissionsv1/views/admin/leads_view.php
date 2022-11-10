@@ -23,13 +23,14 @@
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>id</th>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Units</th>
-                            <th>Year Level</th>
-                            <th>Semester</th>
-                            <th>Select Actions</th>
+                            <th>slug</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Program</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+
                         </tr>
                     </thead>
                     <tbody>

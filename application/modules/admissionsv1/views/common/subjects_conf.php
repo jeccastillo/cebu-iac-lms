@@ -6,20 +6,61 @@ $(document).ready(function() {
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_subjects",
+        // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
+        ajax: function(data, callback, settings) {
+            $.get(
+                "http://localhost:8004/api/v1/admissions/applications", {
+                    limit: data.length,
+                    page: data.start,
+                    search_data: data.search.value,
+                    search_field: "first_name",
+                    counte_content: data.length,
+                    order_by: data.order[0].dir,
+                },
+                function(json) {
+                    callback({
+                        recordsTotal: json.meta.to,
+                        recordsFiltered: json.meta.total,
+                        data: json.data
+                    });
+
+                    // console.log(data);
+                }
+            );
+        },
         "aoColumnDefs": [{
                 "aTargets": [6],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsv1/view_lead/' +
-                        row[0] +
+                        row.slug +
                         '">View Details</a></li></ul></div>';
                 }
             },
             {
                 "aTargets": [0],
                 "bVisible": false
+            },
+        ],
+
+        columns: [{
+                data: "id"
+            },
+            {
+                data: "last_name"
+            },
+            {
+                data: "first_name"
+            },
+            {
+                data: "email"
+            },
+            {
+                data: "student_type_title"
+            },
+            {
+                data: "status"
             }
         ],
         "aaSorting": [

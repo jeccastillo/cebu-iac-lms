@@ -10,7 +10,7 @@
         </ol>
     </section>
     <div class="content  container">
-        <form action="">
+        <div action="">
             <div class="box ">
                 <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
                     <h3 class="box-title text-left">Juan Dela Cruz - Details </h3>
@@ -18,23 +18,19 @@
 
                 <div class="box-body" style="padding:2rem">
                     <div>
-                        <strong><i class="fa fa-sitemap margin-r-5"></i>ALL Status</strong>
+                        <strong><i class="fa fa-sitemap margin-r-5"></i>Status</strong>
                         <p>
-                            <span class="label label-danger">New</span>
-                            <span class="label label-primary">For Interview</span>
-                            <span class="label label-warning">Waiting For Interview</span>
+                            <span class="label label-danger" v-if="request.status ==  'New'">New</span>
+                            <span class="label label-primary" v-if="request.status ==  'For Interview'">For
+                                Interview</span>
+                            <span class="label label-warning" v-if="request.status ==  'Waiting For Interview'">Waiting
+                                For
+                                Interview</span>
                             <!-- <span class="label label-warning">Scheduled</span> -->
-                            <span class="label label-info">For Reservation</span>
-                            <span class="label label-success">Reserved</span>
-                            <span class="label label-danger">Rejected</span>
-                        </p>
-                        <hr>
-                    </div>
-
-                    <div>
-                        <strong><i class="fa fa-sitemap margin-r-5"></i> Current Status</strong>
-                        <p class="text-muted">
-                            {{request.status}}
+                            <span class="label label-info" v-if="request.status ==  'For Reservation'">For
+                                Reservation</span>
+                            <span class="label label-success" v-if="request.status ==  'Reserved'">Reserved</span>
+                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
                         </p>
                         <hr>
                     </div>
@@ -129,222 +125,62 @@
                     </div> -->
 
                     <div class="text-right">
-                        <button type="button" data-toggle="modal" @click="update_status = 'For Interview'"
+                        <button type="button" data-toggle="modal" @click="update_status = 'For Reservation';"
                             data-target="#myModal" class=" btn
                             btn-primary">For
                             Interview</button>
                         <button type="button" @click="update_status = 'For Reservation'" data-toggle="modal"
                             data-target="#myModal" class=" btn btn-info">For
                             Reservation</button>
-                        <button type="button" data-toggle="modal" @click="update_status = 'Reject'"
+                        <button type="button" data-toggle="modal" @click="update_status = 'Rejected'"
                             data-target="#myModal" class=" btn
                             btn-danger">Reject</button>
                     </div>
-
                 </div>
 
             </div>
 
+        </div>
     </div>
 
-
-    <!-- for status Update -->
     <div class="container">
 
         <div class="row">
 
             <!-- for interview -->
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <div class="box box-primary">
                     <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
-                        <h3 class="box-title text-left text-primary">For Interview</h3>
+                        <h3 class="box-title text-left text-primary">Status Logs</h3>
                     </div>
 
                     <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-calendar margin-r-5"></i>Schedule</strong>
-                            <p class="text-muted">
-                                December 10, 2022 10:-00 AM
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                            <p class="text-muted">
-                                Pedro Biglang Awa
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                            <p class="text-muted">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                            </p>
-                            <hr>
-                        </div>
-
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Admissions Officer</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="log in request.logs">
+                                    <td>{{log.date_change}}</td>
+                                    <td>{{log.status}}</td>
+                                    <td>{{log.admissions_officer}}</td>
+                                    <td>
+                                        {{log.remarks}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- end -->
-
-            <!-- for scheduled -->
-            <div class="col-lg-4">
-                <div class="box box-warning">
-                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                        <h3 class="box-title text-left text-warning">Waiting for Reservation</h3>
-                    </div>
-
-                    <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-calendar margin-r-5"></i>Date</strong>
-                            <p class="text-muted">
-                                December 10, 2022 10:-00 AM
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                            <p class="text-muted">
-                                Pedro Biglang Awa
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                            <p class="text-muted">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                            </p>
-                            <hr>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- end -->
-
-            <!-- for reservation -->
-            <div class="col-lg-4">
-                <div class="box box-info">
-                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                        <h3 class="box-title text-left text-info">For Reservation</h3>
-                    </div>
-
-                    <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-money margin-r-5"></i>Reservation Fee</strong>
-                            <p class="text-muted">
-                                ₱700
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                            <p class="text-muted">
-                                Pedro Biglang Awa
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                            <p class="text-muted">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                            </p>
-                            <hr>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- end -->
-
-            <!-- reserved -->
-            <div class="col-lg-4">
-                <div class="box box-success">
-                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                        <h3 class="box-title text-left text-success">Reserved</h3>
-                    </div>
-
-                    <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
-                            <p class="text-muted">
-                                December 15, 2022 10:-00 AM
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                            <p class="text-muted">
-                                Pedro Biglang Awa
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                            <p class="text-muted">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                            </p>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end -->
-
-            <!-- rejected -->
-            <div class="col-lg-4">
-                <div class="box box-danger">
-                    <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                        <h3 class="box-title text-left text-danger">Rejected</h3>
-                    </div>
-
-                    <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-calendar margin-r-5"></i>Date Reserved</strong>
-                            <p class="text-muted">
-                                December 15, 2022 10:-00 AM
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i>AO Officer</strong>
-                            <p class="text-muted">
-                                Pedro Biglang Awa
-                            </p>
-                            <hr>
-                        </div>
-
-                        <div>
-                            <strong><i class="fa  fa-file margin-r-5"></i>Remarks</strong>
-                            <p class="text-muted">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                            </p>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end -->
-
         </div>
-        <!-- end -->
-        </form>
     </div>
+
+
 
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
@@ -372,6 +208,7 @@
         </form>
     </div>
 </div>
+
 
 
 
@@ -413,6 +250,7 @@ new Vue({
             })
 
 
+
     },
 
     methods: {
@@ -437,7 +275,7 @@ new Vue({
                             '/update-status', {
                                 status: this.update_status,
                                 remarks: this.status_remarks,
-                                admissions_officer: 'Admissions Officer'
+                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
                             }, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
@@ -445,8 +283,13 @@ new Vue({
                             })
                         .then(data => {
                             if (data.data.success) {
-                                // this.successMessageApi(data.data.message);
-                                location.reload();
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
                             } else {
                                 Swal.fire(
                                     'Failed!',
