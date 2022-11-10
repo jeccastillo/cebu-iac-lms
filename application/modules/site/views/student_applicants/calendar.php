@@ -271,9 +271,6 @@ new Vue({
                 }
             }
 
-            console.log(moment().toDate().getTime())
-
-
         }
 
     },

@@ -149,16 +149,16 @@
                             <hr>
                         </div>
 
-                        <div v-if="request.uploaded_requirements.length > 0">
-                            <strong><i class="fa fa-home margin-r-5"></i> Date</strong>
+                        <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i> Date</strong>
                             <p class="text-muted">
                                 {{request.schedule_date}}
                             </p>
                             <hr>
                         </div>
 
-                        <div v-if="request.uploaded_requirements.length > 0">
-                            <strong><i class="fa fa-home margin-r-5"></i> Time</strong>
+                        <div>
+                            <strong><i class="fa fa-clock-o margin-r-5"></i> Time</strong>
                             <p class="text-muted">
                                 {{request.schedule_time_from}} - {{request.schedule_time_to}}
                             </p>
@@ -196,8 +196,8 @@
                             @click="update_status = 'For Reservation'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
                             Reservation</button>
-                        <button type="button" data-toggle="modal" @click="update_status = 'Rejected'"
-                            data-target="#myModal" class=" btn
+                        <button type="button" v-if="request.status != 'Reserved'" data-toggle="modal"
+                            @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
                             btn-danger">Reject</button>
                     </div>
                 </div>
