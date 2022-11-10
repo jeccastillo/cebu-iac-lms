@@ -339,7 +339,7 @@ new Vue({
             }
 
 
-            console.log(this.payload)
+            // console.log(this.payload)
 
         },
 

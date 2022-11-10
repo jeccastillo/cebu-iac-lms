@@ -12,8 +12,10 @@
     <div class="content  container">
         <div action="">
             <div class="box ">
-                <div class="box-header with-border font-weight-bold" style="text-align:left; font-weight:bold">
-                    <h3 class="box-title text-left">Juan Dela Cruz - Details </h3>
+                <div class="box-header with-border font-weight-bold py-5" style="text-align:left; font-weight:bold">
+                    <h3 class="box-title text-left text-primary " style="font-size:2rem">
+                        Applicant Details
+                    </h3>
                 </div>
 
                 <div class="box-body" style="padding:2rem">
@@ -99,13 +101,45 @@
                         <hr>
                     </div>
 
-                    <div class="hidden">
-                        <strong><i class="fa fa-bookmark margin-r-5"></i>Desired Program</strong>
+
+
+                    <div class="" v-if="request.uploaded_requirements.length > 0">
+                        <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
+                                class=" text-primary">Initial
+                                Requirements</span>
+                        </strong>
+
+                        <hr>
+                    </div>
+
+                    <div v-if="request.uploaded_requirements.length > 0">
+                        <strong><i class="fa fa-user margin-r-5"></i>School ID</strong>
                         <p class="text-muted">
-                            {{request.student_type_title}}
+                            <a :href="request.uploaded_requirements[0].path" target="_blank">
+                                {{request.uploaded_requirements[0].filename}}</a>
                         </p>
                         <hr>
                     </div>
+
+                    <div v-if="request.uploaded_requirements.length > 0">
+                        <strong><i class="fa fa-file margin-r-5"></i>PSA / NSO</strong>
+                        <p class="text-muted">
+                            <a :href="request.uploaded_requirements[1].path" target="_blank">
+                                {{request.uploaded_requirements[1].filename}}</a>
+                        </p>
+                        <hr>
+                    </div>
+
+                    <div v-if="request.uploaded_requirements.length > 0">
+                        <strong><i class="fa fa-camera margin-r-5"></i>2x2 Picture</strong>
+                        <p class="text-muted">
+                            <a :href="request.uploaded_requirements[2].path" target="_blank">
+                                {{request.uploaded_requirements[2].filename}}</a>
+                        </p>
+                        <hr>
+                    </div>
+
+
 
                     <!-- <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>
@@ -125,12 +159,13 @@
                     </div> -->
 
                     <div class="text-right">
-                        <button type="button" data-toggle="modal" @click="update_status = 'For Reservation';"
-                            data-target="#myModal" class=" btn
+                        <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
+                            @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
                             Interview</button>
-                        <button type="button" @click="update_status = 'For Reservation'" data-toggle="modal"
-                            data-target="#myModal" class=" btn btn-info">For
+                        <button type="button" v-if="request.status == 'For Interview'"
+                            @click="update_status = 'For Reservation'" data-toggle="modal" data-target="#myModal"
+                            class=" btn btn-info">For
                             Reservation</button>
                         <button type="button" data-toggle="modal" @click="update_status = 'Rejected'"
                             data-target="#myModal" class=" btn
@@ -224,7 +259,9 @@
 new Vue({
     el: '#applicant-container',
     data: {
-        request: {},
+        request: {
+            uploaded_requirements: []
+        },
         loader_spinner: true,
         type: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",

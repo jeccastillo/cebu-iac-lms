@@ -9,7 +9,89 @@
         </div>
 
         <div v-else>
-            <h2 class="px-4 color-primary text-3xl font-bold mb-4">{{type_name}} Articles</h2>
+
+            <h2 class="px-4 color-primary text-3xl font-bold mb-4 uppercase">{{type_name}}</h2>
+
+            <div class="p-4">
+                <div v-if="type == 'se'">
+                    <p class="mb-2">
+                        The Bachelor of Science in Computer Science (BSCS) program is designed
+                        to
+                        provide
+                        students with a thorough and advanced understanding of the various computing concepts and
+                        theories,
+                        algorithm development and analysis, and applying strong design and development principles in the
+                        construction of software systems to solve complex, real-world problems.
+                    </p>
+
+                    <p>
+                        By specializing in Software Engineering, students will be able to apply engineering concepts and
+                        methods
+                        in the development and improvement of software systems. They will be exposed to new technologies
+                        and
+                        computing techniques, which they can apply to devise new ways of using computers. They will
+                        acquire
+                        the
+                        necessary skills to analyze, plan, and create software systems instead of merely writing code
+                        for
+                        computer programs. In addition to these, the students will also have a strong background in
+                        modern
+                        management techniques as applied to software development. iACADEMY’s Computer Science Program
+                        takes
+                        11
+                        trimesters to finish.
+                    </p>
+                </div>
+
+                <div v-if="type == 'gd'">
+                    <p class="mb-2">
+                        The Bachelor of Science in Entertainment and Multimedia Computing (BSEMC) program is designed to
+                        provide students with a thorough and advanced understanding of the various study and use of
+                        concepts, principles, and techniques of computing in the design and development of multimedia
+                        products and solutions. It includes various applications such as in science, entertainment,
+                        education, simulations and advertising.
+
+                    </p>
+
+                    <p>
+                        By specializing in Game Development, students will be able to apply fundamental and advanced
+                        theories in game design, scientific simulations, use and development of gaming technology and
+                        tools, and production of commercially acceptable digital games and viable solutions for use in
+                        entertainment and scientific applications. In addition to these, the students will be prepared
+                        to be game development professionals with specialized knowledge, competencies and values in
+                        designing, developing, and producing digital games and / or tools, and in managing game
+                        development projects for various applications.
+
+                    </p>
+                </div>
+
+                <div v-if="type == 'animation'">
+                    <p class="mb-2">
+                        The Bachelor of Science in Animation is an 11 term program which addresses the technical
+                        production needs of the industry where students are trained to be skilled in both 2D and 3D
+                        animation to produce pipeline ready graduates. The program prepares students to become globally
+                        competitive animators, directors and content creators to contribute to the uplifting of both the
+                        local and global Animation industry.
+                    </p>
+
+                </div>
+
+                <div v-if="type == 'mma'">
+                    <p class="mb-2">
+                        The Bachelor of Arts in Multimedia Arts and Design is an 11 term program designed to address the
+                        growing need for highly qualified, multidisciplinary professionals in the creative industries.
+                        Within the heart of the program is the goal of expanding the students’ talents in various
+                        creative fields developing the students potential to create innovative content for print, web,
+                        and audiovisual communication. The MAD Program at SODA develops students into well rounded
+                        creatives who are technology adept critical thinkers and industry ready graduates.
+                    </p>
+                </div>
+
+            </div>
+            <hr>
+
+            <h2 class="px-4 color-primary text-3xl font-bold mb-4 mt-10"> Articles</h2>
+
             <div class="md:flex flex-wrap">
                 <div class="lg:w-1/3 p-3 md:w-1/2 w-full" v-for="article in all_news">
                     <div class="h-full bg-white rounded-lg border border-gray-200 shadow-md ">

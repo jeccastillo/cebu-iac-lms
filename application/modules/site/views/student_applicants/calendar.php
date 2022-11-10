@@ -14,7 +14,7 @@ window.moment || document.write(
 </script>
 
 
-<div id="admissions-form" style="margin-top:150px">
+<div id="admissions-form" style="margin-top:150px" v-show="student.email">
     <div class="custom-container">
         <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
             default-view="month" events-on-month-view="short" twelveHour hide-weekends :events="events"
@@ -120,10 +120,18 @@ new Vue({
             end: "17:00"
         },
         events: [],
-        tags: ['foo', 'bar']
+        tags: ['foo', 'bar'],
+        student: {},
+        slug: "<?php echo $this->uri->segment('3'); ?>",
     },
     mounted() {
-
+        axios.get(api_url + 'admissions/student-info/' + this.slug)
+            .then((data) => {
+                this.student = data.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
     },
 
@@ -153,6 +161,8 @@ new Vue({
 
 
             toggleModal()
+
+
         },
 
         submitSchedule: function() {

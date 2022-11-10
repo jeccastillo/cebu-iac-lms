@@ -174,7 +174,7 @@
                         class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Hello, <?php echo $user['strFirstname']; ?></p>
+                    <p> <?php echo $user['strFirstname']; ?></p>
                     <i class="fa fa-users text-green"></i> <?php echo switch_user_level($user['intUserLevel']); ?>
                 </div>
             </div>
