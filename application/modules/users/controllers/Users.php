@@ -337,19 +337,19 @@ class Users extends CI_Controller {
         $this->data['referer'] = $this->agent->referrer();
         $this->session->set_flashdata('referer',$this->data['referer']);
 		/*get facebook login link*/	
-		$this->config->load('fbconfig');
+		// $this->config->load('fbconfig');
 		$app_id = $this->config->item('app_id');
 		$app_secret = $this->config->item('app_secret');
-		$facebook = new Facebook(array(
-			  'appId'  => $app_id,
-			  'secret' => $app_secret
+		// $facebook = new Facebook(array(
+		// 	  'appId'  => $app_id,
+		// 	  'secret' => $app_secret
 			  
-		));
+		// ));
 		$params = array(
 			'scope' => 'user_status,publish_stream,user_photos,email,offline_access,user_photos,user_birthday,user_location,friends_likes,read_stream',
 			'redirect_uri'=>site_url('users/fb_login/')
 		);
-		$this->data['fb_login_link'] = $facebook->getLoginUrl($params);
+		// $this->data['fb_login_link'] = $facebook->getLoginUrl($params);
 		/*get facebook login link end*/       
 		$this->load->view('common/header',$this->data);
         $this->load->view('login_form',$this->data);        
