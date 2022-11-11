@@ -11,11 +11,11 @@ $(document).ready(function() {
             $.get(
                 "http://localhost:8004/api/v1/admissions/applications", {
                     limit: data.length,
-                    page: data.start,
+                    page: data.start / data.length + 1,
                     search_data: data.search.value,
                     search_field: "first_name",
-                    counte_content: data.length,
-                    order_by: data.order[0].dir,
+                    count_content: data.length,
+                    // order_by: data.order[0].dir,
                 },
                 function(json) {
                     callback({
@@ -24,7 +24,7 @@ $(document).ready(function() {
                         data: json.data
                     });
 
-                    // console.log(data);
+                    console.log(data);
                 }
             );
         },
