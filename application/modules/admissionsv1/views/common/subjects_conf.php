@@ -1,5 +1,6 @@
 <?php $d_open = '<div class="btn-group"><button type="button" class="btn btn-default">Actions</button><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu">';
 ?>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('#subjects-table').dataTable({
@@ -9,7 +10,7 @@ $(document).ready(function() {
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
             $.get(
-                "http://localhost:8004/api/v1/admissions/applications", {
+                api_url + "admissions/applications", {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,

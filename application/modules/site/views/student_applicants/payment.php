@@ -118,7 +118,7 @@
                         <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
                             class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                             style="display:flex; align-itenms:center;">
-                            <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
+                            <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
                         </div>
                     </div>
 
