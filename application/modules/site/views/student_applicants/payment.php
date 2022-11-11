@@ -225,7 +225,8 @@ new Vue({
         selected_items: [],
         payment_type: "<?php echo $this->uri->segment('2'); ?>",
         item_details: {
-            price: this.payment_type == 'admissions_student_payment_reservation' ? 1000 : 10000
+            price: 0,
+            hey: this.payment_type
         },
         item: {}, //single order
         selected_mode_of_payment: {},
@@ -246,7 +247,9 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
     },
     mounted() {
-        console.log(this.payment_type);
+
+        this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 700;
+
         axios
             .get(api_url + 'payments/modes?count_content=100', {
                 headers: {
