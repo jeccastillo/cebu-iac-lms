@@ -50,7 +50,7 @@
         <a onclick="openNav()" class="md:w-[170px] cursor-pointer">
             <img src="<?php echo $img_dir; ?>menu.svg" />
         </a>
-        <a href="<?php echo base_url(); ?>site/student_application">
+        <a href="<?php echo base_url(); ?>site/applicant_first_step">
             <img src="<?php echo $img_dir; ?>btn-apply.png" class="w-[170px] img-btn" alt="" />
         </a>
         <a href="<?php echo base_url(); ?>"> <img src=" <?php echo $img_dir; ?> logo.png"
