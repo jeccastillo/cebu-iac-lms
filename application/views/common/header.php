@@ -233,6 +233,62 @@
                     </ul>
                 </li>
                 <?php endif; ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa-book fa"></i> <span>Subjects</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="add_subject")?'active':''; ?>"><a href="<?php echo base_url(); ?>subject/add_subject" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add a subject</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_subjects")?'active':''; ?>"><a href="<?php echo base_url(); ?>subject/view_all_subjects" style="margin-left: 10px;"><i class="fa fa-book"></i> View Subjects</a></li>
+                                
+                            </ul>
+                        </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="curriculum")?'active':''; ?>">
+                            <a href="#">
+                                <i class="ion ion-university"></i> <span>Curriculum</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="add_curriculum")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/add_curriculum" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add a Curriculum</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_curriculum")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_all_curriculum" style="margin-left: 10px;"><i class="fa fa-book"></i> View Curriculum</a></li>
+                                
+                            </ul>
+                        </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="programs")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa-book fa"></i> <span>Programs</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="add_program")?'active':''; ?>"><a href="<?php echo base_url(); ?>program/add_program" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add a Program</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_programs")?'active':''; ?>"><a href="<?php echo base_url(); ?>program/view_all_programs" style="margin-left: 10px;"><i class="fa fa-book"></i> View Programs</a></li>
+                                
+                            </ul>
+                        </li>
+                <?php endif; ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>                   
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="registrar")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Registrar</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Classlists</a></li>
+                                <--li class="<?php echo (isset($page) && $page=="register_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/register_student" style="margin-left: 10px;"><i class="ion ion-compose"></i> Register Student</a></li-->
+                                <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/completions" style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Completions</a></li>        
+                                
+                                <li class="<?php echo (isset($page) && $page=="set_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/set_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> Set Academic Year</a></li>
+                                <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/add_ay" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Academic Year</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_academic_year")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/view_all_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> View Academic Year</a></li>
+                                
+                            </ul>
+                            
+                        </li>                                                
+                                
+                            
+                <?php endif; ?>
 
 
             </ul>
