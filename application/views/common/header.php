@@ -275,8 +275,7 @@
                                 <i class="fa pull-right fa-angle-left"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Classlists</a></li>
-                                <--li class="<?php echo (isset($page) && $page=="register_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/register_student" style="margin-left: 10px;"><i class="ion ion-compose"></i> Register Student</a></li-->
+                                <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Classlists</a></li>                                
                                 <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/completions" style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Completions</a></li>        
                                 
                                 <li class="<?php echo (isset($page) && $page=="set_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/set_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> Set Academic Year</a></li>
