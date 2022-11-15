@@ -68,13 +68,16 @@ class AdmissionsV1 extends CI_Controller {
     }
 
     public function add_new_student(){
-        $ip = $data['ip_address'] = $this->input->ip_address();
+        
+        $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){
             $data['message'] = "success";
         }
         else{
             $data['message'] = "Access Denied: you are using an invalid ip address";
         }
+
+        $data['ip_address']  = $ip;
             
 
         echo json_encode($data);
