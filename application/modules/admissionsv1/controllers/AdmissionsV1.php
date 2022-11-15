@@ -68,7 +68,7 @@ class AdmissionsV1 extends CI_Controller {
     }
 
     public function add_new_student(){
-
+        
         $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){
             $data['message'] = "success";
@@ -79,8 +79,8 @@ class AdmissionsV1 extends CI_Controller {
 
         $data['ip_address']  = $ip;
             
-        echo "SSSSS";
-        //echo json_encode($data);
+
+        echo json_encode($data);
     }
 
 
