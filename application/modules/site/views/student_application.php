@@ -323,6 +323,7 @@ new Vue({
             type_id: "",
             date_of_birth: ""
         },
+        loading_spinner: false,
         programs: [],
         programs_group: [],
         types: []
@@ -408,51 +409,57 @@ new Vue({
         customSubmit: function(type, title, text, data, url, redirect) {
 
 
-            Swal.fire({
-                title: title,
-                text: "Are you sure you want to " + type + " this " + text + "?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    return axios
-                        .post(api_url + url, data, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.is_done = true;
+            // Swal.fire({
+            //     title: title,
+            //     text: "Are you sure you want to " + type + " this " + text + "?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true,
+            //     preConfirm: (login) => {
+            //         return 
+            //     },
+            //     allowOutsideClick: () => !Swal.isLoading()
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         //    
+            //     }
+            // })
 
-                            if (data.data.success) {
+            this.loading_spinner = true;
 
-                                Swal.fire({
-                                    title: "SUCCESS",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
+            axios
+                .post(api_url + url, data, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.is_done = true;
 
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
+                    if (data.data.success) {
+
+                        this.loading_spinner = false;
+
+                        Swal.fire({
+                            title: "SUCCESS",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
                         });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    //    
-                }
-            })
+
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            data.data.message,
+                            'error'
+                        )
+                    }
+                });
 
         },
     },

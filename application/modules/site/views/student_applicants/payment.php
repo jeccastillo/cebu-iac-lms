@@ -173,9 +173,11 @@
                     </table>
 
                     <div class="text-right mt-3">
-                        <button type="submit" v-if="selected_mode_of_payment.id"
+                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
                             class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                            name="button">Submit</button>
+                            name="button">Submit <img v-show="loading_spinner" width="18" class="ml-1 spinner"
+                                src="<?php echo $img_dir; ?>spinner-solid.svg" alt="">
+                        </button>
                         <button type="button" disabled v-else
                             class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
                             name="button">Submit</button>
@@ -203,6 +205,23 @@
 .box_mode_payment.active {
     background: #1c54a5;
 }
+
+.spinner {
+    animation-name: spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
 </style>
 
 
@@ -216,6 +235,7 @@ new Vue({
             selected_location: "",
             mailing_fee: 0,
         },
+        loading_spinner: false,
         student: {},
         payment_modes: [],
         mode_of_releases: [],
@@ -248,7 +268,7 @@ new Vue({
     },
     mounted() {
 
-        this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 700;
+        this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 500;
 
         axios
             .get(api_url + 'payments/modes?count_content=100', {
@@ -348,52 +368,57 @@ new Vue({
         },
 
         submitPayment: function() {
-            Swal.fire({
-                title: "Submit Payment",
-                text: "Are you sure you want to submit?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    return axios
-                        .post(api_url + 'payments', this.payload, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.is_done = true;
+            // Swal.fire({
+            //     title: "Submit Payment",
+            //     text: "Are you sure you want to submit?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true,
+            //     preConfirm: (login) => {
+            //         return 
+            //     },
+            //     allowOutsideClick: () => !Swal.isLoading()
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
 
-                            if (data.data.success) {
+            //     }
+            // })
 
-                                if (!this.selected_mode_of_payment.is_nonbank) {
-                                    this.redirect_link = data.data.payment_link;
+            this.loading_spinner = true;
 
-                                    setTimeout(() => {
-                                        document.getElementById("payment_link")
-                                            .click();
-                                    }, 500);
+            axios
+                .post(api_url + 'payments', this.payload, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.is_done = true;
 
-                                } else {}
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
+                    if (data.data.success) {
 
-                }
-            })
+                        if (!this.selected_mode_of_payment.is_nonbank) {
+                            this.redirect_link = data.data.payment_link;
+                            this.loading_spinner = false;
+
+                            setTimeout(() => {
+                                document.getElementById("payment_link")
+                                    .click();
+                            }, 500);
+
+                        } else {}
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            data.data.message,
+                            'error'
+                        )
+                    }
+                });
         }
     }
 
