@@ -207,7 +207,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>admissionsv1/view_all_leads"
+                                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
                     </ul>
 
