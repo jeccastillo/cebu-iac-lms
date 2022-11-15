@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 	
-class AdmissionsV2 extends CI_Controller {
+class Admissionsv2 extends CI_Controller {
 
 	
     function __construct() {
