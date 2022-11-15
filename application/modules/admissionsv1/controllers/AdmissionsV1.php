@@ -67,6 +67,11 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url());  
     }
 
+    public function add_new_student(){
+        $data['ip_address'] = $this->input->ip_address();
+        echo json_encode($data);
+    }
+
 
     public function view_lead($id) {
         if($this->faculty_logged_in())
