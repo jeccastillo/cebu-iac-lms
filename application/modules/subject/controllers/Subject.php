@@ -264,6 +264,9 @@ class Subject extends CI_Controller {
             }
             
             $sem_temp = $this->data['active_sem'];
+            
+            $this->data['grades_charts'] = [];
+            
             for($i=0;$i<4;$i++){
                 $chart = getGradeAveragesSubject($sem_temp['intID'],$id);
                

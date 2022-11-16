@@ -6,7 +6,7 @@
     labels: ['1','1.25','1.5','1.75','2.0','2.25','2.5','2.75','3.0','inc','5.0'],
     datasets: [
         <?php 
-        if($grades_charts):
+        if(!empty($grades_charts)):
         foreach($grades_charts as $grades_chart): 
             $i=rand(0,230);
             $j=rand(0,230);
