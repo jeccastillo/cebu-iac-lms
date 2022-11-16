@@ -339,6 +339,8 @@ new Vue({
 
             .then((data) => {
                 this.programs = data.data;
+                console.log("PROG",this.programs);
+                console.log(data);
             })
             .catch((e) => {
                 console.log("error");
