@@ -77,6 +77,7 @@ class AdmissionsV1 extends CI_Controller {
             $data['data'] = $post;       
             $post['dteCreated'] = date("Y-m-d"); 
             $post['strAcademicStanding'] = "regular";
+            $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intintProgramID']);
             $this->data_poster->post_data('tb_mas_users',$post);
         }
         else{

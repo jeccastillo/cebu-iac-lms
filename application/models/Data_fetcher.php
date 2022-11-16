@@ -1125,6 +1125,11 @@ class Data_fetcher extends CI_Model {
                      ->result_array());
                      
     }
+
+    function getCurriculumIDByCourse($id){
+        $curriculum =  $this->db->select('intID')->from('tb_mas_curriculum')->where('intProgramID',$id)->first();
+        return $curriculum->intID;
+    }
     
     function getApplicant($id)
     {
