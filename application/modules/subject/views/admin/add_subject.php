@@ -28,12 +28,16 @@
                             <input type="number" name="strUnits" class="form-control" id="strUnits" placeholder="Enter Number of Units">
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="intLab">Laboratory Time (hours)</label>
+                            <label for="intLab">Laboratory Units</label>
                             <input type="number" class="form-control" value="0" name="intLab" id="intLab" /> 
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="intLectHours">Lecture/Class Time (hours)</label>
+                            <label for="intLectHours">Lecture Units</label>
                             <input type="number" class="form-control" value="0" name="intLectHours" id="intLectHours" /> 
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="intLectHours">Year Level</label>
+                            <input type="number" class="form-control" value="1" name="intYearLevel" id="intYearLevel" /> 
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="intYearLevel">Athletic Fee</label>
