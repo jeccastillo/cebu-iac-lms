@@ -495,6 +495,13 @@ class Unity extends CI_Controller {
             redirect(base_url());
         
     }
+
+    function get_active_sem(){
+        
+        $data['active_sem'] = $this->data_fetcher->get_active_sem();
+        return json_encode($data);
+
+    }
     
     function get_transaction_ajax()
     {
