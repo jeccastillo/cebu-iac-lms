@@ -338,7 +338,7 @@ new Vue({
             })
 
             .then((data) => {
-                this.programs = data.data;
+                this.programs = data.data.data;
                 console.log("PROG",this.programs);
                 console.log(data);
             })
