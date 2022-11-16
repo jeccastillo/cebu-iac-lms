@@ -73,8 +73,8 @@ class AdmissionsV1 extends CI_Controller {
         if($ip == "172.16.80.22"){
             $data['message'] = "success";
             $data['success'] = true;
-            $data['data'] = $post;
             $post = $this->input->post();
+            $data['data'] = $post;            
             $this->data_poster->post_data('tb_mas_users',$post);
 
         }
