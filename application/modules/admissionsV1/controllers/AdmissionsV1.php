@@ -75,7 +75,8 @@ class AdmissionsV1 extends CI_Controller {
             $data['success'] = true;
             $post = $this->input->post();
             $data['data'] = $post;       
-            $post['dteCreated'] = date("Y-m-d");            
+            $post['dteCreated'] = date("Y-m-d"); 
+            $post['strAcademicStanding'] = "regular";
             $this->data_poster->post_data('tb_mas_users',$post);
         }
         else{
