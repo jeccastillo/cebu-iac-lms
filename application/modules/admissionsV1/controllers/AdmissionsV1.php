@@ -72,7 +72,9 @@ class AdmissionsV1 extends CI_Controller {
         $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){
             $data['message'] = "success";
-            $data['data'] = $this->input->post();
+            $activeSem = $this->data_fetcher->get_active_sem();
+            $data['data']['active_sem'] = $activeSem;
+
         }
         else{
             $data['message'] = "Access Denied: you are using an invalid ip address";
