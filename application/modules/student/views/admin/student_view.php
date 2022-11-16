@@ -123,7 +123,7 @@
               <!-- /.row -->
             </div>
             <!-- ./box-body -->
-            */ ?>
+            
             <div class="box-footer" style="display: block;">
                 <div class="row">
                     <div class="col-sm-4">
@@ -133,6 +133,7 @@
               <!-- /.row -->
             </div>
             <!-- /.box-footer -->
+            */ ?>
           </div>
         <div class="box box-solid box-default">
             <div class="box-header">                  
