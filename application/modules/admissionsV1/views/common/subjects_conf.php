@@ -58,7 +58,7 @@ $(document).ready(function() {
                 data: "email"
             },
             {
-                data: "student_type_title"
+                data: "program"
             },
             {
                 data: "status"

@@ -98,7 +98,7 @@
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Student Type</strong>
                         <p class="text-muted">
-                            {{request.student_type_title}}
+                            {{request.program}}
                         </p>
                         <hr>
                     </div>

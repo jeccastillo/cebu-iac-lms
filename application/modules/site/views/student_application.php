@@ -170,7 +170,7 @@
                            </label>
                            <div class="d-flex align-items-center" v-for="t in programs" :key="t.id">
                                <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
-                                   @click="filterProgram(t.type)" name="" :value="t.id" required />
+                                   @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
                                <label :for="'progId-' + t.id"> {{ t.title }}</label>
                            </div>
                        </div>
@@ -321,7 +321,8 @@ new Vue({
     data: {
         request: {
             type_id: "",
-            date_of_birth: ""
+            date_of_birth: "",
+            program: "",
         },
         loading_spinner: false,
         programs: [],
@@ -382,7 +383,7 @@ new Vue({
             console.log(this.request);
         },
 
-        filterProgram: function(type) {
+        filterProgram: function(type,title) {
             var group = _.filter(this.programs, function(o) {
                 return o.type == type;
             });
@@ -398,7 +399,9 @@ new Vue({
                         .prop("checked", false);
                     if ($(e.currentTarget).is(":checked")) {
                         this.request.program_id = e.currentTarget.value;
+                        this.request.program = title;
                         $(".admissions_submission_pg").removeAttr("required");
+
                     } else {
                         $(".admissions_submission_pg").attr("required", true);
                     }
@@ -449,7 +452,7 @@ new Vue({
                             text: data.data.message,
                             icon: "success"
                         }).then(function() {
-                            //location.reload();
+                            location.reload();
                         });
 
                     } else {
