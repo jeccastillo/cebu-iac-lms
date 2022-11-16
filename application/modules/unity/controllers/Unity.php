@@ -499,7 +499,7 @@ class Unity extends CI_Controller {
     function get_active_sem(){
         
         $data['active_sem'] = $this->data_fetcher->get_active_sem();
-        return json_encode($data);
+        echo json_encode($data);
 
     }
     
