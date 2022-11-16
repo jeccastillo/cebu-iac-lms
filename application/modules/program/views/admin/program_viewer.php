@@ -45,6 +45,7 @@
 
             <div class="col-lg-4 col-xs-12">
               <p><strong>Major: </strong><?php echo $program['strMajor']; ?></p>
+              <p><strong>Type: </strong><?php echo $program['type']; ?></p>
             </div>
             <div style="clear:both"></div>
             
