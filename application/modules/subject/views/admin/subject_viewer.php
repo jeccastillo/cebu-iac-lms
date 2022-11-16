@@ -49,9 +49,7 @@
                 </div>
 
                 <div class="col-lg-4 col-xs-12">
-                    <p><strong>Units: </strong><?php echo $subjects['strUnits']; ?></p>
-                    <p><strong>Year Level: </strong><?php echo $subjects['intYearLevel']; ?></p>
-
+                    <p><strong>Units: </strong><?php echo $subjects['strUnits']; ?></p>                    
                 </div>
                 <div style="clear:both"></div>
 
