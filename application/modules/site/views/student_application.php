@@ -168,7 +168,7 @@
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
-                           <div class="d-flex align-items-center" v-for="t in types" :key="t.id">
+                           <div class="d-flex align-items-center" v-for="t in programs" :key="t.id">
                                <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
                                    @click="filterProgram(t.type)" name="" :value="t.id" required />
                                <label :for="'progId-' + t.id"> {{ t.title }}</label>
