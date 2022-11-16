@@ -74,8 +74,8 @@ class AdmissionsV1 extends CI_Controller {
             $data['message'] = "success";
             $data['success'] = true;
             $post = $this->input->post();
-            $data['data'] = json_decode($post);            
-            $this->data_poster->post_data('tb_mas_users',json_decode($post));
+            $data['data'] = $post;            
+            $this->data_poster->post_data('tb_mas_users',$post);
 
         }
         else{
@@ -87,7 +87,7 @@ class AdmissionsV1 extends CI_Controller {
         $data['ip_address']  = $ip;
             
 
-        echo json_encode($data);
+        echo json_encode($data['data']);
     }
 
 
