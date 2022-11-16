@@ -27,6 +27,7 @@
                             <th>Description</th>
                             <th>Major</th>
                             <th>Type</th>
+                            <th>Enabled</th>
                             <th>Select Actions</th>
                         </tr>
                         </thead>
