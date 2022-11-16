@@ -195,6 +195,25 @@
                         <span>My Profile</span></a></li> -->
 
 
+                <?php if(in_array($user['intUserLevel'],array(0,1,2,3,4,5,6)) ): ?>
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="students")?'active':''; ?>">
+                        <a href="#">
+                            <i class="fa-user fa text-teal"></i> <span>Students</span>
+                            <i class="fa pull-right fa-angle-left"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <?php if(in_array($user['intUserLevel'],array(2,3,4,5)) ): ?>
+                            <li class="<?php echo (isset($page) && $page=="add_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/add_student" style="margin-left: 10px;"><i class="ion ion-android-person-add"></i> Add a Student Record</a></li>
+                            <?php endif; ?>
+                            <li class="<?php echo (isset($page) && $page=="view_students")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_students" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students</a></li>
+<!--                            <li class="<?php echo (isset($page) && $page=="view_students2")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_students2" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students' Pass</a></li> -->
+                            
+                            
+                            <!--li class="<?php echo (isset($page) && $page=="view_registered_students")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_registered_students" style="margin-left: 10px;"><i class="ion ion-eye"></i>Registered Students</a></li-->  
+
+                        </ul>
+                    </li>
+                <?php endif; ?>
 
                 <?php if(in_array($user['intUserLevel'],array(1,2,3,4,5,6)) ): ?>
                 <li class="header">Admissions</li>
