@@ -87,7 +87,7 @@ class AdmissionsV1 extends CI_Controller {
         $data['ip_address']  = $ip;
             
 
-        //echo json_encode($data['data']);
+        echo json_encode($data);
     }
 
 
