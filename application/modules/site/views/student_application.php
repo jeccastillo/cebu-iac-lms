@@ -400,6 +400,7 @@ new Vue({
                     if ($(e.currentTarget).is(":checked")) {
                         this.request.program_id = e.currentTarget.value;
                         this.request.program = title;
+                        console.log(this.request.program);
                         $(".admissions_submission_pg").removeAttr("required");
 
                     } else {
