@@ -35,11 +35,7 @@
                      <div class="form-group col-xs-6">
                             <label for="intLectHours">Lecture/Class Units</label>
                             <input type="number" class="form-control" value="<?php echo $subject['intLectHours'] ?>" name="intLectHours" id="intLectHours" />
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="intLectHours">Year Level</label>
-                            <input type="number" class="form-control" value="<?php echo $subject['intYearLevel'] ?>" name="intYearLevel" id="intYearLevel" /> 
-                        </div>
+                    </div>                        
                      <div class="form-group col-xs-6">
                             <label for="intYearLevel">Athletic Fee</label>
                             <select class="form-control" name="intAthleticFee" id="intAthleticFee" >
