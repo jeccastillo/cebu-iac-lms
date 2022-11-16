@@ -196,6 +196,10 @@
                             @click="update_status = 'For Reservation'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
                             Reservation</button>
+                        <button type="button" v-if="request.status == 'Reserved'"
+                            @click="update_status = 'For Enrollment'" data-toggle="modal" data-target="#myModal"
+                            class=" btn btn-info">For
+                            Enrollment</button>
                         <button type="button" v-if="request.status != 'Reserved'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
                             btn-danger">Reject</button>
