@@ -391,6 +391,8 @@ new Vue({
                 return o.type == "others";
             });
             this.programs_group = _.concat(group, others);
+            this.request.program = title;
+            console.log(this.request.program);
 
             setTimeout(() => {
                 $(".admissions_submission_pg").on("click", e => {
@@ -398,9 +400,7 @@ new Vue({
                         .not(e.currentTarget)
                         .prop("checked", false);
                     if ($(e.currentTarget).is(":checked")) {
-                        this.request.program_id = e.currentTarget.value;
-                        this.request.program = title;
-                        console.log(this.request.program);
+                        this.request.program_id = e.currentTarget.value;                        
                         $(".admissions_submission_pg").removeAttr("required");
 
                     } else {
