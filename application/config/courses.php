@@ -4,7 +4,7 @@
 
 $config['terms'] = array('1st','2nd','summer');
 $config['term_type'] = "Semester";
-$config['department'] = array('Business Administration-HRDM','Business Administration-MM', 'Computer Science','General Education', 'Hospitality Management','Information Technology', 'Management Information System','Physical Education','Secondary Education','Student Affairs & Services', 'Tourism Management', 'Office Administration','Non-teaching');
+$config['department'] = array('School of Design', 'School of Computing', 'School of Business','Other');
 $config['days'] = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
 $config['crType']= array('lecture','laboratory','hrm','pe');
 $config['unit_fee'] = 175;
