@@ -331,14 +331,14 @@ new Vue({
     mounted() {
 
         axios
-            .get(api_url + 'admissions/student-info/programs', {
+            .get('program/view_active_programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
             })
 
             .then((data) => {
-                this.programs = data.data.data;
+                this.programs = data.data;
             })
             .catch((e) => {
                 console.log("error");
