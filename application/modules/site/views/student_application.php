@@ -331,7 +331,7 @@ new Vue({
     mounted() {
 
         axios
-            .get('program/view_active_programs', {
+            .get('http://localhost/cebu-iac-lms/program/view_active_programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
