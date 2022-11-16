@@ -331,14 +331,14 @@ new Vue({
     mounted() {
 
         axios
-            .get('http://localhost/cebu-iac-lms/program/view_active_programs', {
+            .get(base_url + 'program/view_active_programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
             })
 
             .then((data) => {
-                this.programs = data.data;
+                this.programs = data.data.data;
             })
             .catch((e) => {
                 console.log("error");
