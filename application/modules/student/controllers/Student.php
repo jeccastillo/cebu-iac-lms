@@ -97,7 +97,7 @@ class Student extends CI_Controller {
         {  
           
             $this->data['student'] = $this->data_fetcher->getStudent($id);
-            //print_r($this->data['student']);
+            print_r($this->data['student']);
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
             $this->data['curriculum'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
             
