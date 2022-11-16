@@ -27,8 +27,6 @@
                             <th>Code</th>
                             <th>Description</th>
                             <th>Units</th>
-                            <th>Year Level</th>
-                            <th>Semester</th>
                             <th>Select Actions</th>
                         </tr>
                     </thead>
