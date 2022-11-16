@@ -200,7 +200,7 @@
                             @click="update_status = 'For Enrollment'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
                             Enrollment</button>
-                        <button type="button" v-if="request.status != 'Reserved'" data-toggle="modal"
+                        <button type="button" v-if="request.status != 'Reserved' || request.status != 'For Enrollment' || request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
                             btn-danger">Reject</button>
                     </div>
