@@ -206,6 +206,7 @@ class Program extends CI_Controller {
             
             $temp['id'] = $prog['intProgramID'];
             $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
             
             $ret[] = $temp;
         }

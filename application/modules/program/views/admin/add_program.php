@@ -32,6 +32,14 @@
                             <label for="strProgramDescription">Program Description</label>
                              <textarea name="strProgramDescription" class="form-control"></textarea>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="type">Type</label>
+                              <select class="form-control" name="type" id="type" >
+                                <option value="college">College</option>
+                                <option value="shs">SHS</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
                         
                         <div class="form-group col-xs-12">
                             <input type="submit" value="add" class="btn btn-default  btn-flat">

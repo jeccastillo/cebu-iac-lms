@@ -33,7 +33,15 @@
                              <textarea name="strProgramDescription" class="form-control"><?php echo $item['strProgramDescription']; ?></textarea>
                         </div>
                     
-                         <div class="form-group col-xs-6">
+                        <div class="form-group col-xs-6">
+                            <label for="type">Type</label>
+                              <select class="form-control" name="type" id="type" >
+                                <option <?php echo ($item['type'] == "college")?'selected':''; ?> value="college">College</option>
+                                <option <?php echo ($item['type'] == "shs")?'selected':''; ?> value="shs">SHS</option>
+                                <option <?php echo ($item['type'] == "other")?'selected':''; ?> value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-6">
                             <label for="enumEnabled">Enable Program Status</label>
                               <select class="form-control" name="enumEnabled" id="enumEnabled" >
                                 <option <?php echo ($item['enumEnabled'] == 0)?'selected':''; ?> value="0">No</option>
