@@ -1119,7 +1119,7 @@ class Data_fetcher extends CI_Model {
                      ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName')
                      ->from('tb_mas_users')
                      ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')   
-                     ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID')
+                     //->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID')
                      ->where(array('tb_mas_users.intID'=>$id))
                      ->get()
                      ->result_array());
