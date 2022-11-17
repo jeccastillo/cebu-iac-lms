@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-require_once('src/facebook.php');
+//require_once('src/facebook.php');
 	
 class Portal extends CI_Controller {
 
