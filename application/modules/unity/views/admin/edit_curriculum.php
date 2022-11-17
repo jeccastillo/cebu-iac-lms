@@ -89,7 +89,7 @@
                         </select>
                     </div>
                     <div class="form-group col-xs-4">
-                        <label for="intSem">Sem</label>
+                        <label for="intSem">Term</label>
                         <select class="form-control" name="intSem" id="intSem" >
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -124,7 +124,7 @@
                     <thead>
                         <tr>
                             <th colspan="2">
-                                <?php echo switch_num($s['intYearLevel'])." Year | ".switch_num($s['intSem'])." Sem"; ?>
+                                <?php echo switch_num($s['intYearLevel'])." Year | ".switch_num($s['intSem'])." Term"; ?>
                                
                             </th>
                         </tr>
