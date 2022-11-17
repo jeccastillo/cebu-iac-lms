@@ -820,7 +820,7 @@ class Pdf extends CI_Controller {
         $this->data['grades'] = $grades;
         $this->data['curriculum'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);
         $this->data['student'] = $this->data_fetcher->getItem('tb_mas_users',$studentId);
-        $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($id);
+        //$this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($id);
         $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
         $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
             
