@@ -244,7 +244,7 @@
                                 
                             </ul>
                         </li>
-
+                <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="admin")?'active':''; ?>">
                     <a href="#">
