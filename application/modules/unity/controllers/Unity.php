@@ -1353,7 +1353,7 @@ class Unity extends CI_Controller {
             $this->data['alert'] = $this->session->flashdata('message');
             $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
             $this->data['is_admin'] = $this->is_super_admin();
-            
+            print_r($this->data['classlist']);
             $cl_ay = $this->data['classlist']['strAcademicYear'];
             $cl_subj = $this->data['classlist']['intSubjectID'];
             
