@@ -1977,7 +1977,7 @@ class Data_fetcher extends CI_Model {
             {
                 $data['id_fee'] = $id_fee;
                 $data['csg']['student_handbook'] = $csg['student_handbook'];
-                $data['misc_fee']['Entrance Exam Fee'] = $misc['entrance_exam_fee'];
+                $data['misc_fee']['Entrance Exam Fee'] = $misc_fee['entrance_exam_fee'];
                 $data['misc_fee']['Medical and Dental Fee'] = $misc_fee['medical_fee'];
             }
             else
