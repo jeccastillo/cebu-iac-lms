@@ -77,12 +77,8 @@
                  <label for="enumScholarship">Scholarship Grant</label>
                     <select class="form-control" id="enumScholarship" name="enumScholarship">
                         <option value="0">---SELECT---</option>
-                        <option>Paying</option>
-                        <option disabled value="7th district">7th District</option>
-                        <option disabled value="resident scholar">Resident Scholar</option>
-                        <option disabled value="tagaytay resident">Tagaytay Resident</option>
-                        <option disabled value="DILG scholar">DILG Scholar</option>
-                        <option value="FREE HIGHER EDUCATION PROGRAM (R.A. 10931)">FREE HIGHER EDUCATION PROGRAM (R.A. 10931)</option>
+                        <option>None</option>                        
+                        <option value="iACADEMY Scholar">iACADEMY Scholar</option>
                     </select>
                         <br />
                  <label for="enumStudentType">Student Type</label>
