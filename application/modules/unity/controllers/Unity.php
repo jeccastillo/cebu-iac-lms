@@ -38,7 +38,7 @@ class Unity extends CI_Controller {
         $this->data['srf'] = $this->config->item('srf');
         $this->data['sfdf'] = $this->config->item('sfdf');
         $this->data['csg'] = $this->config->item('csg');
-        $this->data['photo_dir'] = "https://portal.citycollegeoftagaytay.edu.ph/assets/photos/";
+        $this->data['photo_dir'] = "http://103.225.39.200/cebu-iac-lms//assets/photos/";
         $this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
         $this->data["user"] = $this->session->all_userdata();
         $this->data['unread_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intRead'=>'0','intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
