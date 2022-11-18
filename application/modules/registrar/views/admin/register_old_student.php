@@ -75,9 +75,8 @@
                     </select>
                         <br />
                  <label for="enumScholarship">Scholarship Grant</label>
-                    <select class="form-control" id="enumScholarship" name="enumScholarship">
-                        <option value="0">---SELECT---</option>
-                        <option>None</option>                        
+                    <select class="form-control" id="enumScholarship" name="enumScholarship">                        
+                        <option value="None">None</option>                        
                         <option value="iACADEMY Scholar">iACADEMY Scholar</option>
                     </select>
                         <br />
