@@ -48,13 +48,10 @@
                         <label for="strSchool">School</label>
                         <select class="form-control" name="strSchool" >
                             <option value="Select">--Select--</option>                      
-                            <option value="SCS">School of Computer Studies</option>
-                            <option value="SBM">School of Business & Management</option>
-                            <option value="SED">School of Education</option>
-                            <option value="SHTM">School of Hospitality & Tourism Management</option>
-                            <option value="SAS">School of Arts & Sciences</option>
-                            <option value="OSAS">Office of Student Affairs & Services</option>
-                            <option value="Non-teaching">Non-teaching</option>
+                            <option value="Computing">School of Computing</option>
+                            <option value="Business">School of Business</option>
+                            <option value="Design">School of Design</option>
+                            <option value="Other">Other</option>                           
                         </select>
                     </div>
                     <div class="form-group col-xs-6">
