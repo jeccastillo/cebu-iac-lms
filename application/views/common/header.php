@@ -298,6 +298,16 @@
                                 
                             </ul>
                         </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="schedule")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa-calendar fa"></i> <span>Schedule</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="add_schedule")?'active':''; ?>"><a href="<?php echo base_url(); ?>schedule/add_schedule" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Schedule</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_schedules")?'active':''; ?>"><a href="<?php echo base_url(); ?>schedule/view_schedules" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Schedules</a></li>
+                            </ul>
+                        </li>
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>                   
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="registrar")?'active':''; ?>">
