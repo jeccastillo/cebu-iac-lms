@@ -254,12 +254,14 @@
                     <ul class="treeview-menu">
 
 
-                        <li class="<?php echo (isset($page) && $page=="add_faculty")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>faculty/add_faculty" style="margin-left: 10px;"><i
-                                    class="ion ion-android-person-add"></i> Add Users</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>faculty/view_all_faculty" style="margin-left: 10px;"><i
-                                    class="ion ion-eye"></i> View Users</a></li>
+                    <!--li class="<?php echo (isset($page) && $page=="sync")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/execute_sync" style="margin-left: 10px;"><i class="ion ion-android-sync"></i> Sync Students DB</a></li-->
+                    <li class="<?php echo (isset($page) && $page=="add_faculty")?'active':''; ?>"><a href="<?php echo base_url(); ?>faculty/add_faculty" style="margin-left: 10px;"><i class="ion ion-android-person-add"></i> Add Faculty</a></li>
+                    <li class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>"><a href="<?php echo base_url(); ?>faculty/view_all_faculty" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Faculty</a></li>
+                    <li class="<?php echo (isset($page) && $page=="add_classroom")?'active':''; ?>"><a href="<?php echo base_url(); ?>classroom/add_classroom" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Classroom</a></li>
+                    <li class="<?php echo (isset($page) && $page=="view_classrooms")?'active':''; ?>"><a href="<?php echo base_url(); ?>classroom/view_classrooms" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Classrooms</a></li>
+                    
+                    
+                    <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/logs" style="margin-left: 10px;"><i class="ion ion-ios-list-outline"></i> View Logs</a></li>
 
                     </ul>
                 </li>
