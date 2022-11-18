@@ -395,9 +395,7 @@ class Registrar extends CI_Controller {
             $reg['intYearLevel'] = $academic_standing['year'];
             $reg['dteRegistered'] = date("Y-m-d");
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
-            $reg['enumScholarship'] = $post['enumScholarship'];
-            
-            $stud['enumScholarship'] = $post['enumScholarship'];
+            $reg['enumScholarship'] = $post['enumScholarship'];            
 
             if($post['enumStudentType']=="cross")
                 $st = "Cross Registered From ".$post['strFrom'];
