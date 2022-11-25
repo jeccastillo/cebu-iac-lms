@@ -49,6 +49,9 @@ class Excel extends CI_Controller {
         
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
     }
+    public function index(){
+        echo "php excel module";
+    }
     public function download_classlists_archive()
     {
         $post = $this->input->post();
