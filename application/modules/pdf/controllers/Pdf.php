@@ -812,6 +812,20 @@ class Pdf extends CI_Controller {
         $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
         $this->load->view("print_view_student_reg_data",$this->data);
     }
+
+    function get_curriculum_for_printing($slug){
+
+        $data['student'] = $this->data_fetcher->getItem('tb_mas_users',$slug,'slug');
+        $data['curriculum'] = $this->data_fetcher->getItem('tb_mas_curriculum',$data['student']['intCurriculumID']);
+        $grades = $this->data_fetcher->assessCurriculum($data['student']['intID'],$data['student']['intCurriculumID']);
+        array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+        $data['grades'] = $grades;
+        $data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($data['student']['intCurriculumID']);
+        $data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($data['student']['intCurriculumID']);
+
+        echo json_encode($data);
+
+    }
     
     function print_curriculum($id,$studentId)
     {
