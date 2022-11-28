@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="box-body" style="padding:2rem">
-                <form @submit.prevent="updateData" class="modal-dialog modal-lg">    
+                <form @submit.prevent="updateData">    
                     <div class="row">                     
                         <div class="form-group col-xs-6">
                             <label for="year">Tuition Year</label>
