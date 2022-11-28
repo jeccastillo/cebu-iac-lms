@@ -24,11 +24,11 @@
                     <div class="row">                     
                         <div class="form-group col-xs-6">
                             <label for="year">Tuition Year</label>
-                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
+                            <input type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="year">Price Per Unit</label>
-                            <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                            <input type="number" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
                         </div> 
                         <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
                             <label for="isDefault">Default Tuition</label>
