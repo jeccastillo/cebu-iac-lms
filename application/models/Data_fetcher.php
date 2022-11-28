@@ -1858,14 +1858,12 @@ class Data_fetcher extends CI_Model {
                         $data['repeated'][] = array('amount' => $amountRep, 'subjectCode' => $repeated['strCode'], 'strUnits' => $repeated['strUnits'] );
                         $data['total_for_repeated'] += $amountRep;
                         
-                    }
-                        
-
-                    $class['intLab'] = $class['intLab']/3;
-                    $tuition += intval($class['strUnits'])*$unit_fee;
+                    }                        
+                    
+                    $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                     
                     if($class['intLab'] != 0){
-                        $lab_list[$class['strCode']] = $lab_fee*$class['intLab'];
+                        $lab_list[$class['strCode']] = $class['floatLabFee'];
                         $total_lab += $lab_list[$class['strCode']];
                     }
 

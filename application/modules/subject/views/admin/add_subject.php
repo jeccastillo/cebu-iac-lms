@@ -23,9 +23,17 @@
                             <input type="text" name="strCode" class="form-control" id="strCode" placeholder="Enter Subject Code">
                         </div>
 
-                         <div class="form-group col-xs-6">
+                        <div class="form-group col-xs-6">
                             <label for="strUnits">Number of Units</label>
                             <input type="number" name="strUnits" class="form-control" id="strUnits" placeholder="Enter Number of Units">
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="strUnits">Number of Units for Tuition</label>
+                            <input type="number" name="strTuitionUnits" class="form-control" id="strTuitionUnits" placeholder="Enter Number of Units">
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="strUnits">Laboratory Fee</label>
+                            <input type="number" name="floatLabFee" class="form-control" id="floatLabFee" placeholder="Enter LabFee">
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="intLab">Laboratory Units</label>
