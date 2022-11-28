@@ -468,6 +468,36 @@ if(!function_exists('switch_num_rev'))
     }
 }
 
+if(!function_exists('switch_num_rev_search'))
+{
+    function switch_num_rev_search($num)
+    {
+        switch($num)
+            {
+                case '1st':
+                    $num = "01";
+                    break;
+                case '2nd':
+                    $num = "02";
+                    break;
+                case '3rd':
+                    $num = "03";
+                    break;
+                case '4th':
+                    $num = "04";
+                    break;
+                case '5th':
+                    $num = "05";
+                    break;
+                case '6th':
+                    $num = "06";
+                    break;
+            }
+        
+            return $num;
+    }
+}
+
 if(!function_exists('switch_day_schema'))
 {
     function switch_day_schema($num)
