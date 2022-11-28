@@ -44,6 +44,11 @@ class Data_poster extends CI_Model {
              ->update('tb_mas_applications',array('strConfirmationCode'=>0));
     }
     
+    function reset_tuition_year(){
+        $this->db             
+             ->update('tb_mas_tuition_year',array('isDefault'=>0));
+    }
+
     function updateExamConfirmation($id)
     {
         $this->db

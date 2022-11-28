@@ -123,9 +123,12 @@ class Tuitionyear extends CI_Controller {
         
         if($id == 0)
             $this->data_poster->post_data('tb_mas_tuition_year',$post);
-        else
+        else{
+            if($post['isDefault'] == 1)
+                $this->data_poster->reset_tuition_year();
+                            
             $this->data_poster->post_data('tb_mas_tuition_year',$post,$id);
-
+        }
 
         $data['success'] = true;
         $data['data'] = $post;
