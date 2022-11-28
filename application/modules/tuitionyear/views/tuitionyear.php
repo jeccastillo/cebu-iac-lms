@@ -119,10 +119,10 @@ new Vue({
                                 }
                             })
                         .then(data => {
-                            if (data.data.success) {
+                            if (data.success) {
                                 Swal.fire({
                                     title: "Success",
-                                    text: data.data.message,
+                                    text: data.message,
                                     icon: "success"
                                 }).then(function() {
                                     location.reload();
@@ -130,7 +130,7 @@ new Vue({
                             } else {
                                 Swal.fire(
                                     'Failed!',
-                                    data.data.message,
+                                    data.message,
                                     'error'
                                 )
                             }
