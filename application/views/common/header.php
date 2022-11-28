@@ -326,7 +326,7 @@
                                 <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/add_ay" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="view_academic_year")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/view_all_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> View Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Year</a></li>
-                                <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
+                                <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
                             </ul>
                             
                         </li>                                                
