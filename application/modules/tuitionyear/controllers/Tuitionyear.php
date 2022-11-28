@@ -91,6 +91,15 @@ class Tuitionyear extends CI_Controller {
         $this->load->view("common/footer",$this->data);                                  
        
     }
+
+    public function tuition_info($id){
+        
+        $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
+        $data['success'] = true;        
+        $data['message'] ="Successfully Added";
+        echo json_encode($data);
+
+    }
     
     public function submit_form($id = 0)
     {

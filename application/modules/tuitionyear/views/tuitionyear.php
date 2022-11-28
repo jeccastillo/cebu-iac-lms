@@ -76,17 +76,19 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
+        if(this.id != 0){
 
+        }
 
-        // this.loader_spinner = true;
-        // axios.get(api_url + 'admissions/student-info/' + this.slug)
-        //     .then((data) => {
-        //         this.request = data.data.data;
-        //         this.loader_spinner = false;
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     })
+         this.loader_spinner = true;
+         axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
+            .then((data) => {
+                this.request = data.data.data;
+                this.loader_spinner = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
 
 

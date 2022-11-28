@@ -25,6 +25,10 @@ class Data_fetcher extends CI_Model {
 		return $data;
 						
 	}
+
+    function fetch_single_entry($table,$id,$label = "intID"){
+        return $this->db->where(array($label => $id))->get($table)->first_row('array');
+    }
     
     function getCourseName($id)
     {
