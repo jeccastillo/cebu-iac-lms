@@ -119,11 +119,11 @@ new Vue({
                                 }
                             })
                         .then(data => {
-                            console.log(data);
-                            if (data.success) {
+                            console.log(data.data);
+                            if (data.data.success) {
                                 Swal.fire({
                                     title: "Success",
-                                    text: data.message,
+                                    text: data.data.message,
                                     icon: "success"
                                 }).then(function() {
                                     location.reload();
@@ -131,7 +131,7 @@ new Vue({
                             } else {
                                 Swal.fire(
                                     'Failed!',
-                                    data.message,
+                                    data.data.message,
                                     'error'
                                 )
                             }
