@@ -251,7 +251,7 @@ class Portal extends CI_Controller {
             }
             $this->data['payment'] = $pay;
             //--------TUITION-------------------------------------------------------------------
-            $this->data['tuition'] = $this->data_fetcher->getTuition($this->session->userdata('intID'),$this->data['selected_ay'],$this->data['unit_fee'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
+            $this->data['tuition'] = $this->data_fetcher->getTuition($this->session->userdata('intID'),$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
             
             //$this->data['home'] = true;
             //$this->data['body_class'] = "homepage";

@@ -1773,7 +1773,7 @@ class Data_fetcher extends CI_Model {
             return "For Advising";
     }
     
-    function getTuition($id,$sem,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship)
+    function getTuition($id,$sem,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship)
     {
         
         $tuition = 0;
@@ -1797,7 +1797,7 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
 
         $unit_fee = $tuition_year['pricePerUnit'];
-        
+
         $ay = $this->getAy($sem);
         
         
