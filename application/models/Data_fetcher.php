@@ -48,6 +48,11 @@ class Data_fetcher extends CI_Model {
         return $tuition['intID'];
     }
     
+    function getDefaultTuitionYear()
+    {
+        return $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row('array');        
+        
+    }
     
     function getCourseCode($id)
     {
@@ -1770,6 +1775,7 @@ class Data_fetcher extends CI_Model {
     
     function getTuition($id,$sem,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship)
     {
+        
         $tuition = 0;
         $total_lab = 0;
         $afee = 0;
@@ -1787,6 +1793,11 @@ class Data_fetcher extends CI_Model {
         $data['repeated'] = [];
         $data['total_for_repeated'] = 0;
 
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
+        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
+
+        $unit_fee = $tuition_year['pricePerUnit'];
+        
         $ay = $this->getAy($sem);
         
         
