@@ -83,8 +83,9 @@ new Vue({
          this.loader_spinner = true;
          axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
             .then((data) => {
-                console.log(data.data)
+                console.log(data.data.data)
                 this.request = data.data;
+                console.log("REQ",this.request);
                 this.loader_spinner = false;
             })
             .catch((error) => {
