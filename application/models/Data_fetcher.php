@@ -1949,7 +1949,7 @@ class Data_fetcher extends CI_Model {
         ->first_row('array');
 
         if($res)
-            return $res
+            return $res;
         else
             return "C".$year.'-'.$term.'-000';
     }
@@ -1965,7 +1965,7 @@ class Data_fetcher extends CI_Model {
         ->first_row('array');
 
         if($res)
-            return $res
+            return $res;
         else
             return "T".$year.'-'.$term.'-000';
     }
