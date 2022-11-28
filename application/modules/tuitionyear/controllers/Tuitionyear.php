@@ -96,7 +96,7 @@ class Tuitionyear extends CI_Controller {
     public function submit_form($id = 0)
     {
         $post = $this->input->post();
-        
+        print_r($post);
         // $config['upload_path'] = $this->docroot.'/assets/temp';
 		// $config['allowed_types'] = 'gif|jpg|png|jpeg';
 		// $config['max_size']	= '400';
@@ -108,11 +108,16 @@ class Tuitionyear extends CI_Controller {
 
 		// $this->load->library('upload', $config);
 
-
+        
         
         
         $this->data['info'] = $post;
-        print_r($post);        
+        
+        $data['success'] = true;
+        $data['data'] = $post;
+        $data['message'] ="Success Testing";
+        echo json_encode($data);
+        
         // $this->load->view("common/tuitionyear_header",$this->data);
         // $this->load->view("tuitionyear",$this->data);
         // $this->load->view("common/tuitionyear_conf",$this->data); 
