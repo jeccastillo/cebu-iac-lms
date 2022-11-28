@@ -467,7 +467,17 @@ if(!function_exists('switch_num_rev'))
             return $num;
     }
 }
-
+if(!function_exists('increment_student_number'))
+{
+    function increment_student_number($matches)
+    {
+        if(isset($matches[1]))
+        {
+            $length = strlen($matches[1]);
+            return sprintf("%0".$length."d", ++$matches[1]);
+        }    
+    }
+}
 if(!function_exists('switch_num_rev_search'))
 {
     function switch_num_rev_search($num)
