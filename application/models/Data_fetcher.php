@@ -1945,8 +1945,8 @@ class Data_fetcher extends CI_Model {
         return $this->db->where(array(
             'strStudentNumber LIKE' => 'C%'.$year.$term.'%'
         ))
-        ->get('tb_mas_users')
-        ->order_by('strStudentNumber desc')
+        ->order_by('strStudentNumber','desc')
+        ->get('tb_mas_users')        
         ->first_row('array');
     }
     
