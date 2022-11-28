@@ -25,7 +25,8 @@
                         <tr>
                             <th>id</th>
                             <th>Name</th>
-                            <th>Price/Unit</th>                            
+                            <th>Price/Unit</th>   
+                            <th>Default</th>                         
                             <th>Actions</th>
 
                         </tr>
