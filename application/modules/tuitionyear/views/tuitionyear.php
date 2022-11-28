@@ -98,7 +98,7 @@ new Vue({
                 preConfirm: (login) => {
 
                     return axios
-                        .post(api_url + 'tuitionyear/submit_form/' + this.id, {
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id, {
                                 year: this.request.year,
                                 pricePerUnit: this.request.pricePerUnit,
                                 isDefault: this.request.isDefault,                                
