@@ -22,7 +22,7 @@
                     <div class="row">                     
                         <div class="form-group col-xs-4">
                             <label for="year">Tuition Year</label>
-                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='year'>
+                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='tuitionyear'>
                         </div>
                         <div class="form-group col-xs-4">
                             <label for="year">Price Per Unit</label>
@@ -58,7 +58,7 @@ new Vue({
     data: {
         id: <?php echo $this->uri->segment('3'); ?>,
         request: {
-            year: undefined,
+            tuitionyear: undefined,
             pricePerUnit: undefined,
             isDefault: 0,            
         },
@@ -106,7 +106,7 @@ new Vue({
 
                     return axios
                         .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id, {
-                                year: this.request.year,
+                                year: this.request.tuitionyear,
                                 pricePerUnit: this.request.pricePerUnit,
                                 isDefault: this.request.isDefault,                                
                             }, {
