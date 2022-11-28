@@ -88,8 +88,7 @@ class Tuitionyear extends CI_Controller {
         $this->data['formAction'] = base_url()."tuitionyear/submit_form";
         $this->load->view("common/header",$this->data);
         $this->load->view("tuitionyear",$this->data);
-        $this->load->view("common/footer",$this->data);
-        $this->load->view("common/tuitionyear_conf",$this->data);                              
+        $this->load->view("common/footer",$this->data);                                  
        
     }
     
@@ -123,6 +122,14 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
        
         
+    }
+
+    public function view_tuition_years(){
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("tuitionyearview",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/tuitionyear_conf",$this->data);    
     }
     
     
