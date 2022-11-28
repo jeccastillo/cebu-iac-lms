@@ -19,11 +19,18 @@
                 </div>
 
                 <div class="box-body" style="padding:2rem">
-                    <div>
-                                              
-                    </div>
+                    <div class="row">                     
+                        <div class="form-group col-xs-4">
+                            <label for="year">Tuition Year</label>
+                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='year'>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="year">Price Per Unit</label>
+                            <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='pricePerUnit'>
+                        </div>                        
+                     </div>
                     <form @submit.prevent="updateData" class="modal-dialog modal-lg">
-
+                        
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
