@@ -30,7 +30,7 @@
                             <label for="year">Price Per Unit</label>
                             <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
                         </div> 
-                        <div v-if="id != 0" class="form-group col-xs-6">
+                        <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
                             <label for="isDefault">Default Tuition</label>
                             <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
                                 <option value="0">No</option>
