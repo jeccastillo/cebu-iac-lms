@@ -3,7 +3,7 @@
 $config['tb_mas_message_user_columns'] = array('intMessageUserID','strFirstName','strLastName','strSubject', 'dteDate','intRead');
 $config['tb_mas_message_user_index'] = "intMessageUserID";
 
-$config['tb_mas_tuition_year_columns'] = array('intID','year','pricePerUnit');
+$config['tb_mas_tuition_year_columns'] = array('intID','year','pricePerUnit','isDefault');
 $config['tb_mas_tuition_year_index'] = "intID";
 
 $config['tb_mas_classrooms_columns'] = array("intID","strRoomCode","enumType");
