@@ -95,8 +95,7 @@ class Tuitionyear extends CI_Controller {
     
     public function submit_form($id = 0)
     {
-        $post = $this->input->post();
-        print_r($post);
+        $post = $this->input->post();        
         // $config['upload_path'] = $this->docroot.'/assets/temp';
 		// $config['allowed_types'] = 'gif|jpg|png|jpeg';
 		// $config['max_size']	= '400';
