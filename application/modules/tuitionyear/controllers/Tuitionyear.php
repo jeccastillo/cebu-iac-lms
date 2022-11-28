@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admissions extends CI_Controller {
+class Tuitionyear extends CI_Controller {
 
     public $validation_config = [];
     
