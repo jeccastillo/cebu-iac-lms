@@ -22,6 +22,9 @@
                     <div>
                                               
                     </div>
+                    <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
+                            data-target="#myModal" class=" btn
+                            btn-primary">Add Tuition Year</button>
                 </div>
 
             </div>
