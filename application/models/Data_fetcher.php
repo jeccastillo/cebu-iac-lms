@@ -1948,6 +1948,17 @@ class Data_fetcher extends CI_Model {
         ->get('tb_mas_users')        
         ->first_row('array');
     }
+
+    function getMaxCurrentTempNumber($sem){
+        $term = switch_num_rev_search($sem['enumSem']);
+        $year = $sem['strYearStart'];        
+        return $this->db->where(array(
+            'strStudentNumber LIKE' => 'T%'.$year.$term.'%'
+        ))
+        ->order_by('strStudentNumber','desc')
+        ->get('tb_mas_users')        
+        ->first_row('array');
+    }
     
     function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects)
     {
