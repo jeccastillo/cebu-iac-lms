@@ -23,7 +23,7 @@
                     <div class="row">                     
                         <div class="form-group col-xs-6">
                             <label for="year">Tuition Year</label>
-                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='request.tuitionyear'>
+                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="year">Price Per Unit</label>
@@ -62,7 +62,7 @@ new Vue({
     data: {
         id: <?php echo $this->uri->segment('3'); ?>,
         request: {
-            tuitionyear: undefined,
+            year: undefined,
             pricePerUnit: undefined,
             isDefault: 0,            
         },
@@ -113,7 +113,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append("year",this.request.tuitionyear);
+                    formdata.append("year",this.request.year);
                     formdata.append("pricePerUnit",this.request.pricePerUnit);
                     formdata.append("isDefault",this.request.isDefault);
 
