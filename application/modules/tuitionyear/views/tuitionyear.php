@@ -14,8 +14,9 @@
             <div class="box ">
                 <div class="box-header with-border font-weight-bold py-5" style="text-align:left; font-weight:bold">
                     <h3 class="box-title text-left text-primary " style="font-size:2rem">
-                        Add Tuition Year
+                        {{ header_title }}
                     </h3>
+                    
                 </div>
 
                 <div class="box-body" style="padding:2rem">
@@ -28,7 +29,14 @@
                         <div class="form-group col-xs-6">
                             <label for="year">Price Per Unit</label>
                             <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
-                        </div>                        
+                        </div> 
+                        <div v-if="id != 0" class="form-group col-xs-6">
+                            <label for="isDefault">Default Tuition</label>
+                            <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>                       
                      </div>
                     
                     <div class=row">    
@@ -61,6 +69,7 @@ new Vue({
     el: '#applicant-container',
     data: {
         id: <?php echo $this->uri->segment('3'); ?>,
+        header_title: 'Add Tuition Year',
         request: {
             year: undefined,
             pricePerUnit: undefined,
@@ -77,22 +86,21 @@ new Vue({
         let url = new URL(url_string);
 
         if(this.id != 0){
+        
+            this.header_title = 'Edit Tuition Year';
+            this.loader_spinner = true;
+            axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
+                .then((data) => {
+                    console.log(data.data.data)
+                    this.request = data.data.data;
+                    console.log("REQ",this.request);
+                    this.loader_spinner = false;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
 
         }
-
-         this.loader_spinner = true;
-         axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
-            .then((data) => {
-                console.log(data.data.data)
-                this.request = data.data.data;
-                console.log("REQ",this.request);
-                this.loader_spinner = false;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-
 
     },
 

@@ -36,7 +36,7 @@
                             <label for="intLectHours">Lecture/Class Units</label>
                             <input type="number" class="form-control" value="<?php echo $subject['intLectHours'] ?>" name="intLectHours" id="intLectHours" />
                     </div>                        
-                     <div class="form-group col-xs-6">
+                        <div class="form-group col-xs-6">
                             <label for="intYearLevel">Athletic Fee</label>
                             <select class="form-control" name="intAthleticFee" id="intAthleticFee" >
                                 <option <?php echo ($subject['intAthleticFee'] == 0)?'selected':''; ?> value="0">No</option>
