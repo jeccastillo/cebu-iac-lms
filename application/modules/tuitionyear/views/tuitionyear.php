@@ -22,39 +22,15 @@
                     <div>
                                               
                     </div>
-                    <button type="button" v-if="request.id == 0" data-toggle="modal"
-                            data-target="#myModal" class=" btn
-                            btn-primary">Add Tuition Year</button>
-                    <button type="button" v-else data-toggle="modal"
-                            data-target="#myModal" class=" btn
-                            btn-primary">Update Tuition Year</button>
+                    <form @submit.prevent="updateData" class="modal-dialog modal-lg">
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
 
             </div>
 
         </div>
-    </div>
-
-
-
-    <div class="modal fade" id="myModal" role="dialog">
-        <form @submit.prevent="updateData" class="modal-dialog modal-lg">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!-- modal header  -->
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">{{update_text}}</h4>
-                </div>                
-                <div class=" modal-footer">
-                    <!-- modal footer  -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </form>
     </div>
 </div>
 
