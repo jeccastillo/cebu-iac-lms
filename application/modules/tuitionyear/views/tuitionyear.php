@@ -132,6 +132,8 @@ new Vue({
                     formdata.append("year",this.request.year);
                     formdata.append("pricePerUnit",this.request.pricePerUnit);
                     formdata.append("isDefault",this.request.isDefault);
+                    formdata.append("floatAnimationLab",this.request.floatAnimationLab);
+                    formdata.append("floatComputerLab",this.request.floatComputerLab);
 
                     return axios
                         .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id,formdata, {
