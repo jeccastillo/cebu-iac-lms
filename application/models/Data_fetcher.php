@@ -1818,7 +1818,8 @@ class Data_fetcher extends CI_Model {
             if($scholarship != "DILG scholar")
             {
                 $classes =  $this->db
-                                 ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, tb_mas_subjects.intAthleticFee")
+                                 ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
+                                 tb_mas_subjects.intAthleticFee, tb_mas_subjects.strTuitionUnits, tb_mas_subjects.floatLabFee")
                                  ->from("tb_mas_classlist_student")
                                  ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                                  ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
