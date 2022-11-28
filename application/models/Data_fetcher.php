@@ -1940,8 +1940,7 @@ class Data_fetcher extends CI_Model {
 
     function getMaxCurrentStudentNumber($sem){
         $term = switch_num_rev_search($sem['enumSem']);
-        $year = $sem['strYearStart'];
-        print_r($sem);
+        $year = $sem['strYearStart'];        
         return $this->db->where(array(
             'strStudentNumber LIKE' => 'C%'.$year.$term.'%'
         ))
