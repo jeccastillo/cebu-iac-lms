@@ -119,6 +119,7 @@ new Vue({
                                 }
                             })
                         .then(data => {
+                            console.log(data.success);
                             if (data.success) {
                                 Swal.fire({
                                     title: "Success",
