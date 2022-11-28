@@ -40,8 +40,8 @@ class Data_fetcher extends CI_Model {
 
     function getDefaultTuitionYearID()
     {
-        $tuition = $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row();
-        return $tuition->intID;
+        $tuition = $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row('array');
+        return $tuition['intID'];
     }
     
     
