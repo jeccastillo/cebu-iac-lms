@@ -37,6 +37,12 @@ class Data_fetcher extends CI_Model {
         
         return $desc;
     }
+
+    function getDefaultTuitionYearID()
+    {
+        $tuition = $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row();
+        return $tuition->intID;
+    }
     
     
     function getCourseCode($id)

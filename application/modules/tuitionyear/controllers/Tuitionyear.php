@@ -84,7 +84,7 @@ class Tuitionyear extends CI_Controller {
 
     public function add_tuition_year()
     {        
-        
+        $this->data['defaultYear'] = $this->data_fetcher->getDefaultTuitionYearID();
         $this->data['formAction'] = base_url()."tuitionyear/submit_form";
         $this->load->view("common/header",$this->data);
         $this->load->view("tuitionyear",$this->data);
@@ -116,7 +116,7 @@ class Tuitionyear extends CI_Controller {
         else
             $this->data_poster->post_data('tb_mas_tuition_year',$post,$id);
 
-            
+
         $data['success'] = true;
         $data['data'] = $post;
         $data['message'] ="Successfully Added";
