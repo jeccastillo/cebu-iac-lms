@@ -69,9 +69,9 @@ class AdmissionsV1 extends CI_Controller {
 
     public function test_student_number(){
         $sem = $this->data_fetcher->get_active_sem();
-        $student = $this->data_fetcher->getMaxCurrentStudentNumber($sem);
-        print_r($student);        
-        $newStudentNumber =  preg_replace_callback( "|(\d+)|", "increment_student_number", $student['strStudentNumber']);
+        $studentNum = $this->data_fetcher->getMaxCurrentStudentNumber($sem);
+        print_r($studentNum);        
+        $newStudentNumber =  preg_replace_callback( "|(\d+)|", "increment_student_number", $studentNum);
         echo "Generated next number: ".$newStudentNumber;
     }
 
