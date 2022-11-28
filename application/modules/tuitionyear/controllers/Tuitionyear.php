@@ -113,9 +113,9 @@ class Tuitionyear extends CI_Controller {
         
         $this->data['info'] = $post;
         
-        $data['success'] = true;
-        $data['data'] = $post;
-        $data['message'] ="Success Testing";
+        $data['data']['success'] = true;
+        $data['data']['data'] = $post;
+        $data['data']['message'] ="Success Testing";
         echo json_encode($data);
         
         // $this->load->view("common/tuitionyear_header",$this->data);
