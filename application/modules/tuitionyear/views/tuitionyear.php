@@ -66,7 +66,7 @@ new Vue({
             pricePerUnit: undefined,
             isDefault: 0,            
         },
-        default_year: <?php echo $defaultYear; ?>
+        default_year: <?php echo $defaultYear; ?>,
         update_text: "Tuition Year",
         loader_spinner: true,                        
     },
