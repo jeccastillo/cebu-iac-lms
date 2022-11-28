@@ -32,10 +32,16 @@
                             <label for="strUnits">Number of Units for Tuition</label>
                             <input type="number" name="strTuitionUnits" value="<?php echo $subject['strTuitionUnits'] ?>" class="form-control" id="strTuitionUnits" placeholder="Enter Number of Units">
                         </div>
+                        
                         <div class="form-group col-xs-6">
-                            <label for="strUnits">Laboratory Fee</label>
-                            <input type="number" name="floatLabFee" value="<?php echo $subject['floatLabFee'] ?>" class="form-control" id="floatLabFee" placeholder="Enter LabFee">
+                            <label for="strUnits">Lab Classification</label>
+                            <select name="strLabClassification" class="form-control" id="strLabClassification">
+                                <option <?php echo ($subject['strLabClassification'] == 'none')?'selected':''; ?> value="none">None</option>
+                                <option <?php echo ($subject['strLabClassification'] == 'floatAnimationLab')?'selected':''; ?> value="floatAnimationLab">Animation Lab</option>
+                                <option <?php echo ($subject['strLabClassification'] == 'floatComputerLab')?'selected':''; ?> value="floatComputerLab">Computer Lab</option>
+                            </select>
                         </div>
+                        
                      <div class="form-group col-xs-6">
                             <label for="intLab">Laboratory Units</label>
                             <input type="number" class="form-control" value="<?php echo $subject['intLab'] ?>" name="intLab" id="intLab" />

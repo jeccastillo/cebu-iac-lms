@@ -32,8 +32,12 @@
                             <input type="number" name="strTuitionUnits" class="form-control" id="strTuitionUnits" placeholder="Enter Number of Units">
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="strUnits">Laboratory Fee</label>
-                            <input type="number" name="floatLabFee" class="form-control" id="floatLabFee" placeholder="Enter LabFee">
+                            <label for="strUnits">Lab Classification</label>
+                            <select name="strLabClassification" class="form-control" id="strLabClassification">
+                                <option value="none">None</option>
+                                <option value="floatAnimationLab">Animation Lab</option>
+                                <option value="floatComputerLab">Computer Lab</option>
+                            </select>
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="intLab">Laboratory Units</label>

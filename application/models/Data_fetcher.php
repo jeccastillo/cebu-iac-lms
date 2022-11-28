@@ -1864,7 +1864,7 @@ class Data_fetcher extends CI_Model {
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                     
                     if($class['intLab'] != 0){
-                        $lab_list[$class['strCode']] = $class['floatLabFee'];
+                        $lab_list[$class['strCode']] = $class['intLab'];
                         $total_lab += $lab_list[$class['strCode']];
                     }
 
