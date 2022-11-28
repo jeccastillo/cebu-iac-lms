@@ -21,13 +21,13 @@
                 <div class="box-body" style="padding:2rem">
                 <form @submit.prevent="updateData" class="modal-dialog modal-lg">    
                     <div class="row">                     
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-6">
                             <label for="year">Tuition Year</label>
-                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='tuitionyear'>
+                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='request.tuitionyear'>
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-6">
                             <label for="year">Price Per Unit</label>
-                            <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='pricePerUnit'>
+                            <input type="number" name="pricePerUnit" class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
                         </div>                        
                      </div>
                     
