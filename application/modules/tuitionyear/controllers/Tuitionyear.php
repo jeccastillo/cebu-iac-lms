@@ -97,52 +97,25 @@ class Tuitionyear extends CI_Controller {
     {
         $post = $this->input->post();
         
-        $config['upload_path'] = $this->docroot.'/assets/temp';
-		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		$config['max_size']	= '400';
-        $config['file_name'] = md5(date('Ymdhis'));
-		$config['max_width']  = '300';
-        $config['min_width']  = '300';
-		$config['max_height']  = '300';
-        $config['min_height']  = '300';
+        // $config['upload_path'] = $this->docroot.'/assets/temp';
+		// $config['allowed_types'] = 'gif|jpg|png|jpeg';
+		// $config['max_size']	= '400';
+        // $config['file_name'] = md5(date('Ymdhis'));
+		// $config['max_width']  = '300';
+        // $config['min_width']  = '300';
+		// $config['max_height']  = '300';
+        // $config['min_height']  = '300';
 
-		$this->load->library('upload', $config);
+		// $this->load->library('upload', $config);
 
-		if ( ! $this->upload->do_upload("strAppPicture"))
-		{
-            
-            $data = array('upload_data' => $this->upload->data());
-            $file = $this->upload->data();
-            $this->data['file_error'] = $this->upload->display_errors();
-            $file['file_name'] = "";
-            $post['strAppPicture'] = $file['file_name'];
-              
-		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
-            $file = $this->upload->data();
-            $this->data['file_error'] = "";
-            $post['strAppPicture'] = $file['file_name'];
-              
-            //redirect(base_url()."unity/view_all_students");
-        }
+
         
-        
-//        $post['course1Desc'] = $this->data_fetcher->getCourseName($post['enumCourse1']);
-//        $post['course2Desc'] = $this->data_fetcher->getCourseName($post['enumCourse2']);        
-//        $course3 = $this->data_fetcher->getCourseName($post['enumCourse3']);
-//        $post['course3Desc'] = ($course3=="")?'None':$course3;
-        
-        $post['provinceDesc'] = $this->data_fetcher->getGeneralDesc('refprovince',$post['strAppProvince'],'provCode','provDesc');
-        $post['cityDesc'] = $this->data_fetcher->getGeneralDesc('refcitymun',$post['strAppCity'],'citymunCode','citymunDesc');
-        $post['brgyDesc'] = $this->data_fetcher->getGeneralDesc('refbrgy',$post['strAppBrgy'],'brgyCode','brgyDesc');
         
         $this->data['info'] = $post;
-        
-        $this->load->view("common/tuitionyear_header",$this->data);
-        $this->load->view("tuitionyear",$this->data);
-        $this->load->view("common/tuitionyear_conf",$this->data); 
+        print_r($post);        
+        // $this->load->view("common/tuitionyear_header",$this->data);
+        // $this->load->view("tuitionyear",$this->data);
+        // $this->load->view("common/tuitionyear_conf",$this->data); 
         
     }
     

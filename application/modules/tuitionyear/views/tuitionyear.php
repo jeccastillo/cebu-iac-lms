@@ -32,21 +32,15 @@
 
 
     <div class="modal fade" id="myModal" role="dialog">
-        <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
+        <form @submit.prevent="updateData" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">{{update_status}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Remarks <span class="text-danger">*</span> </label>
-                        <textarea class="form-control" v-model="status_remarks" rows="5" required></textarea>
-                    </div>
-                </div>
+                    <h4 class="modal-title">{{update_text}}</h4>
+                </div>                
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -73,14 +67,14 @@
 new Vue({
     el: '#applicant-container',
     data: {
+        id: <?php echo $this->uri->segment('3'); ?>,
         request: {
-            uploaded_requirements: []
+            year: undefined,
+            pricePerUnit: undefined,
+            isDefault: 0,            
         },
-        loader_spinner: true,
-        type: "",
-        slug: "<?php echo $this->uri->segment('3'); ?>",
-        update_status: "",
-        status_remarks: ""
+        update_text: "Tuition Year",
+        loader_spinner: true,                        
     },
 
     mounted() {
@@ -106,12 +100,12 @@ new Vue({
 
     methods: {
 
-        updateStatus: function() {
+        updateData: function() {
 
 
             Swal.fire({
                 title: 'Update Status',
-                text: "Are you sure you want to update?",
+                text: "Continue adding entry?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
@@ -122,11 +116,10 @@ new Vue({
                 preConfirm: (login) => {
 
                     return axios
-                        .post(api_url + 'admissions/student-info/' + this.slug +
-                            '/update-status', {
-                                status: this.update_status,
-                                remarks: this.status_remarks,
-                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                        .post(api_url + 'tuitionyear/submit_form/' + this.id, {
+                                year: this.request.year,
+                                pricePerUnit: this.request.pricePerUnit,
+                                isDefault: this.request.isDefault,                                
                             }, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
