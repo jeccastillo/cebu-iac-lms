@@ -107,13 +107,13 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("year",this.request.tuitionyear);
+                    formdata.append("pricePerUnit",this.request.pricePerUnit);
+                    formdata.append("isDefault",this.request.isDefault);
 
                     return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id, {
-                                year: this.request.tuitionyear,
-                                pricePerUnit: this.request.pricePerUnit,
-                                isDefault: this.request.isDefault,                                
-                            }, {
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id,formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
