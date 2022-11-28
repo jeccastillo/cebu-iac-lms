@@ -67,6 +67,11 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url());  
     }
 
+    public function test_student_number(){
+        $sem = $this->data_fetcher->get_active_sem();
+        print_r($this->data_fetcher->getMaxCurrentStudentNumber($sem));
+    }
+
     public function add_new_student(){
         
         $ip = $this->input->ip_address();
