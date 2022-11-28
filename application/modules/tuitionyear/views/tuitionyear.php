@@ -22,7 +22,7 @@
                 <form @submit.prevent="updateData">    
                     <div class="row">                     
                         <div class="form-group col-xs-6">
-                            <label for="year">Tuition Year</label>
+                            <label for="year">Tuition Year {{default_year}}</label>
                             <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year" v-model='request.tuitionyear'>
                         </div>
                         <div class="form-group col-xs-6">
@@ -66,6 +66,7 @@ new Vue({
             pricePerUnit: undefined,
             isDefault: 0,            
         },
+        default_year: <?php echo $defaultYear; ?>
         update_text: "Tuition Year",
         loader_spinner: true,                        
     },
