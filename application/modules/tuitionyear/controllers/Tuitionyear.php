@@ -110,16 +110,18 @@ class Tuitionyear extends CI_Controller {
         
         
         
-        $this->data['info'] = $post;
         
+        if($id == 0)
+            $this->data_poster->post_data('tb_mas_tuition_year',$post);
+        else
+            $this->data_poster->post_data('tb_mas_tuition_year',$post,$id);
+
+            
         $data['success'] = true;
         $data['data'] = $post;
-        $data['message'] ="Success Testing";
+        $data['message'] ="Successfully Added";
         echo json_encode($data);
-        
-        // $this->load->view("common/tuitionyear_header",$this->data);
-        // $this->load->view("tuitionyear",$this->data);
-        // $this->load->view("common/tuitionyear_conf",$this->data); 
+       
         
     }
     
