@@ -1942,7 +1942,7 @@ class Data_fetcher extends CI_Model {
         $term = switch_num_rev_search($sem['enumSem']);
         $year = $sem['strYearStart'];        
         return $this->db->where(array(
-            'strStudentNumber LIKE' => 'C%'.$year.$term.'%'
+            'strStudentNumber LIKE' => 'C%'.$year.'-'.$term.'%'
         ))
         ->order_by('strStudentNumber','desc')
         ->get('tb_mas_users')        
@@ -1953,7 +1953,7 @@ class Data_fetcher extends CI_Model {
         $term = switch_num_rev_search($sem['enumSem']);
         $year = $sem['strYearStart'];        
         return $this->db->where(array(
-            'strStudentNumber LIKE' => 'T%'.$year.$term.'%'
+            'strStudentNumber LIKE' => 'T%'.$year.'-'.$term.'%'
         ))
         ->order_by('strStudentNumber','desc')
         ->get('tb_mas_users')        
