@@ -188,6 +188,7 @@
                 'dataType':'json',
                 'success':function(ret){
                     console.log(ret);
+                    //Send to laravel API
                 }
             });        
         });
