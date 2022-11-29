@@ -27,7 +27,7 @@
                             <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a>
                             
                             
-                              <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/print_curriculum/".$student['intCurriculumID']."/".$student['intID'] ?>"><i class="fa fa-print"></i>Curriculum Outline</a> 
+                              <a  class="btn btn-app view-curriculum-pdf"  href="#"><i class="fa fa-print"></i>Curriculum Outline</a> 
                             <?php if($registration && in_array($user['intUserLevel'],array(2,3,6))): ?>
                             <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Reg Form Print Preview</a> 

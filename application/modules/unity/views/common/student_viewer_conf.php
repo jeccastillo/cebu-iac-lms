@@ -176,6 +176,21 @@
             });
             }
         });
+
+        $(".view-curriculum-pdf").click(function(e){
+            e.preventDefault();
+            var csid = $(this).attr('rel');
+            var data = {'id':csid};
+            $.ajax({
+                'url':'<?php echo base_url()."pdf/get_curriculum_for_printing/".$student['slug'] ?>',
+                'method':'post',
+                'data':data,
+                'dataType':'json',
+                'success':function(ret){
+                    console.log(ret);
+                }
+            });        
+        });
         
         $("#ROGStatusChange").change(function(){
             $(".loading-img").show();
