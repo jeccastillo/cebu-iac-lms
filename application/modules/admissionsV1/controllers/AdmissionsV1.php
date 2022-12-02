@@ -77,7 +77,7 @@ class AdmissionsV1 extends CI_Controller {
             $post = $this->input->post();
             $data['data'] = $post;       
             $post['dteCreated'] = date("Y-m-d"); 
-            $post['strStudentNumber'] = $newTempNumber;
+            $post['strStudentNumber'] = $tempNum;
             $post['strAcademicStanding'] = "regular";
             $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
             $post['intTuitionYear'] = $this->data_fetcher->getDefaultTuitionYearID();
