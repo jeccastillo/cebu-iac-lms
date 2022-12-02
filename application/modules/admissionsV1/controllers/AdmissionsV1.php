@@ -65,13 +65,15 @@ class AdmissionsV1 extends CI_Controller {
         }
         else
             redirect(base_url());  
-    }    
+    }
 
     public function add_new_student(){
         
         $ip = $this->input->ip_address();
-        if($ip == "172.16.80.22"){            
-            $tempNum = $this->data_fetcher->generateNewTempNumber();            
+        if($ip == "172.16.80.22"){
+            $sem = $this->data_fetcher->get_active_sem();
+            $tempNum = $this->data_fetcher->getMaxCurrentTempNumber($sem);
+            $newTempNumber =  preg_replace_callback( "|(\d+)(?!.*\d)|", "increment_student_number", $tempNum);
             $data['message'] = "success";
             $data['success'] = true;
             $post = $this->input->post();
