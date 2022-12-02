@@ -1970,6 +1970,23 @@ class Data_fetcher extends CI_Model {
             return "T".$year.'-'.$term.'-000';
     }
     
+
+    public function generateNewStudentNumber(){
+        $sem = $this->get_active_sem();
+        $studentNum = $this->getMaxCurrentStudentNumber($sem);
+        $newStudentNumber =  preg_replace_callback( "|(\d+)(?!.*\d)|", "increment_student_number", $studentNum);
+                
+        return $newStudentNumber;        
+    }
+
+    public function generateNewTempNumber(){
+        $sem = $this->get_active_sem();
+        $studentNum = $this->getMaxCurrentTempNumber($sem);
+        $newStudentNumber =  preg_replace_callback( "|(\d+)(?!.*\d)|", "increment_student_number", $studentNum);
+                
+        return $newStudentNumber;        
+    }
+
     function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects)
     {
         $tuition = 0;
