@@ -2014,7 +2014,7 @@ class Data_fetcher extends CI_Model {
         return $newStudentNumber;        
     }
 
-    function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID = null)
+    function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID)
     {
         $tuition = 0;
         $total_lab = 0;
