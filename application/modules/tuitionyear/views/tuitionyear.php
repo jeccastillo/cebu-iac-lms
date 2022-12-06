@@ -75,7 +75,7 @@
                                 <td>{{ item.miscOnline }}</td>
                                 <td>{{ item.miscHybrid }}</td>
                                 <td>{{ item.miscHyflex }}</td>
-                                <td><a href="#" v-click="deleteMisc(item.intID)">Delete</a></td>
+                                <td><a href="#" @click.prevent.stop="deleteMisc(item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
