@@ -189,7 +189,7 @@ new Vue({
             miscHybrid: undefined,
             miscOnline: undefined,
             miscHyflex: undefined,  
-            isInternational: undefined,    
+            isInternational: no,    
         },
         lab: {
             name: undefined,
