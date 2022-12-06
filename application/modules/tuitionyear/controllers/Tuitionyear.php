@@ -103,7 +103,14 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
 
     }
-    
+    public function submit_misc(){
+        $post = $this->input->post();
+        $this->data_poster->post_data('tb_mas_tuition_year_misc',$post);
+
+        $data['success'] = true;
+        $data['message'] ="Successfully Added";
+        echo json_encode($data);
+    }
     public function submit_form($id = 0)
     {
         $post = $this->input->post();        

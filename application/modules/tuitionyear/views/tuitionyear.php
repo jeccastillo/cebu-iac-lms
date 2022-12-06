@@ -16,48 +16,47 @@
                     <h3 class="box-title text-left text-primary " style="font-size:2rem">
                         {{ header_title }}
                     </h3>
-                    
                 </div>
-
                 <div class="box-body" style="padding:2rem">
-                <form @submit.prevent="updateData">    
-                    <div class="row">                     
-                        <div class="form-group col-xs-6">
-                            <label for="year">Tuition Year</label>
-                            <input type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
+                    <form @submit.prevent="updateData">    
+                        <div class="row">                     
+                            <div class="form-group col-xs-6">
+                                <label for="year">Tuition Year</label>
+                                <input type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="year">Price Per Unit Regular</label>
+                                <input type="number" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="year">Price Per Unit Online</label>
+                                <input type="number" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="year">Price Per Unit Hyflex</label>
+                                <input type="number" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="year">Price Per Unit Hybrid</label>
+                                <input type="number" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
+                            </div> 
+                            <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
+                                <label for="isDefault">Default Tuition</label>
+                                <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>                       
                         </div>
-                        <div class="form-group col-xs-6">
-                            <label for="year">Price Per Unit Regular</label>
-                            <input type="number" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                        
+                        <div class="row">    
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
                         </div>
-                        <div class="form-group col-xs-6">
-                            <label for="year">Price Per Unit Online</label>
-                            <input type="number" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="year">Price Per Unit Hyflex</label>
-                            <input type="number" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="year">Price Per Unit Hybrid</label>
-                            <input type="number" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
-                        </div> 
-                        <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
-                            <label for="isDefault">Default Tuition</label>
-                            <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                        </div>                       
-                     </div>
-                    
-                    <div class=row">    
-                        <div class="col-sm-6">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </div>
                     </form>
                     <hr />
+                    <h3>Miscellaneous Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -66,6 +65,7 @@
                                 <th>Online</th>
                                 <th>Hyflex</th>
                                 <th>Hybrid</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,9 +75,43 @@
                                 <td>{{ item.miscOnline }}</td>
                                 <td>{{ item.miscHybrid }}</td>
                                 <td>{{ item.miscHyflex }}</td>
+                                <td><a href="#" v-click="deleteMisc(item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
+                    <hr />
+                    <p>Add new Miscellaneous Item</p>
+                    <form @submit.prevent="addMisc">    
+                        <div class="row">                     
+                            <div class="form-group col-xs-8">
+                                <label for="year">Name</label>
+                                <input type="text" name="v" required class="form-control" id="name" placeholder="Enter Name" v-model='misc.name'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Regular Fee</label>
+                                <input type="number"  name="miscRegular" required class="form-control" id="miscRegular" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Online Fee</label>
+                                <input type="number" name="miscOnline" required class="form-control" id="miscOnline" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hyflex Fee</label>
+                                <input type="number" name="miscHyflex" required class="form-control" id="miscHyflex" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hybrid Fee</label>
+                                <input type="number" name="miscHybrid" required class="form-control" id="miscHybrid" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
+                            </div>
+                                           
+                        </div>
+                        
+                        <div class="row">    
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
             </div>
@@ -112,6 +146,13 @@ new Vue({
             misc: [],
             isDefault: 0,            
         },
+        misc: {
+            name: undefined,
+            miscRegular: undefined,
+            miscHybrid: undefined,
+            miscOnline: undefined,
+            miscHyflex: undefined,      
+        },
         default_year: <?php echo $defaultYear; ?>,
         update_text: "Tuition Year",
         loader_spinner: true,                        
@@ -141,9 +182,57 @@ new Vue({
 
     methods: {
 
+        addMisc: function (){
+            Swal.fire({
+                title: 'Add Miscellaneous',
+                text: "Continue adding entry?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("name",this.misc.name);
+                    formdata.append("tuitionYearID",this.id);
+                    formdata.append("miscRegular",this.misc.miscRegular);
+                    formdata.append("miscOnline",this.misc.miscOnline);
+                    formdata.append("miscHyflex",this.misc.miscHyflex);
+                    formdata.append("miscHybrid",this.misc.miscHybrid);
+                    
+
+                    return axios
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_misc/',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+        }
         updateData: function() {
-
-
             Swal.fire({
                 title: 'Update Status',
                 text: "Continue adding entry?",
@@ -189,23 +278,7 @@ new Vue({
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                // if (result.isConfirmed) {
-                //     Swal.fire({
-                //         icon: result?.value.data.success ? "success" : "error",
-                //         html: result?.value.data.message,
-                //         allowOutsideClick: false,
-                //     }).then(() => {
-                //         if (reload && result?.value.data.success) {
-                //             if (reload == "reload") {
-                //                 location.reload();
-                //             } else {
-                //                 window.location.href = reload;
-                //             }
-                //         }
-                //     });
-                // }
-            })
+            });
         }
 
 
