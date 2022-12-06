@@ -387,6 +387,7 @@ class Registrar extends CI_Controller {
        
         $this->data['sid'] = $post['studentID'];
         $this->data['ayid'] = $post['strAcademicYear'];
+        
         $this->data['student_link'] = "<a href='".base_url()."unity/student_viewer/".$post['studentID']."'>View Student Info</a>";
         
         if(!$this->data_fetcher->checkRegistered($post['studentID'],$post['strAcademicYear'])){
@@ -405,11 +406,14 @@ class Registrar extends CI_Controller {
             else
                 $st = $post['enumStudentType'];
 
+            
+
             $reg['enumStudentType'] = $st;
 
             $this->data['message'] = "Registration Successful";
 
             $this->data_poster->post_data('tb_mas_registration',$reg);
+            $stud['strStudentNumber'] = $tempNum = $this->data_fetcher->generateNewStudentNumber();
             $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);
         }
         else
