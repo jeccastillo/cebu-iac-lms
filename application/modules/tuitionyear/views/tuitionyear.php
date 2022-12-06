@@ -57,6 +57,26 @@
                         </div>
                     </div>
                     </form>
+                    <hr />
+                    <table class="table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Regular</th>
+                                <th>Online</th>
+                                <th>Hyflex</th>
+                                <th>Hybrid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item in request.misc">
+                                <td>{{ item.miscRegular }}</td>
+                                <td>{{ item.miscOnline }}</td>
+                                <td>{{ item.miscHybrid }}</td>
+                                <td>{{ item.miscHyflex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -88,6 +108,7 @@ new Vue({
             pricePerUnitOnline: undefined,
             pricePerUnitHyflex: undefined,
             pricePerUnitHybrid: undefined,
+            misc: [],
             isDefault: 0,            
         },
         default_year: <?php echo $defaultYear; ?>,
