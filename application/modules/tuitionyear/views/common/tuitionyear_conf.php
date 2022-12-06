@@ -33,7 +33,7 @@
                         var code = parent.children(':first-child').html();
                         var data = {'id':id,'code':code};
                         $.ajax({
-                            'url':'<?php echo base_url(); ?>index.php/tuitionyear/delete_tuitionyear',
+                            'url':'<?php echo base_url(); ?>index.php/tuitionyear/delete_tuition_year',
                             'method':'post',
                             'data':data,
                             'dataType':'json',

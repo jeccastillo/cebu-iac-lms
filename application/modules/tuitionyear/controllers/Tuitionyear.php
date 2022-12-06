@@ -111,6 +111,20 @@ class Tuitionyear extends CI_Controller {
         $data['message'] ="Successfully Added";
         echo json_encode($data);
     }
+
+    public function delete_misc(){
+        $post = $this->input->post();
+        $this->data_poster->deleteItem('tb_mas_tuition_year_misc',$post['id']);
+        $this->data_poster->log_action('Tuition Year Miscellaneous','Deleted Tuition Misc: '.$post['id'],'red');
+
+        $data['success'] = true;
+        $data['message'] ="Successfully Deleted";
+        echo json_encode($data);
+    }
+
+    public function delete_tuition_year(){
+        //delete all tuition misc and fees etc....
+    }
     public function submit_form($id = 0)
     {
         $post = $this->input->post();        
