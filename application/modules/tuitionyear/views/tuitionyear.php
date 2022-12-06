@@ -73,9 +73,9 @@
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.miscRegular }}</td>
                                 <td>{{ item.miscOnline }}</td>
-                                <td>{{ item.miscHybrid }}</td>
                                 <td>{{ item.miscHyflex }}</td>
-                                <td><a href="#" @click.prevent.stop="deleteMisc(item.intID)">Delete</a></td>
+                                <td>{{ item.miscHybrid }}</td>
+                                <td><a href="#" @click.prevent.stop="deleteItem('misc',item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -114,6 +114,31 @@
                             </div>
                         </div>
                     </form>
+                    <hr />
+                    <h3>Lab Fees</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Regular</th>
+                                <th>Online</th>
+                                <th>Hyflex</th>
+                                <th>Hybrid</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in request.misc">
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.labRegular }}</td>
+                                <td>{{ item.labOnline }}</td>
+                                <td>{{ item.labHyflex }}</td>
+                                <td>{{ item.labHybrid }}</td>
+                                <td><a href="#" @click.prevent.stop="deleteItem('lab_fee',item.intID)">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr />
                 </div>
 
             </div>
@@ -146,6 +171,7 @@ new Vue({
             pricePerUnitHyflex: undefined,
             pricePerUnitHybrid: undefined,
             misc: [],
+            lab_fees: [],
             isDefault: 0,            
         },
         misc: {
@@ -233,7 +259,7 @@ new Vue({
             });
 
         },
-        deleteMisc: function(miscId){
+        deleteItem: function(type,miscId){
             Swal.fire({
                 title: 'Delete Miscellaneous',
                 text: "Continue deleting entry?",
@@ -247,8 +273,9 @@ new Vue({
                 preConfirm: (login) => {
                     var formdata= new FormData();
                     formdata.append("id",miscId);
+                    formdata.append("type",type);                    
                     return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/delete_misc/',formdata, {
+                        .post('<?php echo base_url(); ?>tuitionyear/delete_type/',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
