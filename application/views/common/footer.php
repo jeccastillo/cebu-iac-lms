@@ -769,6 +769,7 @@ function return_tuition() {
 
 
     var data = {
+        'intStudentID': $("#studentID").val(),
         'subjects_loaded': sj,
         'scholarship': $("#enumScholarship").val(),
         'stype': $("#transcrossSelect").val()

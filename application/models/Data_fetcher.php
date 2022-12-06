@@ -2014,7 +2014,7 @@ class Data_fetcher extends CI_Model {
         return $newStudentNumber;        
     }
 
-    function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects)
+    function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID = null)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2030,6 +2030,11 @@ class Data_fetcher extends CI_Model {
         $data['misc_fee']['Library Fee'] = 0;
         $data['srf'] = 0;
         $data['sfdf'] = 0;
+
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
+        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
+        $unit_fee = $tuition_year['pricePerUnit'];
+    
         
         if($scholarship != "resident scholar") { //&& $scholarship != "FREE HIGHER EDUCATION PROGRAM (R.A. 10931)"){
             
@@ -2054,17 +2059,15 @@ class Data_fetcher extends CI_Model {
 
             
                 $tuition += intval($class['strUnits'])*$unit_fee;
-                $class['intLab'] = $class['intLab']/3;
-                if($class['intLab'] != 0){
-                    $lab_list[$class['strCode']] = $lab_fee*$class['intLab'];
-                    $total_lab += $lab_list[$class['strCode']];
-                }
 
                 if($class['intAthleticFee'] != 0){
                     $afee += $athletic_fee;
                 }
 
-
+                if($class['strLabClassification'] != "none"){
+                    $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
+                    $total_lab += $lab_list[$class['strCode']];
+                }
 
             }
             }
