@@ -232,7 +232,9 @@ new Vue({
             });
 
         },
-        
+        deleteMisc: function(){
+
+        },
         updateData: function() {
             Swal.fire({
                 title: 'Update Status',
