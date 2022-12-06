@@ -70,6 +70,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item in request.misc">
+                                <td>{{ item.name }}</td>
                                 <td>{{ item.miscRegular }}</td>
                                 <td>{{ item.miscOnline }}</td>
                                 <td>{{ item.miscHybrid }}</td>
