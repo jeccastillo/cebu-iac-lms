@@ -25,7 +25,10 @@
                         <tr>
                             <th>id</th>
                             <th>Name</th>
-                            <th>Price/Unit</th>   
+                            <th>PPU Regular</th>
+                            <th>PPU Online</th>
+                            <th>PPU Hyflex</th>
+                            <th>PPU Hybrid</th>   
                             <th>Default</th>                         
                             <th>Actions</th>
 
