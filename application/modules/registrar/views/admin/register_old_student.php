@@ -90,7 +90,8 @@
                     </select>
                     <br />
                     <input type="text" disabled name="strFrom" id="transcrossText" class="form-control" placeholder="Cross Registrant or Transferee from..." />
-                    <label for="paymentType">Student Type</label>
+                    <br />
+                    <label for="paymentType">Payment Type</label>
                     <select id="paymentType" class="form-control" name="paymentType">
                          <option value="full">FULL</option>
                          <option value="partial">PARTIAL</option>
