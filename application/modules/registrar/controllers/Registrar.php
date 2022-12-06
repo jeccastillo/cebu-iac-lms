@@ -1008,9 +1008,10 @@ class Registrar extends CI_Controller {
     {
         $post = $this->input->post();
         //print_r($post);
-        if($post['enumStatus'] == "active")
+        if($post['enumStatus'] == "active"){
             $this->data_poster->set_ay_inactive();
-        
+            $post['intProcessing'] = "1";
+        }
         $post['strYearEnd'] = $post['strYearStart'] + 1;
        // $this->data_poster->set
         $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
