@@ -57,7 +57,6 @@ function getGradeAveragesSubject($sem,$subject)
 }
 if (!function_exists('getUnitPrice')) {
     function getUnitPrice($ty,$sem){
-        print_r($sem);
         switch($sem['classType']){
             case 'regular':
                 $ret = $ty['pricePerUnit'];
@@ -72,6 +71,7 @@ if (!function_exists('getUnitPrice')) {
                 $ret = $ty['pricePerUnitHybrid'];
                 break;
         }
+        return $ret;
     }
 }
 function getRegistrationDataCourse($sem,$course)
