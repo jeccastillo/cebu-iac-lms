@@ -168,11 +168,11 @@ new Vue({
         if(this.id != 0){
         
             this.header_title = 'Edit Tuition Year';
-            this.loader_spinner = true;
+            //this.loader_spinner = true;
             axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
                 .then((data) => {                    
                     this.request = data.data.data;                    
-                    this.loader_spinner = false;
+                    //this.loader_spinner = false;
                 })
                 .catch((error) => {
                     console.log(error);
