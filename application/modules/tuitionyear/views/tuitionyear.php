@@ -128,7 +128,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in request.misc">
+                            <tr v-for="item in request.lab_fees">
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.labRegular }}</td>
                                 <td>{{ item.labOnline }}</td>
@@ -180,6 +180,13 @@ new Vue({
             miscHybrid: undefined,
             miscOnline: undefined,
             miscHyflex: undefined,      
+        },
+        lab: {
+            name: undefined,
+            labRegular: undefined,
+            labHybrid: undefined,
+            labOnline: undefined,
+            labHyflex: undefined,      
         },
         default_year: <?php echo $defaultYear; ?>,
         update_text: "Tuition Year",
