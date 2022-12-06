@@ -141,6 +141,28 @@ class Data_fetcher extends CI_Model {
                     ->get_where('tb_mas_classlist',array('strAcademicYear'=>$sem['intID'],'intFinalized'=>$submitted))
                     ->num_rows();
     }   
+
+    function count_latest_block($course,$sem)
+    {
+        $term = switch_num_rev_search($sem['enumSem']);
+        $year = $sem['strYearStart'];        
+        $res = $this->db
+        ->select('blockSection')
+        ->where(array(
+            'strStudentNumber LIKE' => 'C%'.$year.'-'.$term.'%',
+            'intProgramID' => $course
+        ))
+        ->order_by('blockSection','desc')
+        ->get('tb_mas_users')
+        ->first_row('array');
+
+        if($res)
+            return $this->db
+                    ->get_where('tb_mas_users',array('blockSection'=>$res['blockSection']))
+                    ->num_rows();
+        else
+            return false;
+    }
     
     function fetch_table_fields($fields,$table)
     {
@@ -382,7 +404,7 @@ class Data_fetcher extends CI_Model {
                          ->from('tb_mas_curriculum_subject')
                          ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID')
                          ->where('tb_mas_curriculum_subject.intCurriculumID',$id)
-                         ->order_by('intYearLevel asc,intSem asc, strCode asc')
+                         ->order_by('strCode asc, intSem asc, intYearLevel asc')
                          ->get()
                          ->result_array();
         
@@ -2609,7 +2631,8 @@ class Data_fetcher extends CI_Model {
                         ->get()
                         ->result_array();
     }
-     function fetch_classlist_by_section($id,$sem=null)
+    
+    function fetch_classlist_by_section($id,$sem=null)
     {
          $sectionID = $id;
                     $this->db
