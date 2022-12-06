@@ -27,8 +27,20 @@
                             <input type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="year">Price Per Unit</label>
+                            <label for="year">Price Per Unit Regular</label>
                             <input type="number" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="year">Price Per Unit Online</label>
+                            <input type="number" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="year">Price Per Unit Hyflex</label>
+                            <input type="number" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="year">Price Per Unit Hybrid</label>
+                            <input type="number" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
                         </div> 
                         <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
                             <label for="isDefault">Default Tuition</label>
@@ -73,6 +85,9 @@ new Vue({
         request: {
             year: undefined,
             pricePerUnit: undefined,
+            pricePerUnitOnline: undefined,
+            pricePerUnitHyflex: undefined,
+            pricePerUnitHybrid: undefined,
             isDefault: 0,            
         },
         default_year: <?php echo $defaultYear; ?>,
@@ -121,6 +136,9 @@ new Vue({
                     var formdata= new FormData();
                     formdata.append("year",this.request.year);
                     formdata.append("pricePerUnit",this.request.pricePerUnit);
+                    formdata.append("pricePerUnitOnline",this.request.pricePerUnitOnline);
+                    formdata.append("pricePerUnitHybrid",this.request.pricePerUnitHybrid);
+                    formdata.append("pricePerUnitHyflex",this.request.pricePerUnitHyflex);
                     formdata.append("isDefault",this.request.isDefault);
 
                     return axios
