@@ -231,7 +231,8 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
 
-        }
+        },
+        
         updateData: function() {
             Swal.fire({
                 title: 'Update Status',
