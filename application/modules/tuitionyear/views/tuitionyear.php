@@ -65,6 +65,7 @@
                                 <th>Online</th>
                                 <th>Hyflex</th>
                                 <th>Hybrid</th>
+                                <th>International</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -75,6 +76,7 @@
                                 <td>{{ item.miscOnline }}</td>
                                 <td>{{ item.miscHyflex }}</td>
                                 <td>{{ item.miscHybrid }}</td>
+                                <td>{{ item.isInternational }}</td>
                                 <td><a href="#" @click.prevent.stop="deleteItem('misc',item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
@@ -105,6 +107,13 @@
                                 <label for="year">Hybrid Fee</label>
                                 <input type="number" name="miscHybrid" required class="form-control" id="miscHybrid" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
                             </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Is for international</label>
+                                <select name="isInternational" required class="form-control" id="isInternational" placeholder="Enter Fee Amount" v-model='misc.isInternational'>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>                            
                                            
                         </div>
                         
@@ -179,7 +188,8 @@ new Vue({
             miscRegular: undefined,
             miscHybrid: undefined,
             miscOnline: undefined,
-            miscHyflex: undefined,      
+            miscHyflex: undefined,  
+            isInternational: undefined,    
         },
         lab: {
             name: undefined,
@@ -235,6 +245,7 @@ new Vue({
                     formdata.append("miscOnline",this.misc.miscOnline);
                     formdata.append("miscHyflex",this.misc.miscHyflex);
                     formdata.append("miscHybrid",this.misc.miscHybrid);
+                    formdata.append("isInternational",this.misc.isInternational);
                     
 
                     return axios
