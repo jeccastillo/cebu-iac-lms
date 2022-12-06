@@ -87,29 +87,29 @@
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
-                                <input type="text" name="v" required class="form-control" id="name" placeholder="Enter Name" v-model='misc.name'>
+                                <input type="text" required class="form-control" placeholder="Enter Name" v-model='misc.name'>
                             </div>
                         </div>
                         <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
-                                <input type="number"  name="miscRegular" required class="form-control" id="miscRegular" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Online Fee</label>
-                                <input type="number" name="miscOnline" required class="form-control" id="miscOnline" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hyflex Fee</label>
-                                <input type="number" name="miscHyflex" required class="form-control" id="miscHyflex" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hybrid Fee</label>
-                                <input type="number" name="miscHybrid" required class="form-control" id="miscHybrid" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Is for international</label>
-                                <select name="isInternational" required class="form-control" id="isInternational" placeholder="Enter Fee Amount" v-model='misc.isInternational'>
+                                <select required class="form-control" placeholder="Enter Fee Amount" v-model='misc.isInternational'>
                                     <option value="no">No</option>
                                     <option value="yes">Yes</option>
                                 </select>
@@ -147,6 +147,40 @@
                             </tr>
                         </tbody>
                     </table>
+                    <hr />
+                    <p>Add new Lab Fee Type</p>
+                    <form @submit.prevent="addLab">    
+                        <div class="row">                     
+                            <div class="form-group col-xs-8">
+                                <label for="year">Name</label>
+                                <input type="text" required class="form-control" placeholder="Enter Name" v-model='lab.name'>
+                            </div>
+                        </div>
+                        <div class="row">                     
+                            <div class="form-group col-sm-3">
+                                <label for="year">Regular Fee</label>
+                                <input type="number"  required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labRegular'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Online Fee</label>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labOnline'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hyflex Fee</label>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHyflex'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hybrid Fee</label>
+                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHybrid'>
+                            </div>                                                                                            
+                        </div>
+                        
+                        <div class="row">    
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                     <hr />
                 </div>
 
@@ -226,9 +260,9 @@ new Vue({
 
     methods: {
 
-        addMisc: function (){
+        addExtra: function (type, name){
             Swal.fire({
-                title: 'Add Miscellaneous',
+                title: 'Add New Fee: '+ name,
                 text: "Continue adding entry?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
@@ -249,7 +283,7 @@ new Vue({
                     
 
                     return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/submit_misc/',formdata, {
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_'+type+'/',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
