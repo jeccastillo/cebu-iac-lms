@@ -74,13 +74,13 @@
                         <option value="irregular">Irregular</option>
                     </select>
                         <br />
-                 <label for="enumScholarship">Scholarship Grant</label>
+                    <label for="enumScholarship">Scholarship Grant</label>
                     <select class="form-control" id="enumScholarship" name="enumScholarship">                        
                         <option value="None">None</option>                        
                         <option value="iACADEMY Scholar">iACADEMY Scholar</option>
                     </select>
                         <br />
-                 <label for="enumStudentType">Student Type</label>
+                    <label for="enumStudentType">Student Type</label>
                     <select id="transcrossSelect" class="form-control" name="enumStudentType">
                         <option value="0">---SELECT---</option>
                          <option value="new">NEW</option>
@@ -90,6 +90,12 @@
                     </select>
                     <br />
                     <input type="text" disabled name="strFrom" id="transcrossText" class="form-control" placeholder="Cross Registrant or Transferee from..." />
+                    <label for="paymentType">Student Type</label>
+                    <select id="paymentType" class="form-control" name="paymentType">
+                         <option value="full">FULL</option>
+                         <option value="partial">PARTIAL</option>
+                    </select>
+                    
                     <hr />
                     
                 <div id="regular-option" class="row">
