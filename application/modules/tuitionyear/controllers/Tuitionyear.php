@@ -85,7 +85,7 @@ class Tuitionyear extends CI_Controller {
     public function add_tuition_year()
     {        
         $this->data['page'] = "tuitionyear";
-        $this->data['opentree'] = "registrar";
+        $this->data['opentree'] = "tuitionyear";
         $this->data['defaultYear'] = $this->data_fetcher->getDefaultTuitionYearID();
         $this->data['formAction'] = base_url()."tuitionyear/submit_form";
         $this->load->view("common/header",$this->data);
@@ -97,6 +97,7 @@ class Tuitionyear extends CI_Controller {
     public function tuition_info($id){
 
         $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
+        $data['data']['misc'] = $this->data_fetcher->getTuitionMiscFees($id);
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
         echo json_encode($data);

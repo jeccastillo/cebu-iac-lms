@@ -2014,6 +2014,10 @@ class Data_fetcher extends CI_Model {
         return $newStudentNumber;        
     }
 
+    function getTuitionMiscFees($id){
+        return $this->db->get_where('tb_mas_tuition_year_misc',array('tuitionYearID'=>$id))->result_array();
+    }
+
     function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID)
     {
         $tuition = 0;
