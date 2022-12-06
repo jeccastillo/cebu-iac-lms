@@ -321,16 +321,22 @@ class Data_fetcher extends CI_Model {
         //echo $this->db->last_query();
         return $subjects;
     }
+
+    function checkIfStudentNew($studentID){
+
+        return $this->db
+                    ->select('intCSID')
+                    ->from('tb_mas_classlist_student')
+                    ->where('intStudentID',$studentID)
+                    ->get()
+                    ->num_rows();
+        
+    }
     
     function getRequiredSubjects($studentID,$curriculumID,$sem=null,$year=null)
     {
         $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID WHERE tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
-            
-    //
-        
-      
-        
-        
+ 
         if($sem!=null && $year!=null)
             $bucket .= "AND tb_mas_curriculum_subject.intYearLevel = ".$year." AND tb_mas_curriculum_subject.intSem = ".$sem." ";
         
@@ -347,7 +353,7 @@ class Data_fetcher extends CI_Model {
         $ret = array();
         
         //PREREQUISITES CODE----------------------------------------------------------------------------
-        /*
+        
         foreach($subjects as $subj)
         {
             $add = true;
@@ -383,8 +389,7 @@ class Data_fetcher extends CI_Model {
                     
         }
         return $ret;
-        */
-        return $subjects;
+
     }
 
     function countStudentsInClasslist($id)

@@ -897,7 +897,11 @@ class Unity extends CI_Controller {
     {
         
         $post = $this->input->post();
-        $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],$post['year']);
+        $isNew = $this->data_fetcher->checkIfStudentNew($post['sid']);
+        if(!$isNew)
+            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],$post['year']);
+        else
+            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],1,1);
         $s = array();
 
         $data = $subjects;
