@@ -28,9 +28,7 @@ function getGradeAverages($sem)
         $ret[$index] = $d['ctr'];    
     }
     
-    return $ret;
-    
-    
+    return $ret;   
     
 }
 function getGradeAveragesSubject($sem,$subject)
@@ -54,10 +52,26 @@ function getGradeAveragesSubject($sem,$subject)
         $ret[$index] = $d['ctr'];    
     }
     
-    return $ret;
+    return $ret;    
     
-    
-    
+}
+if (!function_exists('getUnitPrice')) {
+    function getUnitPrice($ty,$sem){
+        switch($sem['classType']){
+            case 'regular':
+                $ret = $ty['pricePerUnit'];
+                break;
+            case 'online':
+                $ret = $ty['pricePerUnitOnline'];
+                break;
+            case 'hyflex':
+                $ret = $ty['pricePerUnitHyflex'];
+                break;
+            case 'hybrid':
+                $ret = $ty['pricePerUnitHybrid'];
+                break;
+        }
+    }
 }
 function getRegistrationDataCourse($sem,$course)
 {

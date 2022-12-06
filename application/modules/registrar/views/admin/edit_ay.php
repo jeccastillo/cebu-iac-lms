@@ -27,6 +27,15 @@
                             <?php endforeach; ?>
                          </select>
                     </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="classType">Classes Type</label>
+                        <select name="classType" class="form-control">
+                                <option <?php echo $item['classType']=='regular'?'selected':''; ?> value="regular">Regular</option>
+                                <option <?php echo $item['classType']=='online'?'selected':''; ?> value="online">Online</option>
+                                <option <?php echo $item['classType']=='hyflex'?'selected':''; ?> value="hyflex">Hyflex</option>
+                                <option <?php echo $item['classType']=='hybrid'?'selected':''; ?> value="hybrid">Hybrid</option>
+                         </select>
+                    </div>
                      <div class="form-group col-xs-12 col-lg-4">
                         <label for="strYearStart">Year</label>
                          <select id="year-start" name="strYearStart" class="form-control">

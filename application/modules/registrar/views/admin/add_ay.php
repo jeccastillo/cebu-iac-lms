@@ -20,7 +20,7 @@
                 <input type="hidden" name="enumStatus" value="inactive" />
                 <input type="hidden" name="enumFinalized" value="no" />
                  <div class="box-body">
-                     <div class="form-group col-xs-12 col-lg-4">
+                    <div class="form-group col-xs-12 col-lg-4">
                         <label for="enumSem"><?php echo $term_type; ?></label>
                         <select name="enumSem" class="form-control">
                             <?php foreach($terms as $term): ?>
@@ -28,6 +28,16 @@
                             <?php endforeach; ?>
                          </select>
                     </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="classType">Classes Type</label>
+                        <select name="classType" class="form-control">
+                                <option value="regular">Regular</option>
+                                <option value="online">Online</option>
+                                <option value="hyflex">Hyflex</option>
+                                <option value="hybrid">Hybrid</option>
+                         </select>
+                    </div>
+                    
                      <div class="form-group col-xs-12 col-lg-4">
                         <label for="strYearStart">Year</label>
                          <select id="year-start" name="strYearStart" class="form-control">

@@ -1820,13 +1820,13 @@ class Data_fetcher extends CI_Model {
         $data['repeated'] = [];
         $data['total_for_repeated'] = 0;
 
+        $ay = $this->getAy($sem);
+
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
 
-        $unit_fee = $tuition_year['pricePerUnit'];
+        $unit_fee = getUnitPrice($tuition_year,$ay);
 
-        $ay = $this->getAy($sem);
-        
         
         if($scholarship != "resident scholar" ) {//&& $scholarship != "FREE HIGHER EDUCATION PROGRAM (R.A. 10931)"){
             
@@ -1891,8 +1891,8 @@ class Data_fetcher extends CI_Model {
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                     
                     if($class['strLabClassification'] != "none"){
-                        $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
-                        $total_lab += $lab_list[$class['strCode']];
+                        // $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
+                        // $total_lab += $lab_list[$class['strCode']];
                     }
 
                     if($class['intAthleticFee'] != 0){
@@ -2030,10 +2030,13 @@ class Data_fetcher extends CI_Model {
         $data['misc_fee']['Library Fee'] = 0;
         $data['srf'] = 0;
         $data['sfdf'] = 0;
+        
+        $sem  = $this->get_active_sem();
 
         $student = $this->db->where('intID',$studentID)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
-        $unit_fee = $tuition_year['pricePerUnit'];
+        
+        $unit_fee = getUnitPrice($tuition_year,$sem);
     
         
         if($scholarship != "resident scholar") { //&& $scholarship != "FREE HIGHER EDUCATION PROGRAM (R.A. 10931)"){
@@ -2065,8 +2068,8 @@ class Data_fetcher extends CI_Model {
                 }
 
                 if($class['strLabClassification'] != "none"){
-                    $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
-                    $total_lab += $lab_list[$class['strCode']];
+                    // $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
+                    // $total_lab += $lab_list[$class['strCode']];
                 }
 
             }
