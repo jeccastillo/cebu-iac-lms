@@ -87,6 +87,8 @@
                                 <label for="year">Name</label>
                                 <input type="text" name="v" required class="form-control" id="name" placeholder="Enter Name" v-model='misc.name'>
                             </div>
+                        </div>
+                        <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
                                 <input type="number"  name="miscRegular" required class="form-control" id="miscRegular" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
