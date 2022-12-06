@@ -619,7 +619,7 @@ class Registrar extends CI_Controller {
         {
             $post['subjects_loaded'] = array();
         }
-        $tuition = $this->data_fetcher->getTuitionSubjects($post['stype'],$this->data['unit_fee'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$post['scholarship'],$post['subjects_loaded']);
+        $tuition = $this->data_fetcher->getTuitionSubjects($post['stype'],$this->data['unit_fee'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$post['scholarship'],$post['subjects_loaded'],$post['studentID']);
        
         
         $ret ='<div class="box box-solid">
