@@ -1972,7 +1972,7 @@ class Data_fetcher extends CI_Model {
             $nsf_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
                             ->get('tb_mas_tuition_year_misc')->first_row('array');
             
-            $nsf = getExtraFee($nsf_data, $ay, 'misc');
+            $nsf = getExtraFee($nsf_data, $sem, 'misc');
         }                         
 
 
