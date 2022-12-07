@@ -582,19 +582,14 @@ class Unity extends CI_Controller {
                             </div>';                
                 }
                 
-                $ret .= '
+                $ret .= '                
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['misc'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">Laboratory Fee:</div>
-                    <div class="col-sm-6 text-green"></div>
-                </div>
-                <hr />
-                ';
+                </div>';
+
                 if($tuition['nsf']!= 0){
-                $ret .= '                
+                    $ret .= '                
                     <div class="row">
                         <div class="col-sm-6">MISC - NEW STUDENT: </div>
                         <div class="col-sm-6 text-green">'.$tuition['nsf'].'</div>
@@ -602,6 +597,15 @@ class Unity extends CI_Controller {
                     <hr />
                     ';
                 }
+                
+                $ret .= '                
+                <div class="row">
+                    <div class="col-sm-6">Laboratory Fee:</div>
+                    <div class="col-sm-6 text-green"></div>
+                </div>
+                <hr />
+                ';
+                
                 
                 foreach($tuition['lab_list'] as $key=>$val){                
                     $ret .='<div class="row">
@@ -625,6 +629,30 @@ class Unity extends CI_Controller {
                         <hr />
                         ';
                 }    
+                if($tuition['new_student']!= 0){
+                    $ret .= '                
+                    <div class="row">
+                        <div class="col-sm-6">New Student Fees:</div>
+                        <div class="col-sm-6 text-green"></div>
+                    </div>
+                    <hr />
+                    ';
+                    
+                    
+                    foreach($tuition['new_student_list'] as $key=>$val){                
+                        $ret .='<div class="row">
+                                    <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+                                    <div class="col-sm-6">'.$val.'</div>
+                                </div>';                
+                    }
+    
+                    $ret .= '
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align:right;">Total:</div>
+                        <div class="col-sm-6 text-green">'.$tuition['new_student'].'</div>
+                    </div>
+                    <hr />';
+                }
 
                 $ret .= '           
                 <div class="row">

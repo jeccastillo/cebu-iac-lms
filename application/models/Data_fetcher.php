@@ -1882,7 +1882,7 @@ class Data_fetcher extends CI_Model {
             $total_misc += $misc_list[$m['name']];
         }
     
-        $data['total'] = $tuition + $total_lab + $total_misc;
+        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student;
         $data['lab'] = $total_lab;
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
@@ -2043,7 +2043,7 @@ class Data_fetcher extends CI_Model {
             $total_misc += $misc_list[$m['name']];
         }
     
-        $data['total'] = $tuition + $total_lab + $total_misc;
+        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student;
         $data['lab'] = $total_lab;
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
