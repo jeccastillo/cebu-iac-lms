@@ -42,10 +42,10 @@
                             <input type="number" class="form-control" value="<?php echo $subject['intLectHours'] ?>" name="intLectHours" id="intLectHours" />
                     </div>                        
                         <div class="form-group col-xs-6">
-                            <label for="intYearLevel">Athletic Fee</label>
-                            <select class="form-control" name="intAthleticFee" id="intAthleticFee" >
-                                <option <?php echo ($subject['intAthleticFee'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['intAthleticFee'] == 1)?'selected':''; ?> value="1">Yes</option>
+                            <label for="isNSTP">NSTP Subject?</label>
+                            <select class="form-control" name="isNSTP" id="isNSTP" >
+                                <option <?php echo ($subject['isNSTP'] == 0)?'selected':''; ?> value="0">No</option>
+                                <option <?php echo ($subject['isNSTP'] == 1)?'selected':''; ?> value="1">Yes</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-6">

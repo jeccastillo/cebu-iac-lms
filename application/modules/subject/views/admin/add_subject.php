@@ -41,8 +41,8 @@
                             <input type="number" class="form-control" value="0" name="intLectHours" id="intLectHours" /> 
                         </div>                        
                         <div class="form-group col-xs-6">
-                            <label for="intYearLevel">Athletic Fee</label>
-                            <select class="form-control" name="intAthleticFee" id="intAthleticFee" >
+                            <label for="isNSTP">NSTP Subject?</label>
+                            <select class="form-control" name="isNSTP" id="isNSTP" >
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
