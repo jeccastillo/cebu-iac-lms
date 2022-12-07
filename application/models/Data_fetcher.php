@@ -1940,95 +1940,67 @@ class Data_fetcher extends CI_Model {
 
     function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID)
     {
+
         $tuition = 0;
         $total_lab = 0;
+        $total_misc = 0;
         $afee = 0;
-        $data['id_fee'] = 0;
-        $data['csg']['student_handbook'] = 0;
-        $data['csg']['student_publication'] = 0;
-        $lab_list = array();
-        $data['misc_fee']['Registration'] = 0;
-        $data['misc_fee']['Guidance Fee'] = 0;
-        $data['misc_fee']['Entrance Exam Fee'] = 0;
-        $data['misc_fee']['Medical and Dental Fee'] = 0;
-        $data['misc_fee']['Library Fee'] = 0;
-        $data['srf'] = 0;
-        $data['sfdf'] = 0;
-        
-        $sem  = $this->get_active_sem();
+        $lab_list = [];
+        $misc_list = [];
+       
 
-        $student = $this->db->where('intID',$studentID)->get('tb_mas_users')->first_row('array');
-        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');        
-        $unit_fee = getUnitPrice($tuition_year,$sem);
-    
-        
-        if($scholarship != "resident scholar") { //&& $scholarship != "FREE HIGHER EDUCATION PROGRAM (R.A. 10931)"){
-            
-            $data['misc_fee']['Registration'] = $misc_fee['registration'];
-            $data['misc_fee']['Guidance Fee'] = $misc_fee['guidance_fee'];
-            $data['misc_fee']['Library Fee'] = $misc_fee['library_fee'];
-            $data['csg']['student_publication'] = $csg['student_publication'];
-            
-            if($scholarship != "DILG scholar")
-            {
-                foreach($subjects as $sid)
-                {
-                    $class =  current($this->db
+        $ay = $this->getAy($sem);
+
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
+        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
+        $unit_fee = getUnitPrice($tuition_year,$ay);
+
+        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID']))
+                         ->get('tb_mas_tuition_year_misc')->result_array();               
+
+
+        foreach($subjects as $sid)
+        {                  
+            $class =  current($this->db
                                 ->select("*")
                                 ->from("tb_mas_subjects")
                                 ->where(array("intID"=>$sid))
                                 ->get()
-                                ->result_array());
-
-                
-
-
-                
-                    $tuition += intval($class['strUnits'])*$unit_fee;
-
-                    if($class['intAthleticFee'] != 0){
-                        $afee += $athletic_fee;
-                    }
-
-                    if($class['strLabClassification'] != "none"){
-                        $tuition_year_lab = $this->db->where(array('intID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
-                                                    ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                        $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
-                        $total_lab += $lab_list[$class['strCode']];
-                    }
-
-                }
-            }
-
-            if($stype != "old")
-            {
-                $data['id_fee'] = $id_fee;
-                $data['csg']['student_handbook'] = $csg['student_handbook'];
-                $data['misc_fee']['Entrance Exam Fee'] = $misc_fee['entrance_exam_fee'];
-                $data['misc_fee']['Medical and Dental Fee'] = $misc_fee['medical_fee'];
-            }
-            else
-            {
-                $data['misc_fee']['Medical and Dental Fee'] = $misc_fee['medical_fee_old'];
-            }
+                                ->result_array());                       
             
-            $data['srf'] = $srf;
-            if($scholarship != "tagaytay resident")
-            {
-                $data['sfdf'] = $sfdf;
+            $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+            
+            if($class['strLabClassification'] != "none"){
+                $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                                            ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
+                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $ay, 'lab');
+                $total_lab += $lab_list[$class['strCode']];
             }
+
+            if($class['intAthleticFee'] != 0){
+                $afee += $athletic_fee;
+            }           
+        }
+
+        foreach($misc as $m){            
+            $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
+            $total_misc += $misc_list[$m['name']];
         }
     
-        $data['total'] = $tuition + $total_lab + $data['id_fee'] + $afee + $data['misc_fee']['Registration'] + $data['misc_fee']['Medical and Dental Fee'] + $data['misc_fee']['Entrance Exam Fee'] + $data['misc_fee']['Guidance Fee'] + $data['misc_fee']['Library Fee'] +  $data['srf'] +  $data['sfdf'] + $data['csg']['student_publication'] + $data['csg']['student_handbook'];
+        $data['total'] = $tuition + $total_lab + $total_misc;
         $data['lab'] = $total_lab;
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
+        $data['misc'] = $total_misc;
+        $data['misc_list'] = $misc_list;
         $data['athletic'] = $afee;
         
         
         return $data;
-        
+
     }
+        
+    
     
     
     function getTransactions($id,$sem)

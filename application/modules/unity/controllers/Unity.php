@@ -574,64 +574,33 @@ class Unity extends CI_Controller {
                     <div class="col-sm-6 text-green"></div>
                 </div>';
             
-                foreach($tuition['misc_fee'] as $key=>$val){
-                $total_misc = 0;
-                $ret .='<div class="row">
-                            <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
-                            <div class="col-sm-6">'.$val.'</div>
-                        </div>';
-                 $total_misc += $val;
+                foreach($tuition['misc_list'] as $key=>$val){
+                
+                    $ret .='<div class="row">
+                                <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+                                <div class="col-sm-6">'.$val.'</div>
+                            </div>';                
                 }
                 
                 $ret .= '
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Total:</div>
-                    <div class="col-sm-6 text-green">'.$total_misc.'</div>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-6">ID Fee:</div>
-                    <div class="col-sm-6 text-green">'.$tuition['id_fee'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">Athletic Fee:</div>
-                    <div class="col-sm-6 text-green">'.$tuition['athletic'].'</div>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-6">SRF:</div>
-                    <div class="col-sm-6 text-green">'.$tuition['srf'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">SFDF:</div>
-                    <div class="col-sm-6 text-green">'.$tuition['sfdf'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">Lab Fee:</div>
-                    <div class="col-sm-6">'.$tuition['lab'].'</div>
-                </div>
+                    <div class="col-sm-6 text-green">'.$tuition['misc'].'</div>
+                </div>';
+                
+                foreach($tuition['lab_list'] as $key=>$val){                
+                    $ret .='<div class="row">
+                                <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+                                <div class="col-sm-6">'.$val.'</div>
+                            </div>';                
+                }
+
+                $ret .= '
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['lab'].'</div>
                 </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-6">CSG:</div>
-                    <div class="col-sm-6"></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6" style="text-align:right;">Student Handbook:</div>
-                    <div class="col-sm-6">'.$tuition['csg']['student_handbook'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6" style="text-align:right;">Student Publication:</div>
-                    <div class="col-sm-6">'.$tuition['csg']['student_publication'].'</div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6" style="text-align:right;">Total:</div>
-                    <div class="col-sm-6 text-green">'.($tuition['csg']['student_handbook']+$tuition['csg']['student_publication']).'</div>
-                </div>
-                <hr />
+                <hr />               
                 <div class="row">
                     <div class="col-sm-6">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['total'].'</div>
