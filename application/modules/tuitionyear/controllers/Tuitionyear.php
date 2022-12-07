@@ -104,9 +104,9 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
 
     }
-    public function submit_misc(){
+    public function submit_extra($type){
         $post = $this->input->post();
-        $this->data_poster->post_data('tb_mas_tuition_year_misc',$post);
+        $this->data_poster->post_data('tb_mas_tuition_year_'.$type ,$post);
 
         $data['success'] = true;
         $data['message'] ="Successfully Added";

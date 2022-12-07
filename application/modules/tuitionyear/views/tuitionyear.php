@@ -279,7 +279,7 @@ new Vue({
                     }
                     
                     return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/submit_'+type+'/',formdata, {
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_extra/'+type,formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
