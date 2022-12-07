@@ -521,7 +521,7 @@
                                             <td><?php echo $record['strSection']; ?></td>
                                             <td><?php echo $record['strCode']; ?></td>
                                             <td><?php echo $record['strDescription'] ?></td>
-                                            <td><?php echo $record['strUnits']; ?></td>     
+                                            <td><?php echo ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits']; ?></td>     
                                             <?php if(!empty($record['schedule'])): ?>
 
                                             <td>
