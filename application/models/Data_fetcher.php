@@ -1836,7 +1836,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($new_student_data as $nsd){
-                $new_student_list[$nsd['name']] = getExtraFee($nsd, $ay, 'lab');
+                $new_student_list[$nsd['name']] = getExtraFee($nsd, $ay, 'misc');
                 $total_new_student += $new_student_list[$nsd['name']];
             }                         
         }
@@ -2003,7 +2003,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($new_student_data as $nsd){
-                $new_student_list[$nsd['name']] = getExtraFee($nsd, $sem, 'lab');
+                $new_student_list[$nsd['name']] = getExtraFee($nsd, $sem, 'misc');
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }                         
