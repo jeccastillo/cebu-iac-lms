@@ -1809,17 +1809,26 @@ class Data_fetcher extends CI_Model {
         $afee = 0;
         $lab_list = [];
         $misc_list = [];
+        $nsf = 0;
        
 
         $ay = $this->getAy($sem);
 
-        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
+        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $ay))->get('tb_mas_registration')->first_row('array');               
+
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$ay);
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();        
-        
+
+        if($registration['enumStudentType'] == 'new'){
+            $nsf_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
+                         ->get('tb_mas_tuition_year_misc')->first_row('array');
+            
+            $nsf = getExtraFee($nsf_data, $ay, 'misc');
+        }
         $classes =  $this->db
                             ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
                             tb_mas_subjects.intAthleticFee, tb_mas_subjects.strTuitionUnits, tb_mas_subjects.strLabClassification")
@@ -1861,6 +1870,7 @@ class Data_fetcher extends CI_Model {
         $data['tuition'] = $tuition;
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
+        $data['nsf'] = $nsf;
         $data['athletic'] = $afee;
         
         

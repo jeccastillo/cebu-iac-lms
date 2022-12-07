@@ -168,7 +168,24 @@
                                 </div>
 
                             </div>
-                            
+                            <hr />
+                            <?php if($tuition['nsf'] != 0): ?>
+                            <div class="row">
+                                <div class="col-sm-4">MISC - NEW STUDENT:</div>
+                                <div class="col-sm-6 text-green"><?php echo $tuition['nsf']; ?>
+                                <?php if(isset($payment['nsf'])): ?>
+                                    (-<?php echo $payment['nsf']; ?>)
+                                <?php endif; ?>
+                                </div>
+                                <div class="col-sm-1 text-green">
+                                    <?php if((isset($payment['nsf'])) && ($payment['nsf'] >= $tuition['nsf'])): ?>
+                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
+
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <hr />
+                            <?php endif; ?>
                             <div class="row">
                                 <div class="col-sm-4">LAB FEES:</div>
                                 <div class="col-sm-6"></div>
