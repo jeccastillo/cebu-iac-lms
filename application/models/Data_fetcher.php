@@ -1891,8 +1891,10 @@ class Data_fetcher extends CI_Model {
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                     
                     if($class['strLabClassification'] != "none"){
-                        // $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
-                        // $total_lab += $lab_list[$class['strCode']];
+                        $tuition_year_lab = $this->db->where(array('intID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                                                    ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
+                        $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
+                        $total_lab += $lab_list[$class['strCode']];
                     }
 
                     if($class['intAthleticFee'] != 0){
@@ -2055,8 +2057,7 @@ class Data_fetcher extends CI_Model {
         $sem  = $this->get_active_sem();
 
         $student = $this->db->where('intID',$studentID)->get('tb_mas_users')->first_row('array');
-        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
-        
+        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');        
         $unit_fee = getUnitPrice($tuition_year,$sem);
     
         
@@ -2069,31 +2070,33 @@ class Data_fetcher extends CI_Model {
             
             if($scholarship != "DILG scholar")
             {
-            foreach($subjects as $sid)
-            {
-                $class =  current($this->db
-                             ->select("*")
-                             ->from("tb_mas_subjects")
-                             ->where(array("intID"=>$sid))
-                             ->get()
-                             ->result_array());
+                foreach($subjects as $sid)
+                {
+                    $class =  current($this->db
+                                ->select("*")
+                                ->from("tb_mas_subjects")
+                                ->where(array("intID"=>$sid))
+                                ->get()
+                                ->result_array());
 
-            
+                
 
 
-            
-                $tuition += intval($class['strUnits'])*$unit_fee;
+                
+                    $tuition += intval($class['strUnits'])*$unit_fee;
 
-                if($class['intAthleticFee'] != 0){
-                    $afee += $athletic_fee;
+                    if($class['intAthleticFee'] != 0){
+                        $afee += $athletic_fee;
+                    }
+
+                    if($class['strLabClassification'] != "none"){
+                        $tuition_year_lab = $this->db->where(array('intID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                                                    ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
+                        $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
+                        $total_lab += $lab_list[$class['strCode']];
+                    }
+
                 }
-
-                if($class['strLabClassification'] != "none"){
-                    // $lab_list[$class['strCode']] = $tuition_year[$class['strLabClassification']];
-                    // $total_lab += $lab_list[$class['strCode']];
-                }
-
-            }
             }
 
             if($stype != "old")

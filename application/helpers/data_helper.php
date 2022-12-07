@@ -74,6 +74,26 @@ if (!function_exists('getUnitPrice')) {
         return $ret;
     }
 }
+if (!function_exists('getExtraFee')) {
+    function getExtraFee($entry, $sem, $pretext){
+        switch($sem['classType']){
+            case 'regular':
+                $ret = $entry[$pretext.'Regular'];
+                break;
+            case 'online':
+                $ret = $entry[$pretext.'Online'];
+                break;
+            case 'hyflex':
+                $ret = $entry[$pretext.'Hyflex'];
+                break;
+            case 'hybrid':
+                $ret = $entry[$pretext.'Hybrid'];
+                break;
+        }
+        return $ret;
+    }
+}
+
 function getRegistrationDataCourse($sem,$course)
 {
     $ci = load_ci();
