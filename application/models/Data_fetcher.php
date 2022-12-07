@@ -1056,7 +1056,7 @@ class Data_fetcher extends CI_Model {
         if($post!=null){
             $courses =
                 $this->db
-                     ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
+                     ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
                      ->from('tb_mas_subjects')
                      ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
@@ -1086,7 +1086,7 @@ class Data_fetcher extends CI_Model {
         if($post!=null){
             $courses =
                 $this->db
-                     ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
+                     ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
                      ->from('tb_mas_subjects')
                      ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
@@ -1107,7 +1107,7 @@ class Data_fetcher extends CI_Model {
     {
             $courses =
                 $this->db
-                     ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
+                     ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem')
                      ->from('tb_mas_subjects')
                      ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
@@ -1507,7 +1507,7 @@ class Data_fetcher extends CI_Model {
         
             return  current(
                      $this->db
-                         ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.intPrerequisiteID')
+                         ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.intPrerequisiteID')
                          ->from('tb_mas_subjects')
                          ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
                          ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
@@ -1522,7 +1522,7 @@ class Data_fetcher extends CI_Model {
         
             return  current(
                      $this->db
-                         ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.intPrerequisiteID')
+                         ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.intPrerequisiteID')
                          ->from('tb_mas_subjects')
                          ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
                          ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
@@ -1552,7 +1552,7 @@ class Data_fetcher extends CI_Model {
         
             return  current(
                      $this->db
-                         ->select( 'tb_mas_subjects.intID,intProgramID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee,tb_mas_subjects.intPrerequisiteID')
+                         ->select( 'tb_mas_subjects.intID,intProgramID,strCode,strDescription,strUnits,intLab,tb_mas_subjects.intPrerequisiteID')
                          ->from('tb_mas_subjects')
                          ->where(array('tb_mas_subjects.intID'=>$id))
                          ->get()
@@ -1647,7 +1647,7 @@ class Data_fetcher extends CI_Model {
     {
             $courses =
                $this->db
-                    ->select( 'tb_mas_subjects.intID,intAthleticFee,strCode,strDescription,strUnits,intLab,intAthleticFee')
+                    ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab')
                     ->from('tb_mas_advised')
                     ->join('tb_mas_advised_subjects','tb_mas_advised.intAdvisedID = tb_mas_advised_subjects.intAdvisedID')
                     ->join('tb_mas_subjects','tb_mas_advised_subjects.intSubjectID = tb_mas_subjects.intID')
@@ -1843,7 +1843,7 @@ class Data_fetcher extends CI_Model {
 
         $classes =  $this->db
                             ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
-                            tb_mas_subjects.intAthleticFee, tb_mas_subjects.strTuitionUnits, tb_mas_subjects.strLabClassification, tb_mas_subjects.isThesisSubject")
+                             tb_mas_subjects.strTuitionUnits, tb_mas_subjects.strLabClassification, tb_mas_subjects.isThesisSubject")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -1879,10 +1879,7 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
                 $thesis_fee = getExtraFee($thesis, $ay, 'misc');                                
             }
-
-            if($class['intAthleticFee'] != 0){
-                $afee += $athletic_fee;
-            }           
+                   
         }
 
         foreach($misc as $m){            
@@ -2051,10 +2048,7 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
                 $thesis_fee = getExtraFee($thesis, $sem, 'misc');                                
             }
-
-            if($class['intAthleticFee'] != 0){
-                $afee += $athletic_fee;
-            }           
+           
         }
 
         foreach($misc as $m){            
