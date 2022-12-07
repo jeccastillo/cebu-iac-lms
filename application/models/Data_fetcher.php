@@ -1957,7 +1957,7 @@ class Data_fetcher extends CI_Model {
         $afee = 0;
         $lab_list = [];
         $misc_list = [];
-       
+        $nsf = 0;
 
         $sem  = $this->get_active_sem();
 
@@ -1966,7 +1966,14 @@ class Data_fetcher extends CI_Model {
         $unit_fee = getUnitPrice($tuition_year,$sem);
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
-                         ->get('tb_mas_tuition_year_misc')->result_array();               
+                         ->get('tb_mas_tuition_year_misc')->result_array();  
+                         
+        if($stype == 'new'){
+            $nsf_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
+                            ->get('tb_mas_tuition_year_misc')->first_row('array');
+            
+            $nsf = getExtraFee($nsf_data, $ay, 'misc');
+        }                         
 
 
         foreach($subjects as $sid)
@@ -2004,7 +2011,7 @@ class Data_fetcher extends CI_Model {
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
         $data['athletic'] = $afee;
-        
+        $data['nsf'] = $nsf;        
         
         return $data;
 
