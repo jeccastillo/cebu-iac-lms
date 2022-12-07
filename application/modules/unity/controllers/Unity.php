@@ -586,7 +586,12 @@ class Unity extends CI_Controller {
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['misc'].'</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Laboratory Fee:</div>
+                    <div class="col-sm-6 text-green"></div>
                 </div>';
+                
                 
                 foreach($tuition['lab_list'] as $key=>$val){                
                     $ret .='<div class="row">
