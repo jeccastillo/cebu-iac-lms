@@ -2018,7 +2018,16 @@ class Data_fetcher extends CI_Model {
                                 ->get()
                                 ->result_array());                       
             
-            $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+            //Checks if subject is NSTP nstp fee is different from normal fee                                
+            if($class['isNSTP']){
+                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+                ->get('tb_mas_tuition_year_misc')->first_row('array');
+                $nstp_fee = getExtraFee($nstp_fee, $sem, 'misc');
+
+                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+            }
+            else
+                $tuition += intval($class['strTuitionUnits'])*$unit_fee;
             
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
@@ -2026,6 +2035,8 @@ class Data_fetcher extends CI_Model {
                 $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
                 $total_lab += $lab_list[$class['strCode']];
             }
+
+            
 
             if($class['isThesisSubject']){                
                 $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
