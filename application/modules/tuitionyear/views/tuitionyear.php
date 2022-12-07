@@ -275,7 +275,7 @@ new Vue({
                     var formdata= new FormData();
                     switch(type){
                         case 'misc':
-                           foreach(const [key,value] of Object.entries(this.misc)){
+                           for(const [key,value] of Object.entries(this.misc)){
                                 formdata.append(key,value);
                            }
                         break;
