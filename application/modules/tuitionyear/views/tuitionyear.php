@@ -114,7 +114,8 @@
                                     <option value="nsf">New Student Misc</option>
                                     <option value="new_student">New Student Fees</option>
                                     <option value="thesis">Thesis</option>
-                                    <option value="internship">Internship</option>                                    
+                                    <option value="internship">Internship</option>
+                                    <option value="nstp">NSTP/ROTC</option>                                    
                                 </select>
                             </div>                            
                                            
