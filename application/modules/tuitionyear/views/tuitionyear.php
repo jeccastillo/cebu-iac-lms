@@ -83,7 +83,7 @@
                     </table>
                     <hr />
                     <p>Add new Miscellaneous Item</p>
-                    <form @submit.prevent="addExtra('misc','Miscellaneous')">    
+                    <form @submit.prevent="addExtra('misc','Miscellaneous',misc)">    
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
@@ -149,7 +149,7 @@
                     </table>
                     <hr />
                     <p>Add new Lab Fee Type</p>
-                    <form @submit.prevent="addExtra('lab','Laboratory')">    
+                    <form @submit.prevent="addExtra('lab','Laboratory',lab)">    
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
@@ -209,7 +209,7 @@ new Vue({
         header_title: 'Add Tuition Year',
         request: {
             year: undefined,
-            pricePerUnit: undefined,
+            pricePerUnit: undefined,            
             pricePerUnitOnline: undefined,
             pricePerUnitHyflex: undefined,
             pricePerUnitHybrid: undefined,
@@ -219,7 +219,7 @@ new Vue({
         },
         misc: {
             name: undefined,
-            miscRegular: undefined,
+            miscRegular: undefined,            
             miscHybrid: undefined,
             miscOnline: undefined,
             miscHyflex: undefined,  
@@ -260,7 +260,7 @@ new Vue({
 
     methods: {
 
-        addExtra: function (type, name){
+        addExtra: function (type, name, data){
             Swal.fire({
                 title: 'Add New Fee: '+ name,
                 text: "Continue adding entry?",
@@ -273,23 +273,12 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    switch(type){
-                        case 'misc':
-                           for(const [key,value] of Object.entries(this.misc)){
-                            console.log(key+" "+value);
-                                formdata.append(key,value);
-                           }
-                        break;
-                        case 'lab':
-                            formdata.append("name",this.lab.name);
-                            formdata.append("tuitionYearID",this.id);
-                            formdata.append("labRegular",this.lab.labRegular);
-                            formdata.append("labOnline",this.lab.labOnline);
-                            formdata.append("labHyflex",this.lab.labHyflex);
-                            formdata.append("labHybrid",this.lab.labHybrid);                            
-                        break;
+                    formdata.append("tuitionYearID",this.id);                    
+                    for(const [key,value] of Object.entries(data)){
+                    console.log(key+" "+value);
+                        formdata.append(key,value);
                     }
-
+                    
                     return axios
                         .post('<?php echo base_url(); ?>tuitionyear/submit_'+type+'/',formdata, {
                                 headers: {
