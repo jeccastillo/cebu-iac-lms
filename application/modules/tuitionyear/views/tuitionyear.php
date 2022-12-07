@@ -111,9 +111,10 @@
                                 <label for="year">Type</label>
                                 <select required class="form-control" placeholder="Enter Fee Amount" v-model='misc.type'>
                                     <option value="regular">Regular</option>
-                                    <option value="nsf">New Student Fee</option>
+                                    <option value="nsf">New Student Misc</option>
+                                    <option value="new_student">New Student Fees</option>
                                     <option value="thesis">Thesis</option>
-                                    <option value="internship">Internship</option>
+                                    <option value="internship">Internship</option>                                    
                                 </select>
                             </div>                            
                                            

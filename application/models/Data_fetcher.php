@@ -1806,9 +1806,11 @@ class Data_fetcher extends CI_Model {
         $tuition = 0;
         $total_lab = 0;
         $total_misc = 0;
+        $total_new_student = 0;
         $afee = 0;
         $lab_list = [];
         $misc_list = [];
+        $new_student_list = [];        
         $nsf = 0;
         $thesis_fee = 0;
        
@@ -1829,7 +1831,16 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->first_row('array');
             
             $nsf = getExtraFee($nsf_data, $ay, 'misc');
+
+            $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
+                         ->get('tb_mas_tuition_year_misc')->result_array();
+
+            foreach($new_student_data as $nsd){
+                $new_student_list[$nsd['name']] = getExtraFee($nsd, $ay, 'lab');
+                $total_new_student += $new_student_list[$nsd['name']];
+            }                         
         }
+
         $classes =  $this->db
                             ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
                             tb_mas_subjects.intAthleticFee, tb_mas_subjects.strTuitionUnits, tb_mas_subjects.strLabClassification, tb_mas_subjects.isThesisSubject")
@@ -1877,6 +1888,8 @@ class Data_fetcher extends CI_Model {
         $data['tuition'] = $tuition;
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
+        $data['new_student'] = $total_new_student;
+        $data['new_student_list'] = $new_student_list;
         $data['nsf'] = $nsf;
         $data['thesis_fee'] = $thesis_fee;
         $data['athletic'] = $afee;
@@ -1962,9 +1975,11 @@ class Data_fetcher extends CI_Model {
         $tuition = 0;
         $total_lab = 0;
         $total_misc = 0;
+        $total_new_student = 0;
         $afee = 0;
         $lab_list = [];
-        $misc_list = [];        
+        $misc_list = [];    
+        $new_student_list = [];    
         $nsf = 0;
         $thesis_fee = 0;
 
@@ -1983,6 +1998,14 @@ class Data_fetcher extends CI_Model {
                             ->get('tb_mas_tuition_year_misc')->first_row('array');
             
             $nsf = getExtraFee($nsf_data, $sem, 'misc');
+
+            $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
+                         ->get('tb_mas_tuition_year_misc')->result_array();
+
+            foreach($new_student_data as $nsd){
+                $new_student_list[$nsd['name']] = getExtraFee($nsd, $sem, 'lab');
+                $total_new_student += $new_student_list[$nsd['name']];
+            }
         }                         
 
 
@@ -2026,6 +2049,8 @@ class Data_fetcher extends CI_Model {
         $data['tuition'] = $tuition;
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
+        $data['new_student'] = $total_new_student;
+        $data['new_student_list'] = $new_student_list;
         $data['athletic'] = $afee;
         $data['thesis_fee'] = $thesis_fee;
         $data['nsf'] = $nsf;        
