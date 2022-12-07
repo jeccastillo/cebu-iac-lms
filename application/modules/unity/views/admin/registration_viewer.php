@@ -146,84 +146,29 @@
                                 <div class="col-sm-4">Miscellaneous:</div>
                                 <div class="col-sm-6 text-green"></div>
                             </div>
-                            <?php 
-                            $total_misc = 0;
-                            foreach($tuition['misc_fee'] as $key=>$val): ?>
+                            <?php                             
+                            foreach($tuition['misc_list'] as $key=>$val): ?>
                             <div class="row">
                                 <div class="col-sm-4" style="text-align:right;"><?php echo $key; ?>:</div>
                                 <div class="col-sm-6"><?php echo $val; ?></div>
                             </div>
                             <?php 
-                            $total_misc += $val;
                             endforeach; ?>
                             <div class="row">
                                 <div class="col-sm-4" style="text-align:right;">Total:</div>
-                                <div class="col-sm-6 text-green"><?php echo $total_misc; ?>
+                                <div class="col-sm-6 text-green"><?php echo $tuition['misc']; ?>
                                 <?php if(isset($payment['misc'])): ?>
                                     (-<?php echo $payment['misc']; ?>)
                                 <?php endif; ?>
                                 </div>
                                 <div class="col-sm-1 text-green">
-                                    <?php if(isset($payment['misc']) && ($payment['misc'] >= $total_misc)): ?>
+                                    <?php if(isset($payment['misc']) && ($payment['misc'] >= $tuition['misc'])): ?>
                                         <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
                                     <?php endif; ?>
                                 </div>
 
                             </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-4">ID Fee:</div>
-                                <div class="col-sm-6 text-green"><?php echo $tuition['id_fee']; ?>
-                                <?php if(isset($payment['id fee'])): ?>
-                                    (-<?php echo $payment['id fee']; ?>)
-                                <?php endif; ?>
-                                </div>
-                                <div class="col-sm-1 text-green">
-                                    <?php if((isset($payment['id fee'])) && ($payment['id fee'] >= $tuition['id_fee'])): ?>
-                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">Athletic Fee:</div>
-                                <div class="col-sm-6 text-green"><?php echo $tuition['athletic']; ?>
-                                <?php if(isset($payment['athletic fee'])): ?>
-                                    (-<?php echo $payment['athletic fee']; ?>)
-                                <?php endif; ?>
-                                </div>
-                                <div class="col-sm-1 text-green">
-                                    <?php if((isset($payment['athletic fee'])) && ($payment['athletic fee'] >= $tuition['athletic'])): ?>
-                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-4">SRF:</div>
-                                <div class="col-sm-6 text-green"><?php echo $tuition['srf']; ?>
-                                <?php if(isset($payment['srf'])): ?>
-                                    (-<?php echo $payment['srf']; ?>)
-                                <?php endif; ?>
-                                </div>
-                                <div class="col-sm-1 text-green">
-                                    <?php if((isset($payment['srf'])) && ($payment['srf'] >= $tuition['srf'])): ?>
-                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">SFDF:</div>
-                                <div class="col-sm-6 text-green"><?php echo $tuition['sfdf']; ?>
-                                <?php if(isset($payment['sfdf'])): ?>
-                                    (-<?php echo $payment['sfdf']; ?>)
-                                <?php endif; ?>
-                                </div>
-                                <div class="col-sm-1 text-green">
-                                    <?php if((isset($payment['sfdf'])) && ($payment['sfdf'] >= $tuition['sfdf'])): ?>
-                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
+                            
                             <div class="row">
                                 <div class="col-sm-4">LAB FEES:</div>
                                 <div class="col-sm-6"></div>
@@ -246,34 +191,7 @@
                                         <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-4">CSG:</div>
-                                <div class="col-sm-6"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4" style="text-align:right;">Student Handbook:</div>
-                                <div class="col-sm-6"><?php echo $tuition['csg']['student_handbook']; ?></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4" style="text-align:right;">Student Publication:</div>
-                                <div class="col-sm-6"><?php echo $tuition['csg']['student_publication']; ?></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4" style="text-align:right;">Total:</div>
-                                <div class="col-sm-6 text-green"><?php echo $tuition['csg']['student_handbook']+$tuition['csg']['student_publication']; ?>
-                                <?php if(isset($payment['csg'])): ?>
-                                    (-<?php echo $payment['csg']; ?>)
-                                <?php endif; ?>
-                                </div>
-                                <div class="col-sm-1 text-green">
-                                    <?php if((isset($payment['csg'])) && ($payment['csg'] >= $tuition['csg']['student_handbook']+$tuition['csg']['student_publication'])): ?>
-                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <hr />                                
+                            </div>                                                        
                             <div class="row">
                                 <div class="col-sm-4">Total:</div>
                                 <div class="col-sm-6 text-green"><?php echo $tuition['total']; ?></div>
