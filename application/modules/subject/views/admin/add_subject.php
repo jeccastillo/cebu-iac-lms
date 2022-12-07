@@ -48,6 +48,13 @@
                             </select>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label for="isThesisSubject">Thesis Subject?</label>
+                            <select class="form-control" name="isThesisSubject" id="isThesisSubject" >
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>                        
+                        <div class="form-group col-xs-6">
                             <label for="intBridging">Bridging</label>
                             <select class="form-control" name="intBridging" id="intBridging" >
                                 <option value="0">No</option>

@@ -615,7 +615,18 @@ class Unity extends CI_Controller {
                     <div class="col-sm-6" style="text-align:right;">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['lab'].'</div>
                 </div>
-                <hr />               
+                <hr />';
+                if($tuition['thesis_fee']!= 0){
+                    $ret .= '                
+                        <div class="row">
+                            <div class="col-sm-6">THESIS FEE: </div>
+                            <div class="col-sm-6 text-green">'.$tuition['thesis_fee'].'</div>
+                        </div>
+                        <hr />
+                        ';
+                }    
+
+                $ret .= '           
                 <div class="row">
                     <div class="col-sm-6">Total:</div>
                     <div class="col-sm-6 text-green">'.$tuition['total'].'</div>

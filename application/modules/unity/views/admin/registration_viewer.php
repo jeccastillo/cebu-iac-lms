@@ -208,7 +208,24 @@
                                         <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
                                     <?php endif; ?>
                                 </div>
-                            </div>                                                        
+                            </div>   
+                            <?php if($tuition['thesis_fee'] != 0): ?>
+                            <div class="row">
+                                <div class="col-sm-4">THESIS FEE: </div>
+                                <div class="col-sm-6 text-green"><?php echo $tuition['thesis_fee']; ?>
+                                <?php if(isset($payment['thesis_fee'])): ?>
+                                    (-<?php echo $payment['thesis_fee']; ?>)
+                                <?php endif; ?>
+                                </div>
+                                <div class="col-sm-1 text-green">
+                                    <?php if((isset($payment['thesis_fee'])) && ($payment['thesis_fee'] >= $tuition['thesis_fee'])): ?>
+                                        <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
+
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <hr />
+                            <?php endif; ?>                                                     
                             <div class="row">
                                 <div class="col-sm-4">Total:</div>
                                 <div class="col-sm-6 text-green"><?php echo $tuition['total']; ?></div>

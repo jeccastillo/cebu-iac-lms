@@ -1810,6 +1810,7 @@ class Data_fetcher extends CI_Model {
         $lab_list = [];
         $misc_list = [];
         $nsf = 0;
+        $thesis_fee = 0;
        
 
         $ay = $this->getAy($sem);
@@ -1854,6 +1855,12 @@ class Data_fetcher extends CI_Model {
                 $total_lab += $lab_list[$class['strCode']];
             }
 
+            if($class['isThesisSubject']){                
+                $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
+                ->get('tb_mas_tuition_year_misc')->first_row('array');
+                $thesis_fee = getExtraFee($thesis, $ay, 'misc');                                
+            }
+
             if($class['intAthleticFee'] != 0){
                 $afee += $athletic_fee;
             }           
@@ -1871,6 +1878,7 @@ class Data_fetcher extends CI_Model {
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
         $data['nsf'] = $nsf;
+        $data['thesis_fee'] = $thesis_fee;
         $data['athletic'] = $afee;
         
         
@@ -1956,14 +1964,16 @@ class Data_fetcher extends CI_Model {
         $total_misc = 0;
         $afee = 0;
         $lab_list = [];
-        $misc_list = [];
+        $misc_list = [];        
         $nsf = 0;
+        $thesis_fee = 0;
 
         $sem  = $this->get_active_sem();
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$sem);
+        
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
@@ -1994,6 +2004,12 @@ class Data_fetcher extends CI_Model {
                 $total_lab += $lab_list[$class['strCode']];
             }
 
+            if($class['isThesisSubject']){                
+                $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
+                ->get('tb_mas_tuition_year_misc')->first_row('array');
+                $thesis_fee = getExtraFee($thesis, $sem, 'misc');                                
+            }
+
             if($class['intAthleticFee'] != 0){
                 $afee += $athletic_fee;
             }           
@@ -2011,6 +2027,7 @@ class Data_fetcher extends CI_Model {
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
         $data['athletic'] = $afee;
+        $data['thesis_fee'] = $thesis_fee;
         $data['nsf'] = $nsf;        
         
         return $data;
