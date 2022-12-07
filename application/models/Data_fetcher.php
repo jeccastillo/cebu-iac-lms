@@ -1949,11 +1949,11 @@ class Data_fetcher extends CI_Model {
         $misc_list = [];
        
 
-        $ay = $this->getAy($sem);
+        $sem  = $this->get_active_sem();
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
-        $unit_fee = getUnitPrice($tuition_year,$ay);
+        $unit_fee = getUnitPrice($tuition_year,$sem);
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID']))
                          ->get('tb_mas_tuition_year_misc')->result_array();               
@@ -1973,7 +1973,7 @@ class Data_fetcher extends CI_Model {
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
                                             ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $ay, 'lab');
+                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
                 $total_lab += $lab_list[$class['strCode']];
             }
 
