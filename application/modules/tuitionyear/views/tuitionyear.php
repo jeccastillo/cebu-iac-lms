@@ -83,7 +83,7 @@
                     </table>
                     <hr />
                     <p>Add new Miscellaneous Item</p>
-                    <form @submit.prevent="addMisc">    
+                    <form @submit.prevent="addExtra('misc','Miscellaneous')">    
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
@@ -149,7 +149,7 @@
                     </table>
                     <hr />
                     <p>Add new Lab Fee Type</p>
-                    <form @submit.prevent="addLab">    
+                    <form @submit.prevent="addExtra('lab','Laboratory')">    
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
@@ -273,14 +273,21 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append("name",this.misc.name);
-                    formdata.append("tuitionYearID",this.id);
-                    formdata.append("miscRegular",this.misc.miscRegular);
-                    formdata.append("miscOnline",this.misc.miscOnline);
-                    formdata.append("miscHyflex",this.misc.miscHyflex);
-                    formdata.append("miscHybrid",this.misc.miscHybrid);
-                    formdata.append("isInternational",this.misc.isInternational);
-                    
+                    switch(type){
+                        case 'misc':
+                           foreach(const [key,value] of Object.entries(this.misc)){
+                                formdata.append(key,value);
+                           }
+                        break;
+                        case 'lab':
+                            formdata.append("name",this.lab.name);
+                            formdata.append("tuitionYearID",this.id);
+                            formdata.append("labRegular",this.lab.labRegular);
+                            formdata.append("labOnline",this.lab.labOnline);
+                            formdata.append("labHyflex",this.lab.labHyflex);
+                            formdata.append("labHybrid",this.lab.labHybrid);                            
+                        break;
+                    }
 
                     return axios
                         .post('<?php echo base_url(); ?>tuitionyear/submit_'+type+'/',formdata, {
