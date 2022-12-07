@@ -1817,7 +1817,7 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$ay);
 
-        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID']))
+        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();        
         
         $classes =  $this->db
@@ -1955,7 +1955,7 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$sem);
 
-        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID']))
+        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();               
 
 

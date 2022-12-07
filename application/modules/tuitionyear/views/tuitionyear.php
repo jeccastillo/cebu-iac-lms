@@ -65,7 +65,7 @@
                                 <th>Online</th>
                                 <th>Hyflex</th>
                                 <th>Hybrid</th>
-                                <th>International</th>
+                                <th>Type</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -76,7 +76,7 @@
                                 <td>{{ item.miscOnline }}</td>
                                 <td>{{ item.miscHyflex }}</td>
                                 <td>{{ item.miscHybrid }}</td>
-                                <td>{{ item.isInternational }}</td>
+                                <td>{{ item.type }}</td>
                                 <td><a href="#" @click.prevent.stop="deleteItem('misc',item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
@@ -108,10 +108,12 @@
                                 <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
                             </div>
                             <div class="form-group col-sm-3">
-                                <label for="year">Is for international</label>
-                                <select required class="form-control" placeholder="Enter Fee Amount" v-model='misc.isInternational'>
-                                    <option value="no">No</option>
-                                    <option value="yes">Yes</option>
+                                <label for="year">Type</label>
+                                <select required class="form-control" placeholder="Enter Fee Amount" v-model='misc.type'>
+                                    <option value="regular">Regular</option>
+                                    <option value="nsf">New Student Fee</option>
+                                    <option value="thesis">Thesis</option>
+                                    <option value="internship">Internship</option>
                                 </select>
                             </div>                            
                                            
@@ -223,7 +225,7 @@ new Vue({
             miscHybrid: undefined,
             miscOnline: undefined,
             miscHyflex: undefined,  
-            isInternational: 'no',    
+            type: 'regular',    
         },
         lab: {
             name: undefined,
