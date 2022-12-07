@@ -596,7 +596,7 @@ class Unity extends CI_Controller {
                 if($tuition['nsf']!= 0){
                 $ret .= '                
                     <div class="row">
-                        <div class="col-sm-6">MISC - NEW STUDENT</div>
+                        <div class="col-sm-6">MISC - NEW STUDENT: </div>
                         <div class="col-sm-6 text-green">'.$tuition['nsf'].'</div>
                     </div>
                     <hr />
