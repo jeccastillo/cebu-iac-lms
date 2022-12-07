@@ -2018,6 +2018,22 @@ class Data_fetcher extends CI_Model {
         return $this->db->get_where('tb_mas_tuition_year_'.$type,array('tuitionYearID'=>$id))->result_array();
     }
 
+    function getLabTypesForDropdown(){
+        $ret = [];
+        $data = $this->db
+                    ->select('name')
+                    ->from('tb_mas_tuition_year_lab_fee')
+                    ->group_by('name')
+                    ->order_by('name')
+                    ->get()
+                    ->result_array();
+
+        foreach($data as $d)
+            $ret[$d['name']] = $d['name'];
+
+        return $ret;
+    }
+
     function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$studentID)
     {
         $tuition = 0;

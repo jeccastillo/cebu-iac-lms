@@ -53,9 +53,11 @@ class Subject extends CI_Controller {
     {
         if($this->is_admin())
         {
-             $dpt = array(); 
+            $dpt = array(); 
             foreach($this->data['department_config'] as $dept)
                 $dpt[$dept] = $dept;
+
+            $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
             
             $this->data['dpt'] = $dpt;
             $this->data['page'] = "add_subject";

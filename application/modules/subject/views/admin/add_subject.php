@@ -30,15 +30,8 @@
                         <div class="form-group col-xs-6">
                             <label for="strUnits">Number of Units for Tuition</label>
                             <input type="number" name="strTuitionUnits" class="form-control" id="strTuitionUnits" placeholder="Enter Number of Units">
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="strUnits">Lab Classification</label>
-                            <select name="strLabClassification" class="form-control" id="strLabClassification">
-                                <option value="none">None</option>
-                                <option value="floatAnimationLab">Animation Lab</option>
-                                <option value="floatComputerLab">Computer Lab</option>
-                            </select>
-                        </div>
+                        </div>                        
+                        <?php echo cms_dropdown('strLabClassification','Lab Type',$lab_types,'col-sm-6'); ?>
                         <div class="form-group col-xs-6">
                             <label for="intLab">Laboratory Units</label>
                             <input type="number" class="form-control" value="0" name="intLab" id="intLab" /> 
