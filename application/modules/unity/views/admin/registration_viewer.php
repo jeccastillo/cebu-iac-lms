@@ -209,6 +209,7 @@
                                     <?php endif; ?>
                                 </div>
                             </div>   
+                            <hr />
                             <?php if($tuition['thesis_fee'] != 0): ?>
                             <div class="row">
                                 <div class="col-sm-4">THESIS FEE: </div>
