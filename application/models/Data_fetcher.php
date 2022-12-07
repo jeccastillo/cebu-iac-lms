@@ -1852,6 +1852,7 @@ class Data_fetcher extends CI_Model {
         }
 
         foreach($misc as $m){
+            echo $m['name'];
             $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
             $total_misc += $misc_list[$m['name']];
         }
