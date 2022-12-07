@@ -225,7 +225,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">Computer Fee:</div>
+                                <div class="col-sm-4">LAB FEES:</div>
                                 <div class="col-sm-6"></div>
                             </div>
                             <?php foreach($tuition['lab_list'] as $key=>$val): ?>
@@ -273,24 +273,7 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <hr />
-                                <div class="row">
-                                    <div class="col-sm-4">Repeated Subjects:</div>
-                                    <div class="col-sm-6"></div>
-                                </div>
-                                <?php foreach($tuition['repeated'] as $repeated): ?>
-                                <div class="row">
-                                    <div class="col-sm-4" style="text-align:right;"><?php echo $repeated['subjectCode']; ?>:</div>
-                                    <div class="col-sm-6">
-                                         <?php echo $repeated['amount']; ?>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                                <div class="row">
-                                    <div class="col-sm-4" style="text-align:right;">Total:</div>
-                                    <div class="col-sm-6 text-green"><?php echo $tuition['total_for_repeated']; ?></div>                                
-                                </div>
-                            <hr />
+                            <hr />                                
                             <div class="row">
                                 <div class="col-sm-4">Total:</div>
                                 <div class="col-sm-6 text-green"><?php echo $tuition['total']; ?></div>
