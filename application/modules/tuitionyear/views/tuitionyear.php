@@ -149,7 +149,7 @@
                     </table>
                     <hr />
                     <p>Add new Lab Fee Type</p>
-                    <form @submit.prevent="addExtra('lab','Laboratory',lab)">    
+                    <form @submit.prevent="addExtra('lab_fee','Laboratory',lab)">    
                         <div class="row">                     
                             <div class="form-group col-xs-8">
                                 <label for="year">Name</label>
