@@ -93,19 +93,19 @@
                         <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Online Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hyflex Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hybrid Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Type</label>
@@ -163,19 +163,19 @@
                         <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
-                                <input type="number"  required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labRegular'>
+                                <input step="any" type="number"  required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labRegular'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Online Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labOnline'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labOnline'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hyflex Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHyflex'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHyflex'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hybrid Fee</label>
-                                <input type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHybrid'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHybrid'>
                             </div>                                                                                            
                         </div>
                         
