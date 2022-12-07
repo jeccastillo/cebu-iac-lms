@@ -274,8 +274,7 @@ new Vue({
                 preConfirm: (login) => {
                     var formdata= new FormData();
                     formdata.append("tuitionYearID",this.id);                    
-                    for(const [key,value] of Object.entries(data)){
-                    console.log(key+" "+value);
+                    for(const [key,value] of Object.entries(data)){                   
                         formdata.append(key,value);
                     }
                     
