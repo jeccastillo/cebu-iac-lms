@@ -2028,6 +2028,7 @@ class Data_fetcher extends CI_Model {
                     ->get()
                     ->result_array();
 
+        $ret['none'] = "None";
         foreach($data as $d)
             $ret[$d['name']] = $d['name'];
 

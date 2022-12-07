@@ -84,8 +84,8 @@ class Subject extends CI_Controller {
             foreach($this->data['department_config'] as $dept)
                 $dpt[$dept] = $dept;
             
+            $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
             $this->data['dpt'] = $dpt;
-          
             $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);
             
             $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
