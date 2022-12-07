@@ -1857,7 +1857,15 @@ class Data_fetcher extends CI_Model {
         foreach($classes as $class)
         {                                         
             
-            $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+            if($class['isNSTP']){
+                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+                ->get('tb_mas_tuition_year_misc')->first_row('array');
+                $nstp_fee = getExtraFee($nstp_fee, $ay, 'misc');
+
+                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+            }
+            else
+                $tuition += intval($class['strTuitionUnits'])*$unit_fee;
             
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
