@@ -1817,11 +1817,8 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$ay);
 
-        $misc = $this->db->where(array('intID'=>$tuition_year['intID']))
-                         ->get('tb_mas_tuition_year_misc')->result_array();
-
-        print_r($misc);
-        
+        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID']))
+                         ->get('tb_mas_tuition_year_misc')->result_array();        
         
         $classes =  $this->db
                             ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
@@ -1842,7 +1839,7 @@ class Data_fetcher extends CI_Model {
             $tuition += intval($class['strTuitionUnits'])*$unit_fee;
             
             if($class['strLabClassification'] != "none"){
-                $tuition_year_lab = $this->db->where(array('intID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
                                             ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
                 $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $ay, 'lab');
                 $total_lab += $lab_list[$class['strCode']];
