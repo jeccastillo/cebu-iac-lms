@@ -1819,6 +1819,8 @@ class Data_fetcher extends CI_Model {
 
         $misc = $this->db->where(array('intID'=>$tuition_year['intID']))
                          ->get('tb_mas_tuition_year_misc')->result_array();
+
+        print_r($misc);
         
         
         $classes =  $this->db
@@ -1851,8 +1853,7 @@ class Data_fetcher extends CI_Model {
             }           
         }
 
-        foreach($misc as $m){
-            echo $m['name'];
+        foreach($misc as $m){            
             $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
             $total_misc += $misc_list[$m['name']];
         }
