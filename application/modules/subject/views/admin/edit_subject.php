@@ -52,7 +52,7 @@
                             <label for="isThesisSubject">Thesis Subject?</label>
                             <select class="form-control" name="isThesisSubject" id="isThesisSubject" >
                                 <option <?php echo ($subject['isThesisSubject'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['isThesisSubject'] == 0)?'selected':''; ?> value="1">Yes</option>
+                                <option <?php echo ($subject['isThesisSubject'] == 1)?'selected':''; ?> value="1">Yes</option>
                             </select>
                         </div> 
                         <div class="form-group col-xs-6">
