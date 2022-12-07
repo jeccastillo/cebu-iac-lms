@@ -75,8 +75,7 @@ if (!function_exists('getUnitPrice')) {
     }
 }
 if (!function_exists('getExtraFee')) {
-    function getExtraFee($entry, $sem, $pretext){
-        echo $sem['classType'];
+    function getExtraFee($entry, $sem, $pretext){        
         switch($sem['classType']){
             case 'regular':
                 $ret = $entry[$pretext.'Regular'];
