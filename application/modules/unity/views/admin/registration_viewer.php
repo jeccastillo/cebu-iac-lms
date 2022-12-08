@@ -232,7 +232,7 @@
                                     <div class="col-sm-4">INTERNSHIP MISC FEES:</div>
                                     <div class="col-sm-6"></div>
                                 </div>
-                                <?php foreach($tuition['internship_list'] as $key=>$val): ?>
+                                <?php foreach($tuition['internship_fee_list'] as $key=>$val): ?>
                                 <div class="row">
                                     <div class="col-sm-4" style="text-align:right;"><?php echo $key; ?>:</div>
                                     <div class="col-sm-6"><?php echo $val; ?></div>
