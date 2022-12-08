@@ -227,7 +227,7 @@
                             </div>
                             <hr />
                             <?php endif; ?>  
-                            <?php if($tuition['internship'] != 0): ?>
+                            <?php if($tuition['internship_fee'] != 0): ?>
                                 <div class="row">
                                     <div class="col-sm-4">INTERNSHIP MISC FEES:</div>
                                     <div class="col-sm-6"></div>
@@ -240,13 +240,13 @@
                                 <?php endforeach; ?>
                                 <div class="row">
                                     <div class="col-sm-4" style="text-align:right;">Total:</div>
-                                    <div class="col-sm-6 text-green"><?php echo $tuition['internship']; ?>
-                                        <?php if(isset($payment['internship'])): ?>
-                                        (-<?php echo $payment['internship']; ?>)
+                                    <div class="col-sm-6 text-green"><?php echo $tuition['internship_fee']; ?>
+                                        <?php if(isset($payment['internship_fee'])): ?>
+                                        (-<?php echo $payment['internship_fee']; ?>)
                                     <?php endif; ?>
                                     </div>
                                     <div class="col-sm-1 text-green">
-                                        <?php if((isset($payment['internship'])) && ($payment['internship'] >= $tuition['internship'])): ?>
+                                        <?php if((isset($payment['internship_fee'])) && ($payment['internship_fee'] >= $tuition['internship_fee'])): ?>
                                             <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
                                         <?php endif; ?>
                                     </div>
