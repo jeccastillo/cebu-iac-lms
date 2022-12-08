@@ -227,6 +227,32 @@
                             </div>
                             <hr />
                             <?php endif; ?>  
+                            <?php if($tuition['internship'] != 0): ?>
+                                <div class="row">
+                                    <div class="col-sm-4">INTERNSHIP MISC FEES:</div>
+                                    <div class="col-sm-6"></div>
+                                </div>
+                                <?php foreach($tuition['internship_list'] as $key=>$val): ?>
+                                <div class="row">
+                                    <div class="col-sm-4" style="text-align:right;"><?php echo $key; ?>:</div>
+                                    <div class="col-sm-6"><?php echo $val; ?></div>
+                                </div>
+                                <?php endforeach; ?>
+                                <div class="row">
+                                    <div class="col-sm-4" style="text-align:right;">Total:</div>
+                                    <div class="col-sm-6 text-green"><?php echo $tuition['internship']; ?>
+                                        <?php if(isset($payment['internship'])): ?>
+                                        (-<?php echo $payment['internship']; ?>)
+                                    <?php endif; ?>
+                                    </div>
+                                    <div class="col-sm-1 text-green">
+                                        <?php if((isset($payment['internship'])) && ($payment['internship'] >= $tuition['internship'])): ?>
+                                            <i style="margin-left:5rem;" class="ion-checkmark-circled ion"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>   
+                                <hr />
+                            <?php endif; ?>
                             <?php if($tuition['new_student'] != 0): ?>
                                 <div class="row">
                                     <div class="col-sm-4">NEW STUDENT FEES:</div>
