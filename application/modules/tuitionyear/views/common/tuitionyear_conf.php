@@ -29,9 +29,8 @@
                         $(".loading-img").show();
                         $(".overlay").show();
                         var id = $(this).attr('rel');
-                        var parent = $(this).parent().parent().parent().parent().parent();
-                        var code = parent.children(':first-child').html();
-                        var data = {'id':id,'code':code};
+                        var parent = $(this).parent().parent().parent().parent().parent();                        
+                        var data = {'id':id};
                         $.ajax({
                             'url':'<?php echo base_url(); ?>index.php/tuitionyear/delete_tuition_year',
                             'method':'post',

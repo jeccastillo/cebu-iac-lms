@@ -124,7 +124,11 @@ class Tuitionyear extends CI_Controller {
     }
 
     public function delete_tuition_year(){
-        //delete all tuition misc and fees etc....
+        $this->data_poster->deleteItem('tb_mas_tuition_year',$post['id'],'intID');
+
+        $data['message'] = "success";
+        $data['success'] = true;
+        echo json_encode($data);
     }
     public function submit_form($id = 0)
     {
