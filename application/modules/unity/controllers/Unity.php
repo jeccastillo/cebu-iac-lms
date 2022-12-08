@@ -632,7 +632,7 @@ class Unity extends CI_Controller {
                 if($tuition['internship_fee']!= 0){
                     $ret .= '                
                     <div class="row">
-                        <div class="col-sm-6">New Student Fees:</div>
+                        <div class="col-sm-6">Internship Fees:</div>
                         <div class="col-sm-6 text-green"></div>
                     </div>
                     <hr />
