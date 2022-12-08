@@ -2007,7 +2007,7 @@ class Data_fetcher extends CI_Model {
         $nsf = 0;
         $thesis_fee = 0;
         $total_internship_fee = 0;
-
+        $hasInternship = false;
         $sem  = $this->get_active_sem();
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
@@ -2060,13 +2060,15 @@ class Data_fetcher extends CI_Model {
                 $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
                 $total_lab += $lab_list[$class['strCode']];
             }
-
             
-
             if($class['isThesisSubject']){                
                 $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
                 $thesis_fee = getExtraFee($thesis, $sem, 'misc');                                
+            }
+
+            if($class['isInternshipSubject']){                
+                $hasInternship = true;
             }
            
         }
