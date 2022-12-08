@@ -1810,9 +1810,12 @@ class Data_fetcher extends CI_Model {
         $afee = 0;
         $lab_list = [];
         $misc_list = [];
-        $new_student_list = [];        
+        $new_student_list = [];      
+        $internship_fee_list = [];  
         $nsf = 0;
         $thesis_fee = 0;
+        $total_internship_fee = 0;
+        $hasInternship = false;
        
 
         $ay = $this->getAy($sem);
@@ -1879,6 +1882,10 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
                 $thesis_fee = getExtraFee($thesis, $ay, 'misc');                                
             }
+
+            if($class['isInternshipSubject']){                
+                $hasInternship = true;
+            }
                    
         }
 
@@ -1886,8 +1893,17 @@ class Data_fetcher extends CI_Model {
             $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
             $total_misc += $misc_list[$m['name']];
         }
+        if($hasInternship){
+            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
+            ->get('tb_mas_tuition_year_misc')->result_array();
+
+            foreach($internship as $m){            
+                $internship_fee_list[$m['name']] = getExtraFee($m, $ay, 'misc');
+                $total_internship_fee += $internship_fee_list[$m['name']];
+            }                  
+        }                            
     
-        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf;
+        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['lab'] = $total_lab;
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
@@ -1895,9 +1911,11 @@ class Data_fetcher extends CI_Model {
         $data['misc_list'] = $misc_list;
         $data['new_student'] = $total_new_student;
         $data['new_student_list'] = $new_student_list;
-        $data['nsf'] = $nsf;
-        $data['thesis_fee'] = $thesis_fee;
+        $data['internship_fee_list'] = $internship_fee_list;
         $data['athletic'] = $afee;
+        $data['thesis_fee'] = $thesis_fee;
+        $data['nsf'] = $nsf;     
+        $data['internship_fee'] = $total_internship_fee; 
         
         
         return $data;
@@ -1985,8 +2003,10 @@ class Data_fetcher extends CI_Model {
         $lab_list = [];
         $misc_list = [];    
         $new_student_list = [];    
+        $internship_fee_list = [];
         $nsf = 0;
         $thesis_fee = 0;
+        $total_internship_fee = 0;
 
         $sem  = $this->get_active_sem();
 
@@ -2055,8 +2075,17 @@ class Data_fetcher extends CI_Model {
             $misc_list[$m['name']] = getExtraFee($m, $sem, 'misc');
             $total_misc += $misc_list[$m['name']];
         }
+        if($hasInternship){
+            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
+            ->get('tb_mas_tuition_year_misc')->result_array();
+
+            foreach($internship as $m){            
+                $internship_fee_list[$m['name']] = getExtraFee($m, $sem, 'misc');
+                $total_internship_fee += $internship_fee_list[$m['name']];
+            }                  
+        }
     
-        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf;
+        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['lab'] = $total_lab;
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
@@ -2064,9 +2093,11 @@ class Data_fetcher extends CI_Model {
         $data['misc_list'] = $misc_list;
         $data['new_student'] = $total_new_student;
         $data['new_student_list'] = $new_student_list;
+        $data['internship_fee_list'] = $internship_fee_list;
         $data['athletic'] = $afee;
         $data['thesis_fee'] = $thesis_fee;
-        $data['nsf'] = $nsf;        
+        $data['nsf'] = $nsf;     
+        $data['internship_fee'] = $total_internship_fee;   
         
         return $data;
 
