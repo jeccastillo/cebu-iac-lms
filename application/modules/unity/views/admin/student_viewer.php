@@ -29,12 +29,12 @@
                             
                               <a  class="btn btn-app view-curriculum-pdf"  href="#"><i class="fa fa-print"></i>Curriculum Outline</a> 
                             <?php if($registration && in_array($user['intUserLevel'],array(2,3,6))): ?>
-                            <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                                <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Reg Form Print Preview</a> 
                             
-                            <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                                <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Registration Data Only</a> 
-                            <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                                <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a> 
                             <?php endif; ?>
                             <?php if($reg_status!="For Advising"): ?>
@@ -45,6 +45,7 @@
                              <a class="btn btn-app" href="<?php echo base_url()."unity/edit_sections/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="fa fa-book"></i> Update Sections</a> 
                             <?php endif; ?>
+                            
                         </small>
                         
                         <div class="box-tools pull-right">
