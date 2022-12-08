@@ -629,6 +629,30 @@ class Unity extends CI_Controller {
                         <hr />
                         ';
                 }    
+                if($tuition['internship_fee']!= 0){
+                    $ret .= '                
+                    <div class="row">
+                        <div class="col-sm-6">New Student Fees:</div>
+                        <div class="col-sm-6 text-green"></div>
+                    </div>
+                    <hr />
+                    ';
+                    
+                    
+                    foreach($tuition['internship_fee_list'] as $key=>$val){                
+                        $ret .='<div class="row">
+                                    <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+                                    <div class="col-sm-6">'.$val.'</div>
+                                </div>';                
+                    }
+    
+                    $ret .= '
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align:right;">Total:</div>
+                        <div class="col-sm-6 text-green">'.$tuition['internship_fee'].'</div>
+                    </div>
+                    <hr />';
+                }
                 if($tuition['new_student']!= 0){
                     $ret .= '                
                     <div class="row">
