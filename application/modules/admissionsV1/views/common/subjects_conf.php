@@ -16,8 +16,8 @@ $(document).ready(function() {
                     search_data: data.search.value,
                     search_field: "first_name",
                     count_content: data.length,
-                    sort_field: data.order[0].column,
-                    order_by: data.order[0].dir,
+                    //sort_field: data.order[0].column,
+                    order_by: data.order,
                 },
                 function(json) {
                     callback({
