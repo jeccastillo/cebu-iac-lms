@@ -3,13 +3,15 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+    var filter_status = $("#status_filter").val();
     $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
-            var s_column = "last_name";
+            var s_column = "last_name";                        
+                
             switch(data.order[0].column){
                 case 2:
                     s_column = "first_name";
@@ -33,6 +35,7 @@ $(document).ready(function() {
                     count_content: data.length,
                     sort_field: s_column,
                     order_by: data.order[0].dir,
+                    filter: filter_status,
                 },
                 function(json) {
                     callback({

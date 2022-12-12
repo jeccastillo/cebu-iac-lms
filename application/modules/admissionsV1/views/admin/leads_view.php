@@ -8,6 +8,15 @@
             <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
             <li class="active">View All Leads</li>
         </ol>
+        <hr />
+        <select id="status_filter">
+            <option value="none" selected>None</option>
+            <option value="New" selected>New Applicant</option>
+            <option value="For Interview" selected>For Interview</option>
+            <option value="For Reservation" selected>For Reservation</option>
+            <option value="Reserved" selected>Reserved</option>
+            <option value="For Enrollment" selected>For Enrollment</option>
+        </select>
     </section>
     <div class="content mcontainer container">
         <div class="alert alert-danger" style="display:none;">
