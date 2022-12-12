@@ -334,7 +334,7 @@ new Vue({
         type: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
-        status_remarks: ""
+        status_remarks: "",
     },
 
     mounted() {
