@@ -9,13 +9,13 @@
             <li class="active">View All Leads</li>
         </ol>
         <hr />
-        <select id="status_filter">
+        <select class="form-select form-control" id="status_filter">
             <option value="none" selected>None</option>
-            <option value="New" selected>New Applicant</option>
-            <option value="For Interview" selected>For Interview</option>
-            <option value="For Reservation" selected>For Reservation</option>
-            <option value="Reserved" selected>Reserved</option>
-            <option value="For Enrollment" selected>For Enrollment</option>
+            <option value="New">New Applicant</option>
+            <option value="For Interview">For Interview</option>
+            <option value="For Reservation">For Reservation</option>
+            <option value="Reserved">Reserved</option>
+            <option value="For Enrollment">For Enrollment</option>
         </select>
     </section>
     <div class="content mcontainer container">
