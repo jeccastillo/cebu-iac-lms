@@ -9,14 +9,19 @@
             <li class="active">View All Leads</li>
         </ol>
         <hr />
-        <select class="form-select form-control" id="status_filter">
-            <option value="none" selected>None</option>
-            <option value="New">New Applicant</option>
-            <option value="For Interview">For Interview</option>
-            <option value="For Reservation">For Reservation</option>
-            <option value="Reserved">Reserved</option>
-            <option value="For Enrollment">For Enrollment</option>
-        </select>
+        <div class="row">
+            <div class="col-sm-6">
+                <p>Filter by Status</p>
+                <select class="form-select form-control" id="status_filter">
+                    <option value="none" selected>None</option>
+                    <option value="New">New Applicant</option>
+                    <option value="For Interview">For Interview</option>
+                    <option value="For Reservation">For Reservation</option>
+                    <option value="Reserved">Reserved</option>
+                    <option value="For Enrollment">For Enrollment</option>
+                </select>
+            </div>
+        </div>
     </section>
     <div class="content mcontainer container">
         <div class="alert alert-danger" style="display:none;">
