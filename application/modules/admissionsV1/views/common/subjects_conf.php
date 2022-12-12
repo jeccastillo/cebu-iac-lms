@@ -9,6 +9,21 @@ $(document).ready(function() {
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
+            var s_column = "last_name";
+            switch(data.order[0].column){
+                case 2:
+                    s_column = "first_name";
+                break;
+                case 3:
+                    s_column = "email";
+                break;
+                case 4:
+                    s_column = "program";
+                break;
+                case 5:
+                    s_column = "status";
+                break;
+            }
             $.get(
                 api_url + "admissions/applications", {
                     limit: data.length,
@@ -16,8 +31,8 @@ $(document).ready(function() {
                     search_data: data.search.value,
                     search_field: "first_name",
                     count_content: data.length,
-                    //sort_field: data.order[0].column,
-                    order_by: data.order,
+                    sort_field: s_column,
+                    order_by: data.order[0].dir,
                 },
                 function(json) {
                     callback({
