@@ -190,11 +190,20 @@
                         <span>Dashboard</span></a>
                 </li>
 
-                <?php if(in_array($user['intUserLevel'],array(1,2,3,4,5,6)) ): ?>
+                <?php if($user['intUserLevel'] == 2): ?>
                 <li class="header">Admissions</li>
-                <?php endif; ?>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
+                    <a href="#">
+                        <i class="ion ion-email"></i> <span>Student Applicants</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
+                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
+                    </ul>
 
-                
+                </li>
                 <li class="header">Admin Menu</li>
                 <?php if(in_array($user['intUserLevel'],array(0,1,2,3,4,5,6)) ): ?>
                     
@@ -245,18 +254,6 @@
                         </li>
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2): ?>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
-                    <a href="#">
-                        <i class="ion ion-email"></i> <span>Student Applicants</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
-                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
-                    </ul>
-
-                </li>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="admin")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-muted"></i> <span>Admin</span>
