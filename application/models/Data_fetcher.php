@@ -1885,7 +1885,7 @@ class Data_fetcher extends CI_Model {
         }
 
         foreach($misc as $m){                        
-            if($registration['enumStudentType'] != 'new' && $m['name'] != 'ID Validation' ){
+            if($registration['enumStudentType'] != 'new' || $m['name'] != 'ID Validation' ){
                 $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
                 $total_misc += $misc_list[$m['name']];
             }
