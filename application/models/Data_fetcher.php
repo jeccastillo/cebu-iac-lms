@@ -2016,11 +2016,6 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
                          
         if($stype == 'new'){
-            $nsf_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
-                            ->get('tb_mas_tuition_year_misc')->first_row('array');
-            
-            $nsf = getExtraFee($nsf_data, $sem, 'misc');
-
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
@@ -2071,8 +2066,10 @@ class Data_fetcher extends CI_Model {
         }
 
         foreach($misc as $m){            
-            $misc_list[$m['name']] = getExtraFee($m, $sem, 'misc');
-            $total_misc += $misc_list[$m['name']];
+            if($stype != 'new' || $m['name'] != 'ID Validation' ){
+                $misc_list[$m['name']] = getExtraFee($m, $sem, 'misc');
+                $total_misc += $misc_list[$m['name']];
+            }
         }
         if($hasInternship){
             $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
