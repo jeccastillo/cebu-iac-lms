@@ -56,7 +56,7 @@
             <div class="box-header">
                 <?php                
                 if($sy['intID'] != $selected_ay)
-                    $sm = $sy[$i]['enumSem']." ".$term_type." ".$sy[$i]['strYearStart']."-".$sy[$i]['strYearEnd'];
+                    $sm = $sy['enumSem']." ".$term_type." ".$sy['strYearStart']."-".$sy['strYearEnd'];
                 else
                     $sm = "current semester";
                 ?>
@@ -105,10 +105,10 @@ new Vue({
         request: {
             
         },
-        tuition_total: <?php echo $tuition['total']; ?>,
-        sy: <?php echo $sy; ?>,
-        selected_ay: <?php echo $selected_ay; ?>,
-        student: <?php echo $student; ?>,
+        tuition_total: "<?php echo $tuition['total']; ?>",
+        sy: "<?php echo $sy; ?>",
+        selected_ay: "<?php echo $selected_ay; ?>",
+        student: "<?php echo $student; ?>",
         loader_spinner: true,
         type: "",
         slug: "<?php echo $student['slug']; ?>",
