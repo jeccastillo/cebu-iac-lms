@@ -1,4 +1,4 @@
-<section class="section section_port relative" id="adminssions-form">
+<section class="section section_port relative" id="finance-form">
     <div class="custom-container md:h-[500px] relative z-1">
         <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
             alt="" data-scroll-speed="4" data-aos="zoom-in" />
@@ -17,97 +17,10 @@
         <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
             class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-        <div class="custom-container relative h-full mb-[100px] md:mb-[10px]">
-            <div class="md:flex mt-[00px] md:mt-0 h-full items-center justify-center">
-                <div class="md:w-12/12 py-3">
-
-                    <div class=" block mx-auto mt-[200px]" data-aos="fade-up">
-                        <h1 class="text-4xl font-[900] text-center color-primary">
-                            Admissions
-                        </h1>
-                        <h1 class="text-4xl uppercase text-center color-primary">
-
-                            {{ payment_type == 'admissions_student_payment_reservation' ? 'Payment for Reservation Fee' : payment_type == 'admissions_student_payment' ? 'Payment for Application Fee' : '' }}
-                        </h1>
-                    </div>
-                    <p class="max-w-[800px] color-primary mt-[60px]">
-                    </p>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
-    <div class="custom-container" v-if="student.first_name">
-        <form @submit.prevent="submitPayment">
-            <div class="flex flex-wrap">
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Email
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" v-model="student.email" required>
-                    </div>
-                </div>
-
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            First Name
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="student.first_name">
-                    </div>
-                </div>
-
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Last Name
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="student.last_name">
-                    </div>
-                </div>
-
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Course
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="student.student_type_title">
-                    </div>
-                </div>
-
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Mobile Number
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="number" required v-model="student.mobile_number">
-                    </div>
-                </div>
-
-                <div class="mb-6 md:w-4/12 p-2">
-                    <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Telephone Number
-                        </label>
-                        <input disabled
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="number" v-model="student.tel_number">
-                    </div>
-                </div>
-
-            </div>
-            <hr>
+    
             <div class="md:w-1/2 w-full">
 
 
@@ -133,61 +46,7 @@
                     </div>
                 </div>
 
-                <hr>
-
-                <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                    <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
-
-                    <table class="table" style="width:100%">
-                        <tbody>
-                            <tr v-if="item">
-                                <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
-                                    'Application Fee'
-                                    }}
-                                </td>
-                                <td>₱ {{ item_details.price }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Gateway Fee <span class="font-weight-bold"
-                                        v-if="selected_mode_of_payment.type == 'percentage'">(
-                                        {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                        Php
-                                        25.00 whichever is higher )</span> </td>
-                                <td v-if="selected_mode_of_payment">
-                                    <span>
-                                        ₱ {{ new_charge }}
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                        class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                    <span class="font-weight-bold">₱
-                                        {{ total_price_cart_with_charge_es }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="text-right mt-3">
-                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                            name="button">Submit <img v-show="loading_spinner" width="18" class="ml-1 spinner"
-                                src="<?php echo $img_dir; ?>spinner-solid.svg" alt="">
-                        </button>
-                        <button type="button" disabled v-else
-                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                            name="button">Submit</button>
-                        <button type="button" onclick="window.history.back()"
-                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
-                            name="button">Cancel</button>
-                        <a :href="redirect_link" style="opacity:0" target="_blank"
-                            id="payment_link">{{ redirect_link }}</a>
-                    </div>
-                </div>
+                <hr>                
 
         </form>
     </div>
@@ -227,7 +86,7 @@
 
 <script>
 new Vue({
-    el: "#adminssions-form",
+    el: "#finance-form",
     data: {
         request: {
             mode_of_release: "",
@@ -236,7 +95,7 @@ new Vue({
             mailing_fee: 0,
         },
         loading_spinner: false,
-        student: {},
+        registration: {},
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
@@ -292,9 +151,10 @@ new Vue({
                 console.log("error");
             });
 
-        axios.get(api_url + 'admissions/student-info/' + this.slug)
+        axios.get('<?php echo base_url(); ?>registrar/get_registration_info/<?php echo $student_id; ?>')
             .then((data) => {
-                this.student = data.data.data;
+                console.log(data.data);
+                this.registration = data.data.data;
             })
             .catch((error) => {
                 console.log(error);
