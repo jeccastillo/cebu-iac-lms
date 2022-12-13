@@ -84,6 +84,14 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function finance_payment($student_id) {                
+        $this->data['student_id'] = $student_id;
+        //API - registrar/get_registration_info - returns reg data and current sem
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('finance/payment',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
 
    }
 
