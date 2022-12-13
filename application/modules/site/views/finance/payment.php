@@ -165,7 +165,7 @@ new Vue({
             mailing_fee: 0,
         },
         loading_spinner: false,
-        registration: {},
+        registration: {},        
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
