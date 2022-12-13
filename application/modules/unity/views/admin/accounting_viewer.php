@@ -51,13 +51,11 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
-        <?php  if(!empty($transactions)): 
-        for($i=0;$i<count($transactions);$i++):          
-        ?>
+       
         <div class="box box-solid box-success">
             <div class="box-header">
-                <?php
-                if($sy[$i]['intID'] != $selected_ay)
+                <?php                
+                if($sy['intID'] != $selected_ay)
                     $sm = $sy[$i]['enumSem']." ".$term_type." ".$sy[$i]['strYearStart']."-".$sy[$i]['strYearEnd'];
                 else
                     $sm = "current semester";
@@ -73,7 +71,7 @@
                     </tr>                
                     <tr>
                         <td colspan="3">
-                           Total: <?php echo $tuition[$i]['total']; ?>php
+                           Total: P {{ tuition_total }}
                         </td>
                     </tr>
                     <tr>
@@ -86,16 +84,7 @@
                 <hr />
                 
             </div>
-        </div>
-    
-    <?php
-     $paid = 0;
-   endfor;
-   ?>
-    <?php
-   
-     endif;
-     ?>
+        </div>    
     </div>
     
     
@@ -114,8 +103,11 @@ new Vue({
     el: '#applicant-container',
     data: {
         request: {
-            uploaded_requirements: []
+            
         },
+        tuition_total: <?php echo $tuition['total']; ?>,
+        sy: <?php echo $sy; ?>,
+        selected_ay: <?php echo $selected_ay; ?>
         loader_spinner: true,
         type: "",
         slug: "<?php echo $student['slug']; ?>",
@@ -128,7 +120,7 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
-
+        console.log(sy);
 
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)

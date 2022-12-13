@@ -474,16 +474,13 @@ class Unity extends CI_Controller {
         $this->data['selected_ay'] = $active_sem['intID'];
         $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $sy = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        foreach($sy as $s)
-        {
-            $reg = $this->data_fetcher->getRegistrationInfo($id,$s['intID']);
-            if(!empty($reg)){ 
-            $this->data['sy'][] = $s;
-            $this->data['tuition'][] = $this->data_fetcher->getTuition($id,$s['intID'],$reg['enumScholarship']);
-             $this->data['transactions'][] = $this->data_fetcher->getTransactions($reg['intRegistrationID'],$s['intID']);
-            }
+        
+        $reg = $this->data_fetcher->getRegistrationInfo($id,$s['intID']);
+        if(!empty($reg)){ 
+            $this->data['sy'] = $s;
+            $this->data['tuition'] = $this->data_fetcher->getTuition($id,$s['intID'],$reg['enumScholarship']);             
         }
+        
         //print_r($this->data['transactions']);
         
         $this->load->view("common/header",$this->data);
