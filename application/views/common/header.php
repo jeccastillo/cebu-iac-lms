@@ -204,6 +204,7 @@
                     </ul>
 
                 </li>
+                <?php endif; ?>
                 <li class="header">Admin Menu</li>
                 <?php if(in_array($user['intUserLevel'],array(0,1,2,3,4,5,6)) ): ?>
                     
