@@ -12,7 +12,7 @@ $(document).ready(function() {
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
             var s_column = "last_name";                        
-                
+            filter_status = $("#status_filter").val();
             switch(data.order[0].column){
                 case 2:
                     s_column = "first_name";
