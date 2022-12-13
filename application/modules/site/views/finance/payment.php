@@ -235,7 +235,7 @@ new Vue({
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
-            var new_price = parseFloat(this.item_details.price);
+            var new_price = parseFloat(this.registration.tuition_data.total);
             var new_charge = parseFloat(this.selected_mode_of_payment.charge);
             var qty = 1;
 
