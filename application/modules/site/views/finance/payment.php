@@ -1,70 +1,57 @@
-<aside class="right-side">
-    <section class="content-header">
-        <h1>
-            Finance
-            <small></small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Finance</a></li>
-            <li class="active">Payment</li>
-        </ol>
-    </section>
-    <div class="content">
-        <section class="section section_port relative" id="finance-form">
-            <div class="custom-container md:h-[500px] relative z-1">
-                <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
-                    alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-                <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
-                    class="absolute top-[10%] md:left-[17%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-                <img src="<?php echo $img_dir; ?>home-poly/red-poly.png" class="absolute top-[30%] md:left-[0%] hidden md:block"
-                    alt="" data-scroll-speed="4" data-aos="zoom-in" />
+<section class="section section_port relative" id="finance-form">
+    <div class="custom-container md:h-[500px] relative z-1">
+        <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
+            alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-                <img src="<?php echo $img_dir; ?>home-poly/peach-poly.png"
-                    class="absolute top-[25%] md:left-[33%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
+        <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
+            class="absolute top-[10%] md:left-[17%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
+        <img src="<?php echo $img_dir; ?>home-poly/red-poly.png" class="absolute top-[30%] md:left-[0%] hidden md:block"
+            alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-                <img src="<?php echo $img_dir; ?>home-poly/lyellow-poly.png"
-                    class="absolute top-[50%] md:right-[0%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
+        <img src="<?php echo $img_dir; ?>home-poly/peach-poly.png"
+            class="absolute top-[25%] md:left-[33%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-                <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
-                    class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
+        <img src="<?php echo $img_dir; ?>home-poly/lyellow-poly.png"
+            class="absolute top-[50%] md:right-[0%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-                
-            </div>
+        <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
+            class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
-            
-                    <div class="md:w-1/2 w-full">
-
-
-
-                        <div>
-                            <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
-                            <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
-                                    class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                    style="display:flex; align-itenms:center;">
-                                    <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
-                                </div>
-                            </div>
-
-                            <hr>
-                            <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
-                            <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
-                                    class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                    style="display:flex; align-itenms:center;">
-                                    <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>                
-
-                </form>
-            </div>
-        </section>
+        
     </div>
-</aside>
+
+    
+            <div class="md:w-1/2 w-full">
+
+
+
+                <div>
+                    <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
+                    <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                        <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
+                            class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                            style="display:flex; align-itenms:center;">
+                            <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+                        </div>
+                    </div>
+
+                    <hr>
+                    <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
+                    <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                        <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
+                            class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                            style="display:flex; align-itenms:center;">
+                            <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>                
+
+        </form>
+    </div>
+</section>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
