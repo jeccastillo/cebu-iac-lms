@@ -474,6 +474,7 @@ class Unity extends CI_Controller {
         $this->data['selected_ay'] = $active_sem['intID'];
         $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $sy = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['student'] = $this->data_fetcher->getStudent($id);
         
         $reg = $this->data_fetcher->getRegistrationInfo($id,$s['intID']);
         if(!empty($reg)){ 

@@ -107,7 +107,8 @@ new Vue({
         },
         tuition_total: <?php echo $tuition['total']; ?>,
         sy: <?php echo $sy; ?>,
-        selected_ay: <?php echo $selected_ay; ?>
+        selected_ay: <?php echo $selected_ay; ?>,
+        student: <?php echo $student; ?>,
         loader_spinner: true,
         type: "",
         slug: "<?php echo $student['slug']; ?>",
