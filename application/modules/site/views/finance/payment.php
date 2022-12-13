@@ -69,12 +69,10 @@
 
                     <table class="table" style="width:100%">
                         <tbody>
-                            <tr v-if="item">
-                                <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
-                                    'Application Fee'
-                                    }}
+                            <tr v-if="registration.tuition_data">
+                                <td> Tuition Total                                    
                                 </td>
-                                <td>₱ {{ item_details.price }}</td>
+                                <td>₱ {{ registration.tuition_data.total }}</td>
                             </tr>
 
                             <tr>
