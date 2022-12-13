@@ -101,3 +101,117 @@
     
         
 </div>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+<script>
+new Vue({
+    el: '#applicant-container',
+    data: {
+        request: {
+            uploaded_requirements: []
+        },
+        loader_spinner: true,
+        type: "",
+        slug: "<?php echo $student['slug']; ?>",
+        update_status: "",
+        status_remarks: "",
+    },
+
+    mounted() {
+
+        let url_string = window.location.href;
+        let url = new URL(url_string);
+
+
+
+        this.loader_spinner = true;
+        axios.get(api_url + 'admissions/student-info/' + this.slug)
+            .then((data) => {
+                this.request = data.data.data;
+                this.loader_spinner = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+
+
+    },
+
+    methods: {
+
+        updateStatus: function() {
+
+
+            Swal.fire({
+                title: 'Update Status',
+                text: "Are you sure you want to update?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+
+                    return axios
+                        .post(api_url + 'admissions/student-info/' + this.slug +
+                            '/update-status', {
+                                status: this.update_status,
+                                remarks: this.status_remarks,
+                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                            }, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                // if (result.isConfirmed) {
+                //     Swal.fire({
+                //         icon: result?.value.data.success ? "success" : "error",
+                //         html: result?.value.data.message,
+                //         allowOutsideClick: false,
+                //     }).then(() => {
+                //         if (reload && result?.value.data.success) {
+                //             if (reload == "reload") {
+                //                 location.reload();
+                //             } else {
+                //                 window.location.href = reload;
+                //             }
+                //         }
+                //     });
+                // }
+            })
+        }
+
+
+    }
+
+})
+</script>
