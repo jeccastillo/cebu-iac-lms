@@ -619,6 +619,18 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
         
     }
+
+    function get_registration_info($sid){
+
+        $sem = $this->data_fetcher->get_active_sem();
+        $sdata['registration_data'] =  $this->data_fetcher->getRegistrationInfo($sid,$this->data['selected_ay']);
+        $sdata['current_sem'] = $sem['intID'];
+        
+        $data['data'] = $sdata;
+        $data['message'] = "Success";
+        $data['success'] = true;
+        echo json_encode($data);
+    }
     
     function get_tuition_ajax()
     {
