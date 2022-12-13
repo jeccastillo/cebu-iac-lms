@@ -1829,12 +1829,7 @@ class Data_fetcher extends CI_Model {
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();        
 
-        if($registration['enumStudentType'] == 'new'){
-            $nsf_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nsf'))
-                         ->get('tb_mas_tuition_year_misc')->first_row('array');
-            
-            $nsf = getExtraFee($nsf_data, $ay, 'misc');
-
+        if($registration['enumStudentType'] == 'new'){            
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
@@ -1889,9 +1884,11 @@ class Data_fetcher extends CI_Model {
                    
         }
 
-        foreach($misc as $m){            
-            $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
-            $total_misc += $misc_list[$m['name']];
+        foreach($misc as $m){                        
+            if($registration['enumStudentType'] != 'new' && $m['name'] != 'ID Validation' ){
+                $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
+                $total_misc += $misc_list[$m['name']];
+            }
         }
         if($hasInternship){
             $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
