@@ -1,5 +1,5 @@
 
-<section class="section section_port relative" id="adminssions-form">
+<section class="section section_port relative" id="finance-form">
     <div class="custom-container md:h-[500px] relative z-1">
         <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
             alt="" data-scroll-speed="4" data-aos="zoom-in" />
