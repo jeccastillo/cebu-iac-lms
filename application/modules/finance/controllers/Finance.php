@@ -29,26 +29,11 @@ class Finance extends CI_Controller {
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
         $this->data['title'] = "CCT Unity";
-        $this->load->library("email");	
-        $this->load->helper("cms_form");
-		$this->load->model("google_login");	
-		$this->load->model("facebook_login");	
-		$this->load->model("user_model");
-        $this->config->load('courses');
+        $this->load->library("email");	       
         
-        $this->data['department_config'] = $this->config->item('department');
-        $this->data['terms'] = $this->config->item('terms');
-        $this->data['term_type'] = $this->config->item('term_type');
-        $this->data['unit_fee'] = $this->config->item('unit_fee');
-        $this->data['misc_fee'] = $this->config->item('misc_fee');
-        $this->data['lab_fee'] = $this->config->item('lab_fee');
-        $this->data['id_fee'] = $this->config->item('id_fee');
-        $this->data['athletic'] = $this->config->item('athletic');
-        $this->data['srf'] = $this->config->item('srf');
-        $this->data['sfdf'] = $this->config->item('sfdf');
-        $this->data['csg'] = $this->config->item('csg');
+                
         
-        $this->data['page'] = "registrar";
+        $this->data['page'] = "finance";
         
         //$this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
         //$this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
