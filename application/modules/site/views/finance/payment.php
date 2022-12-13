@@ -24,11 +24,10 @@
 
                     <div class=" block mx-auto mt-[200px]" data-aos="fade-up">
                         <h1 class="text-4xl font-[900] text-center color-primary">
-                            Admissions
+                            Payment
                         </h1>
                         <h1 class="text-4xl uppercase text-center color-primary">
-
-                            {{ payment_type == 'admissions_student_payment_reservation' ? 'Payment for Reservation Fee' : payment_type == 'admissions_student_payment' ? 'Payment for Application Fee' : '' }}
+                            Tuition Payment
                         </h1>
                     </div>
                     <p class="max-w-[800px] color-primary mt-[60px]">
