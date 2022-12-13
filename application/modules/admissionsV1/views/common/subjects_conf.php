@@ -4,10 +4,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
-    $("#status_filter").on('change',function(e){
-        $('#subjects-table').dataTable().ajax.reload();
-    })
-    $('#subjects-table').dataTable({
+    
+    var table = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
@@ -129,6 +127,10 @@ $(document).ready(function() {
 
         },
     });
+
+    $("#status_filter").on('change',function(e){
+        table.ajax.reload();
+    })
 
 });
 </script>
