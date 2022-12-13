@@ -623,9 +623,11 @@ class Registrar extends CI_Controller {
     function get_registration_info($slug){
 
         $sem = $this->data_fetcher->get_active_sem();
-        $student = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
-        $sdata['registration_data'] =  $this->data_fetcher->getRegistrationInfo($student['intID'],$sem['intID']);
+        $sdata['student'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
+        $sdata['registration_data'] =  $this->data_fetcher->getRegistrationInfo($sdata['student']['intID'],$sem['intID']);
+        $sdata['tuition_data'] =  $this->data_fetcher->getTuition($sdata['student']['intID'],$sem['intID']);
         $sdata['current_sem'] = $sem['intID'];
+        
         
         $data['data'] = $sdata;
         $data['message'] = "Success";

@@ -1800,7 +1800,7 @@ class Data_fetcher extends CI_Model {
             return "For Advising";
     }
     
-    function getTuition($id,$sem,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship)
+    function getTuition($id,$sem,$scholarship = null)
     {
         
         $tuition = 0;
