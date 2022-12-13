@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 	
-class Site extends CI_Controller {
+class Finance extends CI_Controller {
 
 	
     function __construct() {
