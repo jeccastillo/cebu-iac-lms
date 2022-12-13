@@ -84,8 +84,8 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function finance_payment($student_id) {                
-        $this->data['student_id'] = $student_id;
+	public function finance_payment($slug) {                
+        $this->data['student_slug'] = $slug;
         //API - registrar/get_registration_info - returns reg data and current sem
         $this->load->view('common/header',$this->data);        
 		$this->load->view('finance/payment',$this->data);

@@ -222,7 +222,7 @@ new Vue({
                 console.log("error");
             });
 
-        axios.get('<?php echo base_url(); ?>registrar/get_registration_info/<?php echo $student_id; ?>')
+        axios.get('<?php echo base_url(); ?>registrar/get_registration_info/<?php echo $student_slug; ?>')
             .then((data) => {            
                 this.registration = data.data.data;
             })
