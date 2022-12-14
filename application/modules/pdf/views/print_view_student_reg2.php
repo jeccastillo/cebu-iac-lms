@@ -60,22 +60,22 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
       
      </tr>
      <tr>
-      <td width="80px">&nbsp;NAME:</td>
-      <td width="150px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
-      <td width="80px">&nbsp;DATE:</td>
-      <td width="150px" style="color: black;"> '. $registration['dteRegistered']. '</td>      
+      <td width="80px">&nbsp;NAME</td>
+      <td width="200px" style="color: black;">:&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
+      <td width="80px">&nbsp;DATE</td>
+      <td width="200px" style="color: black;">:&nbsp;'. $registration['dteRegistered']. '</td>      
      </tr>
      <tr>
-      <td width="80px" >&nbsp;PROGRAM:</td>
-      <td width="150px" style="color: black;">&nbsp;'.$student['strProgramDescription'] . '</td>      
-      <td width="80px" >&nbsp;STUDENT NUMBER:</td>
-      <td width="150px" style="color: black;">&nbsp;' . $student['strStudentNumber']. '</td>
+      <td width="80px" >&nbsp;PROGRAM</td>
+      <td width="200px" style="color black;">:&nbsp;'.$student['strProgramDescription'] . '</td>      
+      <td width="80px" >&nbsp;STUD NO</td>
+      <td width="200px" style="color: black;">:&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
      <tr>
-      <td width="80px" >&nbsp;MAJOR:</td>
-      <td width="150px" style="color:black;">&nbsp;' .$student['strMajor'] . '</td>
-      <td width="80px" >&nbsp;SY/TERM:</td>
-      <td width="150px" style="color: black;text-transform:capitalize;">&nbsp; A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
+      <td width="80px" >&nbsp;MAJOR</td>
+      <td width="200px" style="color:black;">:&nbsp;' .$student['strMajor'] . '</td>
+      <td width="80px" >&nbsp;SY/TERM</td>
+      <td width="200px" style="color: black;text-transform:capitalize;">:&nbsp; A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
      </tr>
      <tr>
         <td >&nbsp;</td>
