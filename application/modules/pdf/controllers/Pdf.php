@@ -410,7 +410,7 @@ class Pdf extends CI_Controller {
 
         $this->data['transactions'] = $this->data_fetcher->getTransactions($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
         //--------TUITION-------------------------------------------------------------------
-        $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
+        $this->data['tuition'] = $this->data_fetcher->getTuition($id, $this->data['selected_ay'], $this->data['registration']['enumScholarship']);
        
         $student['has_nstp'] = true;
             
@@ -423,22 +423,7 @@ class Pdf extends CI_Controller {
         $registration = $this->data['registration'];
         $tuition = $this->data['tuition'];
         //$total = $data['total'];
-        $units = $tuition['tuition']/$this->data['unit_fee'];
-
-        if($student['has_nstp']) {
-            $units -= 3;
-            $nstp_units = 3;
-            $nstp_fee = $this->data['unit_fee'] * 3;
-            $tuition['tuition'] -= $nstp_fee;
-            $this->data['tuition'] = $tuition;
-            $this->data['nstp_fee'] = $nstp_fee; 
-        }
-        else {
-                $nstp_units = 0;
-                $nstp_fee = 0;
-                $this->data['nstp_units'] = $nstp_units;
-                $this->data['nstp_fee'] = $nstp_fee;
-        }
+        
 
         switch($this->data['student']['strProgramCode'])
         {
