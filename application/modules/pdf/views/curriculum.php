@@ -9,7 +9,7 @@
             <td width="400" style="text-align: center; line-height:100%">
                 
              <font style="font-family:Calibri Light; font-size: 10;">Republic of the Philippines<br />City of Makati</font><br /><br />
-             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
+             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">Information & Communications Technology Academy</font><br />
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
