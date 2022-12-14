@@ -194,8 +194,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         
         <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
             <tr>
-                <td width="260px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-                <td width="260px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+                <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
+                <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
             </tr>
         </table>
         ';
