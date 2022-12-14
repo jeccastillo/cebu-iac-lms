@@ -239,18 +239,12 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     <td width="264px">                                
                         <table style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
-                        foreach($tuition['misc_list'] as $key=>$val){
-            
-                            $html .= '<tr>
-                                        <td width="132px">'.$key.'</td>
-                                        <td width="132px">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr';                
-                        }
-                    $html.=' 
-                        <tr>
-                            <td width="132px">Total</td>
-                            <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
-                        </tr>';
+                        
+                        $html.=' 
+                            <tr>
+                                <td width="132px">Total</td>
+                                <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
+                            </tr>';
                     }
                     $html.='                        
                     </table>
