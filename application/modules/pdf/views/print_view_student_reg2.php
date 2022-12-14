@@ -74,7 +74,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>
-      <td width="200px" >:&nbsp;'.$student['strProgramDescription'] . '</td>      
+      <td width="200px" >:&nbsp;'.$student['strProgramCode'] . '</td>      
       <td width="80px" >&nbsp;STUD NO</td>
       <td width="200px" >:&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
