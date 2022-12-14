@@ -203,7 +203,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             <table style="color:#333; font-size:10; ">                                
                 <tr>
                     <td width="264px">
-                        <table style="color:#333; font-size:10; ">
+                        <table cellspacing="5px" style="color:#333; font-size:10; ">
                             <tr>
                                 <td width="88px"></td>
                                 <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
