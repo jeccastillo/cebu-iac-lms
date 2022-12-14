@@ -124,7 +124,7 @@ new Vue({
             this.loader_spinner = false;
             this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-            axios.get(api_url + 'finance/tuition/' + this.slug + '/' + this.tuition.sy.intID)
+            axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.sy.intID)
             .then((data) => {
                 this.request = data.data.data;
                 this.loader_spinner = false;
