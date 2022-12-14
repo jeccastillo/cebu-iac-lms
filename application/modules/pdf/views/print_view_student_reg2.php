@@ -53,8 +53,8 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
      <br />
     <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
      <tr>
-            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
-                REGISTRATION INFORMATION
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; padding:5px 10px; color:white; font-size:10;">
+                ASSESSMENT/REGISTRATION FORM
             </td>
      </tr>
      <tr>
@@ -72,8 +72,8 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
      <tr>
       <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;PROGRAM:</td>
       <td width="250px" style="color: black;">&nbsp;'.$student['strProgramDescription'] . '</td>
-      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;YEAR LEVEL:</td>
-      <td width="85px" style="color: black;">&nbsp;'. $academic_standing['year'] . '</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;"></td>
+      <td width="85px" style="color: black;"></td>
      </tr>
      <tr>
       <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;MAJOR:</td>
