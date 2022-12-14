@@ -28,7 +28,7 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:10;">
+$html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
         <tr>
             <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="100" height="29"/></td>
         </tr>
@@ -155,16 +155,16 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                          
         $html.='
-        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
             <tr>
-                <td colspan="2" style= "font-size:10; line-height:1.5; border-top:1px solid #333;"></td>                
+                <td colspan="2" style= "font-size:9; line-height:1.5; border-top:1px solid #333;"></td>                
             </tr>
         </table>
         
         <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
             <tr>
-                <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-                <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+                <td width="264px" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>
+                <td width="264px" style= "font-size:9; font-weight:bold;">MISCELANEOUS DETAIL</td>            
             </tr>
         </table>
         ';
@@ -228,7 +228,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </table>
                     </td>
                     <td>                                
-                        <table  width="258px"  style="color:#333; font-size:10; ">';
+                        <table  width="258px"  style="color:#333; font-size:8; ">';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
         
@@ -248,83 +248,83 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     </td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
-                    <td width="264px" style= "font-size:10;">Official Receipt Number/date______________________</td>
-                    <td width="264px" style= "font-size:10;"></td>            
+                    <td width="264px" style= "font-size:9;">Official Receipt Number/date______________________</td>
+                    <td width="264px" style= "font-size:9;"></td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
-                    <td width="264px" style= "font-size:10;">Enrollment Confirmed by:</td>
-                    <td width="264px" style= "font-size:10;"></td>            
+                    <td width="264px" style= "font-size:9;">Enrollment Confirmed by:</td>
+                    <td width="264px" style= "font-size:9;"></td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:10; " width="500px">        
+            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="500px">        
                 <tr>
-                    <td width="230px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
-                    <td width="30px" style= "font-size:10; text-align:center;">&nbsp;</td>
-                    <td width="230px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
+                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
+                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
                 </tr>                   
                 <tr>
-                    <td style= "font-size:10; text-align:center">Authorized Signatory</td>
-                    <td style= "font-size:10; text-align:center;">&nbsp;</td>
-                    <td style= "font-size:10; text-align:center">Registrar</td>            
+                    <td style= "font-size:9; text-align:center">Authorized Signatory</td>
+                    <td style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td style= "font-size:9; text-align:center">Registrar</td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
-                    <td width="264px" style= "font-size:10;">Note: Class schedule is subject to change</td>
-                    <td width="264px" style= "font-size:10;">Generated: Datetime and Employee Here</td>            
+                    <td width="264px" style= "font-size:9;">Note: Class schedule is subject to change</td>
+                    <td width="264px" style= "font-size:9;">Generated: Datetime and Employee Here</td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="500px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="500px">
                 <tr>
                     <td colspan="2" style="font-size:8; color:#555;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
             </table> 
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:10; " width="500px">        
+            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="500px">        
                 <tr>
-                    <td width="230px" style= "font-size:10; text-align:center;">&nbsp;</td>
-                    <td width="30px" style= "font-size:10; text-align:center;">&nbsp;</td>
-                    <td width="230px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
                 </tr>                   
                 <tr>
-                    <td style= "font-size:10; text-align:center">&nbsp;</td>
-                    <td style= "font-size:10; text-align:center;">&nbsp;</td>
-                    <td style= "font-size:10; text-align:center">Student Signature/Date</td>            
+                    <td style= "font-size:9; text-align:center">&nbsp;</td>
+                    <td style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td style= "font-size:9; text-align:center">Student Signature/Date</td>            
                 </tr>
             </table>       
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
             <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
