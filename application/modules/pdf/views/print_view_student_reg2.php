@@ -228,7 +228,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                 </tr>
                 <tr>
                       <td width="88px"></td>
-                      <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                      <td width="87px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                      <td width="1px"></td>
                       <td width="88px"></td>
                 </tr>
             </table>
