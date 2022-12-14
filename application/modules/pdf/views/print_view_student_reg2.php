@@ -328,13 +328,17 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
                 <tr>
-                    <td>
-                        Policy on School Charges and Refund of Fees<br />
+                    <td>Policy on School Charges and Refund of Fees<br /><br />
                         Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
-                        five hundred pesos (PhP 2,500.00).<br />
+                        five hundred pesos (PhP 2,500.00).<br /><br />
                         Officially Enrolled Students who withdraw their enrollment after the official start of classes, and have already paid the pertinent tuition and other
                         school fees in full or for any length longer than one month (regardless of whether or not he has actually attended classes) shall be charged the
                         appropriate retention fee as stipulated in CHED Manual of Regulations for Private Higher Education (MORPHE) of 2009, as follows:<br /><br />   
+                        <ul>
+                            <li></li>Within the first week of classes - twenty-five percent (25%) of the total school fees.</li>
+                            <li>Within the second week of classes - fifty percent (50%) of the total school fees.</li>
+                            <li>Beyond the second week of classes - one hundred percent (100%) of the total school fees.</li>
+                        </ul>
                     </td>
                 </tr>                   
                 
