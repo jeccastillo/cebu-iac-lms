@@ -30,7 +30,7 @@
     // Set some content to print
 $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <tr>
-            <td width="231" align="center" style="text-align:center;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="231" height="68"/></td>
+            <td width="231" align="center" style="text-align:center;"><img src= src= "'.$img_dir .'iacademy-logo.png"  width="231" height="68"/></td>
         </tr>
         <tr>            
             <td width="600" style="text-align: center; line-height:100%">             
