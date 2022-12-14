@@ -66,7 +66,7 @@
                         </tr>                
                         <tr>
                             <td colspan="3">
-                            Total: P{{ total_formatted }}
+                            Total Tuition: P{{ total_formatted }}
                             </td>
                         </tr>
                         <tr>
@@ -119,16 +119,12 @@ new Vue({
         this.loader_spinner = true;
 
         axios.get('<?php echo base_url(); ?>unity/accounting_viewer_data/<?php echo $id."/".$sem; ?>')
-            .then((data) => {
-                this.tuition = data.data.data;                
-                this.loader_spinner = false;
-                this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        .then((data) => {
+            this.tuition = data.data.data;                
+            this.loader_spinner = false;
+            this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-        axios.get(api_url + 'admissions/student-info/' + this.slug)
+            axios.get(api_url + 'finance/tuition/' + this.slug + '/' + this.tuition.sy.intID)
             .then((data) => {
                 this.request = data.data.data;
                 this.loader_spinner = false;
@@ -136,6 +132,10 @@ new Vue({
             .catch((error) => {
                 console.log(error);
             })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 
 
 
