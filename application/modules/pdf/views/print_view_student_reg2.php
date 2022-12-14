@@ -193,17 +193,17 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         </table>
         
         <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
-        <tr>
-            <td width="260px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-            <td width="260px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
-        </tr>
+            <tr>
+                <td width="260px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
+                <td width="260px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+            </tr>
         </table>
         ';
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
                 <tr>
                     <td width="260px">
-                        <table cellspacing="5px" style="color:#333; font-size:10; ">
+                        <table cellpadding="0" cellspacing="5px" style="color:#333; font-size:10;">
                             <tr>
                                 <td width="78px"></td>
                                 <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
