@@ -4,7 +4,7 @@
     // create new PDF document
     //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(8.5,11), true, 'UTF-8', false, true);
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
@@ -195,134 +195,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
             <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
             <td width="148" style="text-align:center; color:black;">' .  number_format($payment_division, 2, '.' ,',').  '</td>
         </tr>
-                    <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-                            $total_misc = 0;
-                            foreach($tuition['misc_fee'] as $key=>$val) {
-                                $total_misc += $val;
-                            }
-                        
-                        $html.= '<td width="155"style="color:black; text-align:right;"> ' . number_format($total_misc, 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
-                        <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,','). '</td>
-                    </tr>
-                    <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;">' .  number_format($tuition['id_fee'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
-                        <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td width="148" style="text-align:center; color:black;">' .  number_format($payment_division, 2, '.' ,',') . '</td>                    
-                    </tr>
-                    <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            
-                        <td width="155" style="color:black; text-align:right;">' . number_format($tuition['lab'], 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </td>
-                        <td></td>
-                        <td width="148"></td>
-                    </tr>
-                    <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"> ' .  number_format($tuition['srf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td></td>
-                        <td width="148"></td>
-                    </tr>
-                    <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;">' .  number_format($tuition['sfdf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>    
-                        <td></td>
-                        <td width="148"></td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;">' .  number_format($tuition['athletic'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td></td>
-                        <td width="148"></td>
-                    </tr>
-                    <tr>
-                        <td width="80" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;">' .  number_format($tuition['csg']['student_handbook']+$tuition['csg']['student_publication'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td></td>
-                        <td width="148"></td>
-                        
-                    </tr>
-                      <tr>
-                        <td width="80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"></td>
-                        <td colspan="2" rowspan = "9" align="center">
-                          <table border="0" width="285" style="font-size: 7px;">
-                                <tr>
-                                    <td style="font-weight:bold;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left;"></td>
-                                </tr>
-                                <tr>
-                                    <td align="justify" height="100">
-                                        
-                                    </td>
-                                </tr>
-                            </table>
-                           
-                        
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="80" >&nbsp;</td>
-                        <td style="color:black; text-align:right;"></td>
-                        
-                    </tr>
-                      <tr>
-                        <td width="80" >&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"></td>
-                        
-                    </tr>
-                      <tr>
-                        <td width="80">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"></td>
-                        
-                    </tr>
-                    
-                     <tr>
-                        <td width="80">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;">' .  number_format($tuition['total'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"></td>
-                        
-                    </tr>
-                      <tr>
-                        <td >&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right;"></td>
-                        
-                    </tr>
-                     <tr>
-                        <td></td>
-                        <td style="text-align:center;"><img height="25px" src="'.$img_dir.'signat-Accounting.png" /></td>
-                    </tr>
-                   <tr>
-                        <td>&nbsp;</td>
-                        <td width="155" style="vertical-align: middle; color:maroon; text-align:right;">&nbsp;&nbsp;</td>
-                   </tr>
-                    
-         
-        </table>
-        <br />
-        <br />
-        
-        <table border="0" cellpadding="0" width="528px" style="color:maroon; font-size:8;">
-             <tr>
-                <td width="80"></td>
-                <td width="155" style="text-align:center"><img height="16px" src="'.$img_dir.$deanSignature.'" /></td>
-                <td width="80" style="text-align:center;"></td>
-                <td width="213" style="text-align:center; font-weight:bold; text-decoration:underline;"><img height="16px" src="'.$img_dir.'signat-Registrar2.png" /></td>
-            </tr>
-             <tr>
-                <td width="80"> </td>
-                <td width="155" style="text-align:center;"> </td>
-                <td width="80"></td>
-                <td width="213" style="text-align:center;"> </td>
-            </tr>
-        </table>
+                   
     ';
 
 //$html = utf8_encode($html);
