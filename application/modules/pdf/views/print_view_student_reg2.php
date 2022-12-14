@@ -84,7 +84,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
    
         <tr>
             <td width="80px" style="text-align:left; font-weight:bold;">SECTION</td>            
-            <td width="218px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
+            <td width="218px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333 !important;">SUBJECT NAME</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
             <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
