@@ -95,11 +95,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
    
         <tr>
             <th width="80px" style="text-align:left;">SECTION</th>            
-            <th width="180px" style="text-align:center;">SUBJECT NAME</th>
-            <th width="30px" style="text-align:center;">UNITS</th>
-            <th width="30px" style="text-align:center;">DAY</th>
-            <th width="100px" style="text-align:center;">TIME</th>
-            <th width="40px" style="text-align:center;">ROOM</th>
+            <th width="180px" style="text-align:left;">SUBJECT NAME</th>
+            <th width="40px" style="text-align:left;">UNITS</th>
+            <th width="40px" style="text-align:left;">DAY</th>
+            <th width="100px" style="text-align:left;">TIME</th>
+            <th width="40px" style="text-align:left;">ROOM</th>
         </tr> ';
         $html.= '
                 <tr><td colspan="5"> </td> </tr>
@@ -110,7 +110,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
-                                                    <td colspan="7" style="text-align:center;font-size: 11px;">No Data Available</td>
+                                                    <td colspan="7" style="text-align:left;font-size: 10px;">No Data Available</td>
                                                 </tr>';
                         }
                         else {
@@ -119,8 +119,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                     $html.='<tr style="color: black;">
                                             <td width="80px"> ' . $record['strSection'].'</td>                                            
                                             <td width="180px" align ="left"> '. $record['strDescription']. '</td>
-                                            <td width="30px" align = "center"> '. $record['strUnits']. '</td> ';
-                                            $html.= '<td width="30px">';
+                                            <td width="40px" align = "left"> '. $record['strUnits']. '</td> ';
+                                            $html.= '<td width="40px">';
 
                                         foreach($record['schedule'] as $sched) {
                                             if(!empty($record['schedule']))
@@ -128,8 +128,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                                 //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
                                         }
                                             $html.= '</td>
-                                            <td></td>
-                                            <td></td>
+                                            <td width="100px"></td>
+                                            <td width="40px"></td>
                                             ';
                                         $html.='</tr>';
                                 }
