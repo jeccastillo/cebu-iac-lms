@@ -50,6 +50,20 @@ class Finance extends CI_Controller {
 
     }
 		
+    public function get_other_payments(){
+
+        $sem = $this->data_fetcher->get_active_sem();
+        $sdata['student'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
+        $where = array('intStudentID' => $sdata['student']['intID'], 'intSYID' => $sem['intID']);
+        $sdata['other_payments'] =  $this->data_fetcher->fetch_table('tb_mas_other_payments', array('dateIssued','desc'), null, $where);        
+        $sdata['current_sem'] = $sem['intID'];
+        
+        
+        $data['data'] = $sdata;
+        $data['message'] = "Success";
+        $data['success'] = true;
+        echo json_encode($data);
+    }
 
     public function faculty_logged_in()
     {
