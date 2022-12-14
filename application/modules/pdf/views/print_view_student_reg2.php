@@ -293,10 +293,10 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+            <table border="0" cellspacing="5" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
                 <tr>
-                    <td width="264px" style= "font-size:10;">__________________________________________________</td>
-                    <td width="264px" style= "font-size:10;">__________________________________________________</td>            
+                    <td width="259px" style= "font-size:10;">&nbsp</td>
+                    <td width="259px" style= "font-size:10;">&nbsp</td>            
                 </tr>
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
