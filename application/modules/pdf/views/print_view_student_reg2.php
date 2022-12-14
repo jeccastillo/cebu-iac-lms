@@ -307,7 +307,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
@@ -316,16 +316,21 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     <td width="264px" style= "font-size:10;">Generated: Datetime and Employee Here</td>            
                 </tr>
             </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+                <tr>
+                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="500px">
                 <tr>
-                    <td colspan="2" style="font-size:8; line-height:2; color:#555;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
+                    <td colspan="2" style="font-size:8; color:#555;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
             </table> 
             <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
+                    <td colspan="2" style="font-size:10; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
             <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:10; " width="500px">        
