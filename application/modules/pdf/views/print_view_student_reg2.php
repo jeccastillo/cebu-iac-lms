@@ -134,7 +134,12 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                             $html.= '</td>
                                             <td width="40px"></td>
                                             ';
-                                        $html.='</tr>';
+                                            $html.= '</td>
+                                            <td width="100px">';                                            
+                                                if(!empty($record['schedule']))                                                
+                                                    $html.= $record['schedule'][0]['strRoomCode'];
+                                            $html.= '</td>
+                                            </tr>';                                        
                                 }
                         }
                         $html.= '</table>';
