@@ -37,8 +37,8 @@ $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
                     <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
                 </td>
             </tr>
-            <tr>
-                <td colspan="3" style="font-size:8; line-height:5;">&nbsp;</td>
+            <tr style="line-height:15px;">
+                <td colspan="3" style="font-size:8;">&nbsp;</td>
             </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
