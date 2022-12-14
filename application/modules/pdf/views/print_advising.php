@@ -86,7 +86,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
 
             <tr height="200px">
                 <td width="259px" height="180px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course TAKEN from the previous Semester</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course TAKEN from the previous Term</th></tr>
                         <tr>
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
                             <th width="164px" style="text-align:center;font-weight:bold;">Course Description</th>
@@ -119,7 +119,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                 
                             
                 <td width="259px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course to ENROL this Semester</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course to ENROLL this Term</th></tr>
                         <tr>
 
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
