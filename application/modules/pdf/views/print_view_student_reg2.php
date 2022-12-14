@@ -80,15 +80,15 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" width="528" >
+$html.= '<table border="0" cellpadding="5" style="color:#333; font-size:10;" width="528" >
    
         <tr>
-            <th width="80px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SECTION</th>            
-            <th width="218px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</th>
-            <th width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</th>
-            <th width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</th>
-            <th width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</th>
-            <th width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</th>
+            <td width="80px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SECTION</td>            
+            <td width="218px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
+            <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
+            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
+            <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
+            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
         </tr> ';
         $html.= '                
                 <tr>
