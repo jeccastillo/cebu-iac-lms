@@ -229,7 +229,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         </table>
                         <table cellpadding="0"  width="258px" style="color:#333; font-size:9;">
                             <tr>
-                                <td colspan="2" style="font-size:4; line-height:0.5; color:#fff;">Space</td>
+                                <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
                                 <td width="140px">DOWN PAYMENT</td>
