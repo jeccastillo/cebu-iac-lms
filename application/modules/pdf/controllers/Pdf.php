@@ -74,8 +74,7 @@ class Pdf extends CI_Controller {
         $data['transactions'] = $this->data_fetcher->getTransactions($data['registration']['intRegistrationID'],$data['selected_ay']);
         //--------TUITION-------------------------------------------------------------------
         $data['tuition'] = $this->data_fetcher->getTuition($id,$data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$data['registration']['enumScholarship']);
-       print_r($data['tuition']);
-       die();
+    
         $student['has_nstp'] = true;
             
             $records = $this->data_fetcher->checkClasslistStudentNSTP($data['student']['intID'],$sem);

@@ -195,11 +195,167 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
         <tr>
             <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-            <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>
+            <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
         </tr>
-     </table>
+        </table>
+        ';
+        $html .='
+            <table>
+                <tr>
+                      <td width="88px"></td>
+                      <td width="88px" style="border-bottom:1px solid #333;">FULL PAYMENT</td>
+                      <td width="88px" style="border-bottom:1px solid #333;">INSTALLMENT</td>
+                </tr>
+                <tr>
+                      <td width="88px">Tuition</td>
+                      <td width="88px"></td>
+                      <td width="88px"></td>
+                </tr>
+                <tr>
+                      <td width="88px">Laboratory</td>
+                      <td width="88px"></td>
+                      <td width="88px"></td>
+                </tr>
+                <tr>
+                      <td width="88px">Miscellaneous</td>
+                      <td width="88px"></td>
+                      <td width="88px"></td>
+                </tr>
+                <tr>
+                      <td width="88px">New Student</td>
+                      <td width="88px"></td>
+                      <td width="88px"></td>
+                </tr>
+            </table>
+        ';
+
+
+    //     $html .='<tr>        
+    //     <div class="box-body">
+    //         <div class="row">
+    //             <div class="col-sm-6">Tuition:</div>
+    //             <div class="col-sm-6 text-green">'.$tuition['tuition'].'</div>
+    //         </div>
+    //         <hr />
+            
+    //         <div class="row">
+    //             <div class="col-sm-6">Miscellaneous:</div>
+    //             <div class="col-sm-6 text-green"></div>
+    //         </div>';
         
-    ';
+    //         foreach($tuition['misc_list'] as $key=>$val){
+            
+    //             $ret .='<div class="row">
+    //                         <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+    //                         <div class="col-sm-6">'.$val.'</div>
+    //                     </div>';                
+    //         }
+            
+    //         $ret .= '                
+    //         <div class="row">
+    //             <div class="col-sm-6" style="text-align:right;">Total:</div>
+    //             <div class="col-sm-6 text-green">'.$tuition['misc'].'</div>
+    //         </div>';
+
+    //         if($tuition['nsf']!= 0){
+    //             $ret .= '                
+    //             <div class="row">
+    //                 <div class="col-sm-6">MISC - NEW STUDENT: </div>
+    //                 <div class="col-sm-6 text-green">'.$tuition['nsf'].'</div>
+    //             </div>
+    //             <hr />
+    //             ';
+    //         }
+            
+    //         $ret .= '                
+    //         <div class="row">
+    //             <div class="col-sm-6">Laboratory Fee:</div>
+    //             <div class="col-sm-6 text-green"></div>
+    //         </div>
+    //         <hr />
+    //         ';
+            
+            
+    //         foreach($tuition['lab_list'] as $key=>$val){                
+    //             $ret .='<div class="row">
+    //                         <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+    //                         <div class="col-sm-6">'.$val.'</div>
+    //                     </div>';                
+    //         }
+
+    //         $ret .= '
+    //         <div class="row">
+    //             <div class="col-sm-6" style="text-align:right;">Total:</div>
+    //             <div class="col-sm-6 text-green">'.$tuition['lab'].'</div>
+    //         </div>
+    //         <hr />';
+    //         if($tuition['thesis_fee']!= 0){
+    //             $ret .= '                
+    //                 <div class="row">
+    //                     <div class="col-sm-6">THESIS FEE: </div>
+    //                     <div class="col-sm-6 text-green">'.$tuition['thesis_fee'].'</div>
+    //                 </div>
+    //                 <hr />
+    //                 ';
+    //         }    
+    //         if($tuition['internship_fee']!= 0){
+    //             $ret .= '                
+    //             <div class="row">
+    //                 <div class="col-sm-6">Internship Fees:</div>
+    //                 <div class="col-sm-6 text-green"></div>
+    //             </div>
+    //             <hr />
+    //             ';
+                
+                
+    //             foreach($tuition['internship_fee_list'] as $key=>$val){                
+    //                 $ret .='<div class="row">
+    //                             <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+    //                             <div class="col-sm-6">'.$val.'</div>
+    //                         </div>';                
+    //             }
+
+    //             $ret .= '
+    //             <div class="row">
+    //                 <div class="col-sm-6" style="text-align:right;">Total:</div>
+    //                 <div class="col-sm-6 text-green">'.$tuition['internship_fee'].'</div>
+    //             </div>
+    //             <hr />';
+    //         }
+    //         if($tuition['new_student']!= 0){
+    //             $ret .= '                
+    //             <div class="row">
+    //                 <div class="col-sm-6">New Student Fees:</div>
+    //                 <div class="col-sm-6 text-green"></div>
+    //             </div>
+    //             <hr />
+    //             ';
+                
+                
+    //             foreach($tuition['new_student_list'] as $key=>$val){                
+    //                 $ret .='<div class="row">
+    //                             <div class="col-sm-6" style="text-align:right;">'.$key.'</div>
+    //                             <div class="col-sm-6">'.$val.'</div>
+    //                         </div>';                
+    //             }
+
+    //             $ret .= '
+    //             <div class="row">
+    //                 <div class="col-sm-6" style="text-align:right;">Total:</div>
+    //                 <div class="col-sm-6 text-green">'.$tuition['new_student'].'</div>
+    //             </div>
+    //             <hr />';
+    //         }
+
+    //         $ret .= '           
+    //         <div class="row">
+    //             <div class="col-sm-6">Total:</div>
+    //             <div class="col-sm-6 text-green">'.$tuition['total'].'</div>
+    //         </div>
+    //     </div>
+    // </div>';
+
+     
     // <tr><td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td></tr>
 $html = utf8_encode($html);
 $pdf->writeHTML($html);
