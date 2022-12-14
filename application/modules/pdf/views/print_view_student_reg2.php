@@ -163,25 +163,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 }    
 
                          
-        $html.='</table>
-                <table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
-                    <tr>
-                        <td colspan="3" style="font-size:10;"></td>
-                    </tr>
-                    <tr style="background-color:#ffff99; font-weight:bold;">
-                        <td width="80px">&nbsp;SUBJECTS: </td>
-                        <td width="75px" style="color: black;text-align:left;">' . $noOfSubjs . '</td>
-                        <td width="80px">&nbsp;LEC. UNITS: </td>
-                        <td width="45px" style="color: black;text-align:center;">'. $totalLec . '</td>
-                        <td width="55px">&nbsp;LAB UNITS: </td>
-                        <td width="45px" style="color: black;text-align:center;">' . $totalLab . '</td>
-                        <td width="70px">&nbsp;TOTAL CREDITS: </td>
-                        <td width="78px" style="color: black;text-align:center;">' . $units . '</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" style="font-size:10;"></td>
-                    </tr>
-
+        $html.='
+        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+            <tr>
+                <td colspan="2" style= "font-size:10; border:1px solid #333;"></td>                
+            </tr>
         </table>
         
         <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
