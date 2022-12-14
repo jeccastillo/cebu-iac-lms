@@ -135,6 +135,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                                       $s = isset($advised[$i]['strCode'])?ellipsize($advised[$i]['strCode'],9):'';
                                       $s2 = isset($advised[$i]['strDescription'])?ellipsize($advised[$i]['strDescription'],30):'';
                                       $s3 = isset($advised[$i]['strUnits'])?$advised[$i]['strUnits']:'';
+                                      $s3  = ($s3 == 0)?'('.$advised[$i]['intLectHours'].')':$s3;
                                       if(isset($advised[$i]['strUnits']))
                                             $totalUnits += $advised[$i]['strUnits'];
                                     $html.='<tr style="color: black;">
@@ -162,7 +163,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
             </table>';
   
     
-$html.= '<br /><table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
+$html.= '<br /><br /><table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
 
             <tr height="100px">
                 <td width="264px">Advised by:</td>
@@ -177,12 +178,12 @@ $html.= '<br /><table border="0" cellpadding="0" style="color:#014fb3; font-size
             <tr height="100px">
                 <td width="264px" style="text-align: left;">__________________________</td>
                 <td width="10px"></td>
-                <td width="264px" style="font-weight:bold; text-decoration:underline;text-align: right;">Heizel M. Garcia</td>
+                <td width="264px" style="font-weight:bold; text-decoration:underline;text-align: right;"></td>
             </tr>
             <tr height="100px">
                 <td width="264px" style="text-align: left;">Department Chair</td>
                 <td width="10px"></td>
-                <td width="264px" style="text-align: right;">College Registrar</td>
+                <td width="264px" style="text-align: right;">Registrar</td>
             </tr>
         </table>
         ';
@@ -200,8 +201,8 @@ $html.= '<br /><table border="0" cellpadding="0" style="color:#014fb3; font-size
 
 //$html = utf8_encode($html);
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->writeHTML("<hr />", true, false, true, false, '');
-$pdf->writeHTML($html, true, false, true, false, '');
+// $pdf->writeHTML("<hr />", true, false, true, false, '');
+// $pdf->writeHTML($html, true, false, true, false, '');
 // Print text using writeHTMLCell()
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
