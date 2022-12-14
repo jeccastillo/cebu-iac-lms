@@ -339,7 +339,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <li>Within the first week of classes - twenty-five percent (25%) of the total school fees.</li>
                             <li>Within the second week of classes - fifty percent (50%) of the total school fees.</li>
                             <li>Beyond the second week of classes - one hundred percent (100%) of the total school fees.</li>
-                        </ul>
+                        </ul><br />
+                        One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
                     </td>
                 </tr>                   
                 
