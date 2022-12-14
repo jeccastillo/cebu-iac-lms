@@ -202,7 +202,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
      </tr>
      <tr style="border: 0px solid #014fb3;">
          <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" > ' . strtoupper($student['enumScholarship']). '</td>
-         <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" ></td>
+         <td width="293" style="border: 0px solid #014fb3;">             
+         </td>
         
      </tr>
      <tr>
