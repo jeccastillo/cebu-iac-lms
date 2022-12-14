@@ -38,7 +38,7 @@
         <div class="col-sm-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-              <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
+              <!-- <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
              <?php if(in_array($user['intUserLevel'],array(2,4)) ): ?>
                 <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Report of Grades</a></li>
             <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
@@ -46,21 +46,15 @@
                 <?php if($active_registration && in_array($user['intUserLevel'],array(2,3,4,6))): ?>
               <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
               <li><a href="<?php echo base_url()."unity/registration_viewer/".$student['intID']."/".$selected_ay; ?>">Statement of Account</a></li>
-            <?php endif; ?>
+            <?php endif; ?> -->
               <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
        
         <div class="box box-solid box-success">
-            <div class="box-header">
-                <?php                
-                if($sy['intID'] != $selected_ay)
-                    $sm = $sy['enumSem']." ".$term_type." ".$sy['strYearStart']."-".$sy['strYearEnd'];
-                else
-                    $sm = "current semester";
-                ?>
-                <h4 class="box-title">Transactions for <?php echo $sm; ?></h4>
+            <div class="box-header">                            
+                <h4 class="box-title">Transactions</h4>
             </div>
             <div class="box-body">
                 <table class="table table-bordered">
@@ -75,9 +69,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="<?php echo ($remaining_balance!=0)?'background:#c55;color:#fff;':''; ?>" colspan="3">
+                        <!-- <td style="<?php echo ($remaining_balance!=0)?'background:#c55;color:#fff;':''; ?>" colspan="3">
                            remaining balance: <?php echo $remaining_balance; ?>php
-                        </td>
+                        </td> -->
                     </tr>
                 </table>
 
