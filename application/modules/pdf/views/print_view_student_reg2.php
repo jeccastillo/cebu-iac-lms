@@ -39,7 +39,7 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
         </tr>        
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-                <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br />
+                <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
 			    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
             </td>           
         </tr>
@@ -81,7 +81,7 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:10;" width="528" >
+$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:9;" width="528" >
    
         <tr>
             <td width="80px" style="text-align:left; font-weight:bold;">SECTION</td>            
@@ -161,7 +161,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </tr>
         </table>
         
-        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
             <tr>
                 <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
                 <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
@@ -169,10 +169,10 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         </table>
         ';
         $html .='
-            <table cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
+            <table cellpadding="0" style="color:#333; text-align:left; font-size:9;" width="528px">                                
                 <tr>
                     <td>
-                        <table cellspacing="5px" cellpadding="0"  width="258px" style="color:#333; font-size:10;">
+                        <table cellspacing="2px" cellpadding="0"  width="258px" style="color:#333; font-size:9;">
                             <tr>
                                 <td width="78px"></td>
                                 <td width="78px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -204,7 +204,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                             </tr>
                         </table>
-                        <table cellpadding="0"  width="258px" style="color:#333; font-size:9;">
+                        <table cellpadding="0"  width="258px" style="color:#333; font-size:8;">
                             <tr>
                                 <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
