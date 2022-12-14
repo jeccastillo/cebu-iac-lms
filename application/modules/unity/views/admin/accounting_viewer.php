@@ -66,7 +66,7 @@
                         </tr>                
                         <tr>
                             <td colspan="3">
-                            Total: P {{ tuition.tuition.total }}
+                            Total: P{{ total_formatted }}
                             </td>
                         </tr>
                         <tr>
@@ -100,6 +100,7 @@ new Vue({
             
         },        
         tuition: {},
+        total_formatted: undefined,
         sy: {},
         selected_ay: undefined,
         student: {},
@@ -121,6 +122,7 @@ new Vue({
             .then((data) => {
                 this.tuition = data.data.data;                
                 this.loader_spinner = false;
+                this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
             })
             .catch((error) => {
                 console.log(error);
