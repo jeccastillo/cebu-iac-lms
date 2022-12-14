@@ -249,7 +249,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         $html.=' 
                             <tr>
                                 <td width="132px">Total</td>
-                                <td width="132px" style="border-bottom: 1px solid #555; text-align:right;">'.$tuition['misc'].'</td>                
+                                <td width="132px" style="border-bottom: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
                             </tr>';
                     }
                     $html.='                        
