@@ -192,18 +192,18 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
 
         </table>
         
-        <table border="0" cellspacing="4" cellpadding="0" style="color:#333; font-size:10;" width="528px">        
+        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
         <tr>
             <td width="260px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-            <td width="250px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+            <td width="260px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
         </tr>
         </table>
         ';
         $html .='
-            <table cellspacing="4px" style="color:#333; font-size:10;">                                
+            <table cellspacing="4px" style="color:#333; font-size:10; ">                                
                 <tr>
                     <td width="260px">
-                        <table cellspacing="5px" style="color:#333; font-size:10;">
+                        <table cellspacing="5px" style="color:#333; font-size:10; ">
                             <tr>
                                 <td width="78px"></td>
                                 <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -236,14 +236,20 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                             </tr>
                         </table>
                     </td>
-                    <td width="250px">                                
-                        <table style="color:#333; font-size:10;">';
+                    <td width="260px">                                
+                        <table style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
-                        
+                        foreach($tuition['misc_list'] as $key=>$val){
+        
+                            $html .= '<tr>
+                                        <td width="132px">'.$key.'</td>
+                                        <td width="132px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                    </tr>';                
+                        }
                         $html.=' 
                             <tr>
-                                <td width="125px">Total</td>
-                                <td width="125px" style="border-bottom: 1px solid #555; style="text-align:right">'.$tuition['misc'].'</td>                
+                                <td width="132px">Total</td>
+                                <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
                             </tr>';
                     }
                     $html.='                        
