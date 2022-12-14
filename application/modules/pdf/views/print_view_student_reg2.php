@@ -131,11 +131,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                             <td width="100px">';                                            
                                             if(!empty($record['schedule']))                                                
                                                 $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
-                                            $html.= '</td>
-                                            <td width="40px"></td>
+                                            $html.= '</td>                                            
                                             ';
-                                            $html.= '</td>
-                                            <td width="100px">';                                            
+                                            $html.= '<td width="100px">';                                            
                                                 if(!empty($record['schedule']))                                                
                                                     $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
