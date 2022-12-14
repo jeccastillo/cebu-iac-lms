@@ -104,7 +104,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html.= '
                 <tr><td colspan="5"> </td> </tr>
                 <tr>
-                    <td colspan="5" rowspan="24" height="210px">';
+                    <td colspan="5" rowspan="24" height="auto">';
 
                         $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
                         $totalUnits = 0;
