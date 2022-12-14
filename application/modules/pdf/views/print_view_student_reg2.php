@@ -282,6 +282,29 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     <td width="264px" style= "font-size:10;"></td>            
                 </tr>
             </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+                <tr>
+                    <td width="264px" style= "font-size:10;">Enrollment Confirmed by:</td>
+                    <td width="264px" style= "font-size:10;"></td>            
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+                <tr>
+                    <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+                <tr>
+                    <td width="264px" style= "font-size:10;">__________________________________________________</td>
+                    <td width="264px" style= "font-size:10;">__________________________________________________</td>            
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+                <tr>
+                    <td width="264px" style= "font-size:10; text-align:center">Authorized Signatory</td>
+                    <td width="264px" style= "font-size:10; text-align:center">Registrar</td>            
+                </tr>
+            </table>
         ';
 
 
