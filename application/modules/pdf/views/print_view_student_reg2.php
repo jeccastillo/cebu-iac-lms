@@ -200,7 +200,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         </table>
         ';
         $html .='
-            <table>
+            <table style="color:#333; font-size:10; ">
                 <tr>
                       <td width="88px"></td>
                       <td width="88px" style="border-bottom:1px solid #333;">FULL PAYMENT</td>
