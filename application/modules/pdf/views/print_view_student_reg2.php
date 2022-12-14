@@ -29,16 +29,26 @@
 
     
     // Set some content to print
-$html = '<table>
-            <tbody>
-                <tr>
-                    <td>TEST</td>
-                </tr>
-            </tbody>
-        </table>'; 
+$html = <<<EOD
+ 
+ 
+<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0001;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF Example</span>&nbsp;</a>!</h1>
+ 
+<i>This is the principal case of TCPDF library.</i>
+ 
+ 
+This content is printed utilizing the <i>writeHTMLCell()</i> strategy however you can likewise utilize: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.
+ 
+ 
+ 
+Please check the source code documentation and different cases for further information.
+ 
+ 
+EOD;
 
-$html = utf8_encode($html);
-$pdf->writeHTML($html);
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+// $html = utf8_encode($html);
+// $pdf->writeHTML($html);
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
