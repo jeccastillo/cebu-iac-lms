@@ -187,15 +187,15 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
+        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
         <tr>
             <td colspan="3" style="font-size:10;"></td>
         </tr>
         <tr>
-            <td style= "font-size:10; font-weight:bold;">
+            <td width="264px" style= "font-size:10; font-weight:bold;">
                  ASSESSMENT SUMMARY
             </td>
-            <td style= "font-size:10; font-weight:bold;">
+            <td width="264px" style= "font-size:10; font-weight:bold;">
                  MISCELANEOUS DETAIL
             </td>
         </tr>
