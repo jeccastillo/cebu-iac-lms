@@ -46,7 +46,7 @@ $html = '<table border="0" cellpadding="0" style="color:black; font-size:12;" wi
                                                         <td>Province of Cavite</td>
                                                     </tr>
                                                     <tr style="text-align:center;font-family:Calibri;font-size:10pt; font-weight:bold;">
-                                                        <td>CITY OF TAGAYTAY</td>
+                                                        <td>City of Makati</td>
                                                     </tr>
                                                     <tr style="text-align:center;font-family:Calibri;font-size:10pt; font-weight:bold;">
                                                         <td>OFFICE OF THE TREASURER</td>

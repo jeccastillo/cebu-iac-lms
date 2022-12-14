@@ -21,8 +21,8 @@
             <img src="<?php echo $img_dir?>tagaytayseal.png"  width="70" height="70"/>
         </div>
         <div style="text-align:center;float:left;width:50%">
-<!--            <h5 >CITY OF TAGAYTAY</h5>-->
-              <h5 class="box-title"><p>City of Tagaytay</p></h5>
+<!--            <h5 >City of Makati</h5>-->
+              <h5 class="box-title"><p>City of Makati</p></h5>
               <h5  style="margin-top: -8px;"><strong>CITY COLLEGE OF TAGAYTAY</strong></h5>
                 <h6 style="margin-top: -8px;">Akle St., Kaybagal South, Tagaytay City</h6>
 <!--              <h6 style="margin-top: -8px;">Department of Computer Science and Information Technology</h6>-->

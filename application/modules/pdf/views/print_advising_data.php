@@ -32,8 +32,8 @@ $html = '<table border="0" cellpadding="0" style="color:white; font-size:10;">
         <tr>
             <td width="64" align="right"></td>
             <td width="400" style="text-align: center; line-height:100%">
-             <font style="font-family:Calibri Light; font-size: 10;">City of Tagaytay</font><br />
-             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
+             <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
+             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">iACADEMY</font><br />
 			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
