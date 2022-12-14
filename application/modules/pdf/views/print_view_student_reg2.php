@@ -186,10 +186,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     </tr>
 
         </table>
+        
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         <tr>
             <td colspan="3" style="font-size:10;"></td>
         </tr>
-        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         <tr>
             <td style= "font-size:10; font-weight:bold;">
                  ASSESSMENT SUMMARY
