@@ -91,7 +91,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10; padding-bottom:10px !important;" width="528" >
    
         <tr>
             <th width="80px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SECTION</th>            
@@ -104,7 +104,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html.= '
                 <tr><td colspan="5"> </td> </tr>
                 <tr>
-                    <td colspan="5" rowspan="24" style="padding-bottom:10px;">';
+                    <td colspan="5" rowspan="24">';
 
                         $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
                         $totalUnits = 0;
