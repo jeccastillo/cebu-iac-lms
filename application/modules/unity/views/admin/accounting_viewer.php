@@ -66,7 +66,7 @@
                         </tr>                
                         <tr>
                             <td colspan="3">
-                            Total: P {{ tuition_total }}
+                            Total: P {{ tuition.tuition.total }}
                             </td>
                         </tr>
                         <tr>
@@ -119,8 +119,7 @@ new Vue({
 
         axios.get('<?php echo base_url(); ?>unity/accounting_viewer_data/<?php echo $id."/".$sem; ?>')
             .then((data) => {
-                this.tuition = data.data.data;
-                console.log(this.tuition);
+                this.tuition = data.data.data;                
                 this.loader_spinner = false;
             })
             .catch((error) => {
