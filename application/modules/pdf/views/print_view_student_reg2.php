@@ -172,7 +172,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
 
                          
         $html.='</table>
-                <table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" width="528px">
+                <table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
                     <tr>
                         <td colspan="3" style="font-size:10;"></td>
                     </tr>
