@@ -242,14 +242,14 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
-                                        <td width="129px">'.$key.'</td>
-                                        <td width="129px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        <td width="159px">'.$key.'</td>
+                                        <td width="99px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
                         $html.=' 
                             <tr>
-                                <td width="129px">Total</td>
-                                <td width="129px" style="border-bottom: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
+                                <td>Total</td>
+                                <td style="border-bottom: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
                             </tr>';
                     }
                     $html.='                        
