@@ -27,7 +27,7 @@
                             Payment
                         </h1>
                         <h1 class="text-4xl uppercase text-center color-primary">
-                            Tuition Payment
+                            Other Payment
                         </h1>
                     </div>
                     <p class="max-w-[800px] color-primary mt-[60px]">
