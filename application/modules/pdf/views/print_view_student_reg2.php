@@ -202,7 +202,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
                 <tr>
-                    <td width="258px">
+                    <td>
                         <table cellspacing="5px" cellpadding="0"  width="258px" style="color:#333; font-size:10;">
                             <tr>
                                 <td width="78px"></td>
@@ -236,7 +236,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                             </tr>
                         </table>
                     </td>
-                    <td width="258px">                                
+                    <td>                                
                         <table  width="258px"  style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
