@@ -51,10 +51,9 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>'; 
 
-//$html = utf8_encode($html);
-$pdf->writeHTML($html);
-
-//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+$html = utf8_encode($html);
+//$pdf->writeHTML($html);
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
