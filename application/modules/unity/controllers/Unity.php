@@ -493,7 +493,7 @@ class Unity extends CI_Controller {
                 $sy = $this->data_fetcher->get_sem_by_id($sem);
 
             $sdata['selected_ay'] = $sy['intID'];
-            $sdata['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+            $sdata['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$sdata['selected_ay']);
             
             $sdata['student'] = $this->data_fetcher->getStudent($id);
 
