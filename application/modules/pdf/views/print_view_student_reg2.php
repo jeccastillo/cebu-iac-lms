@@ -91,7 +91,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             <th width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</th>
         </tr> ';
         $html.= '                
+                <tr>
                     <td colspan="5" rowspan="24">';
+
                         $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
