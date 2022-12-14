@@ -115,11 +115,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         }
                         else {
                                 foreach($records as $record) {
-
+                                    $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
                                     $html.='<tr style="color: black;">
                                             <td width="80px"> ' . $record['strSection'].'</td>                                            
                                             <td width="218px" align ="left"> '. $record['strDescription']. '</td>
-                                            <td width="40px" align = "left"> '. ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits']. '</td> ';
+                                            <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
 
                                         foreach($record['schedule'] as $sched) {
