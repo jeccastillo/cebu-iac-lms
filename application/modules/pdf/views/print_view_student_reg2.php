@@ -200,36 +200,59 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         </table>
         ';
         $html .='
-            <table style="color:#333; font-size:10; ">
+            <table style="color:#333; font-size:10; ">                                
                 <tr>
-                      <td width="88px"></td>
-                      <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
-                      <td width="88px" style="text-decoration:underline;">INSTALLMENT</td>
-                </tr>
-                <tr>
-                      <td width="88px">Tuition Fee</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['tuition'], 2, '.' ,',') .'</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['tuition_installment'], 2, '.' ,',') .'</td>
-                </tr>
-                <tr>
-                      <td width="88px">Laboratory</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['lab'], 2, '.' ,',') .'</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['lab_installment'], 2, '.' ,',') .'</td>
-                </tr>
-                <tr>
-                      <td width="88px">Miscellaneous</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['misc'], 2, '.' ,',') .'</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['misc'], 2, '.' ,',') .'</td>
-                </tr>
-                <tr>
-                      <td width="88px">New Student</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
-                      <td width="88px" style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
-                </tr>
-                <tr>
-                      <td width="88px"></td>
-                      <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
-                      <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                    <td width="264px">
+                        <table style="color:#333; font-size:10; ">
+                            <tr>
+                                <td width="88px"></td>
+                                <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
+                                <td width="88px" style="text-decoration:underline;">INSTALLMENT</td>
+                            </tr>
+                            <tr>
+                                <td width="88px">Tuition Fee</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['tuition'], 2, '.' ,',') .'</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['tuition_installment'], 2, '.' ,',') .'</td>
+                            </tr>
+                            <tr>
+                                <td width="88px">Laboratory</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['lab'], 2, '.' ,',') .'</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['lab_installment'], 2, '.' ,',') .'</td>
+                            </tr>
+                            <tr>
+                                <td width="88px">Miscellaneous</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['misc'], 2, '.' ,',') .'</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['misc'], 2, '.' ,',') .'</td>
+                            </tr>
+                            <tr>
+                                <td width="88px">New Student</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
+                                <td width="88px" style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
+                            </tr>
+                            <tr>
+                                <td width="88px"></td>
+                                <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                                <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="264px">
+                        <table style="color:#333; font-size:10; ">';
+                    if(!empty($tuition['misc_list']))
+                        foreach($tuition['misc_list'] as $key=>$val){
+            
+                            $html .='<tr>
+                                        <td width="132px">'.$key.'</td>
+                                        <td width="132px">'.$val.'</td>
+                                    </tr';                
+                        }
+                    $html.=' 
+                        <tr>
+                            <td width="132px">Total</td>
+                            <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
+                        </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
         ';
