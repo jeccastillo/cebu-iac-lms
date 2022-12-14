@@ -47,14 +47,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         </tr>
         <tr>
             <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">ASSESSMENT/REGISTRATION FORM</td>
-        </tr>
-        <tr>
-            <td colspan = "3" style="text-align:center; color:black; font-size: 10;"></td>
-        </tr>
-        <tr>
-            <td colspan="3" style="font-size:10;">
-        </td>
-        </tr>
+        </tr>    
     </table>
      <br />
     <table border="0" cellpadding="0" style="color:#333; font-size:11;" width="528px">     
