@@ -192,17 +192,17 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+        <table border="0" cellspacing="4" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
         <tr>
-            <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
-            <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+            <td width="260px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
+            <td width="260px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>            
         </tr>
         </table>
         ';
         $html .='
-            <table style="color:#333; font-size:10; ">                                
+            <table cellspacing="4px" style="color:#333; font-size:10; ">                                
                 <tr>
-                    <td width="264px">
+                    <td width="260px">
                         <table cellspacing="5px" style="color:#333; font-size:10; ">
                             <tr>
                                 <td width="78px"></td>
@@ -236,14 +236,14 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                             </tr>
                         </table>
                     </td>
-                    <td width="264px">                                
+                    <td width="260px">                                
                         <table style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
                                         <td width="132px">'.$key.'</td>
-                                        <td width="132px">'.number_format($val, 2, '.' ,',').'</td>
+                                        <td width="132px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
                         $html.=' 
