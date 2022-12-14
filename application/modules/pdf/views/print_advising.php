@@ -4,7 +4,7 @@
     // create new PDF document
     //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(8.5,13), true, 'UTF-8', false, true);
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
@@ -29,24 +29,27 @@
     
     // Set some content to print
 $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
-        <tr>
-            <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
-            <td width="400" style="text-align: center; line-height:100%">
-             
-             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
-             <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
-            </td>
-            <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
-        </tr>
-        <tr>
-            <td colspan = "3" style="font-weight: bold;text-align:center; font-size:10; letter-spacing: 0px;">OFFICE OF THE COLLEGE REGISTRAR</td>
-        </tr>
-        <tr>
-            <td colspan = "3" style="text-align:center; color:black; font-size: 10;">Student\'s Advising Form</td>
-            
-        </tr>
-          <tr>
+            <tr>
+                <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
+            </tr>
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle;">             
+                <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="font-size:10;"></td>
+            </tr>
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
+                <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
+                <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
+            </td>           
+            </tr>
+            <tr>
+            <td colspan = "3" style="font-weight: bold;text-align:center; font-size:12;">ADVISING FORM</td>
+            </tr>
+            <tr>
             <td colspan = "3" style="text-align:center; color:black; font-size: 10;"> A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Semester' . '</td>
             
         </tr>

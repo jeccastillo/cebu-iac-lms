@@ -257,6 +257,7 @@ class Pdf extends CI_Controller {
     {
        $this->load->view("print_advising_blank",$this->data);
     }
+
     function student_viewer_advising_print($id,$sem= null)
     {
         $active_sem = $this->data_fetcher->get_processing_sem();
@@ -268,7 +269,7 @@ class Pdf extends CI_Controller {
         
         $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
         $this->data['student'] = $this->data_fetcher->getStudent($id);
-         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+        $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($active_sem['intID']);
             
 

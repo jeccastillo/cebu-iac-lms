@@ -24,7 +24,7 @@
                             <a class="btn btn-app" href="<?php echo base_url() ?>student/view_all_students" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
                             <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>   
                             <a class="btn btn-app" href="<?php echo base_url()."student/edit_student/".$student['intID']; ?>"><i class="ion ion-edit"></i> Edit</a> 
-                            <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a>
+                            <!-- <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a> -->
                             
                             
                               <a  class="btn btn-app view-curriculum-pdf"  href="#"><i class="fa fa-print"></i>Curriculum Outline</a> 
@@ -32,10 +32,10 @@
                                 <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Reg Form Print Preview</a> 
                             
-                                <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                                <i class="ion ion-printer"></i>Registration Data Only</a> 
-                                <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                                <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a> 
+                                <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                                <i class="ion ion-printer"></i>Registration Data Only</a>  -->
+                                <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                                <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a>  -->
                             <?php endif; ?>
                             <?php if($reg_status!="For Advising"): ?>
                             <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
