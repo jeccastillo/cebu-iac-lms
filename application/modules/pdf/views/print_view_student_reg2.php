@@ -89,12 +89,8 @@ $html.= '<table border="0" cellpadding="5" style="color:#333; font-size:10;" wid
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
             <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
-        </tr> ';
-        $html.= '                
-                <tr>
-                    <td colspan="5" rowspan="24">';
-
-                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
+        </tr> ';        
+                
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
@@ -128,10 +124,8 @@ $html.= '<table border="0" cellpadding="5" style="color:#333; font-size:10;" wid
                                             </tr>';                                        
                                 }
                         }
-                        $html.= '</table>';
 
-            $html.= '</td> 
-            </tr>';
+            
                                 $units = 0;
                                 $totalUnits = 0;
                                 $totalLab = 0;
