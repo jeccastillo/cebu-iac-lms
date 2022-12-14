@@ -239,14 +239,14 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 $html .= '
                                 <tr>
                                     <td width="140px">'.switch_num($i + 1).' INSTALLMENT</td>
-                                    <td width="80px" style="text-align:right;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                                    <td width="80px" style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
                                 </tr>';                    
                             }
 
                     $html .= 
                         '<tr>
                             <td width="140px"></td>
-                            <td width="80px" style="text-align:right; font-weight:bold; border-bottom:1px solid #333;">'.number_format($tuition['down_payment'], 2, '.' ,',').'</td>
+                            <td width="80px" style="text-align:right; font-weight:bold; border-bottom:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
                     </td>
