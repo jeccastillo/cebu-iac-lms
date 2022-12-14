@@ -33,8 +33,8 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
         </tr>
         <tr>            
-            <td colspan = "3" width="100%" style="text-align: center; line-height:100%">             
-             <font style="font-family:Calibri Light; line-height: 18; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
+            <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
+             <font style="font-family:Calibri Light; line-height: 2; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>           
