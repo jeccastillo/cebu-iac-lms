@@ -34,11 +34,11 @@ $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
             </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle;">             
-                <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
+                    <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="font-size:8; line-height:10px;"></td>
+                0<td colspan="3" style="font-size:8; line-height:5px;"></td>
             </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
