@@ -488,20 +488,22 @@ class Unity extends CI_Controller {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             if($sem == null)
-            $sy = $this->data_fetcher->get_active_sem();
+                $sy = $this->data_fetcher->get_active_sem();
+            else
+                $sy = $this->data_fetcher->get_sem_by_id($sem);
 
-            $this->data['selected_ay'] = $sy['intID'];
-            $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+            $sdata['selected_ay'] = $sy['intID'];
+            $sdata['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
             
-            $this->data['student'] = $this->data_fetcher->getStudent($id);
+            $sdata['student'] = $this->data_fetcher->getStudent($id);
 
             $reg = $this->data_fetcher->getRegistrationInfo($id,$sy['intID']);
             if(!empty($reg)){ 
-                $this->data['sy'] = $sy;
-                $this->data['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);             
+                $sdata['sy'] = $sy;
+                $sdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);             
             }
             
-            $data['data'] = $this->data;
+            $data['data'] = $sdata;
             $data['success'] = true;
             $data['message'] = "Success";
 
