@@ -30,13 +30,13 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
              <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
+			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
             <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
@@ -53,7 +53,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:maroon; font-size:9; border: 0px solid maroon;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
      <tr>
             <td colspan ="3" style="text-align:center; color:black; font-size:10; font-weight:bold;">
                 STUDENT INFORMATION
@@ -90,7 +90,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528">
         
         <tr style="background-color:#ffffcc;">
             <th width="60px" style="text-align:left;border-bottom: 0px solid gray;font-weight:bold;">SECTION</th>
@@ -223,7 +223,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
         
                     
  $html.='</table>
-                <table border="0" cellpadding="0" style="color:maroon; font-size:10; border: 0px solid maroon;" width="528px">
+                <table border="0" cellpadding="0" style="color:#014fb3; font-size:10; border: 0px solid #014fb3;" width="528px">
         
                     <tr style="background-color:#ffffcc;font-weight:bold;">
                     <td width="80px" height="10px">&nbsp;SUBJECTS: </td>
@@ -238,84 +238,84 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
         </table>
        
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
          <tr>
             <td colspan ="3" style="text-align:center;color:black; font-size:10;font-weight:bold;">
                 GRADING INFORMATION
             </td>
         </tr>
         
-        <tr style="border: 0px solid maroon;">
-            <td width="235" style="border: 0px solid maroon;font-weight:bold;"> SCHOLARSHIP GRANT:</td>
-            <td width="293" style="border: 0px solid maroon;font-weight:bold;">
+        <tr style="border: 0px solid #014fb3;">
+            <td width="235" style="border: 0px solid #014fb3;font-weight:bold;"> SCHOLARSHIP GRANT:</td>
+            <td width="293" style="border: 0px solid #014fb3;font-weight:bold;">
                 GRADE POINT AVERAGE DETAILS
             </td>
         </tr>
-        <tr style="border: 0px solid maroon;">
-            <td width="235" style="text-align:center; color:black; border: 0px solid maroon;" > ' . strtoupper($registration['enumScholarship']). '</td>
+        <tr style="border: 0px solid #014fb3;">
+            <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" > ' . strtoupper($registration['enumScholarship']). '</td>
             <td> &nbsp;</td>
            
         </tr>
         <tr>
-            <td width="235" style="border: 0px solid maroon;font-weight:bold;"> GRADING SYSTEM:</td>
+            <td width="235" style="border: 0px solid #014fb3;font-weight:bold;"> GRADING SYSTEM:</td>
             <td width="145" style="font-weight:bold;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASSIFICATION </td>
             <td width="148" style="text-align:center; color:black;font-weight:bold;">GPA RANGE</td>
         </tr>
         <tr>
-            <td width="117" style="border-right: 0px solid maroon;text-align:center;">1.00</td>
-            <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">&nbsp;&nbsp;98 - 100</td>
+            <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">1.00</td>
+            <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">&nbsp;&nbsp;98 - 100</td>
             <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dean\'s Lister/Academic Scholars: </td>
             <td width="148" style="text-align:left; color:black;">1.60 above & no grade lower than 2.25 </td>
         </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">1.25</td>';
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">1.25</td>';
                         
                         
-                        $html.= '<td width="118"style="color:black; text-align:center;border-right: 0px solid maroon;">95 - 97</td>
+                        $html.= '<td width="118"style="color:black; text-align:center;border-right: 0px solid #014fb3;">95 - 97</td>
                         <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scholars: </td>
                         <td width="148" style="text-align:left; color:black;">not lower than 3.00</td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">1.50</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">92 - 94</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">1.50</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">92 - 94</td>
                         <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
                         <td width="148" style="text-align:center; color:black;"></td>                    
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">1.75</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">1.75</td>
                             
-                        <td width="118" style="color:black; text-align:center;border-right: 0px solid maroon;">89 - 91</td>
+                        <td width="118" style="color:black; text-align:center;border-right: 0px solid #014fb3;">89 - 91</td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">2.00</td>
-                        <td width="118" style="color:black; text-align:center;border-right: 0px solid maroon;">86 - 88 </td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">2.00</td>
+                        <td width="118" style="color:black; text-align:center;border-right: 0px solid #014fb3;">86 - 88 </td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">2.25</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">83 - 85</td>    <td></td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">2.25</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">83 - 85</td>    <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">2.50</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">80 - 82</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">2.50</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">80 - 82</td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">2.75 </td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">77 - 79</td>
-                        <td style="border-bottom: 0px solid maroon;"></td>
-                        <td width="148" style="border-bottom: 0px solid maroon;"></td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">2.75 </td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">77 - 79</td>
+                        <td style="border-bottom: 0px solid #014fb3;"></td>
+                        <td width="148" style="border-bottom: 0px solid #014fb3;"></td>
                         
                     </tr>
                       <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">3.00 </td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">75 - 76</td>
-                        <td colspan="2" rowspan = "9" align="center" style="border-right: 0px solid maroon;">
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">3.00 </td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">75 - 76</td>
+                        <td colspan="2" rowspan = "9" align="center" style="border-right: 0px solid #014fb3;">
                           <table border="0px" width="285" style="font-size: 8px;">
                           <tr>
                                     <td style="font-weight:bold;"></td>
@@ -349,42 +349,42 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
                         </td>
                       </tr>
                       <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">5.00</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">Below 75 - Failed</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">5.00</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">Below 75 - Failed</td>
                         
                     </tr>
                       <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">4.00</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">Conditional Grade</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">4.00</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">Conditional Grade</td>
                         
                     </tr>
                       <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">0.00</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">Not Yet Encoded</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">0.00</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">Not Yet Encoded</td>
                         
                     </tr>
                     
                      <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">INC</td>
-                        <td width="118" style="color:black; text-align:center;border-right: 0px solid maroon;">Incomplete</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">INC</td>
+                        <td width="118" style="color:black; text-align:center;border-right: 0px solid #014fb3;">Incomplete</td>
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;text-align:center;">-</td>
-                        <td width="118" style="color:black; text-align:center; border-right: 0px solid maroon;">Not Yet Submitted</td>
+                        <td width="117" style="border-right: 0px solid #014fb3;text-align:center;">-</td>
+                        <td width="118" style="color:black; text-align:center; border-right: 0px solid #014fb3;">Not Yet Submitted</td>
                         
                     </tr>
                       <tr>
-                        <td width="117" style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="118" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td width="117" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="118" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                     <tr>
-                        <td width="117" style="border-right: 0px solid maroon;"></td>
-                        <td width="118" style="border-right: 0px solid maroon;"></td>
+                        <td width="117" style="border-right: 0px solid #014fb3;"></td>
+                        <td width="118" style="border-right: 0px solid #014fb3;"></td>
                     </tr>
                    <tr>
-                        <td width="117" style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="118" style="color:maroon; text-align:center; border-right: 0px solid maroon;">
+                        <td width="117" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="118" style="color:#014fb3; text-align:center; border-right: 0px solid #014fb3;">
                         </td>
                    </tr>
                     
@@ -392,7 +392,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
         </table>
         <br />
         <br />
-          <table border="0" cellpadding="0" width="528px" style="color:maroon; font-size:8;">
+          <table border="0" cellpadding="0" width="528px" style="color:#014fb3; font-size:8;">
            <tr>
                 <td width="80"></td>';
                 

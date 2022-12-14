@@ -28,13 +28,13 @@
     
    // $imgfile = $img_dir
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
              <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
+			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
             <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
@@ -51,9 +51,9 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:maroon; font-size:9; border: 0px solid maroon;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
      <tr>
-            <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
                 REGISTRATION INFORMATION
             </td>
      </tr>
@@ -86,7 +86,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
      </tr>
     </table>
     
-    <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
    
         <tr>
             <th width="80px" style="text-align:center;">SECTION</th>
@@ -182,7 +182,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
         </table>
         
-        <table border="1" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+        <table border="1" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         <tr style="background-color:#ffff99 ; font-weight:bold;">
             <td width="80px">&nbsp;SUBJECTS </td>
             <td width="75px"></td>
@@ -195,9 +195,9 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
         </table>
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
            <tr>
-            <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
                 BILLING INFORMATION
             </td>
         </tr>
@@ -333,12 +333,12 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
                     </tr>
                     <tr>
                         <td>&nbsp;ASSESSED BY:</td>
-                        <td width="155" style="color:maroon; text-align:right;font-weight: bold;">Ms. Elisa G. Chacon&nbsp;&nbsp;</td>
+                        <td width="155" style="color:#014fb3; text-align:right;font-weight: bold;">Ms. Elisa G. Chacon&nbsp;&nbsp;</td>
                         
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
-                        <td width="155" style="color:maroon; text-align:right;">Cashier&nbsp;&nbsp;</td>
+                        <td width="155" style="color:#014fb3; text-align:right;">Cashier&nbsp;&nbsp;</td>
                         
                     </tr>
          

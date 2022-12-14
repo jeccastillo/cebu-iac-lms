@@ -36,7 +36,7 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"></td>
             <td width="400" style="text-align: center; line-height:100%">
@@ -59,7 +59,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:maroon; font-size:9;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9;" width="528px">
      <tr>
             <td colspan ="3" style="text-align:center; color:black; font-size:10; font-weight:bold;">
                 
@@ -96,7 +96,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">
         
         <tr>
             <th width="60px" ></th>
@@ -256,7 +256,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
            <tr>
             <td colspan ="3" style="text-align:center;color:black; font-size:10;font-weight:bold;">
                 
@@ -402,7 +402,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                     </tr>
                    <tr>
                         <td width="117">&nbsp;</td>
-                        <td width="118" style="color:maroon; text-align:center;">
+                        <td width="118" style="color:#014fb3; text-align:center;">
                         </td>
                    </tr>
                     
@@ -410,7 +410,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
         </table>
         <br />
         <br />
-          <table border="0" cellpadding="0" width="528px" style="color:maroon; font-size:8;">
+          <table border="0" cellpadding="0" width="528px" style="color:#014fb3; font-size:8;">
            <tr>
                 <td width="80"></td>';
                 

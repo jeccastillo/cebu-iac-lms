@@ -28,7 +28,7 @@
 <!--            <h5 >City of Makati</h5>-->
               <h5 class="box-title"><p>City of Makati</p></h5>
               <h5  style="margin-top: -8px;"><strong>CITY COLLEGE OF TAGAYTAY</strong></h5>
-            <h6 style="margin-top: -8px;">Akle St., Kaybagal South, Tagaytay City</h6>
+            <h6 style="margin-top: -8px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</h6>
             <h6 style="margin-top: -8px;">Telephone No: (046) 483-0470</h6>    
 <!--              <h6 style="margin-top: -8px;">Department of Computer Science and Information Technology</h6>-->
         </div>

@@ -128,7 +128,7 @@ $html .= '<table border="0" cellpadding="0">
         </table>';
 
 /*
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">
    
         <tr>
             <th width="80px" style="text-align:left;"></th>
@@ -142,7 +142,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                 <tr>
                     <td colspan="5" rowspan="24" height="210px">';
 
-                        $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528">';
+                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">';
                         $totalUnits = 0;
                                 foreach($records as $record) {
 
@@ -190,7 +190,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
        
                          
         $html.='</table>
-                <table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+                <table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
         
                     <tr style="font-weight:bold;">
                     <td width="80px">&nbsp; </td>
@@ -205,7 +205,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
            <tr>
             <td colspan ="3" style="text-align:center; color:white; font-size:10;">
                
@@ -339,7 +339,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                     </tr>
                    <tr>
                         <td>&nbsp;</td>
-                        <td width="155" style="vertical-align: middle; color:maroon; text-align:right;">&nbsp;&nbsp;</td>
+                        <td width="155" style="vertical-align: middle; color:#014fb3; text-align:right;">&nbsp;&nbsp;</td>
                    </tr>
                     
          
@@ -347,7 +347,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
         <br />
         <br />
         
-        <table border="0" cellpadding="0" width="528px" style="color:maroon; font-size:8;">
+        <table border="0" cellpadding="0" width="528px" style="color:#014fb3; font-size:8;">
             <tr>
                 <td colspan="4"> </td
             

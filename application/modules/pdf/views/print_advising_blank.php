@@ -28,13 +28,13 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
              <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">iACADEMY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
+			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
             <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
@@ -56,7 +56,7 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
         </table>
     ';
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
      
      <tr>
       <td width="80px" >&nbsp;NAME:</td>
@@ -79,11 +79,11 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
      </table><br /><br />';
     
 //if($prev_records!=null){
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
 
             <tr height="200px">
                 <td width="259px" height="180px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid maroon;">Course TAKEN from the previous Semester</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course TAKEN from the previous Semester</th></tr>
                         <tr>
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
                             <th width="164px" style="text-align:center;font-weight:bold;">Course Description</th>
@@ -98,9 +98,9 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                                     $s2 = isset($prev_records[$i]['strDescription'])?ellipsize($prev_records[$i]['strDescription'],30):'';
                                     $s3 = isset($prev_records[$i]['v3'])?getEquivalent($prev_records[$i]['v3']):'';
                                     $html.='<tr style="color: black;;">
-                                                <td width="60px" style="color: black; border: 0px solid maroon"> '.$s. '</td>
-                                                <td width="164px" align ="left" style="color: black; border: 0px solid maroon;"> '. $s2. '</td>
-                                                <td width="35px" align = "center" style="color: black; border: 0px solid maroon"> '. $s3. '</td>';
+                                                <td width="60px" style="color: black; border: 0px solid #014fb3"> '.$s. '</td>
+                                                <td width="164px" align ="left" style="color: black; border: 0px solid #014fb3;"> '. $s2. '</td>
+                                                <td width="35px" align = "center" style="color: black; border: 0px solid #014fb3"> '. $s3. '</td>';
                                     $html.='</tr>';
                                 }                           
                         $html.= '</table>';
@@ -116,7 +116,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                 
                             
                 <td width="259px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid maroon;">Course to ENROL this Semester</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course to ENROL this Semester</th></tr>
                         <tr>
 
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
@@ -135,15 +135,15 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
                                       if(isset($advised[$i]['strUnits']))
                                             $totalUnits += $advised[$i]['strUnits'];
                                     $html.='<tr style="color: black;">
-                                            <td width="60px" style="color: black;border: 0px solid maroon;"> '.$s. '</td>
-                                            <td width="164px" align ="left" style="color: black;border: 0px solid maroon;"> '.$s2. '</td>
-                                            <td width="35px" align = "center" style="color: black; border: 0px solid maroon"> '.$s3. '</td>';
+                                            <td width="60px" style="color: black;border: 0px solid #014fb3;"> '.$s. '</td>
+                                            <td width="164px" align ="left" style="color: black;border: 0px solid #014fb3;"> '.$s2. '</td>
+                                            <td width="35px" align = "center" style="color: black; border: 0px solid #014fb3"> '.$s3. '</td>';
                                         $html.='</tr>';
                                 }
                             
                         $html.= '<tr style="color: black;">
                                     <td width="60px"></td>
-                                    <td width="164px" style="text-align: right;border-right: 0px solid maroon;font-weight:bold;">Total Units:</td>
+                                    <td width="164px" style="text-align: right;border-right: 0px solid #014fb3;font-weight:bold;">Total Units:</td>
                                     <td width="35px" style="text-align: center;font-weight:bold;"></td>
                                         
                         </tr>';
@@ -159,7 +159,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" wi
             </table>';
   
     
-$html.= '<br /><table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528px">
+$html.= '<br /><table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
 
             <tr height="100px">
                 <td width="264px">Advised by:</td>

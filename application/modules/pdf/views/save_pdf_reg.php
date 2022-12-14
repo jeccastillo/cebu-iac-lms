@@ -29,13 +29,13 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
              <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">CITY COLLEGE OF TAGAYTAY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
+			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
             <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
@@ -52,44 +52,44 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:maroon; font-size:9; border: 0px solid maroon;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
      <tr>
-            <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
                 REGISTRATION INFORMATION
             </td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;</td>
       <td width="250px">&nbsp;</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;DATE:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;DATE:</td>
       <td width="85px" style="color: black;"> '. $registration['dteRegistered']. '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;NAME:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;NAME:</td>
       <td width="250px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;STUDENT NUMBER:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;STUDENT NUMBER:</td>
       <td width="85px" style="color: black;">&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;PROGRAM:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;PROGRAM:</td>
       <td width="250px" style="color: black;">&nbsp;'.$student['strProgramDescription'] . '</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;YEAR LEVEL:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;YEAR LEVEL:</td>
       <td width="85px" style="color: black;">&nbsp;'. $academic_standing['year'] . '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;MAJOR:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;MAJOR:</td>
       <td width="250px" style="color:black;">&nbsp;' .$student['strMajor'] . '</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;REGISTRATION STATUS:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;REGISTRATION STATUS:</td>
       <td width="85px" style="color: black;text-transform:capitalize;">&nbsp;'.$registration['enumRegistrationStatus'].'</td>
      </tr>
      <tr>
-        <td style="border-right: 0px solid maroon;">&nbsp;</td>
+        <td style="border-right: 0px solid #014fb3;">&nbsp;</td>
         <td>&nbsp;</td>
-        <td style="border-left: 0px solid maroon;">&nbsp;</td>
+        <td style="border-left: 0px solid #014fb3;">&nbsp;</td>
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528">
    
         <tr>
             <th width="80px" style="text-align:left;">SECTION</th>
@@ -103,7 +103,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
                 <tr>
                     <td colspan="5" rowspan="24" height="210px">';
 
-                        $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528">';
+                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
@@ -161,7 +161,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
 
                          
         $html.='</table>
-                <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+                <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         
                     <tr style="background-color:#ffff99 ; font-weight:bold;">
                     <td width="80px">&nbsp;SUBJECTS: </td>
@@ -176,87 +176,87 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
            <tr>
-            <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
                 BILLING INFORMATION
             </td>
         </tr>
         
-        <tr style="border: 0px solid maroon;">
-            <td width="235" style="border: 0px solid maroon;"> SCHOLARSHIP GRANT:</td>
-            <td width="293" style="border: 0px solid maroon;">
+        <tr style="border: 0px solid #014fb3;">
+            <td width="235" style="border: 0px solid #014fb3;"> SCHOLARSHIP GRANT:</td>
+            <td width="293" style="border: 0px solid #014fb3;">
                 PAYMENT DETAILS:
             </td>
         </tr>
-        <tr style="border: 0px solid maroon;">
-            <td width="235" style="text-align:center; color:black; border: 0px solid maroon;" > ' . strtoupper($student['enumScholarship']). '</td>
+        <tr style="border: 0px solid #014fb3;">
+            <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" > ' . strtoupper($student['enumScholarship']). '</td>
             <td> &nbsp;TERMS OF PAYMENT</td>
            
         </tr>
         <tr>
-            <td width="235" style="border: 0px solid maroon;"> ASSESSMENT OF FEES:</td>
+            <td width="235" style="border: 0px solid #014fb3;"> ASSESSMENT OF FEES:</td>
             <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First Payment: </td>
             <td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td>
         </tr>
         <tr>
-            <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition Fee:</td>
-            <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"> ' . number_format($tuition['tuition'], 2, '.' ,',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+            <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition Fee:</td>
+            <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"> ' . number_format($tuition['tuition'], 2, '.' ,',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
             <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Second Payment: </td>
             <td width="148" style="text-align:center; color:black;">' .  number_format($payment_division, 2, '.' ,',').  '</td>
         </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Misc. Fee:</td>';
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Misc. Fee:</td>';
                             $total_misc = 0;
                             foreach($tuition['misc_fee'] as $key=>$val) {
                                 $total_misc += $val;
                             }
                         
-                        $html.= '<td width="155"style="color:black; text-align:right;border-right: 0px solid maroon;"> ' . number_format($total_misc, 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
+                        $html.= '<td width="155"style="color:black; text-align:right;border-right: 0px solid #014fb3;"> ' . number_format($total_misc, 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
                         <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Third Payment: </td>
                         <td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,','). '</td>
                     </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I.D. Fee:</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"> ' .  number_format($tuition['id_fee'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I.D. Fee:</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"> ' .  number_format($tuition['id_fee'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
                         <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fourth Payment: </td>
                         <td width="148" style="text-align:center; color:black;">' .  number_format($payment_division, 2, '.' ,',') . '</td>                    
                     </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Laboratory Fees:</td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Laboratory Fees:</td>
                             
-                        <td width="155" style="color:black; text-align:right;border-right: 0px solid maroon;">' . number_format($tuition['lab'], 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </td>
+                        <td width="155" style="color:black; text-align:right;border-right: 0px solid #014fb3;">' . number_format($tuition['lab'], 2, '.', ',') . ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SRF:</td>
-                        <td width="155" style="color:black; text-align:right;border-right: 0px solid maroon;"> ' .  number_format($tuition['srf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SRF:</td>
+                        <td width="155" style="color:black; text-align:right;border-right: 0px solid #014fb3;"> ' .  number_format($tuition['srf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SFDF:</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;">' .  number_format($tuition['sfdf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>    <td></td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SFDF:</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;">' .  number_format($tuition['sfdf'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>    <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Athletic Fee</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;">' .  number_format($tuition['athletic'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Athletic Fee</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;">' .  number_format($tuition['athletic'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
                         <td></td>
                         <td width="148"></td>
                     </tr>
                     <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSG:</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;">' .  number_format($tuition['csg']['student_handbook']+$tuition['csg']['student_publication'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                        <td style="border-bottom: 0px solid maroon;"></td>
-                        <td width="148" style="border-bottom: 0px solid maroon;"></td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSG:</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;">' .  number_format($tuition['csg']['student_handbook']+$tuition['csg']['student_publication'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td style="border-bottom: 0px solid #014fb3;"></td>
+                        <td width="148" style="border-bottom: 0px solid #014fb3;"></td>
                         
                     </tr>
                       <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Fines:</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
-                        <td colspan="2" rowspan = "9" align="center" style="border-right: 0px solid maroon;">
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Fines:</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
+                        <td colspan="2" rowspan = "9" align="center" style="border-right: 0px solid #014fb3;">
                           <table border="0" width="285" style="font-size: 7px;">
                                 <tr>
                                     <td style="font-weight:bold;">RULES ON FEES</td>
@@ -289,42 +289,42 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
                         </td>
                       </tr>
                       <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                       <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                       <tr>
-                        <td width="80" style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td width="80" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                     
                      <tr>
-                        <td width="80" style="border: 0px solid maroon;">&nbsp;TOTAL:</td>
-                        <td width="155" style="color:black; text-align:right;border: 0px solid maroon;">' .  number_format($tuition['total'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td width="80" style="border: 0px solid #014fb3;">&nbsp;TOTAL:</td>
+                        <td width="155" style="color:black; text-align:right;border: 0px solid #014fb3;">' .  number_format($tuition['total'], 2, '.' ,','). ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
                     </tr>
                     <tr>
-                        <td style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                       <tr>
-                        <td style="border-right: 0px solid maroon;">&nbsp;</td>
-                        <td width="155" style="color:black; text-align:right; border-right: 0px solid maroon;"></td>
+                        <td style="border-right: 0px solid #014fb3;">&nbsp;</td>
+                        <td width="155" style="color:black; text-align:right; border-right: 0px solid #014fb3;"></td>
                         
                     </tr>
                     <tr>
-                        <td style="border-right: 0px solid maroon;"></td>
-                        <td style="border-right: 0px solid maroon;text-align:center;"><img height="25px" src="'.$img_dir.'signat-Accounting.png" /></td>
+                        <td style="border-right: 0px solid #014fb3;"></td>
+                        <td style="border-right: 0px solid #014fb3;text-align:center;"><img height="25px" src="'.$img_dir.'signat-Accounting.png" /></td>
                     </tr>
                    <tr>
-                        <td style="border: 0px solid maroon;">&nbsp;ASSESSED BY:</td>
-                        <td  width="155" style="vertical-align: middle; color:maroon; text-align:center; border: 0px solid maroon;"> <b>Ms. Elisa G. Chacon</b>&nbsp;&nbsp;<br / ><span> Cashier&nbsp;&nbsp; </span></td>
+                        <td style="border: 0px solid #014fb3;">&nbsp;ASSESSED BY:</td>
+                        <td  width="155" style="vertical-align: middle; color:#014fb3; text-align:center; border: 0px solid #014fb3;"> <b>Ms. Elisa G. Chacon</b>&nbsp;&nbsp;<br / ><span> Cashier&nbsp;&nbsp; </span></td>
                    </tr>
                     
          
@@ -332,7 +332,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
         <br />
         <br />
         
-        <table border="0" cellpadding="0" width="528px" style="color:maroon; font-size:8; border: 0px solid maroon;">       
+        <table border="0" cellpadding="0" width="528px" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;">       
             <tr>
                 <td width="80"> Verified by: </td>
                 <td width="155" style="text-align:center"><img height="16px" src="'.$img_dir.$deanSignature.'" /></td>

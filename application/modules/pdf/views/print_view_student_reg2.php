@@ -29,13 +29,13 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         <tr>
             <td width="64" align="right"><img src= "'.$img_dir .'tagaytayseal.png"  width="50" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              <font style="font-family:Calibri Light; font-size: 10;">City of Makati</font><br />
              <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">iACADEMY</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Akle St., Kaybagal South, Tagaytay City</font><br />
+			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
             <td width="64" align="left" valign="middle"><img src= "'.$img_dir .'cctlogo.png"  width="50" height="50"/></td>
@@ -52,44 +52,44 @@ $html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:maroon; font-size:9; border: 0px solid maroon;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
      <tr>
-            <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+            <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
                 REGISTRATION INFORMATION
             </td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;</td>
       <td width="250px">&nbsp;</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;DATE:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;DATE:</td>
       <td width="85px" style="color: black;"> '. $registration['dteRegistered']. '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;NAME:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;NAME:</td>
       <td width="250px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;STUDENT NUMBER:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;STUDENT NUMBER:</td>
       <td width="85px" style="color: black;">&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;PROGRAM:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;PROGRAM:</td>
       <td width="250px" style="color: black;">&nbsp;'.$student['strProgramDescription'] . '</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;YEAR LEVEL:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;YEAR LEVEL:</td>
       <td width="85px" style="color: black;">&nbsp;'. $academic_standing['year'] . '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid maroon;">&nbsp;MAJOR:</td>
+      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;MAJOR:</td>
       <td width="250px" style="color:black;">&nbsp;' .$student['strMajor'] . '</td>
-      <td width="113px" style="border-left: 0px solid maroon;">&nbsp;REGISTRATION STATUS:</td>
+      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;REGISTRATION STATUS:</td>
       <td width="85px" style="color: black;text-transform:capitalize;">&nbsp;'.$registration['enumRegistrationStatus'].'</td>
      </tr>
      <tr>
-        <td style="border-right: 0px solid maroon;">&nbsp;</td>
+        <td style="border-right: 0px solid #014fb3;">&nbsp;</td>
         <td>&nbsp;</td>
-        <td style="border-left: 0px solid maroon;">&nbsp;</td>
+        <td style="border-left: 0px solid #014fb3;">&nbsp;</td>
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528">
    
         <tr>
             <th width="80px" style="text-align:left;">SECTION</th>
@@ -103,7 +103,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
                 <tr>
                     <td colspan="5" rowspan="24" height="210px">';
 
-                        $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8;" width="528">';
+                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
@@ -161,7 +161,7 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
 
                          
         $html.='</table>
-                <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+                <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         
                     <tr style="background-color:#ffff99 ; font-weight:bold;">
                     <td width="80px">&nbsp;SUBJECTS: </td>
@@ -176,26 +176,26 @@ $html.= '<table border="0" cellpadding="0" style="color:maroon; font-size:8; bor
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:maroon; font-size:8; border: 0px solid maroon;" width="528px">
+        <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         <tr>
-         <td colspan ="3" style="text-align:center; background-color: maroon; color:white; font-size:10;">
+         <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
              BILLING INFORMATION
          </td>
      </tr>
      
-     <tr style="border: 0px solid maroon;">
-         <td width="235" style="border: 0px solid maroon;"> SCHOLARSHIP GRANT:</td>
-         <td width="293" style="border: 0px solid maroon;">
+     <tr style="border: 0px solid #014fb3;">
+         <td width="235" style="border: 0px solid #014fb3;"> SCHOLARSHIP GRANT:</td>
+         <td width="293" style="border: 0px solid #014fb3;">
              PAYMENT DETAILS:
          </td>
      </tr>
-     <tr style="border: 0px solid maroon;">
-         <td width="235" style="text-align:center; color:black; border: 0px solid maroon;" > ' . strtoupper($student['enumScholarship']). '</td>
+     <tr style="border: 0px solid #014fb3;">
+         <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" > ' . strtoupper($student['enumScholarship']). '</td>
          <td> &nbsp;TERMS OF PAYMENT</td>
         
      </tr>
      <tr>
-         <td width="235" style="border: 0px solid maroon;"> ASSESSMENT OF FEES:</td>
+         <td width="235" style="border: 0px solid #014fb3;"> ASSESSMENT OF FEES:</td>
          <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First Payment: </td>
          <td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td>
      </tr>
