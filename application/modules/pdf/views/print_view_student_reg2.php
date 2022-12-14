@@ -84,7 +84,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; border: 0px solid #014fb3;" width="528">
    
         <tr>
             <th width="80px" style="text-align:left;">SECTION</th>
