@@ -106,7 +106,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                 <tr>
                     <td colspan="5" rowspan="24" height="210px">';
 
-                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528">';
+                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
@@ -128,7 +128,13 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                                 //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
                                         }
                                             $html.= '</td>
-                                            <td width="100px"></td>
+                                            <td width="100px">';
+                                            foreach($record['schedule'] as $sched) {
+                                                if(!empty($record['schedule']))
+                                                $html.= $sched['strDay'];                    
+                                                $html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']));                    
+                                            }
+                                            $html.= '</td>
                                             <td width="40px"></td>
                                             ';
                                         $html.='</tr>';
