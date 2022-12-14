@@ -31,17 +31,10 @@
 $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             <tr>
                 <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
-            </tr>
-            <tr>            
-                <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle;">             
-                    <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
-                </td>
-            </tr>
-            <tr style="line-height:15px;">
-                <td colspan="3" style="font-size:8;">&nbsp;</td>
-            </tr>
+            </tr>         
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
+                    <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
                     <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
                 </td>           
             </tr>               
@@ -49,7 +42,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
                 <td colspan = "3" style="font-weight: bold;text-align:center; font-size:12;">ADVISING FORM</td>
             </tr>
             <tr>
-                <td colspan = "3" style="text-align:center; color:black; font-size: 10;"> A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Semester' . '</td>                
+                <td colspan = "3" style="text-align:center; color:black; font-size: 10;"> A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Semester' . '<br /><br /></td>                
             </tr>
             <tr>
                 <td colspan="3" style="font-size:10;">
