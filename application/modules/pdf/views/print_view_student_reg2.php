@@ -106,7 +106,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-weight:bold; 
                 <tr>
                     <td colspan="5" rowspan="24" height="210px">';
 
-                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" width="528">';
+                        $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
                             $html.='<tr style="color: black; border-bottom: 0px solid gray;">
