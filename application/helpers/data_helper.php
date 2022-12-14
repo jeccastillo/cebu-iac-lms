@@ -443,6 +443,35 @@ if(!function_exists('get_day'))
     }
 }
 
+if(!function_exists('get_day_abvr'))
+{
+    function get_day_abvr($day)
+    {
+        switch($day)
+            {
+                case '1':
+                    $day = "M";
+                    break;
+                case '2':
+                    $day = "T";
+                    break;
+                case '3':
+                    $day = "W";
+                    break;
+                case '4':
+                    $day = "Th";
+                    break;
+                case '5':
+                    $day = "F";
+                    break;
+                case '6':
+                    $day = "S";
+                    break;
+            }
+        
+            return $day;
+    }
+}
 if(!function_exists('switch_num'))
 {
     function switch_num($num)

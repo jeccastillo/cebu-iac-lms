@@ -2441,7 +2441,7 @@ class Data_fetcher extends CI_Model {
                         ->result_array();
        foreach($sched as $s)
         {
-            $s['strDay'] = get_day($s['strDay']);
+            $s['strDay'] = get_day_abvr($s['strDay']);
             $ret[] = $s;
         }
         
