@@ -1,5 +1,6 @@
 <?php $paid = 0; ?>
-<aside id="vue-container" class="right-side">
+<aside class="right-side">
+    <div id="vue-container">
     <section class="content-header">
         <h1>
             <small>
@@ -81,8 +82,9 @@
             </div>    
         </div>
         
-</div>
-
+        </div>
+    </div>
+</aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
