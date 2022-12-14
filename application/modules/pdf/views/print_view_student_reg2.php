@@ -24,33 +24,12 @@
     // Add a page
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage();
-    $payment_division = $tuition['total'] / 4;
+    //$payment_division = $tuition['total'] / 4;
 
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:maroon; font-size:10;">
-        <tr>
-            <td width="64" align="right">Image Here</td>
-            <td width="400" style="text-align: center; line-height:100%">
-             <font style="font-family:Calibri Light; font-size: 10;">iACADEMY</font><br />
-             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">ADDRESS LINE 1</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Address Line 2</font><br />
-             <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
-            </td>
-            <td width="64" align="left" valign="middle">Image Here</td>
-        </tr>
-        <tr>
-            <td colspan = "3" style="font-weight: bold;text-align:center; font-size:10;"> CERTIFICATE OF REGISTRATION</td>
-        </tr>
-        <tr>
-            <td colspan = "3" style="text-align:center; color:black; font-size: 10;"> A.Y. Term goes Here' . '</td>
-        </tr>
-        <tr>
-        <td colspan="3" style="font-size:10;">
-        </td>
-        </tr>
-    </table>'; 
+$html = ''; 
 
 $html = utf8_encode($html);
 $pdf->writeHTML($html);
