@@ -233,23 +233,15 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 <td width="88px"></td>
                                 <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
                                 <td width="88px" style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
-                            </tr>';
-                            foreach($tuition['misc_list'] as $key=>$val){
-            
-                                $html .='<tr>
-                                            <td width="132px">'.$key.'</td>
-                                            <td width="132px">'.number_format($val, 2, '.' ,',').'</td>
-                                        </tr';                
-                            }
-                        $html.='    
+                            </tr>
                         </table>
                     </td>
                     <td width="264px">                                
                         <table style="color:#333; font-size:10; ">';
-                    if($tuition['misc'] != 0){
+                        if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
             
-                            $html .='<tr>
+                            $html .= '<tr>
                                         <td width="132px">'.$key.'</td>
                                         <td width="132px">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr';                
