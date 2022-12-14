@@ -51,41 +51,36 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">
+    <table border="0" cellpadding="0" style="color:#014fb3; font-size:9; border: 0px solid #014fb3;" width="528px">     
      <tr>
-            <td colspan ="3" style="text-align:center; background-color: #014fb3; padding:5px 10px; color:white; font-size:10;">
-                REGISTRATION INFO
-            </td>
-     </tr>
-     <tr>
-      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;</td>
+      <td width="80px" >&nbsp;</td>
       <td width="250px">&nbsp;</td>
-      <td width="113px" style="border-left: 0px solid #014fb3;"></td>
+      <td width="113px"></td>
       <td width="85px" style="color: black;"></td>
       
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;NAME:</td>
+      <td width="80px" ">&nbsp;NAME:</td>
       <td width="250px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
-      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;DATE:</td>
+      <td width="113px" ">&nbsp;DATE:</td>
       <td width="85px" style="color: black;"> '. $registration['dteRegistered']. '</td>      
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;PROGRAM:</td>
+      <td width="80px" >&nbsp;PROGRAM:</td>
       <td width="250px" style="color: black;">&nbsp;'.$student['strProgramDescription'] . '</td>      
-      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;STUDENT NUMBER:</td>
+      <td width="113px" >&nbsp;STUDENT NUMBER:</td>
       <td width="85px" style="color: black;">&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
      <tr>
-      <td width="80px" style="border-right: 0px solid #014fb3;">&nbsp;MAJOR:</td>
+      <td width="80px" >&nbsp;MAJOR:</td>
       <td width="250px" style="color:black;">&nbsp;' .$student['strMajor'] . '</td>
-      <td width="113px" style="border-left: 0px solid #014fb3;">&nbsp;SY/TERM:</td>
+      <td width="113px" >&nbsp;SY/TERM:</td>
       <td width="85px" style="color: black;text-transform:capitalize;">&nbsp; A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
      </tr>
      <tr>
-        <td style="border-right: 0px solid #014fb3;">&nbsp;</td>
+        <td >&nbsp;</td>
         <td>&nbsp;</td>
-        <td style="border-left: 0px solid #014fb3;">&nbsp;</td>
+        <td >&nbsp;</td>
         <td>&nbsp;</td>
      </tr>
     </table> '; 
