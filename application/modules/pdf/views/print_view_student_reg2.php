@@ -173,7 +173,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                          
         $html.='</table>
                 <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
-        
+                    <tr>
+                        <td colspan="3" style="font-size:10;"></td>
+                    </tr>
                     <tr style="background-color:#ffff99 ; font-weight:bold;">
                     <td width="80px">&nbsp;SUBJECTS: </td>
                     <td width="75px" style="color: black;text-align:left;">' . $noOfSubjs . '</td>
@@ -187,32 +189,15 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
 
         </table>
         
-        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+        <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
         <tr>
-            <td colspan="3" style="font-size:10;"></td>
+            <td width="264px" style= "font-size:10; font-weight:bold;">ASSESSMENT SUMMARY</td>
+            <td width="264px" style= "font-size:10; font-weight:bold;">MISCELANEOUS DETAIL</td>
         </tr>
-        <tr>
-            <td width="264px" style= "font-size:10; font-weight:bold;">
-                 ASSESSMENT SUMMARY
-            </td>
-            <td width="264px" style= "font-size:10; font-weight:bold;">
-                 MISCELANEOUS DETAIL
-            </td>
-        </tr>
-     
-     
-     <tr>
-         <td width="235" style="border: 0px solid #014fb3;"> ASSESSMENT OF FEES:</td>
-         <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First Payment: </td>
-         <td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td>
-     </tr>
-     
-                
-      
      </table>
         
     ';
-
+    // <tr><td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td></tr>
 $html = utf8_encode($html);
 $pdf->writeHTML($html);
 
