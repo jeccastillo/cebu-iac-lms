@@ -25,7 +25,8 @@
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage();
     $payment_division = $tuition['total'] / 4;
-
+    echo '<img src= "'.$img_dir .'iacademy-logo.png"  width="150" height="50"/>';
+    die();
 
     
     // Set some content to print
@@ -34,7 +35,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             <td width="64" align="right"><img src= "'.$img_dir .'iacademy-logo.png"  width="150" height="50"/></td>
             <td width="400" style="text-align: center; line-height:100%">
              
-             <font style="font-family:Calibri Light; font-size: 15;font-weight: bold;">iACADEMY</font><br />
+             <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>
