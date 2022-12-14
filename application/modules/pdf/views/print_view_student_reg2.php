@@ -166,7 +166,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html.='
         <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
             <tr>
-                <td colspan="2" style= "font-size:10; line-height:1.5; border-bottom:1px solid #333;"></td>                
+                <td colspan="2" style= "font-size:10; line-height:1.5; border-top:1px solid #333;"></td>                
             </tr>
         </table>
         
