@@ -202,8 +202,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
                 <tr>
-                    <td width="260px">
-                        <table cellpadding="0"  width="260px" cellspacing="5px" style="color:#333; font-size:10;">
+                    <td width="264px">
+                        <table cellpadding="0"  width="264px" cellspacing="5px" style="color:#333; font-size:10;">
                             <tr>
                                 <td width="78px"></td>
                                 <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -236,8 +236,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                             </tr>
                         </table>
                     </td>
-                    <td width="260px">                                
-                        <table  width="260px"  style="color:#333; font-size:10; ">';
+                    <td width="264px">                                
+                        <table  width="264px"  style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
         
