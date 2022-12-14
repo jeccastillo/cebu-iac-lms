@@ -203,27 +203,32 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             <table style="color:#333; font-size:10; ">
                 <tr>
                       <td width="88px"></td>
-                      <td width="88px" style="border-bottom:1px solid #333;">FULL PAYMENT</td>
-                      <td width="88px" style="border-bottom:1px solid #333;">INSTALLMENT</td>
+                      <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
+                      <td width="88px" style="text-decoration:underline;">INSTALLMENT</td>
                 </tr>
                 <tr>
-                      <td width="88px">Tuition</td>
-                      <td width="88px"></td>
+                      <td width="88px">Tuition Fee</td>
+                      <td width="88px">'.$tuition['tuition'].'</td>
                       <td width="88px"></td>
                 </tr>
                 <tr>
                       <td width="88px">Laboratory</td>
-                      <td width="88px"></td>
+                      <td width="88px">'.$tuition['lab'].'</td>
                       <td width="88px"></td>
                 </tr>
                 <tr>
                       <td width="88px">Miscellaneous</td>
-                      <td width="88px"></td>
+                      <td width="88px">'.$tuition['misc'].'</td>
                       <td width="88px"></td>
                 </tr>
                 <tr>
                       <td width="88px">New Student</td>
+                      <td width="88px">'.$tuition['new_student'].'</td>
                       <td width="88px"></td>
+                </tr>
+                <tr>
+                      <td width="88px"></td>
+                      <td width="88px" style="font-weight:bold; text-decoration:underline;">'.$tuition['total'].'</td>
                       <td width="88px"></td>
                 </tr>
             </table>
