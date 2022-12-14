@@ -297,12 +297,10 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                 <tr>
                     <td width="250px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
                     <td width="250px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+                </tr>                   
                 <tr>
-                    <td width="264px" style= "font-size:10; text-align:center">Authorized Signatory</td>
-                    <td width="264px" style= "font-size:10; text-align:center">Registrar</td>            
+                    <td style= "font-size:10; text-align:center">Authorized Signatory</td>
+                    <td style= "font-size:10; text-align:center">Registrar</td>            
                 </tr>
             </table>
         ';
