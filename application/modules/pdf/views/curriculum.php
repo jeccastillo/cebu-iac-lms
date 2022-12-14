@@ -39,7 +39,7 @@
                 <thead>
                     <tr style="line-height:20px;font-size:9px;">
                         <th style="border:1px solid #333;" colspan="4">
-                            <?php echo switch_num($curriculum_subjects[$i]['intYearLevel'])." Year ".switch_num($curriculum_subjects[$i]['intSem'])." Sem"; ?>
+                            <?php echo switch_num($curriculum_subjects[$i]['intYearLevel'])." Year ".switch_num($curriculum_subjects[$i]['intSem'])." Term"; ?>
                         </th>
                     </tr>
                     <tr style="line-height:15px;font-size:9px;text-align:center">
@@ -110,7 +110,7 @@
                 <thead>
                     <tr style="line-height:20px;font-size:9px;">
                         <th style="border:1px solid #333;" colspan="5">
-                            <?php echo switch_num($equivalent_subjects[$i]['intYearLevel'])." Year ".switch_num($equivalent_subjects[$i]['intSem'])." Sem"; ?>
+                            <?php echo switch_num($equivalent_subjects[$i]['intYearLevel'])." Year ".switch_num($equivalent_subjects[$i]['intSem'])." Term"; ?>
                         </th>
                     </tr>
                     <tr style="line-height:15px;font-size:9px;text-align:center">
