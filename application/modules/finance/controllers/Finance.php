@@ -50,7 +50,7 @@ class Finance extends CI_Controller {
 
     }
 		
-    public function get_other_payments(){
+    public function get_other_payments($slug){
 
         $sem = $this->data_fetcher->get_active_sem();
         $sdata['student'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
