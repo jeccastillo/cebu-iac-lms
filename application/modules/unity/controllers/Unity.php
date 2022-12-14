@@ -472,6 +472,7 @@ class Unity extends CI_Controller {
             //print_r($this->data['transactions']);
             $this->data['id'] = $id;
             $this->data['sem'] = $sem;
+            $this->data['student'] = $this->data_fetcher->getStudent($id);
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/accounting_viewer",$this->data);
             $this->load->view("common/footer",$this->data); 
@@ -486,19 +487,20 @@ class Unity extends CI_Controller {
 
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
-        $active_sem = $this->data_fetcher->get_active_sem();
+            if($sem == null)
+            $sy = $this->data_fetcher->get_active_sem();
 
-        $this->data['selected_ay'] = $active_sem['intID'];
-        $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        $sy = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
+            $this->data['selected_ay'] = $sy['intID'];
+            $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+            
+            $this->data['student'] = $this->data_fetcher->getStudent($id);
 
-        $reg = $this->data_fetcher->getRegistrationInfo($id,$s['intID']);
-        if(!empty($reg)){ 
-            $this->data['sy'] = $s;
-            $this->data['tuition'] = $this->data_fetcher->getTuition($id,$s['intID'],$reg['enumScholarship']);             
-        }
-        
+            $reg = $this->data_fetcher->getRegistrationInfo($id,$sy['intID']);
+            if(!empty($reg)){ 
+                $this->data['sy'] = $sy;
+                $this->data['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);             
+            }
+            
             $data['data'] = $this->data;
             $data['success'] = true;
             $data['message'] = "Success";

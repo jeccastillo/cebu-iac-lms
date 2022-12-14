@@ -105,7 +105,7 @@ new Vue({
         student: {},
         loader_spinner: true,
         type: "",
-        slug: undefined,
+        slug: "<?php echo $student['slug']; ?>",
         update_status: "",
         status_remarks: "",
     },
