@@ -60,7 +60,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
      </tr>
      <tr>
       <td width="80px">&nbsp;NAME</td>
-      <td width="200px" >:&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substr($student['strMiddlename'], 0,1) . ".".'</td>
+      <td width="200px" >:&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
       <td width="80px">&nbsp;DATE</td>
       <td width="200px" >:&nbsp;'. $registration['dteRegistered']. '</td>      
      </tr>
