@@ -95,11 +95,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
    
         <tr>
             <th width="80px" style="text-align:left;">SECTION</th>            
-            <th width="200px" style="text-align:left;">SUBJECT NAME</th>
+            <th width="218px" style="text-align:left;">SUBJECT NAME</th>
             <th width="40px" style="text-align:left;">UNITS</th>
-            <th width="40px" style="text-align:left;">DAY</th>
+            <th width="45px" style="text-align:left;">DAY</th>
             <th width="100px" style="text-align:left;">TIME</th>
-            <th width="40px" style="text-align:left;">ROOM</th>
+            <th width="45px" style="text-align:left;">ROOM</th>
         </tr> ';
         $html.= '
                 <tr><td colspan="5"> </td> </tr>
@@ -118,9 +118,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
 
                                     $html.='<tr style="color: black;">
                                             <td width="80px"> ' . $record['strSection'].'</td>                                            
-                                            <td width="200px" align ="left"> '. $record['strDescription']. '</td>
+                                            <td width="218px" align ="left"> '. $record['strDescription']. '</td>
                                             <td width="40px" align = "left"> '. $record['strUnits']. '</td> ';
-                                            $html.= '<td width="40px">';
+                                            $html.= '<td width="45px">';
 
                                         foreach($record['schedule'] as $sched) {
                                             if(!empty($record['schedule']))
@@ -133,7 +133,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; b
                                                 $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>                                            
                                             ';
-                                            $html.= '<td width="100px">';                                            
+                                            $html.= '<td width="45px">';                                            
                                                 if(!empty($record['schedule']))                                                
                                                     $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
