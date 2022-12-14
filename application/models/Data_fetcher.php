@@ -1902,10 +1902,10 @@ class Data_fetcher extends CI_Model {
     
         
         $data['lab'] = $total_lab;
-        $data['lab_installment'] = $total_lab * ($tuition_year['installmentIncrease']/100);
+        $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
-        $data['tuition_installment'] = $tuition * ($tuition_year['installmentIncrease']/100);        
+        $data['tuition_installment'] = $tuition + $tuition * ($tuition_year['installmentIncrease']/100);       
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc'] = $total_misc;
         $data['misc_list'] = $misc_list;
@@ -2085,11 +2085,11 @@ class Data_fetcher extends CI_Model {
             }                  
         }
     
-        
-        $data['lab_installment'] = $total_lab * ($tuition_year['installmentIncrease']/100);
+        $data['lab'] = $total_lab;
+        $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
         $data['lab_list'] = $lab_list;
         $data['tuition'] = $tuition;
-        $data['tuition_installment'] = $tuition * ($tuition_year['installmentIncrease']/100);
+        $data['tuition_installment'] = $tuition + $tuition * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc'] = $total_misc;                
         $data['misc_list'] = $misc_list;
@@ -2102,7 +2102,7 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee'] = $total_internship_fee;   
         $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-        
+
         return $data;
 
     }
