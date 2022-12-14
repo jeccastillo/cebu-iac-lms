@@ -104,14 +104,14 @@ new Vue({
     data: {
         request: {
             
-        },
-        tuition_total: "<?php echo $tuition['total']; ?>",
-        sy: "<?php echo $sy; ?>",
-        selected_ay: "<?php echo $selected_ay; ?>",
-        student: "<?php echo $student; ?>",
+        },        
+        tuition: {},
+        sy: {},
+        selected_ay: undefined,
+        student: {},
         loader_spinner: true,
         type: "",
-        slug: "<?php echo $student['slug']; ?>",
+        slug: undefined,
         update_status: "",
         status_remarks: "",
     },
@@ -121,9 +121,22 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
+        
+
         console.log(sy);
 
         this.loader_spinner = true;
+
+        axios.get('<?php echo base_url(); ?>unity/accounting_viewer_data/<?php echo $id."/".$sem; ?>')
+            .then((data) => {
+                this.tuition = data.data.data;
+                console.log(this.tuition);
+                this.loader_spinner = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;

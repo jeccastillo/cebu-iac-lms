@@ -468,6 +468,23 @@ class Unity extends CI_Controller {
     function accounting($id,$sem=null)
     {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
+        {                
+            //print_r($this->data['transactions']);
+            $this->data['id'] = $id;
+            $this->data['sem'] = $sem;
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/accounting_viewer",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/registration_viewer_conf",$this->data); 
+        }
+        else
+            redirect(base_url());
+        
+    }
+
+    function accounting_viewer_data($id,$sem=null){
+
+        if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
         $active_sem = $this->data_fetcher->get_active_sem();
 
@@ -475,23 +492,25 @@ class Unity extends CI_Controller {
         $this->data['active_registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $sy = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['student'] = $this->data_fetcher->getStudent($id);
-        
+
         $reg = $this->data_fetcher->getRegistrationInfo($id,$s['intID']);
         if(!empty($reg)){ 
             $this->data['sy'] = $s;
             $this->data['tuition'] = $this->data_fetcher->getTuition($id,$s['intID'],$reg['enumScholarship']);             
         }
         
-        //print_r($this->data['transactions']);
-        
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/accounting_viewer",$this->data);
-        $this->load->view("common/footer",$this->data); 
-        $this->load->view("common/registration_viewer_conf",$this->data); 
+            $data['data'] = $this->data;
+            $data['success'] = true;
+            $data['message'] = "Success";
+
         }
-        else
-            redirect(base_url());
-        
+        else{
+            $data['data'] = null;
+            $data['success'] = false;
+            $data['message'] = "Invalid Access";
+        }
+            
+        echo json_encode($data);
     }
 
     function get_active_sem(){
