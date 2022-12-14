@@ -91,7 +91,7 @@ $html.= '<table border="0" cellpadding="5" style="color:#333; font-size:10;" wid
             <td width="45px" style="text-align:left; font-weight:bold;">ROOM</td>
         </tr> 
         <tr>
-            <td colspan="5" style="border-bottom:1px solid #333;"></td>
+            <td colspan="5" style="border-bottom:1px solid #555;"></td>
         </tr>
         ';
         $html.= '                
