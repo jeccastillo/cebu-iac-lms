@@ -40,7 +40,7 @@
                                 <label for="year">Price Per Unit Hybrid</label>
                                 <input type="number" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
                             </div> 
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-6">
                                 <label for="year">Percent Increase for installment</label>
                                 <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='request.installmentIncrease'>
                             </div>                            
