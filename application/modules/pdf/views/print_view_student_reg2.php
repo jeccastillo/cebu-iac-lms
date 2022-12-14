@@ -34,12 +34,13 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
         </tr>
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center;">             
-                <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br />
+                
              </td>
         </tr>        
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+                <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br />
+			    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
             </td>           
         </tr>
         <tr>
