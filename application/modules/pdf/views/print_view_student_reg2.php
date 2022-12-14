@@ -75,7 +75,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
       <td width="80px" >&nbsp;MAJOR</td>
       <td width="200px" >:&nbsp;' .$student['strMajor'] . '</td>
       <td width="80px" >&nbsp;SY/TERM</td>
-      <td width="200px" text-transform:capitalize;">:&nbsp;' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
+      <td width="200px" style="text-transform:capitalize;">:&nbsp;' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
      </tr>
      <tr>
         <td >&nbsp;</td>
