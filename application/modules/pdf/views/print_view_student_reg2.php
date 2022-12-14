@@ -227,6 +227,12 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 <td style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                             </tr>
                         </table>
+                        <table cellspacing="5px" cellpadding="0"  width="258px" style="color:#333; font-size:10;">
+                            <tr>
+                                <td width="159px">DOWN PAYMENT</td>
+                                <td width="99px" style="text-align:right;">'.number_format($tuition['down_payment'], 2, '.' ,',').'</td>
+                            </tr>
+                        </table>
                     </td>
                     <td>                                
                         <table  width="258px"  style="color:#333; font-size:10; ">';

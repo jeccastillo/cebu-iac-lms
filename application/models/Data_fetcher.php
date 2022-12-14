@@ -1918,7 +1918,9 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee'] = $total_internship_fee; 
         $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-        
+        $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
+        $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
+
         return $data;
         
     }
@@ -2102,7 +2104,9 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee'] = $total_internship_fee;   
         $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-
+        $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
+        $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
+        
         return $data;
 
     }
