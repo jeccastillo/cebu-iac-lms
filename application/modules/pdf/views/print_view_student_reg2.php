@@ -24,9 +24,7 @@
     // Add a page
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage();
-    $payment_division = $tuition['total'] / 4;
-    echo '<img src= "'.$img_dir .'iacademy-logo.png"  width="150" height="50"/>';
-    die();
+    $payment_division = $tuition['total'] / 4;    
 
     
     // Set some content to print
