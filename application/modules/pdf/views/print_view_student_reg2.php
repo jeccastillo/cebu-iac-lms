@@ -91,15 +91,15 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10; border: 0px solid #014fb3;" width="528">
+$html.= '<table border="0" cellpadding="0" style="color:#333; font-weight:bold; font-size:10;" width="528">
    
         <tr>
-            <th width="80px" style="text-align:left;">SECTION</th>            
-            <th width="218px" style="text-align:left;">SUBJECT NAME</th>
-            <th width="40px" style="text-align:left;">UNITS</th>
-            <th width="45px" style="text-align:left;">DAY</th>
-            <th width="100px" style="text-align:left;">TIME</th>
-            <th width="45px" style="text-align:left;">ROOM</th>
+            <th width="80px" style="text-align:left; border-bottom: 1px solid #333;">SECTION</th>            
+            <th width="218px" style="text-align:left; border-bottom: 1px solid #333;">SUBJECT NAME</th>
+            <th width="40px" style="text-align:left; border-bottom: 1px solid #333;">UNITS</th>
+            <th width="45px" style="text-align:left; border-bottom: 1px solid #333;">DAY</th>
+            <th width="100px" style="text-align:left; border-bottom: 1px solid #333;">TIME</th>
+            <th width="45px" style="text-align:left; border-bottom: 1px solid #333;">ROOM</th>
         </tr> ';
         $html.= '
                 <tr><td colspan="5"> </td> </tr>
