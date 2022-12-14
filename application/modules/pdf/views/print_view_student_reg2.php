@@ -30,7 +30,7 @@
     // Set some content to print
 $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <tr>
-            <td width="150" align="center" style="text-align:center;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
+            <td width="150" align="center" style="text-align:center;"><center><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></center></td>
         </tr>
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center; line-height:100%">             
