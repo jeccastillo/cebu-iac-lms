@@ -232,10 +232,19 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
-                                <td width="80px">DOWN PAYMENT</td>
-                                <td width="150px" style="text-align:right;">'.number_format($tuition['down_payment'], 2, '.' ,',').'</td>
-                            </tr>
-                        </table>
+                                <td width="140px">DOWN PAYMENT</td>
+                                <td width="80px" style="text-align:right;">'.number_format($tuition['down_payment'], 2, '.' ,',').'</td>
+                            </tr>';
+                            for($i=0;$i<5;$i++){
+                                $html .= '
+                                <tr>
+                                    <td width="140px">'.switch_num($i + 1).' INSTALLMENT</td>
+                                    <td width="80px" style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                </tr>';                    
+                            }
+
+                    $html .= 
+                        '</table>
                     </td>
                     <td>                                
                         <table  width="258px"  style="color:#333; font-size:10; ">';
