@@ -35,6 +35,13 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
              <font style="font-family:Calibri Light; line-height: 2; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
+             </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="font-size:10;"></td>
+        </tr>
+        <tr>            
+            <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
             </td>           
@@ -46,12 +53,12 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             <td colspan = "3" style="text-align:center; color:black; font-size: 10;"></td>
         </tr>
         <tr>
-        <td colspan="3" style="font-size:10;">
+            <td colspan="3" style="font-size:10;">
         </td>
         </tr>
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:#333; font-size:9; border: 0px solid #014fb3;" width="528px">     
+    <table border="0" cellpadding="0" style="color:#333; font-size:11; border: 0px solid #014fb3;" width="528px">     
      <tr>
       <td width="80px" >&nbsp;</td>
       <td width="250px">&nbsp;</td>
