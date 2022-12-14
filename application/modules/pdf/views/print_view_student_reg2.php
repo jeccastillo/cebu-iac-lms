@@ -200,7 +200,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         </table>
         ';
         $html .='
-            <table cellspacing="4px" cellpadding="0" style="color:#333; font-size:10;" width="528px">                                
+            <table cellspacing="4px" cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
                 <tr>
                     <td width="260px">
                         <table cellspacing="5px" style="color:#333; font-size:10; ">
