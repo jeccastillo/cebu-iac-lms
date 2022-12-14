@@ -243,7 +243,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             
                             $html .='<tr>
                                         <td width="132px">'.$key.'</td>
-                                        <td width="132px">'.$val.'</td>
+                                        <td width="132px">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr';                
                         }
                     $html.=' 
