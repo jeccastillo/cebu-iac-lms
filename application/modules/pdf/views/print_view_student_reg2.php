@@ -238,7 +238,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     </td>
                     <td width="264px">
                         <table style="color:#333; font-size:10; ">';
-                    if(!empty($tuition['misc_list']))
+                    if(!empty($tuition['misc_list'])){
                         foreach($tuition['misc_list'] as $key=>$val){
             
                             $html .='<tr>
@@ -250,8 +250,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         <tr>
                             <td width="132px">Total</td>
                             <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
-                        </tr>
-                        </table>
+                        </tr>';
+                    }
+                    $html.='</table>
                     </td>
                 </tr>
             </table>
