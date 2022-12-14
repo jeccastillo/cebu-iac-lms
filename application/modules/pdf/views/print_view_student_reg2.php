@@ -200,7 +200,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         </table>
         ';
         $html .='
-            <table cellspacing="4px" style="color:#333; font-size:10; ">                                
+            <table cellspacing="4px" style="color:#333; font-size:10; width="528px">                                
                 <tr>
                     <td width="260px">
                         <table cellspacing="5px" style="color:#333; font-size:10; ">
@@ -249,7 +249,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                         $html.=' 
                             <tr>
                                 <td width="132px">Total</td>
-                                <td width="132px" style="border-bottom: 1px solid #555;">'.$tuition['misc'].'</td>                
+                                <td width="132px" style="border-bottom: 1px solid #555; text-align:right;">'.$tuition['misc'].'</td>                
                             </tr>';
                     }
                     $html.='                        
