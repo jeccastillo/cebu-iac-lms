@@ -1172,6 +1172,10 @@ class Data_fetcher extends CI_Model {
         $curriculum =  $this->db->select('intID')->from('tb_mas_curriculum')->where('intProgramID',$id)->get()->first_row();
         return $curriculum->intID;
     }
+
+    function getCurriculumByID($id){
+        return $this->db->get_where('intID',$id)->get('tb_mas_curriculum')->first_row();        
+    }
     
     function getApplicant($id)
     {
