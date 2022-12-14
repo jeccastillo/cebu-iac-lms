@@ -831,7 +831,7 @@ class Pdf extends CI_Controller {
         //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
        // create new PDF document
         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);
-        $pdf = new TCPDF("P", PDF_UNIT, array(8.5, 13), true, 'UTF-8', false);
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("Curriculum");
