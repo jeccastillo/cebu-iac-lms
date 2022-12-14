@@ -104,7 +104,7 @@ $html.= '<table border="0" cellpadding="5" style="color:#333; font-size:10;" wid
                         else {
                                 foreach($records as $record) {
                                     $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
-                                    $html.='<tr style="color: black;">
+                                    $html.='<tr style="color: #333;">
                                             <td width="80px"> ' . $record['strSection'].'</td>                                            
                                             <td width="218px" align ="left"> '. $record['strDescription']. '</td>
                                             <td width="40px" align = "left"> '. $units . '</td> ';
