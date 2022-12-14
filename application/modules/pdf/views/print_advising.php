@@ -38,7 +38,7 @@ $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
                 </td>
             </tr>
             <tr>
-                0<td colspan="3" style="font-size:8; line-height:5px;"></td>
+                <td colspan="3" style="font-size:8; line-height:5px;">&nbsp;</td>
             </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
