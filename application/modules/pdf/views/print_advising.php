@@ -135,9 +135,10 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                                       $s = isset($advised[$i]['strCode'])?ellipsize($advised[$i]['strCode'],9):'';
                                       $s2 = isset($advised[$i]['strDescription'])?ellipsize($advised[$i]['strDescription'],30):'';
                                       $s3 = isset($advised[$i]['strUnits'])?$advised[$i]['strUnits']:'';
-                                      $s3  = ($s3 == 0)?'('.$advised[$i]['intLectHours'].')':$s3;
-                                      if(isset($advised[$i]['strUnits']))
-                                            $totalUnits += $advised[$i]['strUnits'];
+                                      if(isset($advised[$i]['strUnits'])){
+                                        $s3  = ($s3 == 0)?'('.$advised[$i][0'intLectHours'].')':$s3;  
+                                         $totalUnits += $advised[$i]['strUnits'];
+                                      }
                                     $html.='<tr style="color: black;">
                                             <td width="60px" style="color: black;border: 0px solid #014fb3;"> '.$s. '</td>
                                             <td width="164px" align ="left" style="color: black;border: 0px solid #014fb3;"> '.$s2. '</td>
