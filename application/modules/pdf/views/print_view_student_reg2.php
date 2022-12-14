@@ -91,7 +91,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10; padding-bottom:10px !important;" width="528" >
+$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" width="528" >
    
         <tr>
             <th width="80px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SECTION</th>            
@@ -186,26 +186,20 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10; padd
                     </tr>
 
         </table>
-        
+        <tr>
+            <td colspan="3" style="font-size:10;"></td>
+        </tr>
         <table border="0" cellpadding="0" style="color:#014fb3; font-size:8; border: 0px solid #014fb3;" width="528px">
         <tr>
-         <td colspan ="3" style="text-align:center; background-color: #014fb3; color:white; font-size:10;">
-             BILLING INFORMATION
-         </td>
-     </tr>
+            <td style= "font-size:10; font-weight:bold;">
+                 ASSESSMENT SUMMARY
+            </td>
+            <td style= "font-size:10; font-weight:bold;">
+                 MISCELANEOUS DETAIL
+            </td>
+        </tr>
      
-     <tr style="border: 0px solid #014fb3;">
-         <td width="235" style="border: 0px solid #014fb3;"> SCHOLARSHIP GRANT:</td>
-         <td width="293" style="border: 0px solid #014fb3;">
-             PAYMENT DETAILS:
-         </td>
-     </tr>
-     <tr style="border: 0px solid #014fb3;">
-         <td width="235" style="text-align:center; color:black; border: 0px solid #014fb3;" > ' . strtoupper($student['enumScholarship']). '</td>
-         <td width="293" style="border: 0px solid #014fb3;">             
-         </td>
-        
-     </tr>
+     
      <tr>
          <td width="235" style="border: 0px solid #014fb3;"> ASSESSMENT OF FEES:</td>
          <td width="145"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First Payment: </td>
