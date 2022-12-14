@@ -28,7 +28,7 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
+$html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             <tr>
                 <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
             </tr>
@@ -59,7 +59,7 @@ $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
         </tr>
         </table>
     ';
-$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
+$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">
      
      <tr>
       <td width="80px" >&nbsp;NAME:</td>
@@ -82,11 +82,11 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
      </table><br /><br />';
     
 //if($prev_records!=null){
-$html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
+$html.= '<table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">
 
             <tr height="200px">
                 <td width="259px" height="180px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course TAKEN from the previous Term</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #333;">Course TAKEN from the previous Term</th></tr>
                         <tr>
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
                             <th width="164px" style="text-align:center;font-weight:bold;">Course Description</th>
@@ -101,9 +101,9 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                                     $s2 = isset($prev_records[$i]['strDescription'])?ellipsize($prev_records[$i]['strDescription'],30):'';
                                     $s3 = isset($prev_records[$i]['v3'])?number_format($prev_records[$i]['v3'], 2, '.' ,','):'';
                                     $html.='<tr style="color: black;;">
-                                                <td width="60px" style="color: black; border: 0px solid #014fb3"> '.$s. '</td>
-                                                <td width="164px" align ="left" style="color: black; border: 0px solid #014fb3;"> '. $s2. '</td>
-                                                <td width="35px" align = "center" style="color: black; border: 0px solid #014fb3"> '. $s3. '</td>';
+                                                <td width="60px" style="color: black; border: 0px solid #333"> '.$s. '</td>
+                                                <td width="164px" align ="left" style="color: black; border: 0px solid #333;"> '. $s2. '</td>
+                                                <td width="35px" align = "center" style="color: black; border: 0px solid #333"> '. $s3. '</td>';
                                     $html.='</tr>';
                                 }                           
                         $html.= '</table>';
@@ -119,7 +119,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                 
                             
                 <td width="259px"><table border="0" cellpadding="0" width="259px" style="border: solid 0px maroon;">
-                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #014fb3;">Course to ENROLL this Term</th></tr>
+                <tr><th colspan="3" align="center" style="border-bottom: 0px solid #333;">Course to ENROLL this Term</th></tr>
                         <tr>
 
                             <th width="60px" style="text-align:center;font-weight:bold;">Course Code</th>
@@ -140,15 +140,15 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
                                         $totalUnits += $advised[$i]['strUnits'];
                                       }
                                     $html.='<tr style="color: black;">
-                                            <td width="60px" style="color: black;border: 0px solid #014fb3;"> '.$s. '</td>
-                                            <td width="164px" align ="left" style="color: black;border: 0px solid #014fb3;"> '.$s2. '</td>
-                                            <td width="35px" align = "center" style="color: black; border: 0px solid #014fb3"> '.$s3. '</td>';
+                                            <td width="60px" style="color: black;border: 0px solid #333;"> '.$s. '</td>
+                                            <td width="164px" align ="left" style="color: black;border: 0px solid #333;"> '.$s2. '</td>
+                                            <td width="35px" align = "center" style="color: black; border: 0px solid #333"> '.$s3. '</td>';
                                         $html.='</tr>';
                                 }
                             
                         $html.= '<tr style="color: black;">
                                     <td width="60px"></td>
-                                    <td width="164px" style="text-align: right;border-right: 0px solid #014fb3;font-weight:bold;">Total Units:</td>
+                                    <td width="164px" style="text-align: right;border-right: 0px solid #333;font-weight:bold;">Total Units:</td>
                                     <td width="35px" style="text-align: center;font-weight:bold;">'. $totalUnits . '</td>
                                         
                         </tr>';
@@ -164,7 +164,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
             </table>';
   
     
-$html.= '<br /><br /><table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" width="528px">
+$html.= '<br /><br /><table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">
 
             <tr height="100px">
                 <td width="264px">Advised by:</td>
