@@ -34,14 +34,11 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         </tr>
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle;">             
-             <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
+             <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br />
              </td>
-        </tr>
-        <tr>
-            <td colspan="3" style="font-size:4; line-height:0.5; color:#fff;">Space</td>
-        </tr>
+        </tr>        
         <tr>            
-            <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
+            <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:1">             
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
             </td>           
         </tr>
@@ -93,11 +90,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
             <th width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</th>
             <th width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</th>
         </tr> ';
-        $html.= '
-                <tr><td colspan="5"> </td> </tr>
-                <tr>
+        $html.= '                
                     <td colspan="5" rowspan="24">';
-
                         $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;" font-weight:400; width="528">';
                         $totalUnits = 0;
                         if (empty($records)){
