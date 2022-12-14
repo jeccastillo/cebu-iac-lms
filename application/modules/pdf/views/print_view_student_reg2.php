@@ -210,7 +210,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                                 <td width="88px" style="text-decoration:underline;">INSTALLMENT</td>
                             </tr>
                             <tr>
-                                <td width="78px">Tuition Fee</td>
+                                <td width="78px" style="text-align:left;">Tuition Fee</td>
                                 <td width="88px" style="text-align:center;">'.number_format($tuition['tuition'], 2, '.' ,',') .'</td>
                                 <td width="88px" style="text-align:center;">'.number_format($tuition['tuition_installment'], 2, '.' ,',') .'</td>
                             </tr>
