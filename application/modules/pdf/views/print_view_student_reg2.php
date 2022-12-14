@@ -30,8 +30,8 @@
     // Set some content to print
 $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
         <tr>
-            <td width="64" align="right"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="231" height="68"/></td>
-            <td width="400" style="text-align: left; line-height:100%">             
+            <td width="231" align="right"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="231" height="68"/></td>
+            <td width="600" style="text-align: left; line-height:100%">             
              <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">Information & Communications Technology Academy </font><br />
 			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
              <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
