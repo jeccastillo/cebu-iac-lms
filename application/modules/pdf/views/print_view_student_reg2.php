@@ -271,6 +271,17 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     </td>
                 </tr>
             </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">
+                <tr>
+                    <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="528px">        
+                <tr>
+                    <td width="264px" style= "font-size:10; font-weight:bold;">Official Receipt Number/date______________________</td>
+                    <td width="264px" style= "font-size:10; font-weight:bold;"></td>            
+                </tr>
+            </table>
         ';
 
 
