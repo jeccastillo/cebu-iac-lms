@@ -63,7 +63,7 @@ $html.= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:8;" w
      
      <tr>
       <td width="80px" >&nbsp;NAME:</td>
-      <td width="250px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . substrtoupperstr($student['strMiddlename']).'</td>
+      <td width="250px" style="color: black;">&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']).'</td>
       <td width="113px">&nbsp;STUDENT NUMBER:</td>
       <td width="85px" style="color: black;">&nbsp;' . $student['strStudentNumber']. '</td>
      </tr>
