@@ -28,7 +28,7 @@
 
     
     // Set some content to print
-$html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
+$html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:10;">
         <tr>
             <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="100" height="29"/></td>
         </tr>
