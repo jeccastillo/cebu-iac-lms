@@ -202,8 +202,8 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:10;" width="528px">                                
                 <tr>
-                    <td width="264px">
-                        <table cellpadding="0"  width="264px" style="color:#333; font-size:10;">
+                    <td width="270px">
+                        <table cellspacing="5px" cellpadding="0"  width="270px" style="color:#333; font-size:10;">
                             <tr>
                                 <td width="88px"></td>
                                 <td width="88px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -236,20 +236,20 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                             </tr>
                         </table>
                     </td>
-                    <td width="264px">                                
-                        <table  width="264px"  style="color:#333; font-size:10; ">';
+                    <td width="258px">                                
+                        <table  width="258px"  style="color:#333; font-size:10; ">';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
-                                        <td width="132px">'.$key.'</td>
-                                        <td width="132px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        <td width="129px">'.$key.'</td>
+                                        <td width="129px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
                         $html.=' 
                             <tr>
-                                <td width="132px">Total</td>
-                                <td width="132px" style="border-bottom: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
+                                <td width="129px">Total</td>
+                                <td width="129px" style="border-bottom: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
                             </tr>';
                     }
                     $html.='                        
