@@ -293,13 +293,15 @@ $html.= '<table border="0" cellpadding="0" style="color:#333; font-size:10;" wid
                     <td colspan="2" style="font-size:10; line-height:2; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellspacing="10" cellpadding="0" style="color:#333; font-size:10; " width="500px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:10; " width="500px">        
                 <tr>
                     <td width="230px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
+                    <td width="40px" style= "font-size:10; text-align:center;">&nbsp;</td>
                     <td width="230px" style= "font-size:10; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
                 </tr>                   
                 <tr>
                     <td style= "font-size:10; text-align:center">Authorized Signatory</td>
+                    <td style= "font-size:10; text-align:center;">&nbsp;</td>
                     <td style= "font-size:10; text-align:center">Registrar</td>            
                 </tr>
             </table>
