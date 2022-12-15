@@ -90,7 +90,7 @@
                     
                 <div id="regular-option" class="row">
                         <div class="col-sm-12" style="margin-bottom:1rem">
-                        <a href="#" id="load-subjects2" class="btn btn-default  btn-flat">Check Classlists Enlisted and Assess Fees <i class="fa fa-arrow-circle-down"></i></a>
+                        <a href="#" @click.prevent.stop='loadSubjects' class="btn btn-default  btn-flat">Check Classlists Enlisted and Assess Fees <i class="fa fa-arrow-circle-down"></i></a>
                             </div>
                     </div>
                     <hr />
@@ -201,6 +201,25 @@ new Vue({
 
     methods: {
 
+        loadSubjects: function(){            
+            // for(const [key,value] of Object.entries(data)){                   
+            //         formdata.append(key,value);
+            // }
+            var formdata= new FormData();
+            formdata.append("intStudentID",this.id);    
+            formdata.append("intStudentID",this.request.strAcademicYear);
+
+            axios.post('<?php echo base_url(); ?>unity/load_subjects2', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                .then(data => {
+                    console.log(data.data);
+                    
+                });
+
+        },
         submitRegistration: function (type, name, data){
             Swal.fire({
                 title: 'Add New Fee: '+ name,
