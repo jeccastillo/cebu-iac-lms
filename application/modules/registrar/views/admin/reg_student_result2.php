@@ -22,7 +22,7 @@
                 <h4><?php echo $message; ?></h4>
                 <hr />
                 <?php echo $student_link; ?> | 
-                <a target="_blank" class="btn btn-primary" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$sid ."/". $ayid; ?>">
+                <a target="_blank" class="btn btn-primary" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$sid ."/". $ayid; ?>">
                                 <i class="ion ion-printer"></i> Print Registration Form</a>
             </div>
         </div>
