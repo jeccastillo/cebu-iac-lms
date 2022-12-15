@@ -173,8 +173,7 @@ new Vue({
             labHybrid: undefined,
             labOnline: undefined,
             labHyflex: undefined,      
-        },
-        default_year: <?php echo $defaultYear; ?>,
+        },        
         update_text: "Tuition Year",
         loader_spinner: true,                        
     },
@@ -203,7 +202,7 @@ new Vue({
 
     methods: {
 
-        addExtra: function (type, name, data){
+        submitRegistration: function (type, name, data){
             Swal.fire({
                 title: 'Add New Fee: '+ name,
                 text: "Continue adding entry?",
@@ -250,100 +249,6 @@ new Vue({
             });
 
         },
-        deleteItem: function(type,miscId){
-            Swal.fire({
-                title: 'Delete Miscellaneous',
-                text: "Continue deleting entry?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append("id",miscId);
-                    formdata.append("type",type);                    
-                    return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/delete_type/',formdata, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                        .then(data => {
-                            console.log(data.data);
-                            if (data.data.success) {
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-
-        },
-        updateData: function() {
-            Swal.fire({
-                title: 'Update Status',
-                text: "Continue adding entry?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append("year",this.request.year);
-                    formdata.append("pricePerUnit",this.request.pricePerUnit);
-                    formdata.append("pricePerUnitOnline",this.request.pricePerUnitOnline);
-                    formdata.append("pricePerUnitHybrid",this.request.pricePerUnitHybrid);
-                    formdata.append("pricePerUnitHyflex",this.request.pricePerUnitHyflex);
-                    formdata.append("isDefault",this.request.isDefault);
-                    formdata.append("installmentIncrease", this.request.installmentIncrease);
-                    formdata.append("installmentDP", this.request.installmentDP);
-                    
-                    return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id,formdata, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                        .then(data => {
-                            console.log(data.data);
-                            if (data.data.success) {
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        }
 
 
     }
