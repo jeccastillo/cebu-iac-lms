@@ -61,15 +61,12 @@
                     <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
                     <h3>Registration Details</h3>
                 Set Academic Year to Register
-                <select class="form-control" id="strAcademicYear" name="strAcademicYear">
-                            <?php foreach($sy as $s): ?>
-                                <option rel="<?php echo $s['intProcessing']; ?>" <?php echo ($s['intProcessing'] == 1)?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
-                            <?php endforeach; ?>
+                <select class="form-control" id="strAcademicYear" name="strAcademicYear" v-model="request.strAcademicYear">
+                    <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                 </select>
                     <hr />
                 <label for="enumRegistrationStatus">Academic Status</label>
-                    <select class="form-control" id="enumRegistrationStatus" name="enumRegistrationStatus">
-                        <option value="0">---SELECT---</option>
+                    <select class="form-control" v-model="request.enumRegistrationStatus">                        
                         <option value="regular">Regular</option>
                         <option value="irregular">Irregular</option>
                     </select>
@@ -87,14 +84,7 @@
                          <option value="transferee">TRANSFEREE</option>
                         <option value="cross">CROSS REGISTRANT</option>
                     </select>
-                    <br />
-                    <input type="text" disabled name="strFrom" id="transcrossText" class="form-control" placeholder="Cross Registrant or Transferee from..." />
-                    <br />
-                    <label for="paymentType">Payment Type</label>
-                    <select id="paymentType" class="form-control" name="paymentType">
-                         <option value="full">FULL</option>
-                         <option value="partial">PARTIAL</option>
-                    </select>
+                    <br />                    
                     
                     <hr />
                     
@@ -158,8 +148,12 @@ new Vue({
         request: {
             enumScholarship: 0,
             enumStudentType: 'new',
+            enumRegistrationStatus: 'regular',
+            strAcademicYear: undefined,
         },
         scholarships: [],
+        school_years: [],
+        term_type: 'Term',
         misc: {
             name: undefined,
             miscRegular: undefined,            
@@ -193,6 +187,8 @@ new Vue({
                     //this.request = data.data.data;                    
                     console.log(data.data.data);
                     this.scholarships = data.data.data.scholarships;
+                    this.term_type = data.data.data.term_type;
+                    this.school_years = data.data.data.sy;
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {
