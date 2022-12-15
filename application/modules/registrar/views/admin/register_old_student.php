@@ -189,7 +189,7 @@ new Vue({
                     this.scholarships = data.data.data.scholarships;
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
-                    this.strAcademicYear = this.school_years[0].intID;
+                    this.request.strAcademicYear = this.active_sem.intID;
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {
