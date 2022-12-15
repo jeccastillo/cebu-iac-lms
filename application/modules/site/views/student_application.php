@@ -298,14 +298,16 @@
 
 
            <div class=" text-right">
-               <button type="submit">
-                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                   <img v-else src="<?php echo $img_dir; ?>admissions/form/Asset 10.png">
-               </button>
+                <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                <div v-else>
+                    <button type="submit">                            
+                        <img src="<?php echo $img_dir; ?>admissions/form/Asset 10.png">
+                    </button>
 
-               <button type="button">
-                   <img src="<?php echo $img_dir; ?>admissions/form/Asset 9.png">
-               </button>
+                    <button type="button">
+                        <img src="<?php echo $img_dir; ?>admissions/form/Asset 9.png">
+                    </button>
+               </div>
            </div>
 
        </form>
@@ -325,7 +327,7 @@ new Vue({
             date_of_birth: "",
             program: "",
         },
-        loading_spinner: true,
+        loading_spinner: false,
         programs: [],
         programs_group: [],
         types: []
