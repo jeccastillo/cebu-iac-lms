@@ -1,5 +1,4 @@
-<div id="adminssions-form">
-    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+
     <section id="hero" class="section section_port relative">
        <div class="custom-container md:h-[500px] relative z-1">
            <!-- parallax object? -->
@@ -44,7 +43,7 @@
        </div>
    </section>
 
-   <div class="custom-container"  style="margin-top:10px;">        
+   <div class="custom-container" id="adminssions-form" style="margin-top:10px;">        
        <div class="color-primary">
            <h4 class="font-medium text-2xl mb-5">
                Student Information Sheet</h4>
@@ -300,7 +299,8 @@
 
            <div class=" text-right">
                <button type="submit">
-                   <img src="<?php echo $img_dir; ?>admissions/form/Asset 10.png">
+                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                   <img v-else src="<?php echo $img_dir; ?>admissions/form/Asset 10.png">
                </button>
 
                <button type="button">
@@ -310,7 +310,6 @@
 
        </form>
    </div>
-    </div>
    <style>
 
    </style>
