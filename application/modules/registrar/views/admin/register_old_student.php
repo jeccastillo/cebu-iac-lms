@@ -94,8 +94,7 @@
                             </div>
                     </div>
                     <hr />
-                    <div id="subject-list">
-                        {{ subjectList }}
+                    <div v-html="{{ subjectList }}" id="subject-list">                        
                     </div>
                     </div>
                     <div class="col-sm-4" style="padding:1rem;">
