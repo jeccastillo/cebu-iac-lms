@@ -58,7 +58,7 @@ class Site extends CI_Controller {
 			<br /><br />
 			Scan <a href="#">here</a> for the workshops and sign up for the topic you like.
 			<br /><br />
-			See you soon, <span class="font-bold">Game Changer</span>!
+			See you soon, <span class="font-bold">Game Changer</span><br /><br /><br /><br />!
 			';
 		}
         $this->load->view('common/header',$this->data);        
