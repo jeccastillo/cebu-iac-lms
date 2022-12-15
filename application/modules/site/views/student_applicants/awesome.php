@@ -25,7 +25,7 @@
                            <img src="<?php echo $img_dir; ?>admissions/form/awesome.png"
                                class="max-w-full block mx-auto h-auto">
                        </div>
-                       <p class="max-w-[800px] color-primary mt-[60px]">
+                       <p class="max-w-[800px] color-primary mt-[60px] mb-[160px]">
                             <?php echo $text; ?>
                         </p>
                    </div>
