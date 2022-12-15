@@ -77,9 +77,11 @@
 
 
                <div class="text-center" v-if="request.email">
-                  <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
-                   <button v-else type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
-                           class="max-w-full h-auto mx-auto block img-btn"></button>
+                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                    <div v-else>
+                        <button  type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
+                            class="max-w-full h-auto mx-auto block img-btn"></button>
+                    </div>
                </div>
 
 
@@ -97,6 +99,7 @@ new Vue({
         },
         programs: [],
         programs_group: [],
+        loading_spinner: false,
         types: [],
         uploads: {
             requirements: [{
@@ -129,7 +132,7 @@ new Vue({
 
         submitPost: function() {
 
-
+            this.loading_spinner = true;
 
             // Swal.fire({
             //     title: "Submit Requirements",
@@ -159,7 +162,7 @@ new Vue({
                     this.is_done = true;
 
                     if (data.data.success) {
-
+                        this.loading_spinner = false;
                         Swal.fire({
                             title: "Success!",
                             text: data.data.message,
@@ -171,6 +174,7 @@ new Vue({
                         });
 
                     } else {
+                        this.loading_spinner = false;
                         Swal.fire(
                             'Failed!',
                             data.data.message,
