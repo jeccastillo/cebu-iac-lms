@@ -10,65 +10,67 @@
                 </section>
 <section class="content">
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3 box box-primary">
-            <div class="box-header">
-                    <h3 class="box-title">New Classlist</h3>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                        <h3 class="box-title">New Classlist</h3>
+                </div>
+            
+                    
+                <form action="<?php echo base_url(); ?>unity/submit_class" method="post" role="form">
+                    
+                        <div class="box-body">
+                        
+                        <?php if(in_array($user['intUserLevel'],array(2,1)) ): ?>
+                            <label for="intSubjectID">Faculty Assigned:</label>    
+                            <select class="form-control select2" id="facultyID" name="intFacultyID" >
+                                <?php foreach($faculty as $f): ?>
+                                    <option value="<?php echo $f['intID'] ?>"><?php echo $f['strLastname']." ".$f['strFirstname']; ?></option> 
+                                <?php endforeach; ?>
+                            </select>
+                            
+                    <?php else: ?>
+                        <input type="hidden" value="<?php echo $faculty_data['intID']; ?>" name="intFacultyID">
+                    <?php endif; ?>
+                    <label for="intSubjectID">Subject:</label>     
+                    <div class="input-group">
+                        
+                            <select class="form-control select2" id="subjects" name="intSubjectID" >
+                                <?php foreach($subjects as $s): ?>
+                                    <option value="<?php echo $s['intID'] ?>"><?php echo $s['strCode']." ".$s['strDescription']; ?></option> 
+                                <?php endforeach; ?>
+                            </select>
+                        <div class="input-group-btn">
+                            <button data-toggle="modal" href="#myModal" type="button" class="btn btn-default  btn-flat">Add New</button>
+                        </div><!-- /btn-group -->
+                        
+                    </div>
+                                                    
+                    <div class="form-group col-sm-12">
+                        <label for="strSection">Section:</label>
+                        <input type="text" name="strSection" class="form-control" id="strSection" >                                
+                    </div>
+                        
+                            
+                    
+                    <div class="form-group">
+                        <label for="strAcademicYear">Academic Year:</label>
+                        <select class="form-control" name="strAcademicYear">
+                            <?php foreach($sy as $s): ?>
+                                <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <!--<select class="form-control" name="strAcademicYear">
+                            <?php foreach($sy as $s): ?>
+                                <option value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
+                            <?php endforeach; ?>
+                        </select>-->
+                    </div>
+                    
+                    <hr />
+                    <input type="submit" value="add" class="btn btn-default  btn-flat">
+                </form>
             </div>
-        
-                
-            <form action="<?php echo base_url(); ?>unity/submit_class" method="post" role="form">
-                
-                    <div class="box-body">
-                    
-                    <?php if(in_array($user['intUserLevel'],array(2,1)) ): ?>
-                        <label for="intSubjectID">Faculty Assigned:</label>    
-                        <select class="form-control select2" id="facultyID" name="intFacultyID" >
-                            <?php foreach($faculty as $f): ?>
-                                <option value="<?php echo $f['intID'] ?>"><?php echo $f['strLastname']." ".$f['strFirstname']; ?></option> 
-                            <?php endforeach; ?>
-                        </select>
-                        
-                <?php else: ?>
-                    <input type="hidden" value="<?php echo $faculty_data['intID']; ?>" name="intFacultyID">
-                <?php endif; ?>
-                <label for="intSubjectID">Subject:</label>     
-                <div class="input-group">
-                    
-                        <select class="form-control select2" id="subjects" name="intSubjectID" >
-                            <?php foreach($subjects as $s): ?>
-                                <option value="<?php echo $s['intID'] ?>"><?php echo $s['strCode']." ".$s['strDescription']; ?></option> 
-                            <?php endforeach; ?>
-                        </select>
-                    <div class="input-group-btn">
-                        <button data-toggle="modal" href="#myModal" type="button" class="btn btn-default  btn-flat">Add New</button>
-                    </div><!-- /btn-group -->
-                    
-                </div>
-                                                
-                <div class="form-group col-sm-12">
-                    <label for="strSection">Section:</label>
-                    <input type="text" name="strSection" class="form-control" id="strSection" >                                
-                </div>
-                    
-                        
-                
-                <div class="form-group">
-                    <label for="strAcademicYear">Academic Year:</label>
-                    <select class="form-control" name="strAcademicYear">
-                        <?php foreach($sy as $s): ?>
-                            <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <!--<select class="form-control" name="strAcademicYear">
-                        <?php foreach($sy as $s): ?>
-                            <option value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
-                        <?php endforeach; ?>
-                    </select>-->
-                </div>
-                
-                <hr />
-                <input type="submit" value="add" class="btn btn-default  btn-flat">
-            </form>
         </div>
     </div>
 </section>
