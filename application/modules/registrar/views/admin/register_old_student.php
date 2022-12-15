@@ -95,7 +95,7 @@
                     </div>
                     <hr />
                     <div id="subject-list">
-                    
+                        {{ subjectList }}
                     </div>
                     </div>
                     <div class="col-sm-4" style="padding:1rem;">
@@ -154,6 +154,8 @@ new Vue({
         scholarships: [],
         school_years: [],
         term_type: 'Term',
+        total_units: 0,
+        subjectList: '',
         misc: {
             name: undefined,
             miscRegular: undefined,            
@@ -216,6 +218,27 @@ new Vue({
                     })
                 .then(data => {
                     console.log(data.data);
+                    var containerText = "";
+                    if (data.data.subjects.length > 0) {
+                        for (i in data.data.subjects) {
+                            containerText +=
+                                "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
+                                data.data.subjects[i].subjectID +
+                                "'><br> <div class='row'><div class='col-xs-3 subject-code'>" +
+                                data.data.subjects[i].strCode +
+                                "</div><div class='col-xs-3 subject-description'>" + data.data.subjects[i].strDescription +
+                                "</div><div class='col-xs-3 subject-units'>" + data.data.subjects[i].strUnits +
+                                "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'>"
+                                + "<i class='fa fa-minus'></i></a></div></div><hr /></div>";
+                            
+
+
+                            this.total_units = parseInt(this.total_units) + parseInt(data.data.subjects[i]
+                                .strUnits);
+
+                        }
+                        this.subjectList = containerText;
+                    }
                     
                 });
 
