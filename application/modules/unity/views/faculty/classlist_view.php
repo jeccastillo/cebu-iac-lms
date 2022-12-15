@@ -46,7 +46,7 @@
                         
                     </div>
                                                     
-                    <div class="form-group col-sm-12">
+                    <div class="form-group">
                         <label for="strSection">Section:</label>
                         <input type="text" name="strSection" class="form-control" id="strSection" >                                
                     </div>
