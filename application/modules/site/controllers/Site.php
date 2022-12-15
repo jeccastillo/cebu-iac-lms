@@ -36,7 +36,18 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function awesome() {
+	public function awesome($type = null) {
+		echo $type;
+		$this->data['text'] = 'That wasn’t so hard, was it? Now, all you have
+                           to
+                           do is
+                           wait for our
+                           Admissions
+                           Team to evaluate your application and schedule you for an interview – the
+                           last step before finding out if you will become an <span class="font-bold">iACADEMY Game
+                               Changer!</span>
+                           Keep your lines open and check your email!';
+
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/awesome',$this->data);
 		$this->load->view('common/footer',$this->data);

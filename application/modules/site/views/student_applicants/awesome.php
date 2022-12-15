@@ -26,15 +26,8 @@
                                class="max-w-full block mx-auto h-auto">
                        </div>
                        <p class="max-w-[800px] color-primary mt-[60px]">
-                           That wasn’t so hard, was it? Now, all you have
-                           to
-                           do is
-                           wait for our
-                           Admissions
-                           Team to evaluate your application and schedule you for an interview – the
-                           last step before finding out if you will become an <span class="font-bold">iACADEMY Game
-                               Changer!</span>
-                           Keep your lines open and check your email!</p>
+                            <?php echo $text; ?>
+                        </p>
                    </div>
                </div>
            </div>
