@@ -29,6 +29,8 @@
                    <div class="md:w-12/12 py-3">
                        <p class="max-w-[800px] color-primary mt-[60px]  text-2xl">
                            <span class="font-bold"> Great! </span> Next, is to upload your initial requirements:
+                           <br />
+                            PS: We also sent you an email with the link to this page if you want to continue later.
                        </p>
 
                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
