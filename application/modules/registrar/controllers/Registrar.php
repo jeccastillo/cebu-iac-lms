@@ -837,7 +837,7 @@ class Registrar extends CI_Controller {
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
         $active_sem = $this->data_fetcher->get_processing_sem();
-        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$active_sem['intID']);
+        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($data['student']['intID'],$active_sem['intID']);
             $sem = 1;
             
             switch($active_sem['enumSem'])
