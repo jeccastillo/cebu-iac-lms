@@ -43,57 +43,10 @@
                     </div><!-- /btn-group -->
                     
                 </div>
-                     <div class="row">
-                         <div class="form-group col-sm-4">
-                            <label for="strSection">Program:</label>
-                            <select class="form-control select2" name="program">
-                                <?php foreach($programs as $program): ?>
-                                    <option value="<?php echo $program['strProgramCode']; ?>"><?php echo $program['strProgramCode']; ?></option>
-                                <?php endforeach; ?>
-                                <option value="OPEN-SPL">OPEN-SPL</option>
-                                <option value="OPEN-REG">OPEN-REG</option>
-                                <option value="MODULAR">MODULAR</option>
-                            </select>
-                        </div>
-                         <div class="form-group col-sm-4">
-                            <label for="strSection">Year:</label>
-                            <select type="text" name="year" class="form-control" id="year" >
-                                <option value="1">1st</option> 
-                                <option value="2">2nd</option> 
-                                <option value="3">3rd</option> 
-                                <option value="4">4th</option> 
-                                <option value="5">5th</option> 
-                            </select>
-                         </div>
+                     <div class="row">                         
                          <div class="form-group col-sm-4">
                             <label for="strSection">Section:</label>
-                             <select type="text" name="section" class="form-control" id="section" >
-                                <option value="A">A</option> 
-                                <option value="B">B</option> 
-                                <option value="C">C</option> 
-                                <option value="D">D</option> 
-                                <option value="E">E</option> 
-                                <option value="F">F</option> 
-                                <option value="G">G</option> 
-                                <option value="H">H</option> 
-                                <option value="I">I</option> 
-                                <option value="J">J</option>
-                                <option value="K">K</option>
-                                <option value="L">L</option> 
-                                <option value="1">1</option> 
-                                <option value="2">2</option> 
-                                <option value="3">3</option> 
-                                <option value="4">4</option> 
-                                <option value="5">5</option> 
-                                <option value="6">6</option> 
-                                <option value="7">7</option> 
-                                <option value="8">8</option> 
-                                <option value="9">9</option> 
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option> 
-                            </select>
-                            
+                             <input type="text" name="strSection" class="form-control" id="strSection" >                                
                          </div>
                     </div>
                      

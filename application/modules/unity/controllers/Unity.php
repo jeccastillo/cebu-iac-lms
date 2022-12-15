@@ -1031,14 +1031,7 @@ class Unity extends CI_Controller {
         //print_r($post);
         $subject = $this->data_fetcher->getSubjectNoCurr($post['intSubjectID']);
         $post['strUnits'] = $subject['strUnits'];
-        $post['strClassName'] = $subject['strCode'];
-        if($post['program'] == "OPEN" || $post['program'] == "MODULAR")
-            $post['strSection'] = $post['program']."-".$post['section'];
-        else
-            $post['strSection'] = $post['program']."-".$post['year']."-".$post['section'];
-        unset($post['program']);
-        unset($post['year']);
-        unset($post['section']);
+        $post['strClassName'] = $subject['strCode'];                              
         $this->data_poster->log_action('Classlist','Added a new Classlist '.$post['strClassName'],'green');
         $this->data_poster->post_data('tb_mas_classlist',$post);
         redirect(base_url()."unity/view_classlist");
