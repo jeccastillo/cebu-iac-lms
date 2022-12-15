@@ -159,6 +159,7 @@ new Vue({
             enumScholarship: undefined,
             enumStudentType: undefined,
         },
+        scholarships: [],
         misc: {
             name: undefined,
             miscRegular: undefined,            
