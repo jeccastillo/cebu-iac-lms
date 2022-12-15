@@ -38,7 +38,7 @@ class Site extends CI_Controller {
 
 	public function awesome($type = null) {
 		$type = urldecode($type);
-		if($type = "Application Payment"){
+		if($type == "Application Payment"){
 			$this->data['text'] = 'That wasn’t so hard, was it? Now, all you have
 							to
 							do is
