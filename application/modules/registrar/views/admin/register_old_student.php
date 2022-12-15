@@ -207,7 +207,7 @@ new Vue({
             // }
             var formdata= new FormData();
             formdata.append("intStudentID",this.id);    
-            formdata.append("intStudentID",this.request.strAcademicYear);
+            formdata.append("sem",this.request.strAcademicYear);
 
             axios.post('<?php echo base_url(); ?>unity/load_subjects2', formdata, {
                         headers: {
