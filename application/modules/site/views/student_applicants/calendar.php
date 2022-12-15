@@ -59,7 +59,7 @@ window.moment || document.write(
 
                                 <div class="form-group mt-6">
                                     <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                        From <span class="text-red-500">*</span>
+                                        Select Time Slot <span class="text-red-500">*</span>
                                     </label>
                                     <date-picker :time-picker-options="
                                                         reserve_time_picker_options
@@ -72,7 +72,7 @@ window.moment || document.write(
                                     </date-picker>
                                 </div>
 
-                                <div class="form-group mt-6">
+                                <!-- <div class="form-group mt-6">
                                     <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                         To <span class="text-red-500">*</span>
                                     </label>
@@ -85,7 +85,7 @@ window.moment || document.write(
                                                 }"
                                         input-class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                                     </date-picker>
-                                </div>
+                                </div> -->
 
 
                             </div>
@@ -193,10 +193,8 @@ new Vue({
         submitSchedule: function() {
 
 
-
-
             let time_from = moment(this.request.from).format('LT');
-            let time_to = moment(this.request.to).format('LT');
+            let time_to = time_from.add(30, 'minutes').format('LT');
 
             this.request.date = this.date_selected_formatted;
             this.request.slug = this.slug;
