@@ -861,6 +861,8 @@ class Registrar extends CI_Controller {
             $ret['success'] = true;
             $ret['message'] = "Success";
 
+            echo json_encode($ret);
+
     }
     
     public function register_old_student2($studNum=null)
