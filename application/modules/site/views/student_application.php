@@ -326,7 +326,7 @@ new Vue({
             date_of_birth: "",
             program: "",
         },
-        loading_spinner: false,
+        loading_spinner: true,
         programs: [],
         programs_group: [],
         types: []
