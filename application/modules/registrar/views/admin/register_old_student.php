@@ -101,7 +101,7 @@
                                 <div id="tuitionContainer">
                                 
                                 </div>
-                                
+                                <input type="submit" :disabled="reg_status != 'For Registration'" value="Register" class="btn btn-default  btn-flat btn-block">
                             </div>                             
                         </div>
                     </form>                           
