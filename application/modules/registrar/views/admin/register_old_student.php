@@ -62,7 +62,7 @@
                     <h3>Registration Details</h3>
                 Set Academic Year to Register
                 <select class="form-control" id="strAcademicYear" name="strAcademicYear" v-model="request.strAcademicYear">
-                    <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
+                    <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                 </select>
                     <hr />
                 <label for="enumRegistrationStatus">Academic Status</label>
