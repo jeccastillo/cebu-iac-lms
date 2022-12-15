@@ -1,4 +1,6 @@
-   <section id="hero" class="section section_port relative">
+<div id="adminssions-form">
+    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <section id="hero" class="section section_port relative">
        <div class="custom-container md:h-[500px] relative z-1">
            <!-- parallax object? -->
            <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png"
@@ -42,8 +44,7 @@
        </div>
    </section>
 
-   <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
-        <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+   <div class="custom-container"  style="margin-top:10px;">        
        <div class="color-primary">
            <h4 class="font-medium text-2xl mb-5">
                Student Information Sheet</h4>
@@ -309,7 +310,7 @@
 
        </form>
    </div>
-
+    </div>
    <style>
 
    </style>
