@@ -43,6 +43,7 @@
    </section>
 
    <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
+        <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
        <div class="color-primary">
            <h4 class="font-medium text-2xl mb-5">
                Student Information Sheet</h4>
