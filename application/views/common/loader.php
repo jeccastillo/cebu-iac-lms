@@ -1,0 +1,1 @@
+<div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
