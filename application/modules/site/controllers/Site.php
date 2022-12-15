@@ -37,17 +37,30 @@ class Site extends CI_Controller {
     }
 
 	public function awesome($type = null) {
-		echo urldecode($type);
-		$this->data['text'] = 'That wasn’t so hard, was it? Now, all you have
-                           to
-                           do is
-                           wait for our
-                           Admissions
-                           Team to evaluate your application and schedule you for an interview – the
-                           last step before finding out if you will become an <span class="font-bold">iACADEMY Game
-                               Changer!</span>
-                           Keep your lines open and check your email!';
-
+		$type = urldecode($type);
+		if($type = "Application Payment"){
+			$this->data['text'] = 'That wasn’t so hard, was it? Now, all you have
+							to
+							do is
+							wait for our
+							Admissions
+							Team to evaluate your application and schedule you for an interview – the
+							last step before finding out if you will become an <span class="font-bold">iACADEMY Game
+								Changer!</span>
+							Keep your lines open and check your email!';
+		}
+		else{
+			$this->data['text'] = 'You are a game changer. The interests that you have cultivated through the years are leading you down the path of a successful career. How you reach that path is now in your hands.
+			<br /><br />
+			This early on, we can see that you are one of the few people who have the capacity TO shape the course of the future. It is for this reason that iACADEMY would like to offer you the opportunity to pursue your passions and develop practical skills that you will need to enter the industry of your choice with a competitive edge. 
+			<br /><br />
+			Now that you have reserved, you now have exclusive access to our PRIME Workshops where you can learn from rockstar facilitators and meet other Game Changers such as yourself!
+			<br /><br />
+			Scan <a href="#">here</a> for the workshops and sign up for the topic you like.
+			<br /><br />
+			See you soon, <span class="font-bold">Game Changer</span>!
+			';
+		}
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/awesome',$this->data);
 		$this->load->view('common/footer',$this->data);
