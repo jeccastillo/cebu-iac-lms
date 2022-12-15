@@ -37,7 +37,7 @@ class Site extends CI_Controller {
     }
 
 	public function awesome($type = null) {
-		echo $type;
+		echo urldecode($type);
 		$this->data['text'] = 'That wasn’t so hard, was it? Now, all you have
                            to
                            do is
