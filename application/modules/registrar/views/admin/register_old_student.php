@@ -30,12 +30,12 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?php echo $student['strStudentNumber']; ?></td>
-                                <td><?php echo $student['strLastname']; ?></td>
-                                <td><?php echo $student['strFirstname']; ?></td>
-                                <td><?php echo $student['strMiddlename']; ?></td>
-                                <td><?php echo $student['strProgramCode']; ?></td>
-                                <td><?php echo $reg_status; ?></td>
+                                <td>{{ student_data.strStudentNumber }}</td>
+                                <td>{{ student_data.strLastname }}</td>
+                                <td>{{ student_data.strFirstname }}</td>
+                                <td>{{ student_data.strMiddlename }}</td>
+                                <td>{{ student_data.strProgramCode }}</td>
+                                <td>{{ reg_status }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -126,7 +126,8 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: '<?php echo $student['intID']; ?>',        
+        id: '<?php echo $id; ?>',    
+        student_data:{},    
         request: {
             enumScholarship: 0,
             enumStudentType: 'new',
@@ -176,6 +177,7 @@ new Vue({
                     this.school_years = data.data.data.sy;
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
+                    this.student_data = data.data.data.student;
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {

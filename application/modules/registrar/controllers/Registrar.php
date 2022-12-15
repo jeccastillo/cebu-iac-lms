@@ -871,20 +871,10 @@ class Registrar extends CI_Controller {
                    
             if($studNum==null){
                 $post = $this->input->post();
-                $this->data['student'] = $this->data_fetcher->getStudent($post['studentNumber']);
-            }
-            else
-                $this->data['student'] = $this->data_fetcher->getStudent($studNum);
+                $studNum = $post['studentNumber'];
+            }                        
             
-            
-            
-            if(empty($this->data['student']))
-            {
-                //Message here for no student found
-                $this->session->set_flashdata('error_message','Student does not exist');
-                redirect(base_url().'registrar/register_student');
-            }			
-                        
+            $this->data['id'] = $studNum;
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/register_old_student",$this->data);
