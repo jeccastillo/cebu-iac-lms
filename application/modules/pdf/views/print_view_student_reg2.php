@@ -48,7 +48,7 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
         </tr>    
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:#333; font-size:9;" width="528px">     
+    <table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">     
      <tr>
       <td width="80px" >&nbsp;</td>
       <td width="250px">&nbsp;</td>
