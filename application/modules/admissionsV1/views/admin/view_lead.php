@@ -229,6 +229,7 @@
                             <thead>
                                 <tr>
                                     <th>Description</th>
+                                    <th>Request ID</th>
                                     <th>Total Payment</th>
                                     <th>Status</th>
                                     <th>Date</th>
@@ -237,6 +238,7 @@
                             <tbody>
                                 <tr v-for="payment in request.payments">
                                     <td>{{payment.description}}</td>
+                                    <td>{{payment.request_id}}</td>
                                     <td>₱ {{payment.total_amount_due}}</td>
                                     <td>{{payment.status}}</td>
                                     <td>{{payment.status == 'Paid' ? payment.date_paid : payment.date_expired  }}</td>
