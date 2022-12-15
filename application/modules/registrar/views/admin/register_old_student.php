@@ -156,8 +156,8 @@ new Vue({
     data: {
         id: '<?php echo $student['intID']; ?>',        
         request: {
-            enumScholarship: undefined,
-            enumStudentType: undefined,
+            enumScholarship: 0,
+            enumStudentType: 'new',
         },
         scholarships: [],
         misc: {
@@ -192,6 +192,7 @@ new Vue({
                 .then((data) => {                    
                     //this.request = data.data.data;                    
                     console.log(data.data.data);
+                    this.scholarships = data.data.data.scholarships;
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {
