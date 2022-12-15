@@ -792,6 +792,8 @@ class Unity extends CI_Controller {
             
             
             $this->data['student'] = $this->data_fetcher->getStudent($id);
+            if(!$this->data['student'])
+                $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
             //per faculty info
 			$records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
             
