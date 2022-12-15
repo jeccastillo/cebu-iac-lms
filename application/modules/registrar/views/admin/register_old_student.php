@@ -18,13 +18,7 @@
         </div>
        
         <div class="box box-solid">
-            <div class="box-body">
-                <?php if(!empty($reg_status)): ?>
-                <?php if($message!=""): ?>
-                    <div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Error</strong> <?php echo $message; ?></div>
-                <?php endif; ?>
-                <?php //print_r($student); ?>
+            <div v-if="reg_status == 'For Registration'" class="box-body">                                                
                 <table class="table">
                     <thead>
                         <tr>
@@ -49,19 +43,14 @@
                 </table>
                 <hr />
                 <form id="validate-student" action="<?php echo base_url(); ?>registrar/submit_registration_old2" method="post" role="form" enctype="multipart/form-data">
-                <input type="hidden" name="intProgramID" value="<?php echo $student['intProgramID']; ?>" id="addStudentCourse">
-                <input type="hidden" value="<?php echo $student['intCurriculumID']; ?>" id="intCurriculumID">
-                <input type="hidden" value="<?php echo $student['intID']; ?>" name="studentID" id="studentID">
-                <input type="hidden" value="<?php echo $student['strStudentNumber']; ?>" name="studentNumber">
-                <input type="hidden" value="<?php echo $active_sem['intID']; ?>" name="activeSem" id="activeSem">
-                <input type="hidden" value="<?php echo $reg_status; ?>" name="regStatus" id="regStatus">
-                <input type="hidden" value="0" id="total-units">
                 
-                    <div style="border:1px solid #d2d2d2;">
-                    <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
-                    <h3>Registration Details</h3>
+                
+                <div style="border:1px solid #d2d2d2;">
+                <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
+                <h3>Registration Details</h3>
+                
                 Set Academic Year to Register
-                <select class="form-control" id="strAcademicYear" name="strAcademicYear" v-model="request.strAcademicYear">
+                <select class="form-control" v-model="request.strAcademicYear">
                     <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                 </select>
                     <hr />
@@ -116,14 +105,13 @@
                     <div id="tuitionContainer">
                     
                     </div>
-                    <input type="submit" <?php echo ($reg_status!="For Registration")?'disabled':''; ?> value="Register" class="btn btn-default  btn-flat btn-block">
-                    </div>
-                    <div style="clear:both"></div>
+                    <input type="submit" :disabled="reg_status != For Registration" value="Register" class="btn btn-default  btn-flat btn-block">
                 </div>
-                </form>
-                <?php else: ?>
-                    <h3>Student Already Registered</h3>
-                <?php endif; ?>
+                <div v-else>
+                    <h1>Not For Registration</h1>
+                </div>                
+            </div>
+            </form>        
                 </div>
             </div>
         </div>
@@ -155,6 +143,7 @@ new Vue({
         term_type: 'Term',
         total_units: 0,
         subjectList: '',
+        reg_status: null,
         misc: {
             name: undefined,
             miscRegular: undefined,            
@@ -191,6 +180,7 @@ new Vue({
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
+                    this.reg_status = data.data.data.reg_status;
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {
