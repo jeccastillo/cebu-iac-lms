@@ -49,7 +49,11 @@
                             <?php if(!$registration && $reg_status!="For Advising"): ?>
                              <a class="btn btn-app" href="<?php echo base_url()."unity/edit_sections/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="fa fa-book"></i> Update Sections</a> 
+                                
+                                <a class="btn btn-app" href="<?php echo base_url()."/registrar/register_old_student2/".$student['intID']; ?>">
+                                <i class="fa fa-book"></i>Register Student</a> 
                             <?php endif; ?>
+
                             
                         </small>
                         
