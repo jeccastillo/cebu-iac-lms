@@ -12,11 +12,8 @@
     <div class="content">
         <div class="span10 box box-primary">
             <div class="box-header">
-                    <h3 class="box-title">Register Student</h3>
-                    
-                    
-            </div>
-        
+                <h3 class="box-title">Register Student</h3>                      
+            </div>        
             <div class="box box-solid">
                 <div v-if="reg_status == 'For Registration'" class="box-body">                                                
                     <table class="table">
@@ -107,9 +104,6 @@
                             </div>                             
                         </div>
                     </form>                           
-                </div>
-                <div v-else>
-                    <h1>Not For Registration</h1>
                 </div>
             </div>
         </div>    
