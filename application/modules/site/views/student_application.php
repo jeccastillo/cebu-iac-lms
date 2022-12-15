@@ -383,7 +383,7 @@ new Vue({
 
     methods: {
         submitForm: function() {
-            console.log(this.request);
+            //console.log(this.request);
         },
 
         filterProgram: function(type,title) {
@@ -449,13 +449,14 @@ new Vue({
                     if (data.data.success) {
 
                         this.loading_spinner = false;
+                        var ret = data.data.data;
 
                         Swal.fire({
                             title: "SUCCESS",
                             text: data.data.message,
                             icon: "success"
                         }).then(function() {
-                            location.reload();
+                            location.href = "http://103.225.39.200/cebu-iac-lms/site/initial_requirements/" + ret.slug ;
                         });
 
                     } else {
