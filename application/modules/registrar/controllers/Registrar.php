@@ -868,12 +868,7 @@ class Registrar extends CI_Controller {
     
     public function register_old_student2($studNum=null)
     {
-        
-            //print_r($post);
-            //die();
-            $this->data['message'] = $this->session->flashdata('message');
-            
-            //$this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
+                   
             if($studNum==null){
                 $post = $this->input->post();
                 $this->data['student'] = $this->data_fetcher->getStudent($post['studentNumber']);
@@ -888,31 +883,8 @@ class Registrar extends CI_Controller {
                 //Message here for no student found
                 $this->session->set_flashdata('error_message','Student does not exist');
                 redirect(base_url().'registrar/register_student');
-            }
-			$this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $active_sem = $this->data_fetcher->get_processing_sem();
-            
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$active_sem['intID']);
-            $sem = 1;
-            
-            switch($active_sem['enumSem'])
-            {
-                case "1st":
-                    $sem = 1;
-                    break;
-                case "2nd":
-                    $sem = 2;
-                    break;
-                case "3rd":
-                    $sem = 3;
-                    break;
-                default:
-                    $sem = 1;
-            }
-            
-            $this->data['active_sem'] = $active_sem;
-            
-            
+            }			
+                        
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/register_old_student",$this->data);
