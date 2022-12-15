@@ -337,12 +337,14 @@ new Vue({
             console.log("total_single_format", this.total_single_format);
             console.log("new_charge", this.new_charge);
 
+            let title = (this.payment_type == 'admissions_student_payment_reservation') ? 'Reservation Fee' :
+                                    'Application Fee';
 
             this.payload = {
                 "description": "Reservation Payment",
                 "order_items": [{
                     "price_default": "700",
-                    "title": "Reservation Payment",
+                    "title": title,
                     "qty": "1",
                     "id": 1
                 }],
