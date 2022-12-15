@@ -43,7 +43,7 @@
                             <?php endif; ?>
                             <?php if($reg_status == "For Advising"): ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."/department/advising/".$student['strStudentNumber']; ?>">
-                                <i class="fa fa-book"></i>Advising/Subject Loading/a> 
+                                <i class="fa fa-book"></i>Advising/Subject Loading</a> 
                                 
                             <?php endif; ?>                            
                             <?php if(!$registration && $reg_status!="For Advising"): ?>
