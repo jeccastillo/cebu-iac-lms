@@ -41,6 +41,11 @@
                             <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="ion ion-printer"></i>Print Advising Form</a> 
                             <?php endif; ?>
+                            <?php if($reg_status == "For Advising"): ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."/department/advising/".$student['strStudentNumber']; ?>">
+                                <i class="fa fa-book"></i>Advising/Subject Loading/a> 
+                                
+                            <?php endif; ?>                            
                             <?php if(!$registration && $reg_status!="For Advising"): ?>
                              <a class="btn btn-app" href="<?php echo base_url()."unity/edit_sections/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                 <i class="fa fa-book"></i> Update Sections</a> 
