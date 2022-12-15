@@ -15,7 +15,7 @@
                 <h3 class="box-title">Register Student</h3>                      
             </div>        
             <div class="box box-solid">
-                <div v-if="reg_status == 'For Registration'" class="box-body">                                                
+                <div class="box-body">                                                
                     <table class="table">
                         <thead>
                             <tr>
