@@ -194,7 +194,7 @@ new Vue({
 
 
             let time_from = moment(this.request.from).format('LT');
-            let time_to = time_from.add(30, 'minutes').format('LT');
+            let time_to = moment(this.request.from).add(30, 'minutes').format('LT');
 
             this.request.date = this.date_selected_formatted;
             this.request.slug = this.slug;
