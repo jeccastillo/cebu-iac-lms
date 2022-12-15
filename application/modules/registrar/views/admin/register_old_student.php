@@ -75,14 +75,13 @@
                     </select>
                         <br />
                     <label for="enumScholarship">Scholarship Grant</label>
-                    <select class="form-control" id="enumScholarship" name="enumScholarship">                        
-                        <option value="None">None</option>                        
-                        <option value="iACADEMY Scholar">iACADEMY Scholar</option>
+                    <select class="form-control" v-model="request.enumScholarship">                        
+                        <option value="0">None</option>                                                
+                        <option v-for="scholarship in scholarships" :value="scholarship.intID">{{scholarship.name}}</option>
                     </select>
                         <br />
                     <label for="enumStudentType">Student Type</label>
-                    <select id="transcrossSelect" class="form-control" name="enumStudentType">
-                        <option value="0">---SELECT---</option>
+                    <select class="form-control" v-model="request.enumStudentType">                        
                          <option value="new">NEW</option>
                          <option value="old">RETURNING</option>
                          <option value="transferee">TRANSFEREE</option>
@@ -155,18 +154,10 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: <?php echo $student['intID']; ?>,        
+        id: '<?php echo $student['intID']; ?>',        
         request: {
-            year: undefined,
-            pricePerUnit: undefined,            
-            pricePerUnitOnline: undefined,
-            pricePerUnitHyflex: undefined,
-            pricePerUnitHybrid: undefined,
-            installmentIncrease: undefined,
-            installmentDP: undefined,
-            misc: [],
-            lab_fees: [],
-            isDefault: 0,            
+            enumScholarship: undefined,
+            enumStudentType: undefined,
         },
         misc: {
             name: undefined,
@@ -197,9 +188,10 @@ new Vue({
         
             this.header_title = 'Edit Tuition Year';
             //this.loader_spinner = true;
-            axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
+            axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
-                    this.request = data.data.data;                    
+                    //this.request = data.data.data;                    
+                    console.log(data.data.data);
                     //this.loader_spinner = false;
                 })
                 .catch((error) => {
