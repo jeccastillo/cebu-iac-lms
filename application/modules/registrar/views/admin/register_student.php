@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside class="right-side" id="registration-container">
 <section class="content-header">
                     <h1>
                         Registrar
@@ -43,3 +43,5 @@
        
         </div>
 </aside>
+
+

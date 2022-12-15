@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside class="right-side" id="registration-container">
 <section class="content-header">
                     <h1>
                         Registrar
@@ -142,3 +142,219 @@
        
         </div>
 </aside>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+<script>
+new Vue({
+    el: '#registration-container',
+    data: {
+        id: <?php echo $student['intID']; ?>,        
+        request: {
+            year: undefined,
+            pricePerUnit: undefined,            
+            pricePerUnitOnline: undefined,
+            pricePerUnitHyflex: undefined,
+            pricePerUnitHybrid: undefined,
+            installmentIncrease: undefined,
+            installmentDP: undefined,
+            misc: [],
+            lab_fees: [],
+            isDefault: 0,            
+        },
+        misc: {
+            name: undefined,
+            miscRegular: undefined,            
+            miscHybrid: undefined,
+            miscOnline: undefined,
+            miscHyflex: undefined,  
+            type: 'regular',    
+        },
+        lab: {
+            name: undefined,
+            labRegular: undefined,
+            labHybrid: undefined,
+            labOnline: undefined,
+            labHyflex: undefined,      
+        },
+        default_year: <?php echo $defaultYear; ?>,
+        update_text: "Tuition Year",
+        loader_spinner: true,                        
+    },
+
+    mounted() {
+
+        let url_string = window.location.href;
+        let url = new URL(url_string);
+
+        if(this.id != 0){
+        
+            this.header_title = 'Edit Tuition Year';
+            //this.loader_spinner = true;
+            axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
+                .then((data) => {                    
+                    this.request = data.data.data;                    
+                    //this.loader_spinner = false;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+    },
+
+    methods: {
+
+        addExtra: function (type, name, data){
+            Swal.fire({
+                title: 'Add New Fee: '+ name,
+                text: "Continue adding entry?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("tuitionYearID",this.id);                    
+                    for(const [key,value] of Object.entries(data)){                   
+                        formdata.append(key,value);
+                    }
+                    
+                    return axios
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_extra/'+type,formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+        },
+        deleteItem: function(type,miscId){
+            Swal.fire({
+                title: 'Delete Miscellaneous',
+                text: "Continue deleting entry?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("id",miscId);
+                    formdata.append("type",type);                    
+                    return axios
+                        .post('<?php echo base_url(); ?>tuitionyear/delete_type/',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+        },
+        updateData: function() {
+            Swal.fire({
+                title: 'Update Status',
+                text: "Continue adding entry?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("year",this.request.year);
+                    formdata.append("pricePerUnit",this.request.pricePerUnit);
+                    formdata.append("pricePerUnitOnline",this.request.pricePerUnitOnline);
+                    formdata.append("pricePerUnitHybrid",this.request.pricePerUnitHybrid);
+                    formdata.append("pricePerUnitHyflex",this.request.pricePerUnitHyflex);
+                    formdata.append("isDefault",this.request.isDefault);
+                    formdata.append("installmentIncrease", this.request.installmentIncrease);
+                    formdata.append("installmentDP", this.request.installmentDP);
+                    
+                    return axios
+                        .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id,formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
+
+    }
+
+})
+</script>

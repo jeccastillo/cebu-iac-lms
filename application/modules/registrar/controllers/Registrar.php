@@ -830,6 +830,38 @@ class Registrar extends CI_Controller {
             
             
     }
+
+    public function register_old_student_data($studNum){
+
+        $data['student'] = $this->data_fetcher->getStudent($studNum);
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
+        $active_sem = $this->data_fetcher->get_processing_sem();
+        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$active_sem['intID']);
+            $sem = 1;
+            
+            switch($active_sem['enumSem'])
+            {
+                case "1st":
+                    $sem = 1;
+                    break;
+                case "2nd":
+                    $sem = 2;
+                    break;
+                case "3rd":
+                    $sem = 3;
+                    break;
+                default:
+                    $sem = 1;
+            }
+            
+            $data['active_sem'] = $active_sem;
+
+            $ret['data'] = $data;
+            $ret['success'] = true;
+            $ret['message'] = "Success";
+
+    }
     
     public function register_old_student2($studNum=null)
     {
@@ -882,8 +914,8 @@ class Registrar extends CI_Controller {
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/register_old_student",$this->data);
             $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/register_old_student_conf2",$this->data);
-            $this->load->view("registration_validation_js",$this->data);
+            //$this->load->view("common/register_old_student_conf2",$this->data);
+            //$this->load->view("registration_validation_js",$this->data);
             // print_r($this->data['classlists']);
             
             
