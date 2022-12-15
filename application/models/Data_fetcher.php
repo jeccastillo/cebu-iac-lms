@@ -2001,7 +2001,7 @@ class Data_fetcher extends CI_Model {
         return $ret;
     }
 
-    function getTuitionSubjects($stype,$unit_fee,$misc_fee,$lab_fee,$athletic_fee,$id_fee,$srf,$sfdf,$csg,$scholarship,$subjects,$id)
+    function getTuitionSubjects($stype,$scholarship,$subjects,$id)
     {
 
         $tuition = 0;

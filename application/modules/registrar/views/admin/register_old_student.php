@@ -82,23 +82,9 @@
                                 <div v-html="subjectList" id="subject-list">                        
                                 </div>
                                 </div>
-                                <div class="col-sm-4" style="padding:1rem;">
-                                
-                                    <h3>Accounting</h3>
-                                <?php /*
-                                <div id="accounting">
-                                    <div><p><strong>Tuition: </strong><span id="tuition-fee">0</span></p></div>
-                                    <div><p><strong>Misc: </strong>
-                                    <span id="misc-fee">
-                                        <?php echo ($student['enumScholarship'] == "paying")?$misc_fee:'0'; ?>
-                                    </span>
-                                    </p></div>
-                                    <hr />
-                                    <div><p><strong>Total: </strong><span id="total-fee"></span></p></div>
-                                </div>
-                                <hr />
-                                */ ?>
-                                <div id="tuitionContainer">
+                                <div class="col-sm-4" style="padding:1rem;">                                
+                                <h3>Accounting</h3>                                
+                                <div v-html="tuition_text" id="tuitionContainer">
                                 
                                 </div>
                                 <input type="submit" :disabled="reg_status != 'For Registration'" value="Register" class="btn btn-default  btn-flat btn-block">
@@ -140,6 +126,8 @@ new Vue({
         total_units: 0,
         subjectList: '',
         reg_status: null,
+        tuition_text: '',
+        subject_ids:[],
         misc: {
             name: undefined,
             miscRegular: undefined,            
@@ -207,6 +195,7 @@ new Vue({
                     var containerText = "";
                     if (data.data.subjects.length > 0) {
                         for (i in data.data.subjects) {
+                            this.subject_ids.push(data.data.subjects[i].subjectID);
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                                 data.data.subjects[i].subjectID +
@@ -216,14 +205,29 @@ new Vue({
                                 "</div><div class='col-xs-3 subject-units'>" + data.data.subjects[i].strUnits +
                                 "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'>"
                                 + "<i class='fa fa-minus'></i></a></div></div><hr /></div>";
-                            
-
-
-                            this.total_units = parseInt(this.total_units) + parseInt(data.data.subjects[i]
+                                this.total_units = parseInt(this.total_units) + parseInt(data.data.subjects[i]
                                 .strUnits);
+
 
                         }
                         this.subjectList = containerText;
+
+                        var formdata= new FormData();
+                        formdata.append("studentID",this.id);
+                        formdata.append("subjects_loaded",this.subject_ids);    
+                        formdata.append("scholarship",this.request.enumScholarship);    
+                        formdata.append("stype",this.request.enumStudentType);    
+                        axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            console.log(data.data);
+                            this.tuition_text = data.data.tuition;                            
+                            
+                        });
+
                     }
                     
                 });
