@@ -77,7 +77,8 @@
 
 
                <div class="text-center" v-if="request.email">
-                   <button type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
+                  <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                   <button v-else type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
                            class="max-w-full h-auto mx-auto block img-btn"></button>
                </div>
 
