@@ -31,7 +31,7 @@
                             <span class="font-bold"> Great! </span> Next, is to upload your initial requirements:
                             <br />
                             <span class="small">
-                                PS: We also sent you an email with the link to this page if you want to continue later.
+                                PS: We also sent you an <span class="font-bold">email</span> with the link to this page if you want to continue later.
                             </span>
                        </p>
 
