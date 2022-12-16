@@ -101,6 +101,7 @@ new Vue({
     el: '#registration-container',
     data: {
         id: '<?php echo $id; ?>',    
+        sem: '<?php echo $selected_ay; ?>',
         student_data:{},    
         request: {
             enumScholarship: 0,
@@ -123,7 +124,7 @@ new Vue({
         
             this.header_title = 'Edit Tuition Year';
             //this.loader_spinner = true;
-            axios.get('<?php echo base_url(); ?>registrar/registration_viewer_data/' + this.id)
+            axios.get('<?php echo base_url(); ?>registrar/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                        
                     console.log(data.data.data);       
                     this.registration = data.data.data.registration;            
