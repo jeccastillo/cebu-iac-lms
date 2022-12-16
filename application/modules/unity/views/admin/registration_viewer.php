@@ -118,78 +118,21 @@
     
     <input type="hidden" value="<?php echo $paid; ?>" id="totalPaid" />
     <input type="hidden" value="<?php echo $tuition['total']; ?>" id="tuitionTotal" />
-    <div class="box box-solid <?php echo ($remaining_balance>0 && ($registration['enumScholarship'] == "paying" || $registration['enumScholarship'] == "7th district scholar"))?'box-danger':'box-success' ?>">
+        <div class="box box-solid">
             <div class="box-header">
                 <h4 class="box-title">ASSESSMENT OF FEES</h4>
             </div>
             <input type="hidden" id="intAYID" value="<?php echo $selected_ay; ?>">
             <div class="box-body">
                 <div class="row">
-                        <div class="col-sm-6">
-                            <?php echo $tuition; ?>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h4 class="modal-title">New Transaction</h4>
-                              </div>
-                              <div class="modal-body">
-                                  <div class="alert alert-modal alert-danger" style="display:none;">
-                                        <i class="fa fa-ban"></i>
-                                      <span id="sched-alert"></span>
-                                    </div>
-                                    <input type="hidden" value="<?php echo $registration['intRegistrationID']; ?>" id="intRegistrationID" name="intRegistrationID" />
-                                  <div class="row">
-                                    <div class="form-group col-xs-12 col-lg-12">
-                                        <label for="section">OR Number</label>
-                                        <div class="input-group">
-                                                  <input <?php echo ($remaining_balance==0)?'disabled':''; ?> id="intORNumber" type="number" name="intORNumber" class="form-control">
-                                                  <span class="input-group-btn">
-                                                    <button <?php echo ($remaining_balance==0)?'disabled':''; ?> type="button" id="generate-or-num" rel="OR" class="btn btn-danger btn-flat">Generate</button>
-                                                  </span>
-                                                </div>
-
-                                    </div>
-                                  </div>
-                                    <div id="transaction-wrapper" class="row">
-                                        <div class="transaction-group">
-                                            <div class="form-group col-xs-12 col-lg-6">
-                                                <label for="section">Amount To Pay</label>
-                                                <input <?php echo ($remaining_balance==0)?'disabled':''; ?> id="intAmountPaid" type="number" name="intAmountPaid[]" class="form-control">
-                                            </div>
-                                            <div class="form-group col-xs-12 col-lg-6">
-                                                <label for="section">Transaction Type</label>
-                                                <select <?php echo ($remaining_balance==0)?'disabled':''; ?> class="form-control" id="strTransactionType" name="strTransactionType[]" >                      
-                                                        <option value="tuition">Tuition</option>     
-                                                        <option value="misc">Miscellaneous</option>
-                                                        <option value="id fee">ID Fee</option>     
-                                                        <option value="athletic fee">Athletic Fee</option>
-                                                        <option value="srf">SRF</option>     
-                                                        <option value="sfdf">SFDF</option>
-                                                        <option value="lab fee">Lab Fee</option>     
-                                                        <option value="csg">CSG</option>
-                                                    </select>
-                                            </div>  
-                                        </div>
-                                    </div>
-                                    <a <?php echo ($remaining_balance==0)?'disabled':''; ?> class="btn btn-block btn-default  btn-flat" href="#" id="addTransactionField">Add Field</a>
-                                    </div>        
-                              <div class="modal-footer">
-                                <button <?php echo ($remaining_balance==0)?'disabled':''; ?> type="button" id="addTransactionBtn" class="btn btn-default  btn-flat">Add Transaction</button>
-                              </div>
-                            </div>
-                        </div>
+                    <div class="col-sm-6">
+                        <?php echo $tuition; ?>
                     </div>
+                        
                 </div>
-    </div>
-              </div>
             </div>
-        </div>
-        </div>
-    </div>
-    
-    
-        
+        </div>              
+    </div>        
 </div>
 <div class="modal fade" id="transactionsModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
