@@ -454,7 +454,8 @@ class Unity extends CI_Controller {
             }
             $this->data['payment'] = $pay;
             //--------TUITION-------------------------------------------------------------------
-            $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['registration']['enumScholarship']);
+            $data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['registration']['enumScholarship']);
+            $this->data['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
 
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/registration_viewer",$this->data);
@@ -568,8 +569,8 @@ class Unity extends CI_Controller {
         echo json_encode($data);
         
     }
-    function get_tuition_ajax()
-    {
+    function get_tuition_ajax(){
+        
         $post = $this->input->post();              
         $post['subjects_loaded'] =  explode(',', $post['subjects_loaded']);
         $data['tuition'] = $this->data_fetcher->getTuitionSubjects($post['stype'],$post['scholarship'],$post['subjects_loaded'],$post['studentID']);
@@ -577,6 +578,8 @@ class Unity extends CI_Controller {
         
         echo json_encode($ret);
     }
+
+    
     
     public function execute_sync()
     {
