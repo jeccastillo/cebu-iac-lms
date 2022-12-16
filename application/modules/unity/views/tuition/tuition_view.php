@@ -101,7 +101,7 @@
                 <div class="col-sm-6" style="text-align:right;">Total:</div>
                 <div class="col-sm-6 text-green"><?php echo $tuition['new_student']; ?></div>
             </div>
-            <hr />';
+            <hr />
         <?php endif; ?>
 
                     
