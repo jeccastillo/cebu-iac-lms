@@ -1880,13 +1880,7 @@ class Data_fetcher extends CI_Model {
         
 
         
-        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $ay['intID']))->get('tb_mas_registration')->first_row('array');          
-        
-        
-
-        if($registration['enumScholarship'])
-            $scholar = $this->db->get_where('tb_mas_scholarships',array('intID',$registration['enumScholarship']))->first_row('array');
-        
+        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                  
 
         $classes =  $this->db
                             ->select("tb_mas_subjects.intID as subjectID")
@@ -1931,11 +1925,8 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$sem);
         
-        if($scholarship != 0)
+        if($scholarship != 0 && $scholarship != null)
             $scholar = $this->data->get_where('tb_mas_scholarships',array('intID',$scholarship))->first_row('array');
-        
-            
-       
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
