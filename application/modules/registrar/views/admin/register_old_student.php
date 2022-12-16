@@ -46,28 +46,27 @@
                             <h3>Registration Details</h3>
                             
                             Set Academic Year to Register
-                            <select class="form-control" v-model="request.strAcademicYear">
+                            <select id="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
                                 <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                             </select>
                                 <hr />
                             <label for="enumRegistrationStatus">Academic Status</label>
-                                <select class="form-control" v-model="request.enumRegistrationStatus">                        
+                                <select id="enumRegistrationStatus" class="form-control" v-model="request.enumRegistrationStatus">                        
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>
                                     <br />
                                 <label for="enumScholarship">Scholarship Grant</label>
-                                <select class="form-control" v-model="request.enumScholarship">                        
+                                <select class="form-control" name="enumScholarship" id="enumScholarship" v-model="request.enumScholarship">                        
                                     <option value="0">None</option>                                                
                                     <option v-for="scholarship in scholarships" :value="scholarship.intID">{{scholarship.name}}</option>
                                 </select>
                                     <br />
                                 <label for="enumStudentType">Student Type</label>
-                                <select class="form-control" v-model="request.enumStudentType">                        
+                                <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">NEW</option>
                                     <option value="old">RETURNING</option>
-                                    <option value="transferee">TRANSFEREE</option>
-                                    <option value="cross">CROSS REGISTRANT</option>
+                                    <option value="transferee">TRANSFEREE</option>                                    
                                 </select>
                                 <br />                    
                                 
@@ -87,7 +86,7 @@
                                 <div v-html="tuition_text" id="tuitionContainer">
                                 
                                 </div>
-                                <input type="submit" :disabled="reg_status != 'For Registration'" value="Register" class="btn btn-default  btn-flat btn-block">
+                                <input type="submit" :disabled="reg_status != 'For Registration' || !subjects_loaded" value="Register" class="btn btn-default  btn-flat btn-block">
                             </div>                             
                         </div>
                     </form>                           
@@ -126,6 +125,7 @@ new Vue({
         total_units: 0,
         subjectList: '',
         reg_status: null,
+        subjects_loaded: false,
         tuition_text: '',
         subject_ids:[],
         misc: {
@@ -224,7 +224,8 @@ new Vue({
                         })
                         .then(data => {
                             console.log(data.data);
-                            this.tuition_text = data.data.tuition;                            
+                            this.tuition_text = data.data.tuition;  
+                            subjects_loaded =  true;                          
                             
                         });
 
