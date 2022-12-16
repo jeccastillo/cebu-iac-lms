@@ -54,96 +54,33 @@
     
         <div class="col-sm-12">
             <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
-             <?php if(in_array($user['intUserLevel'],array(2,4)) ): ?>
-                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Report of Grades</a></li>
-            <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
-            <?php endif; ?>
-              <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
-              <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
-              <li><a href="<?php echo base_url()."unity/accounting/".$student['intID']; ?>">Accounting Summary</a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="tab_1">
-                  <?php if(!empty($transactions)): ?>
-        <div class="box box-solid box-success">
-            <div class="box-header">
-                <h4 class="box-title">Transactions</h4>
-            </div>
-            <div class="box-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>OR Number</th>
-                        <th>Amount Paid</th>
-                        <th>Date Paid</th>
-                        <th>Actions</th>
-                    </tr>
-                <?php foreach($transactions as $transaction): 
-                                    $paid += $transaction['totalAmountPaid'];
-                                ?>
-
-                        <tr>
-                          <td><?php echo $transaction['intORNumber']; ?></td>
-                          <td><?php echo $transaction['totalAmountPaid']; ?></td>
-                          <td><?php echo date("M j, Y",strtotime($transaction['dtePaid'])); ?></td>
-                          <td>
-                         <button type="button" rel="<?php echo $transaction['intORNumber']; ?>" class="btn btn-box-tool view-or"><i style="font-size:2em;" class="ion ion-eye"></i></button>
-                        <button type="button" rel="<?php echo $transaction['intORNumber']; ?>" class="btn btn-box-tool trash-or"><i style="font-size:2em;" class="ion ion-trash-a"></i></button>
-                        <a target="_blank" href="<?php echo base_url();?>pdf/registration_viewer_account_data_print/<?php echo $transaction['intORNumber']; ?>/<?php echo $student['intID']; ?>" class="btn btn-box-tool print-transaction"><i style="font-size:2em;" class="ion ion-printer"></i></a> 
-                            </td>
-                        </tr>
-
-                        <!-- /.box-body -->
-
-                <?php endforeach;
-                ?>
-                </table>
-            </div>
-        </div>
-    
-    <?php
-    else:?>
-        <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="ion ion-cash"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">No Transactions</span>
-                </div>  
-        </div>
-    <?php
-    endif;
-    $remaining_balance = $tuition['total'] - $paid;
-    ?>
-    
-    <input type="hidden" value="<?php echo $paid; ?>" id="totalPaid" />
-    <input type="hidden" value="<?php echo $tuition['total']; ?>" id="tuitionTotal" />
-        <div class="box box-solid">
-            <div class="box-header">
-                <h4 class="box-title">ASSESSMENT OF FEES</h4>
-            </div>
-            <input type="hidden" id="intAYID" value="<?php echo $selected_ay; ?>">
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <?php echo $tuition; ?>
-                    </div>
-                        
+                <ul class="nav nav-tabs">
+                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
+                <?php if(in_array($user['intUserLevel'],array(2,4)) ): ?>
+                    <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Report of Grades</a></li>
+                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
+                <?php endif; ?>
+                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
+                <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
+                <li><a href="<?php echo base_url()."unity/accounting/".$student['intID']; ?>">Accounting Summary</a></li>
+                </ul>
+                <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">    
+                        <div class="box box-solid">
+                            <div class="box-header">
+                                <h4 class="box-title">ASSESSMENT OF FEES</h4>
+                            </div>
+                            <input type="hidden" id="intAYID" value="<?php echo $selected_ay; ?>">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <?php echo $tuition; ?>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>              
+                    </div>        
                 </div>
             </div>
-        </div>              
-    </div>        
-</div>
-<div class="modal fade" id="transactionsModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Transactions</h4>
-      </div>
-      <div class="modal-body" id="transactionsBody">
         </div>
-      </div>
-    </div>
-</div>
 
