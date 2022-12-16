@@ -880,7 +880,7 @@ class Registrar extends CI_Controller {
             $this->load->view("admin/register_old_student",$this->data);
             $this->load->view("common/footer",$this->data); 
             //$this->load->view("common/register_old_student_conf2",$this->data);
-            $this->load->view("registration_validation_js",$this->data);
+            //$this->load->view("registration_validation_js",$this->data);
             // print_r($this->data['classlists']);
             
             
