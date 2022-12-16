@@ -214,7 +214,7 @@ new Vue({
 
                         var formdata= new FormData();
                         formdata.append("studentID",this.id);
-                        formdata.append("subjects_loaded",this.subject_ids);    
+                        formdata.append("subjects_loaded",this.subject_ids.split(','));    
                         formdata.append("scholarship",this.request.enumScholarship);    
                         formdata.append("stype",this.request.enumStudentType);    
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
