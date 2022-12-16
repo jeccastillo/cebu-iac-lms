@@ -124,7 +124,7 @@ new Vue({
         
             this.header_title = 'Edit Tuition Year';
             //this.loader_spinner = true;
-            axios.get('<?php echo base_url(); ?>registrar/registration_viewer_data/' + this.id + '/' + this.sem)
+            axios.get('<?php echo base_url(); ?>unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                        
                     console.log(data.data.data);       
                     this.registration = data.data.data.registration;            
