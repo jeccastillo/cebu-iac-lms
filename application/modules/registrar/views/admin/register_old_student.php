@@ -159,8 +159,7 @@ new Vue({
             //this.loader_spinner = true;
             axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
-                    //this.request = data.data.data;                    
-                    console.log(data.data.data);
+                    //this.request = data.data.data;                                        
                     this.scholarships = data.data.data.scholarships;
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
