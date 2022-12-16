@@ -41,17 +41,18 @@
                     </table>
                     <hr />
                     <form id="validate-student" action="<?php echo base_url(); ?>registrar/submit_registration_old2" method="post" role="form" enctype="multipart/form-data">                
+                        <input type="hidden" name="studentID" v-model="id" />                        
                         <div style="border:1px solid #d2d2d2;">
                             <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
                             <h3>Registration Details</h3>
                             
                             Set Academic Year to Register
-                            <select id="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
+                            <select id="strAcademicYear" name="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
                                 <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                             </select>
                                 <hr />
                             <label for="enumRegistrationStatus">Academic Status</label>
-                                <select id="enumRegistrationStatus" class="form-control" v-model="request.enumRegistrationStatus">                        
+                                <select id="enumRegistrationStatus" name="enumRegistrationStatus" class="form-control" v-model="request.enumRegistrationStatus">                        
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>

@@ -398,18 +398,7 @@ class Registrar extends CI_Controller {
             $reg['dteRegistered'] = date("Y-m-d");
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
             $reg['enumScholarship'] = $post['enumScholarship'];        
-            $reg['paymentType'] = $post['paymentType'];   
-
-            if($post['enumStudentType']=="cross")
-                $st = "Cross Registered From ".$post['strFrom'];
-            elseif($post['enumStudentType']=="transferee")
-                $st = "Transferred From ".$post['strFrom'];
-            else
-                $st = $post['enumStudentType'];
-
-            
-
-            $reg['enumStudentType'] = $st;
+            $reg['enumStudentType'] = $post['enumStudentType'];
 
             $this->data['message'] = "Registration Successful";
 
@@ -420,6 +409,8 @@ class Registrar extends CI_Controller {
 
             $stud['intStudentYear'] = $academic_standing['year']; 
             $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);
+
+            //SEND AND GENERATE PAYMENT FOR TUITION LINK
         }
         else
         {
