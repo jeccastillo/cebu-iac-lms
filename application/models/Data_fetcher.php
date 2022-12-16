@@ -1919,7 +1919,7 @@ class Data_fetcher extends CI_Model {
         $hasInternship = false;
         $sem  = $this->get_active_sem();
         $scholarship_discount = 0;
-        $discounted_price = 0;
+        $discounted_price = 0;        
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
@@ -2019,7 +2019,7 @@ class Data_fetcher extends CI_Model {
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['class_type'] = $sem['classType'];
-        if($scholar){
+        if(isset($scholar)){
             $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
             $discounted_price = $data['total'] - $scholarship_discount;
         }
