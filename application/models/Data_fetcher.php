@@ -1821,12 +1821,17 @@ class Data_fetcher extends CI_Model {
         $thesis_fee = 0;
         $total_internship_fee = 0;
         $hasInternship = false;
+        $scholarship_discount = 0;
+        $discounted_price = 0;
        
 
         $ay = $this->getAy($sem);
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $ay['intID']))->get('tb_mas_registration')->first_row('array');               
+
+        if($registration['enumScholarship'])
+            $scholar = $this->data->get_where('tb_mas_scholarships',array('intID',$registration['enumScholarship']))->first_row('array');
 
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$ay);
@@ -1926,6 +1931,13 @@ class Data_fetcher extends CI_Model {
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['class_type'] = $ay['classType'];
+        if($scholar){
+            $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
+            $discounted_price = $data['total'] - $scholarship_discount;
+        }
+        $data['discounted_price'] = $discounted_price;
+
+        $data['scholarship_discount'] = $scholarship_discount;
 
         return $data;
         
@@ -2018,11 +2030,18 @@ class Data_fetcher extends CI_Model {
         $total_internship_fee = 0;
         $hasInternship = false;
         $sem  = $this->get_active_sem();
+        $scholarship_discount = 0;
+        $discounted_price = 0;
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$sem);
         
+        if($scholarship != 0)
+            $scholar = $this->data->get_where('tb_mas_scholarships',array('intID',$scholarship))->first_row('array');
+        
+            
+       
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
@@ -2092,6 +2111,8 @@ class Data_fetcher extends CI_Model {
                 $total_internship_fee += $internship_fee_list[$m['name']];
             }                  
         }
+
+        
     
         $data['lab'] = $total_lab;
         $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
@@ -2113,6 +2134,13 @@ class Data_fetcher extends CI_Model {
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['class_type'] = $sem['classType'];
+        if($scholar){
+            $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
+            $discounted_price = $data['total'] - $scholarship_discount;
+        }
+        $data['discounted_price'] = $discounted_price;
+
+        $data['scholarship_discount'] = $scholarship_discount;
         
         return $data;
 
