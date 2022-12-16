@@ -436,6 +436,9 @@ class Unity extends CI_Controller {
             else
                 $this->data['selected_ay'] = $active_sem['intID'];
 
+
+            $this->data['id'] =  $id;
+
             $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
             $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
             $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
