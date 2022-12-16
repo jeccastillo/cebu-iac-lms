@@ -570,15 +570,10 @@ class Unity extends CI_Controller {
     }
     function get_tuition_ajax()
     {
-        $post = $this->input->post();
-        //print_r($post);
-        if(!isset($post['subjects_loaded']))
-        {
-            $post['subjects_loaded'] = array();
-        }
+        $post = $this->input->post();        
+        print_r($post['subjects_loaded']);
         $tuition = $this->data_fetcher->getTuitionSubjects($post['stype'],$post['scholarship'],$post['subjects_loaded'],$post['studentID']);
-       
-        
+               
         $ret ='<div class="box box-solid">
             <div class="box-header">
                 <h4 class="box-title">ASSESSMENT OF FEES</h4>
