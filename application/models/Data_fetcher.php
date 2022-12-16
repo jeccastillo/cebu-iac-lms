@@ -1804,144 +1804,6 @@ class Data_fetcher extends CI_Model {
         else
             return "For Advising";
     }
-    
-    function getTuition($id,$sem,$scholarship = null)
-    {
-        
-        $tuition = 0;
-        $total_lab = 0;
-        $total_misc = 0;
-        $total_new_student = 0;
-        $afee = 0;
-        $lab_list = [];
-        $misc_list = [];
-        $new_student_list = [];      
-        $internship_fee_list = [];  
-        $nsf = 0;
-        $thesis_fee = 0;
-        $total_internship_fee = 0;
-        $hasInternship = false;
-        $scholarship_discount = 0;
-        $discounted_price = 0;
-       
-
-        $ay = $this->getAy($sem);
-
-        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
-        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $ay['intID']))->get('tb_mas_registration')->first_row('array');               
-
-        if($registration['enumScholarship'])
-            $scholar = $this->db->get_where('tb_mas_scholarships',array('intID',$registration['enumScholarship']))->first_row('array');
-
-        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
-        $unit_fee = getUnitPrice($tuition_year,$ay);
-
-        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
-                         ->get('tb_mas_tuition_year_misc')->result_array();        
-
-        if($registration['enumStudentType'] == 'new'){            
-            $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
-                         ->get('tb_mas_tuition_year_misc')->result_array();
-
-            foreach($new_student_data as $nsd){
-                $new_student_list[$nsd['name']] = getExtraFee($nsd, $ay, 'misc');
-                $total_new_student += $new_student_list[$nsd['name']];
-            }                         
-        }
-
-        $classes =  $this->db
-                            ->select("tb_mas_classlist_student.intCSID,tb_mas_subjects.strUnits,tb_mas_subjects.intLab, tb_mas_classlist.intSubjectID, tb_mas_subjects.strCode, 
-                             tb_mas_subjects.strTuitionUnits, tb_mas_subjects.strLabClassification, tb_mas_subjects.isThesisSubject, tb_mas_subjects.isNSTP, tb_mas_subjects.isInternshipSubject")
-                            ->from("tb_mas_classlist_student")
-                            ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
-                            ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
-                            ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
-                            ->get()
-                            ->result_array();
-
-
-
-
-        foreach($classes as $class)
-        {                                         
-            
-            if($class['isNSTP']){
-                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-                ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $nstp_fee = getExtraFee($nstp_fee, $ay, 'misc');
-
-                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
-            }
-            else
-                $tuition += intval($class['strTuitionUnits'])*$unit_fee;
-            
-            if($class['strLabClassification'] != "none"){
-                $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
-                                            ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $ay, 'lab');
-                $total_lab += $lab_list[$class['strCode']];
-            }
-
-            if($class['isThesisSubject']){                
-                $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
-                ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $thesis_fee = getExtraFee($thesis, $ay, 'misc');                                
-            }
-
-            if($class['isInternshipSubject']){                
-                $hasInternship = true;
-            }
-                   
-        }
-
-        foreach($misc as $m){                        
-            if($registration['enumStudentType'] != 'new' || $m['name'] != 'ID Validation' ){
-                $misc_list[$m['name']] = getExtraFee($m, $ay, 'misc');
-                $total_misc += $misc_list[$m['name']];
-            }
-        }
-        if($hasInternship){
-            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
-            ->get('tb_mas_tuition_year_misc')->result_array();
-
-            foreach($internship as $m){            
-                $internship_fee_list[$m['name']] = getExtraFee($m, $ay, 'misc');
-                $total_internship_fee += $internship_fee_list[$m['name']];
-            }                  
-        }                            
-    
-        
-        $data['lab'] = $total_lab;
-        $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
-        $data['lab_list'] = $lab_list;
-        $data['tuition'] = $tuition;
-        $data['tuition_installment'] = $tuition + $tuition * ($tuition_year['installmentIncrease']/100);       
-        $data['installment_dp'] = $tuition_year['installmentDP'];
-        $data['misc'] = $total_misc;
-        $data['misc_list'] = $misc_list;
-        $data['new_student'] = $total_new_student;
-        $data['new_student_list'] = $new_student_list;
-        $data['internship_fee_list'] = $internship_fee_list;
-        $data['athletic'] = $afee;
-        $data['thesis_fee'] = $thesis_fee;
-        $data['nsf'] = $nsf;     
-        $data['internship_fee'] = $total_internship_fee; 
-        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-        $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
-        $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
-        $data['class_type'] = $ay['classType'];
-        if($scholar){
-            $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
-            $discounted_price = $data['total'] - $scholarship_discount;
-        }
-        $data['discounted_price'] = $discounted_price;
-
-        $data['scholarship_discount'] = $scholarship_discount;
-
-        return $data;
-        
-    }
 
     function getMaxCurrentStudentNumber($sem){
         $term = switch_num_rev_search($sem['enumSem']);
@@ -2011,6 +1873,38 @@ class Data_fetcher extends CI_Model {
             $ret[$d['name']] = $d['name'];
 
         return $ret;
+    }
+
+    function getTuition($id,$sem,$scholarship = null)
+    {
+        
+
+        
+        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $ay['intID']))->get('tb_mas_registration')->first_row('array');          
+        
+        
+
+        if($registration['enumScholarship'])
+            $scholar = $this->db->get_where('tb_mas_scholarships',array('intID',$registration['enumScholarship']))->first_row('array');
+        
+
+        $classes =  $this->db
+                            ->select("tb_mas_subjects.intID as subjectID")
+                            ->from("tb_mas_classlist_student")
+                            ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
+                            ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
+                            ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                            ->get()
+                            ->result_array();
+
+        $subjects = [];
+        foreach($classes as $class)
+        {                                         
+            $subjects[] = $class['subjectID'];                            
+        }
+
+        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id);
+        
     }
 
     function getTuitionSubjects($stype,$scholarship,$subjects,$id)
