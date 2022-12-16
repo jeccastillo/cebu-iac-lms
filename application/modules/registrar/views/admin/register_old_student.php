@@ -225,7 +225,7 @@ new Vue({
                         .then(data => {
                             console.log(data.data);
                             this.tuition_text = data.data.tuition;  
-                            subjects_loaded =  true;                          
+                            this.subjects_loaded =  true;                          
                             
                         });
 
