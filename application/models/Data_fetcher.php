@@ -1926,7 +1926,7 @@ class Data_fetcher extends CI_Model {
         $unit_fee = getUnitPrice($tuition_year,$sem);
         
         if($scholarship != 0 && $scholarship != null)
-            $scholar = $this->data->get_where('tb_mas_scholarships',array('intID',$scholarship))->first_row('array');
+            $scholar = $this->db->get_where('tb_mas_scholarships',array('intID',$scholarship))->first_row('array');
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
