@@ -827,8 +827,7 @@
 new Vue({
     el: '#student-viewer-container',
     data: {
-       
-        base_url: '<?php echo base_url(); ?>',
+        
         student:{},    
         advanced_privilages: false,
         registration: {},
