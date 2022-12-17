@@ -118,9 +118,9 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: '<?php echo $id; ?>',    
-        sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
+        id: '<?php echo $id; ?>',    
+        sem: '<?php echo $selected_ay; ?>',        
         student:{},    
         advanced_privilages: false,
         request: {
