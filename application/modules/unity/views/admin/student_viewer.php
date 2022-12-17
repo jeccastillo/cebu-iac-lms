@@ -834,7 +834,7 @@ new Vue({
 
     mounted() {
 
-        
+        let url_string = window.location.href;        
 
     },
 
