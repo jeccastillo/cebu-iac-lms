@@ -1747,7 +1747,12 @@ class Data_fetcher extends CI_Model {
     }
     function getRegistrationInfo($id,$sem)
     {
-        return  current($this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem))->result_array());
+        return  $this->db
+                    ->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
+                    ->from('tb_mas_registration')
+                    ->where(array('intStudentID'=>$id,'intAYID'=>$sem))
+                    ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship')
+                    ->first_row('array');
     }
     
     function getRegistrationData($sem)
