@@ -108,7 +108,7 @@ new Vue({
             strAcademicYear: undefined,
         },
         registration: {},
-        registration_status: undefined,
+        registration_status: 0,
         
         loader_spinner: true,                        
     },
@@ -119,11 +119,11 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get('<?php echo base_url(); ?>unity/registration_viewer_data/' + this.id + '/' + this.sem)
-                .then((data) => {                                        
-                    console.log(data.data.data);       
+                .then((data) => {                                                            
                     this.registration = data.data.data.registration;            
                     this.registration_status = data.data.data.registration.intROG;
                     this.loader_spinner = false;
+                    console.log(this.registration);
                 })
                 .catch((error) => {
                     console.log(error);
