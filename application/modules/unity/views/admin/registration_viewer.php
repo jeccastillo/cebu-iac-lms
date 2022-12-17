@@ -16,7 +16,7 @@
                 
                 <label style="font-size:.6em;"> Registration Status</label>
                     
-                <select v-model="registration_status" @click.prevent.stop="changeRegStatus" class="form-control">
+                <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                     <option value="0">Registered</option>
                     <option value="1">Enrolled</option>
                     <option value="2">Cleared</option>
