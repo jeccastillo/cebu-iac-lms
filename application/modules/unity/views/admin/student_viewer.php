@@ -1,6 +1,6 @@
 
 <aside class="right-side">
-    <div id="student-viewer-container">
+    <div id="student-viewer-container"></div>
         <section class="content-header">
             <h1>
                 <small>
