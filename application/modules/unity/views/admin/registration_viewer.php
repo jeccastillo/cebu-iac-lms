@@ -118,7 +118,7 @@
 new Vue({
     el: '#registration-container',
     data: {
-        base_url: 'Test',
+        base_url: '<?php echo base_url(); ?>',
         id: '<?php echo $id; ?>',    
         sem: '<?php echo $selected_ay; ?>',        
         student:{},    
@@ -138,7 +138,8 @@ new Vue({
 
     mounted() {
 
-        let url_string = window.location.href;        
+        let url_string = window.location.href;
+        console.log(this.id);
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
