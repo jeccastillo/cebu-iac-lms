@@ -809,8 +809,7 @@ class Unity extends CI_Controller {
             //for total units
             $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
            // print_r($this->data['records']);
-
-           print_r($this->data);
+           
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/student_viewer",$this->data);
