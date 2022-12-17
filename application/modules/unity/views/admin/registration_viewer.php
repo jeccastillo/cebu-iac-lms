@@ -56,24 +56,24 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                     <li>
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
+                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
                             Personal Information
                         </a>
                     </li>
                     
                     <li v-if="advanced_privilages">
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
+                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
                             Report of Grades
                         </a>
                     </li>
                     <li v-if="advanced_privilages">
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
+                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
                             Assessment
                         </a>
                     </li>
                     
                     <li>
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
+                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
                             Schedule
                         </a>
                     </li>
@@ -118,8 +118,8 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: '7',    
-        sem: '25',
+        id: '<?php echo $id; ?>',    
+        sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
         student:{},    
         advanced_privilages: false,       
