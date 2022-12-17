@@ -124,6 +124,7 @@ new Vue({
         student:{},    
         advanced_privilages: false,       
         registration: {},
+        tuition:'',
         registration_status: 0,
         reg_status: undefined,        
         loader_spinner: true,                        
@@ -142,6 +143,7 @@ new Vue({
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
                         this.advanced_privilages = data.data.advanced_privilages;       
+                        this.tuition = data.data.tuition;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
