@@ -5,7 +5,7 @@
                 <small>
                     <a class="btn btn-app" href="<?php echo base_url() ?>student/view_all_students" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
                                     <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>   
-                                    <a class="btn btn-app" href="<?php echo base_url()."student/edit_student/".$student['intID']; ?>"><i class="ion ion-edit"></i> Edit</a> 
+                                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a> 
                                     <a class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                                         <i class="ion ion-printer"></i>Reg Form Print Preview</a> 
                                     
@@ -33,8 +33,7 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
                         <!-- /.widget-user-image -->
-                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
-                                <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
+                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramCode }} Major in {{ student.strMajor }}</h5>
                     </div>
                     <div class="box-footer no-padding">
@@ -106,6 +105,7 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',    
         sem: '<?php echo $selected_ay; ?>',
+        base_url: '<?php echo base_url(); ?>',
         student:{},    
         request: {
             enumScholarship: 0,
@@ -125,7 +125,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get('<?php echo base_url(); ?>unity/registration_viewer_data/' + this.id + '/' + this.sem)
+            axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                                                                             
                     this.registration = data.data.registration;            
                     this.registration_status = data.data.registration.intROG;
@@ -142,7 +142,7 @@ new Vue({
 
     methods: {        
         changeRegStatus: function(){
-            let url = '<?php echo base_url(); ?>unity/update_rog_status';
+            let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
             formdata.append("intRegistrationID",this.registration.intRegistrationID);
             formdata.append("intROG",this.registration_status);
