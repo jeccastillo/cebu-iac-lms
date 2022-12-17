@@ -11,20 +11,18 @@
                                     
                                     
                 </small>
-                <div class="pull-right">
-                    <?php if($registration): ?>
-                                <label style="font-size:.6em;"> Registration Status</label>
-                                    
-                                    <select class="form-control" rel="<?php echo $registration['intRegistrationID']; ?>" id="ROGStatusChange">
-                                        <option <?php echo ($registration['intROG'] == 0)?'selected':'' ?>  value="0">Registered</option>
-                                        <option <?php echo ($registration['intROG'] == 1)?'selected':'' ?> value="1">Enrolled</option>
-                                        <option <?php echo ($registration['intROG'] == 2)?'selected':'' ?> value="2">Cleared</option>
-                                    </select>
-                                    <?php endif; ?>
-            </div>
             </h1>
-
-
+            <div v-if="registration" class="pull-right">
+                
+                <label style="font-size:.6em;"> Registration Status</label>
+                    
+                <select v-model="registration_status" @click.prevent.stop="changeRegStatus" class="form-control">
+                    <option value="0">Registered</option>
+                    <option value="1">Enrolled</option>
+                    <option value="2">Cleared</option>
+                </select>
+                
+            </div>
         </section>
             <hr />
         <div class="content">
@@ -110,7 +108,7 @@ new Vue({
             strAcademicYear: undefined,
         },
         registration: {},
-
+        registration_status: undefined,
         
         loader_spinner: true,                        
     },
@@ -128,6 +126,7 @@ new Vue({
                 .then((data) => {                                        
                     console.log(data.data.data);       
                     this.registration = data.data.data.registration;            
+                    this.registration_status = data.data.data.registration.intROG;
                     this.loader_spinner = false;
                 })
                 .catch((error) => {
@@ -138,6 +137,30 @@ new Vue({
     },
 
     methods: {        
+        changeRegStatus: function(){
+            let url = '<?php echo base_url(); ?>unity/update_rog_status';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("intROG",this.registration_status);
+            this.loader_spinner = true;
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+            
+            
+        }
     }
 
 })
