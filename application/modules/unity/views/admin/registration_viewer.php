@@ -23,6 +23,7 @@
                 </select>
                 
             </div>
+            <hr />
         </section>
             <hr />
         <div class="content">
