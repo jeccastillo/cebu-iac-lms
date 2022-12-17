@@ -843,7 +843,7 @@ new Vue({
                         console.log(data.data);
                     }
                     else{
-                        document.location = this.base_url + 'users/login';
+                        //document.location = this.base_url + 'users/login';
                     }
 
                     this.loader_spinner = false;                    
