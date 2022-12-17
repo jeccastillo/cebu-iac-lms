@@ -56,14 +56,34 @@
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                        <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
-                        <?php if(in_array($user['intUserLevel'],array(2,4)) ): ?>
-                            <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Report of Grades</a></li>
-                        <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
-                        <?php endif; ?>
-                        <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
+                                Personal Information
+                            </a>
+                        </li>
+                       
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
+                                Report of Grades
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
+                                Assessment
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
+                                Schedule
+                            </a>
+                        </li>
                         <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
-                        <li><a href="<?php echo base_url()."unity/accounting/".$student['intID']; ?>">Accounting Summary</a></li>
+                        <li>
+                            <a :href="base_url + 'unity/accounting/' + student.intID">                                
+                                Accounting Summary
+                            </a>
+                        </li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">    
@@ -105,6 +125,7 @@ new Vue({
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
         student:{},    
+        advanced_privilages: false,
         request: {
             enumScholarship: 0,
             enumStudentType: 'new',
@@ -124,11 +145,18 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
-                .then((data) => {                                                                                             
-                    this.registration = data.data.registration;            
-                    this.registration_status = data.data.registration.intROG;
-                    this.reg_status = data.data.reg_status;
-                    this.student = data.data.student;
+                .then((data) => {  
+                    if(data.data.success){                                                                                           
+                        this.registration = data.data.registration;            
+                        this.registration_status = data.data.registration.intROG;
+                        this.reg_status = data.data.reg_status;
+                        this.student = data.data.student;         
+                        this.advanced_privilages = data.data.advanced_privilages;       
+                    }
+                    else{
+                        document.location = this.base_url + 'users/login';
+                    }
+
                     this.loader_spinner = false;                    
                 })
                 .catch((error) => {

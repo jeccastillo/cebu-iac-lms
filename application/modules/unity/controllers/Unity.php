@@ -427,61 +427,22 @@ class Unity extends CI_Controller {
     }
     
     public function registration_viewer_data($id,$sem){
-        
-        $active_sem = $this->data_fetcher->get_active_sem();
-
-        if($sem!=null)
-            $ret['selected_ay'] = $sem;
-        else
-            $ret['selected_ay'] = $active_sem['intID'];
-
-        $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
-        $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
-        $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);
-
-
-        $ret['student'] = $this->data_fetcher->getStudent($id);
-        $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-        $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-        $pay =  array();
-        foreach($payment as $p){
-            if(isset($pay[$p['strTransactionType']]))
-                $pay[$p['strTransactionType']] += $p['intAmountPaid'];
-            else
-                $pay[$p['strTransactionType']] = $p['intAmountPaid'];
-
-        }
-        $ret['payment'] = $pay;
-        //--------TUITION-------------------------------------------------------------------
-        $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
-        $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
-
-        echo json_encode($ret);
-
-    }
-
-    public function registration_viewer($id,$sem = null)
-    {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             $active_sem = $this->data_fetcher->get_active_sem();
 
             if($sem!=null)
-                $this->data['selected_ay'] = $sem;
+                $ret['selected_ay'] = $sem;
             else
-                $this->data['selected_ay'] = $active_sem['intID'];
+                $ret['selected_ay'] = $active_sem['intID'];
 
+            $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+            $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);            
 
-            $this->data['id'] =  $id;
-
-            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
-            $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-
-
-            $this->data['student'] = $this->data_fetcher->getStudent($id);
-            $this->data['transactions'] = $this->data_fetcher->getTransactions($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
-            $payment = $this->data_fetcher->getTransactionsPayment($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
+            $ret['student'] = $this->data_fetcher->getStudent($id);
+            $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+            $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             $pay =  array();
             foreach($payment as $p){
                 if(isset($pay[$p['strTransactionType']]))
@@ -490,18 +451,34 @@ class Unity extends CI_Controller {
                     $pay[$p['strTransactionType']] = $p['intAmountPaid'];
 
             }
-            $this->data['payment'] = $pay;
+            $ret['payment'] = $pay;
+            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
-            $data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['registration']['enumScholarship']);
-            $this->data['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/registration_viewer",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/registration_viewer_conf",$this->data); 
+            $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+            $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
+            $ret['success']= true;
         }
+        else{
+            $ret['message'] = 'denied';
+            $ret['success']= false;
+        }
+        echo json_encode($ret);
+
+    }
+
+    public function registration_viewer($id,$sem = null)
+    {
+        
+        if($sem!=null)
+            $data['selected_ay'] = $sem;
         else
-            redirect(base_url());
+            $data['selected_ay'] = $active_sem['intID'];
+
+        $data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/registration_viewer",$this->data);
+        $this->load->view("common/footer",$this->data);         
     }
     
     function accounting($id,$sem=null)
@@ -664,12 +641,102 @@ class Unity extends CI_Controller {
         }
         redirect(base_url());
     }
+
+    public function student_viewer_data($id=0,$sem = null,$tab = null){
+
+        if($this->faculty_logged_in())
+        {
+            $post = $this->input->post();
+            $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+             
+            if(!empty($post))
+               $id = $post['studentID'];
+			
+            //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
+            
+            $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
+            
+            if($sem!=null){
+                 $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+            }
+            else
+            {
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+                
+            }
+            
+            $ret['selected_ay'] = $ret['active_sem']['intID'];
+            
+            if($tab!=null)
+                $ret['tab'] = $tab;
+            else
+                $ret['tab'] = "tab_1";
+            
+            
+            $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+            $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
+            
+            
+            $ret['student'] = $this->data_fetcher->getStudent($id);
+            if(!$ret['student'])
+                $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
+            //per faculty info
+			$records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+            
+            $ret['grades'] = $this->data_fetcher->assessCurriculumDept($ret['student']['intID'],$ret['student']['intCurriculumID']);
+            
+            $ret['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($ret['student']['intID'],$ret['student']['intCurriculumID']);
+            
+            //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+            //$ret['grades'] = $grades;
+            
+            $ret['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$ret['selected_ay'],$id);
+            
+            $ret['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($ret['student']['intCurriculumID']);
+            
+            if($ret['totalUnitsEarned'] != 0)
+                $ret['gpa_curriculum'] = round($this->data_fetcher->getGPA($ret['student']['intID'],$ret['student']['intCurriculumID'])/$ret['totalUnitsEarned'],2);
+            else
+                $ret['gpa_curriculum'] = 0;
+            
+            $ret['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
+           
+            
+            foreach($records as $record)
+            {
+                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
+                //print_r($record['schedule']);
+                $ret['records'][] = $record;
+            }
+            
+            $sm = $this->data_fetcher->get_sem_by_id($regt['selected_ay']);            
+            $term = switch_num_rev($sm['enumSem']);
+        
+            if(!empty($ret['curriculum_subjects']))
+                $ret['sections'] = $this->data_fetcher->fetch_classlist_by_subject($ret['curriculum_subjects'][0]['intSubjectID'],$sm['intID']);
+            
+            //for total units
+            $ret['total_units'] = $this->data_fetcher->getTotalUnits($id);           
+            $ret['success']= true;
+        }
+        else{
+            $ret['message'] = 'denied';
+            $ret['success']= false;
+        }
+
+        echo json_encode($ret);
+
+    }
+
     
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
         if($this->faculty_logged_in())
         {
             $post = $this->input->post();
+            $this->data['id'] = $id;
+            $this->data['sem'] = $sem;
+            
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             if(!empty($post))
                $id = $post['studentID'];
