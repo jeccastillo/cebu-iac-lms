@@ -834,24 +834,7 @@ new Vue({
 
     mounted() {
 
-        let url_string = window.location.href;        
-        if(this.id != 0){            
-            //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem + '/' this.tab)
-                .then((data) => {  
-                    if(data.data.success){                                                                                           
-                        console.log(data.data);
-                    }
-                    else{
-                        document.location = this.base_url + 'users/login';
-                    }
-
-                    this.loader_spinner = false;                    
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        }
+        
 
     },
 
