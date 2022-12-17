@@ -119,7 +119,8 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get('<?php echo base_url(); ?>unity/registration_viewer_data/' + this.id + '/' + this.sem)
-                .then((data) => {                                                            
+                .then((data) => {    
+                    console.log(data.data);                                                     
                     this.registration = data.data.data.registration;            
                     this.registration_status = data.data.data.registration.intROG;
                     this.loader_spinner = false;
