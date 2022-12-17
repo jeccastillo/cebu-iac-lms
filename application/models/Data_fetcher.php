@@ -1752,6 +1752,7 @@ class Data_fetcher extends CI_Model {
                     ->from('tb_mas_registration')
                     ->where(array('intStudentID'=>$id,'intAYID'=>$sem))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship')
+                    ->get()
                     ->first_row('array');
     }
     
