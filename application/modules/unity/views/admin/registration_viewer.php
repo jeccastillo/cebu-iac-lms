@@ -115,12 +115,8 @@ new Vue({
 
     mounted() {
 
-        let url_string = window.location.href;
-        let url = new URL(url_string);
-
-        if(this.id != 0){
-        
-            this.header_title = 'Edit Tuition Year';
+        let url_string = window.location.href;        
+        if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get('<?php echo base_url(); ?>unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                        
