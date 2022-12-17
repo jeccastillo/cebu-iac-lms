@@ -90,11 +90,12 @@
                                 <div class="box box-solid">
                                     <div class="box-header">
                                         <h4 class="box-title">ASSESSMENT OF FEES</h4>
-                                    </div>                                    
+                                    </div>
+                                    <input type="hidden" id="intAYID" value="<?php echo $selected_ay; ?>">
                                     <div class="box-body">
                                         <div class="row">
-                                            <div v-html="tuition" class="col-sm-6">
-                                                
+                                            <div class="col-sm-6">
+                                                <?php echo $tuition; ?>
                                             </div>                                    
                                         </div>
                                     </div>
@@ -125,7 +126,6 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         student:{},    
         advanced_privilages: false,
-        tuition: undefined,
         request: {
             enumScholarship: 0,
             enumStudentType: 'new',
@@ -151,8 +151,7 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
-                        this.advanced_privilages = data.data.advanced_privilages;     
-                        this.tuition = data.data.tuition;  
+                        this.advanced_privilages = data.data.advanced_privilages;       
                     }
                     else{
                         document.location = this.base_url + 'users/login';
