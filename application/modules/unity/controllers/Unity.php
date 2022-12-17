@@ -709,7 +709,7 @@ class Unity extends CI_Controller {
                 $ret['records'][] = $record;
             }
             
-            $sm = $this->data_fetcher->get_sem_by_id($regt['selected_ay']);            
+            $sm = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);            
             $term = switch_num_rev($sm['enumSem']);
         
             if(!empty($ret['curriculum_subjects']))
