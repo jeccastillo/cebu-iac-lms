@@ -1,6 +1,6 @@
 
 <aside class="right-side">
-    <div id="student-viewer-container"></div>
+    <div id="student-viewer-container">
         <section class="content-header">
             <h1>
                 <small>
@@ -830,12 +830,7 @@ new Vue({
         id: '<?php echo $id; ?>',    
         sem: '<?php echo $sem; ?>',
         tab: '<?php echo $tab; ?>',
-        base_url: '<?php echo base_url(); ?>',
-        student:{},    
-        advanced_privilages: false,
-        registration: {},
-        registration_status: 0,
-        reg_status: undefined,        
+        base_url: '<?php echo base_url(); ?>',                      
         loader_spinner: true,                        
     },
 
