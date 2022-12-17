@@ -90,12 +90,11 @@
                                 <div class="box box-solid">
                                     <div class="box-header">
                                         <h4 class="box-title">ASSESSMENT OF FEES</h4>
-                                    </div>
-                                    <input type="hidden" id="intAYID" value="<?php echo $selected_ay; ?>">
+                                    </div>                                    
                                     <div class="box-body">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <?php echo $tuition; ?>
+                                          
                                             </div>                                    
                                         </div>
                                     </div>
