@@ -1,4 +1,18 @@
 
+<style>
+    .green-bg
+    {
+        background-color:#77cc77;
+    }
+    .red-bg
+    {
+        background-color:#cc7777;
+    }
+    .select2-container
+    {
+        display: block !important;
+    }
+</style>
 <aside class="right-side">
     <div id="student-viewer-container">
         <section class="content-header">
@@ -807,21 +821,6 @@
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-
-<style>
-    .green-bg
-    {
-        background-color:#77cc77;
-    }
-    .red-bg
-    {
-        background-color:#cc7777;
-    }
-    .select2-container
-    {
-        display: block !important;
-    }
-</style>
 
 <script>
 new Vue({
