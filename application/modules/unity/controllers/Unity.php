@@ -478,7 +478,7 @@ class Unity extends CI_Controller {
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/registration_viewer",$this->data);
-        $this->load->view("common/footer",$this->data);         
+        
     }
     
     function accounting($id,$sem=null)
