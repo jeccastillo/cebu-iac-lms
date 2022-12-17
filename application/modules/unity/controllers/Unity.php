@@ -738,6 +738,7 @@ class Unity extends CI_Controller {
             $this->data['sem'] = $sem;
             
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            print_r($this->data);
             if(!empty($post))
                $id = $post['studentID'];
 			

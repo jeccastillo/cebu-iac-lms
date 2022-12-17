@@ -827,13 +827,15 @@
 new Vue({
     el: '#student-viewer-container',
     data: {
-        
+        id: '<?php echo $id; ?>',    
+        sem: '<?php echo $sem; ?>',
+        tab: '<?php echo $tab; ?>',
+        base_url: '<?php echo base_url(); ?>',
         student:{},    
         advanced_privilages: false,
         registration: {},
         registration_status: 0,
-        reg_status: undefined,
-        
+        reg_status: undefined,        
         loader_spinner: true,                        
     },
 
