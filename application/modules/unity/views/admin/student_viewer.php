@@ -30,15 +30,17 @@
                         <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                     <?php endforeach; ?>
                     </select>
-                    <?php if($registration): ?>
-                    <label style="font-size:.6em;"> Registration Status</label>
-                    
-                    <select class="form-control" rel="<?php echo $registration['intRegistrationID']; ?>" id="ROGStatusChange">
-                        <option <?php echo ($registration['intROG'] == 0)?'selected':'' ?>  value="0">Registered</option>
-                        <option <?php echo ($registration['intROG'] == 1)?'selected':'' ?> value="1">Enrolled</option>
-                        <option <?php echo ($registration['intROG'] == 2)?'selected':'' ?> value="2">Cleared</option>
-                    </select>
-                    <?php endif; ?>
+                    <div v-if="registration" class="pull-right">
+            
+                        <label style="font-size:.6em;"> Registration Status</label>
+                            
+                        <select v-model="registration_status" @change="changeRegStatus" class="form-control">
+                            <option value="0">Registered</option>
+                            <option value="1">Enrolled</option>
+                            <option value="2">Cleared</option>
+                        </select>
+                        
+                    </div>
                 </div>
                 <div style="clear:both"></div>
             </h1>
@@ -818,7 +820,8 @@ new Vue({
         registration: {},
         active_sem: {},
         reg_status: '',
-        base_url: '<?php echo base_url(); ?>',                      
+        base_url: '<?php echo base_url(); ?>',   
+        registration_status: 0,                   
         loader_spinner: true,                        
     },
 
@@ -831,7 +834,8 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
-                        this.registration = data.data.registration;                        
+                        this.registration = data.data.registration;
+                        this.registration_status = data.data.registration.intROG;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
                     }
@@ -849,7 +853,30 @@ new Vue({
     },
 
     methods: {        
-        
+        changeRegStatus: function(){
+            let url = this.base_url + 'unity/update_rog_status';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("intROG",this.registration_status);
+            this.loader_spinner = true;
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+            
+            
+        }
     }
 
 })
