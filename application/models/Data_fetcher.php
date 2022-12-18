@@ -1156,15 +1156,19 @@ class Data_fetcher extends CI_Model {
     
     function getStudent($id,$field = "intID")
     {
-        return  current(
-                $this->db
+        $ret =  $this->db
                      ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName')
                      ->from('tb_mas_users')
                      ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')   
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID')
                      ->where(array('tb_mas_users.'.$field => $id))
                      ->get()
-                     ->result_array());
+                     ->first_row('array');
+
+        $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                     
+        $ret['dteCreated'] = date("M j, Y",strtotime($ret['dteCreated']));
+
+        return $ret;
                      
     }
 
