@@ -86,7 +86,7 @@
                         <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                    
                     </ul>
                     <div class="tab-content">
-                    <div class="[(tab == 'tab_1') ? 'active' : '', tab-pane]" id="tab_1">
+                    <div :class="[(tab == 'tab_1') ? 'active' : '', tab-pane]" id="tab_1">
                         <div class="box box-primary">
                             
                             <div class="box-body">
