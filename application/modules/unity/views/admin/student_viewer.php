@@ -810,6 +810,7 @@ new Vue({
         reg_status: '',
         advanced_privilages1: false,
         advanced_privilages2: false,
+        selected_ay: undefined,
         base_url: '<?php echo base_url(); ?>',   
         registration_status: 0,                   
         loader_spinner: true,                        
@@ -828,6 +829,7 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
+                        this.selected_ay = data.data.selected_ay;
                         this.advanced_privilages1 = data.data.advanced_privilages1;
                         this.advanced_privilages2 = data.data.advanced_privilages2;
                     }
