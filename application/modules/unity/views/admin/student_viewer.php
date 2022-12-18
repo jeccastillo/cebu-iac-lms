@@ -835,7 +835,7 @@ new Vue({
                         this.advanced_privilages2 = data.data.advanced_privilages2;
                         this.sy = data.data.sy;
                         this.term_type = data.data.term_type;
-                        this.sem_student = selected_ay;
+                        this.sem_student = this.selected_ay;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
