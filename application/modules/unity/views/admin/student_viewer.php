@@ -826,7 +826,8 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',                          
         student: {},
-        registration:{},
+        registration: {},
+        active_sem: {},
         base_url: '<?php echo base_url(); ?>',                      
         loader_spinner: true,                        
     },
@@ -841,7 +842,7 @@ new Vue({
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
                         this.registration = data.data.registration;                        
-                        
+                        this.active_sem = data.data.active_sem;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
