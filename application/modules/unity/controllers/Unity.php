@@ -708,6 +708,9 @@ class Unity extends CI_Controller {
                 //print_r($record['schedule']);
                 $ret['records'][] = $record;
             }
+
+            $ret['advanced_privilages1'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4)) )?true:false;
+            $ret['advanced_privilages2'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4,6)) )?true:false;
             
             $sm = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);            
             $term = switch_num_rev($sm['enumSem']);

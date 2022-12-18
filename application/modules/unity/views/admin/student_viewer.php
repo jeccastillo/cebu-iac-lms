@@ -77,23 +77,16 @@
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                    <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
-                    <?php if(in_array($user['intUserLevel'],array(2,4,3)) ): ?>
-                    <li class="<?php echo ($tab == "tab_2")?'active':'' ?>"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
-                    <li class="<?php echo ($tab == "tab_3")?'active':'' ?>"><a href="#tab_3" data-toggle="tab">Assessment</a></li>
-                        <?php endif; ?>
-                    <?php if($registration && in_array($user['intUserLevel'],array(2,3,4,6))): ?>
-                    <li class="<?php echo ($tab == "tab_5")?'active':'' ?>"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
-                    <li><a href="<?php echo base_url()."unity/registration_viewer/".$student['intID']."/".$selected_ay; ?>">Statement of Account</a></li>
-                        
-                        <li><a href="<?php echo base_url()."unity/edit_registration/".$student['intID']."/".$selected_ay; ?>">Edit Registration</a></li>
-                        <?php endif; ?>
-                        <li><a href="<?php echo base_url()."unity/accounting/".$student['intID']; ?>">Accounting Summary</a></li>
-                        
-                    
+                        <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
+                        <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
+                        <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                        
+                        <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
+                        <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">Statement of Account</a></li>
+                        <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li>
+                        <li><a :href="base_url + 'unity/accounting/' student.intID">Accounting Summary</a></li>                    
                     </ul>
                     <div class="tab-content">
-                    <div class="tab-pane <?php echo ($tab == "tab_1")?'active':'' ?>" id="tab_1">
+                    <div :class="[(tab == 'tab_2') ? 'active' : '', tab-pane]" id="tab_1">
                         <div class="box box-primary">
                             
                             <div class="box-body">
@@ -815,6 +808,8 @@ new Vue({
         registration: {},
         active_sem: {},
         reg_status: '',
+        advanced_privilages1: false,
+        advanced_privilages2: false,
         base_url: '<?php echo base_url(); ?>',   
         registration_status: 0,                   
         loader_spinner: true,                        
@@ -833,6 +828,8 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
+                        this.advanced_privilages1 = data.data.advanced_privilages1;
+                        this.advanced_privilages2 = data.data.advanced_privilages2;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
