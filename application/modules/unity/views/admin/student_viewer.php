@@ -25,7 +25,7 @@
                 </small>
                 
                 <div class="box-tools pull-right">
-                    <select v-model="sem_student" id="select-sem-student" class="form-control" >
+                    <select v-model="sem_student" @change="changeTermSelected" class="form-control" >
                         <option v-for="s in sy" :value="s.intID">{{s.enumSem + ' ' + term_type + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                     </select>
                     <div v-if="registration" class="pull-right">
@@ -846,7 +846,11 @@ new Vue({
 
     },
 
-    methods: {                
+    methods: {     
+        changeTermSelected: function(){
+            document.location = this.base_url + "unity/student_viewer/" + 
+            this.student.intID + "/" + this.sem_student;
+        },           
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
