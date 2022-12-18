@@ -848,11 +848,10 @@ new Vue({
 
     methods: {     
         changeTermSelected: function(){
-            console.log(this.base_url + "unity/student_viewer/" + this.student.intID + "/" + this.sem_student)
-            //document.location = this.base_url + "unity/student_viewer/" + 
-            //this.student.intID + "/" + this.sem_student;
+            document.location = this.base_url + "unity/student_viewer/" + 
+            this.student.intID + "/" + this.sem_student;
         },          
-
+         
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
