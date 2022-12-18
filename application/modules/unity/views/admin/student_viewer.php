@@ -6,8 +6,12 @@
                 <small>
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
                     <!-- <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>    -->
-                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + page_data.student.intID"><i class="ion ion-edit"></i> Edit</a> 
-                    
+                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a> 
+                    <!-- <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a> -->
+                    <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
+                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/ + student.intID +'/'+ active_sem.intID">
+                        <i class="ion ion-printer"></i>Reg Form Print Preview
+                    </a>                     
                     <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                     <i class="ion ion-printer"></i>Registration Data Only</a>  -->
                     <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
@@ -820,8 +824,9 @@
 new Vue({
     el: '#student-viewer-container',
     data: {
-        id: '<?php echo $id; ?>',            
-        page_data: {},        
+        id: '<?php echo $id; ?>',                          
+        student: {},
+        registration:{},
         base_url: '<?php echo base_url(); ?>',                      
         loader_spinner: true,                        
     },
@@ -834,8 +839,8 @@ new Vue({
             axios.get(this.base_url + 'unity/student_viewer_data/' + this.id )
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
-                        this.page_data = data.data;
-                        console.log(this.page_data);
+                        this.student = data.data.student;
+                        this.registration = data.data.registration;                        
                         
                     }
                     else{
