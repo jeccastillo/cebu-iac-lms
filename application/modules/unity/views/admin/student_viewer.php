@@ -6,6 +6,7 @@
                 <small>
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
                     <!-- <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>    -->
+                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + page_data.student.intID"><i class="ion ion-edit"></i> Edit</a> 
                     
                     <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                     <i class="ion ion-printer"></i>Registration Data Only</a>  -->
