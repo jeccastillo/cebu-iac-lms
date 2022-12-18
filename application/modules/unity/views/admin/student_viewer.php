@@ -77,7 +77,7 @@
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                    <li class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
+                    <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
                     <?php if(in_array($user['intUserLevel'],array(2,4,3)) ): ?>
                     <li class="<?php echo ($tab == "tab_2")?'active':'' ?>"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
                     <li class="<?php echo ($tab == "tab_3")?'active':'' ?>"><a href="#tab_3" data-toggle="tab">Assessment</a></li>
