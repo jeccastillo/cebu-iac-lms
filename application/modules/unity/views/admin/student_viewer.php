@@ -89,17 +89,9 @@
                             
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="alert alert-danger" style="<?php echo ($upload_errors=="")?'display:none':'' ?>;">
-                                        <i class="fa fa-ban"></i>
-                                        <b>Alert!</b>
-                                        <?php echo $upload_errors; ?>
-                                    </div>
-                                    <div class="col-sm-3 size-96">
-                                    <?php if($student['strPicture'] == "" ): ?>
-                                    <img src="<?php echo $img_dir?>default_image2.png" class="img-responsive"/>
-                                    <?php else: ?>
-                                            <img class="img-responsive" src="<?php echo $photo_dir.$student['strPicture']; ?>" />
-                                        <?php endif; ?>
+                                    <div class="col-sm-3 size-96">                                    
+                                        <img v-if="student.studentPicture == ''" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
+                                        <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
                                     </div>
                                     <div class="col-sm-9">
                                     <p><strong>Student Number: </strong><?php echo $student['strStudentNumber']; ?></p>
@@ -810,6 +802,8 @@ new Vue({
         term_type: undefined,
         sem_student: undefined,
         advanced_privilages1: false,
+        photo_dir: undefined,
+        img_dir: undefined,
         advanced_privilages2: false,
         selected_ay: undefined,
         base_url: '<?php echo base_url(); ?>',   
@@ -835,6 +829,8 @@ new Vue({
                         this.advanced_privilages2 = data.data.advanced_privilages2;
                         this.sy = data.data.sy;
                         this.term_type = data.data.term_type;
+                        this.photo_dir = data.data.photo_dir;
+                        this.img_dir = data.data.img_dir;
                         this.sem_student = this.selected_ay;
                     }
                     else{

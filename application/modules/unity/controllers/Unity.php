@@ -710,6 +710,8 @@ class Unity extends CI_Controller {
             }
 
             $ret['term_type'] = $this->data['term_type'];
+            $ret['img_dir'] = $this->data['img_dir'];
+            $ret['photo_dir'] = $this->data['photo_dir'];
 
             $ret['advanced_privilages1'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4)) )?true:false;
             $ret['advanced_privilages2'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4,6)) )?true:false;
