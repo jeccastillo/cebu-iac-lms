@@ -47,40 +47,33 @@
         </section>
         <hr />
         <div class="content">
-            <input type="hidden" value="<?php echo $student['intID'] ?>" id="student-id" />
-            <input type="hidden" value="<?php echo $student['intCurriculumID'] ?>" id="curriculum-id" />
-            <input type="hidden" value="<?php echo $active_sem['intID']; ?>" id="active-sem-id" />
-            <input type="hidden" value="<?php echo $academic_standing['year']; ?>" id="academic-standing">
-            <input type="hidden" value="<?php echo $academic_standing['status']; ?>" id="academic-standing-stat">
-            <input type="hidden" value="<?php echo switch_num_rev($active_sem['enumSem']); ?>" id="active-sem" >
             <div class="row">
                 <div class="col-sm-12">
                     <div class="box box-widget widget-user-2">
-                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-red">
-                    <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
-                                <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
-                    <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." Major in ".$student['strMajor']; ?></h5>
-                        
-                        
-                    </div>
-                    <div class="box-footer no-padding">
-                    <ul class="nav nav-stacked">
-                        <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>
-                        <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue"><?php echo $student['strName']; ?></span></a></li>
-                        <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right"><?php echo $reg_status; ?></span></a> </li>
-                            <li><a href="<?php echo base_url()."unity/delete_registration/".$student['intID']."/".$active_sem['intID']; ?>"><i class="ion ion-android-close"></i> Reset Status</a> </li>
-                        <li><a style="font-size:13px;" href="#">Date Registered <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">'.$registration['dteRegistered'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span></a></li>
-                        <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right"><?php echo $registration['enumScholarship']; ?></span></a></li>
-                        
-                    </ul>
-                    </div>
-                </div>
-                    
-                </div>
-                
-            
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-red">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
+                            <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramCode }} Major in {{ student.strMajor }}</h5>
+                        </div>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                            <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber }}</span></a></li>
+                            <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
+                            <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
+                            <li><a :href="base_url + 'unity/delete_registration/' + student.intID + '/' + active_sem.intID"><i class="ion ion-android-close"></i> Reset Status</a> </li>
+                            <li>
+                                <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
+                                    <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
+                                    <span style="color:#900000;" v-else>N/A</span>                                
+                                </a>
+                            </li>                                                
+                            <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>                
+                </div>                                            
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
@@ -128,7 +121,7 @@
                                     <p><strong>Date Created: </strong><?php echo date("M j, Y",strtotime($student['dteCreated'])); ?></p>
                                         
                                     
-                                    <strong>Is Graduate:</strong>
+                                    <strong>Graduated Status:</strong>
                                     <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
                                     <select class="form-control" rel="<?php echo $student['intID']; ?>" id="GraduateStatus">
                                         <option <?php echo ($student['isGraduate'] == 0)?'selected':'' ?>  value="0">No</option>
@@ -140,10 +133,10 @@
                                         switch($student['isGraduate'])
                                         {
                                             case 0:
-                                                echo 'No';
+                                                echo 'Not Grad';
                                                 break;
                                             case 1:
-                                                echo 'yes';
+                                                echo 'Grad';
                                                 break;
                                         }
                                         ?>
