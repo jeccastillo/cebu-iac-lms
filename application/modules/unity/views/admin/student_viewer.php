@@ -839,6 +839,7 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.page_data = data.data;
+                        console.log(this.page_data);
                         
                     }
                     else{
