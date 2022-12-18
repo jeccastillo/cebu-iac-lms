@@ -77,16 +77,16 @@
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" @click='resetTab' data-toggle="tab">Personal Information</a></li>
-                        <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a @click='resetTab' href="#tab_2" data-toggle="tab">Report of Grades</a></li>
-                        <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a @click='resetTab' href="#tab_3" data-toggle="tab">Assessment</a></li>                                        
-                        <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a @click='resetTab' href="#tab_5" data-toggle="tab">Schedule</a></li>
+                        <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
+                        <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
+                        <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                        
+                        <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">Statement of Account</a></li>
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li>
                         <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                    
                     </ul>
                     <div class="tab-content">
-                    <div class="[(tab == 'tab_2') ? 'active' : '', tab-pane]" id="tab_1">
+                    <div class="[(tab == 'tab_1') ? 'active' : '', tab-pane]" id="tab_1">
                         <div class="box box-primary">
                             
                             <div class="box-body">
