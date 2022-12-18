@@ -832,6 +832,7 @@ new Vue({
                         this.photo_dir = data.data.photo_dir;
                         this.img_dir = data.data.img_dir;
                         this.sem_student = this.selected_ay;
+                        console.log(this.sem_student);
                     }
                     else{
                         document.location = this.base_url + 'users/login';
