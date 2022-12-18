@@ -90,7 +90,7 @@
                             <div class="box-body">
                                 <div class="row">
                                     <div class="col-sm-3 size-96">                                    
-                                        <img v-if="student.studentPicture == ''" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
+                                        <img v-if="student.strPicture == ''" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
                                         <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
                                     </div>
                                     <div class="col-sm-9">
