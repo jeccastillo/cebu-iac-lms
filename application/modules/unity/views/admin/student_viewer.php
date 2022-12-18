@@ -849,7 +849,7 @@ new Vue({
     methods: {     
         changeTermSelected: function(){
             document.location = this.base_url + "unity/student_viewer/" + 
-            this.student.intID + "/" + this.sem_student;
+            this.student.intID + "/" + this.sem_student + "/" + this.tab;
         },          
          
         changeRegStatus: function(){
