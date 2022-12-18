@@ -4,35 +4,24 @@
         <section class="content-header">
             <h1>
                 <small>
-                    <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
-                    <!-- <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>    -->
-                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a> 
-                    <!-- <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a> -->
+                    <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
+                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
                     <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
                     <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>Reg Form Print Preview
                     </a>                     
-                    <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                    <i class="ion ion-printer"></i>Registration Data Only</a>  -->
-                    <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                    <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a>  -->
-                    
-                    <?php if($reg_status!="For Advising"): ?>
-                    <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                        <i class="ion ion-printer"></i>Print Advising Form</a> 
-                    <?php endif; ?>
-                    <?php if($reg_status == "For Advising"): ?>
-                        <a class="btn btn-app" href="<?php echo base_url()."/department/advising/".$student['intID']; ?>">
+                    <a v-if="reg_status != 'For Advising'" target="_blank" class="btn btn-app" href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                        <i class="ion ion-printer"></i>Print Advising Form
+                    </a> 
+                    <a v-else target="_blank" class="btn btn-app" href="base_url + 'department/advising/' + student.intID">
                         <i class="fa fa-book"></i>Advising/Subject Loading</a> 
-                        
-                    <?php endif; ?>                            
-                    <?php if(!$registration && $reg_status!="For Advising"): ?>
-                        <a class="btn btn-app" href="<?php echo base_url()."unity/edit_sections/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                        <i class="fa fa-book"></i> Update Sections</a> 
-                        
-                        <a class="btn btn-app" href="<?php echo base_url()."/registrar/register_old_student2/".$student['intID']; ?>">
-                        <i class="fa fa-book"></i>Register Student</a> 
-                    <?php endif; ?>                    
+                    </a>
+                    <a v-if="registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
+                        <i class="fa fa-book"></i> Update Sections
+                    </a>                         
+                    <a v-if="registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'registrar/register_old_student2/' + student.intID">
+                        <i class="fa fa-book"></i>Register Student
+                    </a>                                         
                 </small>
                 
                 <div class="box-tools pull-right">
@@ -828,6 +817,7 @@ new Vue({
         student: {},
         registration: {},
         active_sem: {},
+        reg_status: '',
         base_url: '<?php echo base_url(); ?>',                      
         loader_spinner: true,                        
     },
@@ -843,6 +833,7 @@ new Vue({
                         this.student = data.data.student;
                         this.registration = data.data.registration;                        
                         this.active_sem = data.data.active_sem;
+                        this.reg_status = data.data.reg_status;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
