@@ -846,10 +846,7 @@ new Vue({
 
     },
 
-    methods: {        
-        resetTab: function(){
-            this.tab = '';
-        },
+    methods: {                
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
