@@ -742,11 +742,27 @@ class Unity extends CI_Controller {
         {
             $post = $this->input->post();
             $this->data['id'] = $id;
-            $this->data['sem'] = $sem;                
+            $this->data['sem'] = $sem;
+            
             
             if(!empty($post))
                $id = $post['studentID'];
-		
+			
+            //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
+            
+        
+            
+            if($sem!=null){
+                 $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+            }
+            else
+            {
+                $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+                
+            }
+            
+            $this->data['selected_ay'] = $this->data['active_sem']['intID'];
+            
             if($tab!=null)
                 $this->data['tab'] = $tab;
             else
