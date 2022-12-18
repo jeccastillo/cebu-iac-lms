@@ -25,10 +25,8 @@
                 </small>
                 
                 <div class="box-tools pull-right">
-                    <select id="select-sem-student" class="form-control" >
-                    <?php foreach($sy as $s): ?>
-                        <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                    <?php endforeach; ?>
+                    <select v-model="sem_student" id="select-sem-student" class="form-control" >
+                        <option v-for="s in sy" :value="s.intID">{{s.enumSem + ' ' + term_type + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                     </select>
                     <div v-if="registration" class="pull-right">
             
@@ -145,7 +143,7 @@
                         </div>
                     <!-- /.tab-pane -->
                     <?php if(in_array($user['intUserLevel'],array(2,4,3)) ): ?>
-                    <div class="tab-pane <?php echo ($tab == "tab_2")?'active':'' ?>" id="tab_2">
+                        <div :class="[(tab == 'tab_2') ? 'active' : '']" class="tab-pane" id="tab_2">
                         <div class="box box-primary">
                                 <div class="box-body">
                                     <?php if($active_sem['enumFinalized'] == "no" && $registration): ?>
@@ -808,6 +806,7 @@ new Vue({
         registration: {},
         active_sem: {},
         reg_status: '',
+        sem_student: undefined,
         advanced_privilages1: false,
         advanced_privilages2: false,
         selected_ay: undefined,
@@ -832,6 +831,8 @@ new Vue({
                         this.selected_ay = data.data.selected_ay;
                         this.advanced_privilages1 = data.data.advanced_privilages1;
                         this.advanced_privilages2 = data.data.advanced_privilages2;
+                        this.sy = data.data.sy;
+                        this.sem_student = selected_ay;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
