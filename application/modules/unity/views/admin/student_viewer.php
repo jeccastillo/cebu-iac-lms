@@ -94,37 +94,37 @@
                                         <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
                                     </div>
                                     <div class="col-sm-9">
-                                    <p><strong>Student Number: </strong><?php echo $student['strStudentNumber']; ?></p>
-                                    <p><strong>Learner Reference Number(LRN): </strong><?php echo $student['strLRN']; ?></p>
-                                    <p><strong>Address: </strong><?php echo $student['strAddress']; ?></p>
-                                    <p><strong>Contact: </strong><?php echo $student['strMobileNumber']; ?></p>
-                                    <p><strong>Institutional Email: </strong><?php echo $student['strGSuiteEmail']; ?></p>  
-                                    <p><strong>Personal Email: </strong><?php echo $student['strEmail']; ?></p>  
-                                    <p><strong>Birthdate: </strong><?php echo date("M j, Y",strtotime($student['dteBirthDate'])); ?></p>  
-                                    <p><strong>Date Created: </strong><?php echo date("M j, Y",strtotime($student['dteCreated'])); ?></p>
+                                        <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
+                                        <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
+                                        <p><strong>Address: </strong>{{ student.strAddress }}</p>
+                                        <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
+                                        <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
+                                        <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
+                                        <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>  
+                                        <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
+                                            
                                         
-                                    
-                                    <strong>Graduated Status:</strong>
-                                    <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
-                                    <select class="form-control" rel="<?php echo $student['intID']; ?>" id="GraduateStatus">
-                                        <option <?php echo ($student['isGraduate'] == 0)?'selected':'' ?>  value="0">No</option>
-                                        <option <?php echo ($student['isGraduate'] == 1)?'selected':'' ?> value="1">Yes</option>
-                                    </select>
-                                        <hr />
-                                        <a href="<?php echo base_url()."pdf/portal_login_data/".$student['intID']; ?>" class="btn btn-info" target="_blank">Portal Login Data</a>
-                                    <?php else: 
-                                        switch($student['isGraduate'])
-                                        {
-                                            case 0:
-                                                echo 'Not Grad';
-                                                break;
-                                            case 1:
-                                                echo 'Grad';
-                                                break;
-                                        }
-                                        ?>
-                                        
-                                    <?php endif; ?>
+                                        <strong>Graduated Status:</strong>
+                                        <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
+                                        <select class="form-control" rel="<?php echo $student['intID']; ?>" id="GraduateStatus">
+                                            <option <?php echo ($student['isGraduate'] == 0)?'selected':'' ?>  value="0">No</option>
+                                            <option <?php echo ($student['isGraduate'] == 1)?'selected':'' ?> value="1">Yes</option>
+                                        </select>
+                                            <hr />
+                                            <a href="<?php echo base_url()."pdf/portal_login_data/".$student['intID']; ?>" class="btn btn-info" target="_blank">Portal Login Data</a>
+                                        <?php else: 
+                                            switch($student['isGraduate'])
+                                            {
+                                                case 0:
+                                                    echo 'Not Grad';
+                                                    break;
+                                                case 1:
+                                                    echo 'Grad';
+                                                    break;
+                                            }
+                                            ?>
+                                            
+                                        <?php endif; ?>
                                         
                                     </div>
                                     
