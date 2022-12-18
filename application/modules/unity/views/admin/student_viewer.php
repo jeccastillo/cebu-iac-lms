@@ -806,6 +806,8 @@ new Vue({
         registration: {},
         active_sem: {},
         reg_status: '',
+        sy: undefined,
+        term_type: undefined,
         sem_student: undefined,
         advanced_privilages1: false,
         advanced_privilages2: false,
@@ -832,6 +834,7 @@ new Vue({
                         this.advanced_privilages1 = data.data.advanced_privilages1;
                         this.advanced_privilages2 = data.data.advanced_privilages2;
                         this.sy = data.data.sy;
+                        this.term_type = data.data.term_type;
                         this.sem_student = selected_ay;
                     }
                     else{
