@@ -4,20 +4,19 @@
         <section class="content-header">
             <h1>
                 <small>
-                    <a class="btn btn-app" href="<?php echo base_url() ?>student/view_all_students" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
-                    <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>   
-                    <a class="btn btn-app" href="<?php echo base_url()."student/edit_student/".$student['intID']; ?>"><i class="ion ion-edit"></i> Edit</a> 
+                    <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
+                    <!-- <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>    -->
+                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + page_data.student.intID"><i class="ion ion-edit"></i> Edit</a> 
                     <!-- <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_repeated_subject_per_student/<?php echo $student['intID']; ?>"><i class="ion ion-android-download"></i> Download Repeated Subjects</a> -->
-                    <a class="btn btn-app" target="_blank" href="<?php echo base_url()."pdf/print_curriculum/".$student['intCurriculumID']."/".$student['intID'] ?>"><i class="fa fa-print"></i>Curriculum Outline</a> 
-                    <?php if($registration && in_array($user['intUserLevel'],array(2,3,6))): ?>
-                        <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                        <i class="ion ion-printer"></i>Reg Form Print Preview</a> 
+                    <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + page_data.student.intCurriculumID + '/' + page_data.student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
+                    <a target="_blank" v-if="page_data.registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/ + page_data.student.intID +'/'+ page_data.active_sem.intID">
+                        <i class="ion ion-printer"></i>Reg Form Print Preview
+                    </a>                     
+                    <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                    <i class="ion ion-printer"></i>Registration Data Only</a>  -->
+                    <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
+                    <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a>  -->
                     
-                        <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                        <i class="ion ion-printer"></i>Registration Data Only</a>  -->
-                        <!-- <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_registration_data_print_legacy/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                        <i class="ion ion-printer"></i>Registration Data Only (Legacy)</a>  -->
-                    <?php endif; ?>
                     <?php if($reg_status!="For Advising"): ?>
                     <a target="_blank" class="btn btn-app" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
                         <i class="ion ion-printer"></i>Print Advising Form</a> 
@@ -826,7 +825,8 @@ new Vue({
     el: '#student-viewer-container',
     data: {
         id: '<?php echo $id; ?>',    
-        sem: '<?php echo $sem; ?>',
+        sem: '<?php echo $sem; ?>',        
+        page_data: {},
         tab: '<?php echo $tab; ?>',
         base_url: '<?php echo base_url(); ?>',                      
         loader_spinner: true,                        
@@ -839,11 +839,11 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem + '/' + this.tab)
                 .then((data) => {  
-                    if(data.data.success){                                                                                           
-                        console.log(data.data);
+                    if(data.data.success){                                                                                                                   
+                        page_data = data.data;
                     }
                     else{
-                        //document.location = this.base_url + 'users/login';
+                        document.location = this.base_url + 'users/login';
                     }
 
                     this.loader_spinner = false;                    
