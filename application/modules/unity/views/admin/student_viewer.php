@@ -16,10 +16,10 @@
                     <a v-else target="_blank" class="btn btn-app" href="base_url + 'department/advising/' + student.intID">
                         <i class="fa fa-book"></i>Advising/Subject Loading</a> 
                     </a>
-                    <a v-if="registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         
-                    <a v-if="registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'registrar/register_old_student2/' + student.intID">
+                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Register Student
                     </a>                                         
                 </small>
