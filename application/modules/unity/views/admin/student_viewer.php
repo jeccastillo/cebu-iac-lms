@@ -816,7 +816,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/student_viewer_data/' + this.id )
+            axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem )
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
