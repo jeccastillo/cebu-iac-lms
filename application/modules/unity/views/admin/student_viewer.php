@@ -83,10 +83,10 @@
                         <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">Statement of Account</a></li>
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li>
-                        <li><a :href="base_url + 'unity/accounting/' student.intID">Accounting Summary</a></li>                    
+                        <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                    
                     </ul>
                     <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1">
+                    <div class="[(tab == 'tab_2') ? 'active' : '', tab-pane]" id="tab_1">
                         <div class="box box-primary">
                             
                             <div class="box-body">
