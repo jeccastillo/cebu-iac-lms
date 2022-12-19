@@ -95,9 +95,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <!-- <td style="<?php echo ($remaining_balance!=0)?'background:#c55;color:#fff;':''; ?>" colspan="3">
-                            remaining balance: <?php echo $remaining_balance; ?>php
-                            </td> -->
+                            <td style="" colspan="3">
+                            remaining balance: {{ remaining_amount }}
+                            </td>
                         </tr>
                     </table>
 
