@@ -234,9 +234,9 @@
                                         </thead>
                                         <tbody>                                            
                                             <tr v-for="record in records"  style="font-size: 13px;">
-                                                <td>{{ record.strSection }}<?php echo $record['strSection']; ?></td>
-                                                <td>{{ record.strCode }}<?php echo $record['strCode']; ?></td>
-                                                <td>{{ record.strDescription }}<?php echo $record['strDescription'] ?></td>
+                                                <td>{{ record.strSection }</td>
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strDescription }}</td>
                                                 <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
                                                 
 
