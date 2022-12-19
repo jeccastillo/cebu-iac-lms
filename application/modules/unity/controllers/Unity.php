@@ -936,6 +936,10 @@ class Unity extends CI_Controller {
                 $this->data['tab'] = "tab_1";
             
             
+            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
+            
+            
           
             
           
