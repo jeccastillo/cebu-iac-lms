@@ -66,7 +66,7 @@
                                     <span style="color:#900000;" v-else>N/A</span>                                
                                 </a>
                             </li>                                                
-                            <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
                                 
                             </ul>
                         </div>
