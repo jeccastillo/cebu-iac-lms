@@ -12,12 +12,6 @@
             </div>
             <div style="clear:both"></div>
         </h1>
-        <!--
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Faculty</a></li>
-                        <li class="active">View Faculty</li>
-                    </ol>
--->
     </section>
     <div class="content container">
         <input type="hidden" value="<?php echo $faculty['intID'] ?>" id="faculty-id" />
@@ -82,7 +76,7 @@
 
                     <tbody>
                         <?php if(!empty($classlist)):
-                    foreach($classlist as $class): ?>
+                                foreach($classlist as $class): ?>
                         <tr>
                             <td><?php echo $class['strSection']; ?></td>
                             <td><?php echo $class['strClassName']; ?></td>
@@ -93,7 +87,7 @@
                             <td>
                                 <?php echo $class['schedule']['schedString']; ?>
                                 <?php foreach($class['schedule'] as $sched):
-                                    if(isset($sched['dteStart'])):                                
+                                        if(isset($sched['dteStart'])):                                
                                         $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
                                 ?>
                                 <input type="hidden" class="<?php echo $sched['strDay']; ?>"
@@ -107,23 +101,24 @@
                                 ?>
                             </td>
                             <?php else: ?>
-                            <td></td>
+                                <td></td>
 
                             <?php endif; ?>
                             <td>
                                 <?php 
-                                                            if ($class['intFinalized'] == 1) {
-                                                                echo "Submitted";
-                                                            }
-                                                            else {
-                                                                echo "Not Yet Submitted";
-                                                            }                                        
-                                                    ?>
-                            </td>
-                            <!--                    <td><?php echo $record['strFirstname']." ".$record['strLastname'];  ?></td>-->
+                                    if ($class['intFinalized'] == 1) {
+                                        echo "Submitted";
+                                    }
+                                    else {
+                                        echo "Not Yet Submitted";
+                                    }                                        
+                            ?>
+                            </td>                           
                         </tr>
-                        <?php endforeach; 
-                    else: ?>
+                            <?php 
+                                endforeach; 
+                            else:
+                        ?>
                         <tr>
                             <th>No Classlists for this term</th>
                         </tr>
