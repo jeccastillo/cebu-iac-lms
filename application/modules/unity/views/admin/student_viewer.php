@@ -250,7 +250,7 @@
                             </div>
                             <div class="box box-primary">
                                 <div class="box-body">
-                                    <form method="post" :action="base_url + 'pdf/print_sched'">   
+                                    <form method="post" target="_blank" :action="base_url + 'pdf/print_sched'">   
                                         <input type="hidden" name="sched-table" id="sched-table" />                                                                                
                                         <input type="hidden" :value="student.strLastname + '-' + student.strFirstname + '-' + student.strStudentNumber" name="studentInfo" id="studentInfo" />
                                         <div id="sched-table-container">
