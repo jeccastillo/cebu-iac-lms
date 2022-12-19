@@ -2,7 +2,7 @@
     $(document).ready(function(){
     
         $(".Mon").each(function(){
-            
+            console.log("Monday");
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
