@@ -870,8 +870,11 @@ class Unity extends CI_Controller {
                 }
                 
             }
+            if($totalUnits > 0)
+                $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
+            else
+                $ret['gpa'] = 0;
 
-            $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
             $ret['total_units'] = $totalUnits;
             $ret['lab_units'] = $totalLab;
             $ret['term_type'] = $this->data['term_type'];
