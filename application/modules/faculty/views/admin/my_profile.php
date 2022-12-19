@@ -92,7 +92,8 @@
                                         <input type="hidden" class="<?php echo $sched['strDay']; ?>"
                                             value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
                                             href="<?php echo $hourdiff*2; ?>"
-                                            rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?> <?php echo $class['strSection']; ?>">
+                                            rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?>"
+                                            data-section="<?php echo $class['strSection']; ?>">
                                 
                                 <?php 
                                         endif;
