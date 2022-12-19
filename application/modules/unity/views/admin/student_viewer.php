@@ -104,16 +104,7 @@
                                                 
                                             
                                             <strong>Graduated Status:</strong>
-                                            
-                                            <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
-                                                <option value="0">No</option>
-                                                <option value="1">Yes</option>
-                                            </select>
-                                            <hr />
-                                            <a v-if="registrar_privelages" href="base_url + 'pdf/portal_login_data/' + student.intID" class="btn btn-info" target="_blank">Portal Login Data</a>
-                                            <div v-else>
-                                                {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
-                                            </div>
+                                           
                                         </div>                                                                        
                                     </div>    
                                 </div>
