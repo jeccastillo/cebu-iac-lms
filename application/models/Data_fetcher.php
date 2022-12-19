@@ -2387,10 +2387,11 @@ class Data_fetcher extends CI_Model {
         foreach($sched as $s)
         {
             
-            $s['strDay'] = get_day_abvr($s['strDay']);
+            $s['strDayAbvr'] = get_day_abvr($s['strDay']);
+            $s['strDay'] = get_day($s['strDay']);
             
             if(!empty($s)){
-                $schedString.= $s['strDay'];
+                $schedString.= $s['strDayAbvr'];
                 $timeString = date('g:ia',strtotime($s['dteStart'])).'  '.date('g:ia',strtotime($s['dteEnd']))." ";
                 $timeString.= $s['strRoomCode'];
             }            

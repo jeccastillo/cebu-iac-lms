@@ -109,7 +109,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                                         foreach($record['schedule'] as $sched) {
                                             if(!empty($record['schedule']))
-                                                $html.= $sched['strDay'];                    
+                                                $html.= $sched['strDayAbvr'];                    
                                                 //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
                                         }
                                             $html.= '</td>

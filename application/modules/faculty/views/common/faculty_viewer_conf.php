@@ -147,7 +147,7 @@
         
        
          $(".Mon").each(function(){
-            console.log("MON TEST");
+            
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
