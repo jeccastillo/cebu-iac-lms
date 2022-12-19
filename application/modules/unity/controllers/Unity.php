@@ -926,12 +926,12 @@ class Unity extends CI_Controller {
         {
             $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);
             foreach($schedule as $sched){                
-                if(isset($sched['dteStart'])){                    
-                    $hdiff = $sched['hourdiff']*2;
-                    $sc_ret .=$sched['strDay'].'" value="'.date('gia',strtotime($sched['dteStart'])).'" href="'.$hdiff.'" rel="'.$record['strCode'].' '.$sched['strRoomCode'].'" data-section="'.$record['strSection'].'">';
+                $d['class'] = $record;
+                $d['sched'] = $sched;
+                    $sc_ret .= $this->load->view('common/sched_block_template', $d, true);
                     echo $sc_ret;                       
-                }
-            }        
+            }
+                
         }
         
         $this->data['sched_hidden'] = $sc_ret;
