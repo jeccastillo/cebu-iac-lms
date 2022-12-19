@@ -709,7 +709,7 @@ class Unity extends CI_Controller {
                 $ret['other_data']['gpa_curriculum'] = 0;
             
             $ret['other_data']['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
-            $ret['other_data']['academic_standing']['year'] = switch_num($ret['student']['academic_standing']['year']);
+            $ret['other_data']['academic_standing']['year'] = switch_num($ret['other_data']['academic_standing']['year']);
             
                        
             $totalUnits = 0;
