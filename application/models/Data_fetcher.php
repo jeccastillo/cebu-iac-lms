@@ -2381,15 +2381,23 @@ class Data_fetcher extends CI_Model {
                         ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                         ->get()
                         ->result_array();
-       foreach($sched as $s)
+        
+        
+        foreach($sched as $s)
         {
+            $schedString = "";
             $s['strDay'] = get_day_abvr($s['strDay']);
+            
+            if(!empty($sched)){
+                $schedString.= $sched['strDay'];
+                $schedString.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));
+                $schedString.= $sched[0]['strRoomCode'];
+            }
+            $ret['schedString'] = $schedString;
             $ret[] = $s;
         }
         
-        return $ret;
-        
-        
+        return $ret;                
         
     }
     

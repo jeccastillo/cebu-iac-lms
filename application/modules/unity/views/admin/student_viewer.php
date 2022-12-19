@@ -218,314 +218,288 @@
                                     <div v-html="assessment"></div>                                    
                                 </div> 
                             </div>                                
-                        </div>
-                    
-                    <?php if($registration): ?>
-                        <div class="tab-pane <?php echo ($tab == "tab_5")?'active':'' ?>" id="tab_5">
-                                <div class="box box-primary">
-                                    <div class="box-body">
-                                        <table class="table table-condensed table-bordered">
-                                            <thead>
-                                                <tr style="font-size: 13px;">
-                                                    <th>Section</th>
-                                                    <th>Course Code</th>
-                                                    <th>Course Description</th>
-                                                    <th>Units</th>
-                                                    <th>Schedule</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php 
-                                                $totalUnits = 0;
-                                                foreach($records as $record): ?>
-                                                <tr style="font-size: 13px;">
-                                                    <td><?php echo $record['strSection']; ?></td>
-                                                    <td><?php echo $record['strCode']; ?></td>
-                                                    <td><?php echo $record['strDescription'] ?></td>
-                                                    <td><?php echo ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits']; ?></td>     
-                                                    <?php if(!empty($record['schedule'])): ?>
+                        </div>                                        
+                        <div v-if="registration" :class="[(tab == 'tab_5') ? 'active' : '']" class="tab-pane" id="tab_5">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <table class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr style="font-size: 13px;">
+                                                <th>Section</th>
+                                                <th>Course Code</th>
+                                                <th>Course Description</th>
+                                                <th>Units</th>
+                                                <th>Schedule</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                            
+                                            <tr v-for="record in records"  style="font-size: 13px;">
+                                                <td>{{ record.strSection }}<?php echo $record['strSection']; ?></td>
+                                                <td>{{ record.strCode }}<?php echo $record['strCode']; ?></td>
+                                                <td>{{ record.strDescription }}<?php echo $record['strDescription'] ?></td>
+                                                <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
+                                                
 
-                                                    <td>
-                                                        <?php foreach($record['schedule'] as $sched): ?>
-
-                                                        <?php echo date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])); ?> <?php echo $sched['strDay']; ?> <?php echo $sched['strRoomCode']; ?>
-                                                        
-                                                        <?php
-                                                            $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
-                                                            
-                                                        ?>
-                                                        <input type="hidden" class="<?php echo $sched['strDay']; ?>" value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>" href="<?php echo $hourdiff*2; ?>" rel="<?php echo $record['strCode']; ?> <?php echo $sched['strRoomCode']; ?>" data-section="<?php echo $sched['strSection']; ?>">
-                                                        <br />
-                                                        <?php endforeach; ?>
-                                                    </td>
-                                                    <?php else: ?>
-                                                    <td></td>
-
-                                                    <?php endif; ?>
-
-                                                </tr>
-
-                                                <?php endforeach; ?>
-
-
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                <td v-if="record.schedule.length > 0">                                                    
+                                                    <span v-for(sched in record.schedule)>
+                                                        {{ sched.schedString }}
+                                                    </span>                                                      
+                                                </td>
+                                                <td v-else></td>                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="box box-primary">
-                                    <div class="box-body">
-                                    <form method="post" action="<?php echo base_url() ?>pdf/print_sched">   
+                                <div class="box-body">
+                                    <form method="post" :action="base_url + 'pdf/print_sched'">   
                                         <input type="hidden" name="sched-table" id="sched-table" />
-                                        <input type="hidden" value="<?php echo $student['strLastname']."-".$student['strFirstname']."-".$student['strStudentNumber']; ?>" name="studentInfo" id="studentInfo" />
-                                        
+                                        <input type="hidden" value="<?php echo $student['strLastname']."-".$student['strFirstname']."-".$student['strStudentNumber']; ?>" name="studentInfo" id="studentInfo" />                                        
                                         <div id="sched-table-container">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="text-align:center;border:1px solid #555;"></th>
-                                                    <th style="text-align:center;border:1px solid #555;">Mon</th>
-                                                    <th style="text-align:center;border:1px solid #555;">Tue</th>
-                                                    <th style="text-align:center;border:1px solid #555;">Wed</th>
-                                                    <th style="text-align:center;border:1px solid #555;">Thu</th>
-                                                    <th style="text-align:center;border:1px solid #555;">Fri</th>
-                                                    <th style="text-align:center;border:1px solid #555;">Sat</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody-sched">
-                                                <tr id="700am">
-                                                <td style="border:1px solid #555;">7:00-7:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="730am">
-                                                    <td style="border:1px solid #555;">7:30-8:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="800am">
-                                                    <td style="border:1px solid #555;">8:00-8:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="830am">
-                                                    <td style="border:1px solid #555;">8:30-9:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="900am">
-                                                    <td style="border:1px solid #555;">9:00-9:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="930am">
-                                                    <td style="border:1px solid #555;">9:30-10:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="1000am">
-                                                    <td style="border:1px solid #555;">10:00-10:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="1030am">
-                                                    <td style="border:1px solid #555;">10:30-11:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="1100am">
-                                                    <td style="border:1px solid #555;">11:00-11:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            <tr id="1130am">
-                                                    <td style="border:1px solid #555;">11:30-12:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="1200pm">
-                                                    <td style="border:1px solid #555;">12:00-12:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="1230pm">
-                                                    <td style="border:1px solid #555;">12:30-1:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="100pm">
-                                                    <td style="border:1px solid #555;">1:00-1:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="130pm">
-                                                    <td style="border:1px solid #555;">1:30-2:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="200pm">
-                                                    <td style="border:1px solid #555;">2:00-2:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="230pm">
-                                                    <td style="border:1px solid #555;">2:30-3:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="300pm">
-                                                    <td style="border:1px solid #555;">3:00-3:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="330pm">
-                                                    <td style="border:1px solid #555;">3:30-4:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="400pm">
-                                                    <td style="border:1px solid #555;">4:00-4:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="430pm">
-                                                    <td style="border:1px solid #555;">4:30-5:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="500pm">
-                                                    <td style="border:1px solid #555;">5:00-5:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="530pm">
-                                                    <td style="border:1px solid #555;">5:30-6:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="600pm">
-                                                    <td style="border:1px solid #555;">6:00-6:30</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr id="630pm">
-                                                    <td style="border:1px solid #555;">6:30-7:00</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center;border:1px solid #555;"></th>
+                                                        <th style="text-align:center;border:1px solid #555;">Mon</th>
+                                                        <th style="text-align:center;border:1px solid #555;">Tue</th>
+                                                        <th style="text-align:center;border:1px solid #555;">Wed</th>
+                                                        <th style="text-align:center;border:1px solid #555;">Thu</th>
+                                                        <th style="text-align:center;border:1px solid #555;">Fri</th>
+                                                        <th style="text-align:center;border:1px solid #555;">Sat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody-sched">
+                                                    <tr id="700am">
+                                                    <td style="border:1px solid #555;">7:00-7:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="730am">
+                                                        <td style="border:1px solid #555;">7:30-8:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="800am">
+                                                        <td style="border:1px solid #555;">8:00-8:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="830am">
+                                                        <td style="border:1px solid #555;">8:30-9:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="900am">
+                                                        <td style="border:1px solid #555;">9:00-9:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="930am">
+                                                        <td style="border:1px solid #555;">9:30-10:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="1000am">
+                                                        <td style="border:1px solid #555;">10:00-10:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="1030am">
+                                                        <td style="border:1px solid #555;">10:30-11:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="1100am">
+                                                        <td style="border:1px solid #555;">11:00-11:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                <tr id="1130am">
+                                                        <td style="border:1px solid #555;">11:30-12:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="1200pm">
+                                                        <td style="border:1px solid #555;">12:00-12:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="1230pm">
+                                                        <td style="border:1px solid #555;">12:30-1:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="100pm">
+                                                        <td style="border:1px solid #555;">1:00-1:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="130pm">
+                                                        <td style="border:1px solid #555;">1:30-2:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="200pm">
+                                                        <td style="border:1px solid #555;">2:00-2:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="230pm">
+                                                        <td style="border:1px solid #555;">2:30-3:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="300pm">
+                                                        <td style="border:1px solid #555;">3:00-3:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="330pm">
+                                                        <td style="border:1px solid #555;">3:30-4:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="400pm">
+                                                        <td style="border:1px solid #555;">4:00-4:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="430pm">
+                                                        <td style="border:1px solid #555;">4:30-5:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="500pm">
+                                                        <td style="border:1px solid #555;">5:00-5:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="530pm">
+                                                        <td style="border:1px solid #555;">5:30-6:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="600pm">
+                                                        <td style="border:1px solid #555;">6:00-6:30</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="630pm">
+                                                        <td style="border:1px solid #555;">6:30-7:00</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                         <input class="btn btn-flat btn-default" type="submit" value="print preview" />
-                                        </form> 
-                                    </div>
+                                    </form> 
                                 </div>
-                        </div>
-                    <?php endif; ?>
-                    
+                            </div>
+                        </div>                                        
                     </div>
                     <!-- /.tab-content -->
                 </div>
-                </div>
             </div>
-    
+        </div>
+
     
     
     
