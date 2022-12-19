@@ -8,7 +8,7 @@ class Schedule extends CI_Controller {
 		parent::__construct();
 		
         if(!$this->is_super_admin() && !$this->is_department_head())
-            redirect(base_url());
+            redirect(base_url()."/users/login");
         
         $this->config->load('themes');		
 		$theme = $this->config->item('unity');
@@ -82,7 +82,7 @@ class Schedule extends CI_Controller {
             
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
     
     public function edit_schedule($id)
@@ -116,10 +116,10 @@ class Schedule extends CI_Controller {
                // print_r($this->data['classlists']);
             }
             else
-                redirect(base_url()); 
+                redirect(base_url()."/users/login"); 
         }
         else
-            redirect(base_url());    
+            redirect(base_url()."/users/login");    
         
         
     }
@@ -425,7 +425,7 @@ class Schedule extends CI_Controller {
             
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
     
     public function delete_schedule()

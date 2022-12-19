@@ -63,7 +63,7 @@ class Program extends CI_Controller {
             
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
     
     public function edit_program($id)
@@ -81,7 +81,7 @@ class Program extends CI_Controller {
             
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
     
     public function submit_program()
@@ -122,7 +122,7 @@ class Program extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
     
     public function program_viewer($id,$sem = null)

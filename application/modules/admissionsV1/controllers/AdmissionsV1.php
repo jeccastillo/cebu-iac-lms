@@ -64,7 +64,7 @@ class AdmissionsV1 extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url());  
+            redirect(base_url()."/users/login");  
     }
 
     public function add_new_student(){
