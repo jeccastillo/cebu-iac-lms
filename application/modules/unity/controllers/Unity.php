@@ -753,7 +753,6 @@ class Unity extends CI_Controller {
 
                 $ret['records'][] = $record;
             }
-            print_r($totalUnits);
             $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
             $ret['total_units'] = $totalUnits;
             $ret['lab_units'] = $totalLab;
