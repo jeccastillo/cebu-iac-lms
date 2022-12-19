@@ -59,7 +59,7 @@
                             </li>
                             
                             <li>
-                                <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
+                                <a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">                                
                                 Statement of Account
                                 </a>
                             </li>
@@ -146,7 +146,7 @@ new Vue({
         sy: {},
         reservation_payment: {},
         advanced_privilages: false,
-        selected_ay: 0,
+        selected_ay: undefined,
         student: {},
         loader_spinner: true,
         type: "",
