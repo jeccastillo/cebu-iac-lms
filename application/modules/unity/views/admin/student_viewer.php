@@ -811,8 +811,8 @@ new Vue({
                         this.selected_ay = data.data.selected_ay;
                         this.curriculum_subjects = data.data.curriculum_subjects;                        
                         this.sections = data.data.sections;
-                        this.add_subject.section = this.sections[0].intID;
-                        this.add_subject.subject = this.curriculum_subjects[0].intSubjectID;
+                        this.add_subject.section = ( this.sections.length > 0 ) ? this.sections[0].intID : null;
+                        this.add_subject.subject = ( this.curriculum_subjects.length > 0 ) ? this.curriculum_subjects[0].intSubjectID : null;
                         this.add_subject.studentID = this.id;
                         this.add_subject.activeSem = this.selected_ay;
                         this.advanced_privilages1 = data.data.advanced_privilages1;
