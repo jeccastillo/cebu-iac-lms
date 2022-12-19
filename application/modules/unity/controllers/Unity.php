@@ -905,48 +905,45 @@ class Unity extends CI_Controller {
     
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
-        if($this->faculty_logged_in())
-        {
-            $post = $this->input->post();
-            $this->data['id'] = $id;
-            $this->data['sem'] = $sem;
-            
-            
-            if(!empty($post))
-               $id = $post['studentID'];
-			
-            if($tab!=null)
-                $this->data['tab'] = $tab;
-            else
-                $this->data['tab'] = "tab_1";
-                        
-            
-            
-            $this->data['student'] = $this->data_fetcher->getStudent($id);
-            if(!$this->data['student'])
-                $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
-            //per faculty info
-			$records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
-            
-            $this->data['grades'] = $this->data_fetcher->assessCurriculumDept($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-                        
-            
-            //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-            //$this->data['grades'] = $grades;
-            
-          
-          
-           
-            
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/student_viewer",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/student_viewer_conf",$this->data); 
-           // print_r($this->data['classlists']);
-            
-        }
+       
+        $post = $this->input->post();
+        $this->data['id'] = $id;
+        $this->data['sem'] = $sem;
+        
+        
+        if(!empty($post))
+            $id = $post['studentID'];
+        
+        if($tab!=null)
+            $this->data['tab'] = $tab;
         else
-            redirect(base_url());    
+            $this->data['tab'] = "tab_1";
+                    
+        
+        
+        $this->data['student'] = $this->data_fetcher->getStudent($id);
+        if(!$this->data['student'])
+            $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        //per faculty info
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
+        
+        $this->data['grades'] = $this->data_fetcher->assessCurriculumDept($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+        
+        $this->data['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+        
+        //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+        //$this->data['grades'] = $grades;
+        
+        
+        
+        
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/student_viewer",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/student_viewer_conf",$this->data); 
+        // print_r($this->data['classlists']);
+            
         
         
     }
