@@ -102,6 +102,7 @@ new Vue({
         tuition: {},
         total_formatted: undefined,
         sy: {},
+        reservation_payment: {},
         selected_ay: undefined,
         student: {},
         loader_spinner: true,
@@ -127,6 +128,16 @@ new Vue({
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.sy.intID)
             .then((data) => {
                 this.request = data.data.data;
+                this.loader_spinner = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+            axios.get(api_url + 'finance/reservation/' + this.slug)
+            .then((data) => {
+                this.reservation_payment = data.data.data;
+                console.log(this.reservation_payment);
                 this.loader_spinner = false;
             })
             .catch((error) => {
