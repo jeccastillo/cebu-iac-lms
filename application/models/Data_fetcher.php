@@ -2390,7 +2390,7 @@ class Data_fetcher extends CI_Model {
             $s['strDayAbvr'] = get_day_abvr($s['strDay']);
             $s['strDay'] = get_day($s['strDay']);
             $s['hourdiff'] = round((strtotime($s['dteEnd']) - strtotime($s['dteStart']))/3600, 1);
-            $s['dteStartF'] = date('gia',strtotime($sched['dteStart']));
+            $s['dteStartF'] = date('gia',strtotime($s['dteStart']));
             
             if(!empty($s)){
                 $schedString.= $s['strDayAbvr'];
