@@ -90,14 +90,12 @@
                                 </div>                                    
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <p>{{ registration.paymentStatus }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div v-html="tuition" class="col-sm-6">
                                         
                                         </div>                                    
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Payment Status: {{ registration.paymentStatus }}</p>
                                     </div>
                                 </div>
                             </div>              
