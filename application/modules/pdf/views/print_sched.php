@@ -52,7 +52,7 @@ $html = '
                 </td>           
             </tr>
             <tr>
-                <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">ASSESSMENT/REGISTRATION FORM</td>
+                <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">SCHEDULE</td>
             </tr>    
         </table>
         <table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">        
