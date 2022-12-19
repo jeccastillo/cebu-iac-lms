@@ -105,26 +105,16 @@
                                             
                                         
                                         <strong>Graduated Status:</strong>
-                                        <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
-                                        <select class="form-control" rel="<?php echo $student['intID']; ?>" id="GraduateStatus">
-                                            <option <?php echo ($student['isGraduate'] == 0)?'selected':'' ?>  value="0">No</option>
-                                            <option <?php echo ($student['isGraduate'] == 1)?'selected':'' ?> value="1">Yes</option>
+                                        
+                                        <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
                                         </select>
-                                            <hr />
-                                            <a href="<?php echo base_url()."pdf/portal_login_data/".$student['intID']; ?>" class="btn btn-info" target="_blank">Portal Login Data</a>
-                                        <?php else: 
-                                            switch($student['isGraduate'])
-                                            {
-                                                case 0:
-                                                    echo 'Not Grad';
-                                                    break;
-                                                case 1:
-                                                    echo 'Grad';
-                                                    break;
-                                            }
-                                            ?>
-                                            
-                                        <?php endif; ?>
+                                        <hr />
+                                        <a v-if="registrar_privelages" href="base_url + 'pdf/portal_login_data/' + student.intID" class="btn btn-info" target="_blank">Portal Login Data</a>
+                                        <div v-else>
+                                            {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
+                                        </div>
                                         
                                     </div>
                                     
@@ -802,9 +792,11 @@ new Vue({
         term_type: undefined,
         sem_student: undefined,
         advanced_privilages1: false,
-        photo_dir: undefined,
-        img_dir: undefined,
         advanced_privilages2: false,
+        registrar_privilages: false,
+        photo_dir: undefined,
+        img_dir: undefined,  
+        grad_status: 0,      
         selected_ay: undefined,
         base_url: '<?php echo base_url(); ?>',   
         registration_status: 0,                   
@@ -832,7 +824,8 @@ new Vue({
                         this.photo_dir = data.data.photo_dir;
                         this.img_dir = data.data.img_dir;
                         this.sem_student = this.selected_ay;
-                        console.log(this.sem_student);
+                        this.registrar_privilages =  data.data.registrar_privilages;        
+                        this.grad_status = this.student.isGraduate;                
                     }
                     else{
                         document.location = this.base_url + 'users/login';
@@ -847,7 +840,33 @@ new Vue({
 
     },
 
-    methods: {     
+    methods: {  
+        
+        updateGradStatus: function(){
+            
+            var formdata= new FormData();
+            formdata.append("intID",this.registration.intRegistrationID);
+            formdata.append("isGraduate",this.grad_status);
+
+            this.loader_spinner = true;
+            axios.post(base_url + 'unity/update_graduate_status', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+                        
+        
+        },
         changeTermSelected: function(){
             document.location = this.base_url + "unity/student_viewer/" + 
             this.student.intID + "/" + this.sem_student + "/" + this.tab;
