@@ -123,6 +123,8 @@ new Vue({
     data: {
         payments:[],        
         tuition: {},
+        total_tuition: 0,
+        remaining_amount: 0,
         total_formatted: 0,
         sy: {},
         reservation_payment: {},
@@ -146,26 +148,35 @@ new Vue({
         .then((data) => {
             this.tuition = data.data.data;                
             this.loader_spinner = false;
-            if(this.tuition.tuition)
+            if(this.tuition.tuition){
+                this.total_tuition = this.tuition.tuition.total;
                 this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
+            }
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.selected_ay)
             .then((data) => {
                 this.payments = data.data.data;
+                for(i in this.payments){
+                    if(this.payments[i].status == "Paid")
+                        this.remaining_amount = this.remaining_amount - this.payments[i].total_amount_due;
+                }
                 this.loader_spinner = false;
+
+                axios.get(api_url + 'finance/reservation/' + this.slug)
+                .then((data) => {
+                    this.reservation_payment = data.data.data;    
+                    if(this.reservation_payment.status == "Paid" && this.reservation_payment.sy_reference == this.tuition.selected_ay)
+                            this.remaining_amount = this.remaining_amount - this.reservation_payment.total_amount_due;            
+                    this.loader_spinner = false;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
             })
             .catch((error) => {
                 console.log(error);
             })
 
-            axios.get(api_url + 'finance/reservation/' + this.slug)
-            .then((data) => {
-                this.reservation_payment = data.data.data;                
-                this.loader_spinner = false;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            
         })
         .catch((error) => {
             console.log(error);
