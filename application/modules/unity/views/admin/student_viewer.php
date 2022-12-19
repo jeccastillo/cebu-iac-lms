@@ -215,7 +215,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    {{ assessment }}
+                                    <div v-html="assessment"></div>                                    
                                 </div> 
                             </div>                                
                         </div>
