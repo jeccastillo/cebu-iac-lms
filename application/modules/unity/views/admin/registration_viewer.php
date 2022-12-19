@@ -86,7 +86,7 @@
                         <div class="tab-pane active" id="tab_1">    
                             <div class="box box-solid">
                                 <div class="box-header">
-                                    <h4 class="box-title">ASSESSMENT OF FEES</h4>                                    
+                                    <h4 class="box-title">ACCOUNTING</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
                                     <div class="row">
