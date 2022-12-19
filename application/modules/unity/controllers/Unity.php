@@ -915,21 +915,6 @@ class Unity extends CI_Controller {
             if(!empty($post))
                $id = $post['studentID'];
 			
-            //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
-            
-        
-            
-            if($sem!=null){
-                 $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-            }
-            else
-            {
-                $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-                
-            }
-            
-            $this->data['selected_ay'] = $this->data['active_sem']['intID'];
-            
             if($tab!=null)
                 $this->data['tab'] = $tab;
             else
@@ -944,8 +929,7 @@ class Unity extends CI_Controller {
 			$records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
             
             $this->data['grades'] = $this->data_fetcher->assessCurriculumDept($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-            $this->data['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+                        
             
             //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
             //$this->data['grades'] = $grades;
