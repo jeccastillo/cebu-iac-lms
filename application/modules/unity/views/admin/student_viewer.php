@@ -100,9 +100,8 @@
                                             <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
                                             <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
                                             <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>  
-                                            <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
-                                                
-                                            
+                                            <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
+                                            <hr />
                                             <strong>Graduated Status:</strong>
                                             
                                             <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
@@ -120,37 +119,28 @@
                         </div>
                     <!-- /.tab-pane -->
                     <?php if(in_array($user['intUserLevel'],array(2,4,3)) ): ?>
-                        <div :class="[(tab == 'tab_2') ? 'active' : '']" class="tab-pane" id="tab_2">
-                        <div class="box box-primary">
-                                <div class="box-body">
-                                    <?php if($active_sem['enumFinalized'] == "no" && $registration): ?>
-                                    <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <div class="input-group">
-                            
-                                                        <select class="select2" id="subjectSv" name="subjectSv">
-                                                                <?php foreach($curriculum_subjects as $s): ?>
-                                                                    <option value="<?php echo $s['intSubjectID'] ?>"><?php echo $s['strCode']; ?> <?php echo $s['strDescription']; ?></option> 
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                            <a href="<?php echo base_url(); ?>subject/subject_viewer/<?php echo $curriculum_subjects[0]['intSubjectID']; ?>" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
-
-                                                    </div>
-                                                        
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <select class="form-control" id="sections-to-add">
-                                                        <?php foreach($sections as $sc): ?>
-                                                            <option value="<?php echo $sc['intID'] ?>"><?php echo $sc['strSection']; ?></option> 
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <a href="#" id="submitSubject" class='btn btn-default  btn-flat'>Add Subject <i class='fa fa-plus'></i></a>
-                                                    </div>
-                                                </div>
-                                    <hr />
-                                    <?php endif; ?> 
+                        <div v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']" class="tab-pane" id="tab_2">
+                            <div class="box box-primary">
+                                <div class="box-body">                                    
+                                    <div v-if="active_sem.enumFinalized == 'no' && registration" class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <select v-model="add_subject.subject" class="select2" id="subjectSv" name="subjectSv">
+                                                    <option v-for="s in curriculum_subjects" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
+                                                </select>
+                                                <a href="base_url + 'subject/subject_viewer/' + curriculum_subjects[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <select v-model="add_subject.section" class="form-control" id="sections-to-add">
+                                                <option v-for="sc in sections" :value="sc.intID">{{ sc.strSection }}</option>                                                
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="#" @click="submitSubject" class='btn btn-default  btn-flat'>Add Subject <i class='fa fa-plus'></i></a>
+                                        </div>
+                                    </div>
+                                    <hr />                                    
                                     <table class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
@@ -782,10 +772,17 @@ new Vue({
         student: {},
         registration: {},
         active_sem: {},
+        sections: [],
         reg_status: '',
         sy: undefined,
         term_type: undefined,
         sem_student: undefined,
+        add_subject:{
+            code: undefined,
+            section:undefined,
+            studentID: undefined,
+            activeSem: undefined,
+        },        
         advanced_privilages1: false,
         advanced_privilages2: false,
         registrar_privilages: false,
@@ -812,8 +809,14 @@ new Vue({
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
                         this.selected_ay = data.data.selected_ay;
+                        this.curriculum_subjects = data.data.curriculum_subjects;                        
+                        this.sections = data.data.sections;
+                        this.add_subject.section = this.sections[0].intID;
+                        this.add_subject.subject = this.curriculum_subjects[0].intSubjectID;
+                        this.add_subject.studentID = this.id;
+                        this.add_subject.activeSem = this.selected_ay;
                         this.advanced_privilages1 = data.data.advanced_privilages1;
-                        this.advanced_privilages2 = data.data.advanced_privilages2;
+                        this.advanced_privilages2 = data.data.advanced_privilages2;                        
                         this.sy = data.data.sy;
                         this.term_type = data.data.term_type;
                         this.photo_dir = data.data.photo_dir;
@@ -836,7 +839,39 @@ new Vue({
     },
 
     methods: {  
-        
+        submitSubject: function(){
+            if(add_subject.section){            
+                var formdata= new FormData();
+                for (const [key, value] of Object.entries(this.add_subject)) {
+                    formdata.append(key,value);
+                }
+                                                    
+
+                this.loader_spinner = true;
+                axios.post(base_url + 'unity/add_to_classlist_ajax', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.loader_spinner = false;
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        
+                    });
+                });
+            }
+            else
+                Swal.fire({
+                    title: "Failed",
+                    text: 'Incomplete Data',
+                    icon: "success"
+                }).then(function() {
+
+        },
         updateGradStatus: function(){
             
             var formdata= new FormData();
@@ -859,8 +894,7 @@ new Vue({
                     
                 });
             });
-                        
-        
+                                
         },
         changeTermSelected: function(){
             document.location = this.base_url + "unity/student_viewer/" + 
