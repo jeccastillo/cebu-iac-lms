@@ -69,8 +69,7 @@
                             <th>Course Description</th>
                             <th>Units</th>
                             <th>Schedule</th>
-                            <th>Remarks</th>
-                            <!--                        <th>Action</th>-->
+                            <th>Remarks</th>                            
                         </tr>
                     </thead>
 
