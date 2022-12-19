@@ -470,7 +470,7 @@ class Registrar extends CI_Controller {
                                 $classlist['intSubjectID'] = $subject;
                                 $classlist['strAcademicYear'] = $post['strAcademicYear'];
                                 $classlist['strUnits'] = $subject_data['strUnits'];
-                                $classlist['strSection'] = $program['strProgramCode']."-".$post['intYearLevel']."-".$letter;
+                                $classlist['strSection'] = $subject_data['strCode']."-".$subject_data['intYearLevel']."-".$letter;
                                 $classlist['strClassName'] = $subject_data['strCode'];
                                 $this->data_poster->post_data('tb_mas_classlist',$classlist);
                                 $cid = $this->db->insert_id();
