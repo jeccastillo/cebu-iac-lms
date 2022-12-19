@@ -2392,10 +2392,11 @@ class Data_fetcher extends CI_Model {
                 $schedString.= $s['strDay'];
                 $timeString = date('g:ia',strtotime($s['dteStart'])).'  '.date('g:ia',strtotime($s['dteEnd']))." ";
                 $timeString.= $s['strRoomCode'];
-            }
-            $ret['schedString'] = $schedString;
+            }            
             $ret[] = $s;
         }
+        
+        $ret['schedString'] = $schedString." ".$timeString;
         
         return $ret;                
         
