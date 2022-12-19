@@ -927,10 +927,10 @@ class Unity extends CI_Controller {
             $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);                          
             $d['class'] = $record;
             $d['schedule'] = $schedule;
-                $sc_ret .= $this->load->view('common/sched_block_template', $d, true);                                                               
-        }
-        
-        $this->data['sched_hidden'] = $sc_ret;
+                $sc_ret .= $this->load->view('common/sched_block_template', $d, true);
+                echo $sc_ret;                                   
+                
+        }        
         
         if(!empty($post))
             $id = $post['studentID'];
