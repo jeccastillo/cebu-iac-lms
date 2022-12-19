@@ -109,8 +109,7 @@
                                                 <option value="0">No</option>
                                                 <option value="1">Yes</option>
                                             </select>
-                                            <hr />
-                                            <a v-if="registrar_privilages" href="base_url + 'pdf/portal_login_data/' + student.intID" class="btn btn-info" target="_blank">Portal Login Data</a>
+                                            <hr />                                            
                                             <div v-else>
                                                 {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
                                             </div>
