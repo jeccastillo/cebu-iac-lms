@@ -87,6 +87,7 @@
                             <div class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">ASSESSMENT OF FEES</h4>
+                                    <p>{{ registration.paymentStatus }}</p>
                                 </div>                                    
                                 <div class="box-body">
                                     <div class="row">
