@@ -700,7 +700,9 @@ class Unity extends CI_Controller {
                 $ret['gpa_curriculum'] = 0;
             
             $ret['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
-                                             
+                       
+            $totalUnits = 0;
+            $totalLab = 0;
             $products = [];
             foreach($records as $record)
             {
@@ -714,13 +716,13 @@ class Unity extends CI_Controller {
                 {
                     if ($record['intBridging'] == 1){
                         //$num_of_bridging = count($record['intBridging']);
-                        $ret['total_units'] = $ret['total_units'] + intval($record['strUnits']);
-                        $ret['total_units'] = $ret['total_units'] - 3;
+                        $totalUnits += intval($record['strUnits']);
+                        $totalUnits -= 3;
                     }
                     else{
                         $product = intval($record['strUnits']) * $record['v3']; 
                         $products[] = $product;
-                        $ret['total_units'] = $ret['total_units'] + intval($record['strUnits']);
+                        $totalUnits += intval($record['strUnits']);
                     }    
                 }
                 if($record['intFinalized']  <= 2)
@@ -751,7 +753,8 @@ class Unity extends CI_Controller {
 
                 $ret['records'][] = $record;
             }
-            $ret['gpa'] = round(array_sum($products) / $ret['total_units'], 2);            
+            $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
+            $ret['total_units'] = $totalUnits;
             $ret['lab_units'] = $totalLab;
             $ret['term_type'] = $this->data['term_type'];
             $ret['img_dir'] = $this->data['img_dir'];
@@ -768,7 +771,7 @@ class Unity extends CI_Controller {
                 $ret['sections'] = $this->data_fetcher->fetch_classlist_by_subject($ret['curriculum_subjects'][0]['intSubjectID'],$sm['intID']);
             
             //for total units
-            $ret['total_units'] = $this->data_fetcher->getTotalUnits($id);           
+            //$ret['total_units'] = $this->data_fetcher->getTotalUnits($id);           
             $ret['success']= true;
         }
         else{
