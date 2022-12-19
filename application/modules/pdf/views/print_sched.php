@@ -115,12 +115,12 @@ $html .= '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;"
                     <tr>
                         <td style="text-align: center;color:black;">'. $facultyName . '</td>
                         <td style="text-align: center;color:black;"></td>
-                        <td style="text-align: center;color:black;">MR. EDGARDO T. CASTILLO</td>
+                        <td style="text-align: center;color:black;"></td>
                     </tr>
                     <tr>
                         <td style="text-align: center;">Faculty</td>
                         <td style="text-align: center;">School Dean</td>
-                        <td style="text-align: center;">College President</td>
+                        <td style="text-align: center;"></td>
                     </tr>
                 </table>';
 //$html = utf8_encode($html);
