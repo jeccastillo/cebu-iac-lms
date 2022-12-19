@@ -33,8 +33,7 @@
                     
                      <div class="form-group col-xs-12 col-lg-6">
                         <label for="intRoomID">Room</label>
-                        <select name="intRoomID" class="form-control">
-                            <option <?php echo ($item['intRoomID'] == 99999)?'selected':''; ?> value="99999">TBA</option>
+                        <select name="intRoomID" class="form-control">                            
                             <?php foreach($rooms as $rm): ?>
                                 <option <?php echo ($rm['intID'] == $item['intRoomID'])?'selected':''; ?> value="<?php echo $rm['intID'] ?>"><?php echo $rm['strRoomCode']; ?></option>
                             <?php endforeach; ?>
