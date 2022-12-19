@@ -918,10 +918,13 @@ class Unity extends CI_Controller {
             $this->data['tab'] = $tab;
         else
             $this->data['tab'] = "tab_1";
-                            
+                    
         
-        //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-        //$this->data['grades'] = $grades;
+        
+        $this->data['student'] = $this->data_fetcher->getStudent($id);
+        if(!$this->data['student'])
+            $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        //per faculty info                        
         
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_viewer",$this->data);
