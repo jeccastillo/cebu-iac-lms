@@ -770,6 +770,7 @@ class Unity extends CI_Controller {
             $sgpa = 0;
             $scount = 0;
             $countBridg = 0;
+            $grades = $ret['grades'];
             for($i = 0;$i<count($grades); $i++){
             //echo $prev_year_sem."<br />";
                 
