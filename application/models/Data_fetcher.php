@@ -2382,10 +2382,11 @@ class Data_fetcher extends CI_Model {
                         ->get()
                         ->result_array();
         
-        
+        $schedString = "";
+        $timeString = "";
         foreach($sched as $s)
         {
-            $schedString = "";
+            
             $s['strDay'] = get_day_abvr($s['strDay']);
             
             if(!empty($s)){
