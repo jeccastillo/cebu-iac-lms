@@ -238,7 +238,7 @@
                                                 <td>{{ record.strCode }}</td>
                                                 <td>{{ record.strDescription }}</td>
                                                 <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
-                                                <td v-if="record.schedule.length > 0">                                                    
+                                                <td v-if="record.schedule.schedString != ''">                                                    
                                                     {{ record.schedule.schedString }}                                       
                                                 </td>
                                                 <td v-else></td>                                                
