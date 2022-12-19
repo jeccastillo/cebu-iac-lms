@@ -738,7 +738,7 @@ new Vue({
                         this.gpa = data.data.gpa;
                     }
                     else{
-                        document.location = this.base_url + 'users/login';
+                       // document.location = this.base_url + 'users/login';
                     }
 
                     this.loader_spinner = false;                    
