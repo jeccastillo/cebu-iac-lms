@@ -239,7 +239,15 @@
                                                 <td>{{ record.strDescription }}</td>
                                                 <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
                                                 <td v-if="record.schedule.schedString != ''">                                                    
-                                                    {{ record.schedule.schedString }}                                       
+                                                    {{ record.schedule.schedString }}    
+                                                    <div v-for="sched in record.schedule" >
+                                                    <input v-if="sched.strDay" type="hidden" 
+                                                        :class="sched.strDay"
+                                                        :value="sched.dteStartF"
+                                                        :href="sched.hourdiff * 2"
+                                                        rel="record.strCode + ' ' + sched.strRommCode"
+                                                        data-section="record.strSection">                                   
+                                                    </div>
                                                 </td>
                                                 <td v-else></td>                                                
                                             </tr>
