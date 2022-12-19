@@ -701,14 +701,64 @@ class Unity extends CI_Controller {
             
             $ret['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
            
-            
+            $units = 0;
+            $totalUnits = 0;
+            $totalLab = 0;
+            $products = [];
             foreach($records as $record)
             {
                 $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
-                //print_r($record['schedule']);
+                $units += $record['strUnits'];
+                if($record['intLab'] == 1)
+                {
+                    $totalLab++;
+                }
+                
+                
+                if($record['v3'] != 3.50 && $record['v3'] != "0")
+                {
+                    if ($record['intBridging'] == 1){
+                        //$num_of_bridging = count($record['intBridging']);
+                        $totalUnits += $record['strUnits'];
+                        $totalUnits-=3;
+                    }
+                    else{
+                        $product = $record['strUnits'] * $record['v3']; 
+                        $products[] = $product;
+                        $totalUnits += $record['strUnits'];
+                    }    
+                }
+                if($record['intFinalized']  <= 2)
+                    $record['strRemarks'] = "-";
+                    
+                if($record['strFirstname']!="unassigned"){
+                    $firstNameInitial = substr($record['strFirstname'], 0,1);
+                    $record['facultyName'] = $firstNameInitial.". ".$record['strLastname'];  
+                }
+                else
+                    $record['facultyName'] = "unassigned";
+
+                if ($record['strFirstname'] == "unassigned")
+                    $record['recStatus'] = "No Assigned Faculty Yet<";
+                elseif($record['intFinalized'] > 2) 
+                    $record['recStatus'] = "Submitted";                    
+                else
+                    $record['recStatus'] = "Not Yet Submitted";                                                    
+
+                
+                if($record['intFinalized'] > 2){
+                    if($record['v3'] != 5.00){
+                        $record['v3'] =  ($record['v3']==3.50) ? 'inc' : number_format($record['v3'], 2, '.' ,',');
+                    }  
+                }                
+                else
+                    $record['v3'] = "-";
+
                 $ret['records'][] = $record;
             }
-
+            $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
+            $ret['total_units'] = $totalUnits;
+            $ret['lab_units'] = $totalLab;
             $ret['term_type'] = $this->data['term_type'];
             $ret['img_dir'] = $this->data['img_dir'];
             $ret['photo_dir'] = $this->data['photo_dir'];

@@ -365,40 +365,7 @@ $(document).ready(function() {
             $('#transcrossText').prop("disabled", false);
         else
             $('#transcrossText').prop("disabled", true);
-    });
-
-    $(".remove-from-classlist").click(function(e) {
-        conf = confirm("Are you sure you want to delete?");
-        if (conf) {
-            $(".loading-img").show();
-            $(".overlay").show();
-            var id = $(this).attr('rel');
-            var parent = $(this).parent().parent();
-            //alert(parent.html());
-            var data = {
-                'intCSID': id
-            };
-
-            $.ajax({
-                'url': '<?php echo base_url(); ?>unity/delete_student_cs',
-                'method': 'post',
-                'data': data,
-                'dataType': 'json',
-                'success': function(ret) {
-                    if (ret.message == "failed") {
-                        $(".alert").show();
-                        setTimeout(function() {
-                            $(".alert").hide('fade', {}, 500)
-                        }, 3000);
-                    } else
-                        parent.hide();
-
-                    $(".loading-img").hide();
-                    $(".overlay").hide();
-                }
-            });
-        }
-    });
+    });    
 
 
 
@@ -589,50 +556,7 @@ $(document).ready(function() {
 
 
 
-    });
-
-    $("#submitSubject").click(function(e) {
-
-        e.preventDefault();
-
-        var container = $("#subject-list");
-        var subjectID = $("#subject-to-add").val();
-        var section = $("#sections-to-add").val();
-        var studentID = $("#student-id").val();
-        var activeSem = $("#active-sem-id").val();
-        if (section != "") {
-            var data = {
-                'code': $("#subject-to-add").val(),
-                'section': section,
-                'studentID': studentID
-            };
-
-            $.ajax({
-                'url': '<?php echo base_url(); ?>unity/add_to_classlist_ajax',
-                'method': 'post',
-                'data': data,
-                'dataType': 'json',
-                'success': function(ret) {
-                    if (ret.message == "failed") {
-                        alert("subject enrolled or already taken");
-                    } else if (ret.message == "failed2") {
-                        alert("Insufficient Access");
-                    } else if (ret.message == "failed3") {
-                        alert("Already in Classlist");
-                    } else if (ret.message == "failed4") {
-                        alert("Subject already Passed or Incomplete status");
-                    } else {
-                        document.location =
-                            "<?php echo base_url(); ?>unity/student_viewer/" + studentID +
-                            "/" + activeSem;
-                    }
-                }
-            });
-        } else {
-            alert("please enter section code");
-        }
-    });
-
+    });   
 
 
     $("#add-subject-loaded").click(function(e) {

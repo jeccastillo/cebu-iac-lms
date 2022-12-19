@@ -191,44 +191,8 @@
                     //Send to laravel API
                 }
             });        
-        });
-        
-        $("#ROGStatusChange").change(function(){
-            $(".loading-img").show();
-            $(".overlay").show();
-            var regid = $(this).attr('rel');
-            var regVal = $(this).val();
-            var data = {'intRegistrationID':regid,'intROG':regVal};
-            $.ajax({
-                'url':'<?php echo base_url(); ?>unity/update_rog_status',
-                'method':'post',
-                'data':data,
-                'dataType':'json',
-                'success':function(ret){
-                    alert(ret.message);
-                }
-            });
-        
-        });
-        
-        
-        $("#GraduateStatus").change(function(){
-            $(".loading-img").show();
-            $(".overlay").show();
-            var regid = $(this).attr('rel');
-            var regVal = $(this).val();
-            var data = {'intID':regid,'isGraduate':regVal};
-            $.ajax({
-                'url':'<?php echo base_url(); ?>unity/update_graduate_status',
-                'method':'post',
-                'data':data,
-                'dataType':'json',
-                'success':function(ret){
-                    alert("updated");
-                }
-            });
-        
-        });
+        });        
+                        
         
     });
 </script>

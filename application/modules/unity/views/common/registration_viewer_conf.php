@@ -30,24 +30,7 @@
             
         });
         });
-        
-        $("#ROGStatusChange").change(function(){
-            $(".loading-img").show();
-            $(".overlay").show();
-            var regid = $(this).attr('rel');
-            var regVal = $(this).val();
-            var data = {'intRegistrationID':regid,'intROG':regVal};
-            $.ajax({
-                'url':'<?php echo base_url(); ?>unity/update_rog_status',
-                'method':'post',
-                'data':data,
-                'dataType':'json',
-                'success':function(ret){
-                    alert(ret.message);
-                }
-            });
-        
-        });
+                
         $("#addTransactionField").click(function(e){
            e.preventDefault();
             $("#transaction-wrapper").append('<div class="transaction-group"><div class="form-group col-xs-12 col-lg-6">'+

@@ -154,126 +154,33 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <?php 
-                                            $units = 0;
-                                            $totalUnits = 0;
-                                            $totalLab = 0;
-                                            foreach($records as $record): ?>
-                                            <tr style="font-size: 13px;">
-                                                <td><?php echo $record['strSection']; ?></td>
-                                                <td><?php echo $record['strCode']; ?></td>
-                                                <td><?php echo $record['strUnits']; ?>
-                                                <?php
-                                                    $units += $record['strUnits'];
-                                                    if($record['intLab'] == 1)
-                                                    {
-                                                        $totalLab++;
-                                                    }  
-                                                ?>
-                                                <?php if($record['intFinalized'] > 2): 
-                                                        if($record['v3'] == 5.00):    
-                                                ?>
-                                                    <td><span class="text-red"><?php echo ($record['v3']==3.50)?'inc':$record['v3']; ?></span></td>
-                                                <?php else: ?>
-                                                <td></span><span><?php echo ($record['v3']==3.50)?'inc':number_format($record['v3'], 2, '.' ,','); ?></span></td>
-                                                <?php endif; ?>
-                                                <?php else: ?>
-                                                    <td><span><?php echo "-" ?></span></td>
-                                                    
-                                                <?php endif; ?>
-                                                    
-                                                    <?php
-                                                        if($record['v3'] != 3.50 && $record['v3'] != "0")
-                                                        {
-                                                            //$productArray = array();
-                                                        
-                                                            //echo $product
-                                                            if ($record['intBridging'] == 1){
-                                                                //$num_of_bridging = count($record['intBridging']);
-                                                                $totalUnits += $record['strUnits'];
-                                                                $totalUnits-=3;
-                                                            }
-                                                            else{
-                                                                $product = $record['strUnits'] * $record['v3']; 
-                                                                $products[] = $product;
-                                                                $totalUnits += $record['strUnits'];
-                                                            }     
-                                                        }
-
-                                                    ?>
-                                        <?php if($record['intFinalized']  > 2):
-                                                    if($record['v3'] == 5.00): 
-                                                ?>  
-                                                    <td><span class="text-red"><?php echo $record['strRemarks']; ?></span></td>
-                                                <?php else: ?>
-                                                <td><?php echo $record['strRemarks']; ?></td>
-                                                <?php endif; ?>
-                                            
-                                    <?php else: ?>
-                                                    <td><span><?php echo "-" ?></span></td>
-                                                    
-                                                <?php endif; ?>
-                                                <td>  
-                                                <?php 
-                                                        if($record['strFirstname']!="unassigned"){
-                                                        $firstNameInitial = substr($record['strFirstname'], 0,1);
-                                                        echo $firstNameInitial.". ".$record['strLastname'];  
-                                                        }
-                                                        else
-                                                        echo "unassigned";
-                                                    ?>
-                                                </td>
-                                    <td><?php 
-                                                if ($record['strFirstname'] == "unassigned") {
-                                                    echo "<span class='label label-warning'>No Assigned Faculty Yet</span>";
-                                                }
-                                                else {
-                                                    if ($record['intFinalized'] > 2) {
-                                                        echo "<span class='label label-success'>Submitted</span>";
-                                                    }
-                                                    else {
-                                                        echo "<span class='label label-danger'>Not Yet Submitted</span>";
-                                                    }
-                                                }
-                                        ?> 
-                                    </td>
-                                                <td>
-                                                    <?php if($record['intFinalized'] < 2): ?>
-                                                        <a href="#" rel="<?php echo $record['intCSID']; ?>" class="remove-from-classlist">Remove</a><br />
-                                                        <a href="<?php echo base_url()."unity/classlist_viewer/".$record['classlistID'] ?>" rel="<?php echo $record['intCSID']; ?>">View Classlist</a>
-                                                    <?php else: ?>
-                                                    <a href="<?php echo base_url()."unity/classlist_viewer/".$record['classlistID'] ?>" rel="<?php echo $record['intCSID']; ?>">View Classlist</a>
-                                                    <?php endif; ?>
+                                        <tbody>                                          
+                                            <tr v-for="record in records" style="font-size: 13px;">
+                                                <td>{{ record.strSection }}</td>
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strUnits }}</td>
+                                                <td>{{ record.v3 }}</td>
+                                                <td>{{ record.strRemarks }}</td>
+                                                <td>{{ record.facultyName }}</td>
+                                                <td>{{ record.recStatus }}</td>
+                                                <td>                                                    
+                                                    <a v-if="record.intFinalized < 2" href="#"  @click.prevent.stop="removeFromClasslist(record.intCSID)">Remove</a><br />
+                                                    <a v-if="record.intFinalized < 2" :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                                                    
+                                                    <a v-else :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                               
                                                 </td>
                                             </tr>
-                                            <?php endforeach; ?>
-                                                <tr style="font-size: 13px;">
-                                                    <td></td>
-                                                    <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
-                                                    <td><?php 
-                                                            echo $totalUnits;
-                                                            ?>
-                                                    </td>
-                                                    <td colspan="3"></td>
-
-                                                </tr>
-
-                                                <tr style="font-size: 11px;">
-                                                    <td></td>
-                                                    <td align="right"><strong>GPA:</strong></td>
-                                                    <td>
-                                                        <?php
-                                                        $gpa = round(array_sum($products) / $totalUnits, 2)  ;
-                                                        echo $gpa;
-                                                        //echo $num_of_bridging;
-                                                        ?>
-
-
-                                                    </td>
-                                                    <td colspan="3"></td>
-                                                </tr>
-
+                                            <tr style="font-size: 13px;">
+                                                <td></td>
+                                                <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
+                                                <td>{{ total_units }}</td>
+                                                <td colspan="3"></td>
+                                            </tr>
+                                            <tr style="font-size: 11px;">
+                                                <td></td>
+                                                <td align="right"><strong>GPA:</strong></td>
+                                                <td>{{ gpa }}</td>
+                                                <td colspan="3"></td>
+                                            </tr>
 
                                         </tbody>
                                     </table>
@@ -773,6 +680,7 @@ new Vue({
         registration: {},
         active_sem: {},
         sections: [],
+        records: [],
         reg_status: '',
         sy: undefined,
         term_type: undefined,
@@ -792,7 +700,10 @@ new Vue({
         selected_ay: undefined,
         base_url: '<?php echo base_url(); ?>',   
         registration_status: 0,                   
-        loader_spinner: true,                        
+        loader_spinner: true,           
+        total_units: 0,
+        lab_units: 0,    
+        gpa: 0,                 
     },
 
     mounted() {
@@ -823,7 +734,11 @@ new Vue({
                         this.img_dir = data.data.img_dir;
                         this.sem_student = this.selected_ay;
                         this.registrar_privilages =  data.data.registrar_privilages;        
-                        this.grad_status = this.student.isGraduate;                
+                        this.grad_status = this.student.isGraduate;     
+                        this.records = data.data.records;           
+                        this.total_units = data.data.total_units;
+                        this.lab_units = data.data.lab_units;
+                        this.gpa = data.data.gpa;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
@@ -839,6 +754,49 @@ new Vue({
     },
 
     methods: {  
+        removeFromClasslist: function(classlistID){
+            Swal.fire({
+                title: 'Delete Entry?',
+                text: "Continue deleting entry?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("intCSID",classlistID);                                                            
+                    return axios
+                        .post('<?php echo base_url(); ?>unity/delete_student_cs',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+        },
         submitSubject: function(){
             if(add_subject.section){            
                 var formdata= new FormData();
