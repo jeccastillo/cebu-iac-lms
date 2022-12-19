@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    $(document).ready(function(){
+    function load_sched_map(){
     
         $(".Mon").each(function(){
             
@@ -194,5 +194,5 @@
         });        
                         
         
-    });
+    }
 </script>
