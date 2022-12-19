@@ -700,32 +700,29 @@ class Unity extends CI_Controller {
                 $ret['gpa_curriculum'] = 0;
             
             $ret['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
-           
-            $units = 0;
+                       
             $totalUnits = 0;
             $totalLab = 0;
             $products = [];
             foreach($records as $record)
             {
                 $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
-                $units += $record['strUnits'];
+                
                 if($record['intLab'] == 1)
                 {
                     $totalLab++;
-                }
-                
-                
+                }                
                 if($record['v3'] != 3.50 && $record['v3'] != "0")
                 {
                     if ($record['intBridging'] == 1){
                         //$num_of_bridging = count($record['intBridging']);
-                        $totalUnits += intval($record['strUnits']);
+                        $totalUnits += $record['strUnits'];
                         $totalUnits -= 3;
                     }
                     else{
                         $product = $record['strUnits'] * $record['v3']; 
                         $products[] = $product;
-                        $totalUnits += intval($record['strUnits']);
+                        $totalUnits += $record['strUnits'];
                     }    
                 }
                 if($record['intFinalized']  <= 2)
@@ -756,6 +753,7 @@ class Unity extends CI_Controller {
 
                 $ret['records'][] = $record;
             }
+            print_r($totalUnits);
             $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
             $ret['total_units'] = $totalUnits;
             $ret['lab_units'] = $totalLab;
