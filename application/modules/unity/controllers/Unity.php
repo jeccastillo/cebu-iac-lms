@@ -927,13 +927,13 @@ class Unity extends CI_Controller {
             $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);
             foreach($schedule as $sched){                
                 if(isset($sched['dteStart'])){
+                    print_r($sched);
                     $hdiff = $sched['hourdiff']*2;
                     $sc_ret .='<input type="hidden" 
                         class="'.$sched['strDay'].'" 
                         value="'.date('gia',strtotime($sched['dteStart'])).'" 
                         href="'.$hdiff.'" 
-                        rel="'.$record['strCode'].' '.$sched['strRoomCode'].'" data-section="'.$record['strSection'].'">';                
-                    echo $sc_ret;                        
+                        rel="'.$record['strCode'].' '.$sched['strRoomCode'].'" data-section="'.$record['strSection'].'">';                                                 
                 }
             }        
         }
