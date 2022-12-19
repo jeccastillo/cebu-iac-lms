@@ -909,7 +909,35 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         $this->data['id'] = $id;
         $this->data['sem'] = $sem;
+
+        if($sem!=null){
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        }
+        else
+        {
+            $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+            
+        }
+        $selected_ay = $ret['active_sem']['intID'];
         
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$selected_ay);
+        $sc_ret = '';                        
+        foreach($records as $record)
+        {
+            $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);
+            foreach($schedule as $sched){
+                if(isset($sched['dteStart'])){
+                   $sc_ret .='
+                    <input type="hidden" class="'.$sched['strDay'].'"
+                        value="'.date('gia',strtotime($sched['dteStart'])).'"
+                        href="'.$sched['hourdiff']*2.'"
+                        rel="'.$class['strCode'].' '.$sched['strRoomCode'].'"
+                        data-section="'.$class['strSection'].'">';                
+                }
+            }        
+        }
+
+        $this->data['sched_hidden'] = $sc_ret;
         
         if(!empty($post))
             $id = $post['studentID'];
