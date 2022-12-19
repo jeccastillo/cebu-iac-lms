@@ -523,7 +523,7 @@ new Vue({
         tab: '<?php echo $tab; ?>',                          
         sem: '<?php echo $sem; ?>',
         student: {},
-        registration: {},
+        registration: undefined,
         active_sem: {},
         sections: [],
         records: [],
