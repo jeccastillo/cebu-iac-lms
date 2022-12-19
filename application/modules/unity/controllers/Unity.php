@@ -936,22 +936,7 @@ class Unity extends CI_Controller {
                 $this->data['tab'] = "tab_1";
             
             
-            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
-            
-            
-            $this->data['student'] = $this->data_fetcher->getStudent($id);
-            if(!$this->data['student'])
-                $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
-            //per faculty info
-			$records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
-            
-            $this->data['grades'] = $this->data_fetcher->assessCurriculumDept($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-            $this->data['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-            //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-            //$this->data['grades'] = $grades;
+          
             
           
           
