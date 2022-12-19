@@ -152,6 +152,7 @@ new Vue({
             if(this.tuition.tuition){
                 this.total_tuition = this.tuition.tuition.total;
                 this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                this.remaining_amount = this.total_tuition;
             }
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.selected_ay)
             .then((data) => {
