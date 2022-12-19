@@ -107,20 +107,19 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
 
-                                        foreach($record['schedule'] as $sched) {
-                                            if(!empty($record['schedule']))
-                                                //$html.= $sched['strDayAbvr'];     
-                                                $html .= "";               
-                                                //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
-                                        }
+                                            foreach($record['schedule'] as $sched) {
+                                                if(isset($sched['strDay']))
+                                                    $html.= $sched['strDayAbvr'];                    
+                                                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+                                            }
                                             $html.= '</td>
                                             <td width="100px">';                                            
-                                            if(!empty($record['schedule']))                                                
-                                                $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
+                                                if(isset($sched['strDay']))                                                
+                                                    $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>                                            
                                             ';
                                             $html.= '<td width="45px">';                                            
-                                                if(!empty($record['schedule']))                                                
+                                                if(isset($sched['strDay']))
                                                     $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
                                             </tr>';                                        
