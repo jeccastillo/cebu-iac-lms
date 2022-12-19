@@ -953,35 +953,8 @@ class Unity extends CI_Controller {
             //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
             //$this->data['grades'] = $grades;
             
-            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($this->data['student']['intCurriculumID'],$this->data['selected_ay'],$id);
-            
-            $this->data['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($this->data['student']['intCurriculumID']);
-            
-            if($this->data['totalUnitsEarned'] != 0)
-                $this->data['gpa_curriculum'] = round($this->data_fetcher->getGPA($this->data['student']['intID'],$this->data['student']['intCurriculumID'])/$this->data['totalUnitsEarned'],2);
-            else
-                $this->data['gpa_curriculum'] = 0;
-            
-            $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-           
-            
-            foreach($records as $record)
-            {
-                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
-                //print_r($record['schedule']);
-                $this->data['records'][] = $record;
-            }
-            
-            $sm = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-            
-            $term = switch_num_rev($sm['enumSem']);
-        
-            if(!empty($this->data['curriculum_subjects']))
-                $this->data['sections'] = $this->data_fetcher->fetch_classlist_by_subject($this->data['curriculum_subjects'][0]['intSubjectID'],$sm['intID']);
-            
-            //for total units
-            $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
-           // print_r($this->data['records']);
+          
+          
            
             
             $this->load->view("common/header",$this->data);
