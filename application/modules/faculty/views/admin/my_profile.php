@@ -88,12 +88,12 @@
                                 <?php echo $class['schedule']['schedString']; ?>
                                 <?php foreach($class['schedule'] as $sched):
                                         if(isset($sched['dteStart'])):                                
-                                        $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
+                                            $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
                                 ?>
-                                <input type="hidden" class="<?php echo $sched['strDay']; ?>"
-                                    value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
-                                    href="<?php echo $hourdiff*2; ?>"
-                                    rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?> <?php echo $class['strSection']; ?>">
+                                        <input type="hidden" class="<?php echo $sched['strDay']; ?>"
+                                            value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
+                                            href="<?php echo $hourdiff*2; ?>"
+                                            rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?> <?php echo $class['strSection']; ?>">
                                 
                                 <?php 
                                         endif;
@@ -105,20 +105,15 @@
 
                             <?php endif; ?>
                             <td>
-                                <?php 
-                                    if ($class['intFinalized'] == 1) {
-                                        echo "Submitted";
-                                    }
-                                    else {
-                                        echo "Not Yet Submitted";
-                                    }                                        
-                            ?>
+                                <?php if($class['intFinalized'] == 1): ?>
+                                    Submitted
+                                <?php else: ?>
+                                    Not Yet Submitted
+                                <?php endif;  ?>
                             </td>                           
                         </tr>
-                            <?php 
-                                endforeach; 
-                            else:
-                        ?>
+                            <?php endforeach; ?>
+                            <?php else: ?>
                         <tr>
                             <th>No Classlists for this term</th>
                         </tr>
