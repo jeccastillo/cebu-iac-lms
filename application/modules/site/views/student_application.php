@@ -326,6 +326,7 @@ new Vue({
             type_id: "",
             date_of_birth: "",
             program: "",
+            syid: "<?php echo $current_term; ?>",
         },
         loading_spinner: false,
         programs: [],
@@ -413,27 +414,6 @@ new Vue({
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
-
-
-            // Swal.fire({
-            //     title: title,
-            //     text: "Are you sure you want to " + type + " this " + text + "?",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Yes",
-            //     imageWidth: 100,
-            //     icon: "question",
-            //     cancelButtonText: "No, cancel!",
-            //     showCloseButton: true,
-            //     showLoaderOnConfirm: true,
-            //     preConfirm: (login) => {
-            //         return 
-            //     },
-            //     allowOutsideClick: () => !Swal.isLoading()
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-            //         //    
-            //     }
-            // })
 
             this.loading_spinner = true;
 
