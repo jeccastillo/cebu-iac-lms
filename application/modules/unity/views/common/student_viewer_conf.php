@@ -1,8 +1,8 @@
 <script type="text/javascript">
-    function load_sched_map(){
+    $(document).ready(function(){
     
         $(".Mon").each(function(){
-            console.log("Test");
+            
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
@@ -194,5 +194,5 @@
         });        
                         
         
-    }
+    });
 </script>
