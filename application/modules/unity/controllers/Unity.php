@@ -844,27 +844,29 @@ class Unity extends CI_Controller {
                         <td>'.$facultyName.'</td>
                     </tr>';
 
-                if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1){
-                    $sgpa_computed = $sgpa/$scount;
-                    $scount_counted = $scount;
-                    $sgpa = 0;
-                    $scount = 0;
-                
-                $student_grade_table .='    
-                    <tr>
-                        <th colspan="4">GPA:'.round($sgpa_computed,2).'</th>
-                        <th colspan="6">Units:'.$scount_counted.'</th>
-                    </tr>
-                    <tr>';
+                if(isset($grades[$i+1])){
+                    if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1){
+                        $sgpa_computed = $sgpa/$scount;
+                        $scount_counted = $scount;
+                        $sgpa = 0;
+                        $scount = 0;
+                    
+                    $student_grade_table .='    
+                        <tr>
+                            <th colspan="4">GPA:'.round($sgpa_computed,2).'</th>
+                            <th colspan="6">Units:'.$scount_counted.'</th>
+                        </tr>
+                        <tr>';
 
-                    if($countBridg > 0){
+                        if($countBridg > 0){
+                            $student_grade_table .='
+                                <td colspan="10" style="font-style:italic;font-size:13px;"><small>Note: ('.$countBridg.') Bridging course/s - not computed in units & GPA.</small></td>';
+                        }
                         $student_grade_table .='
-                            <td colspan="10" style="font-style:italic;font-size:13px;"><small>Note: ('.$countBridg.') Bridging course/s - not computed in units & GPA.</small></td>';
+                                </tr>
+                            </tbody>
+                        </table>';                
                     }
-                    $student_grade_table .='
-                            </tr>
-                        </tbody>
-                    </table>';                
                 }
                 
             }
