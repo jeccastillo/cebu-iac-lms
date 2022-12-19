@@ -208,125 +208,14 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{{ this.other_data.academic_standing.year}} Year / {{ this.other_data.academic_standing.status }}</td>
-                                                <td>{{ this.other_data.gpa_curriculum }}</td>
-                                                <td>{{ this.other_data.totalUnitsEarned }}</td>
-                                                <td>{{ this.other_data.units_in_curriculum }}</td>
+                                                <td>{{ other_data.academic_standing.year}} Year / {{ other_data.academic_standing.status }}</td>
+                                                <td>{{ other_data.gpa_curriculum }}</td>
+                                                <td>{{ other_data.totalUnitsEarned }}</td>
+                                                <td>{{ other_data.units_in_curriculum }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <?php 
-                                        $prev_year_sem = '0';
-                                        $sgpa = 0;
-                                        $scount = 0;
-                                        $countBridg = 0;
-                                        for($i = 0;$i<count($grades); $i++): 
-                                        //echo $prev_year_sem."<br />";
-                                    
-                                        if($grades[$i]['floatFinalGrade']!="0" && $grades[$i]['floatFinalGrade']!="3.5")
-                                        {    
-                                            //print_r($grades[$i]['intBridging']);
-                                            
-                                            if ($grades[$i]['intBridging'] == 1) { 
-                                                $countBridg  = $countBridg + $grades[$i]['intBridging'];
-                                                $scount += $grades[$i]['strUnits'];
-                                                $scount-=3;
-                                            }
-                                            else {
-                                                
-                                                $sgpa += $grades[$i]['floatFinalGrade']*$grades[$i]['strUnits'];
-                                                $scount+=$grades[$i]['strUnits'];
-                                            
-                                            }
-                                        //print_r($grades[$i]['intBridging']);
-                                        //echo "<br />" . $countBridg;
-                                        }
-
-                                        ?>
-                                        <?php if($prev_year_sem != $grades[$i]['syID']): 
-                                            $countBridg = 0;
-                                        ?>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="4">
-                                                        <?php echo ($grades[$i]['syID'] != 0)?$grades[$i]['enumSem']." Sem A.Y. ".$grades[$i]['strYearStart']." - ".$grades[$i]['strYearEnd']:'Credited Units'; ?>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Course Code</th>
-                                                    <th>Course Description</th>
-                                                    <th>P</th>
-                                                    <th>M</th>
-                                                    <th>F</th>
-                                                    <th>FG</th>
-                                                    <th>Num. Rating</th>
-                                                    <th>Units</th>
-                                                    <th>Remarks</th>
-                                                    <th>Faculty</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                        <?php 
-                                                
-                                                endif; 
-                                                $prev_year_sem = $grades[$i]['syID'];
-                                            
-                                                ?>
-                                        <tr class="<?php echo (strtoupper($grades[$i]['strRemarks'])=='PASSED')?'green-bg':''; ?> <?php echo ($grades[$i]['strRemarks']=='Failed' || $grades[$i]['strRemarks']=='Failed(U.D.)')?'red-bg':''; ?>">
-                                            <td><a href="<?php echo base_url()."unity/classlist_viewer/".$grades[$i]['classListID'] ?>"><?php echo $grades[$i]['strCode']; ?></a></td>
-                                            <td><?php echo $grades[$i]['strDescription']; ?></td>
-                                            <td><?php echo $grades[$i]['floatPrelimGrade']; ?></td>
-                                            <td><?php echo $grades[$i]['floatMidtermGrade']; ?></td>
-                                            <td><?php echo $grades[$i]['floatFinalsGrade']; ?></td>
-                                            
-                                            <td>
-                                            <?php  echo number_format(getAve($grades[$i]['floatPrelimGrade'],$grades[$i]['floatMidtermGrade'],$grades[$i]['floatFinalsGrade']), 2); ?>
-                                            </td>
-                                            <td>
-                                            <?php echo number_format($grades[$i]['floatFinalGrade'], 2, '.' ,','); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo $grades[$i]['strUnits']; ?> 
-                                            </td>
-                                            <td>
-                                                <?php echo $grades[$i]['strRemarks']; ?>
-                                            </td>
-                                            
-                                            <td>
-                                            <?php
-                                                if($grades[$i]['strFirstname']!="unassigned"){
-                                                            $firstNameInitial = substr($grades[$i]['strFirstname'], 0,1);
-                                                            echo $firstNameInitial. ". " . $grades[$i]['strLastname'];  
-                                                            }
-                                                            else
-                                                            echo "unassigned";
-                                                ?>
-                                            </td>
-                                        </tr>
-                                    <?php if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1): 
-                                        $sgpa_computed = $sgpa/$scount;
-                                        $scount_counted = $scount;
-                                        $sgpa = 0;
-                                        $scount = 0;
-                                    
-                                    ?>   
-                                        <tr>
-                                            <th colspan="4">GPA: <?php echo round($sgpa_computed,2); ?></th>
-                                            <th colspan="6">Units: <?php echo $scount_counted; ?></th>
-                                        </tr>
-                                        <tr>
-                                        <?php if($countBridg > 0): ?>
-                                        <td colspan="10" style="font-style:italic;font-size:13px;"><small>Note: (<?php echo $countBridg; ?>) Bridging course/s - not computed in units & GPA.</small></td>
-                                        <?php endif; ?> 
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <?php 
-                                    endif; ?>
-                                    <?php 
-                                    endfor; ?>
+                                    {{ assessment }}
                                 </div> 
                             </div>                                
                         </div>
@@ -683,6 +572,7 @@ new Vue({
         sy: undefined,
         term_type: undefined,
         sem_student: undefined,
+        prev_year_sem: 0,
         add_subject:{
             code: undefined,
             section:undefined,
@@ -701,7 +591,8 @@ new Vue({
         loader_spinner: true,           
         total_units: 0,
         lab_units: 0,    
-        gpa: 0,                 
+        gpa: 0,        
+        assessment: '',         
     },
 
     mounted() {
@@ -738,6 +629,7 @@ new Vue({
                         this.lab_units = data.data.lab_units;
                         this.gpa = data.data.gpa;
                         this.other_data = data.data.other_data;
+                        this.assessment = data.data.assessment;
                     }
                     else{
                        // document.location = this.base_url + 'users/login';

@@ -764,12 +764,117 @@ class Unity extends CI_Controller {
 
                 $ret['records'][] = $record;
             }
+
+            $student_grade_table = "";
+            $prev_year_sem = '0';
+            $sgpa = 0;
+            $scount = 0;
+            $countBridg = 0;
+            for($i = 0;$i<count($grades); $i++){
+            //echo $prev_year_sem."<br />";
+                
+                if($grades[$i]['floatFinalGrade']!="0" && $grades[$i]['floatFinalGrade']!="3.5")
+                {                                            
+                    if ($grades[$i]['intBridging'] == 1) { 
+                        $countBridg  = $countBridg + $grades[$i]['intBridging'];
+                        $scount += $grades[$i]['strUnits'];
+                        $scount-=3;
+                    }
+                    else {
+                        
+                        $sgpa += $grades[$i]['floatFinalGrade']*$grades[$i]['strUnits'];
+                        $scount+=$grades[$i]['strUnits'];
+                    
+                    }                
+                }
+
+                    
+                if($prev_year_sem != $grades[$i]['syID']){
+                    $grade = ($grades[$i]['syID'] != 0)?$grades[$i]['enumSem']." Sem A.Y. ".$grades[$i]['strYearStart']." - ".$grades[$i]['strYearEnd']:'Credited Units';
+                    $countBridg = 0;
+                
+                    $student_grade_table = '<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="4">
+                                    '.$grade.'
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Description</th>
+                                <th>P</th>
+                                <th>M</th>
+                                <th>F</th>
+                                <th>FG</th>
+                                <th>Num. Rating</th>
+                                <th>Units</th>
+                                <th>Remarks</th>
+                                <th>Faculty</th>
+                            </tr>
+                        </thead>
+                        <tbody>';                
+                        
+                }
+
+                $prev_year_sem = $grades[$i]['syID'];
+                $remarks = (strtoupper($grades[$i]['strRemarks'])=='PASSED')?'green-bg':''; ?> <?php echo ($grades[$i]['strRemarks']=='Failed' || $grades[$i]['strRemarks']=='Failed(U.D.)')?'red-bg':'';
+                $ave = number_format(getAve($grades[$i]['floatPrelimGrade'],$grades[$i]['floatMidtermGrade'],$grades[$i]['floatFinalsGrade']), 2);
+                $student_grade_table .='    
+                    <tr class="'.$remarks.'">
+                        <td><a href="'.base_url().'unity/classlist_viewer/'.$grades[$i]['classListID'].'">'.$grades[$i]['strCode'].'</a></td>
+                        <td>'.$grades[$i]['strDescription'].'</td>
+                        <td>'.$grades[$i]['floatPrelimGrade'].'</td>
+                        <td>'.$grades[$i]['floatMidtermGrade'].'</td>
+                        <td>'.$grades[$i]['floatFinalsGrade'].'</td>                        
+                        <td>'.$ave.'</td>
+                        <td>'.number_format($grades[$i]['floatFinalGrade'], 2, '.' ,',').'</td>
+                        <td>'.$grades[$i]['strUnits'].'</td>
+                        <td>'.$grades[$i]['strRemarks'].'</td>'; 
+                
+                if($grades[$i]['strFirstname']!="unassigned"){
+                    $firstNameInitial = substr($grades[$i]['strFirstname'], 0,1);
+                    $facultyName = $firstNameInitial. ". " . $grades[$i]['strLastname'];  
+                }
+                else
+                    $facultyName = "unassigned";                        
+
+                $student_grade_table .='    
+                        <td>'.$facultyName.'</td>
+                    </tr>';
+
+                if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1){
+                    $sgpa_computed = $sgpa/$scount;
+                    $scount_counted = $scount;
+                    $sgpa = 0;
+                    $scount = 0;
+                
+                $student_grade_table .='    
+                    <tr>
+                        <th colspan="4">GPA:'.round($sgpa_computed,2).'</th>
+                        <th colspan="6">Units:'.$scount_counted.'</th>
+                    </tr>
+                    <tr>';
+
+                    if($countBridg > 0){
+                        $student_grade_table .='
+                            <td colspan="10" style="font-style:italic;font-size:13px;"><small>Note: ('.$countBridg.') Bridging course/s - not computed in units & GPA.</small></td>';
+                    }
+                    $student_grade_table .='
+                            </tr>
+                        </tbody>
+                    </table>';                
+                }
+                
+            }
+
             $ret['gpa'] = round(array_sum($products) / $totalUnits, 2);
             $ret['total_units'] = $totalUnits;
             $ret['lab_units'] = $totalLab;
             $ret['term_type'] = $this->data['term_type'];
             $ret['img_dir'] = $this->data['img_dir'];
             $ret['photo_dir'] = $this->data['photo_dir'];
+            $ret['assessment'] = $student_grade_table;
 
             $ret['advanced_privilages1'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4)) )?true:false;
             $ret['advanced_privilages2'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4,6)) )?true:false;
