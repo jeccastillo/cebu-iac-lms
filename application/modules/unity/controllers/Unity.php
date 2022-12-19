@@ -905,94 +905,22 @@ class Unity extends CI_Controller {
     
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
-        if($this->faculty_logged_in())
-        {
-            $post = $this->input->post();
-            $this->data['id'] = $id;
-            $this->data['sem'] = $sem;
-            
-            
-            if(!empty($post))
-               $id = $post['studentID'];
-			
-            //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
-            
+                   
+        if(!empty($post))
+            $id = $post['studentID'];
         
-            
-            if($sem!=null){
-                 $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-            }
-            else
-            {
-                $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-                
-            }
-            
-            $this->data['selected_ay'] = $this->data['active_sem']['intID'];
-            
-            if($tab!=null)
-                $this->data['tab'] = $tab;
-            else
-                $this->data['tab'] = "tab_1";
-            
-            
-            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
-            
-            
-            $this->data['student'] = $this->data_fetcher->getStudent($id);
-            if(!$this->data['student'])
-                $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
-            //per faculty info
-			$records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
-            
-            $this->data['grades'] = $this->data_fetcher->assessCurriculumDept($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-            $this->data['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-            //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-            //$this->data['grades'] = $grades;
-            
-            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($this->data['student']['intCurriculumID'],$this->data['selected_ay'],$id);
-            
-            $this->data['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($this->data['student']['intCurriculumID']);
-            
-            if($this->data['totalUnitsEarned'] != 0)
-                $this->data['gpa_curriculum'] = round($this->data_fetcher->getGPA($this->data['student']['intID'],$this->data['student']['intCurriculumID'])/$this->data['totalUnitsEarned'],2);
-            else
-                $this->data['gpa_curriculum'] = 0;
-            
-            $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-           
-            
-            foreach($records as $record)
-            {
-                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
-                //print_r($record['schedule']);
-                $this->data['records'][] = $record;
-            }
-            
-            $sm = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-            
-            $term = switch_num_rev($sm['enumSem']);
+        $this->data['id'] = $id;
+        $this->data['sem'] = $sem;            
         
-            if(!empty($this->data['curriculum_subjects']))
-                $this->data['sections'] = $this->data_fetcher->fetch_classlist_by_subject($this->data['curriculum_subjects'][0]['intSubjectID'],$sm['intID']);
-            
-            //for total units
-            $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
-           // print_r($this->data['records']);
-           
-            
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/student_viewer",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/student_viewer_conf",$this->data); 
-           // print_r($this->data['classlists']);
-            
-        }
-        else
-            redirect(base_url());    
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/student_viewer",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/student_viewer_conf",$this->data); 
+        // print_r($this->data['classlists']);
+        
+    
+        redirect(base_url());    
         
         
     }
