@@ -244,7 +244,8 @@
                                                 <td v-else></td>                                                
                                             </tr>
                                         </tbody>
-                                    </table>                                    
+                                    </table>
+                                    <?php echo $sched_hidden; ?>
                                 </div>
                             </div>
                             <div class="box box-primary">
