@@ -916,12 +916,7 @@ class Unity extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_viewer",$this->data);
         $this->load->view("common/footer",$this->data);
-        $this->load->view("common/student_viewer_conf",$this->data); 
-        // print_r($this->data['classlists']);
-        
-    
-        redirect(base_url());    
-        
+        $this->load->view("common/student_viewer_conf",$this->data);                                     
         
     }
     
