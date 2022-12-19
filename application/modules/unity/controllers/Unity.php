@@ -519,7 +519,7 @@ class Unity extends CI_Controller {
                 $sdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);             
             }
             
-            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
+            $sdata['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3,4)) )?true:false;
 
             $data['data'] = $sdata;
             $data['success'] = true;

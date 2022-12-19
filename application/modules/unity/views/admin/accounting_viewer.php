@@ -167,8 +167,7 @@ new Vue({
         .then((data) => {
             this.tuition = data.data.data;         
             this.student = data.data.data.student;  
-            this.selected_ay = data.data.data.selected_ay; 
-            console.log(this.selected_ay);    
+            this.selected_ay = data.data.data.selected_ay;             
             this.advanced_privilages = data.data.data.advanced_privilages;
             this.loader_spinner = false;
             if(this.tuition.tuition){
