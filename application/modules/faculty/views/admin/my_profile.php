@@ -92,14 +92,19 @@
 
                             <td>
                                 <?php echo $class['schedule']['schedString']; ?>
-                                <?php foreach($class['schedule'] as $sched):                                
-                                    $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
+                                <?php foreach($class['schedule'] as $sched):
+                                    if(isset($sched['dteStart'])):                                
+                                        $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
                                 ?>
                                 <input type="hidden" class="<?php echo $sched['strDay']; ?>"
                                     value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
                                     href="<?php echo $hourdiff*2; ?>"
                                     rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?> <?php echo $class['strSection']; ?>">
-                                <?php endforeach; ?>
+                                
+                                <?php 
+                                        endif;
+                                    endforeach; 
+                                ?>
                             </td>
                             <?php else: ?>
                             <td></td>
