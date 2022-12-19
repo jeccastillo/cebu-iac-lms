@@ -37,12 +37,11 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li>
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + '/tab_1'">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
                                     Personal Information
                                 </a>
-                            </li>
-                            
-                            <!-- <li v-if="advanced_privilages">
+                            </li>                            
+                            <li v-if="advanced_privilages">
                                 <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
                                     Report of Grades
                                 </a>
@@ -63,7 +62,7 @@
                                 <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
                                 Statement of Account
                                 </a>
-                            </li> -->
+                            </li>
                             <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
                         </ul>                    
                         <div class="tab-content">
@@ -147,7 +146,7 @@ new Vue({
         sy: {},
         reservation_payment: {},
         advanced_privilages: false,
-        selected_ay: undefined,
+        selected_ay: 0,
         student: {},
         loader_spinner: true,
         type: "",
