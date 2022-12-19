@@ -27,15 +27,17 @@
                         </div>
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
-                                <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber }}</span></a></li>
-                                <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>                            
-                                <li>
-                                    <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
-                                        <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
-                                        <span style="color:#900000;" v-else>N/A</span>                                
-                                    </a>
-                                </li>
-                                <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>                                
+                            <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber }}</span></a></li>
+                            <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
+                            <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
+                            <li>
+                                <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
+                                    <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
+                                    <span style="color:#900000;" v-else>N/A</span>                                
+                                </a>
+                            </li>
+                            <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
+                                
                             </ul>
                         </div>
                     </div>                   
@@ -152,6 +154,8 @@ new Vue({
         total_formatted: 0,
         sy: {},
         reservation_payment: {},
+        registration: {},
+        reg_status: undefined, 
         advanced_privilages: false,
         selected_ay: undefined,
         student: {},
@@ -176,6 +180,8 @@ new Vue({
             this.student = data.data.data.student;  
             this.selected_ay = data.data.data.selected_ay;             
             this.advanced_privilages = data.data.data.advanced_privilages;
+            this.registration = data.data.data.registration;
+            this.reg_status = data.data.data.reg_status;
             this.loader_spinner = false;
             if(this.tuition.tuition){
                 this.total_tuition = this.tuition.tuition.total;
