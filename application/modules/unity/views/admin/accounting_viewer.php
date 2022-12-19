@@ -61,9 +61,24 @@
                     <table class="table table-bordered">
                         <tr>
                             <th>OR Number</th>
+                            <th>Payment Type</th>
                             <th>Amount Paid</th>
+                            <th>Online Payment Charge</th>
+                            <th>Total Due</th>
+                            <th>Status</th>
+                            <th>Online Response Message</th>
                             <th>Date Paid</th>
-                        </tr>                
+                        </tr>     
+                        <tr>
+                            <td>{{ reservation_payment.or_number }}</td>
+                            <td>{{ reservation_payment.description }}</td>
+                            <td>{{ reservation_payment.subtotal_order }}</td>
+                            <td>{{ reservation_payment.charges }}</td>
+                            <td>{{ reservation_payment.total_amount_due }}</td>
+                            <td>{{ reservation_payment.status }}</td>
+                            <td>{{ reservation_payment.response_message }}</td>
+                            <td>{{ reservation_payment.updated_at }}</td>
+                        </tr>           
                         <tr>
                             <td colspan="3">
                             Total Tuition: P{{ total_formatted }}
@@ -137,8 +152,7 @@ new Vue({
 
             axios.get(api_url + 'finance/reservation/' + this.slug)
             .then((data) => {
-                this.reservation_payment = data.data.data;
-                console.log(this.reservation_payment);
+                this.reservation_payment = data.data.data;                
                 this.loader_spinner = false;
             })
             .catch((error) => {
