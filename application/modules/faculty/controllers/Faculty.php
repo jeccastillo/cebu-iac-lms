@@ -249,7 +249,7 @@ class Faculty extends CI_Controller {
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/my_profile",$this->data);
             $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/faculty_viewer_conf",$this->data); 
+            // $this->load->view("common/faculty_viewer_conf",$this->data); 
             }
             else
                 redirect(base_url());   
