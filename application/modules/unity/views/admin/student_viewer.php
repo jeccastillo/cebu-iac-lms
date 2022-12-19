@@ -10,16 +10,16 @@
                     <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>Reg Form Print Preview
                     </a>                     
-                    <a v-if="reg_status != 'For Advising'" target="_blank" class="btn btn-app" href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="reg_status != 'For Advising'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>Print Advising Form
                     </a> 
-                    <a v-else target="_blank" class="btn btn-app" href="base_url + 'department/advising/' + student.intID">
+                    <a v-else target="_blank" class="btn btn-app" :href="base_url + 'department/advising/' + student.intID">
                         <i class="fa fa-book"></i>Advising/Subject Loading</a> 
                     </a>
-                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         
-                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" href="base_url + 'registrar/register_old_student2/' + student.intID">
+                    <a v-if="!registration && reg_status!='For Advising'" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Register Student
                     </a>                                         
                 </small>
@@ -127,7 +127,7 @@
                                                 <select v-model="add_subject.subject" class="select2" id="subjectSv" name="subjectSv">
                                                     <option v-for="s in curriculum_subjects" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                                                 </select>
-                                                <a href="base_url + 'subject/subject_viewer/' + curriculum_subjects[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
+                                                <a :href="base_url + 'subject/subject_viewer/' + curriculum_subjects[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
                                             </div>                                                        
                                         </div>
                                         <div class="col-sm-4">
