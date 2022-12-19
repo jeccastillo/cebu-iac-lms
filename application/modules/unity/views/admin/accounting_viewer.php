@@ -37,12 +37,33 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li>
-                                <a :href="base_url">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + '/tab_1'">
                                     Personal Information
                                 </a>
                             </li>
                             
+                            <!-- <li v-if="advanced_privilages">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
+                                    Report of Grades
+                                </a>
+                            </li>
+                            <li v-if="advanced_privilages">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
+                                    Assessment
+                                </a>
+                            </li>
                             
+                            <li>
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
+                                    Schedule
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
+                                Statement of Account
+                                </a>
+                            </li> -->
                             <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
                         </ul>                    
                         <div class="tab-content">
