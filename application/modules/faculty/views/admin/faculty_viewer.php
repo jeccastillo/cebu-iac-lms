@@ -144,51 +144,52 @@
                 </thead>
 
                 <tbody>
-                    <?php if(!empty($classlist)):
-                    foreach($classlist as $class): ?>
-                    <tr>
-                        <td><a href="<?php echo base_url().'unity/classlist_viewer/'.$class['intID']; ?>"><?php echo $class['strSection']; ?></a></td>
-                        <td><?php echo $class['strClassName']; ?></td>
-                        <td><?php echo $class['strDescription']; ?></td>
-                        <td><?php echo $class['strUnits']; ?></td>
-                        <?php if(!empty($class['schedule'])): ?>
-                            
+                        <?php if(!empty($classlist)):
+                                foreach($classlist as $class): ?>
+                        <tr>
+                            <td><?php echo $class['strSection']; ?></td>
+                            <td><?php echo $class['strClassName']; ?></td>
+                            <td><?php echo $class['strDescription']; ?></td>
+                            <td><?php echo $class['strUnits']; ?></td>
+                            <?php if(!empty($class['schedule'])): ?>
+
                             <td>
-                                <?php foreach($class['schedule'] as $sched): ?>
+                                <?php echo $class['schedule']['schedString']; ?>
+                                <?php foreach($class['schedule'] as $sched):
+                                        if(isset($sched['dteStart'])):                                
+                                            $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
+                                ?>
+                                        <input type="hidden" class="<?php echo $sched['strDay']; ?>"
+                                            value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
+                                            href="<?php echo $hourdiff*2; ?>"
+                                            rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?>"
+                                            data-section="<?php echo $class['strSection']; ?>">
                                 
-                                <?php echo date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])); ?> <?php echo $sched['strDay']; ?> <?php echo $sched['strRoomCode']; ?>
-                                <br />
-                                <?php
-                                                    $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
-                                                    
-                                                ?>
-                                                <input type="hidden" class="<?php echo $sched['strDay']; ?>" value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>" href="<?php echo $hourdiff*2; ?>" rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?>" data-section="<?php echo $class['strSection']; ?>">
-                                <?php endforeach; ?>
+                                <?php 
+                                        endif;
+                                    endforeach; 
+                                ?>
                             </td>
                             <?php else: ?>
-                            <td></td>
-                           
-                            <?php endif; ?>
-                        <td>
-                        <?php 
-                                                            if ($class['intFinalized'] == 1) {
-                                                                echo "Submitted";
-                                                            }
-                                                            else {
-                                                                echo "Not Yet Submitted";
-                                                            }                                        
-                                                    ?> 
-                        </td>
-<!--                    <td><?php echo $record['strFirstname']." ".$record['strLastname'];  ?></td>-->
-                    </tr>
-                    <?php endforeach; 
-                    else: ?>
-                    <tr>
-                        <th>No Classlists for this term</th>
-                    </tr>
-                    <?php endif; ?>
+                                <td></td>
 
-                </tbody>
+                            <?php endif; ?>
+                            <td>
+                                <?php if($class['intFinalized'] == 1): ?>
+                                    Submitted
+                                <?php else: ?>
+                                    Not Yet Submitted
+                                <?php endif;  ?>
+                            </td>                           
+                        </tr>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                        <tr>
+                            <th>No Classlists for this term</th>
+                        </tr>
+                        <?php endif; ?>
+
+                    </tbody>
 
             </table>
         </div>
