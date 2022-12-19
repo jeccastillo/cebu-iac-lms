@@ -245,7 +245,7 @@
                                                         :class="sched.strDay"
                                                         :value="sched.dteStartF"
                                                         :href="sched.hourdiff * 2"
-                                                        :rel="record.strCode + ' ' + sched.strRommCode"
+                                                        :rel="record.strCode + ' ' + sched.strRoomCode"
                                                         :data-section="record.strSection">                                   
                                                     </div>
                                                 </td>
