@@ -844,8 +844,7 @@ new Vue({
                 var formdata= new FormData();
                 for (const [key, value] of Object.entries(this.add_subject)) {
                     formdata.append(key,value);
-                }
-                                                    
+                }                                                    
 
                 this.loader_spinner = true;
                 axios.post(base_url + 'unity/add_to_classlist_ajax', formdata, {
@@ -869,7 +868,7 @@ new Vue({
                     title: "Failed",
                     text: 'Incomplete Data',
                     icon: "success"
-                }).then(function() {
+                });
 
         },
         updateGradStatus: function(){
