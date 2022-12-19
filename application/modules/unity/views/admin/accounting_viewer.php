@@ -100,7 +100,7 @@ new Vue({
             
         },        
         tuition: {},
-        total_formatted: undefined,
+        total_formatted: 0,
         sy: {},
         reservation_payment: {},
         selected_ay: undefined,
@@ -123,7 +123,8 @@ new Vue({
         .then((data) => {
             this.tuition = data.data.data;                
             this.loader_spinner = false;
-            this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            if(this.tuition.tuition)
+                this.total_formatted = this.tuition.tuition.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.sy.intID)
             .then((data) => {
