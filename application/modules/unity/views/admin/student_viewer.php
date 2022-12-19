@@ -208,10 +208,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{{ this.student.academic_standing.year}} Year / {{ this.student.academic_standing.status }}</td>
-                                                <td>{{ this.student.gpa_curriculum }}</td>
-                                                <td>{{ this.student.totalUnitsEarned }}</td>
-                                                <td>{{ this.student.units_in_curriculum }}</td>
+                                                <td>{{ this.other_data.academic_standing.year}} Year / {{ this.other_data.academic_standing.status }}</td>
+                                                <td>{{ this.other_data.gpa_curriculum }}</td>
+                                                <td>{{ this.other_data.totalUnitsEarned }}</td>
+                                                <td>{{ this.other_data.units_in_curriculum }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -678,6 +678,7 @@ new Vue({
         active_sem: {},
         sections: [],
         records: [],
+        other_data: undefined,
         reg_status: '',
         sy: undefined,
         term_type: undefined,
@@ -736,6 +737,7 @@ new Vue({
                         this.total_units = data.data.total_units;
                         this.lab_units = data.data.lab_units;
                         this.gpa = data.data.gpa;
+                        this.other_data = data.data.other_data;
                     }
                     else{
                        // document.location = this.base_url + 'users/login';

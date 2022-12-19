@@ -671,6 +671,15 @@ class Unity extends CI_Controller {
                 $ret['tab'] = $tab;
             else
                 $ret['tab'] = "tab_1";
+
+            $ret['other_data'] = 
+            array(
+                'academic_standing' => null,
+                'totalUnitsEarned' => null,
+                'gpa_curriculum' => null,
+                'academic_standing' => null,
+
+            );
             
             
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
@@ -685,22 +694,22 @@ class Unity extends CI_Controller {
             
             $ret['grades'] = $this->data_fetcher->assessCurriculumDept($ret['student']['intID'],$ret['student']['intCurriculumID']);
             
-            $ret['student']['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($ret['student']['intID'],$ret['student']['intCurriculumID']);
+            $ret['other_data']['totalUnitsEarned'] = $this->data_fetcher->unitsEarned($ret['student']['intID'],$ret['student']['intCurriculumID']);
             
             //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
             //$ret['grades'] = $grades;
             
             $ret['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$ret['selected_ay'],$id);
             
-            $ret['student']['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($ret['student']['intCurriculumID']);
+            $ret['other_data']['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($ret['student']['intCurriculumID']);
             
-            if($ret['totalUnitsEarned'] != 0)
-                $ret['student']['gpa_curriculum'] = round($this->data_fetcher->getGPA($ret['student']['intID'],$ret['student']['intCurriculumID'])/$ret['totalUnitsEarned'],2);
+            if($ret['other_data']['totalUnitsEarned'] != 0)
+                $ret['other_data']['gpa_curriculum'] = round($this->data_fetcher->getGPA($ret['student']['intID'],$ret['student']['intCurriculumID'])/$ret['other_data']['totalUnitsEarned'],2);
             else
-                $ret['student']['gpa_curriculum'] = 0;
+                $ret['other_data']['gpa_curriculum'] = 0;
             
-            $ret['student']['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
-            $ret['student']['academic_standing']['year'] = switch_num($ret['student']['academic_standing']['year']);
+            $ret['other_data']['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
+            $ret['other_data']['academic_standing']['year'] = switch_num($ret['student']['academic_standing']['year']);
             
                        
             $totalUnits = 0;
