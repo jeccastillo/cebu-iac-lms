@@ -841,7 +841,7 @@ new Vue({
         updateGradStatus: function(){
             
             var formdata= new FormData();
-            formdata.append("intID",this.registration.intRegistrationID);
+            formdata.append("intID",this.student.intID);
             formdata.append("isGraduate",this.grad_status);
 
             this.loader_spinner = true;
