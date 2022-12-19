@@ -910,7 +910,12 @@ class Unity extends CI_Controller {
             $id = $post['studentID'];
         
         $this->data['id'] = $id;
-        $this->data['sem'] = $sem;            
+        $this->data['sem'] = $sem; 
+        
+        if($tab!=null)
+            $this->data['tab'] = $tab;
+        else
+            $this->data['tab'] = "tab_1";           
         
         
         $this->load->view("common/header",$this->data);
