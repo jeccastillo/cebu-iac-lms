@@ -1,128 +1,130 @@
-<?php $paid = 0; ?>
-<aside class="right-side" id="vue-container">    
-    <section class="content-header">
-        <h1>
-            <small>
-                <a class="btn btn-app" href="<?php echo base_url() ?>student/view_all_students" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
-                                <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>   
-                                <a class="btn btn-app" href="<?php echo base_url()."student/edit_student/".$student['intID']; ?>"><i class="ion ion-edit"></i> Edit</a> 
-                                
-                                
-            </small>
-        </h1>
+
+<aside class="right-side">
+    <div id="vue-container">
+        <section class="content-header">
+            <h1>
+                <small>
+                    <a class="btn btn-app" href="<?php echo base_url() ?>student/view_all_students" ><i class="ion ion-arrow-left-a"></i>All Students</a> 
+                                    <a class="btn btn-app trash-student-record2" rel="<?php echo $student['intID']; ?>" href="#"><i class="ion ion-android-close"></i> Delete</a>   
+                                    <a class="btn btn-app" href="<?php echo base_url()."student/edit_student/".$student['intID']; ?>"><i class="ion ion-edit"></i> Edit</a> 
+                                    
+                                    
+                </small>
+            </h1>
 
 
-    </section>
-        <hr />
-    <div class="content">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="box box-widget widget-user-2">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-red">
-                <!-- /.widget-user-image -->
-                <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
-                            <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
-                <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." Major in ".$student['strMajor']; ?></h5>
+        </section>
+            <hr />
+        <div class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-red">
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
+                                <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
+                    <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." Major in ".$student['strMajor']; ?></h5>
+                    </div>
+                    <div class="box-footer no-padding">
+                    <ul class="nav nav-stacked">
+                        <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>                  
+                    </ul>
+                    </div>
                 </div>
-                <div class="box-footer no-padding">
-                <ul class="nav nav-stacked">
-                    <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>                  
-                </ul>
+                    
                 </div>
-            </div>
                 
-            </div>
             
-        
-            <div class="col-sm-12">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li>
-                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
-                                Personal Information
-                            </a>
-                        </li>
-                        
-                        <li v-if="advanced_privilages">
-                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
-                                Report of Grades
-                            </a>
-                        </li>
-                        <li v-if="advanced_privilages">
-                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
-                                Assessment
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
-                                Schedule
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
-                            Statement of Account
-                            </a>
-                        </li>
-                        <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
-                    </ul>                    
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
-        
-                            <div class="box box-solid box-success">
-                                <div class="box-header">                            
-                                    <h4 class="box-title">Transactions</h4>
-                                </div>
-                                <div class="box-body">
-                                    <table class="table table-bordered">
-                                        <tr>
-                                            <th>OR Number</th>
-                                            <th>Payment Type</th>
-                                            <th>Amount Paid</th>
-                                            <th>Online Payment Charge</th>
-                                            <th>Total Due</th>
-                                            <th>Status</th>
-                                            <th>Online Response Message</th>
-                                            <th>Date Paid</th>
-                                        </tr>     
-                                        <tr>
-                                            <td>{{ reservation_payment.or_number }}</td>
-                                            <td>{{ reservation_payment.description }}</td>
-                                            <td>{{ reservation_payment.subtotal_order }}</td>
-                                            <td>{{ reservation_payment.charges }}</td>
-                                            <td>{{ reservation_payment.total_amount_due }}</td>
-                                            <td>{{ reservation_payment.status }}</td>
-                                            <td>{{ reservation_payment.response_message }}</td>
-                                            <td>{{ reservation_payment.updated_at }}</td>
-                                        </tr>
-                                        <tr v-for="payment in payments">
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>
-                                            <td>{{ payment.response_message }}</td>
-                                            <td>{{ payment.updated_at }}</td>
-                                        </tr>           
-                                        <tr>
-                                            <td colspan="3">
-                                            Total Tuition: P{{ total_formatted }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="" colspan="3">
-                                            remaining balance: P{{ remaining_amount_formatted }}
-                                            </td>
-                                        </tr>
-                                    </table>
+                <div class="col-sm-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li>
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
+                                    Personal Information
+                                </a>
+                            </li>
+                            
+                            <li v-if="advanced_privilages">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
+                                    Report of Grades
+                                </a>
+                            </li>
+                            <li v-if="advanced_privilages">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
+                                    Assessment
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
+                                    Schedule
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
+                                Statement of Account
+                                </a>
+                            </li>
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
+                        </ul>                    
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+            
+                                <div class="box box-solid box-success">
+                                    <div class="box-header">                            
+                                        <h4 class="box-title">Transactions</h4>
+                                    </div>
+                                    <div class="box-body">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th>OR Number</th>
+                                                <th>Payment Type</th>
+                                                <th>Amount Paid</th>
+                                                <th>Online Payment Charge</th>
+                                                <th>Total Due</th>
+                                                <th>Status</th>
+                                                <th>Online Response Message</th>
+                                                <th>Date Paid</th>
+                                            </tr>     
+                                            <tr>
+                                                <td>{{ reservation_payment.or_number }}</td>
+                                                <td>{{ reservation_payment.description }}</td>
+                                                <td>{{ reservation_payment.subtotal_order }}</td>
+                                                <td>{{ reservation_payment.charges }}</td>
+                                                <td>{{ reservation_payment.total_amount_due }}</td>
+                                                <td>{{ reservation_payment.status }}</td>
+                                                <td>{{ reservation_payment.response_message }}</td>
+                                                <td>{{ reservation_payment.updated_at }}</td>
+                                            </tr>
+                                            <tr v-for="payment in payments">
+                                                <td>{{ payment.or_number }}</td>
+                                                <td>{{ payment.description }}</td>
+                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ payment.charges }}</td>
+                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ payment.status }}</td>
+                                                <td>{{ payment.response_message }}</td>
+                                                <td>{{ payment.updated_at }}</td>
+                                            </tr>           
+                                            <tr>
+                                                <td colspan="3">
+                                                Total Tuition: P{{ total_formatted }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="" colspan="3">
+                                                remaining balance: P{{ remaining_amount_formatted }}
+                                                </td>
+                                            </tr>
+                                        </table>
 
-                                    <hr />                                    
-                                </div>
-                            </div>    
-                        </div>                    
+                                        <hr />                                    
+                                    </div>
+                                </div>    
+                            </div>                    
+                        </div>
                     </div>
                 </div>
             </div>
