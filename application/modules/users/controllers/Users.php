@@ -114,7 +114,7 @@ class Users extends CI_Controller {
         $this->session->sess_destroy(); 
         $this->load->library('user_agent');
         
-        redirect(base_url()."#navigation-bar");
+        redirect(base_url()."users/login");
     }
     
     public function logout_student() {
