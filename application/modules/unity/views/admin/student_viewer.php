@@ -122,7 +122,7 @@
                         <div v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']" class="tab-pane" id="tab_2">
                             <div class="box box-primary">
                                 <div class="box-body">                                    
-                                    <div v-if="active_sem.enumFinalized == 'no' && registration" class="row">
+                                    <div v-if="active_sem.enumFinalized == 'no' && registration && sections.length > 0" class="row">
                                         <div class="col-sm-6">
                                             <div class="input-group">
                                                 <select v-model="add_subject.subject" class="select2" id="subjectSv" name="subjectSv">
