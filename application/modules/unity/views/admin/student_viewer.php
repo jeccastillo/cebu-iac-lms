@@ -159,7 +159,7 @@
                                                 <td>{{ record.strSection }}</td>
                                                 <td>{{ record.strCode }}</td>
                                                 <td>{{ record.strUnits }}</td>
-                                                <td>{{ record.v3 }}</td>
+                                                <td>{{ record.v3Display }}</td>
                                                 <td>{{ record.strRemarks }}</td>
                                                 <td>{{ record.facultyName }}</td>
                                                 <td>{{ record.recStatus }}</td>

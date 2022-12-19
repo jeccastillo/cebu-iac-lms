@@ -716,13 +716,13 @@ class Unity extends CI_Controller {
                 {
                     if ($record['intBridging'] == 1){
                         //$num_of_bridging = count($record['intBridging']);
-                        $totalUnits += $record['strUnits'];
+                        $totalUnits += intval($record['strUnits']);
                         $totalUnits -= 3;
                     }
                     else{
-                        $product = $record['strUnits'] * $record['v3']; 
+                        $product = intval($record['strUnits']) * $record['v3']; 
                         $products[] = $product;
-                        $totalUnits += $record['strUnits'];
+                        $totalUnits += intval($record['strUnits']);
                     }    
                 }
                 if($record['intFinalized']  <= 2)
@@ -745,11 +745,11 @@ class Unity extends CI_Controller {
                 
                 if($record['intFinalized'] > 2){
                     if($record['v3'] != 5.00){
-                        $record['v3'] =  ($record['v3']==3.50) ? 'inc' : number_format($record['v3'], 2, '.' ,',');
+                        $record['v3Display'] =  ($record['v3']==3.50) ? 'inc' : number_format($record['v3'], 2, '.' ,',');
                     }  
                 }                
                 else
-                    $record['v3'] = "-";
+                    $record['v3Display'] = "-";
 
                 $ret['records'][] = $record;
             }
