@@ -933,7 +933,7 @@ class Unity extends CI_Controller {
                         value="'.date('gia',strtotime($sched['dteStart'])).'" 
                         href="'.$hdiff.'" 
                         rel="'.$record['strCode'].' '.$sched['strRoomCode'].'" data-section="'.$record['strSection'].'">';
-                    echo $record['strSection'];                       
+                    echo date('gia',strtotime($sched['dteStart']));                       
                 }
             }        
         }
