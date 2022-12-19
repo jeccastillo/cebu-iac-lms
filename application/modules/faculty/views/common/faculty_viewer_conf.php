@@ -2,7 +2,7 @@
 <?php $d_open = '<div class="btn-group"><button type="button" class="btn btn-default">Actions</button><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu">';
 ?>
 <script src="<?php echo base_url(); ?>assets/lib/adminlte/js/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
 
