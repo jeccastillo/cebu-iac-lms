@@ -2388,10 +2388,10 @@ class Data_fetcher extends CI_Model {
             $schedString = "";
             $s['strDay'] = get_day_abvr($s['strDay']);
             
-            if(!empty($sched)){
-                $schedString.= $sched['strDay'];
-                $schedString.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));
-                $schedString.= $sched[0]['strRoomCode'];
+            if(!empty($s)){
+                $schedString.= $s['strDay'];
+                $schedString.= date('g:ia',strtotime($s['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($s['schedule'][0]['dteEnd']));
+                $schedString.= $s[0]['strRoomCode'];
             }
             $ret['schedString'] = $schedString;
             $ret[] = $s;
