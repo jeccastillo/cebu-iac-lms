@@ -254,16 +254,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="box box-primary">
-                                <div class="box-body">
-                                    <form method="post" :action="base_url + 'pdf/print_sched'">   
-                                        <input type="hidden" name="sched-table" id="sched-table" />                                                                                
-                                        <input type="hidden" :value="student.strLastname + '-' + student.strFirstname + '-' + student.strStudentNumber" name="studentInfo" id="studentInfo" />                                        
-                                        <input class="btn btn-flat btn-default" type="submit" value="print preview" />
-                                    </form> 
-                                </div>
-                            </div>
+                            </div>                            
                         </div>                                        
                     </div>
                     <!-- /.tab-content -->
