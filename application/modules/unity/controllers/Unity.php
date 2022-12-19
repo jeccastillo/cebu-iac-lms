@@ -719,13 +719,13 @@ class Unity extends CI_Controller {
                 {
                     if ($record['intBridging'] == 1){
                         //$num_of_bridging = count($record['intBridging']);
-                        $totalUnits += $record['strUnits'];
-                        $totalUnits-=3;
+                        $totalUnits += intval($record['strUnits']);
+                        $totalUnits -= 3;
                     }
                     else{
                         $product = $record['strUnits'] * $record['v3']; 
                         $products[] = $product;
-                        $totalUnits += $record['strUnits'];
+                        $totalUnits += intval($record['strUnits']);
                     }    
                 }
                 if($record['intFinalized']  <= 2)
@@ -739,7 +739,7 @@ class Unity extends CI_Controller {
                     $record['facultyName'] = "unassigned";
 
                 if ($record['strFirstname'] == "unassigned")
-                    $record['recStatus'] = "No Assigned Faculty Yet<";
+                    $record['recStatus'] = "No Assigned Faculty Yet";
                 elseif($record['intFinalized'] > 2) 
                     $record['recStatus'] = "Submitted";                    
                 else
