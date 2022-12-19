@@ -84,44 +84,40 @@
                         <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                    
                     </ul>
                     <div class="tab-content">
-                    <div :class="[(tab == 'tab_1') ? 'active' : '']" class="tab-pane" id="tab_1">
-                        <div class="box box-primary">
-                            
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-sm-3 size-96">                                    
-                                        <img v-if="!student.strPicture" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
-                                        <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
-                                        <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
-                                        <p><strong>Address: </strong>{{ student.strAddress }}</p>
-                                        <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
-                                        <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
-                                        <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
-                                        <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>  
-                                        <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
-                                            
-                                        
-                                        <strong>Graduated Status:</strong>
-                                        
-                                        <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
-                                            <option value="0">No</option>
-                                            <option value="1">Yes</option>
-                                        </select>
-                                        <hr />
-                                        <a v-if="registrar_privelages" href="base_url + 'pdf/portal_login_data/' + student.intID" class="btn btn-info" target="_blank">Portal Login Data</a>
-                                        <div v-else>
-                                            {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
+                        <div :class="[(tab == 'tab_1') ? 'active' : '']" class="tab-pane" id="tab_1">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-3 size-96">                                    
+                                            <img v-if="!student.strPicture" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
+                                            <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
                                         </div>
-                                        
-                                    </div>
-                                    
-                                    
-                                </div>    
+                                        <div class="col-sm-9">
+                                            <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
+                                            <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
+                                            <p><strong>Address: </strong>{{ student.strAddress }}</p>
+                                            <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
+                                            <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
+                                            <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
+                                            <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>  
+                                            <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
+                                                
+                                            
+                                            <strong>Graduated Status:</strong>
+                                            
+                                            <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                            <hr />
+                                            <a v-if="registrar_privelages" href="base_url + 'pdf/portal_login_data/' + student.intID" class="btn btn-info" target="_blank">Portal Login Data</a>
+                                            <div v-else>
+                                                {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
+                                            </div>
+                                        </div>                                                                        
+                                    </div>    
+                                </div>
                             </div>
-                        </div>
                         </div>
                     <!-- /.tab-pane -->
                     <?php if(in_array($user['intUserLevel'],array(2,4,3)) ): ?>
