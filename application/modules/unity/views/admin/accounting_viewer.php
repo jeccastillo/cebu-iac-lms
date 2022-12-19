@@ -14,64 +14,33 @@
 
 
         </section>
-            <hr />
+        <hr />
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="box box-widget widget-user-2">
-                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-red">
-                    <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
-                                <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
-                    <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." Major in ".$student['strMajor']; ?></h5>
-                    </div>
-                    <div class="box-footer no-padding">
-                    <ul class="nav nav-stacked">
-                        <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>                  
-                    </ul>
-                    </div>
-                </div>
-                    
-                </div>
-                
-            
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-red">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;"><?php echo strtolower($student['strLastname'].", ". $student['strFirstname']); ?>
+                                        <?php echo ($student['strMiddlename'] != "")?' '.strtolower($student['strMiddlename']):''; ?></h3>
+                            <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." Major in ".$student['strMajor']; ?></h5>
+                        </div>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>                  
+                            </ul>
+                        </div>
+                    </div>                    
+                </div>                            
                 <div class="col-sm-12">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li>
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
-                                    Personal Information
-                                </a>
-                            </li>
                             
-                            <li v-if="advanced_privilages">
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
-                                    Report of Grades
-                                </a>
-                            </li>
-                            <li v-if="advanced_privilages">
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
-                                    Assessment
-                                </a>
-                            </li>
-                            
-                            <li>
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
-                                    Schedule
-                                </a>
-                            </li>
-                            
-                            <li>
-                                <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
-                                Statement of Account
-                                </a>
-                            </li>
                             <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
                         </ul>                    
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
-            
+                            <div class="tab-pane active" id="tab_1">            
                                 <div class="box box-solid box-success">
                                     <div class="box-header">                            
                                         <h4 class="box-title">Transactions</h4>
@@ -121,15 +90,15 @@
                                         </table>
 
                                         <hr />                                    
-                                    </div>
-                                </div>    
-                            </div>                    
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                    </div><!---box body--->
+                                </div><!---box--->    
+                            </div><!---tab pane--->                    
+                        </div><!---tab content--->
+                    </div><!---tabs container--->
+                </div><!---column--->
+            </div><!---row--->
+        </div><!---content container--->
+    </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
