@@ -924,13 +924,11 @@ class Unity extends CI_Controller {
         $sc_ret = '';                        
         foreach($records as $record)
         {
-            $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);
-            foreach($schedule as $sched){                
-                $d['class'] = $record;
-                $d['sched'] = $sched;
-                    $sc_ret .= $this->load->view('common/sched_block_template', $d, true);
-                    echo $sc_ret;                       
-            }
+            $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);                          
+            $d['class'] = $record;
+            $d['schedule'] = $schedule;
+                $sc_ret .= $this->load->view('common/sched_block_template', $d, true);
+                echo $sc_ret;                                   
                 
         }
         
