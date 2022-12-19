@@ -157,7 +157,7 @@ new Vue({
                 this.payments = data.data.data;
                 for(i in this.payments){
                     if(this.payments[i].status == "Paid")
-                        this.remaining_amount = this.remaining_amount - this.payments[i].total_amount_due;
+                        this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                 }
                 this.loader_spinner = false;
 
@@ -165,7 +165,7 @@ new Vue({
                 .then((data) => {
                     this.reservation_payment = data.data.data;    
                     if(this.reservation_payment.status == "Paid" && this.reservation_payment.sy_reference == this.tuition.selected_ay)
-                            this.remaining_amount = this.remaining_amount - this.reservation_payment.total_amount_due;            
+                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
                     this.loader_spinner = false;
                 })
                 .catch((error) => {
