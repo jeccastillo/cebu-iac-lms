@@ -95,6 +95,7 @@
                                         </div>   
                                         <div class="col-sm-6">
                                             <p>Payment Status: {{ registration.paymentStatus }}</p>
+                                            <button class="btn btn-primary btn-lg" @click="testManualPay">Test Manual Pay</button>
                                         </div>                                 
                                     </div>
                                    
@@ -124,6 +125,9 @@ new Vue({
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
         student:{},    
+        request:{
+
+        },
         advanced_privilages: false,       
         registration: {},
         tuition:'',
@@ -161,6 +165,25 @@ new Vue({
     },
 
     methods: {        
+        testManualPay: function(){
+            let url = api_url + 'finance/manual_payment';            
+            this.loader_spinner = true;
+            axios.post(url, this.request, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+        },
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();

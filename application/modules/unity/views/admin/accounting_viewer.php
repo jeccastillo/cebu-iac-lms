@@ -224,11 +224,9 @@ new Vue({
 
     },
 
-    methods: {
+    methods: {        
 
         updateStatus: function() {
-
-
             Swal.fire({
                 title: 'Update Status',
                 text: "Are you sure you want to update?",
