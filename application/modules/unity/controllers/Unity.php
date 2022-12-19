@@ -938,6 +938,7 @@ class Unity extends CI_Controller {
             }        
         }
 
+        print_r($sc_ret);
         $this->data['sched_hidden'] = $sc_ret;
         
         if(!empty($post))
