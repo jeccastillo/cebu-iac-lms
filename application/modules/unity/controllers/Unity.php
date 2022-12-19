@@ -934,10 +934,6 @@ class Unity extends CI_Controller {
         //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
         //$this->data['grades'] = $grades;
         
-        
-        
-        
-        
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_viewer",$this->data);
         $this->load->view("common/footer",$this->data);
