@@ -235,7 +235,7 @@ class Registrar extends CI_Controller {
                             $classlist['intSubjectID'] = $subject;
                             $classlist['strAcademicYear'] = $post['strAcademicYear'];
                             $classlist['strUnits'] = $subject_data['strUnits'];
-                            $classlist['strSection'] = $program['strProgramCode']."-".$subject_data['intYearLevel']."-".$letter;
+                            $classlist['strSection'] = $subject_data['strCode']."-".$subject_data['intYearLevel']."-".$letter;
                             $classlist['strClassName'] = $subject_data['strCode'];
                            
                             
