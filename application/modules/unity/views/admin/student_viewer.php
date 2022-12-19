@@ -565,7 +565,7 @@ new Vue({
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
                         this.registration = data.data.registration;
-                        this.registration_status = data.data.registration.intROG;                        
+                        this.registration_status = data.data.registration.intROG ? data.data.registration.intROG : 0;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
                         this.selected_ay = data.data.selected_ay;
