@@ -2,7 +2,7 @@
     function load_sched_map(){
     
         $(".Mon").each(function(){
-            
+            console.log("Test");
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
