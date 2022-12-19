@@ -86,10 +86,14 @@
                         <div class="tab-pane active" id="tab_1">    
                             <div class="box box-solid">
                                 <div class="box-header">
-                                    <h4 class="box-title">ASSESSMENT OF FEES</h4>
-                                    <p>{{ registration.paymentStatus }}</p>
+                                    <h4 class="box-title">ASSESSMENT OF FEES</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <p>{{ registration.paymentStatus }}</p>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6">
                                         
