@@ -931,8 +931,8 @@ class Unity extends CI_Controller {
                     <input type="hidden" class="'.$sched['strDay'].'"
                         value="'.date('gia',strtotime($sched['dteStart'])).'"
                         href="'.$sched['hourdiff']*2.'"
-                        rel="'.$class['strCode'].' '.$sched['strRoomCode'].'"
-                        data-section="'.$class['strSection'].'">';                
+                        rel="'.$record['strCode'].' '.$sched['strRoomCode'].'"
+                        data-section="'.$record['strSection'].'">';                
                 }
             }        
         }
