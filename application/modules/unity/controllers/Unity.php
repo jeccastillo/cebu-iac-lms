@@ -716,13 +716,13 @@ class Unity extends CI_Controller {
                 {
                     if ($record['intBridging'] == 1){
                         //$num_of_bridging = count($record['intBridging']);
-                        $totalUnits += intval($record['strUnits']);
-                        $totalUnits -= 3;
+                        $totalUnits = $totalUnits + intval($record['strUnits']);
+                        $totalUnits = $totalUnits - 3;
                     }
                     else{
                         $product = intval($record['strUnits']) * $record['v3']; 
                         $products[] = $product;
-                        $totalUnits += intval($record['strUnits']);
+                        $totalUnits = $totalUnits + intval($record['strUnits']);
                     }    
                 }
                 if($record['intFinalized']  <= 2)
