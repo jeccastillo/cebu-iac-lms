@@ -1,6 +1,5 @@
 <?php $paid = 0; ?>
-<aside class="right-side">
-    <div id="vue-container">
+<aside class="right-side" id="vue-container">    
     <section class="content-header">
         <h1>
             <small>
@@ -39,74 +38,94 @@
             <div class="col-sm-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_1">Personal Information</a></li>
-                <?php if(in_array($user['intUserLevel'],array(2,4)) ): ?>
-                    <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Report of Grades</a></li>
-                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
-                <?php endif; ?>
-                    <?php if($active_registration && in_array($user['intUserLevel'],array(2,3,4,6))): ?>
-                <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
-                <li><a href="<?php echo base_url()."unity/registration_viewer/".$student['intID']."/".$selected_ay; ?>">Statement of Account</a></li>
-                <?php endif; ?>
-                <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
-                </ul>
-                <div class="tab-content">
-                <div class="tab-pane active" id="tab_1">
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_1'">
+                                Personal Information
+                            </a>
+                        </li>
+                        
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_2'">                            
+                                Report of Grades
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_3'">                            
+                                Assessment
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + selected_ay + '/tab_5'">                            
+                                Schedule
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a :href="base_url + 'unity/registration_viewer/' + student.intID '/' + selected_ay">                                
+                            Statement of Account
+                            </a>
+                        </li>
+                        <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>
+                    </ul>                    
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
         
-            <div class="box box-solid box-success">
-                <div class="box-header">                            
-                    <h4 class="box-title">Transactions</h4>
-                </div>
-                <div class="box-body">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>OR Number</th>
-                            <th>Payment Type</th>
-                            <th>Amount Paid</th>
-                            <th>Online Payment Charge</th>
-                            <th>Total Due</th>
-                            <th>Status</th>
-                            <th>Online Response Message</th>
-                            <th>Date Paid</th>
-                        </tr>     
-                        <tr>
-                            <td>{{ reservation_payment.or_number }}</td>
-                            <td>{{ reservation_payment.description }}</td>
-                            <td>{{ reservation_payment.subtotal_order }}</td>
-                            <td>{{ reservation_payment.charges }}</td>
-                            <td>{{ reservation_payment.total_amount_due }}</td>
-                            <td>{{ reservation_payment.status }}</td>
-                            <td>{{ reservation_payment.response_message }}</td>
-                            <td>{{ reservation_payment.updated_at }}</td>
-                        </tr>
-                        <tr v-for="payment in payments">
-                            <td>{{ payment.or_number }}</td>
-                            <td>{{ payment.description }}</td>
-                            <td>{{ payment.subtotal_order }}</td>
-                            <td>{{ payment.charges }}</td>
-                            <td>{{ payment.total_amount_due }}</td>
-                            <td>{{ payment.status }}</td>
-                            <td>{{ payment.response_message }}</td>
-                            <td>{{ payment.updated_at }}</td>
-                        </tr>           
-                        <tr>
-                            <td colspan="3">
-                            Total Tuition: P{{ total_formatted }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="" colspan="3">
-                            remaining balance: P{{ remaining_amount_formatted }}
-                            </td>
-                        </tr>
-                    </table>
+                            <div class="box box-solid box-success">
+                                <div class="box-header">                            
+                                    <h4 class="box-title">Transactions</h4>
+                                </div>
+                                <div class="box-body">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>OR Number</th>
+                                            <th>Payment Type</th>
+                                            <th>Amount Paid</th>
+                                            <th>Online Payment Charge</th>
+                                            <th>Total Due</th>
+                                            <th>Status</th>
+                                            <th>Online Response Message</th>
+                                            <th>Date Paid</th>
+                                        </tr>     
+                                        <tr>
+                                            <td>{{ reservation_payment.or_number }}</td>
+                                            <td>{{ reservation_payment.description }}</td>
+                                            <td>{{ reservation_payment.subtotal_order }}</td>
+                                            <td>{{ reservation_payment.charges }}</td>
+                                            <td>{{ reservation_payment.total_amount_due }}</td>
+                                            <td>{{ reservation_payment.status }}</td>
+                                            <td>{{ reservation_payment.response_message }}</td>
+                                            <td>{{ reservation_payment.updated_at }}</td>
+                                        </tr>
+                                        <tr v-for="payment in payments">
+                                            <td>{{ payment.or_number }}</td>
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>
+                                            <td>{{ payment.response_message }}</td>
+                                            <td>{{ payment.updated_at }}</td>
+                                        </tr>           
+                                        <tr>
+                                            <td colspan="3">
+                                            Total Tuition: P{{ total_formatted }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="" colspan="3">
+                                            remaining balance: P{{ remaining_amount_formatted }}
+                                            </td>
+                                        </tr>
+                                    </table>
 
-                    <hr />
-                    
+                                    <hr />                                    
+                                </div>
+                            </div>    
+                        </div>                    
+                    </div>
                 </div>
-            </div>    
-        </div>
-        
+            </div>
         </div>
     </div>
 </aside>
@@ -129,11 +148,13 @@ new Vue({
         total_formatted: 0,
         sy: {},
         reservation_payment: {},
+        advanced_privilages: false,
         selected_ay: undefined,
         student: {},
         loader_spinner: true,
         type: "",
         slug: "<?php echo $student['slug']; ?>",
+        base_url: "<?php echo base_url(); ?>",
         update_status: "",
         status_remarks: "",
     },
@@ -147,7 +168,10 @@ new Vue({
 
         axios.get('<?php echo base_url(); ?>unity/accounting_viewer_data/<?php echo $id."/".$sem; ?>')
         .then((data) => {
-            this.tuition = data.data.data;                
+            this.tuition = data.data.data;         
+            this.student = data.data.data.student;  
+            this.selected_ay = data.data.data.selected_ay;     
+            this.advanced_privilages = data.data.data.advanced_privilages;
             this.loader_spinner = false;
             if(this.tuition.tuition){
                 this.total_tuition = this.tuition.tuition.total;

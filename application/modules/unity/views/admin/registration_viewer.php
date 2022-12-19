@@ -53,34 +53,34 @@
             <div class="col-sm-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                    <li>
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
-                            Personal Information
-                        </a>
-                    </li>
-                    
-                    <li v-if="advanced_privilages">
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
-                            Report of Grades
-                        </a>
-                    </li>
-                    <li v-if="advanced_privilages">
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
-                            Assessment
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
-                            Schedule
-                        </a>
-                    </li>
-                    <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
-                    <li>
-                        <a :href="base_url + 'unity/accounting/' + student.intID">                                
-                            Accounting Summary
-                        </a>
-                    </li>
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
+                                Personal Information
+                            </a>
+                        </li>
+                        
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
+                                Report of Grades
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
+                                Assessment
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
+                                Schedule
+                            </a>
+                        </li>
+                        <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
+                        <li>
+                            <a :href="base_url + 'unity/accounting/' + student.intID">                                
+                                Accounting Summary
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">    
