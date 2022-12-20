@@ -117,8 +117,11 @@
                                                     <input type="text" required class="form-control" v-model="request.contact_number" />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Email: {{ request.email_address }}</label>
-                                                    
+                                                    <label>Email: {{ request.email_address }}</label>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Remarks:</label>
+                                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>
                                                 <button class="btn btn-primary btn-lg" type="submit">Test Manual Pay</button>
                                             </form>
@@ -161,6 +164,7 @@ new Vue({
             email_address: '',
             mode_of_payment_id: 26,
             description: 'Tuition Full', 
+            remarks:'',
             subtotal_order: 0,
             convenience_fee: 0,
             total_amount_due: 0,            
