@@ -202,8 +202,7 @@ new Vue({
                         this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
-                        this.tuition_data = data.data.tuition_data;
-                        this.amount_to_pay = data.data.tuition_data.total;                        
+                        this.tuition_data = data.data.tuition_data;                                               
                         this.remaining_amount = data.data.tuition_data.total;
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
@@ -219,11 +218,11 @@ new Vue({
                                 this.reservation_payment = data.data.data;    
                                 
                                 if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
-                                        console.log(this.remaining_amount);
+                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
                                 }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
                             })
                             .catch((error) => {
