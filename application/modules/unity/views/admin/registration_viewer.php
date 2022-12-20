@@ -159,6 +159,9 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
+                        this.request.first_name = this.student.strFirstname;
+                        this.request.middle_name = this.student.strMiddlename;
+                        this.request.last_name = this.student.strLastname;                        
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
                     }
