@@ -113,6 +113,10 @@
                                                     <label>Contact Number:</label>
                                                     <input type="text" required class="form-control" v-model="request.contact_number" />
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Email: {{ request.email_address }}</label>
+                                                    
+                                                </div>
                                                 <button class="btn btn-primary btn-lg" type="submit">Test Manual Pay</button>
                                             </form>
                                         </div>                                 
@@ -183,7 +187,8 @@ new Vue({
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
-                        this.request.contact_number = this.student.strMobileNumber;                    
+                        this.request.contact_number = this.student.strMobileNumber;  
+                        this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
                     }
