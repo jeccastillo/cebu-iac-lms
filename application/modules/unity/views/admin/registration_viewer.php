@@ -422,13 +422,22 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                    if(data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
                                 });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
@@ -462,14 +471,23 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                    this.loader_spinner = false;                                    
+                                    if(data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
                                 });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
@@ -504,13 +522,22 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                    if(data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
                                 });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
@@ -549,13 +576,22 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                    if(data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
                                 });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
@@ -600,13 +636,22 @@ new Vue({
             })
             .then(data => {
                 this.loader_spinner = false;
-                Swal.fire({
-                    title: "Success",
-                    text: data.data.message,
-                    icon: "success"
-                }).then(function() {
-                    
-                });
+                if(data.success)
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                else
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        //location.reload();
+                    });
             });
            
             
