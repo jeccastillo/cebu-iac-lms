@@ -98,7 +98,7 @@
                                             <th>Online Payment Charge</th>
                                             <th>Total Due</th>
                                             <th>Status</th>
-                                            <th>Date Paid</th>
+                                            <th>Date Updated</th>
                                         </tr>     
                                         <tr>
                                             <td>{{ reservation_payment.or_number }}</td>
