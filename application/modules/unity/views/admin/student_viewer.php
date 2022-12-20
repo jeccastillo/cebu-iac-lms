@@ -598,8 +598,7 @@ new Vue({
                         this.lab_units = data.data.lab_units;
                         this.gpa = data.data.gpa;
                         this.other_data = data.data.other_data;
-                        this.assessment = data.data.assessment;
-                        load_sched_map();
+                        this.assessment = data.data.assessment;                        
                     }
                     else{
                        document.location = this.base_url + 'users/login';
