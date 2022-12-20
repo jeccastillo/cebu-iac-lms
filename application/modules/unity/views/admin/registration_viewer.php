@@ -163,7 +163,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Payment Type</label>
+                                                    <label>Payment Status</label>
                                                     <select @change="selectDescription" class="form-control" v-model="request.status">
                                                         <option value="Paid">Paid</option>
                                                         <option value="Pending">Pending</option>                                                        
