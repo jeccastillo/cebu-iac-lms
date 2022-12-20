@@ -109,5 +109,23 @@
             <div class="col-sm-6">Total:</div>
             <div class="col-sm-6 text-green"><?php echo $tuition['total'] ?></div>
         </div>
+        <div class="row">
+            <div class="col-sm-6">Down Payment</div>
+            <div class="col-sm-6"><?php echo number_format($tuition['down_payment'], 2, '.' ,','); ?></div>
+        </div>
+        <?php for($i=0;$i<5;$i++): ?>
+        <div class="row">        
+            <div class="col-sm-6">
+                <td width="140px"><?php echo switch_num($i + 1) ?> INSTALLMENT</td>
+            </div>
+            <div class="col-sm-6">
+                <td width="80px" style="text-align:right;"><?php echo number_format($tuition['installment_fee'], 2, '.' ,','); ?></td>
+            </div>                    
+        </div>
+        <?php endfor; ?>
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6"><?php echo number_format($tuition['total_installment'], 2, '.' ,','); ?></div>
+        </div>                                                                    
     </div>
 </div>
