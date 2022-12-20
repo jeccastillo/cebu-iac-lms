@@ -265,7 +265,10 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                     preConfirm: (login) => {
-
+                        
+                        this.request.subtotal_order = this.amount_to_pay;
+                        this.request.total_amount_due = this.amount_to_pay;
+                        
                         return axios.post(url, this.request, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
