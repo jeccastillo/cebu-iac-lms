@@ -124,10 +124,10 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
-                                            <td><button v-if="payment.status == 'Pending'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
+                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
                                         </tr>    
                                         <tr>
-                                            <th colspan="7">
+                                            <th colspan="8">
                                             Tuition Payments:
                                             </th>
                                         </tr>
@@ -139,9 +139,10 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
+                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
                                         </tr>                                                                           
                                         <tr>
-                                            <td class="text-green" colspan="7">
+                                            <td class="text-green" colspan="8">
                                             amount paid: P{{ amount_paid_formatted }}                                           
                                             </td>
                                         </tr>
@@ -181,7 +182,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
-                                                    <input type="text" required class="form-control" v-model="request.or_number" />
+                                                    <input type="text" class="form-control" v-model="request.or_number" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -365,7 +366,7 @@ new Vue({
                     preConfirm: (login) => {
                         
                         let payload = {'id':payment_id}
-                                                                        
+
                         return axios.post(url, payload, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
