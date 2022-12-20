@@ -124,6 +124,7 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <hr />
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6">
                                         
