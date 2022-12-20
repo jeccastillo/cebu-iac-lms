@@ -249,6 +249,7 @@ new Vue({
         amount_paid_formatted: 0,
         payments: [],
         remaining_amount_formatted: 0,
+        has_partial: false,
         reg_status: undefined,        
         loader_spinner: true,                        
     },
@@ -281,8 +282,18 @@ new Vue({
                         .then((data) => {
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
+                            
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){
+                                    if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
+                                        this.has_partial = true;
+                            }
+
+                            if(this.has_partial)
+                                this.remaining_amount = this.tuition_data.total_total_installment;
+
+                            for(i in this.payments){
+                                if(this.payments[i].status == "Paid"){                              
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }
@@ -294,7 +305,7 @@ new Vue({
                                 
                                 if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
-                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;
+                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                                 }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

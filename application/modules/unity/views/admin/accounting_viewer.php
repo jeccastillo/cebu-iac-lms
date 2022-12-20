@@ -164,6 +164,7 @@ new Vue({
         slug: "<?php echo $student['slug']; ?>",
         base_url: "<?php echo base_url(); ?>",
         update_status: "",
+        has_partial: false,
         status_remarks: "",
     },
 
@@ -191,6 +192,15 @@ new Vue({
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.selected_ay)
             .then((data) => {
                 this.payments = data.data.data;
+                for(i in this.payments){
+                    if(this.payments[i].status == "Paid"){
+                        if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
+                            this.has_partial = true;
+                }
+
+                if(this.has_partial)
+                    this.remaining_amount = this.tuition_data.total_total_installment;
+
                 for(i in this.payments){
                     if(this.payments[i].status == "Paid")
                         this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
