@@ -482,16 +482,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
-                                                    </tr>
-                                                    <tr id="hours-per-day">
-                                                        <td style="border:1px solid #555;">Hours per Day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                        <td style="text-align:center;">hrs./day</td>
-                                                    </tr>
+                                                    </tr>                                                  
                                                 </tbody>
                                             </table>
                                         </div>
