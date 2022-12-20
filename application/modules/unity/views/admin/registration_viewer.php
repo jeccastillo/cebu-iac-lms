@@ -199,21 +199,40 @@ new Vue({
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
-            axios.post(url, this.request, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {
-                this.loader_spinner = false;
-                Swal.fire({
-                    title: "Success",
-                    text: data.data.message,
-                    icon: "success"
-                }).then(function() {
-                    
-                });
-            });
+            
+            Swal.fire({
+                title: 'Continue with Payment',
+                text: "Are you sure you want to add payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+
+                        return axios.post(url, this.request, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        
+                                    });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+            
         },
         selectDescription: function(){
             if(this.description != 'Other'){
