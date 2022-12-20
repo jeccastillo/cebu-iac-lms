@@ -89,6 +89,41 @@
                                     <h4 class="box-title">ACCOUNTING</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
+                                <h4 class="box-title">Payments</h4>
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <th>OR Number</th>
+                                            <th>Payment Type</th>
+                                            <th>Amount Paid</th>
+                                            <th>Online Payment Charge</th>
+                                            <th>Total Due</th>
+                                            <th>Status</th>
+                                            <th>Date Paid</th>
+                                        </tr>     
+                                        <tr>
+                                            <td>{{ reservation_payment.or_number }}</td>
+                                            <td>{{ reservation_payment.description }}</td>
+                                            <td>{{ reservation_payment.subtotal_order }}</td>
+                                            <td>{{ reservation_payment.charges }}</td>
+                                            <td>{{ reservation_payment.total_amount_due }}</td>
+                                            <td>{{ reservation_payment.status }}</td>                                            
+                                            <td>{{ reservation_payment.updated_at }}</td>
+                                        </tr>
+                                        <tr v-for="payment in payments">
+                                            <td>{{ payment.or_number }}</td>
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>                                            
+                                            <td>{{ payment.updated_at }}</td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="" colspan="3">
+                                            remaining balance: P{{ remaining_amount_formatted }}
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6">
                                         
@@ -131,45 +166,7 @@
                                             </form>
                                             <hr />                                            
                                         </div>                                 
-                                    </div>
-                                    <h4 class="box-title">Payments</h4>
-                                    <table class="table table-bordered table-striped">
-                                        <tr>
-                                            <th>OR Number</th>
-                                            <th>Payment Type</th>
-                                            <th>Amount Paid</th>
-                                            <th>Online Payment Charge</th>
-                                            <th>Total Due</th>
-                                            <th>Status</th>
-                                            <th>Date Paid</th>
-                                        </tr>     
-                                        <tr>
-                                            <td>{{ reservation_payment.or_number }}</td>
-                                            <td>{{ reservation_payment.description }}</td>
-                                            <td>{{ reservation_payment.subtotal_order }}</td>
-                                            <td>{{ reservation_payment.charges }}</td>
-                                            <td>{{ reservation_payment.total_amount_due }}</td>
-                                            <td>{{ reservation_payment.status }}</td>
-                                            <td>{{ reservation_payment.response_message }}</td>
-                                            <td>{{ reservation_payment.updated_at }}</td>
-                                        </tr>
-                                        <tr v-for="payment in payments">
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>
-                                            <td>{{ payment.response_message }}</td>
-                                            <td>{{ payment.updated_at }}</td>
-                                        </tr>  
-                                        <tr>
-                                            <td style="" colspan="3">
-                                            remaining balance: P{{ remaining_amount_formatted }}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                   
+                                    </div>                                                                       
                                 </div>
                             </div>              
                         </div>        
