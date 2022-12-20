@@ -89,16 +89,24 @@
                             <td>
                                 <?php echo $class['strLastname'] . ", " . $class['strFirstname'] ;?>
                             </td>
-                            <?php if(!empty($class['schedule'])): ?>
-
+                            <?php if(!empty($class['schedule'])): ?>                                
                             <td>
-                                <?php foreach($class['schedule'] as $sched): ?>
-
-                                <?php echo date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])); ?>
-                                <?php echo $sched['strDay']; ?> <?php echo $sched['strRoomCode']; ?>
-                                <br />
-                                <?php endforeach; ?>
-                            </td>
+                                <?php echo $class['schedule']['schedString']; ?>
+                                <?php foreach($class['schedule'] as $sched):
+                                        if(isset($sched['dteStart'])):                                
+                                            $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
+                                ?>
+                                        <input type="hidden" class="<?php echo $sched['strDay']; ?>"
+                                            value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>"
+                                            href="<?php echo $hourdiff*2; ?>"
+                                            rel="<?php echo $class['strCode']; ?> <?php echo $sched['strRoomCode']; ?>"
+                                            data-section="<?php echo $class['strSection']; ?>">
+                                
+                                <?php 
+                                        endif;
+                                    endforeach; 
+                                ?>
+                            </td>                            
                             <?php else: ?>
                             <td></td>
 
