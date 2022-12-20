@@ -124,8 +124,10 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
-                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
-                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button></td>
+                                            <td>
+                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                            </td>
                                         </tr>    
                                         <tr>
                                             <th colspan="8">
@@ -140,8 +142,10 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
-                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
-                                            <td><button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button></td>
+                                            <td>
+                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                            </td>
                                         </tr>                                                                           
                                         <tr>
                                             <td class="text-green" colspan="8">
