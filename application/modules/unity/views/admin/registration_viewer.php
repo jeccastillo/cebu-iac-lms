@@ -195,6 +195,7 @@ new Vue({
                         this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
+                        //this.amount_to_pay = data.data.tuition_data.
                     }
                     else{
                         document.location = this.base_url + 'users/login';

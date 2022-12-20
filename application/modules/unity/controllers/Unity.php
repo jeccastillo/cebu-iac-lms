@@ -455,6 +455,7 @@ class Unity extends CI_Controller {
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+            $ret['tuition_data'] = $data['tuition'];
             $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
             $ret['success']= true;
         }
