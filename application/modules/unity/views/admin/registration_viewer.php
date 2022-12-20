@@ -95,6 +95,13 @@
                                         </div>   
                                         <div class="col-sm-6">
                                             <p>Payment Status: {{ registration.paymentStatus }}</p>
+                                            <select class="form-control" v-model="description">
+                                                <option value="Tuition Full">Tuition Full</option>
+                                                <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                                <option value="Tuition Partial">Tuition Partial</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            <input type="text" :disabled="description != 'Other'" class="form-control" v-model="description_other" />
                                             <button class="btn btn-primary btn-lg" @click="testManualPay">Test Manual Pay</button>
                                         </div>                                 
                                     </div>
@@ -132,14 +139,16 @@ new Vue({
             contact_number: '',
             email_address: '',
             mode_of_payment_id: 26,
-            description: undefined,
+            description: 'Tuition Full', 
             subtotal_order: 0,
             convenience_fee: 0,
             total_amount_due: 0,
             charges: 0,
             sy_reference: '<?php echo $selected_ay; ?>',
         },
-        advanced_privilages: false,       
+        advanced_privilages: false,      
+        description: 'Tuition Full', 
+        description_other: '',
         registration: {},
         tuition:'',
         registration_status: 0,
