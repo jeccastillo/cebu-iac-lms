@@ -359,8 +359,8 @@ new Vue({
             this.loader_spinner = true;
             
             Swal.fire({
-                title: 'Continue with processing Payment',
-                text: "Are you sure you want to add payment?",
+                title: 'Continue with deleting Payment',
+                text: "Are you sure you want to delete payment?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
@@ -401,7 +401,7 @@ new Vue({
             
             Swal.fire({
                 title: 'Continue with processing Payment',
-                text: "Are you sure you want to add payment?",
+                text: "Are you sure you want to process payment?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
