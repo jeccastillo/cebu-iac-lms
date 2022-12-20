@@ -119,7 +119,7 @@
                                             <td>{{ payment.updated_at }}</td>
                                         </tr>  
                                         <tr>
-                                            <td style="" colspan="3">
+                                            <td class="text-green" colspan="3">
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
