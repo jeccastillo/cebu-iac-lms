@@ -252,6 +252,17 @@ new Vue({
         selectDescription: function(){
             if(this.description != 'Other'){
                 this.request.description == this.description;
+                switch(this.description){
+                    case 'Tuition Full':
+                        this.amount_to_pay = data.data.tuition_data.total;
+                    break;
+                    case 'Tuition Partial':
+                        this.amount_to_pay = data.data.tuition_data.installment_fee;
+                    break;
+                    case 'Tuition Down Payment':
+                        this.amount_to_pay = data.data.tuition_data.down_payment;
+                    break;                    
+                }
             }
             else
                 this.request.description = this.description_other;
