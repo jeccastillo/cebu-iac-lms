@@ -139,7 +139,11 @@
                                         </tr>                                                                           
                                         <tr>
                                             <td class="text-green" colspan="7">
-                                            amount paid: P{{ amount_paid_formatted }}
+                                            amount paid: P{{ amount_paid_formatted }}                                           
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green" colspan="7">                                            
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
