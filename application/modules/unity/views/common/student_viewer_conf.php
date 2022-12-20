@@ -21,7 +21,7 @@
                 
                 nxt = nxt.next();
             }
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });
         
@@ -46,7 +46,7 @@
                 
                 nxt = nxt.next();
             }
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });
         
@@ -72,7 +72,7 @@
                 nxt = nxt.next();
             }
             
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });
         
@@ -97,7 +97,7 @@
                 
                 nxt = nxt.next();
             }
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });
         
@@ -122,7 +122,7 @@
                 
                 nxt = nxt.next();
             }
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });
         
@@ -147,7 +147,7 @@
                 
                 nxt = nxt.next();
             }
-            $("#sched-table").val($("#student_sched_container").html());
+            $("#sched-table").val($("#sched-table-container").html());
             
         });      
 
