@@ -422,7 +422,7 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    if(data.success)
+                                    if(data.data.success)
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
@@ -472,7 +472,7 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                    
-                                    if(data.success)
+                                    if(data.data.success)
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
@@ -522,7 +522,7 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    if(data.success)
+                                    if(data.data.success)
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
@@ -576,7 +576,7 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    if(data.success)
+                                    if(data.data.success)
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
@@ -636,7 +636,7 @@ new Vue({
             })
             .then(data => {
                 this.loader_spinner = false;
-                if(data.success)
+                if(data.data.success)
                     Swal.fire({
                         title: "Success",
                         text: data.data.message,
