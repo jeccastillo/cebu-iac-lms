@@ -127,8 +127,45 @@
                                                     <label>Remarks:</label>
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>
-                                                <button class="btn btn-primary btn-lg" type="submit">Test Manual Pay</button>
+                                                <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                             </form>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th>OR Number</th>
+                                                    <th>Payment Type</th>
+                                                    <th>Amount Paid</th>
+                                                    <th>Online Payment Charge</th>
+                                                    <th>Total Due</th>
+                                                    <th>Status</th>
+                                                    <th>Online Response Message</th>
+                                                    <th>Date Paid</th>
+                                                </tr>     
+                                                <tr>
+                                                    <td>{{ reservation_payment.or_number }}</td>
+                                                    <td>{{ reservation_payment.description }}</td>
+                                                    <td>{{ reservation_payment.subtotal_order }}</td>
+                                                    <td>{{ reservation_payment.charges }}</td>
+                                                    <td>{{ reservation_payment.total_amount_due }}</td>
+                                                    <td>{{ reservation_payment.status }}</td>
+                                                    <td>{{ reservation_payment.response_message }}</td>
+                                                    <td>{{ reservation_payment.updated_at }}</td>
+                                                </tr>
+                                                <tr v-for="payment in payments">
+                                                    <td>{{ payment.or_number }}</td>
+                                                    <td>{{ payment.description }}</td>
+                                                    <td>{{ payment.subtotal_order }}</td>
+                                                    <td>{{ payment.charges }}</td>
+                                                    <td>{{ payment.total_amount_due }}</td>
+                                                    <td>{{ payment.status }}</td>
+                                                    <td>{{ payment.response_message }}</td>
+                                                    <td>{{ payment.updated_at }}</td>
+                                                </tr>  
+                                                <tr>
+                                                    <td style="" colspan="3">
+                                                    remaining balance: P{{ remaining_amount_formatted }}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>                                 
                                     </div>
                                    
