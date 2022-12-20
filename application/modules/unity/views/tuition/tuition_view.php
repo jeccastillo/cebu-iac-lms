@@ -127,7 +127,7 @@
         <?php endfor; ?>
         <hr />
         <div class="row">
-            <div class="col-sm-6"></div>
+            <div class="col-sm-6">Total for installment</div>
             <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_installment'], 2, '.' ,','); ?></div>
         </div>                                                                    
     </div>
