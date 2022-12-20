@@ -104,12 +104,12 @@
             <hr />
         <?php endif; ?>
             
-                    
         <div class="row">
             <div class="col-sm-6">Total:</div>
             <div class="col-sm-6 text-green"><?php echo $tuition['total'] ?></div>
         </div>
         <hr />
+        <h4 class="box-title">FOR INSTALLMENT</h4>
         <div class="row">
             <div class="col-sm-6">Down Payment</div>
             <div class="col-sm-6"><?php echo number_format($tuition['down_payment'], 2, '.' ,','); ?></div>
