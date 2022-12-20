@@ -94,21 +94,23 @@
                                         
                                         </div>   
                                         <div class="col-sm-6">
-                                            <p>Payment Status: {{ registration.paymentStatus }}</p>
-                                            <div class="form-group">
-                                                <label>Payment Type</label>
-                                                <select class="form-control" v-model="description">
-                                                    <option value="Tuition Full">Tuition Full</option>
-                                                    <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                    <option value="Tuition Partial">Tuition Partial</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Enter type if oher is selected:</label>
-                                                <input type="text" :disabled="description != 'Other'" class="form-control" v-model="description_other" />
-                                            </div>
-                                            <button class="btn btn-primary btn-lg" @click="testManualPay">Test Manual Pay</button>
+                                            <form @submit.prevent="submitManualPayment" method="post">
+                                                <p>Payment Status: {{ registration.paymentStatus }}</p>
+                                                <div class="form-group">
+                                                    <label>Payment Type</label>
+                                                    <select @change="selectDescription" class="form-control" v-model="description">
+                                                        <option value="Tuition Full">Tuition Full</option>
+                                                        <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                                        <option value="Tuition Partial">Tuition Partial</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Enter type if oher is selected:</label>
+                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                                </div>
+                                                <button class="btn btn-primary btn-lg" type="submit">Test Manual Pay</button>
+                                            </form>
                                         </div>                                 
                                     </div>
                                    
@@ -194,7 +196,7 @@ new Vue({
     },
 
     methods: {        
-        testManualPay: function(){
+        submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
             axios.post(url, this.request, {
@@ -213,27 +215,52 @@ new Vue({
                 });
             });
         },
+        selectDescription: function(){
+            if(this.description != 'Other'){
+                this.request.description == this.description;
+            }
+            else
+                this.request.description = this.description_other;
+        },
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
             formdata.append("intRegistrationID",this.registration.intRegistrationID);
             formdata.append("intROG",this.registration_status);
+            var missing_fields = false;
             this.loader_spinner = true;
-            axios.post(url, formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {
-                this.loader_spinner = false;
-                Swal.fire({
-                    title: "Success",
-                    text: data.data.message,
-                    icon: "success"
-                }).then(function() {
-                    
+            
+            //validate description
+            if(this.request.description == '')
+                missing_fields = true;
+
+            if(!missing_fields){            
+                axios.post(url, formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.loader_spinner = false;
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        
+                    });
                 });
-            });
+            }
+            else{
+                this.loader_spinner = false;
+                    Swal.fire({
+                        title: "Validation Error",
+                        text: "There are missing fields",
+                        icon: "success"
+                    }).then(function() {
+                        
+                    });
+            }
             
             
         }
