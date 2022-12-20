@@ -99,6 +99,7 @@
                                             <th>Total Due</th>
                                             <th>Status</th>
                                             <th>Date Updated</th>
+                                            <th>Actions</th>
                                         </tr>     
                                         <tr>
                                             <td>{{ reservation_payment.or_number }}</td>
@@ -108,6 +109,7 @@
                                             <td>{{ reservation_payment.total_amount_due }}</td>
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th colspan="7">
