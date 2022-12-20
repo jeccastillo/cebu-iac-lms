@@ -217,9 +217,11 @@ new Vue({
                             axios.get(api_url + 'finance/reservation/' + this.slug)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
-                                console.log(this.reservation_payment);
-                                if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem)
+                                
+                                if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
+                                        console.log(this.remaining_amount);
+                                }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 this.loader_spinner = false;
