@@ -149,33 +149,7 @@
             }
             $("#sched-table").val($("#sched-table-container").html());
             
-        });
-        
-       $(".trash-student-record2").click(function(e){
-            
-            conf = confirm("Are you sure you want to delete?");
-            if(conf)
-            {
-                var csid = $(this).attr('rel');
-                var data = {'id':csid};
-                $.ajax({
-                    'url':'<?php echo base_url(); ?>student/delete_student',
-                    'method':'post',
-                    'data':data,
-                    'dataType':'json',
-                    'success':function(ret){
-                        if(ret.message == "success")
-                            document.location="<?php echo base_url(); ?>student/view_all_students";
-                        else{
-                            $(".alert").show();
-                            setTimeout(function() {
-                                $(".alert").hide('fade', {}, 500)
-                            }, 3000);
-                        }
-                }
-            });
-            }
-        });
+        });      
 
         $(".view-curriculum-pdf").click(function(e){
             e.preventDefault();
