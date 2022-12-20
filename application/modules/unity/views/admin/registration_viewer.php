@@ -349,8 +349,48 @@ new Vue({
     },
 
     methods: {        
+        deletePayment: function(payment_id){
+            let url = api_url + 'finance/delete_payment';
 
-        setToPaid: function(payment_id){
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with processing Payment',
+                text: "Are you sure you want to add payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        
+                        let payload = {'id':payment_id}
+
+                        return axios.post(url, payload, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },
+        setToPaid: function(payment_id){    
             let url = api_url + 'finance/set_paid';
 
             this.loader_spinner = true;
