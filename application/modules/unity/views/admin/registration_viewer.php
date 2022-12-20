@@ -176,6 +176,7 @@ new Vue({
         reservation_payment: {},
         registration_status: 0,
         remaining_amount: 0,
+        amount_paid: 0,
         payments: [],
         remaining_amount_formatted: 0,
         reg_status: undefined,        
@@ -209,8 +210,10 @@ new Vue({
                         .then((data) => {
                             this.payments = data.data.data;
                             for(i in this.payments){
-                                if(this.payments[i].status == "Paid")
+                                if(this.payments[i].status == "Paid"){
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
+                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
+                                }
                             }                        
 
                             axios.get(api_url + 'finance/reservation/' + this.slug)
@@ -219,6 +222,7 @@ new Vue({
                                 
                                 if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
+                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;
                                 }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -295,7 +299,7 @@ new Vue({
                         this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
                     break;
                     case 'Tuition Down Payment':
-                        this.amount_to_pay = (this.tuition_data.down_payment > this.remaining_amount) ? this.remaining_amount : this.tuition_data.down_payment;
+                        this.amount_to_pay = (this.tuition_data.down_payment > this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                     break;                    
                 }
             }
