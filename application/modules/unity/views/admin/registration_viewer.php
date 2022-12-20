@@ -108,6 +108,9 @@
                                                 <div class="form-group">
                                                     <label>Enter type if oher is selected:</label>
                                                     <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                                    
+                                                    <label>Enter amount to pay:</label>
+                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -159,6 +162,7 @@ new Vue({
             subtotal_order: 0,
             convenience_fee: 0,
             total_amount_due: 0,
+            amount_to_pay: 0,
             charges: 0,
             sy_reference: '<?php echo $selected_ay; ?>',
         },
