@@ -112,7 +112,7 @@
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <th colspan="7">
+                                            <th colspan="8">
                                             Other Payments:
                                             </th>
                                         </tr>  
@@ -125,6 +125,11 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
+                                                <button v-if="payment.or_number == ''" data-toggle="modal"                                                
+                                                        @click="or_update.id = payment.id;" 
+                                                        data-target="#myModal" class="btn btn-primary">
+                                                        Update OR
+                                                </button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
@@ -143,6 +148,11 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
+                                                <button v-if="payment.or_number == ''" data-toggle="modal"                                                
+                                                        @click="or_update.id = payment.id;" 
+                                                        data-target="#myModal" class="btn btn-primary">
+                                                        Update OR
+                                                </button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
@@ -214,6 +224,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add OR Number</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>OR Number <span class="text-danger">*</span> </label>
+                        <input type="text" class="form-control" v-model="or_update.or_number" required></textarea>                        
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -251,7 +286,11 @@ new Vue({
             sy_reference: '<?php echo $selected_ay; ?>',
             status: 'Paid',
         },
-        amount_to_pay: 0,
+        or_update:{
+            id: undefined,
+            or_number: undefined,
+        },
+        amount_to_pay: 0,        
         advanced_privilages: false,      
         description: 'Tuition Full', 
         description_other: '',
@@ -352,7 +391,46 @@ new Vue({
 
     },
 
-    methods: {        
+    methods: {      
+        updateOR: function(){
+            let url = api_url + 'finance/update_or';
+
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to update the payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+
+                        return axios.post(url, this.or_update, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },  
         deletePayment: function(payment_id){
             let url = api_url + 'finance/delete_payment';
 
