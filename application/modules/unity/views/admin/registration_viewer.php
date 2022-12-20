@@ -111,20 +111,6 @@
                                         </tr>
                                         <tr>
                                             <th colspan="7">
-                                            Tuition Payments:
-                                            </th>
-                                        </tr>
-                                        <tr v-for="payment in payments">
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="7">
                                             Other Payments:
                                             </th>
                                         </tr>  
@@ -136,7 +122,21 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
-                                        </tr>                                        
+                                        </tr>    
+                                        <tr>
+                                            <th colspan="7">
+                                            Tuition Payments:
+                                            </th>
+                                        </tr>
+                                        <tr v-for="payment in payments">
+                                            <td>{{ payment.or_number }}</td>
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>                                            
+                                            <td>{{ payment.updated_at }}</td>
+                                        </tr>                                                                           
                                         <tr>
                                             <td class="text-green" colspan="7">
                                             remaining balance: P{{ remaining_amount_formatted }}
