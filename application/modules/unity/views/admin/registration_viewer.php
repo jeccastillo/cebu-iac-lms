@@ -129,7 +129,8 @@
                                                 </div>
                                                 <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                             </form>
-                                            <table class="table table-bordered">
+                                            <hr />
+                                            <table class="table table-bordered table-striped">
                                                 <tr>
                                                     <th>OR Number</th>
                                                     <th>Payment Type</th>
