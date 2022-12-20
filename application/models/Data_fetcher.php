@@ -2026,8 +2026,11 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee'] = $total_internship_fee;   
         $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
         $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
+        $data['total_installment'] = round($data['total_installment'],2);
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
+        $data['down_payment'] = round($data['down_payment'],2);
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
+        $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
         if(isset($scholar)){
             $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
