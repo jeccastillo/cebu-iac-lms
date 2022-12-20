@@ -91,8 +91,24 @@
                                                 <th>Status</th>
                                                 <th>Online Response Message</th>
                                                 <th>Date Updated</th>
-                                            </tr>     
-                                            <tr>
+                                            </tr>    
+                                            <tr v-if="application_payment">
+                                                <td>{{ application_payment.or_number }}</td>
+                                                <td>{{ application_payment.description }}</td>
+                                                <td>{{ application_payment.subtotal_order }}</td>
+                                                <td>{{ application_payment.charges }}</td>
+                                                <td>{{ application_payment.total_amount_due }}</td>
+                                                <td>{{ application_payment.status }}</td>                                            
+                                                <td>{{ application_payment.updated_at }}</td>
+                                                <td>
+                                                    <button v-if="!application_payment.or_number" data-toggle="modal"                                                
+                                                            @click="or_update.id = application_payment.id;" 
+                                                            data-target="#myModal" class="btn btn-primary">
+                                                            Update OR
+                                                    </button>
+                                                </td>
+                                            </tr> 
+                                            <tr v-if="reservation_payment">
                                                 <td>{{ reservation_payment.or_number }}</td>
                                                 <td>{{ reservation_payment.description }}</td>
                                                 <td>{{ reservation_payment.subtotal_order }}</td>
@@ -173,7 +189,8 @@ new Vue({
         remaining_amount_formatted: 0,
         total_formatted: 0,
         sy: {},
-        reservation_payment: {},
+        reservation_payment: undefined,
+        application_payment: undefined,
         registration: {},
         reg_status: undefined, 
         advanced_privilages: false,
