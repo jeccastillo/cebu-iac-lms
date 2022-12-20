@@ -109,7 +109,13 @@
                                             <td>{{ reservation_payment.total_amount_due }}</td>
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
-                                            <td></td>
+                                            <td>
+                                                <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
+                                                        @click="or_update.id = reservation_payment.id;" 
+                                                        data-target="#myModal" class="btn btn-primary">
+                                                        Update OR
+                                                </button>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th colspan="8">
