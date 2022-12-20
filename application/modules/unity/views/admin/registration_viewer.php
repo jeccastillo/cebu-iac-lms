@@ -109,6 +109,11 @@
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
                                         </tr>
+                                        <tr>
+                                            <th colspan="7">
+                                            Tuition Payments:
+                                            </th>
+                                        </tr>
                                         <tr v-for="payment in payments">
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
@@ -117,18 +122,30 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
-                                        </tr>  
+                                        </tr>
                                         <tr>
-                                            <td class="text-green" colspan="3">
+                                            <th colspan="7">
+                                            Other Payments:
+                                            </th>
+                                        </tr>  
+                                        <tr v-for="payment in other_payments">
+                                            <td>{{ payment.or_number }}</td>
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>                                            
+                                            <td>{{ payment.updated_at }}</td>
+                                        </tr>                                        
+                                        <tr>
+                                            <td class="text-green" colspan="7">
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
                                     </table>
                                     <hr />
                                     <div class="row">
-                                        <div v-html="tuition" class="col-sm-6">
-                                        
-                                        </div>   
+                                        <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6">
                                             <form @submit.prevent="submitManualPayment" method="post">
                                                 <p>Payment Status: {{ registration.paymentStatus }}</p>
@@ -217,6 +234,7 @@ new Vue({
         description: 'Tuition Full', 
         description_other: '',
         registration: {},
+        other_payments:[],
         tuition:'',
         tuition_data: {},
         reservation_payment: {},
@@ -256,6 +274,7 @@ new Vue({
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
                             this.payments = data.data.data;
+                            this.other_payments = data.data.other;
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
