@@ -99,6 +99,7 @@
                                                 <td>{{ application_payment.charges }}</td>
                                                 <td>{{ application_payment.total_amount_due }}</td>
                                                 <td>{{ application_payment.status }}</td>                                            
+                                                <td>{{ application_payment.response_message }}</td>
                                                 <td>{{ application_payment.updated_at }}</td>                                                
                                             </tr> 
                                             <tr v-if="reservation_payment">
