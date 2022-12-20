@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        
+        console.log($("#sched-table-container").html());
         $(".Mon").each(function(){
             
             var st = $(this).val();
