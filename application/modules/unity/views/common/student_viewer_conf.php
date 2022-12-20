@@ -57,11 +57,10 @@
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
             var section = $(this).attr('data-section');
-            console.log(st + hourspan + text + section);
             $("#"+st+" :nth-child(4)").addClass("bg-teal");
             $("#"+st+" :nth-child(4)").css({'border-top':'1px solid #999','border-left':'1px solid #999','border-right':'1px solid #999'});
             $("#"+st+" :nth-child(4)").html("<div style='text-align:center;'>"+text+"</div>");
-            //$("#"+st+" :nth-child(3)").attr('rowspan',hourspan);
+            $("#"+st+" :nth-child(3)").attr('rowspan',hourspan);
             nxt = $("#"+st);
             nxt.next().children(":nth-child(4)").html("<div style='text-align:center;'>"+section+"</div>");
             for(i=1;i<hourspan;i++){
