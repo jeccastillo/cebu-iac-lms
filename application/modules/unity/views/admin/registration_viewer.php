@@ -171,6 +171,7 @@ new Vue({
         description_other: '',
         registration: {},
         tuition:'',
+        tuition_data: {},
         registration_status: 0,
         reg_status: undefined,        
         loader_spinner: true,                        
@@ -195,6 +196,7 @@ new Vue({
                         this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
+                        this.tuition_data = data.data.tuition_data;
                         this.amount_to_pay = data.data.tuition_data.total;
                     }
                     else{
@@ -254,13 +256,13 @@ new Vue({
                 this.request.description == this.description;
                 switch(this.description){
                     case 'Tuition Full':
-                        this.amount_to_pay = data.data.tuition_data.total;
+                        this.amount_to_pay = this.tuition_data.total;
                     break;
                     case 'Tuition Partial':
-                        this.amount_to_pay = data.data.tuition_data.installment_fee;
+                        this.amount_to_pay = this.tuition_data.installment_fee;
                     break;
                     case 'Tuition Down Payment':
-                        this.amount_to_pay = data.data.tuition_data.down_payment;
+                        this.amount_to_pay = this.tuition_data.down_payment;
                     break;                    
                 }
             }
