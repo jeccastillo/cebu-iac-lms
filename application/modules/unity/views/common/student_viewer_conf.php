@@ -1,7 +1,8 @@
 <script type="text/javascript">
     function load_sched_map(){
         
-        $(".Mon").each(function(){                        
+        $(".Mon").each(function(){
+            
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
@@ -11,7 +12,7 @@
             $("#"+st+" :nth-child(2)").html("<div style='text-align:center;'>"+text+"</div>");
             //$("#"+st+" :nth-child(3)").attr('rowspan',hourspan);
             nxt = $("#"+st);
-             nxt.next().children(":nth-child(2)").html("<div style='text-align:center;'>"+section+"</div>");
+            nxt.next().children(":nth-child(2)").html("<div style='text-align:center;'>"+section+"</div>");
             for(i=1;i<hourspan;i++){
                 nxt.next().children(":nth-child(2)").addClass("bg-teal");
                 if(i==hourspan-1)
@@ -51,7 +52,7 @@
         });
         
         $(".Wed").each(function(){
-            console.log("Test Wed");
+            
             var st = $(this).val();
             var hourspan = $(this).attr('href'); 
             var text = $(this).attr('rel');
