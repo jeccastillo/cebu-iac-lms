@@ -150,6 +150,7 @@ new Vue({
         id: '<?php echo $id; ?>',    
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
+        slug: undefined,
         student:{},    
         request:{
             first_name: '',
@@ -172,7 +173,11 @@ new Vue({
         registration: {},
         tuition:'',
         tuition_data: {},
+        reservation_payment: {},
         registration_status: 0,
+        remaining_amount: 0,
+        payments: [],
+        remaining_amount_formatted: 0,
         reg_status: undefined,        
         loader_spinner: true,                        
     },
@@ -189,6 +194,7 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
+                        this.slug = this.student.slug;
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
@@ -197,13 +203,36 @@ new Vue({
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
                         this.tuition_data = data.data.tuition_data;
-                        this.amount_to_pay = data.data.tuition_data.total;
+                        this.amount_to_pay = data.data.tuition_data.total;                        
+                        this.remaining_amount = data.data.tuition_data.total;
                     }
                     else{
                         document.location = this.base_url + 'users/login';
                     }
+                    axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
+                    .then((data) => {
+                        this.payments = data.data.data;
+                        for(i in this.payments){
+                            if(this.payments[i].status == "Paid")
+                                this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
+                        }                        
 
-                    this.loader_spinner = false;                    
+                        axios.get(api_url + 'finance/reservation/' + this.slug)
+                        .then((data) => {
+                            this.reservation_payment = data.data.data;    
+                            if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.tuition.selected_ay)
+                                    this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
+
+                            this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            this.loader_spinner = false;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })                    
                 })
                 .catch((error) => {
                     console.log(error);
@@ -256,13 +285,13 @@ new Vue({
                 this.request.description == this.description;
                 switch(this.description){
                     case 'Tuition Full':
-                        this.amount_to_pay = this.tuition_data.total;
+                        this.amount_to_pay = this.remaining_amount;
                     break;
                     case 'Tuition Partial':
-                        this.amount_to_pay = this.tuition_data.installment_fee;
+                        this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount ? this.remaining_amount) : this.tuition_data.installment_fee;
                     break;
                     case 'Tuition Down Payment':
-                        this.amount_to_pay = this.tuition_data.down_payment;
+                        this.amount_to_pay = (this.tuition_data.down_payment > this.remaining_amount ? this.remaining_amount) : this.tuition_data.down_payment;
                     break;                    
                 }
             }
