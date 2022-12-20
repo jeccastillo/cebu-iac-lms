@@ -101,7 +101,7 @@
                                             <th>Date Updated</th>
                                             <th>Actions</th>
                                         </tr>     
-                                        <tr>
+                                        <tr v-if="application_payment">
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
                                             <td>{{ application_payment.subtotal_order }}</td>
@@ -117,7 +117,7 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr v-if="reservation_payment">
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
                                             <td>{{ reservation_payment.subtotal_order }}</td>
@@ -320,8 +320,8 @@ new Vue({
         other_payments:[],
         tuition:'',
         tuition_data: {},
-        reservation_payment: {},
-        application_payment: {},
+        reservation_payment: undefined,
+        application_payment: undefined,
         registration_status: 0,
         remaining_amount: 0,
         amount_paid: 0,

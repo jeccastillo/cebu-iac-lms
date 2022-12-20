@@ -249,6 +249,8 @@ new Vue({
                 axios.get(api_url + 'finance/reservation/' + this.slug)
                 .then((data) => {
                     this.reservation_payment = data.data.data;    
+                    this.application_payment = data.data.application;
+                    
                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.tuition.selected_ay)
                             this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
 
