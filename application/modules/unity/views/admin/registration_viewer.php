@@ -154,6 +154,7 @@ new Vue({
         student:{},    
         request:{
             first_name: '',
+            slug: '',
             middle_name: '',
             last_name: '',
             contact_number: '',
@@ -196,6 +197,7 @@ new Vue({
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
                         this.slug = this.student.slug;
+                        this.request.slug = this.slug;
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
