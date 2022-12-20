@@ -113,6 +113,10 @@
                                                     <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
                                                 <div class="form-group">
+                                                    <label>OR Number:</label>
+                                                    <input type="text" required class="form-control" v-model="request.or_number" />
+                                                </div>
+                                                <div class="form-group">
                                                     <label>Contact Number:</label>
                                                     <input type="text" required class="form-control" v-model="request.contact_number" />
                                                 </div>
@@ -164,6 +168,7 @@ new Vue({
             email_address: '',
             mode_of_payment_id: 26,
             description: 'Tuition Full', 
+            or_number:'',
             remarks:'',
             subtotal_order: 0,
             convenience_fee: 0,
