@@ -139,6 +139,7 @@
                                         </tr>                                                                           
                                         <tr>
                                             <td class="text-green" colspan="7">
+                                            amount paid: P{{ amount_paid_formatted }}
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
@@ -241,6 +242,7 @@ new Vue({
         registration_status: 0,
         remaining_amount: 0,
         amount_paid: 0,
+        amount_paid_formatted: 0,
         payments: [],
         remaining_amount_formatted: 0,
         reg_status: undefined,        
@@ -292,6 +294,7 @@ new Vue({
                                 }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 this.remaining_amount = this.remaining_amount.toFixed(2);
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
