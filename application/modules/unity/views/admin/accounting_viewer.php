@@ -196,6 +196,7 @@ new Vue({
                     if(this.payments[i].status == "Paid"){
                         if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
                             this.has_partial = true;
+                    }
                 }
 
                 if(this.has_partial)
