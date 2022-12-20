@@ -1,6 +1,7 @@
 
 <aside class="right-side">
     <div id="student-viewer-container">
+        <?php echo $sched_hidden; ?>
         <section class="content-header">
             <h1>
                 <small>
@@ -244,8 +245,7 @@
                                                 <td v-else></td>                                                
                                             </tr>
                                         </tbody>
-                                    </table>
-                                    <?php echo $sched_hidden; ?>
+                                    </table>                                    
                                 </div>
                             </div>
                             <div class="box box-primary">
