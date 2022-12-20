@@ -299,7 +299,7 @@ new Vue({
                         this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
                     break;
                     case 'Tuition Down Payment':
-                        console.log((this.tuition_data.down_payment +' > '+ this.amount_paid);
+                        console.log(this.tuition_data.down_payment +' > '+ this.amount_paid);
                         this.amount_to_pay = (this.tuition_data.down_payment > this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                     break;                    
                 }
