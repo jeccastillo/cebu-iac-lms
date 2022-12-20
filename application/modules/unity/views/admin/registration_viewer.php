@@ -266,8 +266,10 @@ new Vue({
                     break;                    
                 }
             }
-            else
+            else{
                 this.request.description = this.description_other;
+                this.amount_to_pay = 0;
+            }
         },
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
