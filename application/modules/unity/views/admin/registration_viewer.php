@@ -300,7 +300,7 @@ new Vue({
         },
         selectDescription: function(){
             if(this.description != 'Other'){
-                this.request.description == this.description;
+                this.request.description = this.description;
                 switch(this.description){
                     case 'Tuition Full':
                         this.amount_to_pay = this.remaining_amount;
