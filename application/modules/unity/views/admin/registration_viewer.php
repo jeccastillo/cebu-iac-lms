@@ -102,6 +102,22 @@
                                             <th>Actions</th>
                                         </tr>     
                                         <tr>
+                                            <td>{{ application_payment.or_number }}</td>
+                                            <td>{{ application_payment.description }}</td>
+                                            <td>{{ application_payment.subtotal_order }}</td>
+                                            <td>{{ application_payment.charges }}</td>
+                                            <td>{{ application_payment.total_amount_due }}</td>
+                                            <td>{{ application_payment.status }}</td>                                            
+                                            <td>{{ application_payment.updated_at }}</td>
+                                            <td>
+                                                <button v-if="!application_payment.or_number" data-toggle="modal"                                                
+                                                        @click="or_update.id = application_payment.id;" 
+                                                        data-target="#myModal" class="btn btn-primary">
+                                                        Update OR
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
                                             <td>{{ reservation_payment.subtotal_order }}</td>
@@ -305,6 +321,7 @@ new Vue({
         tuition:'',
         tuition_data: {},
         reservation_payment: {},
+        application_payment: {},
         registration_status: 0,
         remaining_amount: 0,
         amount_paid: 0,
@@ -365,6 +382,7 @@ new Vue({
                             axios.get(api_url + 'finance/reservation/' + this.slug)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
+                                this.application_payment = data.data.application;
                                 
                                 if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
