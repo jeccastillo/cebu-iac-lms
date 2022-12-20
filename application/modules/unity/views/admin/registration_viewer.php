@@ -276,21 +276,21 @@ new Vue({
                         this.request.total_amount_due = this.amount_to_pay;
                         console.log(this.request);
                         
-                        // return axios.post(url, this.request, {
-                        //             headers: {
-                        //                 Authorization: `Bearer ${window.token}`
-                        //             }
-                        //         })
-                        //         .then(data => {
-                        //             this.loader_spinner = false;
-                        //             Swal.fire({
-                        //                 title: "Success",
-                        //                 text: data.data.message,
-                        //                 icon: "success"
-                        //             }).then(function() {
+                        return axios.post(url, this.request, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
                                         
-                        //             });
-                        //         });
+                                    });
+                                });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
