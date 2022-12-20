@@ -114,7 +114,7 @@
             <div class="col-sm-6">Down Payment</div>
             <div class="col-sm-6"><?php echo number_format($tuition['down_payment'], 2, '.' ,','); ?></div>
         </div>
-        <br /><br />
+        <br />
         <?php for($i=0;$i<5;$i++): ?>
         <div class="row">        
             <div class="col-sm-6">
