@@ -231,36 +231,23 @@ new Vue({
             this.loader_spinner = true;
             
             //validate description
-            if(this.request.description == '')
-                missing_fields = true;
-
-            if(!missing_fields){            
-                axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                .then(data => {
-                    this.loader_spinner = false;
-                    Swal.fire({
-                        title: "Success",
-                        text: data.data.message,
-                        icon: "success"
-                    }).then(function() {
-                        
-                    });
-                });
-            }
-            else{
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
                 this.loader_spinner = false;
-                    Swal.fire({
-                        title: "Validation Error",
-                        text: "There are missing fields",
-                        icon: "success"
-                    }).then(function() {
-                        
-                    });
-            }
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+           
             
             
         }
