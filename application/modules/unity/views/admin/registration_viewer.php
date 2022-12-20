@@ -206,7 +206,30 @@ new Vue({
                         this.amount_to_pay = data.data.tuition_data.total;                        
                         this.remaining_amount = data.data.tuition_data.total;
 
-                          
+                        axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
+                        .then((data) => {
+                            this.payments = data.data.data;
+                            for(i in this.payments){
+                                if(this.payments[i].status == "Paid")
+                                    this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
+                            }                        
+
+                            axios.get(api_url + 'finance/reservation/' + this.slug)
+                            .then((data) => {
+                                this.reservation_payment = data.data.data;    
+                                if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.tuition.selected_ay)
+                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
+
+                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.loader_spinner = false;
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })      
                     }
                     else{
                         document.location = this.base_url + 'users/login';
@@ -267,14 +290,15 @@ new Vue({
                         this.amount_to_pay = this.remaining_amount;
                     break;
                     case 'Tuition Partial':
-                        this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount ? this.remaining_amount) : this.tuition_data.installment_fee;
+                        this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
                     break;
                     case 'Tuition Down Payment':
-                        this.amount_to_pay = (this.tuition_data.down_payment > this.remaining_amount ? this.remaining_amount) : this.tuition_data.down_payment;
+                        this.amount_to_pay = (this.tuition_data.down_payment > this.remaining_amount) ? this.remaining_amount : this.tuition_data.down_payment;
                     break;                    
                 }
             }
             else{
+
                 this.request.description = this.description_other;
                 this.amount_to_pay = 0;
             }
