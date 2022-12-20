@@ -245,7 +245,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <?php echo $sched_hidden; ?>
+                                    
                                 </div>
                             </div>
                             <div class="box box-primary">
