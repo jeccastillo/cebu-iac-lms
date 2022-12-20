@@ -90,7 +90,7 @@
                                                 <th>Total Due</th>
                                                 <th>Status</th>
                                                 <th>Online Response Message</th>
-                                                <th>Date Paid</th>
+                                                <th>Date Updated</th>
                                             </tr>     
                                             <tr>
                                                 <td>{{ reservation_payment.or_number }}</td>
@@ -101,6 +101,25 @@
                                                 <td>{{ reservation_payment.status }}</td>
                                                 <td>{{ reservation_payment.response_message }}</td>
                                                 <td>{{ reservation_payment.updated_at }}</td>
+                                            </tr>
+                                            <tr>
+                                            <th colspan="7">
+                                                Other Payments:
+                                                </th>
+                                            </tr>  
+                                            <tr v-for="payment in other_payments">
+                                                <td>{{ payment.or_number }}</td>
+                                                <td>{{ payment.description }}</td>
+                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ payment.charges }}</td>
+                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ payment.status }}</td>                                            
+                                                <td>{{ payment.updated_at }}</td>
+                                            </tr>    
+                                            <tr>
+                                                <th colspan="7">
+                                                Tuition Payments:
+                                                </th>
                                             </tr>
                                             <tr v-for="payment in payments">
                                                 <td>{{ payment.or_number }}</td>
@@ -146,7 +165,8 @@
 new Vue({
     el: '#vue-container',
     data: {
-        payments:[],        
+        payments:[],       
+        other_payments:[], 
         tuition: {},
         total_tuition: 0,
         remaining_amount: 0,
@@ -192,6 +212,7 @@ new Vue({
             axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.tuition.selected_ay)
             .then((data) => {
                 this.payments = data.data.data;
+                this.other_payments = data.data.other;
                 for(i in this.payments){
                     if(this.payments[i].status == "Paid"){
                         if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
