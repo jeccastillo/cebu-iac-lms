@@ -434,7 +434,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Failed",
                                             text: data.data.message,
-                                            icon: "success"
+                                            icon: "error"
                                         }).then(function() {
                                             //location.reload();
                                         });
@@ -476,7 +476,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
-                                            icon: "success"
+                                            icon: "error"
                                         }).then(function() {
                                             location.reload();
                                         });
@@ -484,7 +484,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Failed",
                                             text: data.data.message,
-                                            icon: "success"
+                                            icon: "error"
                                         }).then(function() {
                                             //location.reload();
                                         });
@@ -534,7 +534,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Failed",
                                             text: data.data.message,
-                                            icon: "success"
+                                            icon: "error"
                                         }).then(function() {
                                             //location.reload();
                                         });
@@ -588,7 +588,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Failed",
                                             text: data.data.message,
-                                            icon: "success"
+                                            icon: "error"
                                         }).then(function() {
                                             //location.reload();
                                         });
@@ -648,7 +648,7 @@ new Vue({
                     Swal.fire({
                         title: "Failed",
                         text: data.data.message,
-                        icon: "success"
+                        icon: "error"
                     }).then(function() {
                         //location.reload();
                     });
