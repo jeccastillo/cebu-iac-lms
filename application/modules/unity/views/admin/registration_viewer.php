@@ -237,6 +237,7 @@ new Vue({
                                 }
 
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.remaining_amount = this.remaining_amount.toFixed(2);
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
                             })
