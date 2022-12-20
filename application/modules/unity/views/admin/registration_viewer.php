@@ -95,13 +95,19 @@
                                         </div>   
                                         <div class="col-sm-6">
                                             <p>Payment Status: {{ registration.paymentStatus }}</p>
-                                            <select class="form-control" v-model="description">
-                                                <option value="Tuition Full">Tuition Full</option>
-                                                <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                <option value="Tuition Partial">Tuition Partial</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                            <input type="text" :disabled="description != 'Other'" class="form-control" v-model="description_other" />
+                                            <div class="form-group">
+                                                <label>Payment Type</label>
+                                                <select class="form-control" v-model="description">
+                                                    <option value="Tuition Full">Tuition Full</option>
+                                                    <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                                    <option value="Tuition Partial">Tuition Partial</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Enter type if oher is selected:</label>
+                                                <input type="text" :disabled="description != 'Other'" class="form-control" v-model="description_other" />
+                                            </div>
                                             <button class="btn btn-primary btn-lg" @click="testManualPay">Test Manual Pay</button>
                                         </div>                                 
                                     </div>
