@@ -152,8 +152,7 @@
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6">
-                                            <form @submit.prevent="submitManualPayment" method="post">
-                                                <p>Payment Status: {{ registration.paymentStatus }}</p>
+                                            <form @submit.prevent="submitManualPayment" method="post">                                                
                                                 <div class="form-group">
                                                     <label>Payment Type</label>
                                                     <select @change="selectDescription" class="form-control" v-model="description">
@@ -161,6 +160,13 @@
                                                         <option value="Tuition Down Payment">Tuition Down Payment</option>
                                                         <option value="Tuition Partial">Tuition Partial</option>
                                                         <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Payment Type</label>
+                                                    <select @change="selectDescription" class="form-control" v-model="request.status">
+                                                        <option value="Paid">Paid</option>
+                                                        <option value="Pending">Pending</option>                                                        
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
@@ -233,6 +239,7 @@ new Vue({
             total_amount_due: 0,            
             charges: 0,
             sy_reference: '<?php echo $selected_ay; ?>',
+            status: 'Paid',
         },
         amount_to_pay: 0,
         advanced_privilages: false,      
