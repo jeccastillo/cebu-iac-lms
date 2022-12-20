@@ -352,6 +352,9 @@ new Vue({
                 showLoaderOnConfirm: true,
                     preConfirm: (login) => {
                         
+                        if(this.description == 'Other')
+                            this.request.description = this.description_other;
+
                         this.request.subtotal_order = this.amount_to_pay;
                         this.request.total_amount_due = this.amount_to_pay;
                         console.log(this.request);
@@ -379,7 +382,7 @@ new Vue({
             
         },
         selectDescription: function(){
-            if(this.description != 'Other'){
+            if(this.description != 'Other'){                
                 this.request.description = this.description;
                 switch(this.description){
                     case 'Tuition Full':
@@ -393,9 +396,7 @@ new Vue({
                     break;                    
                 }
             }
-            else{
-
-                this.request.description = this.description_other;
+            else{                                
                 this.amount_to_pay = 0;
             }
         },
