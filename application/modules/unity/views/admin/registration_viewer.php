@@ -124,6 +124,7 @@
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
+                                            <td><button v-if="payment.status == 'Pending'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button></td>
                                         </tr>    
                                         <tr>
                                             <th colspan="7">
@@ -345,6 +346,48 @@ new Vue({
     },
 
     methods: {        
+
+        setToPaid: function(payment_id){
+            let url = api_url + 'finance/set_paid';
+
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with processing Payment',
+                text: "Are you sure you want to add payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        
+                        let payload = {'id':payment_id}
+                                                                        
+                        return axios.post(url, payload, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
