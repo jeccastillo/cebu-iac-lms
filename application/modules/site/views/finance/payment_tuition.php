@@ -205,18 +205,9 @@ new Vue({
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
-            })
-
-            .then((data) => {
+            }).then((data) => {
                 this.payment_modes = _.filter(data.data.data, item => item.is_nonbank != true);
-                this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);
-
-                $(function() {
-                    $(".box_mode_payment").click(function() {
-                        $(".box_mode_payment").removeClass("active");
-                        $(this).addClass("active");
-                    })
-                })
+                this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                
 
                 axios
                 .get(this.base_url + 'unity/accounting_viewer_data/' + this.slug)
@@ -226,6 +217,13 @@ new Vue({
                 })
                 .catch((error) => {
                     console.log(error);
+                })
+
+                $(function() {
+                    $(".box_mode_payment").click(function() {
+                        $(".box_mode_payment").removeClass("active");
+                        $(this).addClass("active");
+                    })
                 })
             })
             .catch((e) => {
