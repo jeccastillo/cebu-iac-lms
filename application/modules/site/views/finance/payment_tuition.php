@@ -212,9 +212,9 @@ new Vue({
                 axios
                 .get(this.base_url + 'unity/accounting_viewer_data/' + this.slug)
                 .then((data) => {            
-                    this.registration = data.data.registration;
-                    this.student = data.data.student;
-                    this.tuition = data.data.tuition;
+                    this.registration = data.data.data.registration;
+                    this.student = data.data.data.student;
+                    this.tuition = data.data.data.tuition;
                 })
                 .catch((error) => {
                     console.log(error);
