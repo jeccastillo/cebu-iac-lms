@@ -11,7 +11,7 @@
                         <select @change="selectDescription" class="form-control" v-model="payment_type">
                             <option value="Tuition Full">Tuition Full</option>
                             <option value="Tuition Down Payment">Tuition Down Payment</option>
-                            <option value="Tuition Partial">Tuition Partial</option>                                
+                            <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>                                
                         </select>
                     </div>                                                                
                     <div>
@@ -243,6 +243,7 @@ new Vue({
         payments: [],
         remaining_amount_formatted: 0,
         has_partial: false,
+        has_down: false,
         reg_status: undefined,        
         loader_spinner: true,     
         selected_mode_of_payment: {},
@@ -323,6 +324,8 @@ new Vue({
                             
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){
+                                    if(this.payments[i].description == "Tuition Down Payment")
+                                        this.has_down = true;
                                     if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
                                         this.has_partial = true;
                                 }
