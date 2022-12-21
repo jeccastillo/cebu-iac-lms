@@ -476,7 +476,7 @@ class Unity extends CI_Controller {
             $data['selected_ay'] = $sem;
         else
             $data['selected_ay'] = $active_sem['intID'];
-
+        
         $data['id'] =  $id;
 
         $this->load->view("common/header",$this->data);
@@ -488,8 +488,9 @@ class Unity extends CI_Controller {
     {
         $active_sem = $this->data_fetcher->get_active_sem();
 
+        $student = $this->data_fetcher->getStudent($id, 'slug');            
         $data['selected_ay'] = $active_sem['intID'];
-        $data['id'] =  $id;
+        $data['id'] = $student['intID'];
 
         $this->load->view("common/header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
