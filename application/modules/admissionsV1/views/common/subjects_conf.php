@@ -59,7 +59,7 @@ $(document).ready(function() {
                         +'">View Details</a></li>'
                         +'<li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'"</li></ul></div>';
+                        +'"></li></ul></div>';
                 }
             },
             {
