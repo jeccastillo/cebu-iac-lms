@@ -246,7 +246,7 @@ new Vue({
         has_down: false,
         reg_status: undefined,        
         loader_spinner: true,     
-        selected_mode_of_payment: {},
+        selected_mode_of_payment: undefined,
         total_single: 0,
         new_charge: 0,
         total_single_without_charge: 0,
@@ -395,7 +395,8 @@ new Vue({
                     this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                 break;                    
             }
-            this.selectPayment(this.selected_mode_of_payment);            
+            if(this.selected_mode_of_payment)
+                this.selectPayment(this.selected_mode_of_payment);            
             
         },
         selectPayment: function(mode_payment) {
