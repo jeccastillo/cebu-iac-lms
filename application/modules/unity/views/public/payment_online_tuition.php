@@ -395,7 +395,7 @@ new Vue({
                     this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                 break;                    
             }
-            if(this.selected_mode_of_payment)
+            if(this.selected_mode_of_payment != {})
                 this.selectPayment(this.selected_mode_of_payment);            
             
         },
