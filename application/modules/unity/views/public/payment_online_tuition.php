@@ -220,6 +220,12 @@ new Vue({
         selected_items: [],
         payment_type: 'Tuition Full',
         item: {},
+        request: {
+            mode_of_release: "",
+            delivery_region_id: "",
+            selected_location: "",
+            mailing_fee: 0,
+        },
         item_details: {
             price: 0,
             hey: this.payment_type
