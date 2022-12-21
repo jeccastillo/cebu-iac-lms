@@ -71,9 +71,7 @@
                             <table class="table" style="width:100%">
                                 <tbody>
                                     <tr v-if="item">
-                                        <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
-                                            'Application Fee'
-                                            }}
+                                        <td> {{ payment_type }}
                                         </td>
                                         <td>₱ {{ item_details.price }}</td>
                                     </tr>
@@ -210,26 +208,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
         loading_spinner: false,
-        student:{},    
-        request:{
-            first_name: '',
-            slug: '',
-            middle_name: '',
-            last_name: '',
-            contact_number: '',
-            email_address: '',
-            mode_of_payment_id: 26,
-            description: 'Tuition Full', 
-            or_number:'',
-            remarks:'',
-            subtotal_order: 0,
-            convenience_fee: 0,
-            total_amount_due: 0,            
-            charges: 0,
-            sy_reference: '<?php echo $selected_ay; ?>',
-            status: 'Paid',
-        },
-        
+        student:{},            
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
