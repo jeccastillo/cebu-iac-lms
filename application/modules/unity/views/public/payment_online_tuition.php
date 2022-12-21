@@ -209,6 +209,7 @@ new Vue({
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
+        loading_spinner: false,
         student:{},    
         request:{
             first_name: '',
