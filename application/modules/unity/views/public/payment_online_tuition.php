@@ -372,9 +372,8 @@ new Vue({
                 })
         },
         selectDescription: function(){
-            
-            this.request.description = this.description;
-            switch(this.description){
+                        
+            switch(this.payment_type){
                 case 'Tuition Full':
                     this.item_details.price = this.remaining_amount;
                 break;
