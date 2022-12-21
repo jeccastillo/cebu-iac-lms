@@ -54,9 +54,12 @@ $(document).ready(function() {
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/' +
-                        row.slug +
-                        '">View Details</a></li></ul></div>';
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/'
+                        +row.slug 
+                        +'">View Details</a></li>'
+                        +'<li><a href="<?php echo base_url(); ?>finance/manualPay/'
+                        + row.slug
+                        +'"</li></ul></div>';
                 }
             },
             {
