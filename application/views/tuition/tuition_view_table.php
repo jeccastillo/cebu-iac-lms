@@ -7,7 +7,7 @@
                     <td class="w-1/2 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo $tuition['tuition']; ?></td>      
                     </tr>
                     <tr>
-                        <td colspan="2" class="w-1/2 border border-slate-300 dark:border-slate-800 font-semibold p-4 text-slate-600 dark:text-slate-400 text-center">Miscellaneous</td>                        
+                        <td colspan="2" class="w-1/2 border border-slate-200 dark:border-slate-500 font-semibold p-4 text-slate-600 dark:text-slate-400 text-center">Miscellaneous</td>                        
                     </tr>
                 <?php foreach($tuition['misc_list'] as $key=>$val): ?>
                     <tr>
