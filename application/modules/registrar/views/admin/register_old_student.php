@@ -40,7 +40,7 @@
                         </tbody>
                     </table>
                     <hr />
-                    <form id="validate-student" action="<?php echo base_url(); ?>registrar/submit_registration_old2" method="post" role="form" enctype="multipart/form-data">                
+                    <form id="validate-student" @submit.prevent="submitRegistration" method="post" role="form" enctype="multipart/form-data">                
                         <input type="hidden" name="studentID" v-model="id" />                        
                         <div style="border:1px solid #d2d2d2;">
                             <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
@@ -87,7 +87,7 @@
                                 <div v-html="tuition_text" id="tuitionContainer">
                                 
                                 </div>
-                                <input type="submit" :disabled="reg_status != 'For Registration' || !subjects_loaded" value="Register" class="btn btn-default  btn-flat btn-block">
+                                <input type="submit" :disabled="reg_status != 'For Registration' || !subjects_loaded || loader_spinner" value="Register" class="btn btn-default  btn-flat btn-block">
                             </div>                             
                         </div>
                     </form>                           
@@ -115,6 +115,7 @@ new Vue({
         id: '<?php echo $id; ?>',    
         student_data:{},    
         request: {
+            studentID: '<?php echo $id; ?>',
             enumScholarship: 0,
             enumStudentType: 'new',
             enumRegistrationStatus: 'regular',
@@ -234,10 +235,10 @@ new Vue({
                 });
 
         },
-        submitRegistration: function (type, name, data){
+        submitRegistration: function (){
             Swal.fire({
-                title: 'Add New Fee: '+ name,
-                text: "Continue adding entry?",
+                title: 'Submit Registration',
+                text: "Continue registering studen?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
@@ -246,14 +247,14 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append("tuitionYearID",this.id);                    
-                    for(const [key,value] of Object.entries(data)){                   
+                    this.loader_spinner = true;
+                    var formdata= new FormData();                    
+                    for(const [key,value] of Object.entries(this.request)){                   
                         formdata.append(key,value);
                     }
                     
                     return axios
-                        .post('<?php echo base_url(); ?>tuitionyear/submit_extra/'+type,formdata, {
+                        .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
@@ -266,7 +267,7 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(function() {
-                                    location.reload();
+                                    document.location = data.data.student_link;
                                 });
                             } else {
                                 Swal.fire(

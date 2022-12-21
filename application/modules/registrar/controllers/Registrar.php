@@ -385,11 +385,11 @@ class Registrar extends CI_Controller {
        
         $academic_standing = $this->data_fetcher->getAcademicStanding($post['studentID'],$post['strAcademicYear']);
        
-        $this->data['sid'] = $post['studentID'];
-        $this->data['ayid'] = $post['strAcademicYear'];
+        $data['sid'] = $post['studentID'];
+        $data['ayid'] = $post['strAcademicYear'];
         $student = $this->data_fetcher->getStudent($post['studentID']);
         
-        $this->data['student_link'] = "<a href='".base_url()."unity/student_viewer/".$post['studentID']."'>View Student Info</a>";
+        $data['student_link'] = base_url()."unity/student_viewer/".$post['studentID'];
         
         if(!$this->data_fetcher->checkRegistered($post['studentID'],$post['strAcademicYear'])){
             $reg['intStudentID'] = $post['studentID'];
@@ -400,7 +400,7 @@ class Registrar extends CI_Controller {
             $reg['enumScholarship'] = $post['enumScholarship'];        
             $reg['enumStudentType'] = $post['enumStudentType'];
 
-            $this->data['message'] = "Registration Successful";
+            $data['message'] = "Registration Successful";
 
             $this->data_poster->post_data('tb_mas_registration',$reg);
             
@@ -414,12 +414,13 @@ class Registrar extends CI_Controller {
         }
         else
         {
-            $this->data['message'] = "Student Already Registered";
+            $data['message'] = "Student Already Registered";
         }
         
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/reg_student_result2",$this->data);
-        $this->load->view("common/footer",$this->data); 
+        echo json_encode($data);
+        // $this->load->view("common/header",$this->data);
+        // $this->load->view("admin/reg_student_result2",$this->data);
+        // $this->load->view("common/footer",$this->data); 
     } 
     
     public function submit_registration_new($post)
