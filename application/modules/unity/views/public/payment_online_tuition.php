@@ -36,7 +36,7 @@
                         <div class="box-body">                                                                                                  
                             <div class="form-group">
                                 <label>Select Payment Type</label>
-                                <select @change="selectDescription" class="form-control" v-model="description">
+                                <select @change="selectDescription" class="form-control" v-model="payment_type">
                                     <option value="Tuition Full">Tuition Full</option>
                                     <option value="Tuition Down Payment">Tuition Down Payment</option>
                                     <option value="Tuition Partial">Tuition Partial</option>                                
@@ -228,15 +228,19 @@ new Vue({
             sy_reference: '<?php echo $selected_ay; ?>',
             status: 'Paid',
         },
+        
+        payment_modes: [],
+        mode_of_releases: [],
+        area_delivery: [],
+        city_delivery: [],
+        payment_modes_nonbanks: [],
+        selected_items: [],
+        payment_type: 'Tuition Full',
+        item: {},
         item_details: {
             price: 0,
             hey: this.payment_type
-        },
-        payment_modes: [],
-        item: {},
-        amount_to_pay: 0,                     
-        description: 'Tuition Full', 
-        description_other: '',
+        },                                             
         registration: {},
         other_payments:[],
         tuition:'',
@@ -348,7 +352,7 @@ new Vue({
                                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                this.amount_to_pay = this.remaining_amount;
+                                this.item_details.price = this.remaining_amount;
                                 this.loader_spinner = false;
                                 Swal.close();
                             })
@@ -370,7 +374,21 @@ new Vue({
                 })
         },
         selectDescription: function(){
-
+            
+            this.request.description = this.description;
+            switch(this.description){
+                case 'Tuition Full':
+                    this.item_details.price = this.remaining_amount;
+                break;
+                case 'Tuition Partial':
+                    this.item_details.price = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
+                break;
+                case 'Tuition Down Payment':                        
+                    this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                break;                    
+            }
+            
+            
         },
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
