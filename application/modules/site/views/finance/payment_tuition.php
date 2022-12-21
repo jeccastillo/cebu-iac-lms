@@ -217,7 +217,7 @@ new Vue({
                     this.registration = data.data.data.registration;
                     this.student = data.data.data.student;
                     this.tuition = data.data.data.tuition;
-                    this.tuition_view = data.data.tuition_view;
+                    this.tuition_view = data.data.data.tuition_view;
                 })
                 .catch((error) => {
                     console.log(error);
