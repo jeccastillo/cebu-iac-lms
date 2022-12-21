@@ -247,7 +247,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
+            axios.get(this.base_url + 'unity/online_payment_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){                                                                                           
                         this.registration = data.data.registration;            
