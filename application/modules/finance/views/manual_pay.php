@@ -131,21 +131,22 @@ new Vue({
         let url = new URL(url_string);
 
         this.loader_spinner = true;
-
-        axios.get(this.base_url + 'finance/manualPayData/' + this.slug)
+        axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
-            this.student = data.data.data;                     
-            this.request.slug = this.slug;
-            this.request.first_name = this.student.strFirstname;
-            this.request.middle_name = this.student.strMiddlename;
-            this.request.last_name = this.student.strLastname;    
-            this.request.contact_number = this.student.strMobileNumber;  
-            this.request.email_address = this.student.strEmail;
-            
+            // this.student = data.data.data;
+            // this.request.slug = this.slug;
+            // this.request.first_name = this.student.strFirstname;
+            // this.request.middle_name = this.student.strMiddlename;
+            // this.request.last_name = this.student.strLastname;    
+            // this.request.contact_number = this.student.strMobileNumber;  
+            // this.request.email_address = this.student.strEmail;
+            console.log(data.data.data);
+
             axios.get(api_url + 'finance/reservation/' + this.slug)
             .then((data) => {
                 this.reservation_payment = data.data.data;    
                 this.application_payment = data.data.application;                    
+                this.loader_spinner = false;
             })
             .catch((error) => {
                 console.log(error);
@@ -154,8 +155,6 @@ new Vue({
         .catch((error) => {
             console.log(error);
         })
-         
-
 
     },
 
