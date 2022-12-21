@@ -117,7 +117,7 @@
             </div>                                           
         </form>
     </div>
-    <div v-html="tuition_view_table"></div>
+    <div v-html="tuition_view"></div>
 </section>
 
 <style scoped="">
@@ -216,7 +216,7 @@ new Vue({
                     this.registration = data.data.data.registration;
                     this.student = data.data.data.student;
                     this.tuition = data.data.data.tuition;
-                    this.tuition_view = data.data.data.tuition_view;
+                    this.tuition_view = data.data.data.tuition_view_table;
                 })
                 .catch((error) => {
                     console.log(error);
