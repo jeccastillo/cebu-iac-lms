@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="custom-container">
-        <div v-html="tuition_view"></div>
+        
     </div>
     <div class="custom-container">
         <form @submit.prevent="submitPayment">                        
