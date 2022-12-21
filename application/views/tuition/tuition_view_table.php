@@ -66,27 +66,33 @@
                             <td class="text-green-400"><?php echo $tuition['internship_fee']; ?></td>
                         </tr>
                         <hr />
-                    <?php endif; ?>
-                    <?php if($tuition['new_student']!= 0): ?>
+                    <?php endif; ?>                    
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <table class="table-fixed border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
+                <tbody>
+                <?php if($tuition['new_student']!= 0): ?>
+                    <tr>
+                        <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">New Student Fees:</td>
+                        <td class="text-green-400"></td>
+                    </tr>
+                    <hr />
+                    
+                    <?php foreach($tuition['new_student_list'] as $key=>$val): ?>                
                         <tr>
-                            <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">New Student Fees:</td>
-                            <td class="text-green-400"></td>
+                            <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2"><?php echo $key; ?></td>
+                            <td class="w-1/2 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo $val; ?></td>
                         </tr>
-                        <hr />
-                        
-                        <?php foreach($tuition['new_student_list'] as $key=>$val): ?>                
-                            <tr>
-                                <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2"><?php echo $key; ?></td>
-                                <td class="w-1/2 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo $val; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
 
-                        
-                        <tr>
-                            <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Total:</td>
-                            <td class="text-green-400"><?php echo $tuition['new_student']; ?></td>
-                        </tr>
-                        <hr />
+                    
+                    <tr>
+                        <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Total:</td>
+                        <td class="text-green-400"><?php echo $tuition['new_student']; ?></td>
+                    </tr>
+                    <hr />
                     <?php endif; ?>
                         
                     <tr>
@@ -114,5 +120,4 @@
                 </tbody>
             </table>
         </div>
-        <div></div>
     </div>
