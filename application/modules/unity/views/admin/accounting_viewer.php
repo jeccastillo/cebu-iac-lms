@@ -248,7 +248,7 @@ new Vue({
                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.tuition.selected_ay)
                             this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;            
 
-                    this.remaining_amount = (this.remaining_balance <= 0.01) ? 0 : this.remaining_balance;                            
+                    this.remaining_amount = (this.remaining_amount <= 0.01) ? 0 : this.remaining_amount;                            
                     this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     this.loader_spinner = false;
                 })
