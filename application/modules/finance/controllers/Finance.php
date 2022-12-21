@@ -62,7 +62,7 @@ class Finance extends CI_Controller {
         $this->data['slug'] = $slug;
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/manual_pay",$this->data);
+        $this->load->view("manual_pay",$this->data);
         $this->load->view("common/footer",$this->data);
     }
 		
