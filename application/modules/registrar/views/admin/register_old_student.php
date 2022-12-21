@@ -1,6 +1,6 @@
 <aside class="right-side" id="registration-container">
     <div v-if="loader_spinner" style="width:100%; display: flex; justify-content: center;">
-        <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
     <section class="content-header">
         <h1>
