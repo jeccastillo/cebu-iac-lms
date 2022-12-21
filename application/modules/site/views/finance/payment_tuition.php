@@ -167,6 +167,7 @@ new Vue({
         loading_spinner: false,
         registration: {},        
         student: {},
+        tuition: {},
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
@@ -214,6 +215,7 @@ new Vue({
                 .then((data) => {            
                     this.registration = data.data.registration;
                     this.student = data.data.student;
+                    this.tuition = data.data.tuition;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -237,7 +239,7 @@ new Vue({
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
-            var new_price = parseFloat(this.registration.tuition_data.total);
+            var new_price = parseFloat(this.tuition_data.total);
             var new_charge = parseFloat(this.selected_mode_of_payment.charge);
             var qty = 1;
 
