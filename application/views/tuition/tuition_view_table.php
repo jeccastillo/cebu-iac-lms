@@ -1,4 +1,4 @@
-    <table class="table-fixed"">
+    <table class="table-fixed w-full">
     <thead>
         <tr>
         <th class="text-right w-1/2">Tuition:</th>
