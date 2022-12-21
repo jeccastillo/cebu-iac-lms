@@ -238,15 +238,14 @@ new Vue({
         submitRegistration: function (){
             Swal.fire({
                 title: 'Submit Registration',
-                text: "Continue registering studen?",
+                text: "Continue registering student?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
                 icon: "question",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
-                showLoaderOnConfirm: true,
-                closeOnConfirm:false,
+                showLoaderOnConfirm: true,                
                 preConfirm: (login) => {
                     this.loader_spinner = true;
                     var formdata= new FormData();                    
@@ -254,7 +253,7 @@ new Vue({
                         formdata.append(key,value);
                     }
                     
-                    return axios
+                    axios
                         .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
@@ -273,8 +272,7 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                                                        
-                                    document.location = student_link;
-                                    
+                                    document.location = student_link;                                    
                                 });                                
                             } else {
                                 Swal.fire(
@@ -284,7 +282,11 @@ new Vue({
                                 )
                             }
                         });
-                },                
+                },
+                preDeny: () =>{
+                    return false;
+                },
+                allowOutsideClick: () => !Swal.isLoading()
             });
 
         },
