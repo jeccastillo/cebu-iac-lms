@@ -597,7 +597,7 @@ new Vue({
                         this.assessment = data.data.assessment;                        
                     }
                     else{
-                       document.location = this.base_url + 'users/login';
+                       //document.location = this.base_url + 'users/login';
                     }
 
                     this.loader_spinner = false;                    
