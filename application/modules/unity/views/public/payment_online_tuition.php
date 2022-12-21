@@ -246,7 +246,7 @@ new Vue({
         has_down: false,
         reg_status: undefined,        
         loader_spinner: true,     
-        selected_mode_of_payment: undefined,
+        selected_mode_of_payment: {},
         total_single: 0,
         new_charge: 0,
         total_single_without_charge: 0,
