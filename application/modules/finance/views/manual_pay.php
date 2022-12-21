@@ -82,6 +82,7 @@
                                     <th>Status</th>
                                     <th>Online Response Message</th>
                                     <th>Date Updated</th>
+                                    <th>Actions</th>
                                 </tr>    
                                 <tr v-if="application_payment">
                                     <td>{{ application_payment.or_number }}</td>
@@ -91,7 +92,14 @@
                                     <td>{{ application_payment.total_amount_due }}</td>
                                     <td>{{ application_payment.status }}</td>                                            
                                     <td>{{ application_payment.response_message }}</td>
-                                    <td>{{ application_payment.updated_at }}</td>                                                
+                                    <td>{{ application_payment.updated_at }}</td>            
+                                    <td>
+                                        <button v-if="!application_payment.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = application_payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                    </td>                                    
                                 </tr> 
                                 <tr v-if="reservation_payment">
                                     <td>{{ reservation_payment.or_number }}</td>
@@ -102,6 +110,13 @@
                                     <td>{{ reservation_payment.status }}</td>
                                     <td>{{ reservation_payment.response_message }}</td>
                                     <td>{{ reservation_payment.updated_at }}</td>
+                                    <td>
+                                        <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = reservation_payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr>                                            
                             </table>
@@ -111,6 +126,30 @@
                 </div><!---column--->
             </div><!---row--->
         </div><!---content container--->
+        <div class="modal fade" id="myModal" role="dialog">
+            <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add OR Number</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>OR Number <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control" v-model="or_update.or_number" required></textarea>                        
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -146,6 +185,10 @@ new Vue({
             charges: 0,            
             status: 'Paid',
         },
+        or_update:{
+            id: undefined,
+            or_number: undefined,
+        },
              
     },
 
@@ -178,7 +221,54 @@ new Vue({
     },
 
     methods: {        
+        updateOR: function(){
+            let url = api_url + 'finance/update_or';
 
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to update the payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+
+                        return axios.post(url, this.or_update, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    if(data.data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
