@@ -111,17 +111,21 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function finance_payment($slug, $type = "tuition") {                
+	public function student_tuition_payment($slug) {                
         $this->data['student_slug'] = $slug;
         //API - registrar/get_registration_info - returns reg data and current sem
         $this->load->view('common/header',$this->data);        
-		if($type == "other")
-			$this->load->view('finance/payment_other',$this->data);
-		else
-			$this->load->view('finance/payment_tuition',$this->data);
+		$this->load->view('finance/payment_tuition',$this->data);
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function student_other_payment($slug) {                
+        $this->data['student_slug'] = $slug;
+        //API - registrar/get_registration_info - returns reg data and current sem
+        $this->load->view('common/header',$this->data);        		
+		$this->load->view('finance/payment_other',$this->data);		
+		$this->load->view('common/footer',$this->data);
+    }
 
    }
 
