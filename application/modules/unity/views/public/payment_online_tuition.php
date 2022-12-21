@@ -224,7 +224,7 @@ new Vue({
                 showCloseButton: false,
                 allowEscapeKey: false,
                 title: 'Loading',
-                text: 'Processing Data do not leave page',
+                text: 'Loading data please wait',
                 icon: 'info',
             })
             Swal.showLoading();
