@@ -38,8 +38,6 @@
     </div>
     <div class="custom-container">
         <div v-html="tuition_view"></div>        
-    </div>
-    <div class="custom-container">
         <form @submit.prevent="submitPayment">                        
             <div class="md:w-1/2 w-full">
                 <div>
