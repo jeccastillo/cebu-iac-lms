@@ -49,21 +49,37 @@ class Finance extends CI_Controller {
 		
 
     }
-		
-    public function get_other_payments($slug){
 
-        $sem = $this->data_fetcher->get_active_sem();
-        $sdata['student'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
-        $where = array('intStudentID' => $sdata['student']['intID'], 'intSYID' => $sem['intID']);
-        $sdata['other_payments'] =  $this->data_fetcher->fetch_table('tb_mas_other_payments', array('dateIssued','desc'), null, $where);        
-        $sdata['current_sem'] = $sem['intID'];
-        
-        
-        $data['data'] = $sdata;
+    public function manualPayData($slug){
+        $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');        
         $data['message'] = "Success";
         $data['success'] = true;
         echo json_encode($data);
     }
+    public function manualPay($slug,$type="Reservation Payment"){
+                
+        $this->data['type'] = $type;
+        $this->data['slug'] = $slug;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/manual_pay",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+		
+    // public function get_other_payments($slug){
+
+    //     $sem = $this->data_fetcher->get_active_sem();
+    //     $sdata['student'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');
+    //     $where = array('intStudentID' => $sdata['student']['intID'], 'intSYID' => $sem['intID']);
+    //     $sdata['other_payments'] =  $this->data_fetcher->fetch_table('tb_mas_other_payments', array('dateIssued','desc'), null, $where);        
+    //     $sdata['current_sem'] = $sem['intID'];
+        
+        
+    //     $data['data'] = $sdata;
+    //     $data['message'] = "Success";
+    //     $data['success'] = true;
+    //     echo json_encode($data);
+    // }
 
     public function faculty_logged_in()
     {
