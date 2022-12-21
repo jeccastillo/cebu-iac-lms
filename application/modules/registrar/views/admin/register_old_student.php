@@ -264,6 +264,7 @@ new Vue({
                                 let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
                                 let student_link = data.data.student_link;
                                 let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
+                                
                                 Swal.fire({
                                     showCancelButton: false,
                                     showCloseButton: false,
@@ -272,7 +273,7 @@ new Vue({
                                     text: 'Processing Data do not leave page',
                                     icon: 'info',
                                 })
-
+                                Swal.showLoading();
                                 axios.post(url, payload, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
