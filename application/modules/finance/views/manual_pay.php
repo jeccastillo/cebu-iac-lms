@@ -12,7 +12,7 @@
         <div class="content">
             <div class="row">       
                 <div class="col-sm-12">
-                    <div class="box box-solid box-success">
+                    <div v-if="!application_payment && !reservation_payment" class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">New Application Transaction</h4>
                         </div>
