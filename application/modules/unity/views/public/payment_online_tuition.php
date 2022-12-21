@@ -1,4 +1,4 @@
-<aside class="right-side" id="registration-container">    
+<div class="container" id="registration-container">    
     <section class="content-header">
         <h1>
             <small>
@@ -271,7 +271,7 @@
 
         </form>
     </div>
-</aside>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
