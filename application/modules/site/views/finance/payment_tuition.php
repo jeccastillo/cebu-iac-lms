@@ -115,6 +115,7 @@
                             id="payment_link">{{ redirect_link }}</a>
                     </div>
                 </div>
+                <div class="md:w-1/2 w-full" v-html="tuition_view"></div>
 
         </form>
     </div>
@@ -168,6 +169,7 @@ new Vue({
         registration: {},        
         student: {},
         tuition: {},
+        tuition_view: '',
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
@@ -215,6 +217,7 @@ new Vue({
                     this.registration = data.data.data.registration;
                     this.student = data.data.data.student;
                     this.tuition = data.data.data.tuition;
+                    this.tuition_view = data.data.tuition_view;
                 })
                 .catch((error) => {
                     console.log(error);
