@@ -1,4 +1,4 @@
-    <table class="table-fixed border w-1/2">
+    <table class="table-fixed w-1/2 border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
     <thead>
         <tr>
         <th class="text-right w-1/2">Tuition:</th>
