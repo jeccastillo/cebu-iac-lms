@@ -11,8 +11,9 @@
                             <label>Select Payment Type</label>
                             <select @change="selectDescription" class="form-control" v-model="payment_type">
                                 <option value="Tuition Full">Tuition Full</option>
-                                <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>                                
+                                <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>
+                                <option v-else value="Tuition Down Payment">Tuition Down Payment</option>
+                                                                
                             </select>
                         </div>                                                                
                         <div>
