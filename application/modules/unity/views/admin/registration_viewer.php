@@ -388,10 +388,10 @@ new Vue({
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
                                         this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                                 }
-                                this.remaining_balance = (this.remaining_balance <= 0.01) ? 0 : this.remaining_balance;
-                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 this.remaining_amount = this.remaining_amount.toFixed(2);
+                                this.remaining_amount = (this.remaining_amount <= 0.01) ? 0 : this.remaining_amount;
+                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
                             })
