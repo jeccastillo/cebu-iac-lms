@@ -38,8 +38,7 @@
     </div>
 
     <div class="custom-container">
-        <form @submit.prevent="submitPayment">            
-            
+        <form @submit.prevent="submitPayment">                        
             <div class="md:w-1/2 w-full">
                 <div>
                     <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
@@ -114,9 +113,9 @@
                         <a :href="redirect_link" style="opacity:0" target="_blank"
                             id="payment_link">{{ redirect_link }}</a>
                     </div>
-                </div>
-                <div class="md:w-1/2 w-full" v-html="tuition_view"></div>
-
+                </div>                
+            </div>                    
+            <div class="md:w-1/2 w-full" v-html="tuition_view"></div>           
         </form>
     </div>
 </section>
