@@ -267,8 +267,8 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(function() {
-                                    let url = api_url + 'registrar/send_notif_registered';
-                                    let payload = {'slug':this.student_data.slug, 'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
+                                    let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
+                                    let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
 
                                     axios.post(url, payload, {
                                         headers: {
@@ -277,7 +277,8 @@ new Vue({
                                     })
                                     .then(data => {
                                         this.loader_spinner = false;                                    
-                                        document.location = data.data.student_link;
+                                        console.log(data.data);
+                                        //document.location = data.data.student_link;
                                     });
                                 });
                             } else {
