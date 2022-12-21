@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="custom-container">
-        <?php echo $tuition_view; ?>
+        <div v-html="tuition_view"></div>
     </div>
     <div class="custom-container">
         <form @submit.prevent="submitPayment">                        
@@ -217,7 +217,7 @@ new Vue({
                     this.registration = data.data.data.registration;
                     this.student = data.data.data.student;
                     this.tuition = data.data.data.tuition;
-                    this.tuition_view = data.data.data.tuition_view;
+                    this.tuition_view = data.data.data.tuition_view_table;
                 })
                 .catch((error) => {
                     console.log(error);
