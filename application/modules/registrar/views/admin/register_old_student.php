@@ -253,7 +253,7 @@ new Vue({
                         formdata.append(key,value);
                     }
                     
-                    axios
+                    return axios
                         .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
@@ -272,7 +272,8 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                                                        
-                                    document.location = student_link;                                    
+                                    document.location = student_link;
+                                    
                                 });                                
                             } else {
                                 Swal.fire(
@@ -282,9 +283,6 @@ new Vue({
                                 )
                             }
                         });
-                },
-                preDeny: () =>{
-                    return false;
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
