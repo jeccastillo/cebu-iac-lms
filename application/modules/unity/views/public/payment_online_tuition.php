@@ -426,7 +426,7 @@ new Vue({
                 .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
 
-            this.new_charge = new_charge.toFixed(2);
+            this.new_charge = new_charge;
 
             console.log("total_single_format", this.total_single_format);
             console.log("new_charge", this.new_charge);
