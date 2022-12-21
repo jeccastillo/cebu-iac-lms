@@ -467,6 +467,41 @@ class Unity extends CI_Controller {
 
     }
 
+    public function online_payment_data($id,$sem){
+        
+        $active_sem = $this->data_fetcher->get_active_sem();
+
+        if($sem!=null)
+            $ret['selected_ay'] = $sem;
+        else
+            $ret['selected_ay'] = $active_sem['intID'];
+
+        $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+        $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
+        $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);            
+
+        $ret['student'] = $this->data_fetcher->getStudent($id);
+        $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+        $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+        $pay =  array();
+        foreach($payment as $p){
+            if(isset($pay[$p['strTransactionType']]))
+                $pay[$p['strTransactionType']] += $p['intAmountPaid'];
+            else
+                $pay[$p['strTransactionType']] = $p['intAmountPaid'];
+
+        }
+        $ret['payment'] = $pay;        
+        //--------TUITION-------------------------------------------------------------------
+        $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+        $ret['tuition_data'] = $data['tuition'];
+        $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
+        $ret['success']= true;
+        
+        echo json_encode($ret);
+
+    }
+
     public function registration_viewer($id,$sem = null)
     {
         
