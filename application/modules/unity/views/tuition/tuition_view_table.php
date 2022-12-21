@@ -1,11 +1,9 @@
-<table class="table-auto">
-    <thead>
-        <tr>
-        <th class="text-right">Tuition:</th>
-        <td><?php echo $tuition['tuition']; ?></td>      
-        </tr>
-    </thead>
+<table class="table-auto">    
     <tbody>
+        <tr>
+            <th class="text-right">Tuition:</th>
+            <td><?php echo $tuition['tuition']; ?></td>      
+        </tr>
         <tr>
             <th class="text-right">Miscellaneous:</th>
             <td></td>      
