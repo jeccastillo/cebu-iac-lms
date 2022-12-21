@@ -431,8 +431,7 @@ new Vue({
             console.log("total_single_format", this.total_single_format);
             console.log("new_charge", this.new_charge);
 
-            let title = (this.payment_type == 'admissions_student_payment_reservation') ? 'Reservation Payment' :
-                                    'Application Payment';
+            let title = this.payment_type;
 
             this.payload = {
                 "description": title,
