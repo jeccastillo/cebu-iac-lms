@@ -1,7 +1,4 @@
-<aside class="right-side" id="registration-container">
-    <div v-if="loader_spinner" style="width:100%; display: flex; justify-content: center;">
-        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
+<aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
             Registrar
@@ -275,14 +272,9 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                    
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        console.log(data.data);
-                                        document.location = data.data.student_link;
-                                    });
+                                    console.log(data.data);
+                                    document.location = data.data.student_link;
+                                    
                                 });                                
                             } else {
                                 Swal.fire(
