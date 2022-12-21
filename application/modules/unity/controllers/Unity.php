@@ -509,7 +509,7 @@ class Unity extends CI_Controller {
             else
                 $sy = $this->data_fetcher->get_sem_by_id($sem);
                         
-            $sdata['student'] = $this->data_fetcher->getStudent($id);
+            $sdata['student'] = $this->data_fetcher->getStudent($id);            
             if(!$sdata['student'])
                 $sdata['student'] = $this->data_fetcher->getStudent($id, 'slug');
             
