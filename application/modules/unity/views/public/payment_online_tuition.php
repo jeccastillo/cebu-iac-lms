@@ -232,8 +232,9 @@ new Vue({
             price: 0,
             hey: this.payment_type
         },
-        amount_to_pay: 0,        
-        advanced_privilages: false,      
+        payment_modes: [],
+        item: {},
+        amount_to_pay: 0,                     
         description: 'Tuition Full', 
         description_other: '',
         registration: {},
