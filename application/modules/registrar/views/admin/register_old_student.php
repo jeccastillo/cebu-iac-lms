@@ -273,7 +273,7 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     console.log(data.data);
-                                    document.location = data.data.student_link;
+                                    //document.location = data.data.student_link;
                                     
                                 });                                
                             } else {
