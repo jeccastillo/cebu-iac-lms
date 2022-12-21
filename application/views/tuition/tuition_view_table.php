@@ -22,7 +22,7 @@
         </tr>    
         <tr>
             <th class="text-right">Laboratory Fee:</th>
-            <td class="text-green"></td>
+            <td class="text-green-400"></td>
         </tr>
         <hr />                
         <?php foreach($tuition['lab_list'] as $key=>$val): ?>
@@ -33,13 +33,13 @@
         <?php endforeach; ?>        
         <tr>
             <th class="text-right">Total:</th>
-            <td class="text-green"><?php echo $tuition['lab']; ?></td>
+            <td class="text-green-400"><?php echo $tuition['lab']; ?></td>
         </tr>
         <hr />
         <?php if($tuition['thesis_fee']!= 0): ?>                    
             <tr>
                 <th class="text-right">THESIS FEE: </th>
-                <td class="text-green"><?php echo $tuition['thesis_fee']; ?></td>
+                <td class="text-green-400"><?php echo $tuition['thesis_fee']; ?></td>
             </tr>
             <hr />                    
         <?php endif; ?>
@@ -47,7 +47,7 @@
             
             <tr>
                 <th class="text-right">Internship Fees:</th>
-                <td class="text-green"></td>
+                <td class="text-green-400"></td>
             </tr>
             <hr />
             
@@ -61,14 +61,14 @@
             
             <tr>
                 <th class="text-right">Total:</th>
-                <td class="text-green"><?php echo $tuition['internship_fee']; ?></td>
+                <td class="text-green-400"><?php echo $tuition['internship_fee']; ?></td>
             </tr>
             <hr />
         <?php endif; ?>
         <?php if($tuition['new_student']!= 0): ?>
             <tr>
                 <th class="text-right">New Student Fees:</th>
-                <td class="text-green"></td>
+                <td class="text-green-400"></td>
             </tr>
             <hr />
             
@@ -82,14 +82,14 @@
             
             <tr>
                 <th class="text-right">Total:</th>
-                <td class="text-green"><?php echo $tuition['new_student']; ?></td>
+                <td class="text-green-400"><?php echo $tuition['new_student']; ?></td>
             </tr>
             <hr />
         <?php endif; ?>
             
         <tr>
             <th class="text-right">Total:</th>
-            <td class="text-green"><?php echo $tuition['total'] ?></td>
+            <td class="text-green-400"><?php echo $tuition['total'] ?></td>
         </tr>
         <hr />
         <h4 class="box-title">FOR INSTALLMENT</h4>
@@ -107,7 +107,7 @@
         <hr />
         <tr>
             <th class="text-right">Total for installment</th>
-            <td class="text-green"><?php echo number_format($tuition['total_installment'], 2, '.' ,','); ?></td>
+            <td class="text-green-400"><?php echo number_format($tuition['total_installment'], 2, '.' ,','); ?></td>
         </tr>   
     </tbody>
     </table>
