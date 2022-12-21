@@ -167,7 +167,7 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
-                    //this.loader_spinner = false;
+                    this.loader_spinner = false;
                 })
                 .catch((error) => {
                     console.log(error);
