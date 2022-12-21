@@ -32,66 +32,66 @@
                             style="display:flex; align-itenms:center;">
                             <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
                         </div>
-                    </div>
-                </div>
+                    </div>                
 
-                <hr>
+                    <hr>
 
-                <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                    <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+                    <div class="d-flex flex-wrap my-5" style="margin-top:50px">
+                        <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
 
-                    <table class="table" style="width:100%">
-                        <tbody>
-                            <tr v-if="item">
-                                <td> {{ payment_type }}
-                                </td>
-                                <td>₱ {{ item_details.price }}</td>
-                            </tr>
+                        <table class="table" style="width:100%">
+                            <tbody>
+                                <tr v-if="item">
+                                    <td> {{ payment_type }}
+                                    </td>
+                                    <td>₱ {{ item_details.price }}</td>
+                                </tr>
 
-                            <tr>
-                                <td>Gateway Fee <span class="font-weight-bold"
-                                        v-if="selected_mode_of_payment.type == 'percentage'">(
-                                        {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                        Php
-                                        25.00 whichever is higher )</span> </td>
-                                <td v-if="selected_mode_of_payment">
-                                    <span>
-                                        ₱ {{ new_charge }}
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                        class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                    <span class="font-weight-bold">₱
-                                        {{ total_price_cart_with_charge_es }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td>Gateway Fee <span class="font-weight-bold"
+                                            v-if="selected_mode_of_payment.type == 'percentage'">(
+                                            {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
+                                            Php
+                                            25.00 whichever is higher )</span> </td>
+                                    <td v-if="selected_mode_of_payment">
+                                        <span>
+                                            ₱ {{ new_charge }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
+                                    <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
+                                            class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
+                                    <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
+                                        <span class="font-weight-bold">₱
+                                            {{ total_price_cart_with_charge_es }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                    <div class="text-right mt-3">
-                        <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
-                        <div v-else>
-                            <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                                name="button">Submit 
-                            </button>
-                            <button type="button" disabled v-else
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                                name="button">Submit</button>
-                            <button type="button" onclick="window.history.back()"
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
-                                name="button">Cancel</button>
-                            <a :href="redirect_link" style="opacity:0" target="_blank"
-                                id="payment_link">{{ redirect_link }}</a>
+                        <div class="text-right mt-3">
+                            <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                            <div v-else>
+                                <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
+                                    class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                    name="button">Submit 
+                                </button>
+                                <button type="button" disabled v-else
+                                    class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                    name="button">Submit</button>
+                                <button type="button" onclick="window.history.back()"
+                                    class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
+                                    name="button">Cancel</button>
+                                <a :href="redirect_link" style="opacity:0" target="_blank"
+                                    id="payment_link">{{ redirect_link }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br /><br />
+            
             <div class="row">
                 <div class="col-sm-6">
                     <div class="box box-widget widget-user-2">
