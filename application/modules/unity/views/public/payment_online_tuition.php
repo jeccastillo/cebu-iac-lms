@@ -2,7 +2,7 @@
     <div class="container">       
         <div class="content">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <div class="box box-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-red">
@@ -26,6 +26,73 @@
                             </ul>
                         </div>
                     </div>                
+                </div>
+                <div class="col-sm-6">
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <h4 class="box-title">MY PAYMENTS</h4>                                    
+                        </div>                                    
+                        <div class="box-body">
+                            <h4 class="box-title">Payments</h4>
+                            <table class="table table-bordered table-striped">
+                                <tr>                                    
+                                    <th>Payment Type</th>
+                                    <th>Amount Paid</th>
+                                    <th>Online Payment Charge</th>
+                                    <th>Total Due</th>
+                                    <th>Status</th>
+                                </tr>     
+                                <tr v-if="application_payment">                                    
+                                    <td>{{ application_payment.description }}</td>
+                                    <td>{{ application_payment.subtotal_order }}</td>
+                                    <td>{{ application_payment.charges }}</td>
+                                    <td>{{ application_payment.total_amount_due }}</td>
+                                    <td>{{ application_payment.status }}</td>                                                                                            
+                                </tr>
+                                <tr v-if="reservation_payment">                                    
+                                    <td>{{ reservation_payment.description }}</td>
+                                    <td>{{ reservation_payment.subtotal_order }}</td>
+                                    <td>{{ reservation_payment.charges }}</td>
+                                    <td>{{ reservation_payment.total_amount_due }}</td>
+                                    <td>{{ reservation_payment.status }}</td>                                                                                           
+                                </tr>
+                                <tr>
+                                    <th colspan="6">
+                                    Other Payments:
+                                    </th>
+                                </tr>  
+                                <tr v-for="payment in other_payments">                                    
+                                    <td>{{ payment.description }}</td>
+                                    <td>{{ payment.subtotal_order }}</td>
+                                    <td>{{ payment.charges }}</td>
+                                    <td>{{ payment.total_amount_due }}</td>
+                                    <td>{{ payment.status }}</td>                                                                                            
+                                </tr>    
+                                <tr>
+                                    <th colspan="6">
+                                    Tuition Payments:
+                                    </th>
+                                </tr>
+                                <tr v-for="payment in payments">                                    
+                                    <td>{{ payment.description }}</td>
+                                    <td>{{ payment.subtotal_order }}</td>
+                                    <td>{{ payment.charges }}</td>
+                                    <td>{{ payment.total_amount_due }}</td>
+                                    <td>{{ payment.status }}</td>                                                                                            
+                                </tr>                                                                           
+                                <tr>
+                                    <td class="text-green" colspan="5">
+                                    amount paid: P{{ amount_paid_formatted }}                                           
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-green" colspan="5">                                            
+                                    remaining balance: P{{ remaining_amount_formatted }}
+                                    </td>
+                                </tr>
+                            </table>                                                                                                                          
+                        </div>
+                    </div> 
                 </div>
                 <div class="col-sm-12">      
                     <div class="box box-solid">
@@ -81,77 +148,7 @@
                                 </div>                                 
                             </div>     
                         </div>
-                    </div>                
-                    <div class="box box-solid">
-                        <div class="box-header">
-                            <h4 class="box-title">MY PAYMENTS</h4>                                    
-                        </div>                                    
-                        <div class="box-body">
-                            <h4 class="box-title">Payments</h4>
-                            <table class="table table-bordered table-striped">
-                                <tr>
-                                    <th>OR Number</th>
-                                    <th>Payment Type</th>
-                                    <th>Amount Paid</th>
-                                    <th>Online Payment Charge</th>
-                                    <th>Total Due</th>
-                                    <th>Status</th>
-                                </tr>     
-                                <tr v-if="application_payment">
-                                    <td>{{ application_payment.or_number }}</td>
-                                    <td>{{ application_payment.description }}</td>
-                                    <td>{{ application_payment.subtotal_order }}</td>
-                                    <td>{{ application_payment.charges }}</td>
-                                    <td>{{ application_payment.total_amount_due }}</td>
-                                    <td>{{ application_payment.status }}</td>                                                                                            
-                                </tr>
-                                <tr v-if="reservation_payment">
-                                    <td>{{ reservation_payment.or_number }}</td>
-                                    <td>{{ reservation_payment.description }}</td>
-                                    <td>{{ reservation_payment.subtotal_order }}</td>
-                                    <td>{{ reservation_payment.charges }}</td>
-                                    <td>{{ reservation_payment.total_amount_due }}</td>
-                                    <td>{{ reservation_payment.status }}</td>                                                                                           
-                                </tr>
-                                <tr>
-                                    <th colspan="6">
-                                    Other Payments:
-                                    </th>
-                                </tr>  
-                                <tr v-for="payment in other_payments">
-                                    <td>{{ payment.or_number }}</td>
-                                    <td>{{ payment.description }}</td>
-                                    <td>{{ payment.subtotal_order }}</td>
-                                    <td>{{ payment.charges }}</td>
-                                    <td>{{ payment.total_amount_due }}</td>
-                                    <td>{{ payment.status }}</td>                                                                                            
-                                </tr>    
-                                <tr>
-                                    <th colspan="6">
-                                    Tuition Payments:
-                                    </th>
-                                </tr>
-                                <tr v-for="payment in payments">
-                                    <td>{{ payment.or_number }}</td>
-                                    <td>{{ payment.description }}</td>
-                                    <td>{{ payment.subtotal_order }}</td>
-                                    <td>{{ payment.charges }}</td>
-                                    <td>{{ payment.total_amount_due }}</td>
-                                    <td>{{ payment.status }}</td>                                                                                            
-                                </tr>                                                                           
-                                <tr>
-                                    <td class="text-green" colspan="6">
-                                    amount paid: P{{ amount_paid_formatted }}                                           
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-green" colspan="6">                                            
-                                    remaining balance: P{{ remaining_amount_formatted }}
-                                    </td>
-                                </tr>
-                            </table>                                                                                                                          
-                        </div>
-                    </div>              
+                    </div>                                                 
                 </div>        
             </div>           
         </div>
