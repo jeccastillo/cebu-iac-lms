@@ -479,9 +479,9 @@ class Unity extends CI_Controller {
         
         $data['id'] =  $id;
 
-        $this->load->view("public/header",$this->data);
+        $this->load->view("common/header",$this->data);
         $this->load->view("admin/registration_viewer",$data);
-        $this->load->view("public/footer",$this->data);         
+        $this->load->view("common/footer",$this->data);         
     }
 
     public function student_tuition_payment($id)
@@ -492,9 +492,9 @@ class Unity extends CI_Controller {
         $data['selected_ay'] = $active_sem['intID'];
         $data['id'] = $student['intID'];
 
-        $this->load->view("common/header",$this->data);
+        $this->load->view("public/header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
-        $this->load->view("common/footer",$this->data);         
+        $this->load->view("public/footer",$this->data);         
     }
     
     function accounting($id,$sem=null)
