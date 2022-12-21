@@ -470,6 +470,8 @@ class Unity extends CI_Controller {
     public function registration_viewer($id,$sem = null)
     {
         
+        $active_sem = $this->data_fetcher->get_active_sem();
+
         if($sem!=null)
             $data['selected_ay'] = $sem;
         else
@@ -479,6 +481,18 @@ class Unity extends CI_Controller {
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/registration_viewer",$data);
+        $this->load->view("common/footer",$this->data);         
+    }
+
+    public function student_tuition_payment($id)
+    {
+        $active_sem = $this->data_fetcher->get_active_sem();
+
+        $data['selected_ay'] = $active_sem['intID'];
+        $data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("public/payment_online_tuition",$data);
         $this->load->view("common/footer",$this->data);         
     }
     
