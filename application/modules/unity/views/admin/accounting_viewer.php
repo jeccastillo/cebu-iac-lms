@@ -233,8 +233,6 @@ new Vue({
 
                 if(this.has_partial)
                     this.remaining_amount = this.tuition.tuition.total_installment;
-                else
-                    this.remaining_amount = this.tuition.tuition.total;
 
                 for(i in this.payments){
                     if(this.payments[i].status == "Paid")
