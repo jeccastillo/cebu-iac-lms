@@ -370,9 +370,7 @@ new Vue({
                             }
 
                             if(this.has_partial)
-                                this.remaining_amount = this.tuition_data.total_installment;
-                            else
-                                this.remaining_amount = this.tuition_data.total;
+                                this.remaining_amount = this.tuition_data.total_installment;                            
 
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){                              
@@ -391,7 +389,7 @@ new Vue({
                                         this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                                 }
                                 this.remaining_amount = this.remaining_amount.toFixed(2);
-                                this.remaining_amount = (this.remaining_amount <= 0.01) ? 0 : this.remaining_amount;
+                                //this.remaining_amount = (this.remaining_amount <= 0.01) ? 0 : this.remaining_amount;
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
