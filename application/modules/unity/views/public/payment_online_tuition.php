@@ -25,7 +25,8 @@
                                 
                             </ul>
                         </div>
-                    </div>                
+                    </div>  
+                    <div v-html="tuition"></div>                                  
                 </div>
                 <div class="col-sm-6">
                     <div class="box box-solid">
@@ -91,6 +92,7 @@
                                     </td>
                                 </tr>
                             </table>                                                                                                                          
+                            
                         </div>
                     </div> 
                 </div>
@@ -100,8 +102,7 @@
                             <h4 class="box-title">PAY ONLINE</h4>
                         </div>
                         <div class="box-body">
-                            <div class="row">
-                                <div v-html="tuition" class="col-sm-6"></div>   
+                            <div class="row">                                   
                                 <div class="col-sm-6">
                                     <form @submit.prevent="submitManualPayment" method="post">                                                
                                         <div class="form-group">
