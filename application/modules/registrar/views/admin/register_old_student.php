@@ -253,8 +253,7 @@ new Vue({
                         formdata.append(key,value);
                     }
                     
-                    return axios
-                        .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
+                    axios.post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
@@ -265,22 +264,22 @@ new Vue({
                                 let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
                                 let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
 
-                                axios.post(url, payload, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;                                    
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        console.log(data.data);
-                                        //document.location = data.data.student_link;
-                                    });
-                                });                                
+                                return axios.post(url, payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(data => {
+                                            this.loader_spinner = false;                                    
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                console.log(data.data);
+                                                document.location = data.data.student_link;
+                                            });
+                                        });                                
                             } else {
                                 Swal.fire(
                                     'Failed!',
@@ -289,7 +288,7 @@ new Vue({
                                 )
                             }
                         });
-                },
+                    },
                 allowOutsideClick: () => !Swal.isLoading()
             });
 
