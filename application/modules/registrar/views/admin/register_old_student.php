@@ -246,6 +246,7 @@ new Vue({
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
+                closeOnConfirm:false,
                 preConfirm: (login) => {
                     this.loader_spinner = true;
                     var formdata= new FormData();                    
@@ -259,10 +260,10 @@ new Vue({
                                     Authorization: `Bearer ${window.token}`
                                 }
                             })
-                        .then(data => {
-                            console.log(data.data);
+                        .then(data => {                            
                             if (data.data.success) {                            
                                 let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
+                                let student_link = data.data.student_link;
                                 let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
 
                                 axios.post(url, payload, {
@@ -271,9 +272,8 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;                                    
-                                    console.log(data.data);
-                                    //document.location = data.data.student_link;
+                                    this.loader_spinner = false;                                                                        
+                                    document.location = student_link;
                                     
                                 });                                
                             } else {
@@ -284,8 +284,7 @@ new Vue({
                                 )
                             }
                         });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
+                },                
             });
 
         },
