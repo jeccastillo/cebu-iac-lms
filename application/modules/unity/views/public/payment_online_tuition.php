@@ -209,6 +209,7 @@ new Vue({
         slug: undefined,
         loading_spinner: false,
         student:{},            
+        student_api_data: {},
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
@@ -273,7 +274,7 @@ new Vue({
                 },
             }).then((data) => {
                 this.payment_modes = _.filter(data.data.data, item => item.is_nonbank != true);
-                this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                
+                this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                                
                 this.loadData();
 
                 $(function() {
@@ -301,13 +302,7 @@ new Vue({
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
-                        this.slug = this.student.slug;
-                        this.request.slug = this.slug;
-                        this.request.first_name = this.student.strFirstname;
-                        this.request.middle_name = this.student.strMiddlename;
-                        this.request.last_name = this.student.strLastname;    
-                        this.request.contact_number = this.student.strMobileNumber;  
-                        this.request.email_address = this.student.strEmail;                  
+                        this.slug = this.student.slug;                           
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
                         this.tuition_data = data.data.tuition_data;                                               
@@ -349,7 +344,15 @@ new Vue({
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.item_details.price = this.remaining_amount;
                                 this.loader_spinner = false;
-                                Swal.close();
+                                axios.get(api_url + 'admissions/student-info/' + this.slug)
+                                .then((data) => {
+                                    this.student_api_data = data.data.data;
+                                    Swal.close();
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                })
+                                
                             })
                             .catch((error) => {
                                 console.log(error);
@@ -427,10 +430,10 @@ new Vue({
                     "id": 1
                 }],
                 "total_price_without_charge": this.total_single_without_charge,
-                "first_name": this.student.first_name,
-                "last_name": this.student.last_name,
-                "contact_number": this.student.mobile_number,
-                "email": this.student.email,
+                "first_name": this.student.strFirstname,
+                "last_name": this.student.strLastname,
+                "contact_number": this.student.strMobileNumber,
+                "email": this.strEmail,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
                 "delivery_region_id": null,
@@ -441,7 +444,7 @@ new Vue({
                 "charge": parseFloat(this.new_charge),
                 "mode_of_release": null,
                 "mailing_fee": 0,
-                "student_information_id": this.student.id
+                "student_information_id": this.student_api_data.id
             }
 
 
