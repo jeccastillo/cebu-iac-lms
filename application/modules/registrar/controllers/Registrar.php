@@ -383,8 +383,7 @@ class Registrar extends CI_Controller {
         $post = $this->input->post();
        
        
-        $academic_standing = $this->data_fetcher->getAcademicStanding($post['studentID'],$post['strAcademicYear']);
-       
+        $academic_standing = $this->data_fetcher->getAcademicStanding($post['studentID'],$post['strAcademicYear']);        
         $data['sid'] = $post['studentID'];
         $data['ayid'] = $post['strAcademicYear'];
         $student = $this->data_fetcher->getStudent($post['studentID']);
@@ -401,7 +400,7 @@ class Registrar extends CI_Controller {
             $reg['enumStudentType'] = $post['enumStudentType'];
 
             $data['message'] = "Registration Successful";
-
+            $data['success'] = true;
             $this->data_poster->post_data('tb_mas_registration',$reg);
             
             if($student['strStudentNumber'][0] == "T")
