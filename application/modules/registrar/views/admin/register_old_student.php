@@ -261,26 +261,26 @@ new Vue({
                             })
                         .then(data => {
                             console.log(data.data);
-                            if (data.data.success) {
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
-                                    let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
+                            if (data.data.success) {                            
+                                let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;
+                                let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
 
-                                    axios.post(url, payload, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    })
-                                    .then(data => {
-                                        this.loader_spinner = false;                                    
+                                axios.post(url, payload, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;                                    
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
                                         console.log(data.data);
                                         //document.location = data.data.student_link;
                                     });
-                                });
+                                });                                
                             } else {
                                 Swal.fire(
                                     'Failed!',
