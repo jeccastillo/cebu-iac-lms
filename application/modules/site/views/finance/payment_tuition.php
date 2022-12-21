@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-
+    <div v-html="tuition_view"></div>
     <div class="custom-container">
         <form @submit.prevent="submitPayment">                        
             <div class="md:w-1/2 w-full">
@@ -116,8 +116,7 @@
                 </div>                
             </div>                                           
         </form>
-    </div>
-    <div v-html="tuition_view"></div>
+    </div>    
 </section>
 
 <style scoped="">
