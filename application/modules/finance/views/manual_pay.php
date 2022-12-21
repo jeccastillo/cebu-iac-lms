@@ -132,7 +132,7 @@ new Vue({
 
         this.loader_spinner = true;
 
-        axios.get(this.base_url + 'finance/manualPay/' + this.slug)
+        axios.get(this.base_url + 'finance/manualPayData/' + this.slug)
         .then((data) => {
             this.student = data.data.data;                     
             this.request.slug = this.slug;
