@@ -201,8 +201,7 @@ new Vue({
 
         this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 500;
 
-        axios
-            .get(api_url + 'payments/modes?count_content=100', {
+        axios.get(api_url + 'payments/modes?count_content=100', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
