@@ -445,7 +445,7 @@ new Vue({
                 "first_name": this.student.strFirstname,
                 "last_name": this.student.strLastname,
                 "contact_number": this.student.strMobileNumber,
-                "email": this.strEmail,
+                "email": this.student.strEmail,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
                 "delivery_region_id": null,
