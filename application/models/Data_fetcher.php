@@ -1165,8 +1165,8 @@ class Data_fetcher extends CI_Model {
                      ->get()
                      ->first_row('array');
 
-        $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                     
-        $ret['dteCreated'] = date("M j, Y",strtotime($ret['dteCreated']));
+        $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                             
+        $ret['dteCreated'] = $ret['dteCreated'] ? date("M j, Y",strtotime($ret['dteCreated'])): null;
 
         return $ret;
                      
