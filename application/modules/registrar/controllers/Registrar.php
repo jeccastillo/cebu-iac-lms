@@ -203,11 +203,11 @@ class Registrar extends CI_Controller {
                         
                         if(isset($post['section-'.$subject]) && $post['section-'.$subject] == "new")
                         {
-                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$program['strProgramCode'],"new");
+                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$subject_data['strCode'],"new");
                             
                         }
                         else{
-                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$program['strProgramCode']); // this is where auto sectioning happens
+                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$subject_data['strCode']); // this is where auto sectioning happens
                             
                         }
                         
@@ -225,7 +225,7 @@ class Registrar extends CI_Controller {
                             }
                             else
                             {
-                                $letter = "1";
+                                $letter = "A";
                             }
                             
                             
@@ -453,7 +453,7 @@ class Registrar extends CI_Controller {
                         else
                         {
 
-                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$program['strProgramCode']);
+                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$subject_data['strCode']);
                             if(!is_array($cl))
                             {
                                 if($cl!="1"){
@@ -463,7 +463,7 @@ class Registrar extends CI_Controller {
                                 }
                                 else
                                 {
-                                    $letter = "1";
+                                    $letter = "A";
                                 }
 
                                 $classlist['intFacultyID'] = 999;
