@@ -267,7 +267,18 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(function() {
-                                    document.location = data.data.student_link;
+                                    let url = api_url + 'registrar/send_notif_registered';
+                                    let payload = {'slug':this.student_data.slug, 'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
+
+                                    axios.post(url, payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    })
+                                    .then(data => {
+                                        this.loader_spinner = false;                                    
+                                        document.location = data.data.student_link;
+                                    });
                                 });
                             } else {
                                 Swal.fire(

@@ -398,8 +398,9 @@ class Registrar extends CI_Controller {
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
             $reg['enumScholarship'] = $post['enumScholarship'];        
             $reg['enumStudentType'] = $post['enumStudentType'];
-
-            $data['message'] = "Registration Successful";
+            $s = $this->data_fetcher->get_sem_by_id($data['ayid']);
+            $data['message'] = "Congratulations, you have been registered for ".$s['enumSem']." Term S.Y. ".$s['strYearStart']."-".$s['strYearEnd'];
+            $data['tuition_payment_link'] = "";
             $data['success'] = true;
             $this->data_poster->post_data('tb_mas_registration',$reg);
             
