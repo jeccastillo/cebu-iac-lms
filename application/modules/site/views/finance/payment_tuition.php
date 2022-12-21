@@ -117,7 +117,7 @@
             </div>                                           
         </form>
     </div>
-    <div v-html="tuition_view"></div>
+    <div v-html="tuition_view_table"></div>
 </section>
 
 <style scoped="">

@@ -525,7 +525,8 @@ class Unity extends CI_Controller {
                 $sdata['sy'] = $sy;
                 $pdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);                      
                 $sdata['tuition'] = $pdata['tuition'];
-                $sdata['tuition_view'] = $this->load->view('tuition/tuition_view', $pdata, true);       
+                $sdata['tuition_view'] = $this->load->view('tuition/tuition_view', $pdata, true);      
+                $sdata['tuition_view_table'] = $this->load->view('tuition/tuition_view_table', $pdata, true);       
             }
             
             $sdata['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
