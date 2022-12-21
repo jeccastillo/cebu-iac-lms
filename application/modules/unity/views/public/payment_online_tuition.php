@@ -219,6 +219,42 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Loading',
+                text: 'Processing Data do not leave page',
+                icon: 'info',
+            })
+            Swal.showLoading();
+            axios.get(api_url + 'payments/modes?count_content=100', {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                },
+            }).then((data) => {
+                this.payment_modes = _.filter(data.data.data, item => item.is_nonbank != true);
+                this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                
+                this.loadData();
+
+                $(function() {
+                    $(".box_mode_payment").click(function() {
+                        $(".box_mode_payment").removeClass("active");
+                        $(this).addClass("active");
+                    })
+                })
+            })
+            .catch((e) => {
+                console.log("error");
+            });        
+            
+            
+        }
+
+    },
+
+    methods: {      
+        loadData: function(){
             axios.get(this.base_url + 'unity/online_payment_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){                                                                                           
@@ -274,6 +310,7 @@ new Vue({
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
+                                Swal.close();
                             })
                             .catch((error) => {
                                 console.log(error);
@@ -291,11 +328,7 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
-        }
-
-    },
-
-    methods: {      
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
