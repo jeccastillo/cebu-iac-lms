@@ -3,8 +3,8 @@
             <table class="table-fixed border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
                 <tbody>
                     <tr>
-                    <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-right w-1/2">Tuition:</td>
-                    <td class="w-1/2 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo $tuition['tuition']; ?></td>      
+                    <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-right w-1/4">Tuition:</td>
+                    <td class="w-3/4 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo $tuition['tuition']; ?></td>      
                     </tr>
                     <tr>
                         <td colspan="2" class="w-1/2 border border-slate-200 dark:border-slate-500 font-semibold p-4 text-slate-600 dark:text-slate-400 text-center">Miscellaneous</td>                        
