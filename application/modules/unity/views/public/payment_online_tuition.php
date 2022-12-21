@@ -1,4 +1,4 @@
-<div class="container" id="registration-container">    
+<aside class="container" id="registration-container">    
     <div class="container">
         <section class="content-header">
             <h1>
