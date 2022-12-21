@@ -69,10 +69,10 @@
 
                     <table class="table" style="width:100%">
                         <tbody>
-                            <tr v-if="registration.tuition_data">
+                            <tr v-if="tuition">
                                 <td> Tuition Total                                    
                                 </td>
-                                <td>₱ {{ registration.tuition_data.total }}</td>
+                                <td>₱ {{ tuition.total }}</td>
                             </tr>
 
                             <tr>
@@ -239,7 +239,7 @@ new Vue({
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
-            var new_price = parseFloat(this.tuition_data.total);
+            var new_price = parseFloat(this.tuition.total);
             var new_charge = parseFloat(this.selected_mode_of_payment.charge);
             var qty = 1;
 
