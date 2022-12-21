@@ -33,53 +33,48 @@
                         <div class="box-header">
                             <h4 class="box-title">PAY ONLINE</h4>
                         </div>
-                        <div class="box-body">
-                            <div class="row">                                   
-                                <div class="col-sm-6">
-                                    <form @submit.prevent="submitManualPayment" method="post">                                                
-                                        <div class="form-group">
-                                            <label>Payment Type</label>
-                                            <select @change="selectDescription" class="form-control" v-model="description">
-                                                <option value="Tuition Full">Tuition Full</option>
-                                                <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                <option value="Tuition Partial">Tuition Partial</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Payment Status</label>
-                                            <select @change="selectDescription" class="form-control" v-model="request.status">
-                                                <option value="Paid">Paid</option>
-                                                <option value="Pending">Pending</option>                                                        
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Enter type if other is selected:</label>
-                                            <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
-                                            
-                                            <label>Enter amount to pay:</label>
-                                            <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>OR Number:</label>
-                                            <input type="text" class="form-control" v-model="request.or_number" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Contact Number:</label>
-                                            <input type="text" required class="form-control" v-model="request.contact_number" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Email: {{ request.email_address }}</label>                                                    
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Remarks:</label>
-                                            <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                        </div>
-                                        <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
-                                    </form>
-                                    <hr />                                            
-                                </div>                                 
-                            </div>     
+                        <div class="box-body">                            
+                            <form @submit.prevent="submitManualPayment" method="post">                                                
+                                <div class="form-group">
+                                    <label>Payment Type</label>
+                                    <select @change="selectDescription" class="form-control" v-model="description">
+                                        <option value="Tuition Full">Tuition Full</option>
+                                        <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                        <option value="Tuition Partial">Tuition Partial</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Payment Status</label>
+                                    <select @change="selectDescription" class="form-control" v-model="request.status">
+                                        <option value="Paid">Paid</option>
+                                        <option value="Pending">Pending</option>                                                        
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Enter type if other is selected:</label>
+                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                    
+                                    <label>Enter amount to pay:</label>
+                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                </div>
+                                <div class="form-group">
+                                    <label>OR Number:</label>
+                                    <input type="text" class="form-control" v-model="request.or_number" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Number:</label>
+                                    <input type="text" required class="form-control" v-model="request.contact_number" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Email: {{ request.email_address }}</label>                                                    
+                                </div>
+                                <div class="form-group">
+                                    <label>Remarks:</label>
+                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
+                                </div>
+                                <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
+                            </form>
                         </div>
                     </div>      
                     <div class="box box-solid">
