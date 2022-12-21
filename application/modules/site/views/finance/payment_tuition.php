@@ -156,6 +156,8 @@
 new Vue({
     el: "#finance-form",
     data: {
+        base_url: "<?php echo base_url(); ?>",
+        slug: "<?php echo $student_slug; ?>",
         request: {
             mode_of_release: "",
             delivery_region_id: "",
@@ -164,6 +166,7 @@ new Vue({
         },
         loading_spinner: false,
         registration: {},        
+        student: {},
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
@@ -214,19 +217,20 @@ new Vue({
                         $(this).addClass("active");
                     })
                 })
+
+                axios
+                .get(this.base_url + 'unity/accounting_viewer_data/' + this.slug)
+                .then((data) => {            
+                    this.registration = data.data.registration;
+                    this.student = data.data.student;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
             })
             .catch((e) => {
                 console.log("error");
-            });
-
-        axios.get('<?php echo base_url(); ?>registrar/get_registration_info/<?php echo $student_slug; ?>')
-            .then((data) => {            
-                this.registration = data.data.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
+            });        
 
     },
 
