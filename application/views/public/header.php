@@ -5,7 +5,6 @@
 <title><?php echo ($title=="")?"":$title; ?></title>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-----CSS----------------------------------------------->
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/foundation-icons/foundation-icons.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/bootstrap.min.css">    
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/AdminLTE.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/font-awesome.min.css">   
