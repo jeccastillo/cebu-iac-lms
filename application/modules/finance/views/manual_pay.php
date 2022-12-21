@@ -17,9 +17,9 @@
                             <h4 class="box-title">New Application Transaction</h4>
                         </div>
                         <div class="box-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <form @submit.prevent="submitManualPayment" method="post">                                                
+                            <div class="row">                                
+                                <form @submit.prevent="submitManualPayment" method="post">                                                
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Payment Type</label>
                                             <select @change="selectDescription" class="form-control" v-model="request.description">
@@ -27,28 +27,40 @@
                                                 <option value="Application Payment">Application</option>                                
                                             </select>
                                         </div>                                                
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number:</label>
                                             <input type="text" class="form-control" v-model="request.or_number" />
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
                                             {{ request.subtotal_order }}
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Contact Number:</label>
                                             <input type="text" required class="form-control" v-model="request.contact_number" />
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Email: {{ request.email_address }}</label>                                                    
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Remarks:</label>
                                             <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                        </div>
+                                        </div>                                    
+                                    </div>
+                                    <div class="col-sm-12">
                                         <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>                                
                             </div>                            
                         </div>
                     </div>
