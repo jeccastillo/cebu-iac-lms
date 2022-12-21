@@ -75,14 +75,14 @@
                                 <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
                                 <div v-else>
                                     <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                        class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                        class="btn btn-primary"
                                         name="button">Submit 
                                     </button>
                                     <button type="button" disabled v-else
-                                        class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                        class="btn btn-default"
                                         name="button">Submit</button>
                                     <button type="button" onclick="window.history.back()"
-                                        class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
+                                        class="btn btn-default"
                                         name="button">Cancel</button>
                                     <a :href="redirect_link" style="opacity:0" target="_blank"
                                         id="payment_link">{{ redirect_link }}</a>
