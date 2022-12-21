@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="custom-container">
-        
+        <?php echo $tuition_view; ?>
     </div>
     <div class="custom-container">
         <form @submit.prevent="submitPayment">                        

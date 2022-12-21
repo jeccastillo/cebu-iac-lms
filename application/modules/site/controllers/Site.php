@@ -113,7 +113,15 @@ class Site extends CI_Controller {
 
 	public function student_tuition_payment($slug) {                
         $this->data['student_slug'] = $slug;
-        //API - registrar/get_registration_info - returns reg data and current sem
+		
+		$student = $this->data_fetcher->getStudent($slug, 'slug');
+		$id = $student['intID'];
+		$sy = $this->data_fetcher->get_active_sem();
+		$selected_ay = $sy['intID'];
+		
+		$pdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);                                      
+		$this->data['tuition_view'] = $this->load->view('tuition/tuition_view_table', $pdata, true);
+            
         $this->load->view('common/header',$this->data);        
 		$this->load->view('finance/payment_tuition',$this->data);
 		$this->load->view('common/footer',$this->data);
