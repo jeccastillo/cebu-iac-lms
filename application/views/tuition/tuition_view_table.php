@@ -1,6 +1,6 @@
     <div class="grid grid-rows-2 grid-flow-col gap-4">
         <div>
-            <table class="table-fixed border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
+            <table class="table-fixed border-collapse border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
                 <thead>
                     <tr>
                     <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Tuition:</td>
@@ -71,7 +71,7 @@
             </table>
         </div>
         <div>
-            <table class="table-fixed border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
+            <table class="table-fixed border-collapse border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm">
                 <tbody>
                 <?php if($tuition['new_student']!= 0): ?>
                     <tr>
