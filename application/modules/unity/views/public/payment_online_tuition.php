@@ -1,29 +1,5 @@
 <div id="registration-container">    
-    <div class="container">
-        <section class="content-header">
-            <h1>
-                <small>
-                    <a class="btn btn-app" :href="base_url + 'student/view_all_student'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
-                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a> 
-                    <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID">
-                        <i class="ion ion-printer"></i>Reg Form Print Preview
-                    </a>            
-                </small>
-            </h1>
-            <div v-if="registration" class="pull-right">
-                
-                <label style="font-size:.6em;"> Registration Status</label>
-                    
-                <select v-model="registration_status" @change="changeRegStatus" class="form-control">
-                    <option value="0">Registered</option>
-                    <option value="1">Enrolled</option>
-                    <option value="2">Cleared</option>
-                </select>
-                
-            </div>
-            <hr />
-        </section>
-            <hr />
+    <div class="container">       
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
@@ -51,201 +27,127 @@
                         </div>
                     </div>                
                 </div>
-                <div class="col-sm-12">
-                    <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li>
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
-                                    Personal Information
-                                </a>
-                            </li>
-                            
-                            <li v-if="advanced_privilages">
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
-                                    Report of Grades
-                                </a>
-                            </li>
-                            <li v-if="advanced_privilages">
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
-                                    Assessment
-                                </a>
-                            </li>
-                            
-                            <li>
-                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
-                                    Schedule
-                                </a>
-                            </li>
-                            <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
-                            <li>
-                                <a :href="base_url + 'unity/accounting/' + student.intID">                                
-                                    Accounting Summary
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">    
-                                <div class="box box-solid">
-                                    <div class="box-header">
-                                        <h4 class="box-title">ACCOUNTING</h4>                                    
-                                    </div>                                    
-                                    <div class="box-body">
-                                    <h4 class="box-title">Payments</h4>
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                <th>OR Number</th>
-                                                <th>Payment Type</th>
-                                                <th>Amount Paid</th>
-                                                <th>Online Payment Charge</th>
-                                                <th>Total Due</th>
-                                                <th>Status</th>
-                                                <th>Date Updated</th>
-                                                <th>Actions</th>
-                                            </tr>     
-                                            <tr v-if="application_payment">
-                                                <td>{{ application_payment.or_number }}</td>
-                                                <td>{{ application_payment.description }}</td>
-                                                <td>{{ application_payment.subtotal_order }}</td>
-                                                <td>{{ application_payment.charges }}</td>
-                                                <td>{{ application_payment.total_amount_due }}</td>
-                                                <td>{{ application_payment.status }}</td>                                            
-                                                <td>{{ application_payment.updated_at }}</td>
-                                                <td>
-                                                    <button v-if="!application_payment.or_number" data-toggle="modal"                                                
-                                                            @click="or_update.id = application_payment.id;" 
-                                                            data-target="#myModal" class="btn btn-primary">
-                                                            Update OR
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr v-if="reservation_payment">
-                                                <td>{{ reservation_payment.or_number }}</td>
-                                                <td>{{ reservation_payment.description }}</td>
-                                                <td>{{ reservation_payment.subtotal_order }}</td>
-                                                <td>{{ reservation_payment.charges }}</td>
-                                                <td>{{ reservation_payment.total_amount_due }}</td>
-                                                <td>{{ reservation_payment.status }}</td>                                            
-                                                <td>{{ reservation_payment.updated_at }}</td>
-                                                <td>
-                                                    <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
-                                                            @click="or_update.id = reservation_payment.id;" 
-                                                            data-target="#myModal" class="btn btn-primary">
-                                                            Update OR
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="8">
-                                                Other Payments:
-                                                </th>
-                                            </tr>  
-                                            <tr v-for="payment in other_payments">
-                                                <td>{{ payment.or_number }}</td>
-                                                <td>{{ payment.description }}</td>
-                                                <td>{{ payment.subtotal_order }}</td>
-                                                <td>{{ payment.charges }}</td>
-                                                <td>{{ payment.total_amount_due }}</td>
-                                                <td>{{ payment.status }}</td>                                            
-                                                <td>{{ payment.updated_at }}</td>
-                                                <td>
-                                                    <button v-if="!payment.or_number" data-toggle="modal"                                                
-                                                            @click="or_update.id = payment.id;" 
-                                                            data-target="#myModal" class="btn btn-primary">
-                                                            Update OR
-                                                    </button>
-                                                    <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                    <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
-                                                </td>
-                                            </tr>    
-                                            <tr>
-                                                <th colspan="8">
-                                                Tuition Payments:
-                                                </th>
-                                            </tr>
-                                            <tr v-for="payment in payments">
-                                                <td>{{ payment.or_number }}</td>
-                                                <td>{{ payment.description }}</td>
-                                                <td>{{ payment.subtotal_order }}</td>
-                                                <td>{{ payment.charges }}</td>
-                                                <td>{{ payment.total_amount_due }}</td>
-                                                <td>{{ payment.status }}</td>                                            
-                                                <td>{{ payment.updated_at }}</td>
-                                                <td>
-                                                    <button v-if="!payment.or_number" data-toggle="modal"                                                
-                                                            @click="or_update.id = payment.id;" 
-                                                            data-target="#myModal" class="btn btn-primary">
-                                                            Update OR
-                                                    </button>
-                                                    <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                    <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
-                                                </td>
-                                            </tr>                                                                           
-                                            <tr>
-                                                <td class="text-green" colspan="8">
-                                                amount paid: P{{ amount_paid_formatted }}                                           
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-green" colspan="8">                                            
-                                                remaining balance: P{{ remaining_amount_formatted }}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <hr />
-                                        <div class="row">
-                                            <div v-html="tuition" class="col-sm-6"></div>   
-                                            <div class="col-sm-6">
-                                                <form @submit.prevent="submitManualPayment" method="post">                                                
-                                                    <div class="form-group">
-                                                        <label>Payment Type</label>
-                                                        <select @change="selectDescription" class="form-control" v-model="description">
-                                                            <option value="Tuition Full">Tuition Full</option>
-                                                            <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                            <option value="Tuition Partial">Tuition Partial</option>
-                                                            <option value="Other">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Payment Status</label>
-                                                        <select @change="selectDescription" class="form-control" v-model="request.status">
-                                                            <option value="Paid">Paid</option>
-                                                            <option value="Pending">Pending</option>                                                        
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Enter type if other is selected:</label>
-                                                        <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
-                                                        
-                                                        <label>Enter amount to pay:</label>
-                                                        <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>OR Number:</label>
-                                                        <input type="text" class="form-control" v-model="request.or_number" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Contact Number:</label>
-                                                        <input type="text" required class="form-control" v-model="request.contact_number" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Email: {{ request.email_address }}</label>                                                    
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Remarks:</label>
-                                                        <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                                    </div>
-                                                    <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
-                                                </form>
-                                                <hr />                                            
-                                            </div>                                 
-                                        </div>                                                                       
-                                    </div>
-                                </div>              
-                            </div>        
+                <div class="col-sm-12">                      
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <h4 class="box-title">ACCOUNTING</h4>                                    
+                        </div>                                    
+                        <div class="box-body">
+                        <h4 class="box-title">Payments</h4>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th>OR Number</th>
+                                    <th>Payment Type</th>
+                                    <th>Amount Paid</th>
+                                    <th>Online Payment Charge</th>
+                                    <th>Total Due</th>
+                                    <th>Status</th>
+                                </tr>     
+                                <tr v-if="application_payment">
+                                    <td>{{ application_payment.or_number }}</td>
+                                    <td>{{ application_payment.description }}</td>
+                                    <td>{{ application_payment.subtotal_order }}</td>
+                                    <td>{{ application_payment.charges }}</td>
+                                    <td>{{ application_payment.total_amount_due }}</td>
+                                    <td>{{ application_payment.status }}</td>                                                                                            
+                                </tr>
+                                <tr v-if="reservation_payment">
+                                    <td>{{ reservation_payment.or_number }}</td>
+                                    <td>{{ reservation_payment.description }}</td>
+                                    <td>{{ reservation_payment.subtotal_order }}</td>
+                                    <td>{{ reservation_payment.charges }}</td>
+                                    <td>{{ reservation_payment.total_amount_due }}</td>
+                                    <td>{{ reservation_payment.status }}</td>                                                                                           
+                                </tr>
+                                <tr>
+                                    <th colspan="6">
+                                    Other Payments:
+                                    </th>
+                                </tr>  
+                                <tr v-for="payment in other_payments">
+                                    <td>{{ payment.or_number }}</td>
+                                    <td>{{ payment.description }}</td>
+                                    <td>{{ payment.subtotal_order }}</td>
+                                    <td>{{ payment.charges }}</td>
+                                    <td>{{ payment.total_amount_due }}</td>
+                                    <td>{{ payment.status }}</td>                                                                                            
+                                </tr>    
+                                <tr>
+                                    <th colspan="6">
+                                    Tuition Payments:
+                                    </th>
+                                </tr>
+                                <tr v-for="payment in payments">
+                                    <td>{{ payment.or_number }}</td>
+                                    <td>{{ payment.description }}</td>
+                                    <td>{{ payment.subtotal_order }}</td>
+                                    <td>{{ payment.charges }}</td>
+                                    <td>{{ payment.total_amount_due }}</td>
+                                    <td>{{ payment.status }}</td>                                                                                            
+                                </tr>                                                                           
+                                <tr>
+                                    <td class="text-green" colspan="6">
+                                    amount paid: P{{ amount_paid_formatted }}                                           
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-green" colspan="6">                                            
+                                    remaining balance: P{{ remaining_amount_formatted }}
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr />
+                            <div class="row">
+                                <div v-html="tuition" class="col-sm-6"></div>   
+                                <div class="col-sm-6">
+                                    <form @submit.prevent="submitManualPayment" method="post">                                                
+                                        <div class="form-group">
+                                            <label>Payment Type</label>
+                                            <select @change="selectDescription" class="form-control" v-model="description">
+                                                <option value="Tuition Full">Tuition Full</option>
+                                                <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                                <option value="Tuition Partial">Tuition Partial</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Payment Status</label>
+                                            <select @change="selectDescription" class="form-control" v-model="request.status">
+                                                <option value="Paid">Paid</option>
+                                                <option value="Pending">Pending</option>                                                        
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Enter type if other is selected:</label>
+                                            <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                            
+                                            <label>Enter amount to pay:</label>
+                                            <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>OR Number:</label>
+                                            <input type="text" class="form-control" v-model="request.or_number" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact Number:</label>
+                                            <input type="text" required class="form-control" v-model="request.contact_number" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email: {{ request.email_address }}</label>                                                    
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Remarks:</label>
+                                            <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
+                                        </div>
+                                        <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
+                                    </form>
+                                    <hr />                                            
+                                </div>                                 
+                            </div>                                                                       
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </div>              
+                </div>        
+            </div>           
         </div>
         <div class="modal fade" id="myModal" role="dialog">
             <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
