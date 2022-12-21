@@ -43,16 +43,82 @@
                                         <option value="Tuition Partial">Tuition Partial</option>                                
                                     </select>
                                 </div>                                                                
-                                <div class="form-group">
-                                    <label>Contact Number:</label>
-                                    <input type="text" required class="form-control" v-model="request.contact_number" />
+                                <div>
+                                <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
+                                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                    <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
+                                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                        style="display:flex; align-itenms:center;">
+                                        <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Email: {{ request.email_address }}</label>                                                    
+
+                                <hr>
+                                <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
+                                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                    <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
+                                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                        style="display:flex; align-itenms:center;">
+                                        <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Remarks:</label>
-                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
+                            </div>
+
+                            <hr>
+
+                            <div class="d-flex flex-wrap my-5" style="margin-top:50px">
+                                <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+
+                                <table class="table" style="width:100%">
+                                    <tbody>
+                                        <tr v-if="item">
+                                            <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
+                                                'Application Fee'
+                                                }}
+                                            </td>
+                                            <td>₱ {{ item_details.price }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Gateway Fee <span class="font-weight-bold"
+                                                    v-if="selected_mode_of_payment.type == 'percentage'">(
+                                                    {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
+                                                    Php
+                                                    25.00 whichever is higher )</span> </td>
+                                            <td v-if="selected_mode_of_payment">
+                                                <span>
+                                                    ₱ {{ new_charge }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
+                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
+                                                    class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
+                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
+                                                <span class="font-weight-bold">₱
+                                                    {{ total_price_cart_with_charge_es }}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="text-right mt-3">
+                                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                                    <div v-else>
+                                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
+                                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                            name="button">Submit 
+                                        </button>
+                                        <button type="button" disabled v-else
+                                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                                            name="button">Submit</button>
+                                        <button type="button" onclick="window.history.back()"
+                                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
+                                            name="button">Cancel</button>
+                                        <a :href="redirect_link" style="opacity:0" target="_blank"
+                                            id="payment_link">{{ redirect_link }}</a>
+                                    </div>
                                 </div>
                                 <!-- <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button> -->
                             </form>
@@ -126,31 +192,7 @@
                     </div> 
                 </div>                       
             </div>           
-        </div>
-        <div class="modal fade" id="myModal" role="dialog">
-            <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- modal header  -->
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add OR Number</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>OR Number <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control" v-model="or_update.or_number" required></textarea>                        
-                        </div>
-                    </div>
-                    <div class=" modal-footer">
-                        <!-- modal footer  -->
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        </div>        
     </div>
 </div>
 
@@ -189,9 +231,9 @@ new Vue({
             sy_reference: '<?php echo $selected_ay; ?>',
             status: 'Paid',
         },
-        or_update:{
-            id: undefined,
-            or_number: undefined,
+        item_details: {
+            price: 0,
+            hey: this.payment_type
         },
         amount_to_pay: 0,        
         advanced_privilages: false,      
@@ -329,264 +371,121 @@ new Vue({
                     console.log(error);
                 })
         },
-        updateOR: function(){
-            let url = api_url + 'finance/update_or';
+        selectPayment: function(mode_payment) {
+            this.selected_mode_of_payment = mode_payment;
 
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with the update',
-                text: "Are you sure you want to update the payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
+            var new_price = parseFloat(this.item_details.price);
+            var new_charge = parseFloat(this.selected_mode_of_payment.charge);
+            var qty = 1;
 
-                        return axios.post(url, this.or_update, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });
-                                });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
-                })
 
-        },  
-        deletePayment: function(payment_id){
-            let url = api_url + 'finance/delete_payment';
+            if (this.selected_mode_of_payment.type == 'percentage') {
+                var new_price_with_qty = new_price * qty;
 
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with deleting Payment',
-                text: "Are you sure you want to delete payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        
-                        let payload = {'id':payment_id}
-
-                        return axios.post(url, payload, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;                                    
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });
-                                });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
-                })
-
-        },
-        setToPaid: function(payment_id){    
-            let url = api_url + 'finance/set_paid';
-
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with processing Payment',
-                text: "Are you sure you want to process payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        
-                        let payload = {'id':payment_id}
-
-                        return axios.post(url, payload, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });
-                                });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
-                })
-
-        },
-        submitManualPayment: function(){
-            let url = api_url + 'finance/manual_payment';            
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with Payment',
-                text: "Are you sure you want to add payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        
-                        if(this.description == 'Other')
-                            this.request.description = this.description_other;
-
-                        this.request.subtotal_order = this.amount_to_pay;
-                        this.request.total_amount_due = this.amount_to_pay;
-                        console.log(this.request);
-                        
-                        return axios.post(url, this.request, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });
-                                });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
-                })
-            
-        },
-        selectDescription: function(){
-            if(this.description != 'Other'){                
-                this.request.description = this.description;
-                switch(this.description){
-                    case 'Tuition Full':
-                        this.amount_to_pay = this.remaining_amount;
-                    break;
-                    case 'Tuition Partial':
-                        this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
-                    break;
-                    case 'Tuition Down Payment':                        
-                        this.amount_to_pay = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                    break;                    
+                new_charge = ((new_charge / 100) * new_price_with_qty);
+                if (new_charge < 25) {
+                    new_charge = 25.00;
                 }
+
+
             }
-            else{                                
-                this.amount_to_pay = 0;
+
+            this.total_single_without_charge = (new_price * qty);
+            this.total_single = (new_price * qty) + new_charge;
+            this.total_single_format = (this.total_single + parseFloat(this.request.mailing_fee))
+                .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+
+            this.new_charge = new_charge.toFixed(2);
+
+            console.log("total_single_format", this.total_single_format);
+            console.log("new_charge", this.new_charge);
+
+            let title = (this.payment_type == 'admissions_student_payment_reservation') ? 'Reservation Payment' :
+                                    'Application Payment';
+
+            this.payload = {
+                "description": title,
+                "order_items": [{
+                    "price_default": "700",
+                    "title": title,
+                    "qty": "1",
+                    "id": 1
+                }],
+                "total_price_without_charge": this.total_single_without_charge,
+                "first_name": this.student.first_name,
+                "last_name": this.student.last_name,
+                "contact_number": this.student.mobile_number,
+                "email": this.student.email,
+                "remarks": "",
+                "mode_of_payment_id": mode_payment.id,
+                "delivery_region_id": null,
+                "delivery_city_id": "",
+                "country": "",
+                "other_country": "",
+                "total_price_with_charge": this.total_single,
+                "charge": parseFloat(this.new_charge),
+                "mode_of_release": null,
+                "mailing_fee": 0,
+                "student_information_id": this.student.id
             }
+
+
+            // console.log(this.payload)
+
         },
-        changeRegStatus: function(){
-            let url = this.base_url + 'unity/update_rog_status';
-            var formdata= new FormData();
-            formdata.append("intRegistrationID",this.registration.intRegistrationID);
-            formdata.append("intROG",this.registration_status);
-            var missing_fields = false;
-            this.loader_spinner = true;
-            
-            //validate description
-                      
-            axios.post(url, formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {
-                this.loader_spinner = false;
-                if(data.data.success)
-                    Swal.fire({
-                        title: "Success",
-                        text: data.data.message,
-                        icon: "success"
-                    }).then(function() {
-                        location.reload();
-                    });
-                else
-                    Swal.fire({
-                        title: "Failed",
-                        text: data.data.message,
-                        icon: "error"
-                    }).then(function() {
-                        //location.reload();
-                    });
-            });
-           
-            
-            
+        submitPayment: function() {
+            // Swal.fire({
+            //     title: "Submit Payment",
+            //     text: "Are you sure you want to submit?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true,
+            //     preConfirm: (login) => {
+            //         return 
+            //     },
+            //     allowOutsideClick: () => !Swal.isLoading()
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+
+            //     }
+            // })
+
+            this.loading_spinner = true;
+
+            axios
+                .post(api_url + 'payments', this.payload, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.is_done = true;
+
+                    if (data.data.success) {
+
+                        if (!this.selected_mode_of_payment.is_nonbank) {
+                            this.redirect_link = data.data.payment_link;
+                            this.loading_spinner = false;
+
+                            setTimeout(() => {
+                                document.getElementById("payment_link")
+                                    .click();
+                            }, 500);
+
+                        } else {}
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            data.data.message,
+                            'error'
+                        )
+                    }
+                });
         }
     }
 
