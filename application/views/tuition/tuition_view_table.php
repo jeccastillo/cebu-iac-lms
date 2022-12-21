@@ -96,11 +96,10 @@
                     <?php endif; ?>
                         
                     <tr>
-                        <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Total:</td>
-                        <td class="text-green-400"><?php echo $tuition['total'] ?></td>
+                        <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Total Amount Due:</td>
+                        <td class="text-green-400"><?php echo number_format($tuition['total'], 2, '.' ,','); ?></td>
                     </tr>
-                    <hr />
-                    <h4 class="box-title">FOR INSTALLMENT</h4>
+                    <hr />                    
                     <tr>
                         <td class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-lefttext-right w-1/2">Down Payment</td>
                         <td class="w-1/2 border border-slate-300 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"><?php echo number_format($tuition['down_payment'], 2, '.' ,','); ?></td>
