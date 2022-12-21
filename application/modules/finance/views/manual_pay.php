@@ -133,24 +133,19 @@ new Vue({
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
-            // this.student = data.data.data;
-            // this.request.slug = this.slug;
-            // this.request.first_name = this.student.strFirstname;
-            // this.request.middle_name = this.student.strMiddlename;
-            // this.request.last_name = this.student.strLastname;    
-            // this.request.contact_number = this.student.strMobileNumber;  
-            // this.request.email_address = this.student.strEmail;
-            console.log(data.data.data);
-
-            axios.get(api_url + 'finance/reservation/' + this.slug)
-            .then((data) => {
-                this.reservation_payment = data.data.data;    
-                this.application_payment = data.data.application;                    
-                this.loader_spinner = false;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            this.student = data.data.data;
+            this.request.slug = this.slug;
+            this.request.first_name = this.student.first_name;
+            this.request.middle_name = this.student.middle_name;
+            this.request.last_name = this.student.last_name;    
+            this.request.contact_number = this.student.mobile_number;  
+            this.request.email_address = this.student.email;   
+            for(i in this.student.payments){
+                if(this.student.payments[i].description == "Application Payment")
+                    this.application_payment = this.student.payments[i];
+                if(this.student.payments[i].description == "Reservation Payment")
+                    this.reservation_payment = this.student.payments[i];
+            }
         })
         .catch((error) => {
             console.log(error);
