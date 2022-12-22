@@ -110,7 +110,7 @@
                                                     <button type="button" onclick="window.history.back()"
                                                         class="btn btn-default"
                                                         name="button">Cancel</button>
-                                                    <a :href="redirect_link" style="opacity:0" target="_blank"
+                                                    <a :href="redirect_link" style="opacity:0" 
                                                         id="payment_link">{{ redirect_link }}</a>
                                                 </div>
                                             </div>
@@ -525,6 +525,15 @@ new Vue({
             // })
 
             this.loading_spinner = true;
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Loading',
+                text: 'Processing Payment',
+                icon: 'info',
+            })
+            Swal.showLoading();
 
             axios
                 .post(api_url + 'payments', this.payload, {
