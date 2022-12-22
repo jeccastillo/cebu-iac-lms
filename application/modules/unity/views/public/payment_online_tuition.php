@@ -1,6 +1,7 @@
 <div id="registration-container">    
     <div class="container">       
         <div class="content">
+            <h3>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</h3>
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active">
@@ -25,8 +26,7 @@
                             <div class="box-header">
                                 <h4 class="box-title">PAY ONLINE</h4>
                             </div>
-                            <div class="box-body">   
-                                <p>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</p>
+                            <div class="box-body">                                   
                                 <hr />
                                 <form @submit.prevent="submitPayment">                                                                                               
                                     <div class="form-group">
