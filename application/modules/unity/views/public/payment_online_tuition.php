@@ -443,6 +443,7 @@ new Vue({
                     "id": 1
                 }],
                 "total_price_without_charge": this.total_single_without_charge,
+                "sy_reference": this.sem,
                 "first_name": this.student.strFirstname,
                 "last_name": this.student.strLastname,
                 "contact_number": this.student.strMobileNumber,
