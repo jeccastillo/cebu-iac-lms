@@ -1,176 +1,203 @@
 <div id="registration-container">    
     <div class="container">       
         <div class="content">
-            <div class="box box-solid">
-                <div class="box-header">
-                    <h4 class="box-title">PAY ONLINE</h4>
-                </div>
-                <div class="box-body">   
-                    <p>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</p>
-                    <hr />
-                    <form @submit.prevent="submitPayment">                                                                                               
-                        <div class="form-group">
-                            <label>Select Payment Type</label>
-                            <select @change="selectDescription" class="form-control" v-model="payment_type">
-                                <option value="Tuition Full">Tuition Full</option>
-                                <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>
-                                <option v-else value="Tuition Down Payment">Tuition Down Payment</option>
-                                                                
-                            </select>
-                        </div>                                                                
-                        <div>
-                            <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
-                            <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
-                                    class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                    style="display:flex; align-itenms:center;">
-                                    <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="tab1">
+                            PAY ONLINE
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tab2">
+                            ASSESSMENT OF FEES
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tab3">
+                            MY PAYMENTS
+                        </a>
+                    </li>                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">    
+                        <div class="box box-solid">
+                            <div class="box-header">
+                                <h4 class="box-title">PAY ONLINE</h4>
+                            </div>
+                            <div class="box-body">   
+                                <p>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</p>
+                                <hr />
+                                <form @submit.prevent="submitPayment">                                                                                               
+                                    <div class="form-group">
+                                        <label>Select Payment Type</label>
+                                        <select @change="selectDescription" class="form-control" v-model="payment_type">
+                                            <option value="Tuition Full">Tuition Full</option>
+                                            <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>
+                                            <option v-else value="Tuition Down Payment">Tuition Down Payment</option>
+                                                                            
+                                        </select>
+                                    </div>                                                                
+                                    <div>
+                                        <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
+                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                            <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
+                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                style="display:flex; align-itenms:center;">
+                                                <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
+                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                            <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
+                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                style="display:flex; align-itenms:center;">
+                                                <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
+                                            </div>
+                                        </div>                
+
+                                        <hr>
+
+                                        <div class="d-flex flex-wrap my-5" style="margin-top:50px">
+                                            <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+
+                                            <table class="table" style="width:100%">
+                                                <tbody>
+                                                    <tr v-if="item">
+                                                        <td> {{ payment_type }}
+                                                        </td>
+                                                        <td>₱ {{ item_details.price }}</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>Gateway Fee <span class="font-weight-bold"
+                                                                v-if="selected_mode_of_payment.type == 'percentage'">(
+                                                                {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
+                                                                Php
+                                                                25.00 whichever is higher )</span> </td>
+                                                        <td v-if="selected_mode_of_payment">
+                                                            <span>
+                                                                ₱ {{ new_charge }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
+                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
+                                                                class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
+                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
+                                                            <span class="font-weight-bold">₱
+                                                                {{ total_price_cart_with_charge_es }}</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="text-right mt-3">
+                                                <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                                                <div v-else>
+                                                    <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
+                                                        class="btn btn-primary"
+                                                        name="button">Submit 
+                                                    </button>
+                                                    <button type="button" disabled v-else
+                                                        class="btn btn-default"
+                                                        name="button">Submit</button>
+                                                    <button type="button" onclick="window.history.back()"
+                                                        class="btn btn-default"
+                                                        name="button">Cancel</button>
+                                                    <a :href="redirect_link" style="opacity:0" target="_blank"
+                                                        id="payment_link">{{ redirect_link }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-
-                            <hr>
-                            <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
-                            <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
-                                    class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                    style="display:flex; align-itenms:center;">
-                                    <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
-                                </div>
-                            </div>                
-
-                            <hr>
-
-                            <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                                <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
-
-                                <table class="table" style="width:100%">
-                                    <tbody>
-                                        <tr v-if="item">
-                                            <td> {{ payment_type }}
-                                            </td>
-                                            <td>₱ {{ item_details.price }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Gateway Fee <span class="font-weight-bold"
-                                                    v-if="selected_mode_of_payment.type == 'percentage'">(
-                                                    {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                                    Php
-                                                    25.00 whichever is higher )</span> </td>
-                                            <td v-if="selected_mode_of_payment">
-                                                <span>
-                                                    ₱ {{ new_charge }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                                    class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                                <span class="font-weight-bold">₱
-                                                    {{ total_price_cart_with_charge_es }}</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="text-right mt-3">
-                                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
-                                    <div v-else>
-                                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                            class="btn btn-primary"
-                                            name="button">Submit 
-                                        </button>
-                                        <button type="button" disabled v-else
-                                            class="btn btn-default"
-                                            name="button">Submit</button>
-                                        <button type="button" onclick="window.history.back()"
-                                            class="btn btn-default"
-                                            name="button">Cancel</button>
-                                        <a :href="redirect_link" style="opacity:0" target="_blank"
-                                            id="payment_link">{{ redirect_link }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
+                    </div>
+                <div class="tab-pane active" id="tab2">                                                                    
+                    <div class="row">
+                        <div class="col-sm-12">                    
+                            <div v-html="tuition"></div>                                  
+                        </div>
                     </div>
                 </div>
+                <div class="tab-pane active" id="tab3">
+                    <div class="row">
+                        <div class="col-sm-12">                          
+                            <div class="box box-solid">
+                                <div class="box-header">
+                                    <h4 class="box-title">MY PAYMENTS</h4>                                    
+                                </div>                                    
+                                <div class="box-body">
+                                    <h4 class="box-title">Payments</h4>
+                                    <table class="table table-bordered table-striped">
+                                        <tr>                                    
+                                            <th>Payment Type</th>
+                                            <th>Amount Paid</th>
+                                            <th>Online Payment Charge</th>
+                                            <th>Total Due</th>
+                                            <th>Status</th>
+                                        </tr>     
+                                        <tr v-if="application_payment">                                    
+                                            <td>{{ application_payment.description }}</td>
+                                            <td>{{ application_payment.subtotal_order }}</td>
+                                            <td>{{ application_payment.charges }}</td>
+                                            <td>{{ application_payment.total_amount_due }}</td>
+                                            <td>{{ application_payment.status }}</td>                                                                                            
+                                        </tr>
+                                        <tr v-if="reservation_payment">                                    
+                                            <td>{{ reservation_payment.description }}</td>
+                                            <td>{{ reservation_payment.subtotal_order }}</td>
+                                            <td>{{ reservation_payment.charges }}</td>
+                                            <td>{{ reservation_payment.total_amount_due }}</td>
+                                            <td>{{ reservation_payment.status }}</td>                                                                                           
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6">
+                                            Other Payments:
+                                            </th>
+                                        </tr>  
+                                        <tr v-for="payment in other_payments">                                    
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>                                                                                            
+                                        </tr>    
+                                        <tr>
+                                            <th colspan="6">
+                                            Tuition Payments:
+                                            </th>
+                                        </tr>
+                                        <tr v-for="payment in payments">                                    
+                                            <td>{{ payment.description }}</td>
+                                            <td>{{ payment.subtotal_order }}</td>
+                                            <td>{{ payment.charges }}</td>
+                                            <td>{{ payment.total_amount_due }}</td>
+                                            <td>{{ payment.status }}</td>                                                                                            
+                                        </tr>                                                                           
+                                        <tr>
+                                            <td class="text-green" colspan="5">
+                                            amount paid: P{{ amount_paid_formatted }}                                           
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green" colspan="5">                                            
+                                            remaining balance: P{{ remaining_amount_formatted }}
+                                            </td>
+                                        </tr>
+                                    </table>                                                                                                                          
+                                    
+                                </div>
+                            </div> 
+                        </div>                       
+                    </div>   
+                </div>        
             </div>
-            
-            <div class="row">
-                <div class="col-sm-6">                    
-                    <div v-html="tuition"></div>                                  
-                </div>
-                <div class="col-sm-6">                          
-                    <div class="box box-solid">
-                        <div class="box-header">
-                            <h4 class="box-title">MY PAYMENTS</h4>                                    
-                        </div>                                    
-                        <div class="box-body">
-                            <h4 class="box-title">Payments</h4>
-                            <table class="table table-bordered table-striped">
-                                <tr>                                    
-                                    <th>Payment Type</th>
-                                    <th>Amount Paid</th>
-                                    <th>Online Payment Charge</th>
-                                    <th>Total Due</th>
-                                    <th>Status</th>
-                                </tr>     
-                                <tr v-if="application_payment">                                    
-                                    <td>{{ application_payment.description }}</td>
-                                    <td>{{ application_payment.subtotal_order }}</td>
-                                    <td>{{ application_payment.charges }}</td>
-                                    <td>{{ application_payment.total_amount_due }}</td>
-                                    <td>{{ application_payment.status }}</td>                                                                                            
-                                </tr>
-                                <tr v-if="reservation_payment">                                    
-                                    <td>{{ reservation_payment.description }}</td>
-                                    <td>{{ reservation_payment.subtotal_order }}</td>
-                                    <td>{{ reservation_payment.charges }}</td>
-                                    <td>{{ reservation_payment.total_amount_due }}</td>
-                                    <td>{{ reservation_payment.status }}</td>                                                                                           
-                                </tr>
-                                <tr>
-                                    <th colspan="6">
-                                    Other Payments:
-                                    </th>
-                                </tr>  
-                                <tr v-for="payment in other_payments">                                    
-                                    <td>{{ payment.description }}</td>
-                                    <td>{{ payment.subtotal_order }}</td>
-                                    <td>{{ payment.charges }}</td>
-                                    <td>{{ payment.total_amount_due }}</td>
-                                    <td>{{ payment.status }}</td>                                                                                            
-                                </tr>    
-                                <tr>
-                                    <th colspan="6">
-                                    Tuition Payments:
-                                    </th>
-                                </tr>
-                                <tr v-for="payment in payments">                                    
-                                    <td>{{ payment.description }}</td>
-                                    <td>{{ payment.subtotal_order }}</td>
-                                    <td>{{ payment.charges }}</td>
-                                    <td>{{ payment.total_amount_due }}</td>
-                                    <td>{{ payment.status }}</td>                                                                                            
-                                </tr>                                                                           
-                                <tr>
-                                    <td class="text-green" colspan="5">
-                                    amount paid: P{{ amount_paid_formatted }}                                           
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-green" colspan="5">                                            
-                                    remaining balance: P{{ remaining_amount_formatted }}
-                                    </td>
-                                </tr>
-                            </table>                                                                                                                          
-                            
-                        </div>
-                    </div> 
-                </div>                       
-            </div>           
         </div>        
     </div>
 </div>
