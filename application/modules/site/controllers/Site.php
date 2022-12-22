@@ -52,7 +52,7 @@ class Site extends CI_Controller {
 								Changer!</span>
 							Keep your lines open and check your email!';
 		}
-		else{
+		elseif($type == "Reservation Payment"){
 			$this->data['text'] = 'You are a game changer. The interests that you have cultivated through the years are leading you down the path of a successful career. How you reach that path is now in your hands.
 			<br /><br />
 			This early on, we can see that you are one of the few people who have the capacity TO shape the course of the future. It is for this reason that iACADEMY would like to offer you the opportunity to pursue your passions and develop practical skills that you will need to enter the industry of your choice with a competitive edge. 
@@ -63,6 +63,9 @@ class Site extends CI_Controller {
 			<br /><br />
 			See you soon, <span class="font-bold">Game Changer</span><br /><br /><br /><br />!
 			';
+		}
+		else{
+			$this->data['text'] = 'Payment Successful'
 		}
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/awesome',$this->data);
