@@ -118,14 +118,14 @@
                             </div>
                         </div>
                     </div>
-                <div class="tab-pane active" id="tab2">                                                                    
+                <div class="tab-pane" id="tab2">                                                                    
                     <div class="row">
                         <div class="col-sm-12">                    
                             <div v-html="tuition"></div>                                  
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane active" id="tab3">
+                <div class="tab-pane" id="tab3">
                     <div class="row">
                         <div class="col-sm-12">                          
                             <div class="box box-solid">
