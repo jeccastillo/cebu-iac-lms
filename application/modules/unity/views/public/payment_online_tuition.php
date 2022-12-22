@@ -70,7 +70,7 @@
                                                     <tr v-if="item">
                                                         <td> {{ payment_type }}
                                                         </td>
-                                                        <td>₱ {{ item_details.price }}</td>
+                                                        <td>₱ {{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                                                     </tr>
 
                                                     <tr>
@@ -81,7 +81,7 @@
                                                                 25.00 whichever is higher )</span> </td>
                                                         <td v-if="selected_mode_of_payment">
                                                             <span>
-                                                                ₱ {{ new_charge }}
+                                                                ₱ {{ new_charge.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}
                                                             </span>
                                                         </td>
                                                     </tr>
