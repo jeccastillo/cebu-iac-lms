@@ -6,6 +6,8 @@
                     <h4 class="box-title">PAY ONLINE</h4>
                 </div>
                 <div class="box-body">   
+                    <p>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</p>
+                    <hr />
                     <form @submit.prevent="submitPayment">                                                                                               
                         <div class="form-group">
                             <label>Select Payment Type</label>
@@ -97,30 +99,7 @@
             </div>
             
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="box box-widget widget-user-2">
-                        <!-- Add the bg color to the header using any of the bg-* classes -->
-                        <div class="widget-user-header bg-red">
-                            <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
-                            <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramCode }} Major in {{ student.strMajor }}</h5>
-                        </div>
-                        <div class="box-footer no-padding">
-                            <ul class="nav nav-stacked">
-                            <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber }}</span></a></li>
-                            <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
-                            <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
-                            <li>
-                                <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
-                                    <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
-                                    <span style="color:#900000;" v-else>N/A</span>                                
-                                </a>
-                            </li>
-                            <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
-                                
-                            </ul>
-                        </div>
-                    </div>  
+                <div class="col-sm-6">                    
                     <div v-html="tuition"></div>                                  
                 </div>
                 <div class="col-sm-6">                          
