@@ -61,12 +61,12 @@ class Site extends CI_Controller {
 			<br /><br />
 			Scan <a href="#">here</a> for the workshops and sign up for the topic you like.
 			<br /><br />
-			See you soon, <span class="font-bold">Game Changer</span><br /><br /><br /><br />!
-			';
+			See you soon, <span class="font-bold">Game Changer</span><br /><br /><br /><br />!';
 		}
 		else{
-			$this->data['text'] = 'Payment Successful'
+			$this->data['text'] = 'Payment Successful';
 		}
+
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/awesome',$this->data);
 		$this->load->view('common/footer',$this->data);
