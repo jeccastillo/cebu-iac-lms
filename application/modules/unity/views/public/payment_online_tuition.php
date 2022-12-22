@@ -212,6 +212,36 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
+<style scoped="">
+.box_mode_payment {
+    border: 1px solid #000;
+    height: 41px;
+    width: 57px;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.box_mode_payment.active {
+    background: #1c54a5;
+}
+
+.spinner {
+    animation-name: spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>
 <script>
 new Vue({
     el: '#registration-container',
