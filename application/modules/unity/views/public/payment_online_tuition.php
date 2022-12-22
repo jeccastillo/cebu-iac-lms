@@ -1,7 +1,9 @@
 <div id="registration-container">    
     <div class="container">       
-        <div class="content">
-            <h3>{{ student.strFirstname }} {{ student.strLastname }} - {{ student.strStudentNumber }}</h3>
+        <div class="content">                        
+            <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
+                Stud No :{{ student.strStudentNumber }}
+            </h3>
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active">
