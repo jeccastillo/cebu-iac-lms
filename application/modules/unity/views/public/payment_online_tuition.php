@@ -4,17 +4,17 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab1">
+                        <a href="#tab1" data-toggle="tab">
                             PAY ONLINE
                         </a>
                     </li>
                     <li>
-                        <a href="#tab2">
+                        <a href="#tab2" data-toggle="tab">
                             ASSESSMENT OF FEES
                         </a>
                     </li>
                     <li>
-                        <a href="#tab3">
+                        <a href="#tab3" data-toggle="tab">
                             MY PAYMENTS
                         </a>
                     </li>                    
