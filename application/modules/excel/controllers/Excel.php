@@ -1882,6 +1882,8 @@ class Excel extends CI_Controller {
         // Echo memory usage
         echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
 
+        //Test
+
 
         // // Redirect output to a client’s web browser (Excel2007)
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
