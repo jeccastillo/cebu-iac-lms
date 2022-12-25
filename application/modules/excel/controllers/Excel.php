@@ -1868,26 +1868,40 @@ class Excel extends CI_Controller {
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
-
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        if($registered != 0)
-            header('Content-Disposition: attachment;filename="enrolment-list-'.$active_sem['enumSem'].'sem'."-".$active_sem['strYearStart']."-".$active_sem['strYearEnd'].'.xlsx"');
-        else
-            header('Content-Disposition: attachment;filename="student_list.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
+        // Save Excel 2007 file
+        echo date('H:i:s') , " Write to Excel2007 format" , EOL;
+        $callStartTime = microtime(true);
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-        exit;
+        $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+        $callEndTime = microtime(true);
+        $callTime = $callEndTime - $callStartTime;
+
+        echo date('H:i:s') , " File written to " , str_replace('.php', '.xlsx', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
+        echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
+        // Echo memory usage
+        echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
+
+
+        // // Redirect output to a client’s web browser (Excel2007)
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // if($registered != 0)
+        //     header('Content-Disposition: attachment;filename="enrolment-list-'.$active_sem['enumSem'].'sem'."-".$active_sem['strYearStart']."-".$active_sem['strYearEnd'].'.xlsx"');
+        // else
+        //     header('Content-Disposition: attachment;filename="student_list.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // // If you're serving to IE 9, then the following may be needed
+        // header('Cache-Control: max-age=1');
+
+        // // If you're serving to IE over SSL, then the following may be needed
+        // header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        // header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        // header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        // header ('Pragma: public'); // HTTP/1.0
+
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        // $objWriter->save('php://output');
+        // exit;
     }
     
     
