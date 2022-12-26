@@ -1869,6 +1869,8 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0);
 
 
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         if($registered != 0)
@@ -1885,8 +1887,8 @@ class Excel extends CI_Controller {
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
 
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // $objWriter->save('php://output');
+        
+        $objWriter->save('php://output');
         // exit;
     }
     
