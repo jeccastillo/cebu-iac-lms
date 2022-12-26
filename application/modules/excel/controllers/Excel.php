@@ -1871,10 +1871,10 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // if($registered != 0)
-        //     header('Content-Disposition: attachment;filename="enrolment-list-'.$active_sem['enumSem'].'sem'."-".$active_sem['strYearStart']."-".$active_sem['strYearEnd'].'.xlsx"');
-        // else
-        //     header('Content-Disposition: attachment;filename="student_list.xlsx"');
+        if($registered != 0)
+            header('Content-Disposition: attachment;filename="enrolment-list-'.$active_sem['enumSem'].'sem'."-".$active_sem['strYearStart']."-".$active_sem['strYearEnd'].'.xlsx"');
+        else
+            header('Content-Disposition: attachment;filename="student_list.xlsx"');
         // header('Cache-Control: max-age=0');
         // // If you're serving to IE 9, then the following may be needed
         // header('Cache-Control: max-age=1');
@@ -1885,9 +1885,9 @@ class Excel extends CI_Controller {
         // header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         // header ('Pragma: public'); // HTTP/1.0
 
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // $objWriter->save('php://output');
-        // exit;
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
     }
     
     
