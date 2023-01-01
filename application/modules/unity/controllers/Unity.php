@@ -731,6 +731,15 @@ class Unity extends CI_Controller {
             
             $ret['selected_ay'] = $ret['active_sem']['intID'];
             
+        
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
+            $sc_ret = [];
+            foreach($records as $record)
+            {
+                $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
+                $sc_ret = array_merge($sc_ret, $schedule);
+            }
+            
             if($tab!=null)
                 $ret['tab'] = $tab;
             else
@@ -774,7 +783,7 @@ class Unity extends CI_Controller {
             
             $ret['other_data']['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
             $ret['other_data']['academic_standing']['year'] = switch_num($ret['other_data']['academic_standing']['year']);
-            
+            $ret['schedule'] = $sc_ret;
                        
             $totalUnits = 0;
             $totalLab = 0;
@@ -985,20 +994,6 @@ class Unity extends CI_Controller {
             $ret['active_sem'] = $this->data_fetcher->get_active_sem();
             
         }
-        $selected_ay = $ret['active_sem']['intID'];
-        
-        $records = $this->data_fetcher->getClassListStudentsSt($id,$selected_ay);
-        $sc_ret = '';                        
-        foreach($records as $record)
-        {
-            $schedule = $this->data_fetcher->getScheduleByCode($record['classlistID']);                          
-            $d['class'] = $record;
-            $d['schedule'] = $schedule;
-                $sc_ret .= $this->load->view('common/sched_block_template', $d, true);
-                
-        }
-        
-        $this->data['sched_hidden'] = $sc_ret;
         
         if(!empty($post))
             $id = $post['studentID'];
@@ -1011,6 +1006,7 @@ class Unity extends CI_Controller {
         
         
         $this->data['student'] = $this->data_fetcher->getStudent($id);
+        
         if(!$this->data['student'])
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
         //per faculty info                        
@@ -1019,8 +1015,7 @@ class Unity extends CI_Controller {
         
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_viewer",$this->data);
-        $this->load->view("common/footer",$this->data);
-        $this->load->view("common/student_viewer_conf",$this->data); 
+        $this->load->view("common/footer",$this->data);        
         // print_r($this->data['classlists']);
             
         

@@ -1,7 +1,6 @@
 
 <aside class="right-side">
-    <div id="student-viewer-container">
-        <?php echo $sched_hidden; ?>
+    <div id="student-viewer-container">        
         <section class="content-header">
             <h1>
                 <small>
@@ -252,7 +251,8 @@
                                 <input type="hidden" name="sched-table" id="sched-table" />                                                                                
                                 <input type="hidden" :value="student.strLastname + '-' + student.strFirstname + '-' + student.strStudentNumber" name="studentInfo" id="studentInfo" />
                                 <input class="btn btn-flat btn-default" type="submit" value="print preview" />
-                            </form>                             
+                            </form>             
+                            <hr />                
                             <div class="box box-primary">
                                 <div class="box-header">
                                     <h4>Schedule</h4>
@@ -360,7 +360,9 @@ new Vue({
                         this.lab_units = data.data.lab_units;
                         this.gpa = data.data.gpa;
                         this.other_data = data.data.other_data;
-                        this.assessment = data.data.assessment;                        
+                        this.assessment = data.data.assessment;    
+                        var sched = data.data.schedule;
+                        load_schedule(sched);                    
                     }
                     else{
                        //document.location = this.base_url + 'users/login';

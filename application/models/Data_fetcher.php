@@ -2372,6 +2372,31 @@ class Data_fetcher extends CI_Model {
         return $d;
     }
     
+    function getScheduleByCodeNew($schedCode){
+        $ret = array();
+        $sched = $this->db
+                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode')
+                        ->from('tb_mas_room_schedule')
+                        ->where(array('strScheduleCode'=>$schedCode))
+                        ->join('tb_mas_classrooms','tb_mas_room_schedule.intRoomID = tb_mas_classrooms.intID')
+                        ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode')
+                        ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                        ->get()
+                        ->result_array();
+        
+        $schedString = "";
+        $timeString = "";
+        foreach($sched as $s)
+        {
+            $s['strDay'] = $s['strDay'] + 1;
+            $s['hourdiff'] = round((strtotime($s['dteEnd']) - strtotime($s['dteStart']))/3600, 1);
+            $s['st'] = date('gia',strtotime($s['dteStart']));
+
+            $ret[] = $s;
+        }
+
+        return $ret;
+    }
     
     function getScheduleByCode($schedCode)
     {
