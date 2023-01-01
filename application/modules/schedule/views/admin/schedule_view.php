@@ -7,6 +7,13 @@
                         <option <?php echo ($sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                     <?php endforeach; ?>
                 </select>
+                <hr />
+                <select id="select-sem-section" class="form-control select2" >
+                    <option value="0">All</option>
+                    <?php foreach($block_sections as $s): ?>
+                        <option <?php echo ($section == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <a class="btn btn-success" href="<?php echo base_url()."excel/download_schedules/".$sem; ?>">Download Schedules</a>
             <div style="clear:both"></div>

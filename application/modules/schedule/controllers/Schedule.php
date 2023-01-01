@@ -408,6 +408,7 @@ class Schedule extends CI_Controller {
             $this->data['page'] = "view_schedules";
             $this->data['opentree'] = "schedule";
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
             if($sem == 0)
             {
                 $active_sem = $this->data_fetcher->get_active_sem();
