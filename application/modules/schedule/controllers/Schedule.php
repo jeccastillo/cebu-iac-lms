@@ -401,12 +401,13 @@ class Schedule extends CI_Controller {
             
     }
     
-    public function view_schedules($sem = 0)
+    public function view_schedules($sem = 0, $section = 0)
     {
         if($this->faculty_logged_in())
         {
             $this->data['page'] = "view_schedules";
             $this->data['opentree'] = "schedule";
+            $this->data['section'] = $section;
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
             if($sem == 0)
