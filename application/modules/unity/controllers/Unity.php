@@ -1014,6 +1014,8 @@ class Unity extends CI_Controller {
         if(!$this->data['student'])
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
         //per faculty info                        
+
+        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
         
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_viewer",$this->data);
