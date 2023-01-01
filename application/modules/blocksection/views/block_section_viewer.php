@@ -278,13 +278,14 @@ new Vue({
                 let hourspan = sched[i].hourspan * 2;
                 let st = sched[i].st;
 
+
                 
                 
                 $("#"+st+" :nth-child("+day+")").addClass("bg-teal");
                 $("#"+st+" :nth-child("+day+")").css({'border-top':'1px solid #999','border-left':'1px solid #999','border-right':'1px solid #999'});
                 $("#"+st+" :nth-child("+day+")").html("<div style='text-align:center;'>"+text+"</div>");
                 nxt = $("#"+st);
-                nxt.next().children(":nth-child("+day+")").html("<div style='text-align:center;'>"+faculty+"</div>");
+                nxt.next().children(":nth-child("+day+")").html("<div style='text-align:center;'></div>");
                 for(i=1;i<hourspan;i++){
                     nxt.next().children(":nth-child("+day+")").addClass("bg-teal");
                     if(i==hourspan-1)
