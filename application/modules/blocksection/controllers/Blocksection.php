@@ -117,8 +117,14 @@ class Blocksection extends CI_Controller {
         $data['message'] = "failed to add";
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
-            $post = $this->input->post();                        
-            //$this->data_poster->log_action('Classroom','Deleted a Classroom '.$info['strRoomCode'].' '.$info['enumType'],'red');
+            $post = $this->input->post();       
+            
+            if($id != 0)                 
+                $this->data_poster->post_data('tb_mas_curriculum',$post,$id);
+            else
+                $this->data_poster->post_data('tb_mas_curriculum',$post);
+
+            $this->data_poster->log_action('Block Section','Updated/Added Section'.$post['name'].' '.$post['enumType'],'green');
             $data['data'] = $post;
             $data['message'] = "successfully added";
             $data['success'] = true;

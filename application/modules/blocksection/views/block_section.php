@@ -79,15 +79,12 @@ new Vue({
         .catch((error) => {
             console.log(error);
         })
-
-
-
     },
 
     methods: {     
 
         submitBlockSection: function(){
-            let url = this.base_url + 'blocksection/submit_block_section';            
+            let url = this.base_url + 'blocksection/submit_block_section/' + this.id;            
             this.loader_spinner = true;
             
             Swal.fire({
