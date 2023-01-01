@@ -251,19 +251,19 @@
                                 <input type="hidden" name="sched-table" id="sched-table" />                                                                                
                                 <input type="hidden" :value="student.strLastname + '-' + student.strFirstname + '-' + student.strStudentNumber" name="studentInfo" id="studentInfo" />
                                 <input class="btn btn-flat btn-default" type="submit" value="print preview" />
-                            </form>                                         
+                            </form>             
+                            <hr />                
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h4>Schedule</h4>
+                                </div>
+                                <div class="box-body">
+                                    <?php echo $sched_table; ?>                                
+                                </div>
+                            </div>
                         </div>                                        
                     </div>
                     <!-- /.tab-content -->
-                </div>
-            </div>
-            <hr />                
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h4>Schedule</h4>
-                </div>
-                <div class="box-body">
-                    <?php echo $sched_table; ?>                                
                 </div>
             </div>
         </div>
@@ -362,6 +362,7 @@ new Vue({
                         this.other_data = data.data.other_data;
                         this.assessment = data.data.assessment;    
                         var sched = data.data.schedule;
+                        await delay(1000);
                         load_schedule(sched);                    
                     }
                     else{
