@@ -292,14 +292,14 @@ class Schedule extends CI_Controller {
         {
             //print_r($post);
             $conflict = $this->data_fetcher->schedule_conflict($post,null,$post['intSem']);
-            $sconflict = $this->data_fetcher->section_conflict($post,null,$classlist->strSection,$post['intSem']);
+            $sconflict = $this->data_fetcher->section_conflict($post,null,$post['blockSectionID'],$post['intSem']);
             $fconflict = $this->data_fetcher->faculty_conflict($post,null,$classlist->intFacultyID,$post['intSem']);
         }
         else
         {
             $sc = explode(' ',$schema);
             $conflict = $this->data_fetcher->schedule_conflict($post,null,$post['intSem'],$sc);
-            $sconflict = $this->data_fetcher->section_conflict($post,null,$classlist->strSection,$post['intSem'],$sc);
+            $sconflict = $this->data_fetcher->section_conflict($post,null,$post['blockSectionID'],$post['intSem'],$sc);
             $fconflict = $this->data_fetcher->faculty_conflict($post,null,$classlist->intFacultyID,$post['intSem'],$sc);
         
         }

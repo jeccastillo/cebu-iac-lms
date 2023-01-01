@@ -2725,7 +2725,7 @@ class Data_fetcher extends CI_Model {
             $query .= " AND intRoomSchedID != ".$id;
         }
         if($d == null)
-            $query .=" AND strDay = ".$post['strDay']." AND strSection = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
+            $query .=" AND strDay = ".$post['strDay']." AND blockSectionID = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
         else
         {
             $query .=" AND ( ";
@@ -2736,7 +2736,7 @@ class Data_fetcher extends CI_Model {
                 else
                     $query .="strDay = ".$d[$i]." OR ";
             }
-            $query .= "AND strSection = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
+            $query .= "AND blockSectionID = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
         }
         // echo $query."<br />";
         //print_r($this->db->query($query)->result_array());
