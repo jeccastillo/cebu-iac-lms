@@ -115,14 +115,13 @@ class Blocksection extends CI_Controller {
     public function submit_block_section($id = 0){        
         $data['success'] = false;
         $data['message'] = "failed to add";
+        $post = $this->input->post();  
         $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$post['name'],'name');
         if($section){
             $data['message'] = "Section already exists";
         }
         elseif($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
-        {            
-            $post = $this->input->post();       
-            
+        {                                         
             if($id != 0)                 
                 $this->data_poster->post_data('tb_mas_block_sections',$post,$id);
             else
