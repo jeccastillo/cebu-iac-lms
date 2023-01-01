@@ -1,11 +1,14 @@
 <aside id="vue-container" class="right-side">
     <section class="content-header container">
-        <h1>
-            Schedule for {{ section.name }}
-        </h1>
+        <small>
+            <a class="btn btn-app" href="<?php echo base_url() ?>blocksection/view_block_sections" ><i class="ion ion-eye"></i>View All Block Sections</a>                             
+        </small>
     </section>
     <div class="content container">               
         <div class="box box-primary">
+            <div class="box-header">
+                <h4>Schedule for {{ section.name }}</h4>
+            </div>
             <div class="box-body">
                 <div id="sched-table-container">
                     <table class="table">
