@@ -7,6 +7,7 @@ const api_url_article = "http://103.225.39.201:8081/api/v1/";
 // const api_url_article = "http://172.16.80.22:8081/api/v1/"
 
 function load_schedule(sched){
+    console.log(sched);
     for(i in sched){
                 
         let day = sched[i].strDay;
