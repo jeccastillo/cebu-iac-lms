@@ -68,8 +68,12 @@ class Blocksection extends CI_Controller {
 
     public function block_section_data($id){
         $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$id);
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $active_sem = $this->data_fetcher->get_active_sem();
 
-        $ret['data'] = $section;        
+        $ret['data']['section'] = $section;        
+        $ret['data']['active_sem'] = $active_sem;
+        $ret['data']['programs'] = $programs;
         $ret['success'] = true;
         $ret['message'] = "success"; 
         

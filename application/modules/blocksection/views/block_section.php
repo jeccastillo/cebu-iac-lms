@@ -7,7 +7,30 @@
         <hr />
         <div class="content">
             <div class="row">                                        
-                <div class="col-sm-12">                    
+                <div class="col-sm-12">  
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Block Section</h3>
+                        </div>
+                        <form  @submit.prevent="submitBlockSection" method="post" role="form">
+                            <div class="box-body">
+                                <div class="form-group col-xs-6">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" class="form-control" v-model="request.name" placeholder="Enter Name/Section">
+                                </div>
+
+                                <div class="form-group col-xs-6">
+                                    <label for="intYearLevel">Program</label>
+                                    <select class="form-control" name="intProgramID" v-model="request.intProgramID">                                        
+                                        <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramCode }}</option>                                        
+                                    </select>
+                                </div>                                
+                                <div class="form-group col-xs-12">
+                                    <input type="submit" value="add" class="btn btn-default  btn-flat">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div><!---column--->
             </div><!---row--->
         </div><!---content container--->
@@ -25,9 +48,15 @@ new Vue({
     el: '#vue-container',
     data: {
         base_url: "<?php echo base_url(); ?>",
-        id: <?php echo $id; ?>,
-        payments:[],               
-        data: {},
+        id: <?php echo $id; ?>,        
+        request:{
+            name: undefined,
+            intProgramID: undefined,
+            intSYID: undefined,
+        },          
+        section: {},
+        programs:[],
+        active_sem: {},
     },
 
     mounted() {
@@ -39,7 +68,11 @@ new Vue({
 
         axios.get(this.base_url + 'blocksection/block_section_data/' + this.id)
         .then((data) => {           
-            this.data = data.data;
+            this.section = data.data.section;
+            this.programs = data.data.programs;
+            this.active_sem = data.data.active_sem;
+            this.request.intSYID = this.active_sem.intID;
+            this.request.intProgramID = this.programs[0].intProgramID;
             console.log(data.data);
             
         })
@@ -52,7 +85,9 @@ new Vue({
     },
 
     methods: {        
-
+        submitBlockSection: function(){
+            
+        }
 
     }
 
