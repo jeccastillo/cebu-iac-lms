@@ -87,7 +87,7 @@ new Vue({
     methods: {     
 
         submitBlockSection: function(){
-            let url = api_url + 'blocksection/submit_block_section';            
+            let url = this.base_url + 'blocksection/submit_block_section';            
             this.loader_spinner = true;
             
             Swal.fire({
