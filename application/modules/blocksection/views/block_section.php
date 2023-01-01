@@ -16,7 +16,7 @@
                             <div class="box-body">
                                 <div class="form-group col-xs-6">
                                     <label for="name">Name</label>
-                                    <input type="text" name="name" class="form-control" v-model="request.name" placeholder="Enter Name/Section">
+                                    <input type="text" name="name" required class="form-control" v-model="request.name" placeholder="Enter Name/Section">
                                 </div>
 
                                 <div class="form-group col-xs-6">
