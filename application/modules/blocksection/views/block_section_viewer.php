@@ -273,7 +273,7 @@ new Vue({
             console.log(sched);
             for(i in sched){
                 
-                let day = parseInt(sched[i].strDay) + 1;
+                let day = sched[i].strDay;
                 let text = sched[i].strCode;
                 let hourspan = sched[i].hourspan * 2;
                 let st = sched[i].st;
