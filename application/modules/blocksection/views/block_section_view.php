@@ -24,8 +24,7 @@
                     <thead><tr>
                         <th>id</th>
                         <th>Name</th>
-                        <th>Program</th>
-                        <th>SYID</th>
+                        <th>Program</th>                        
                         <th>Select Actions</th>
                     </tr>
                     </thead>
