@@ -362,6 +362,9 @@
                                 <li class="<?php echo (isset($page) && $page=="set_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/set_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> Set Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/add_ay" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="view_academic_year")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/view_all_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> View Academic Year</a></li>
+                                <li class="<?php echo (isset($page) && $page=="add_blocksection")?'active':''; ?>"><a href="<?php echo base_url(); ?>blocksection/block_section" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Block Section</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_blocksection")?'active':''; ?>"><a href="<?php echo base_url(); ?>blocksection/view_block_sections" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block Sections</a></li>
+                                
                             </ul>
                             
                         </li>
