@@ -277,9 +277,6 @@ new Vue({
                 let text = sched[i].strCode;
                 let hourspan = sched[i].hourdiff * 2;
                 let st = sched[i].st;
-
-
-                
                 
                 $("#"+st+" :nth-child("+day+")").addClass("bg-teal");
                 $("#"+st+" :nth-child("+day+")").css({'border-top':'1px solid #999','border-left':'1px solid #999','border-right':'1px solid #999'});
