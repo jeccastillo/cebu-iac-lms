@@ -140,8 +140,7 @@ class Blocksection extends CI_Controller {
         {
             
             $this->data['page'] = "view_blocksection";
-            $this->data['opentree'] = "registrar";
-            $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
+            $this->data['opentree'] = "registrar";            
             $this->load->view("common/header",$this->data);
             $this->load->view("block_section_view",$this->data);
             $this->load->view("common/footer",$this->data);     
@@ -168,6 +167,7 @@ class Blocksection extends CI_Controller {
         $this->data['id'] = $id;
         $this->data['page'] = "view_blocksection";
         $this->data['opentree'] = "registrar";
+        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
         $this->load->view("common/header",$this->data);
         $this->load->view("block_section_viewer",$this->data);
         $this->load->view("common/footer",$this->data);             
