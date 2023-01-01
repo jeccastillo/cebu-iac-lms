@@ -2433,6 +2433,30 @@ class Data_fetcher extends CI_Model {
         return $ret;                
         
     }
+
+    function getScheduleBySectionNew($section,$sem){
+
+        $ret = array();
+        $sched = $this->db
+                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode,strLastname,strFirstname')
+                        ->from('tb_mas_room_schedule')
+                        ->join('tb_mas_classrooms','tb_mas_room_schedule.intRoomID = tb_mas_classrooms.intID')
+                        ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode')
+                        ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                        ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
+                        ->where(array('tb_mas_room_schedule.blockSectionID'=>$section,'tb_mas_room_schedule.intSem'=>$sem))
+                        ->order_by('strDay ASC, dteStart ASC')
+                        ->get()
+                        ->result_array();
+        
+        foreach($sched as $s)
+        {
+            $s['strDay'] = get_day($s['strDay']);
+            $ret[] = $s;
+        }
+        
+        return $ret;   
+    }
     
     
     function getScheduleByRoomID($id,$sem)
