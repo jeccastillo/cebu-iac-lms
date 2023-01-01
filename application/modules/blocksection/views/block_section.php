@@ -68,9 +68,9 @@ new Vue({
 
         axios.get(this.base_url + 'blocksection/block_section_data/' + this.id)
         .then((data) => {           
-            this.section = data.data.section;
-            this.programs = data.data.programs;
-            this.active_sem = data.data.active_sem;
+            this.section = data.data.data.section;
+            this.programs = data.data.data.programs;
+            this.active_sem = data.data.data.active_sem;
             this.request.intSYID = this.active_sem.intID;
             this.request.intProgramID = this.programs[0].intProgramID;
             console.log(data.data);
@@ -86,7 +86,7 @@ new Vue({
 
     methods: {        
         submitBlockSection: function(){
-            
+
         }
 
     }
