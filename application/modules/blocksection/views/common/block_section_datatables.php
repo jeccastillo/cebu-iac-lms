@@ -13,7 +13,7 @@
                     "aTargets":[3],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>blocksection/block_section/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>blocksection/view_block_section/'+row[0]+'">View</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>blocksection/block_section/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>blocksection/block_section_viewer/'+row[0]+'">View</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],

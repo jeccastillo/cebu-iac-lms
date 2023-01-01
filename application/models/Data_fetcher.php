@@ -2430,11 +2430,10 @@ class Data_fetcher extends CI_Model {
             $ret[] = $s;
         }
         
-        return $ret;
-        
-        
+        return $ret;                
         
     }
+    
     
     function getScheduleByRoomID($id,$sem)
     {

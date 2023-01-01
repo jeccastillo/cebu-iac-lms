@@ -151,6 +151,25 @@ class Blocksection extends CI_Controller {
             redirect(base_url()."/users/login");   
     
     }
+
+    public function block_section_viewer_data($id){
+        $active_sem = $this->data_fetcher->get_active_sem();
+        $data['schedule'] = $this->data_fetcher->getScheduleBySectionNew($id,$active_sem['intID']);
+        
+        $data['message'] = "success";
+        $data['success'] = true;
+        echo json_encode($data);
+        
+    }
+
+    public function block_section_viewer($id){
+        $this->data['id'] = $id;
+        $this->data['page'] = "view_blocksection";
+        $this->data['opentree'] = "registrar";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("block_section_viewer",$this->data);
+        $this->load->view("common/footer",$this->data);             
+    }
     
     public function delete_blocksection()
     {
