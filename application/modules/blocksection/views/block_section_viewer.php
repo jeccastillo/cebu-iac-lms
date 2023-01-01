@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside id="vue-container" class="right-side">
     <section class="content-header container">
         <h1>
             Schedule for {{ section.name }}
