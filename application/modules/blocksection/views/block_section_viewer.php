@@ -275,7 +275,7 @@ new Vue({
                 
                 let day = sched[i].strDay;
                 let text = sched[i].strCode;
-                let hourspan = sched[i].hourspan * 2;
+                let hourspan = sched[i].hourdiff * 2;
                 let st = sched[i].st;
 
 
@@ -286,8 +286,7 @@ new Vue({
                 $("#"+st+" :nth-child("+day+")").html("<div style='text-align:center;'>"+text+"</div>");
                 nxt = $("#"+st);
                 nxt.next().children(":nth-child("+day+")").html("<div style='text-align:center;'></div>");
-                for(i=1;i<hourspan;i++){
-                    console.log(nxt);
+                for(i=1;i<hourspan;i++){                    
                     nxt.next().children(":nth-child("+day+")").addClass("bg-teal");
                     if(i==hourspan-1)
                     nxt.next().children(":nth-child("+day+")").css({'border-top':'none','border-bottom':'1px solid #999','border-left':'1px solid #999','border-right':'1px solid #999'});
