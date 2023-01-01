@@ -9,8 +9,8 @@
             <div class="box-header">
                 <h4>Schedule for {{ section.name }}</h4>
             </div>
-            <div v-html="sched_table" class="box-body">
-                
+            <div class="box-body">
+                <?php echo $sched_table; ?>
             </div>
         </div>
     </div>
@@ -42,8 +42,7 @@ new Vue({
         axios.get(this.base_url + 'blocksection/block_section_viewer_data/' + this.id)
         .then((data) => {                                   
             this.section = data.data.section;
-            var sched = data.data.schedule;       
-            this.sched_table = data.data.sched_table;     
+            var sched = data.data.schedule;                        
             for(i in sched){
                 
                 let day = sched[i].strDay;
