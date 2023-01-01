@@ -270,8 +270,7 @@ new Vue({
         axios.get(this.base_url + 'blocksection/block_section_viewer_data/' + this.id)
         .then((data) => {                                   
             this.section = data.data.section;
-            var sched = data.data.schedule;
-            console.log(sched);
+            var sched = data.data.schedule;            
             for(i in sched){
                 
                 let day = sched[i].strDay;
