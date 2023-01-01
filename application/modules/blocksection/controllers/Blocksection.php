@@ -49,7 +49,7 @@ class Blocksection extends CI_Controller {
         $this->data['page'] = "classroom";
     }
     
-    public function block_section($id)
+    public function block_section($id = 0)
     {
         if($this->is_admin())
         {               
