@@ -82,7 +82,7 @@
                     </div>                    
                     <div class="form-group col-xs-12 col-lg-6">
                         <label for="blockSectionID">Block Section</label>
-                        <select name="blockSectionID" class="form-control">                                
+                        <select name="blockSectionID" class="form-control select2">                                
                             <?php foreach($block_sections as $bs): ?>
                                 <option value="<?php echo $bs['intID'] ?>"><?php echo $bs['name']; ?></option>
                             <?php endforeach; ?>
