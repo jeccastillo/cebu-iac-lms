@@ -84,10 +84,60 @@ new Vue({
 
     },
 
-    methods: {        
-        submitBlockSection: function(){
+    methods: {     
 
-        }
+        submitBlockSection: function(){
+            let url = api_url + 'block_section/submit_block_section';            
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Submit Block Section?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                    
+                    for(const [key,value] of Object.entries(this.request)){                   
+                        formdata.append(key,value);
+                    }
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+            
+        },
 
     }
 

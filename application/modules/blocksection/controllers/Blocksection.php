@@ -111,6 +111,20 @@ class Blocksection extends CI_Controller {
         
         
     }
+
+    public function submit_block_section($id = 0){        
+        $data['success'] = false;
+        $data['message'] = "failed to add";
+        if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
+        {
+            $post = $this->input->post();                        
+            //$this->data_poster->log_action('Classroom','Deleted a Classroom '.$info['strRoomCode'].' '.$info['enumType'],'red');
+            $data['data'] = $post;
+            $data['message'] = "successfully added";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
+    }
     
     public function view_classrooms()
     {
