@@ -269,14 +269,13 @@ new Vue({
         axios.get(this.base_url + 'blocksection/block_section_viewer_data/' + this.id)
         .then((data) => {                                   
             
-            var sched = data.data.schedule;
-            console.log(sched);
+            var sched = data.data.schedule;            
             for(i in sched){
                 
-                let day = parseInt(sched.strDay) + 1;
-                let text = sched.strCode;
-                let hourspan = sched.hourspan * 2;
-                let st = sched.st;
+                let day = parseInt(sched[i].strDay) + 1;
+                let text = sched[i].strCode;
+                let hourspan = sched[i].hourspan * 2;
+                let st = sched[i].st;
 
                 
                 const container = document.querySelector("#"+st+" :nth-child("+day+")");
