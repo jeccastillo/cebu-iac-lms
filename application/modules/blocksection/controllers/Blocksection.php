@@ -120,9 +120,9 @@ class Blocksection extends CI_Controller {
             $post = $this->input->post();       
             
             if($id != 0)                 
-                $this->data_poster->post_data('tb_mas_curriculum',$post,$id);
+                $this->data_poster->post_data('tb_mas_block_sections',$post,$id);
             else
-                $this->data_poster->post_data('tb_mas_curriculum',$post);
+                $this->data_poster->post_data('tb_mas_block_sections',$post);
 
             $this->data_poster->log_action('Block Section','Updated/Added Section'.$post['name'].' '.$post['enumType'],'green');
             $data['data'] = $post;
