@@ -1532,7 +1532,7 @@ class Datatables extends CI_Controller {
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         
         if($registered != 0 && $table =='tb_mas_users')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 )
+            if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
             {
                 switch($registered)
                 {                   
@@ -1564,7 +1564,7 @@ class Datatables extends CI_Controller {
             }
         
         if($sem!=0 && $table =='tb_mas_room_schedule')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 )
+            if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
                 $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
             else
                 $sWhere .= "WHERE tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
