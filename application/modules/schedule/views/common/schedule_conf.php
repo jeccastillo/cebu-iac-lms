@@ -6,10 +6,10 @@
         
         
     $("#select-sem-schedule").change(function(e){
-            document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$(this).val()+"/"+$("#select-sem-section").val();
+            document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$(this).val()+"/"+$("#select-section-schedule").val();
         
     });
-    $("#select-sem-section").change(function(e){
+    $("#select-section-schedule").change(function(e){
         document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$("#select-sem-schedule").val()+"/"+$(this).val();
     
     });
