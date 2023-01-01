@@ -1450,7 +1450,7 @@ class Datatables extends CI_Controller {
         //if($user!=null && $table !='tb_mas_registration' && $table!='tb_mas_room_schedule')
             $sWhere = "WHERE $table.intFacultyID LIKE '".$user."' ";
 
-        if($table =='tb_mas_schedules' && $filter_section!=0)
+        if($table =='tb_mas_room_schedule' && $filter_section!=0)
         //if($user!=null && $table !='tb_mas_registration' && $table!='tb_mas_room_schedule')
             $sWhere = "WHERE $table.blockSectionID = '".$filter_section."' ";
         
