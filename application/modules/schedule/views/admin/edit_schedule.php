@@ -31,7 +31,7 @@
                 <input type="hidden" name="intSem" value="<?php echo $item['intSem'] ?>" />
                  <div class="box-body">
                     
-                     <div class="form-group col-xs-12 col-lg-6">
+                    <div class="form-group col-xs-12 col-lg-6">
                         <label for="intRoomID">Room</label>
                         <select name="intRoomID" class="form-control">                            
                             <?php foreach($rooms as $rm): ?>
@@ -39,7 +39,15 @@
                             <?php endforeach; ?>
                          </select>
                     </div>
-                     <div class="form-group col-xs-12 col-lg-6">
+                    <div class="form-group col-xs-12 col-lg-6">
+                        <label for="blockSectionID">Block Section</label>
+                        <select name="blockSectionID" class="form-control">                                
+                            <?php foreach($block_sections as $bs): ?>
+                                <option <?php echo ($bs['intID'] == $item['blockSectionID'])?'selected':''; ?> value="<?php echo $bs['intID'] ?>"><?php echo $bs['name']; ?></option>
+                            <?php endforeach; ?>
+                         </select>
+                    </div>                    
+                    <div class="form-group col-xs-12 col-lg-6">
                         <label for="strDay">Day</label>
                         <select name="strDay" class="form-control">
                             <?php foreach($days as $key=>$val): ?>
