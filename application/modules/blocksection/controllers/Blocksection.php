@@ -124,7 +124,7 @@ class Blocksection extends CI_Controller {
             else
                 $this->data_poster->post_data('tb_mas_block_sections',$post);
 
-            $this->data_poster->log_action('Block Section','Updated/Added Section'.$post['name'].' '.$post['enumType'],'green');
+            $this->data_poster->log_action('Block Section','Updated/Added Section'.$post['name'],'green');
             $data['data'] = $post;
             $data['message'] = "successfully added";
             $data['success'] = true;
