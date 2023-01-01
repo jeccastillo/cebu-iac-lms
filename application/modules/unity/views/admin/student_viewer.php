@@ -362,8 +362,11 @@ new Vue({
                         this.other_data = data.data.other_data;
                         this.assessment = data.data.assessment;    
                         var sched = data.data.schedule;
-                        await delay(1000);
-                        load_schedule(sched);                    
+                        setTimeout(function() {
+                            // function code goes here
+                            load_schedule(sched);
+                        }, 1000);
+                                            
                     }
                     else{
                        //document.location = this.base_url + 'users/login';
