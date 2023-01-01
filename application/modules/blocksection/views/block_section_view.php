@@ -2,7 +2,7 @@
 <section class="content-header">
                     <h1>
                         <small>
-                            <a class="btn btn-app" href="<?php echo base_url() ?>blocksection/block_section" ><i class="ion ion-plus"></i>Add Classroom</a> 
+                            <a class="btn btn-app" href="<?php echo base_url() ?>blocksection/block_section" ><i class="ion ion-plus"></i>Add Block Section</a>                             
                         </small>
                     </h1>
                     <ol class="breadcrumb">
