@@ -82,35 +82,34 @@ class Blocksection extends CI_Controller {
     }
     
     
-    
-    public function classroom_viewer($id)
-    {
+    // public function classroom_viewer($id)
+    // {
         
-        if($this->is_admin())
-        {
+    //     if($this->is_admin())
+    //     {
           
-            $this->data['item'] = $this->data_fetcher->getClassroom($id);
-            $active_sem = $this->data_fetcher->get_active_sem();
-            $this->data['schedules'] = $this->data_fetcher->getScheduleByRoomID($id,$active_sem['intID']);
+    //         $this->data['item'] = $this->data_fetcher->getClassroom($id);
+    //         $active_sem = $this->data_fetcher->get_active_sem();
+    //         $this->data['schedules'] = $this->data_fetcher->getScheduleByRoomID($id,$active_sem['intID']);
             
-            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
-            $this->data['types'] = Array('lect','lab');
-            $this->data['timeslots'] = Array('7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00');
+    //         $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
+    //         $this->data['types'] = Array('lect','lab');
+    //         $this->data['timeslots'] = Array('7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00');
             
-            $this->data['subjects'] = $this->data_fetcher->getSubjects();
+    //         $this->data['subjects'] = $this->data_fetcher->getSubjects();
             
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/classroom_viewer",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/classroom_viewer_conf",$this->data); 
-           // print_r($this->data['classlists']);
+    //         $this->load->view("common/header",$this->data);
+    //         $this->load->view("admin/classroom_viewer",$this->data);
+    //         $this->load->view("common/footer",$this->data); 
+    //         $this->load->view("common/classroom_viewer_conf",$this->data); 
+    //        // print_r($this->data['classlists']);
             
-        }
-        else
-            redirect(base_url()."/users/login");    
+    //     }
+    //     else
+    //         redirect(base_url()."/users/login");    
         
         
-    }
+    // }
 
     public function submit_block_section($id = 0){        
         $data['success'] = false;
@@ -135,19 +134,18 @@ class Blocksection extends CI_Controller {
         echo json_encode($data);
     }
     
-    public function view_classrooms()
+    public function view_block_sections()
     {
         if($this->is_admin())
         {
-            $this->data['classrooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
-            $this->data['page'] = "view_classrooms";
-            $this->data['opentree'] = "admin";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/classroom_view",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/classroom_conf",$this->data);
-            //print_r($this->data['classlist']);
             
+            $this->data['page'] = "view_blocksection";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("block_section_view",$this->data);
+            $this->load->view("common/footer",$this->data);     
+            $this->load->view("common/block_section_datatables",$this->data);                         
+            //print_r($this->data['classlist']);            
         }
         else
             redirect(base_url()."/users/login");   

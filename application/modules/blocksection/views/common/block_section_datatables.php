@@ -3,11 +3,11 @@
 <script type="text/javascript">
     
     $(document).ready(function(){
-    $('#classroom-table').dataTable( {
+    $('#blocksection-table').dataTable( {
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_classrooms",
+            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_block_sections",
             "aoColumnDefs":[
                 {
                     "aTargets":[3],
@@ -32,7 +32,7 @@
                         var parent = $(this).parent().parent().parent().parent().parent();
                         var data = {'table':'tb_mas_users','id':id};
                         $.ajax({
-                            'url':'<?php echo base_url(); ?>index.php/classroom/delete_classroom',
+                            'url':'<?php echo base_url(); ?>index.php/blocksection/delete_blocksection',
                             'method':'post',
                             'data':data,
                             'dataType':'json',
