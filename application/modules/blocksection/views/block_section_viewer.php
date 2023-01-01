@@ -269,7 +269,8 @@ new Vue({
         axios.get(this.base_url + 'blocksection/block_section_viewer_data/' + this.id)
         .then((data) => {                                   
             
-            var sched = data.data.schedule;            
+            var sched = data.data.schedule;
+            console.log(sched);
             for(i in sched){
                 
                 let day = parseInt(sched[i].strDay) + 1;
