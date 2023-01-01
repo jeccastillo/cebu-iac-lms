@@ -129,7 +129,7 @@ class Blocksection extends CI_Controller {
 
             $this->data_poster->log_action('Block Section','Updated/Added Section'.$post['name'],'green');
             $data['data'] = $post;
-            $data['message'] = "successfully added";
+            $data['message'] = "successfully submitted";
             $data['success'] = true;
         }
         echo json_encode($data);

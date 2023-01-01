@@ -26,7 +26,7 @@
                                     </select>
                                 </div>                                
                                 <div class="form-group col-xs-12">
-                                    <input type="submit" value="add" class="btn btn-default  btn-flat">
+                                    <input type="submit" value="Submit" class="btn btn-default btn-flat">
                                 </div>
                             </div>
                         </form>
