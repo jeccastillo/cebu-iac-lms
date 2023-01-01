@@ -1,16 +1,7 @@
 <aside class="right-side">
     <section class="content-header container">
         <h1>
-            <div class="pull-right">
-                <select id="select-sem-profile" class="form-control">
-                    <?php foreach($sy as $s): ?>
-                    <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?>
-                        value="<?php echo $s['intID']; ?>">
-                        <?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div style="clear:both"></div>
+            Schedule
         </h1>
     </section>
     <div class="content container">               
