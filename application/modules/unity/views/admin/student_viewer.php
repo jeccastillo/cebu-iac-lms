@@ -285,7 +285,7 @@
         display: block !important;
     }
 </style>
-
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script>
 new Vue({
     el: '#student-viewer-container',
