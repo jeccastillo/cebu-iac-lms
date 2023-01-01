@@ -119,7 +119,7 @@ class Blocksection extends CI_Controller {
         if($section){
             $data['message'] = "Section already exists";
         }
-        elseif($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
+        elseif($this->is_super_admin() || $this->is_registrar())
         {                                         
             if($id != 0)                 
                 $this->data_poster->post_data('tb_mas_block_sections',$post,$id);
@@ -136,7 +136,7 @@ class Blocksection extends CI_Controller {
     
     public function view_block_sections()
     {
-        if($this->is_admin())
+        if($this->is_super_admin() || $this->is_registrar())
         {
             
             $this->data['page'] = "view_blocksection";
@@ -152,15 +152,17 @@ class Blocksection extends CI_Controller {
     
     }
     
-    public function delete_classroom()
+    public function delete_blocksection()
     {
         $data['message'] = "failed";
-        if($this->is_admin()){
-            $post = $this->input->post();
-            $info = $this->data_fetcher->getClassroom($post['id']);
-            $this->data_poster->deleteClassroom($post['id']);
-            $this->data_poster->log_action('Classroom','Deleted a Classroom '.$info['strRoomCode'].' '.$info['enumType'],'red');
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_registrar()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_block_sections',$post['id'],'intID');
+            $this->data_poster->log_action('Block Section','Deleted a Section '.$info['name'],'red');
             $data['message'] = "success";
+            $data['success'] = true;
         }
         echo json_encode($data);
     }

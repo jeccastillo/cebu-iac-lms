@@ -30,7 +30,7 @@
                         $(".overlay").show();
                         var id = $(this).attr('rel');
                         var parent = $(this).parent().parent().parent().parent().parent();
-                        var data = {'table':'tb_mas_users','id':id};
+                        var data = {'id':id};
                         $.ajax({
                             'url':'<?php echo base_url(); ?>index.php/blocksection/delete_blocksection',
                             'method':'post',
