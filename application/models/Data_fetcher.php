@@ -2427,6 +2427,8 @@ class Data_fetcher extends CI_Model {
        foreach($sched as $s)
         {
             $s['strDay'] = get_day($s['strDay']);
+            $s['hourdiff'] = round((strtotime($s['dteEnd']) - strtotime($s['dteStart']))/3600, 1);
+            $s['st'] = date('gia',strtotime($s['dteStart']));
             $ret[] = $s;
         }
         
