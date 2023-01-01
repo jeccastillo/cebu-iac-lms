@@ -53,8 +53,7 @@ new Vue({
             name: undefined,
             intProgramID: undefined,
             intSYID: undefined,
-        },          
-        section: {},
+        },                  
         programs:[],
         active_sem: {},
     },
@@ -67,12 +66,15 @@ new Vue({
         this.loader_spinner = true;
 
         axios.get(this.base_url + 'blocksection/block_section_data/' + this.id)
-        .then((data) => {           
-            this.section = data.data.data.section;
+        .then((data) => {                       
             this.programs = data.data.data.programs;
             this.active_sem = data.data.data.active_sem;
-            this.request.intSYID = this.active_sem.intID;
-            this.request.intProgramID = this.programs[0].intProgramID;
+            if(data.data.data.section)
+                this.request = data.data.data.section;
+            else{
+                this.request.intSYID = this.active_sem.intID;
+                this.request.intProgramID = this.programs[0].intProgramID;
+            }
             console.log(data.data);
             
         })
