@@ -71,13 +71,21 @@
                                 <option value="<?php echo $cl['intID']; ?>"><?php echo $cl['strCode']." ".$cl['strSection']; ?></option>
                             <?php endforeach; ?>
                          </select>
-                    </div>
-                    
-                     <div class="form-group col-xs-12 col-lg-6">
+                    </div>                    
+                    <div class="form-group col-xs-12 col-lg-6">
                         <label for="intRoomID">Room</label>
                         <select name="intRoomID" class="form-control">                                
                             <?php foreach($rooms as $rm): ?>
                                 <option value="<?php echo $rm['intID'] ?>"><?php echo $rm['strRoomCode']; ?></option>
+                            <?php endforeach; ?>
+                         </select>
+                    </div>
+                    <hr />
+                    <div class="form-group col-xs-12 col-lg-6">
+                        <label for="blockSectionID">Block Section</label>
+                        <select name="blockSectionID" class="form-control">                                
+                            <?php foreach($block_sections as $bs): ?>
+                                <option value="<?php echo $bs['intID'] ?>"><?php echo $bs['name']; ?></option>
                             <?php endforeach; ?>
                          </select>
                     </div>

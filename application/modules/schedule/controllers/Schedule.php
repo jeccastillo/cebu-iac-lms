@@ -74,6 +74,7 @@ class Schedule extends CI_Controller {
             $this->data['classlists'] = $this->data_fetcher->getAllClasslistAssigned($active_sem['intID'],$this->session->userdata('strDepartment'),$this->is_super_admin());
             
             $this->data['rooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
+            $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_schedule",$this->data);
             $this->load->view("common/footer",$this->data); 
@@ -107,7 +108,7 @@ class Schedule extends CI_Controller {
                 $active_sem = $this->data_fetcher->get_active_sem();
                 
                 $this->data['rooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
-
+                $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
                 $this->load->view("common/header",$this->data);
                 $this->load->view("admin/edit_schedule",$this->data);
                 $this->load->view("common/footer",$this->data); 
