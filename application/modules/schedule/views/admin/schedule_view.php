@@ -8,7 +8,7 @@
                     <?php endforeach; ?>
                 </select>
                 <hr />
-                <select id="select-sem-section" class="form-control select2" >
+                <select id="select-section-schedule" class="form-control select2" >
                     <option value="0">All</option>
                     <?php foreach($block_sections as $s): ?>
                         <option <?php echo ($section == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['name']; ?></option>

@@ -6,9 +6,14 @@
         
         
     $("#select-sem-schedule").change(function(e){
-            document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$(this).val();
+            document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$(this).val()+"/"+$("#select-sem-section").val();
         
-        });
+    });
+    $("#select-sem-section").change(function(e){
+        document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$("#select-sem-schedule").val()+"/"+$(this).val();
+    
+    });
+        
     $('#users_table').dataTable( {
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
