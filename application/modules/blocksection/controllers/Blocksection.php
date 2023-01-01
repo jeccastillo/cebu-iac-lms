@@ -156,7 +156,7 @@ class Blocksection extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();
         $data['schedule'] = $this->data_fetcher->getScheduleBySectionNew($id,$active_sem['intID']);
         $data['section'] = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$id);
-
+        $data['sched_table'] = $this->load->view('sched_table', $this->data, true);
         $data['message'] = "success";
         $data['success'] = true;
         echo json_encode($data);
