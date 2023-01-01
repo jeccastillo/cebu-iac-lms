@@ -15,7 +15,7 @@ $config['tb_mas_users_columns2'] = array("intID","strStudentNumber","strLastname
 
 $config['tb_mas_users_index'] = "intID";
 
-$config['tb_mas_room_schedule_columns'] = array("intRoomSchedID","strCode","strSection","strDay","dteStart","dteEnd","enumClassType","strRoomCode");
+$config['tb_mas_room_schedule_columns'] = array("intRoomSchedID","strCode","strSection","name","strDay","dteStart","dteEnd","enumClassType","strRoomCode");
 $config['tb_mas_room_schedule_index'] = "intRoomSchedID";
 
 

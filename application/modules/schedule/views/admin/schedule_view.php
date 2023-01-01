@@ -33,7 +33,20 @@
             
             <div class="box-body table-responsive">
                 <table id="users_table" class="table table-hover table-bordered">
-                    <thead><tr><th>id</th><th>Subject</th><th>Section</th><th>Day</th><th>Start</th><th>End</th><th>Class Type</th><th>Room</th><th>Actions</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Subject</th>
+                            <th>Section</th>
+                            <th>Block</th>
+                            <th>Day</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Class Type</th>
+                            <th>Room</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div><!-- /.box-body -->
