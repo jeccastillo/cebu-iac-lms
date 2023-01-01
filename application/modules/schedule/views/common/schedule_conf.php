@@ -18,7 +18,7 @@
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_room_schedule/null/null/0/0/0/0/0/0/0/<?php echo $sem; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_room_schedule/null/null/0/0/0/0/0/0/0/<?php echo $sem; ?>/<?php echo $section; ?>",
             "aoColumnDefs":[
                 {
                     "aTargets":[8],

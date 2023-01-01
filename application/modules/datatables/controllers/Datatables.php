@@ -1383,7 +1383,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );        
     }
     
-    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0)
+    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -1449,6 +1449,10 @@ class Datatables extends CI_Controller {
         if($user!=null && $table !='tb_mas_users' && $table!='tb_mas_room_schedule' && $table!='tb_mas_applications')
         //if($user!=null && $table !='tb_mas_registration' && $table!='tb_mas_room_schedule')
             $sWhere = "WHERE $table.intFacultyID LIKE '".$user."' ";
+
+        if($table =='tb_mas_schedules' && $filter_section!=0)
+        //if($user!=null && $table !='tb_mas_registration' && $table!='tb_mas_room_schedule')
+            $sWhere = "WHERE $table.blockSectionID = '".$filter_section."' ";
         
         // if($scholarship!=0 && $table =='tb_mas_users')
         // //if($scholarship!=0 && $table =='tb_mas_registration')
