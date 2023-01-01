@@ -2,7 +2,9 @@
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
-            <h1>Block Section</h1>
+            <small>
+                <a class="btn btn-app" href="<?php echo base_url() ?>blocksection/view_block_sections" ><i class="ion ion-eye"></i>View All Block Sections</a>                             
+            </small>
         </section>
         <hr />
         <div class="content">
