@@ -1,7 +1,7 @@
 <aside class="right-side">
     <section class="content-header container">
         <h1>
-            Schedule
+            Schedule for {{ section.name }}
         </h1>
     </section>
     <div class="content container">               
@@ -256,7 +256,8 @@ new Vue({
     el: '#vue-container',
     data: {
         base_url: "<?php echo base_url(); ?>",   
-        id: "<?php echo $id; ?>"     
+        id: "<?php echo $id; ?>",
+        section: {}
     },
 
     mounted() {
@@ -268,7 +269,7 @@ new Vue({
 
         axios.get(this.base_url + 'blocksection/block_section_viewer_data/' + this.id)
         .then((data) => {                                   
-            
+            this.section = data.data.section;
             var sched = data.data.schedule;
             console.log(sched);
             for(i in sched){

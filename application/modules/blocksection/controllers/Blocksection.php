@@ -155,7 +155,8 @@ class Blocksection extends CI_Controller {
     public function block_section_viewer_data($id){
         $active_sem = $this->data_fetcher->get_active_sem();
         $data['schedule'] = $this->data_fetcher->getScheduleBySectionNew($id,$active_sem['intID']);
-        
+        $data['section'] = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$id);
+
         $data['message'] = "success";
         $data['success'] = true;
         echo json_encode($data);
