@@ -1,7 +1,7 @@
 <div class="container py-4" id="adminssions-form" style="margin-top:100px;">
     <h4 class="font-bold"><strong>Student Information Sheet</strong></h4>
     <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free to email
-        us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
+        us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
     <hr>
 
     <form class="row" @submit.prevent="
