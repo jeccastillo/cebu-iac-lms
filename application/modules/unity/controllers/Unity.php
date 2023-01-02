@@ -532,6 +532,23 @@ class Unity extends CI_Controller {
         $this->load->view("public/footer",$this->data);         
     }
     
+    public function confirm_program($slug) {                
+        
+        $student = $this->data_fetcher->getStudent($slug, 'slug');                    
+        $data['id'] = $student['intID'];
+            
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('public/confirm_program',$this->data);
+		$this->load->view('common/footer',$this->data);
+    }
+
+    public function program_confirmation_data($id){
+        $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        $ret['success']= true;
+        
+        echo json_encode($ret);
+    }
+    
     function accounting($id,$sem=null)
     {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
