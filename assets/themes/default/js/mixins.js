@@ -1,5 +1,7 @@
 import Vue from "vue";
 
+console.log("MASK that shit");
+
 Vue.directive('mask', {
   inserted: function (el, binding) {    
     var mask = binding.value,
@@ -17,8 +19,7 @@ Vue.directive('mask', {
     el.value = mask
     el.clean = mask.replace(/[^0-9]/gm, '')
     
-    function maskIt(event, start){
-      console.log("MASK that shit");
+    function maskIt(event, start){      
       var value = el.value,
           filtred = value.replace(/[^0-9]/gm, ''),
           result = ''
