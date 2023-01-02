@@ -8,7 +8,17 @@
                     </h3>
                 </div>
                 <div class="box-body">
-                    
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Selected Program</th>
+                                <td>{{ student.strProgramDescription }}</td>
+                                <td><button class="btn btn-secondary" @click="updateProgram">Change Selected Program</button></td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <hr />
+                    <button class="btn btn-primary" @click="confirmProgram">Confirm</button>
                 </div>
             </div>
         </div>        
@@ -78,7 +88,12 @@ new Vue({
     },
 
     methods: {  
-        
+        updateProgram: function(){
+
+        },
+        confirmProgram: function(){
+            
+        }
     }
 
 })
