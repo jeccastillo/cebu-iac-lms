@@ -426,7 +426,7 @@ new Vue({
         customSubmit: function(type, title, text, data, url, redirect) {
 
             this.loading_spinner = true;
-            if(request.mobile_number.length < 18){
+            if(this.request.mobile_number.length < 18){
                 this.loading_spinner = false;
                 Swal.fire(
                     'Failed!',
