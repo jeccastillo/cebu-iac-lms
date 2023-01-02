@@ -450,6 +450,7 @@ new Vue({
                         });
 
                     } else {
+                        this.loading_spinner = false;
                         Swal.fire(
                             'Failed!',
                             data.data.message,
