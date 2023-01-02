@@ -18,7 +18,9 @@
                         </tbody>
                     </table>
                     <hr />
-                    <button class="btn btn-primary" @click="confirmProgram">Confirm</button>
+                    <div class="text-center">
+                        <button class="btn btn-primary" @click="confirmProgram">Confirm</button>
+                    </div>
                 </div>
             </div>
         </div>        
