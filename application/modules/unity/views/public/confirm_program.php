@@ -24,7 +24,7 @@
                     </table>
                     <hr />
                     <div class="text-center">
-                        <button class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>                        
+                        <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program</button>                        
                     </div>
                 </div>
             </div>
@@ -78,6 +78,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',            
         student: {},
         programs: [],
+        loaded: false,
         api_data:{},
         request: {
             intProgramID: undefined,
@@ -100,9 +101,11 @@ new Vue({
                     this.request.id = this.student.intID;                           
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
-                        this.api_data = data.data.data;
+                        this.api_data = data.data.data;                        
                         if(this.api_data.status == "Confirmed")
                             document.location = this.base_url;
+                        else
+                            this.loaded = true;
                         
                     })
                     .catch((error) => {
