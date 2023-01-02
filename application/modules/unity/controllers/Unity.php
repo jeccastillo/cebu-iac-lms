@@ -537,9 +537,9 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');                    
         $this->data['id'] = $student['intID'];
             
-        $this->load->view('common/header',$this->data);        
+        $this->load->view('public/header',$this->data);        
 		$this->load->view('public/confirm_program',$this->data);
-		$this->load->view('common/footer',$this->data);
+		$this->load->view('public/footer',$this->data);
     }
 
     public function program_confirmation_data($id){
