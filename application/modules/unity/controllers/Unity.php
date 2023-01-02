@@ -549,7 +549,18 @@ class Unity extends CI_Controller {
         
         echo json_encode($ret);
     }
-    
+    public function student_confirm_program(){
+        
+        $post = $this->input->post();
+        $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
+        $this->data_poster->post_data('tb_mas_users',$post,$post['id']);
+        
+        $ret['success'] = true;
+        $ret['message'] = "Updated Successfully";
+        
+        echo json_encode($ret);
+    }
+
     function accounting($id,$sem=null)
     {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())

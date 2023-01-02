@@ -80,6 +80,7 @@ new Vue({
         programs: [],
         request: {
             intProgramID: undefined,
+            id: undefined,
         },
         payload:{
 
@@ -93,7 +94,8 @@ new Vue({
                 .then((data) => {  
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;         
-                    this.programs = data.data.programs;                                 
+                    this.programs = data.data.programs;      
+                    this.request.id = this.student.intID;                           
                 })
                 .catch((error) => {
                     console.log(error);
