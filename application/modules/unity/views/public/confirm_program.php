@@ -19,7 +19,7 @@
                     </table>
                     <hr />
                     <div class="text-center">
-                        <button class="btn btn-primary" @click="confirmProgram">Confirm</button>
+                        <button class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>
                     </div>
                 </div>
             </div>
