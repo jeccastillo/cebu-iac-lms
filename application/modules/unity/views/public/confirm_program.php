@@ -109,7 +109,7 @@ new Vue({
             Swal.showLoading();
 
             axios
-                .post(api_url + 'confirm_selected_program/' + this.student.slug , this.payload, {
+                .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug , this.payload, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     }
