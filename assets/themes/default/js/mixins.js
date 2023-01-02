@@ -1,7 +1,5 @@
 import Vue from "vue";
 
-console.log("MASK that shit");
-
 Vue.directive('mask', {
   inserted: function (el, binding) {    
     var mask = binding.value,
