@@ -13,16 +13,18 @@
                             <tr>
                                 <th>Selected Program</th>
                                 <td>{{ student.strProgramDescription }}</td>
-                                <td><button class="btn btn-secondary" @click="updateProgram">Change Selected Program</button></td>
+                                <td>
+                                    <button v-if="!show_select" class="btn btn-secondary" @click="updateProgram">Change Selected Program</button>
+                                    <select v-else v-model="request.intProgramID" class="form-control">
+                                        <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
+                                    </select>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                     <hr />
                     <div class="text-center">
-                        <button v-if="!show_select" class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>
-                        <select v-else v-model="request.intProgramID" class="form-controk">
-                            <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
-                        </select>
+                        <button class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>                        
                     </div>
                 </div>
             </div>
