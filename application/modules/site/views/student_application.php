@@ -123,9 +123,18 @@
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Mobile Number <span class="text-red-500">*</span>
                            </label>
-                           <input
+                           <phone-mask-input
+                                v-model="phone"
+                                autoDetectCountry
+                                showFlag
+                                @onValidate="onValidate"
+                                wrapperClass="wrraper-example"
+                                inputClass="input-example"
+                                flagClass="flag-example"
+                            />
+                           <!-- <input
                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="number" required v-model="request.mobile_number">
+                               type="number" required v-model="request.mobile_number"> -->
                        </div>
                    </div>
 
@@ -319,6 +328,9 @@
 
 
    <script>
+
+import PhoneMaskInput from  "vue-phone-mask-input";
+
 new Vue({
     el: "#adminssions-form",
     data: {
