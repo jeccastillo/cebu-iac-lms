@@ -553,8 +553,10 @@ class Unity extends CI_Controller {
     public function student_confirm_program(){
         
         $post = $this->input->post();
+        $id = $post['id'];
+        unset($post['id']);
         $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
-        $this->data_poster->post_data('tb_mas_users',$post,$post['id']);
+        $this->data_poster->post_data('tb_mas_users',$post,$id);
         
         $ret['success'] = true;
         $ret['message'] = "Updated Successfully";
