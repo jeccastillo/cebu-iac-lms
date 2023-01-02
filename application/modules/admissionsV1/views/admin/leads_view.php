@@ -19,6 +19,8 @@
                     <option value="For Reservation">For Reservation</option>
                     <option value="Reserved">Reserved</option>
                     <option value="For Enrollment">For Enrollment</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Registered">Registered</option>
                 </select>
             </div>
         </div>

@@ -116,7 +116,8 @@ new Vue({
                 })
                 .then(data => {
                     this.is_done = true;
-                    //location.reload();
+                    Swal.hideLoading();
+                    location.reload();
                 });
             
         }
