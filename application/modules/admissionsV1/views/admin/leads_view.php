@@ -20,7 +20,7 @@
                     <option value="Reserved">Reserved</option>
                     <option value="For Enrollment">For Enrollment</option>
                     <option value="Confirmed">Confirmed</option>
-                    <option value="Registered">Registered</option>
+                    <option value="Game Changer">Game Changer</option>
                 </select>
             </div>
         </div>

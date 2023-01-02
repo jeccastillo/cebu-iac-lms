@@ -19,7 +19,10 @@
                     </table>
                     <hr />
                     <div class="text-center">
-                        <button class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>
+                        <button v-if="!show_select" class="btn btn-primary" @click="confirmProgram">Confirm Selected Program</button>
+                        <select v-else v-model="request.intProgramID" class="form-controk">
+                            <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -72,17 +75,23 @@ new Vue({
         id: '<?php echo $id; ?>',   
         base_url: '<?php echo base_url(); ?>',            
         student: {},
+        programs: [],
+        request: {
+            intProgramID: undefined,
+        },
         payload:{
 
         },
+        show_select: false,
     },    
     mounted() {
 
         let url_string = window.location.href;                
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
                 .then((data) => {  
-                    this.student = data.data.student;              
-                                  
+                    this.student = data.data.student;     
+                    this.request.intProgramID = this.student.intProgramID;         
+                    this.programs = data.data.programs;                                 
                 })
                 .catch((error) => {
                     console.log(error);
@@ -94,7 +103,7 @@ new Vue({
 
     methods: {  
         updateProgram: function(){
-
+            this.show_select =  true;
         },
         confirmProgram: function(){
             this.loading_spinner = true;
@@ -114,10 +123,22 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 })
-                .then(data => {
-                    this.is_done = true;
-                    Swal.hideLoading();
-                    location.reload();
+                .then(data => {     
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.request)) {
+                        formdata.append(key,value);
+                    }                                                    
+                    axios
+                    .post(this.base_url + 'unity/student_confirm_program', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {
+                        Swal.hideLoading();
+                        location.reload();
+                    });               
+                    
                 });
             
         }

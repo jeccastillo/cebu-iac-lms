@@ -544,6 +544,7 @@ class Unity extends CI_Controller {
 
     public function program_confirmation_data($id){
         $ret['student'] = $this->data_fetcher->getStudent($id);
+        $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['success']= true;
         
         echo json_encode($ret);
