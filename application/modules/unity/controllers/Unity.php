@@ -543,7 +543,7 @@ class Unity extends CI_Controller {
     }
 
     public function program_confirmation_data($id){
-        $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        $ret['student'] = $this->data_fetcher->getStudent($id);
         $ret['success']= true;
         
         echo json_encode($ret);
