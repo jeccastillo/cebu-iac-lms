@@ -78,6 +78,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',            
         student: {},
         programs: [],
+        api_data:{},
         request: {
             intProgramID: undefined,
             id: undefined,
@@ -89,13 +90,24 @@ new Vue({
     },    
     mounted() {
 
-        let url_string = window.location.href;                
+        let url_string = window.location.href;           
+           
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
                 .then((data) => {  
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID;                           
+                    axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
+                    .then((data) => {
+                        this.api_data = data.data.data;
+                        if(this.api_data.status == "Confirmed")
+                            document.location(this.base_url);
+                        
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })  
                 })
                 .catch((error) => {
                     console.log(error);
