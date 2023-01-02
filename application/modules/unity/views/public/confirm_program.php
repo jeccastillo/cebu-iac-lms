@@ -72,6 +72,9 @@ new Vue({
         id: '<?php echo $id; ?>',   
         base_url: '<?php echo base_url(); ?>',            
         student: {},
+        payload:{
+
+        },
     },    
     mounted() {
 
@@ -94,7 +97,28 @@ new Vue({
 
         },
         confirmProgram: function(){
+            this.loading_spinner = true;
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Loading',
+                text: 'Processing Payment',
+                icon: 'info',
+            })
+            Swal.showLoading();
 
+            axios
+                .post(api_url + 'confirm_selected_program/' + this.student.slug , this.payload, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.is_done = true;
+                    //location.reload();
+                });
+            
         }
     }
 
