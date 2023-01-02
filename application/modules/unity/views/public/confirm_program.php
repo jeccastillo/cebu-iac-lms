@@ -102,7 +102,7 @@ new Vue({
                     .then((data) => {
                         this.api_data = data.data.data;
                         if(this.api_data.status == "Confirmed")
-                            document.location(this.base_url);
+                            document.location = this.base_url;
                         
                     })
                     .catch((error) => {
