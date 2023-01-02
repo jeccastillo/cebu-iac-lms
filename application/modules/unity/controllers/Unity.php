@@ -524,8 +524,8 @@ class Unity extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();
 
         $student = $this->data_fetcher->getStudent($id, 'slug');            
-        $this->data['selected_ay'] = $active_sem['intID'];
-        $this->data['id'] = $student['intID'];
+        $data['selected_ay'] = $active_sem['intID'];
+        $data['id'] = $student['intID'];
 
         $this->load->view("public/header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
@@ -535,10 +535,10 @@ class Unity extends CI_Controller {
     public function confirm_program($slug) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');                    
-        $this->data['id'] = $student['intID'];
+        $data['id'] = $student['intID'];
             
         $this->load->view('public/header',$this->data);        
-		$this->load->view('public/confirm_program',$this->data);
+		$this->load->view('public/confirm_program',$data);
 		$this->load->view('public/footer',$this->data);
     }
 
