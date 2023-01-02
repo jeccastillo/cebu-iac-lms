@@ -57,7 +57,8 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: '<?php echo $id; ?>',               
+        id: '<?php echo $id; ?>',   
+        base_url: '<?php echo base_url(); ?>',            
         student: {},
     },    
     mounted() {
