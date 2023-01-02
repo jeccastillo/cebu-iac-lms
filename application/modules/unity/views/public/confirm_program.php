@@ -9,13 +9,13 @@
                 </div>
                 <div class="box-body">
                     <table class="table table-bordered table-striped">
-                        <thead>
+                        <tbody>
                             <tr>
                                 <th>Selected Program</th>
                                 <td>{{ student.strProgramDescription }}</td>
                                 <td><button class="btn btn-secondary" @click="updateProgram">Change Selected Program</button></td>
                             </tr>
-                        </thead>
+                        </tbody>
                     </table>
                     <hr />
                     <button class="btn btn-primary" @click="confirmProgram">Confirm</button>
@@ -92,7 +92,7 @@ new Vue({
 
         },
         confirmProgram: function(){
-            
+
         }
     }
 
