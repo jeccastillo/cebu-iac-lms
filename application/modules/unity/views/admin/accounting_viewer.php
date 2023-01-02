@@ -69,7 +69,7 @@
                             
                             <li>
                                 <a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">                                
-                                Statement of Account
+                                Finance
                                 </a>
                             </li>
                             <li class="active"><a href="#tab_1" data-toggle="tab">Accounting Summary</a></li>

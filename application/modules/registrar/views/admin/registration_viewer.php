@@ -53,7 +53,7 @@
               <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_2">Grades</a></li>
             <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_3">Assessment</a></li>
               <li><a href="<?php echo base_url(); ?>unity/student_viewer/<?php echo $student['intID']; ?>/<?php echo $selected_ay; ?>/tab_5">Schedule</a></li>
-              <li class="active"><a href="#tab_1" data-toggle="tab">Statement of Account</a></li>
+              <li class="active"><a href="#tab_1" data-toggle="tab">Finance</a></li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">
