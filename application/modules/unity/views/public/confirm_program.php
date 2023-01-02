@@ -115,8 +115,8 @@ new Vue({
                 showCancelButton: false,
                 showCloseButton: false,
                 allowEscapeKey: false,
-                title: 'Loading',
-                text: 'Processing Payment',
+                title: 'Please wait',
+                text: 'Processing confirmation',
                 icon: 'info',
             })
             Swal.showLoading();
