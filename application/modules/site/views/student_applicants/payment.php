@@ -109,9 +109,6 @@
             </div>
             <hr>
             <div class="md:w-1/2 w-full">
-
-
-
                 <div>
                     <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
                     <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
