@@ -102,7 +102,7 @@
                         </label>
                         <input disabled
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="number" v-model="student.tel_number">
+                            type="text" v-model="student.tel_number">
                     </div>
                 </div>
 
@@ -351,7 +351,7 @@ new Vue({
                 "total_price_without_charge": this.total_single_without_charge,
                 "first_name": this.student.first_name,
                 "last_name": this.student.last_name,
-                "contact_number": 0,
+                "contact_number": this.student.mobile_number,
                 "email": this.student.email,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
