@@ -337,12 +337,13 @@ new Vue({
         loading_spinner: false,
         programs: [],
         programs_group: [],
-        types: []
+        types: [],
+        base_url: "<?php echo base_url(); ?>",
     },
     mounted() {
 
         axios
-            .get(base_url + 'program/view_active_programs', {
+            .get(this.base_url + 'program/view_active_programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
