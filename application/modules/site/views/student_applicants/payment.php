@@ -351,7 +351,7 @@ new Vue({
                 "total_price_without_charge": this.total_single_without_charge,
                 "first_name": this.student.first_name,
                 "last_name": this.student.last_name,
-                "contact_number": this.student.mobile_number,
+                "contact_number": 0,
                 "email": this.student.email,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
