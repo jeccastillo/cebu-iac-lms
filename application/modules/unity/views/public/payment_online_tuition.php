@@ -485,7 +485,7 @@ new Vue({
                 "sy_reference": this.sem,
                 "first_name": this.student.strFirstname,
                 "last_name": this.student.strLastname,
-                "contact_number": this.student.strMobileNumber,
+                "contact_number": 0,
                 "email": this.student.strEmail,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
