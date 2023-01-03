@@ -488,8 +488,10 @@ class Data_fetcher extends CI_Model {
                          ->group_by('tb_mas_curriculum_subject.intCurriculumID')
                          ->get()
                          ->result_array();
-        
-        return $subjects[0]['totalUnits'];
+        if($subjects)
+            return $subjects[0]['totalUnits'];
+        else
+            return 0;
     }
     
     function count_table_contents($table,$category = null,$where=null,$group=null)
