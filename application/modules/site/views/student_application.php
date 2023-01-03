@@ -455,7 +455,7 @@ new Vue({
                                 text: data.data.message,
                                 icon: "success"
                             }).then(function() {
-                                location.href = "http://103.225.39.200/cebu-iac-lms/site/initial_requirements/" + ret.slug ;
+                                location.href = this.base_url + "site/initial_requirements/" + ret.slug ;
                             });
 
                         } else {
