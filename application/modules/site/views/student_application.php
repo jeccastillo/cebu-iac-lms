@@ -455,7 +455,7 @@ new Vue({
                                 text: data.data.message,
                                 icon: "success"
                             }).then(function() {
-                                location.href = this.base_url + "site/initial_requirements/" + ret.slug ;
+                                location.href = "<?php echo base_url(); ?>site/initial_requirements/" + ret.slug ;
                             });
 
                         } else {
