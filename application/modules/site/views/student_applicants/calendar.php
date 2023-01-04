@@ -231,7 +231,7 @@ new Vue({
                                     icon: "success"
                                 }).then(res => {
                                     window.location =
-                                        "<?php echo base_url();?>awesome/sched"
+                                        "<?php echo base_url();?>site/awesome/sched"
                                 });
 
                             } else {
