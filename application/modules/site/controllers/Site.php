@@ -52,6 +52,11 @@ class Site extends CI_Controller {
 								Changer!</span>
 							Keep your lines open and check your email!';
 		}
+		elseif($type == "sched"){
+			$this->data['text'] = '<h4>You have successfully scheduled your interview.</h4> 
+									<br /><br />
+									Please arrive at iacademy cebu 30 min before your scheduled interview. Good luck.';
+		}
 		elseif($type == "Reservation Payment"){
 			$this->data['text'] = 'You are a game changer. The interests that you have cultivated through the years are leading you down the path of a successful career. How you reach that path is now in your hands.
 			<br /><br />
