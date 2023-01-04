@@ -53,8 +53,8 @@ class Site extends CI_Controller {
 							Keep your lines open and check your email!';
 		}
 		elseif($type == "sched"){
-			$this->data['text'] = '<h4>You have successfully scheduled your interview.</h4> 
-									<br /><br />
+			$this->data['text'] = '<h3>You have successfully scheduled your interview.</h3> 
+									<br />
 									Please arrive at iacademy cebu 30 min before your scheduled interview. Good luck.';
 		}
 		elseif($type == "Reservation Payment"){
