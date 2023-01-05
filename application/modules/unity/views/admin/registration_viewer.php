@@ -201,12 +201,13 @@
                                                         <option value="Tuition Full">Tuition Full</option>
                                                         <option value="Tuition Down Payment">Tuition Down Payment</option>
                                                         <option value="Tuition Partial">Tuition Partial</option>
+                                                        <option value="Tuition Specific">Tuition Specific</option>
                                                         <option value="Other">Other</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Payment Status</label>
-                                                    <select @change="selectDescription" class="form-control" v-model="request.status">
+                                                    <select class="form-control" v-model="request.status">
                                                         <option value="Paid">Paid</option>
                                                         <option value="Pending">Pending</option>                                                        
                                                     </select>
@@ -216,7 +217,7 @@
                                                     <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
                                                     
                                                     <label>Enter amount to pay:</label>
-                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                                    <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
