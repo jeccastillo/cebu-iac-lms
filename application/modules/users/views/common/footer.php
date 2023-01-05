@@ -88,7 +88,7 @@
                 type:'post',
                 success: function(response){
 				if(response.message=="1")
-                    document.location="<?php echo base_url()?>/unity";
+                    document.location="<?php echo base_url()?>unity";
                 else
                     alert("Invalid Login: "+response.message);
                 

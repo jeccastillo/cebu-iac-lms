@@ -91,7 +91,7 @@
                         </label>
                         <input disabled
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="number" required v-model="student.mobile_number">
+                            type="text" required v-model="student.mobile_number">
                     </div>
                 </div>
 
@@ -102,16 +102,13 @@
                         </label>
                         <input disabled
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="number" v-model="student.tel_number">
+                            type="text" v-model="student.tel_number">
                     </div>
                 </div>
 
             </div>
             <hr>
             <div class="md:w-1/2 w-full">
-
-
-
                 <div>
                     <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
                     <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -351,7 +348,7 @@ new Vue({
                 "total_price_without_charge": this.total_single_without_charge,
                 "first_name": this.student.first_name,
                 "last_name": this.student.last_name,
-                "contact_number": this.student.mobile_number,
+                "contact_number": this.student.mobile_number.replace(/\D/g, ""),
                 "email": this.student.email,
                 "remarks": "",
                 "mode_of_payment_id": mode_payment.id,
