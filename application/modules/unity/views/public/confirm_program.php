@@ -139,6 +139,7 @@ new Vue({
             .then((data) => {
                 if(data.data.sections.length > 0){ 
                     this.sections = data.data.sections;
+                    console.log(data.data.sections[0].sched);
                     load_schedule(data.data.sections[0].sched);
                 }  
             });
