@@ -140,7 +140,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;
-                if(this.student.status != "Waiting For Interview")
+                if(this.student.status != "For Interview")
                     document.location = this.base_url;
             })
             .catch((error) => {
