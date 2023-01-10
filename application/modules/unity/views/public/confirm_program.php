@@ -99,8 +99,7 @@ new Vue({
         loaded: false,
         sections: [],
         api_data:{},
-        sched_table: '',
-        sched_table_clear: '',
+        sched_table: '',        
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -121,8 +120,7 @@ new Vue({
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
-                    this.sched_table = data.data.sched_table;                      
-                    this.sched_table_clear = data.data.sched_table;
+                    this.sched_table = data.data.sched_table;                                          
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
                         load_schedule(data.data.sections[0].schedule);
@@ -153,7 +151,7 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
                 this.section = data.data.section;  
-                this.sched_table = '';                  
+                this.sched_table = data.data.sched_table;                  
                 load_schedule(data.data.section.schedule);
             });
         },
@@ -162,7 +160,7 @@ new Vue({
             .then((data) => {
                 if(data.data.sections.length > 0){ 
                     this.sections = data.data.sections;  
-                    this.sched_table = this.sched_table_clear;                  
+                    this.sched_table = data.data.sched_table;                       
                     load_schedule(data.data.sections[0].schedule);
                 }  
             });

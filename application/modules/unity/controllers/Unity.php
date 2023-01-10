@@ -562,6 +562,7 @@ class Unity extends CI_Controller {
             $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
             $sec[] = $section;
         }
+        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
         $ret['sections'] = $sec;
         $ret['success']= true;
         
@@ -592,7 +593,7 @@ class Unity extends CI_Controller {
         unset($post['id']);
         $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
         $this->data_poster->post_data('tb_mas_users',$post,$id);
-        
+        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
         $ret['success'] = true;
         $ret['message'] = "Updated Successfully";
         
