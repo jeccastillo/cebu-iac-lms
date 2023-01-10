@@ -117,6 +117,7 @@ Vue.component('asd', {
 new Vue({
     el: "#admissions-form",
     data: {
+        base_url: "<?php echo base_url(); ?>",
         date_selected: "",
         time_scheduled: [],
         date_selected_formatted: "",
@@ -139,6 +140,8 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;
+                if(this.student.status != "Waiting For Interview")
+                    document.location = this.base_url;
             })
             .catch((error) => {
                 console.log(error);
