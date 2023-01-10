@@ -2461,7 +2461,12 @@ class Data_fetcher extends CI_Model {
         
     }
 
-    function getScheduleBySectionNew($section,$sem){
+    function getBlockSectionsPerProgram($program, $sem){
+        return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem))
+                        ->result_array();
+    }
+
+    function getScheduleBySectionNew($section, $sem){
 
         $ret = array();
         $sched = $this->db
