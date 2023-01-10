@@ -137,7 +137,10 @@ new Vue({
         changeProgram: function(){
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
-
+                if(data.data.sections.length > 0){ 
+                    this.sections = data.data.sections;
+                    load_schedule(data.data.sections[0].sched);
+                }  
             });
 
         },
