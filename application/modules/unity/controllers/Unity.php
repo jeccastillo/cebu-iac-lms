@@ -543,6 +543,13 @@ class Unity extends CI_Controller {
 		$this->load->view('public/footer',$this->data);
     }
 
+    public function program_confirmation_section($sectionID){
+        $ret['section'] = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$sectionID);
+        $ret['success']= true;
+        
+        echo json_encode($ret);
+    }
+
     public function program_confirmation_sub_data($programId){
         $active_sem = $this->data_fetcher->get_active_sem();
         $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$active_sem['intID']);

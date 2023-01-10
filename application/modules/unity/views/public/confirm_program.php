@@ -11,10 +11,18 @@
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
-                                <th>Selected Program</th>                                
+                                <th>Select Program</th>                                
                                 <td>                                    
                                     <select v-model="request.intProgramID" @change="changeProgram" class="form-control">
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Select Section/Schedule</th>                                
+                                <td>                                    
+                                    <select v-model="request.preferedSection" @change="changeSection" class="form-control">
+                                        <option v-for="section in sections" :value="section.intID">{{ section.name }}</option>
                                     </select>
                                 </td>
                             </tr>
@@ -93,6 +101,7 @@ new Vue({
         api_data:{},
         request: {
             intProgramID: undefined,
+            preferedSection: undefined,
             id: undefined,
         },
         payload:{
@@ -136,6 +145,13 @@ new Vue({
     },
 
     methods: {  
+        changeSection: function(){
+            axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
+            .then((data) => {                    
+                this.section = data.data.section;                                        
+                load_schedule(data.data.section.schedule);
+            });
+        },
         changeProgram: function(){
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
