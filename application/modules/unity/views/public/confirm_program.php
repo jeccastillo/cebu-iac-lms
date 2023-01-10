@@ -39,7 +39,7 @@
                 <h4>Schedule</h4>
             </div>
             <div class="box-body">
-                <?php echo $sched_table; ?>
+                {{ sched_table }}
             </div>
         </div>
     </div>
@@ -99,6 +99,7 @@ new Vue({
         loaded: false,
         sections: [],
         api_data:{},
+        sched_table: "<?php echo $sched_table; ?>",
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -118,7 +119,7 @@ new Vue({
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
-                    this.request.id = this.student.intID;    
+                    this.request.id = this.student.intID;                      
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
                         load_schedule(data.data.sections[0].schedule);
