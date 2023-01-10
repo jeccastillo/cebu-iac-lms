@@ -123,7 +123,12 @@ new Vue({
                     this.sched_table = data.data.sched_table;                                          
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
-                        load_schedule(data.data.sections[0].schedule);
+                        this.request.preferedSection = data.data.sections[0].intID;
+                        setTimeout(function() {
+                            // function code goes here
+                            load_schedule(data.data.sections[0].schedule);
+                        }, 1000);
+                        
                     }                       
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
@@ -152,7 +157,11 @@ new Vue({
             .then((data) => {                    
                 this.section = data.data.section;  
                 this.sched_table = data.data.sched_table;                  
-                load_schedule(data.data.section.schedule);
+                setTimeout(function() {
+                            // function code goes here
+                    load_schedule(data.data.section.schedule);
+                }, 1000);
+                
             });
         },
         changeProgram: function(){
@@ -160,8 +169,13 @@ new Vue({
             .then((data) => {
                 if(data.data.sections.length > 0){ 
                     this.sections = data.data.sections;  
-                    this.sched_table = data.data.sched_table;                       
-                    load_schedule(data.data.sections[0].schedule);
+                    this.sched_table = data.data.sched_table;  
+                    this.request.preferedSection = data.data.sections[0].intID;
+                    setTimeout(function() {
+                            // function code goes here
+                        load_schedule(data.data.sections[0].schedule);
+                    }, 1000);
+                    
                 }  
             });
 
