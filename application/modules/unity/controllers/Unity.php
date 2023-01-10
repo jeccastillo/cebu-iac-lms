@@ -545,8 +545,8 @@ class Unity extends CI_Controller {
 
     public function schedule_viewer($id) {                
         
-        $this->data['id'] = $id;        
-        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);        
+        $data['id'] = $id;        
+        $data['sched_table'] = $this->load->view('sched_table', $this->data, true);        
            
         $this->load->view('public/header',$this->data);        
 		$this->load->view('public/schedule_viewer',$data);
