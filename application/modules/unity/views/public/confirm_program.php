@@ -28,6 +28,16 @@
             </div>
         </div>        
     </div>
+    <div class="content container">               
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4>Schedule</h4>
+            </div>
+            <div class="box-body">
+                <?php echo $sched_table; ?>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -77,6 +87,7 @@ new Vue({
         student: {},
         programs: [],
         loaded: false,
+        sections: [],
         api_data:{},
         request: {
             intProgramID: undefined,
@@ -96,7 +107,11 @@ new Vue({
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
-                    this.request.id = this.student.intID;                           
+                    this.request.id = this.student.intID;    
+                    if(data.data.sections.length > 0){ 
+                        this.sections = data.data.sections;
+                        load_schedule(data.data.sections[0].sched);
+                    }                       
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;                        
