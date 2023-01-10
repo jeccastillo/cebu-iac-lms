@@ -11,11 +11,9 @@
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
-                                <th>Selected Program</th>
-                                <td>{{ student.strProgramDescription }}</td>
-                                <td>
-                                    <button v-if="!show_select" class="btn btn-secondary" @click="updateProgram">Change Selected Program</button>
-                                    <select v-else v-model="request.intProgramID" class="form-control">
+                                <th>Selected Program</th>                                
+                                <td>                                    
+                                    <select v-model="request.intProgramID" class="form-control">
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                     </select>
                                 </td>
