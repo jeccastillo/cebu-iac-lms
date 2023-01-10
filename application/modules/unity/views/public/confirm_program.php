@@ -157,7 +157,8 @@ new Vue({
             .then((data) => {                    
                 this.section = data.data.section;  
                 this.sched_table = "";
-                this.sched_table = data.data.sched_table;                  
+                this.sched_table = data.data.sched_table;     
+                this.$forceUpdate();             
                 setTimeout(function() {
                             // function code goes here
                     load_schedule(data.data.section.schedule);
