@@ -165,7 +165,7 @@ new Vue({
             if (this.date_selected_formatted <= today) {
                 Swal.fire(
                     'Ooopps!',
-                    "Unable to select pass date and today's date. Please try other dates. ",
+                    "Unable to select past date and today's date. Please try other dates. ",
                     'error'
                 )
                 return false;
