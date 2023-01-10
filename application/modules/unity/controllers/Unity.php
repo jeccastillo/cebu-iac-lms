@@ -530,7 +530,7 @@ class Unity extends CI_Controller {
         $this->load->view("public/header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
         $this->load->view("public/footer",$this->data);         
-    }
+    }  
     
     public function confirm_program($slug) {                
         
@@ -543,11 +543,19 @@ class Unity extends CI_Controller {
 		$this->load->view('public/footer',$this->data);
     }
 
+    public function schedule_viewer($id) {                
+        
+        $this->data['id'] = $id;        
+        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);        
+           
+        $this->load->view('public/header',$this->data);        
+		$this->load->view('public/schedule_viewer',$data);
+		$this->load->view('public/footer',$this->data);
+    }
+
     public function program_confirmation_section($sectionID){
         $active_sem = $this->data_fetcher->get_active_sem();
-        $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$sectionID);        
-        $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
-        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
+        $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$sectionID);                
         $ret['section'] = $section;
         $ret['success']= true;
         
@@ -556,14 +564,8 @@ class Unity extends CI_Controller {
 
     public function program_confirmation_sub_data($programId){
         $active_sem = $this->data_fetcher->get_active_sem();
-        $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$active_sem['intID']);
-        $sec = [];        
-        foreach($sections as $section){
-            $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
-            $sec[] = $section;
-        }
-        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
-        $ret['sections'] = $sec;
+        $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$active_sem['intID']);                      
+        $ret['sections'] = $sections;
         $ret['success']= true;
         
         echo json_encode($ret);
@@ -572,14 +574,9 @@ class Unity extends CI_Controller {
     public function program_confirmation_data($id){
         $active_sem = $this->data_fetcher->get_active_sem();        
         $ret['student'] = $this->data_fetcher->getStudent($id);        
-        $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);        
-        $sec = [];
-        foreach($sections as $section){
-            $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
-            $sec[] = $section;
-        }
+        $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);              
         $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
-        $ret['sections'] = $sec;
+        $ret['sections'] = $sections;
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['success']= true;
         

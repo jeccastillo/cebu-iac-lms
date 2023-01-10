@@ -17,6 +17,7 @@
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                     </select>
                                 </td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <th>Select Section/Schedule</th>                                
@@ -25,29 +26,20 @@
                                         <option v-for="section in sections" :value="section.intID">{{ section.name }}</option>
                                     </select>
                                 </td>
+                                <td>
+                                    <a class="btn btn-primary" :href="base_url + 'unity/schedule_viewer/' + section.intID" target="_blank">View Schedule</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <hr />                    
+                    <hr />    
+                    <div class="text-center">
+                        <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
+                    </div>                
                 </div>
             </div>
         </div>        
-    </div>
-    <div class="content container">               
-        <div class="box box-primary">
-            <div class="box-header">
-                <h4>Schedule</h4>
-            </div>
-            <div v-html="sched_table" class="box-body">
-                
-            </div>
-        </div>
-    </div>
-    <div class="content container">
-        <div class="text-center">
-            <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Schedule</button>                        
-        </div>
-    </div>
+    </div>  
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -98,8 +90,7 @@ new Vue({
         programs: [],
         loaded: false,
         sections: [],
-        api_data:{},
-        sched_table: '',        
+        api_data:{},        
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -120,15 +111,10 @@ new Vue({
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
-                    this.sched_table = data.data.sched_table;                                          
+                    
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
-                        this.request.preferedSection = data.data.sections[0].intID;
-                        setTimeout(function() {
-                            // function code goes here
-                            load_schedule(data.data.sections[0].schedule);
-                        }, 1000);
-                        
+                        this.request.preferedSection = data.data.sections[0].intID;                        
                     }                       
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
@@ -155,30 +141,15 @@ new Vue({
         changeSection: function(){
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
-                this.section = data.data.section;  
-                this.sched_table = "";
-                this.sched_table = data.data.sched_table;     
-                this.$forceUpdate();             
-                setTimeout(function() {
-                            // function code goes here
-                    load_schedule(data.data.section.schedule);
-                }, 1000);
-                
+                this.section = data.data.section;                 
             });
         },
         changeProgram: function(){
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
                 if(data.data.sections.length > 0){ 
-                    this.sections = data.data.sections;  
-                    this.sched_table = "";
-                    this.sched_table = data.data.sched_table;  
-                    this.request.preferedSection = data.data.sections[0].intID;
-                    setTimeout(function() {
-                            // function code goes here
-                        load_schedule(data.data.sections[0].schedule);
-                    }, 1000);
-                    
+                    this.sections = data.data.sections;                      
+                    this.request.preferedSection = data.data.sections[0].intID;                                        
                 }  
             });
 
