@@ -13,7 +13,7 @@
                             <tr>
                                 <th>Selected Program</th>                                
                                 <td>                                    
-                                    <select v-model="request.intProgramID" class="form-control">
+                                    <select v-model="request.intProgramID" @change="changeProgram" class="form-control">
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                     </select>
                                 </td>
@@ -119,7 +119,13 @@ new Vue({
     },
 
     methods: {  
-                
+        changeProgram: function(){
+            axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
+            .then((data) => {
+
+            });
+
+        },
         confirmProgram: function(){
             this.loading_spinner = true;
             Swal.fire({

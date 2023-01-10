@@ -542,6 +542,20 @@ class Unity extends CI_Controller {
 		$this->load->view('public/footer',$this->data);
     }
 
+    public function program_confirmation_sub_data($programId){
+        $active_sem = $this->data_fetcher->get_active_sem();
+        $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$active_sem['intID']);
+        $sec = [];
+        foreach($sections as $section){
+            $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
+            $sec[] = $section;
+        }
+        $ret['sections'] = $sec;
+        $ret['success']= true;
+        
+        echo json_encode($ret);
+    }
+
     public function program_confirmation_data($id){
         $active_sem = $this->data_fetcher->get_active_sem();        
         $ret['student'] = $this->data_fetcher->getStudent($id);
