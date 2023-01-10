@@ -153,7 +153,7 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
                 this.section = data.data.section;  
-                this.sched_table = this.sched_table_clear;                  
+                this.sched_table = '';                  
                 load_schedule(data.data.section.schedule);
             });
         },
