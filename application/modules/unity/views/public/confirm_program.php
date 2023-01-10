@@ -20,10 +20,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <hr />
-                    <div class="text-center">
-                        <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program</button>                        
-                    </div>
+                    <hr />                    
                 </div>
             </div>
         </div>        
@@ -36,6 +33,11 @@
             <div class="box-body">
                 <?php echo $sched_table; ?>
             </div>
+        </div>
+    </div>
+    <div class="content container">
+        <div class="text-center">
+            <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Schedule</button>                        
         </div>
     </div>
 </div>
