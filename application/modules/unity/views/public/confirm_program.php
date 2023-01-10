@@ -119,9 +119,7 @@ new Vue({
     },
 
     methods: {  
-        updateProgram: function(){
-            this.show_select =  true;
-        },
+                
         confirmProgram: function(){
             this.loading_spinner = true;
             Swal.fire({
