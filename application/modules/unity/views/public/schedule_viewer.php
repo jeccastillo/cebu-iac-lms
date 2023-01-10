@@ -1,4 +1,4 @@
-<aside id="vue-container" class="right-side">    
+<div id="vue-container">    
     <div class="content container">               
         <div class="box box-primary">
             <div class="box-header">
@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-</aside>
+</div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
