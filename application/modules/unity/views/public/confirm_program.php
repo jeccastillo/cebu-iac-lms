@@ -156,6 +156,7 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
                 this.section = data.data.section;  
+                this.sched_table = "";
                 this.sched_table = data.data.sched_table;                  
                 setTimeout(function() {
                             // function code goes here
@@ -169,6 +170,7 @@ new Vue({
             .then((data) => {
                 if(data.data.sections.length > 0){ 
                     this.sections = data.data.sections;  
+                    this.sched_table = "";
                     this.sched_table = data.data.sched_table;  
                     this.request.preferedSection = data.data.sections[0].intID;
                     setTimeout(function() {
