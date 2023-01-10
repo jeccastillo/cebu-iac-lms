@@ -544,7 +544,8 @@ class Unity extends CI_Controller {
     }
 
     public function program_confirmation_section($sectionID){
-        $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$sectionID);
+        $active_sem = $this->data_fetcher->get_active_sem();
+        $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$sectionID);        
         $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
         $ret['section'] = $section;
         $ret['success']= true;

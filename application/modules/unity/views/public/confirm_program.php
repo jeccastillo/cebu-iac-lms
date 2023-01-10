@@ -121,7 +121,7 @@ new Vue({
                     this.request.id = this.student.intID;    
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
-                        load_schedule(data.data.sections[0].sched);
+                        load_schedule(data.data.sections[0].schedule);
                     }                       
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
