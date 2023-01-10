@@ -170,69 +170,66 @@
                        </div>
                    </div>
 
-                   <div class="form-group">
-                            <label for=""
-                                >Do you hold good moral standing in your
-                                previous school?
-                                <span class="text-danger">*</span>
-                            </label>
+                    <div class="form-group mb-6">
+                        <label for=""
+                            >Do you hold good moral standing in your
+                            previous school?
+                            <span class="text-danger">*</span>
+                        </label>
 
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="good_moral"
-                                    v-model="request.good_moral"
-                                    value="Yes"
-                                />
-                                Yes
-                            </div>
-
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="good_moral"
-                                    value="No"
-                                    v-model="request.good_moral"
-                                />
-                                No
-                            </div>
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="good_moral"
+                                v-model="request.good_moral"
+                                value="Yes"
+                            />
+                            Yes
                         </div>
 
-                        <div class="form-group  mb-5">
-                            <label for=""
-                                >Have you been involved of any illegal
-                                activities?
-                                <span class="text-danger">*</span>
-                            </label>
-
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="crime"
-                                    v-model="request.crime"
-                                    value="Yes"
-                                />
-                                Yes
-                            </div>
-
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="crime"
-                                    value="No"
-                                    v-model="request.crime"
-                                />
-                                No
-                            </div>
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="good_moral"
+                                value="No"
+                                v-model="request.good_moral"
+                            />
+                            No
                         </div>
                     </div>
 
+                    <div class="form-group  mb-6">
+                        <label for=""
+                            >Have you been involved of any illegal
+                            activities?
+                            <span class="text-danger">*</span>
+                        </label>
 
-                   <div class="mb-6">
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="crime"
+                                v-model="request.crime"
+                                value="Yes"
+                            />
+                            Yes
+                        </div>
+
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="crime"
+                                value="No"
+                                v-model="request.crime"
+                            />
+                            No
+                        </div>
+                    </div>                    
+                    <div class="mb-6">
                        <div class="md:w-4/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
