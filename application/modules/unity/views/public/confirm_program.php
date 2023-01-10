@@ -38,8 +38,8 @@
             <div class="box-header">
                 <h4>Schedule</h4>
             </div>
-            <div id="sched" class="box-body">
-                <?php echo $sched_table; ?>
+            <div v-html="sched_table" class="box-body">
+                
             </div>
         </div>
     </div>
@@ -99,6 +99,7 @@ new Vue({
         loaded: false,
         sections: [],
         api_data:{},
+        sched_table: '',
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -118,7 +119,8 @@ new Vue({
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;         
                     this.programs = data.data.programs;      
-                    this.request.id = this.student.intID;                       
+                    this.request.id = this.student.intID; 
+                    this.sched_table = data.data.sched_table;                      
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
                         load_schedule(data.data.sections[0].schedule);
@@ -148,8 +150,7 @@ new Vue({
         changeSection: function(){
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
-                this.section = data.data.section;    
-                $("#sched").html('<?php echo $sched_table; ?>');
+                this.section = data.data.section;                    
                 load_schedule(data.data.section.schedule);
             });
         },
@@ -157,8 +158,7 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
                 if(data.data.sections.length > 0){ 
-                    this.sections = data.data.sections;
-                    $("#sched").html('<?php echo $sched_table; ?>');
+                    this.sections = data.data.sections;                    
                     load_schedule(data.data.sections[0].schedule);
                 }  
             });

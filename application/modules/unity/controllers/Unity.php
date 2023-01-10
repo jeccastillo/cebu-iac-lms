@@ -537,7 +537,7 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');                    
         $data['id'] = $student['intID'];
         
-        $data['sched_table'] = $this->load->view('sched_table', $this->data, true);    
+           
         $this->load->view('public/header',$this->data);        
 		$this->load->view('public/confirm_program',$data);
 		$this->load->view('public/footer',$this->data);
@@ -571,13 +571,13 @@ class Unity extends CI_Controller {
     public function program_confirmation_data($id){
         $active_sem = $this->data_fetcher->get_active_sem();        
         $ret['student'] = $this->data_fetcher->getStudent($id);        
-        $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);
+        $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);        
         $sec = [];
         foreach($sections as $section){
             $section['schedule'] = $this->data_fetcher->getScheduleBySectionNew($section['intID'],$active_sem['intID']);
             $sec[] = $section;
         }
-
+        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
         $ret['sections'] = $sec;
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['success']= true;
