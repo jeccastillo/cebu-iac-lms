@@ -90,6 +90,7 @@ new Vue({
         programs: [],
         loaded: false,
         sections: [],
+        section: undefined,
         api_data:{},        
         request: {
             intProgramID: undefined,
@@ -114,6 +115,7 @@ new Vue({
                     
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
+                        this.section = data.data.sections[0];
                         this.request.preferedSection = data.data.sections[0].intID;                        
                     }                       
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
@@ -148,7 +150,8 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
                 if(data.data.sections.length > 0){ 
-                    this.sections = data.data.sections;                      
+                    this.sections = data.data.sections;  
+                    this.section = data.data.sections[0];                    
                     this.request.preferedSection = data.data.sections[0].intID;                                        
                 }  
             });
