@@ -149,7 +149,7 @@ new Vue({
             axios.get(this.base_url + 'unity/program_confirmation_section/' + this.request.preferedSection)
             .then((data) => {                    
                 this.section = data.data.section;    
-                $("#sched").html("<?php echo $sched_table; ?>");
+                $("#sched").html('<?php echo $sched_table; ?>');
                 load_schedule(data.data.section.schedule);
             });
         },
@@ -158,7 +158,7 @@ new Vue({
             .then((data) => {
                 if(data.data.sections.length > 0){ 
                     this.sections = data.data.sections;
-                    $("#sched").html("<?php echo $sched_table; ?>");
+                    $("#sched").html('<?php echo $sched_table; ?>');
                     load_schedule(data.data.sections[0].schedule);
                 }  
             });
