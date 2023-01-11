@@ -89,7 +89,7 @@
             <section class="sidebar">                 
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
-                        <img style="max-height:120px;margin:0 auto;" class="img-responsive" src="<?php echo base_url(); ?>assets/img/cctlogo.png" />
+                        <img style="max-height:120px;margin:0 auto;" class="img-responsive" src="<?php echo base_url(); ?>assets/img/%20logo.png" />
                         <hr />
                         <div class="pull-left image">
                             <img src="<?php echo ($student['strPicture']=="")?$img_dir."default_image.jpg":$photo_dir.$student['strPicture']; ?>" class="img-circle" alt="User Image">

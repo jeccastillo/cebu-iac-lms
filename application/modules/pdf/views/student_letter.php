@@ -7,7 +7,7 @@
          <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
          <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
         </td>
-        <td width="64" align="left" valign="middle"><img src= "<?php echo $img_dir .'cctlogo.png'; ?>"  width="50" height="50"/></td>
+        <td width="64" align="left" valign="middle"><img src= "<?php echo $img_dir .'%20logo.png'; ?>"  width="50" height="50"/></td>
     </tr>
     <tr>
     <td colspan="3" style="font-size:10;">
