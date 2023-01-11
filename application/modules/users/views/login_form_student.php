@@ -1,10 +1,7 @@
 <div class="login-box">
   <div class="login-logo">
-    <a href="#">
-        <div>
-            <img style="max-height:250px;margin:0 auto;" class="img-responsive" src="<?php echo base_url(); ?>assets/img/cctLogo_new.png" />
-        </div>
-        <b>CCT</b> Student Portal
+    <a href="#">        
+        <b>iACADEMY</b> Student Portal
     </a>
   </div>
   <!-- /.login-logo -->
