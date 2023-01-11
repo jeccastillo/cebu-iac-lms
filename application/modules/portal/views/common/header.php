@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/ionicons.min.css">  
 <link href="<?php echo base_url(); ?>assets/lib/adminlte/css/iCheck/all.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/AdminLTE.min.css">
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/skins/skin-red.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/skins/skin-blue-light.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/lib/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" />
 <link href="<?php echo $css_dir; ?>token-input.css" rel="stylesheet" type="text/css" />
