@@ -30,20 +30,20 @@
     <!-- <div class="alert alert-info alert-dismissible"> -->
     <div class="callout callout-warning">
     <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
-        <h4> <i class="fa fa-warning"></i> CCTStudent Portal Advisory</h4>
+        <h4> <i class="fa fa-warning"></i> iACADEMY Student Portal Advisory</h4>
         <p> No courses/subjects advised. Please contact your department chairman for the advising of courses/subjects.<p>
     </div>
 <?php } ?>
 
 <?php elseif ($reg_status =="For Registration"):  { ?>
     <div class="callout callout-info">
-        <h4> <i class="fa fa-info"></i> CCTStudent Portal Advisory</h4>
+        <h4> <i class="fa fa-info"></i> iACADEMY Student Portal Advisory</h4>
         <p>Your courses have been advised. Please wait for the registrar to register your courses.<p>
     </div>
 <?php } ?>
     <?php elseif ($reg_status =="Registered"):  { ?>
         <div class="callout callout-success">
-         <h4> <i class="fa fa-check"></i> CCTStudent Portal Advisory</h4>
+         <h4> <i class="fa fa-check"></i> iACADEMY Student Portal Advisory</h4>
         <p>Your courses / subjects have been registered. To view your courses / subjects, please wait for the accounting office to tag you as enrolled.<p>
     </div>
 <?php } endif; ?>
@@ -301,7 +301,7 @@
                 <?php if ($reg_status == "For Advising"): ?>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">x</button>
-                        <h3 class="modal-title"><i class="fa fa-warning"></i> CCTStudent Portal</h3>
+                        <h3 class="modal-title"><i class="fa fa-warning"></i> iACADEMY Student Portal</h3>
                     </div>
                     <div class="modal-body">
                         <p>No courses / subjects advised. Please contact your department chairman for the advising of courses / subjects.</p>
@@ -309,7 +309,7 @@
                 <?php elseif($reg_status == "For Registration"):?>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">x</button>
-                        <h3 class="modal-title"><i class="fa fa-info"></i> CCTStudent Portal</h3>
+                        <h3 class="modal-title"><i class="fa fa-info"></i> iACADEMY Student Portal</h3>
                     </div>
                     <div class="modal-body">
                         <p>Your courses / subjects have been advised. Please wait for the registrar to register your courses / subjects.
@@ -317,7 +317,7 @@
                     <?php elseif($reg_status == "Registered"):?>
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">x</button>
-                        <h3 class="modal-title"><i class="fa fa-check"></i> CCTStudent Portal</h3>
+                        <h3 class="modal-title"><i class="fa fa-check"></i> iACADEMY Student Portal</h3>
                     </div>
                     <div class="modal-body">
                         <p>Your courses / subjects have been registered. To view your courses / subjects, please wait for the accounting office to tag you as enrolled.

@@ -48,7 +48,7 @@ class Tuitionyear extends CI_Controller {
         $this->data['temp_pics'] = base_url()."assets/temp/";
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
-        $this->data['title'] = "CCT Unity";
+        $this->data['title'] = "iACADEMY";
         $this->load->library("email");	
         $this->load->helper("cms_form");	
 		$this->load->model("user_model");

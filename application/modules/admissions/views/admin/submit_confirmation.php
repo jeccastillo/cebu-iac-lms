@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>CCT ADMISSIONS</h1>
+    <h1>iACADEMY ADMISSIONS</h1>
     <div class="content">
         <div class="box box-primary">
             <div class="box-header">
