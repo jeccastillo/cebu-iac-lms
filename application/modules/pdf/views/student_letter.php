@@ -63,7 +63,7 @@
 <table>
     <tbody>
         <tr style="line-height:20px;">
-            <td style="font-size:10px;">Thank you for registering at City College of Tagaytay. This letter will provide you with your login credentials for the CCT Student Portal.</td>
+            <td style="font-size:10px;">Thank you for registering at City College of Tagaytay. This letter will provide you with your login credentials for the iACADEMY Student Portal.</td>
         </tr>
     </tbody>
 </table>

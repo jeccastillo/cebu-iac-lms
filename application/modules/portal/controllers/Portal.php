@@ -40,7 +40,7 @@ class Portal extends CI_Controller {
 		
 		//------------------------------------------------------------------------------
         $this->load->library("email");	
-		$this->data['title'] = "CCT Student Portal";
+		$this->data['title'] = "iACADEMY Student Portal";
         $this->data['home'] = false;
 		$this->data["student"] = $this->session->all_userdata();
         $this->data['page']="default";
