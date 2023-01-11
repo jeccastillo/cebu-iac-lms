@@ -1159,9 +1159,10 @@ class Data_fetcher extends CI_Model {
     function getStudent($id,$field = "intID")
     {
         $ret =  $this->db
-                     ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName')
+                     ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName, tb_mas_block_sections.name as block')
                      ->from('tb_mas_users')
-                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')   
+                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+                     ->join('tb_mas_block_sections','tb_mas_block_sections.intID = tb_mas_users.preferedSection','left')   
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID')
                      ->where(array('tb_mas_users.'.$field => $id))
                      ->get()

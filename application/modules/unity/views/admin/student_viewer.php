@@ -95,7 +95,8 @@
                                         <div class="col-sm-9">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
                                             <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
-                                            <p><strong>Address: </strong>{{ student.strAddress }}</p>
+                                            <p><strong>Block Section: </strong>{{ student.block }}</p>
+                                            <p><strong>Address: </strong>{{ student.strAddress }}</p>                                            
                                             <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
                                             <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
                                             <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
