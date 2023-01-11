@@ -1,6 +1,6 @@
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><b>iACADEMY</b>Cebu</a>
+        <a href="../../index2.html"><b>iACADEMY</b>SMS</a>
     </div>
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
