@@ -32,7 +32,7 @@
         <![endif]-->
 
 </head>
-    <body class="sidebar-mini skin-red">
+    <body class="sidebar-mini skin-blue-light">
         <header class="main-header">
             <!-- Logo -->
             <a href="<?php echo base_url(); ?>" class="logo">
