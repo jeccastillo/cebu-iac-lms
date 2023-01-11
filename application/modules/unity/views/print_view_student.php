@@ -28,7 +28,7 @@
 <!--              <h6 style="margin-top: -8px;">Department of Computer Science and Information Technology</h6>-->
         </div>
         <div style="float:right;width:25%;text-align:left">
-            <img src="<?php echo $img_dir?>%20logo.png"  width="70" height="70"/>
+            <img src="<?php echo $img_dir?>iacademy-logo.png"  width="70" height="70"/>
         </div>
         
     </div<!-- /.box-header --> 
