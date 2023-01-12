@@ -188,7 +188,7 @@
                     </div>
                 </div>
                 <hr />
-                <p><strong>Reservation Fee is not refundable and non-transferrable</strong></p>
+                <p>Disclaimer: <i>Reservation Fee is not refundable and non-transferrable</i></p>
 
         </form>
     </div>
