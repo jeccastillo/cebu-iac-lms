@@ -62,7 +62,7 @@ class Site extends CI_Controller {
 			<br /><br />
 			This early on, we can see that you are one of the few people who have the capacity TO shape the course of the future. It is for this reason that iACADEMY would like to offer you the opportunity to pursue your passions and develop practical skills that you will need to enter the industry of your choice with a competitive edge. 						
 			<br /><br />
-			See you soon, <span class="font-bold">Game Changer</span><br /><br /><br /><br />!';
+			See you soon, <span class="font-bold">Game Changer</span>';
 		}
 		else{
 			$this->data['text'] = 'Payment Successful';
