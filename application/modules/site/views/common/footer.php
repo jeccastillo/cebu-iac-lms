@@ -31,13 +31,13 @@
                             </h4>
                             <p class="text-[16px] mt-2" data-aos="fade-up">
                             Email:
-                            <hr />
+                            <br /><br />                            
                             inquirecebu@iacademy.edu.ph<br />
                             admissionscebu@iacademy.edu.ph
                             </p>
                             <p class="text-[16px] mt-2" data-aos="fade-up">
                             Landline:
-                            <hr />
+                            <br /><br />
                             +63 32 520 4888
                             </p>
                         </div>
