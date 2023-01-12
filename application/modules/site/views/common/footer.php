@@ -19,7 +19,7 @@
                                 <img src="<?php echo $img_dir?>footer/ pin.png" class="inline-block" alt="" />
                                 Visit Us
                             </h4>
-                            <p class="text-[19px] mt-2" data-aos="fade-up">
+                            <p class="text-[16px] mt-2" data-aos="fade-up">
                                 Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug,
                                 Cebu City
                             </p>
@@ -30,8 +30,13 @@
                                 Contact Us
                             </h4>
                             <p class="text-[14px] mt-2" data-aos="fade-up">
+                            Email:<br />
                             inquirecebu@iacademy.edu.ph<br />
                             admissionscebu@iacademy.edu.ph
+                            </p>
+                            <p class="text-[14px] mt-2" data-aos="fade-up">
+                            Landline:<br />
+                            +63 32 520 4888
                             </p>
                         </div>
 
