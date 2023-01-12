@@ -25,7 +25,7 @@
                             </p>
                         </div>
 
-                        <div class="md:w-1/3">
+                        <div class="md:w-1/2">
                             <h4 class="uppercase color-primary font-bold text-2xl" data-aos="fade-up">
                                 Contact Us
                             </h4>
