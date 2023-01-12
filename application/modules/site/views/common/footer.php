@@ -29,13 +29,15 @@
                             <h4 class="uppercase color-primary font-bold text-2xl" data-aos="fade-up">
                                 Contact Us
                             </h4>
-                            <p class="text-[14px] mt-2" data-aos="fade-up">
-                            Email:<br />
+                            <p class="text-[16px] mt-2" data-aos="fade-up">
+                            Email:
+                            <hr />
                             inquirecebu@iacademy.edu.ph<br />
                             admissionscebu@iacademy.edu.ph
                             </p>
-                            <p class="text-[14px] mt-2" data-aos="fade-up">
-                            Landline:<br />
+                            <p class="text-[16px] mt-2" data-aos="fade-up">
+                            Landline:
+                            <hr />
                             +63 32 520 4888
                             </p>
                         </div>
