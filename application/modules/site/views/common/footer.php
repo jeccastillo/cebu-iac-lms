@@ -30,7 +30,8 @@
                                 Contact Us
                             </h4>
                             <p class="text-[19px] mt-2" data-aos="fade-up">
-
+                            inquirecebu@iacademy.edu.ph<br />
+                            admissionscebu@iacademy.edu.ph
                             </p>
                         </div>
 
