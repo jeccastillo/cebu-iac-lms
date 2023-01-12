@@ -55,7 +55,7 @@ class Site extends CI_Controller {
 		elseif($type == "sched"){
 			$this->data['text'] = '<h3>You have successfully scheduled your interview.</h3> 
 									<br />
-									Please arrive at iacademy cebu 30 min before your scheduled interview. Good luck.';
+									Please arrive at iACADEMY cebu 30 min before your scheduled interview. Good luck.';
 		}
 		elseif($type == "Reservation Payment"){
 			$this->data['text'] = 'You are a game changer. The interests that you have cultivated through the years are leading you down the path of a successful career. How you reach that path is now in your hands.
