@@ -29,7 +29,7 @@
                             <h4 class="uppercase color-primary font-bold text-2xl" data-aos="fade-up">
                                 Contact Us
                             </h4>
-                            <p class="text-[19px] mt-2" data-aos="fade-up">
+                            <p class="text-[12px] mt-2" data-aos="fade-up">
                             inquirecebu@iacademy.edu.ph<br />
                             admissionscebu@iacademy.edu.ph
                             </p>
