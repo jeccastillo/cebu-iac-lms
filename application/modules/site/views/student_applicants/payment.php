@@ -188,7 +188,7 @@
                     </div>
                 </div>
                 <hr />
-                <p v-if="payment_type == 'admissions_student_payment_reservation'">Disclaimer: <i>Reservation Fee is not refundable and non-transferrable</i></p>
+                <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable and non-transferrable</i></p>
 
         </form>
     </div>
