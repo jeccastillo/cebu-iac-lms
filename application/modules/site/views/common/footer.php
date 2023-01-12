@@ -44,7 +44,7 @@
 
                         <div class="md:w-1/3">
                             <h4 class="uppercase color-primary font-bold text-2xl" data-aos="fade-up">
-                                <u>Privacy Policy</u>
+                                <a href="https://iacademy.edu.ph/privacypolicy.htm" target="_blank">Privacy Policy</a>
                             </h4>
                             <p class="text-[19px] mt-2" data-aos="fade-up">
 
