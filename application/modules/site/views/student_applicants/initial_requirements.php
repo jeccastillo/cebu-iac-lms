@@ -35,10 +35,8 @@
                             </span>
                        </p>
 
-                       <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
-                           v-if="request.email">
-
-                            <span v-if="request.citizenship == 'Philippines'">
+                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                           v-if="request.email && request.citizenship == 'Philippines'">                            
                                 <div class="md-w-1/3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/2x2.png"
                                         class="max-w-full h-auto mx-auto block">
@@ -71,8 +69,9 @@
                                     </div>
 
                                 </div>
-                            </span>
-                            <span v-else>
+                        </div>
+                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                           v-if="request.email && request.citizenship == 'Foreign'">
                                 <div class="md-w-1/3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                         class="max-w-full h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
