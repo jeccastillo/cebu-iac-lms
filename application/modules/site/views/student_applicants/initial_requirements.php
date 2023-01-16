@@ -80,21 +80,21 @@
                                     <span>Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
                                         the latest admission/arrival in the Philippines with "valid authorized stay" date and the Bureau of Quarantine (BOQ) stamp.
                                         Note: Present the original passport for verification</span>
-                                    <input ref="file_id" @change="uploadReq('passport')"
+                                    <input ref="file_passport" @change="uploadReq('passport')"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>
                                 <br /><br />
                                 <div class="md-w-1/2">
                                     <span>Copy of Alien Certificate of Registration (i-CARD) if any</span>
-                                    <input ref="file_id" @change="uploadReq('icard')"
+                                    <input ref="file_icard" @change="uploadReq('icard')"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file">
                                 </div>
                                 <br /><br />
                                 <div class="md-w-1/2">
                                     <span>Quarantine Medical Examination by the Bureau of Quarantine (BOQ)</span>
-                                    <input ref="file_id" @change="uploadReq('quarantine_med_exam')"
+                                    <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam')"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>
