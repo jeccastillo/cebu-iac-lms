@@ -212,6 +212,9 @@ new Vue({
                         {
                             "file_id": ""
                         },
+                        {
+                            "file_id": ""
+                        },
                     ]
             })
             .catch((error) => {
