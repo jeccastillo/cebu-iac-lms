@@ -103,7 +103,21 @@
                         <hr>
                     </div>
 
+                    <div>
+                        <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
+                        <p class="text-muted">
+                            {{request.good_moral}}
+                        </p>
+                        <hr>
+                    </div>
 
+                    <div>
+                        <strong><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>
+                        <p class="text-muted">
+                            {{request.crime}}
+                        </p>
+                        <hr>
+                    </div>
 
                     <div class="" v-if="request.uploaded_requirements.length > 0">
                         <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
