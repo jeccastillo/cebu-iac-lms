@@ -170,7 +170,17 @@ new Vue({
         loading_spinner: false,
         types: [],
         uploads: {
-            requirements: []
+            requirements: [
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+            ]
         },
         slug: '<?php echo $this->uri->segment('3'); ?>'
     },
@@ -179,6 +189,30 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
+                if(this.request.citizenship != "Philippines")
+                    this.uploads.requirements = [
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                    ]
             })
             .catch((error) => {
                 console.log(error);
