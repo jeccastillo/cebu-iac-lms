@@ -311,14 +311,33 @@ new Vue({
                             data.data.message,
                             'success'
                         )
-
-                        if (type == 'school_id')
-                            this.uploads.requirements[0].file_id = data.data.data.id;
-                        if (type == 'psa')
-                            this.uploads.requirements[1].file_id = data.data.data.id;
-                        if (type == '2x2')
-                            this.uploads.requirements[2].file_id = data.data.data.id;
-
+                        if(this.request.citizenship == "Philippines"){
+                            if (type == 'school_id')
+                                this.uploads.requirements[0].file_id = data.data.data.id;
+                            if (type == 'psa')
+                                this.uploads.requirements[1].file_id = data.data.data.id;
+                            if (type == '2x2')
+                                this.uploads.requirements[2].file_id = data.data.data.id;
+                        }
+                        else{
+                            if (type == 'passport')
+                                this.uploads.requirements[0].file_id = data.data.data.id;
+                            if (type == 'icard')
+                                this.uploads.requirements[1].file_id = data.data.data.id;
+                            if (type == 'quarantine_med_exam')
+                                this.uploads.requirements[2].file_id = data.data.data.id;
+                            if (type == 'birthcert')
+                                this.uploads.requirements[3].file_id = data.data.data.id;
+                            if (type == 'schrecords')
+                                this.uploads.requirements[4].file_id = data.data.data.id;
+                            if (type == 'recommendation')
+                                this.uploads.requirements[5].file_id = data.data.data.id;                            
+                            if (type == 'financial_support')
+                                this.uploads.requirements[6].file_id = data.data.data.id;
+                            if (type == '2x2_foreign')
+                                this.uploads.requirements[7].file_id = data.data.data.id;
+                        }
+                        
                         this.uploads.slug = this.slug;
 
 
