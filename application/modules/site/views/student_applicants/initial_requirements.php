@@ -231,7 +231,13 @@ new Vue({
                 file = this.$refs.file_nso.files[0];
             } else if (type == '2x2') {
                 file = this.$refs.file_2x2.files[0];
-            } else {
+            } else if (type == 'passport') {
+                file = this.$refs.file_passport.files[0];
+            } else if (type == 'icard') {
+                file = this.$refs.file_icard.files[0];
+            } else if (type == 'quarantine_med_exam') {
+                file = this.$refs.file_quarantine.files[0];
+            }else {
                 file = '';
             }
 
