@@ -128,33 +128,15 @@
                         <hr>
                     </div>
 
-                    <div v-if="request.uploaded_requirements.length > 0">
-                        <strong><i class="fa fa-user margin-r-5"></i>School ID</strong>
+                    <div v-for="requirement in request.uploaded_requirements">
+                        <strong><i class="fa fa-user margin-r-5"></i>{{ requirement.type }}</strong>
                         <p class="text-muted">
-                            <a :href="request.uploaded_requirements[0].path" target="_blank">
-                                {{request.uploaded_requirements[0].filename}}</a>
+                            <a :href="requirement.path" target="_blank">
+                                {{requirement.filename}}</a>
                         </p>
                         <hr>
                     </div>
-
-                    <div v-if="request.uploaded_requirements.length > 0">
-                        <strong><i class="fa fa-file margin-r-5"></i>PSA / NSO</strong>
-                        <p class="text-muted">
-                            <a :href="request.uploaded_requirements[1].path" target="_blank">
-                                {{request.uploaded_requirements[1].filename}}</a>
-                        </p>
-                        <hr>
-                    </div>
-
-                    <div v-if="request.uploaded_requirements.length > 0">
-                        <strong><i class="fa fa-camera margin-r-5"></i>2x2 Picture</strong>
-                        <p class="text-muted">
-                            <a :href="request.uploaded_requirements[2].path" target="_blank">
-                                {{request.uploaded_requirements[2].filename}}</a>
-                        </p>
-                        <hr>
-                    </div>
-
+                
                     <div v-if="request.schedule_date">
                         <div class="">
                             <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
