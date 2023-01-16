@@ -38,41 +38,43 @@
                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
                            v-if="request.email">
 
-                           <div class="md-w-1/3">
-                               <img src="<?php echo $img_dir; ?>admissions/form/2x2.png"
-                                   class="max-w-full h-auto mx-auto block">
+                            <div v-if="request.citizenship == 'Philippines'">
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/2x2.png"
+                                        class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_2x2" @change="uploadReq('2x2')"
-                                       class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                       type="file" required>
-                               </div>
-                           </div>
+                                    <div class="w-[200px] my-3 block mx-auto">
+                                        <input ref="file_2x2" @change="uploadReq('2x2')"
+                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                            type="file" required>
+                                    </div>
+                                </div>
 
 
 
-                           <div class="md-w-1/3">
-                               <img src="<?php echo $img_dir; ?>admissions/form/nso.png"
-                                   class="max-w-full h-auto mx-auto block">
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/nso.png"
+                                        class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_nso" @change="uploadReq('psa')"
-                                       class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                       type="file" required>
-                               </div>
-                           </div>
+                                    <div class="w-[200px] my-3 block mx-auto">
+                                        <input ref="file_nso" @change="uploadReq('psa')"
+                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                            type="file" required>
+                                    </div>
+                                </div>
 
-                           <div class="md-w-1/3">
-                               <img src="<?php echo $img_dir; ?>admissions/form/id.png"
-                                   class="max-w-full h-auto mx-auto block">
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block">
 
-                               <div class="w-[200px] my-3 block mx-auto">
-                                   <input ref="file_id" @change="uploadReq('school_id')"
-                                       class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                       type="file" required>
-                               </div>
+                                    <div class="w-[200px] my-3 block mx-auto">
+                                        <input ref="file_id" @change="uploadReq('school_id')"
+                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                            type="file" required>
+                                    </div>
 
-                           </div>
+                                </div>
+                            </div>
 
 
                        </div>
