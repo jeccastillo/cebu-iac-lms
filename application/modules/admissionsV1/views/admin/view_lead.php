@@ -102,7 +102,13 @@
                         </p>
                         <hr>
                     </div>
-
+                    <div>
+                        <strong><i class="fa fa-user margin-r-5"></i>Citizenship</strong>
+                        <p class="text-muted">
+                            {{request.citizenship}}
+                        </p>
+                        <hr>
+                    </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
                         <p class="text-muted">
