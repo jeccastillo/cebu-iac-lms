@@ -1,6 +1,6 @@
    <section id="adminssions-form" class="section section_port relative">
        <div class="custom-container  relative z-1">
-           <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png"
+           <!-- <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png"
                class="absolute top-0 md:right-[25%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
            <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
@@ -20,7 +20,7 @@
 
            <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
                class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4"
-               data-aos="zoom-in" />
+               data-aos="zoom-in" /> -->
 
            <form @submit.prevent="submitPost"
                class="custom-container relative h-full pt-[200px] mb-[100px] md:mb-[10px]">
