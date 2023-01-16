@@ -170,16 +170,7 @@ new Vue({
         loading_spinner: false,
         types: [],
         uploads: {
-            requirements: [{
-                    "file_id": ""
-                },
-                {
-                    "file_id": ""
-                },
-                {
-                    "file_id": ""
-                }
-            ]
+            requirements: []
         },
         slug: '<?php echo $this->uri->segment('3'); ?>'
     },
