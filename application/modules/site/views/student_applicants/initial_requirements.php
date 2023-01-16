@@ -72,6 +72,31 @@
                         </div>
                         <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship == 'Foreign'">
+                                <div class="md-w-1/2">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
+                                        the latest admission/arrival in the Philippines with "valid authorized stay" date and the Bureau of Quarantine (BOQ) stamp.
+                                        Note: Present the original passport for verification'>                                        
+                                    <input ref="file_passport" @change="uploadReq('passport')"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>
+                                
+                                <div class="md-w-1/2">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block" title='Copy of Alien Certificate of Registration (i-CARD) if any'>                                    
+                                    <input ref="file_icard" @change="uploadReq('icard')"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file">
+                                </div>
+                                <br /><br />
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block" title='Quarantine Medical Examination by the Bureau of Quarantine (BOQ)'>                                    
+                                    <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam')"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>
                                 <div class="md-w-1/3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                         class="max-w-full h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
@@ -82,6 +107,21 @@
                                         type="file" required>
                                 </div>
                                 
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block" title='Copy of Alien Certificate of Registration (i-CARD) if any'>                                    
+                                    <input ref="file_icard" @change="uploadReq('icard')"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file">
+                                </div>
+                                <br /><br />
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block" title='Quarantine Medical Examination by the Bureau of Quarantine (BOQ)'>                                    
+                                    <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam')"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>
                                 <div class="md-w-1/3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                         class="max-w-full h-auto mx-auto block" title='Copy of Alien Certificate of Registration (i-CARD) if any'>                                    
