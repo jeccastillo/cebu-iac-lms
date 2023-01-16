@@ -170,6 +170,36 @@
                        </div>
                    </div>
 
+                   <div class="form-group mb-6">
+                        <label for="">
+                            Country of citizenship
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="citizenship"
+                                v-model="request.citizenship"
+                                value="Philippines"
+                            />
+                            Philippines
+                        </div>
+
+                        <div>
+                            <input
+                                type="radio"
+                                required
+                                name="citizenship"
+                                value="Foreign"
+                                v-model="request.citizenship"
+                            />
+                            Foreign
+                        </div>
+                    </div>
+
+
                     <div class="form-group mb-6">
                         <label for=""
                             >Do you hold good moral standing in your
@@ -230,7 +260,7 @@
                         </div>
                     </div>                    
                     <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
