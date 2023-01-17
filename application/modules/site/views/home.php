@@ -229,6 +229,53 @@
         </section>
         <!-- mma end -->
 
+        <!--rem start -->
+        <section>
+            <div class="custom-container lg:flex items-center relative z-10">
+                <div class="lg:w-2/4 w-full">
+                    <div class="py-[100px] md:text-center lg:text-left">
+                        <!-- <h1 class="text-2xl">What’s going on in</h1> -->
+                        <h1 class="text-5xl color-primary font-black">
+                            Real Estate <br />
+                            Management
+                        </h1>
+                        <a href="<?php echo base_url(); ?>site/articles?type=rem" class=" btn img-btn mt-4">
+                            <span>View Articles</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-2/4 relative w-full">
+                    <div class="owl-carousel-inner owl-carousel relative z-2 owl-rem">
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/1.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/2.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/3.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/4.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/5.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/mma/6.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- rem end -->
+
 
 
 
