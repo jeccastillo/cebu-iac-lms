@@ -70,7 +70,7 @@
 
                                 </div>
                         </div>
-                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                        <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship == 'Foreign'">
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload1.png"
@@ -104,7 +104,7 @@
                                         type="file" required>
                                 </div>                                                  
                         </div>
-                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                        <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship == 'Foreign'">                                
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload5.png"
