@@ -100,7 +100,7 @@
         <!-- se end -->
 
         <!--gd start -->
-        <section>
+        <section id="gd-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -143,7 +143,7 @@
         <!-- gd end -->
 
         <!--ani start -->
-        <section class="bg-gray-50">
+        <section class="bg-gray-50" id="ani-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -183,7 +183,7 @@
         <!-- ani end -->
 
         <!--mma start -->
-        <section>
+        <section id="mma-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -230,7 +230,7 @@
         <!-- mma end -->
 
         <!--rem start -->
-        <section>
+        <section class="bg-gray-50" id="rem-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
