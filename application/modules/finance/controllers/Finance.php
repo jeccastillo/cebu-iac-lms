@@ -66,7 +66,7 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);
     }
 
-    public function payments_no_or($slug,$type="Reservation Payment"){
+    public function payments_no_or(){
                 
         $this->data['type'] = $type;
         $this->data['slug'] = $slug;
