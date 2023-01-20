@@ -1,7 +1,7 @@
 // const api_url = "http://103.225.39.201:8081/api/v1/";
 // const api_url = "http://103.225.39.201:8081/api/v1/";
-const api_url = "http://103.225.39.199/api/v1/sms/";
-const base_url = "http://103.225.39.200/";
+const api_url = "http://116.50.237.244/api/v1/sms/";
+const base_url = "http://cebu.iacademy.edu.ph/";
 
 const api_url_article = "http://103.225.39.201:8081/api/v1/";
 // const api_url_article = "http://172.16.80.22:8081/api/v1/"
