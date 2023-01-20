@@ -100,7 +100,7 @@
         <!-- se end -->
 
         <!--gd start -->
-        <section>
+        <section id="gd-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -143,7 +143,7 @@
         <!-- gd end -->
 
         <!--ani start -->
-        <section class="bg-gray-50">
+        <section class="bg-gray-50" id="ani-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -183,7 +183,7 @@
         <!-- ani end -->
 
         <!--mma start -->
-        <section>
+        <section id="mma-section">
             <div class="custom-container lg:flex items-center relative z-10">
                 <div class="lg:w-2/4 w-full">
                     <div class="py-[100px] md:text-center lg:text-left">
@@ -228,6 +228,61 @@
             </div>
         </section>
         <!-- mma end -->
+
+        <!--rem start -->
+        <section class="bg-gray-50" id="rem-section">
+            <div class="custom-container lg:flex items-center relative z-10">
+                <div class="lg:w-2/4 w-full">
+                    <div class="py-[100px] md:text-center lg:text-left">
+                        <!-- <h1 class="text-2xl">What’s going on in</h1> -->
+                        <h1 class="text-5xl color-primary font-black">
+                            Real Estate <br />
+                            Management
+                        </h1>
+                        <a href="<?php echo base_url(); ?>site/articles?type=rem" class=" btn img-btn mt-4">
+                            <span>View Articles</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-2/4 relative w-full">
+                    <div class="owl-carousel-inner owl-carousel relative z-2 owl-rem">
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/1.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/2.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/3.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/4.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/5.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/6.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/7.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                        <div class="inner-carousel-item md:flex items-center">
+                            <img src="<?php echo $img_dir; ?>home/course/rem/8.jpg" class="mx-auto block" alt=""
+                                title="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- rem end -->
 
 
 

@@ -283,4 +283,78 @@ $(function () {
     }
   });
   //end soda
+
+  //init owl for shs slider
+  var outerrowlrem = $(".owl-carousel-outer.owl-carousel.owl-rem");
+  outerrowlrem.owlCarousel({
+    loop: true,
+    margin: 10,
+    dots: true,
+    smartSpeed: 1000,
+    responsiveClass: true,
+    autoHeight: true,
+    touchDrag: false,
+    mouseDrag: false,
+    responsive: {
+      0: {
+        items: 1,
+        nav: false,
+        loop: false,
+      },
+      600: {
+        items: 1,
+        nav: false,
+        lopp: false,
+      },
+      1000: {
+        items: 1,
+        nav: false,
+        loop: false,
+        margin: 20,
+      },
+    },
+  });
+
+  var innerowlrem = $(".owl-carousel-inner.owl-carousel.owl-rem");
+  innerowlrem.owlCarousel({
+    loop: true,
+    navs: true,
+    navText: ["<", ">"],
+    smartSpeed: 500,
+    margin: 10,
+    responsiveClass: true,
+    responsive: {
+      0: {
+        items: 2,
+        nav: true,
+      },
+      600: {
+        items: 2,
+        nav: true,
+      },
+      1000: {
+        items: 2,
+        nav: true,
+      },
+    },
+  });
+
+  outerrowlrem.on("change.owl.carousel", function (event) {
+    if (event.property.name == "position" && event.item.count == 2) {
+      console.log(1);
+      $(this).find(".rotate").toggleClass("start-rot");
+
+      if (event.page.index == 0) {
+        $("html, body").animate(
+          {
+            scrollTop: $("#rem-three-slider").offset().top,
+          },
+          1000
+        );
+      }
+    }
+    console.log(event.property.name);
+  });
+
+  //end shs
 });
