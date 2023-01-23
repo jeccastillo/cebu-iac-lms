@@ -613,16 +613,7 @@ $(document).ready(function() {
                         $('#subject-to-add').append($('<option>', {
                             value: sid,
                             text: scode
-                        }));
-                        if ($("#enumScholarship").val() == "paying") {
-                            $("#total-units").val(parseInt(total_units) * parseInt(
-                                <?php echo $unit_fee; ?>));
-                            $("#tuition-fee").html(parseInt(total_units) * parseInt(
-                                <?php echo $unit_fee; ?>));
-                        } else {
-                            $("#total-units").val("0");
-                            $("#tuition-fee").html("0");
-                        }
+                        }));                        
                         mainContainer.remove();
                         return_tuition();
                     });
