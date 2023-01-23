@@ -54,7 +54,8 @@ $(document).ready(function() {
             },
         ],
 
-        columns: [{
+        columns: [
+            {
                 data: "id"
             },
             {
@@ -77,8 +78,7 @@ $(document).ready(function() {
             },
             {
                 data: "updated_at"
-            },
-
+            }
         ],
         "aaSorting": [
             [1, 'asc']

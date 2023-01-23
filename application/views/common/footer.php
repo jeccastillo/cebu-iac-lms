@@ -597,15 +597,15 @@ $(document).ready(function() {
                         total_units = parseInt(total_units) + parseInt(ret.subject
                             .strUnits);
 
-                    if ($("#enumScholarship").val() == "paying") {
-                        $("#total-units").val(parseInt(total_units) * parseInt(
-                            <?php echo $unit_fee; ?>));
-                        $("#tuition-fee").html(parseInt(total_units) * parseInt(
-                            <?php echo $unit_fee; ?>));
-                    } else {
-                        $("#total-units").val("0");
-                        $("#tuition-fee").html("0");
-                    }
+                    // if ($("#enumScholarship").val() == "paying") {
+                    //     $("#total-units").val(parseInt(total_units) * parseInt(
+                    //         <?php echo $unit_fee; ?>));
+                    //     $("#tuition-fee").html(parseInt(total_units) * parseInt(
+                    //         <?php echo $unit_fee; ?>));
+                    // } else {
+                    //     $("#total-units").val("0");
+                    //     $("#tuition-fee").html("0");
+                    // }
                     $(".remove-subject-loaded2").click(function() {
 
                         mainContainer = $(this).parent().parent().parent();
