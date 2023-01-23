@@ -54,25 +54,32 @@ $(document).ready(function() {
             },
         ],
 
-        // columns: [{
-        //         data: "id"
-        //     },
-        //     {
-        //         data: "last_name"
-        //     },
-        //     {
-        //         data: "first_name"
-        //     },
-        //     {
-        //         data: "email"
-        //     },
-        //     {
-        //         data: "program"
-        //     },
-        //     {
-        //         data: "status"
-        //     }
-        // ],
+        columns: [{
+                data: "id"
+            },
+            {
+                data: "description"
+            },
+            {
+                data: "subtotal_order"
+            },
+            {
+                data: "charges"
+            },
+            {
+                data: "total_amount_due"
+            },
+            {
+                data: "status"
+            },
+            {
+                data: "response_message"
+            },
+            {
+                data: "updated_at"
+            },
+
+        ],
         "aaSorting": [
             [1, 'asc']
         ],

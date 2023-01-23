@@ -22,16 +22,15 @@
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
-                        <tr>
-                        <th>OR Number</th>
-                        <th>Payment Type</th>
-                        <th>Amount Paid</th>
-                        <th>Online Payment Charge</th>
-                        <th>Total Due</th>
-                        <th>Status</th>
-                        <th>Online Response Message</th>
-                        <th>Date Updated</th>
-                        <th>Actions</th>
+                        <tr>                            
+                            <th>Payment Type</th>
+                            <th>Amount Paid</th>
+                            <th>Online Payment Charge</th>
+                            <th>Total Due</th>
+                            <th>Status</th>
+                            <th>Online Response Message</th>
+                            <th>Date Updated</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
