@@ -36,7 +36,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [8],
+                "aTargets": [7],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
