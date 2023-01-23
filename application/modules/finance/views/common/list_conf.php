@@ -12,21 +12,7 @@ $(document).ready(function() {
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
             var s_column = "last_name";                        
-            filter_status = $("#status_filter").val();
-            switch(data.order[0].column){
-                case 2:
-                    s_column = "first_name";
-                break;
-                case 3:
-                    s_column = "email";
-                break;
-                case 4:
-                    s_column = "program";
-                break;
-                case 5:
-                    s_column = "status";
-                break;
-            }
+            filter_status = $("#status_filter").val();           
             $.get(
                 api_url + "finance/transactions_not_filed", {
                     limit: data.length,
@@ -50,7 +36,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [6],
+                "aTargets": [8],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -68,25 +54,25 @@ $(document).ready(function() {
             },
         ],
 
-        columns: [{
-                data: "id"
-            },
-            {
-                data: "last_name"
-            },
-            {
-                data: "first_name"
-            },
-            {
-                data: "email"
-            },
-            {
-                data: "program"
-            },
-            {
-                data: "status"
-            }
-        ],
+        // columns: [{
+        //         data: "id"
+        //     },
+        //     {
+        //         data: "last_name"
+        //     },
+        //     {
+        //         data: "first_name"
+        //     },
+        //     {
+        //         data: "email"
+        //     },
+        //     {
+        //         data: "program"
+        //     },
+        //     {
+        //         data: "status"
+        //     }
+        // ],
         "aaSorting": [
             [1, 'asc']
         ],

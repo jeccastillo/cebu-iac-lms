@@ -23,14 +23,15 @@
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>slug</th>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Email</th>
-                            <th>Program</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-
+                        <th>OR Number</th>
+                        <th>Payment Type</th>
+                        <th>Amount Paid</th>
+                        <th>Online Payment Charge</th>
+                        <th>Total Due</th>
+                        <th>Status</th>
+                        <th>Online Response Message</th>
+                        <th>Date Updated</th>
+                        <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
