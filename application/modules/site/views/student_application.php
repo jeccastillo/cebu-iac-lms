@@ -663,7 +663,21 @@ new Vue({
                     'warning'
                 )
             }
-            else
+            else{
+                if (this.request.health_concerns.includes("Others")) {
+                    const hasOther = this.request.health_concerns.indexOf("Others");
+                    this.request.health_concerns.splice(
+                        hasOther,
+                        1,
+                        this.request.health_concern_other
+                    );
+                }
+
+
+                this.request.health_concern = this.request.health_concerns.join(
+                    ", "
+                );
+
                 axios
                     .post(api_url + url, data, {
                         headers: {
@@ -695,7 +709,7 @@ new Vue({
                             )
                         }
                     });
-
+            }
         },
     },
 });
