@@ -22,7 +22,9 @@
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
-                        <tr>                            
+                        <tr>     
+                            <th>id</th>
+                            <th>slug</th>                       
                             <th>Payment Type</th>
                             <th>Amount Paid</th>
                             <th>Online Payment Charge</th>
