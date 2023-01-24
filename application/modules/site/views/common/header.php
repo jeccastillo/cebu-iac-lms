@@ -39,7 +39,9 @@
             <li>
                 <a class="hover-line white inline-block" href="<?php echo base_url(); ?>site">Home</a>
             </li>
-
+            <li>
+                <a class="hover-line white inline-block" href="<?php echo base_url(); ?>site/articles">Articles</a>
+            </li>
             <li>
                 <a class="hover-line inline-block" target="_blank" href="https://iacademy.edu.ph/homev4/about">About
                     iACADEMY</a>
