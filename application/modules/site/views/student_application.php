@@ -559,7 +559,7 @@ new Vue({
             type_id: "",
             date_of_birth: "",
             program: "",
-            health_concerns: "",
+            health_concerns: [],
             syid: "<?php echo $current_term; ?>",
         },
         loading_spinner: false,
