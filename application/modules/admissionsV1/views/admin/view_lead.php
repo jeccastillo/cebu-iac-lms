@@ -170,7 +170,7 @@
                         </div>
                     </div>
 
-                    <div v-if="request.schedule_date">
+                    <div>
                         <div class="">
                             <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
                                     class=" text-primary">Health Declaration
