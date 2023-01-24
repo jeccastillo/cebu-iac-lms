@@ -258,7 +258,145 @@
                             />
                             No
                         </div>
-                    </div>                    
+                    </div>      
+                    <div class="mb-5">
+                        <hr />
+                        <div class="form-group">
+                            <h4 class="mb-3">
+                                Health Conditions
+                                <span class="text-danger"></span>
+                            </h4>
+
+                            <label for=""
+                                >Have you been hospitalized before?
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="hospitalized"
+                                    v-model="request.hospitalized"
+                                    value="Yes"
+                                />
+                                Yes
+                            </div>
+
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="hospitalized"
+                                    value="No"
+                                    v-model="request.hospitalized"
+                                />
+                                No
+                            </div>
+                        </div>
+                        <div
+                            class="form-group"
+                            v-if="request.hospitalized == 'Yes'"
+                        >
+                            <label for=""
+                                >Reason <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                class="form-control"
+                                v-model="request.hospitalized_reason"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for=""
+                                >Have you been any of the following? (check
+                                all that apply)
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="health_concern"
+                                    v-model="request.health_concerns"
+                                    value="Diabetes"
+                                    :required="
+                                        request.health_concerns.length == 0
+                                    "
+                                />
+                                Diabetes
+                            </div>
+
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="health_concern"
+                                    value="Allergies"
+                                    v-model="request.health_concerns"
+                                />
+                                Allergies
+                            </div>
+
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="health_concern"
+                                    value="High Blood"
+                                    v-model="request.health_concerns"
+                                />
+                                High Blood
+                            </div>
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="health_concern"
+                                    value="Anemia"
+                                    v-model="request.health_concerns"
+                                />
+                                Anemia
+                            </div>
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="health_concern"
+                                    value="Others"
+                                    v-model="request.health_concerns"
+                                />
+                                Others (please specify)
+                            </div>
+                            <div
+                                v-if="
+                                    request.health_concerns.includes(
+                                        'Others'
+                                    )
+                                "
+                            >
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    required
+                                    value=""
+                                    v-model="request.health_concern_other"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for=""
+                                >Other health concerns/conditions the school
+                                should know about
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                class="form-control"
+                                v-model="request.other_health_concern"
+                            />
+                        </div>
+                    </div>
                     <div class="mb-6">
                        <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
