@@ -611,7 +611,6 @@ html {
   font-size: inherit !important;
 }
 
-
 .lds-ring {
   display: inline-block;
   position: relative;
@@ -648,11 +647,7 @@ html {
   }
 }
 
-*.hidden {
-  display: none !important;
-}
-
-div.loading{
+div.loading {
   position: fixed;
   top: 0;
   left: 0;

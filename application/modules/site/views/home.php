@@ -285,6 +285,53 @@
         <!-- rem end -->
 
 
+        <!-- latest news -->
+        <div id="article-section" class="custom-container my-12">
+            <h2 class="px-4 color-primary text-5xl font-black mb-4 mt-10"> Latest News</h2>
+
+            <div class="md:flex flex-wrap">
+                <div class="lg:w-1/3 p-3 md:w-1/2 w-full" v-for="article in articles">
+                    <div class="h-full bg-white rounded-lg border border-gray-200 shadow-md ">
+                        <div
+                            class="h-[220px] w-full rounded-t-lg   block mx-auto flex items-center bg-no-repeat bg-center bg-cover bg-[url('https://i.ibb.co/b7kG8JF/bg-art.jpg')]">
+                            <img class=" max-w-full h-auto h-[170px] mx-auto block" :src="article.image_url" alt="" />
+                        </div>
+                        <hr>
+                        <div class="p-5">
+                            <a href="#">
+                                <h5 class="mb-2 text-[20px] font-bold tracking-tight text-gray-900 min-h-[60px]">
+                                    {{replaceThis(article.title, 55)}}</h5>
+                            </a>
+                            <p class="mb-3 font-normal text-gray-700 min-h-[100px]">
+                                {{replaceThis(article.short_description, 120)}}
+                            </p>
+                            <a :href=" '<?php echo base_url(); ?>site/article_details?id=' + article.id"
+                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                Read more
+                                <svg aria-hidden="true" class="ml-2 -mr-1 w-4 h-4" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="<?php echo base_url(); ?>site/latest_news" class=" btn img-btn mt-4">
+                    <span>View More >></span>
+                </a>
+            </div>
+
+
+        </div>
+
+        <!-- end -->
+
+
 
 
         <!-- join game changer section -->
@@ -322,3 +369,38 @@
             </div>
         </section>
         <!-- end join game changer section -->
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+        <script>
+        new Vue({
+            el: "#article-section",
+            data: {
+                articles: [],
+            },
+
+            mounted() {
+                axios
+                    .get(
+                        api_url_article + "osea/external-news?count_content=3"
+                    )
+                    .then((data) => {
+                        this.articles = data.data.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+            },
+
+            methods: {
+                replaceThis: function(str, width) {
+                    if (str.length < width) {
+                        return str.substring(0, width);
+                    } else {
+                        return str.substring(0, width) + "...";
+                    }
+                },
+            },
+        });
+        </script>

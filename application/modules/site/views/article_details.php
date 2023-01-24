@@ -8,27 +8,27 @@
             Loading please wait..
         </div>
 
-        <div class="row">
+        <div class="row" v-else>
             <div :class="news.type == 'blog' ? 'col-lg-9 col-sm-12' : 'col-lg-12 col-sm-12'">
 
                 <h2 class="news__title color-primary text-2xl">{{ news.title }}</h2>
-                <div class="" v-if="news.type == 'internal' || news.type == 'blog'">
-                    <span class="span__nw" v-if="!loader_spinner"> <span>{{ news.date }} </span>
-                </div>
-                <hr class="w-100 h-[4px] bg-blue-700 my-5">
+                <!-- <div class="" v-if="news.type == 'internal' || news.type == 'blog'"> -->
+                <span class="span__nw" v-if="!loader_spinner"> <span>{{ news.date }} </span>
+                    <!-- </div> -->
+                    <hr class="w-100 h-[4px] bg-blue-700 my-5">
 
-                <img v-if="news.type == 'blog'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
-                    :src="news.header_image" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
-                <div class="d-block mx-auto logo_single_page_ mb-2 mt-2">
-                    <img v-if="news.type == 'external'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
-                        :src="news.logo" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
-                </div>
-                <div class="news__content__text mt-12" id="news__content__text" v-html="news.content"></div>
+                    <img v-if="news.type == 'blog'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
+                        :src="news.header_image" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
+                    <div class="d-block mx-auto logo_single_page_ mb-2 mt-2">
+                        <img v-if="news.type == 'external'" onerror="this.src='<?php echo $img_dir; ?>missing.jpg';"
+                            :src="news.logo" alt="" class="mb-2 max-w-full h-auto mx-auto block h-[200px]">
+                    </div>
+                    <div class="news__content__text mt-12" id="news__content__text" v-html="news.content"></div>
 
-                <div class="mt-4" v-if="news.type == 'internal' && (news.attachment)">
-                    <a :href="news.download_link" class="btn btn-iac btn-sm" target="_blank"> <i
-                            class="fa fa-arrow-down"></i> Download PDF version </a>
-                </div>
+                    <div class="mt-4" v-if="news.type == 'internal' && (news.attachment)">
+                        <a :href="news.download_link" class="btn btn-iac btn-sm" target="_blank"> <i
+                                class="fa fa-arrow-down"></i> Download PDF version </a>
+                    </div>
             </div>
             <div class="col-lg-3 col-sm-12" v-if="news.type == 'blog'">
                 <div class="mb-2" style="margin-top:60px">
@@ -151,7 +151,7 @@ new Vue({
         // http://222.127.137.134:8081/api/v1/osea/
 
         this.loader_spinner = true;
-        axios.get('http://103.225.39.201:8081/api/v1/osea/news/' + param)
+        axios.get(api_url_article + 'osea/news/' + param)
             .then((data) => {
                 this.news = data.data.news;
                 this.more_articles = data.data.more_articles;
