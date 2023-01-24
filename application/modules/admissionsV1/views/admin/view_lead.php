@@ -170,10 +170,46 @@
                         </div>
                     </div>
 
+                    <div v-if="request.schedule_date">
+                        <div class="">
+                            <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
+                                    class=" text-primary">Health Declaration
+                                </span>
+                            </strong>
 
+                            <hr>
+                        </div>
 
+                        <div>
+                            <strong>Hospitalized?</strong>
+                            <p class="text-muted">
+                                {{request.hospitalized}}
+                            </p>
+                            <hr>
+                        </div>
 
-
+                        <div>
+                            <strong>Hospitalized Reason</strong>
+                            <p class="text-muted">
+                                {{request.hospitalized_reason}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong>Health Concerns</strong>
+                            <p class="text-muted">
+                                {{request.health_concern}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong>Other Health Concerns</strong>
+                            <p class="text-muted">
+                                {{request.other_health_concern}}
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
                     <!-- <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>
                         <div class="row">
