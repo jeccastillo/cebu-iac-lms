@@ -49,6 +49,10 @@ $(document).ready(function() {
                 "aTargets": [0],
                 "bVisible": false
             },
+            {
+                "aTargets": [1],
+                "bVisible": false
+            },
         ],
 
         columns: [
