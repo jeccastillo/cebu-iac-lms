@@ -36,7 +36,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [8],
+                "aTargets": [9],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -85,10 +85,9 @@ $(document).ready(function() {
             }
         ],
         "aaSorting": [
-            [1, 'asc']
+            [2, 'asc']
         ],
-        "fnDrawCallback": function() {
-            $("#")
+        "fnDrawCallback": function() {            
             $(".trash-item").click(function(e) {
                 conf = confirm("Are you sure you want to delete?");
                 if (conf) {
