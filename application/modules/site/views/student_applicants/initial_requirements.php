@@ -1,4 +1,9 @@
    <section id="adminssions-form" class="section section_port relative">
+        <div class="loading">
+            <div class='uil-ring-css' style='transform:scale(0.79);'>
+                <div></div>
+            </div>
+        </div>
        <div class="custom-container  relative z-1">
            <!-- <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png"
                class="absolute top-0 md:right-[25%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
@@ -282,6 +287,7 @@ new Vue({
 
         uploadReq: function(type) {
 
+            this.loading_spinner = true;
             let formDataUp = "";
             formDataUp = new FormData();
 
@@ -363,7 +369,7 @@ new Vue({
                         }
                         
                         this.uploads.slug = this.slug;
-
+                        this.loading_spinner = false;
 
                     } else {
                         Swal.fire(
@@ -371,6 +377,7 @@ new Vue({
                             data.data.message,
                             'error'
                         )
+                        this.loading_spinner = false;
                     }
                 });
 
