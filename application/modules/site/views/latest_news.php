@@ -4,20 +4,20 @@
             <div
                 class="custom-container relative h-full mb-[100px] md:mb-[10px] md:px-[150px] md:pt-[190px] md:pb-[80px] pb-[50px]">
                 <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png"
-                    class="absolute top-0 md:right-[15%] hidden md:block" alt="" data-scroll-speed="4" />
+                    class="absolute top-0 md:right-[15%] hidden md:block" alt="" />
                 <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
-                    class="absolute top-[5%] md:left-[13%] hidden md:block" alt="" data-scroll-speed="4" />
+                    class="absolute top-[5%] md:left-[13%] hidden md:block" alt="" />
                 <img src="<?php echo $img_dir; ?>home-poly/red-poly.png"
-                    class="absolute top-[41%] md:left-[-9%] hidden md:block" alt="" data-scroll-speed="4" />
+                    class="absolute top-[41%] md:left-[-9%] hidden md:block" alt="" />
 
                 <img src="<?php echo $img_dir; ?>home-poly/peach-poly.png" class="absolute bottom-[6%] hidden md:block"
-                    alt="" data-scroll-speed="4" />
+                    alt="" />
 
                 <img src="<?php echo $img_dir; ?>home-poly/lyellow-poly.png"
-                    class="absolute top-[60%] md:right-[2%] hidden md:block" alt="" data-scroll-speed="4" />
+                    class="absolute top-[60%] md:right-[2%] hidden md:block" alt="" />
 
                 <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
-                    class="absolute top-[30%] md:right-[6%] hidden md:block" alt="" data-scroll-speed="4" />
+                    class="absolute top-[30%] md:right-[6%] hidden md:block" alt="" />
 
                 <!-- parallax object end -->
                 <div class="block mt-[100px] md:mt-0 h-full max-w-[980px] mx-auto">
