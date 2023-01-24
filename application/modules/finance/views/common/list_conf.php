@@ -36,15 +36,12 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [7],
+                "aTargets": [8],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/'
-                        +row.id 
-                        +'">View Details</a></li>'
-                        +'<li><a href="<?php echo base_url(); ?>finance/manualPay/'
-                        + row.id
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
+                        + row.slug
                         +'">Finance Viewer</a></li></ul></div>';
                 }
             },
@@ -57,6 +54,9 @@ $(document).ready(function() {
         columns: [
             {
                 data: "id"
+            },
+            {
+                data: "slug"
             },
             {
                 data: "description"
