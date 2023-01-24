@@ -216,10 +216,10 @@
                     <li class="header">Administrative</li>
                 <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
-                    <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li>
-                
-                <li class="header">Admissions</li>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
+                    <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
+                    <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>
+                    <li class="header">Admissions</li>
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
                     <a href="#">
                         <i class="ion ion-email"></i> <span>Student Applicants</span>
                         <i class="fa pull-right fa-angle-left"></i>
@@ -229,9 +229,7 @@
                                 href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>                                
                     </ul>
-
-                </li>
-                <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>
+                </li>                
                 
                 <?php endif; ?>
                 <li class="header">Admin Menu</li>
