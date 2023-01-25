@@ -496,9 +496,9 @@ new Vue({
 
         },  
         printOR: function(payment){
-            this.print_or.or_number = payment.or_number;
-            this.print_or.description = payment.description;
-            this.print_or.total_amount_due = payment.total_amount_due;
+            this.or_print.or_number = payment.or_number;
+            this.or_print.description = payment.description;
+            this.or_print.total_amount_due = payment.total_amount_due;
             this.$refs.print_or.$el.submit();
 
         },
