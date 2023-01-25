@@ -505,7 +505,7 @@ new Vue({
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
             this.or_print.transaction_date = payment.updated_at;
-            console.log(or_print);
+            console.log(this.or_print);
             //this.$refs.print_or.submit();
 
         },
