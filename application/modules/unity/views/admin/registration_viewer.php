@@ -267,6 +267,11 @@
             </div>
         </div>
     </div>
+    <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
+        <input type="hidden" name="or_number" v-model="or_print.or_number" />
+        <input type="hidden" name="description" v-model="or_print.description" />
+        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" />        
+    </form>
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
 
@@ -311,6 +316,11 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
         student:{},    
+        or_print: {
+            or_number: undefined,
+            description: undefined,
+            total_amount_due: undefined,
+        },
         request:{
             first_name: '',
             slug: '',
@@ -486,7 +496,11 @@ new Vue({
 
         },  
         printOR: function(payment){
-            console.log(payment);
+            this.print_or.or_number = payment.or_number;
+            this.print_or.description = payment.description;
+            this.print_or.total_amount_due = payment.total_amount_due;
+            this.$refs.print_or.$el.submit();
+
         },
         deletePayment: function(payment_id){
             let url = api_url + 'finance/delete_payment';
