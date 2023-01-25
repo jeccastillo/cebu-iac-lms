@@ -175,6 +175,11 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
+                                                <button v-if="payment.or_number" data-toggle="modal"                                                
+                                                        @click="printOR(payment)" 
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                </button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
@@ -465,6 +470,9 @@ new Vue({
                 })
 
         },  
+        printOR: function(payment){
+            console.log(payment);
+        },
         deletePayment: function(payment_id){
             let url = api_url + 'finance/delete_payment';
 
