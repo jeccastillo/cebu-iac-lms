@@ -1164,11 +1164,11 @@ class Pdf extends CI_Controller {
         // This method has several options, check the source code documentation for more information.
 
         $pdf->AddPage();
-        $this->data['student'] = $this->data_fetcher->getStudent($request->student_id);
-        $this->data['or_number'] = $request->or_number;
-        $this->data['description'] = $request->description;
-        $this->data['total_amount_due'] = $request->total_amount_due;
-        $this->data['transaction_date'] =  $request->transaction_date;
+        $this->data['student'] = $this->data_fetcher->getStudent($request['student_id']);
+        $this->data['or_number'] = $request['or_number'];
+        $this->data['description'] = $request['description'];
+        $this->data['total_amount_due'] = $request['total_amount_due'];
+        $this->data['transaction_date'] =  $request['transaction_date'];
         $html = $this->load->view("print_or",$this->data,true);
         //$html = $pdf->unhtmlentities($html);
 
