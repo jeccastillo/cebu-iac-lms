@@ -10,7 +10,7 @@
 </table>
 <table >
     <tr style="line-height:38px;">
-        <td style=""></td>
+        <td style=""><?php echo $or_number; ?></td>
     </tr>
 </table>
 <table >
