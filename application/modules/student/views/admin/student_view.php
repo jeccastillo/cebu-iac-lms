@@ -161,6 +161,7 @@
                     <tfoot>
                         <tr>
                             <th>id</th>
+                            <th>slug</th>
                             <th>Student Number</th>
                             <th>Last Name</th>
                             <th>First Name</th>

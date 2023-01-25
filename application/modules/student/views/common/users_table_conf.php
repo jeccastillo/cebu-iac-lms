@@ -32,13 +32,21 @@
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
             "aoColumnDefs":[
                 {
-                    "aTargets":[6],
+                    "aTargets":[7],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>student/edit_student/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>unity/registration_viewer/'+row[0]+'">Finances</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>student/edit_student/'+row[0]+'">Edit</a></li>'
+                                +'<li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li>'
+                                +'<li><a href="<?php echo base_url(); ?>unity/registration_viewer/'+row[0]+'">Finances for term</a></li>'
+                                +'<li><a href="<?php echo base_url(); ?>finance/manualPay/'+row[1]+'">All Transactions</a></li>'
+                                +'</ul></div>'; }
                 },
                 {
                     "aTargets":[0],
+                    "bVisible": false 
+                },
+                {
+                    "aTargets":[1],
                     "bVisible": false 
                 },
             ],

@@ -9,7 +9,7 @@ $config['tb_mas_tuition_year_index'] = "intID";
 $config['tb_mas_classrooms_columns'] = array("intID","strRoomCode","enumType");
 $config['tb_mas_classrooms_index'] = "intID";
 
-$config['tb_mas_users_columns'] = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
+$config['tb_mas_users_columns'] = array("intID","slug","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
 
 $config['tb_mas_users_columns2'] = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding", "dteBirthDate", "strPass");
 
