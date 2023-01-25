@@ -1138,8 +1138,7 @@ class Pdf extends CI_Controller {
     function print_or()
     {
         $request = $this->input->post();
-        print_r($request);
-        die();
+                
         tcpdf();
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(4.5,8.5), true, 'UTF-8', false, true);
