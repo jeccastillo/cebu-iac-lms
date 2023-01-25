@@ -115,7 +115,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="payment.or_number"                                             
+                                                <button v-if="application_payment.or_number"                                             
                                                         @click="printOR(application_payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
@@ -136,7 +136,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="payment.or_number"                                             
+                                                <button v-if="reservation_payment.or_number"                                             
                                                         @click="printOR(reservation_payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
