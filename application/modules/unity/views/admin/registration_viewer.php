@@ -175,7 +175,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="payment.or_number" data-toggle="modal"                                                
+                                                <button v-if="payment.or_number"                                             
                                                         @click="printOR(payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
