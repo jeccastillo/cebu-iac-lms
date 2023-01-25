@@ -110,7 +110,7 @@
                                             <td>{{ application_payment.status }}</td>                                            
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!application_payment.or_number" data-toggle="modal"                                                
+                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="or_update.id = application_payment.id;" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
@@ -131,7 +131,7 @@
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
+                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="or_update.id = reservation_payment.id;" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
@@ -157,7 +157,7 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="or_update.id = payment.id;" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
@@ -185,7 +185,7 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="or_update.id = payment.id;" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
