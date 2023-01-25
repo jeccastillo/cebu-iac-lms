@@ -505,9 +505,10 @@ new Vue({
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
             this.or_print.transaction_date = payment.updated_at;
-            console.log(this.or_print);
-            //this.$refs.print_or.submit();
-
+            setTimeout(function() {
+                // function code goes here
+                this.$refs.print_or.submit();
+            }, 1000);            
         },
         deletePayment: function(payment_id){
             let url = api_url + 'finance/delete_payment';
