@@ -1134,6 +1134,50 @@ class Pdf extends CI_Controller {
             $pdf->Output("request-form.pdf", 'I');
         }
     }
+
+    function print_or()
+    {
+        $request = $this->input->post();
+        tcpdf();
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(4.5,8.5), true, 'UTF-8', false, true);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("OR");
+    
+    
+        // set margins
+        $pdf->SetMargins(.3, .1, .25);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+       //font setting
+        //$pdf->SetFont('calibril_0', '', 10, '', 'false');
+
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+            
+
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+
+        $pdf->AddPage();
+        $this->data['student'] = $this->data_fetcher->getStudent($request->student_id);
+        $this->data['or_number'] = $request->or_number;
+        $this->data['description'] = $request->description;
+        $this->data['total_amount_due'] = $request->total_amount_due;
+        $this->data['transaction_date'] =  $request->transaction_date;
+        $html = $this->load->view("print_or",$this->data,true);
+        //$html = $pdf->unhtmlentities($html);
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+
+        $pdf->Output("official-receipt.pdf", 'I');
+        
+    }
     
     
     

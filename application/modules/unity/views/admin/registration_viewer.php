@@ -270,7 +270,9 @@
     <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
         <input type="hidden" name="or_number" v-model="or_print.or_number" />
         <input type="hidden" name="description" v-model="or_print.description" />
-        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" />        
+        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
+        <input type="hidden" name="student_id" v-model="or_print.student_id" />       
+        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
     </form>
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
@@ -320,6 +322,8 @@ new Vue({
             or_number: undefined,
             description: undefined,
             total_amount_due: undefined,
+            student_id: <?php echo $id; ?>,
+            transaction_date: undefined,
         },
         request:{
             first_name: '',
@@ -499,6 +503,7 @@ new Vue({
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
+            this.or_print.transaction_date = payment.updated_at;
             this.$refs.print_or.submit();
 
         },
