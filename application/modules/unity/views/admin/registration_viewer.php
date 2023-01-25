@@ -499,7 +499,7 @@ new Vue({
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
-            this.$refs.print_or.$el.submit();
+            this.$refs.print_or.submit();
 
         },
         deletePayment: function(payment_id){
