@@ -228,7 +228,7 @@
     <input type="hidden" name="or_number" v-model="or_print.or_number" />
     <input type="hidden" name="description" v-model="or_print.description" />
     <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
-    <input type="hidden" name="student_id" v-model="or_print.student_id" />       
+    <input type="hidden" name="name" v-model="or_print.student_name" />       
     <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
 </form>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -251,7 +251,7 @@ new Vue({
             or_number: undefined,
             description: undefined,
             total_amount_due: undefined,
-            student_id: <?php echo $id; ?>,
+            student_name: undefined,
             transaction_date: undefined,
         },
         request:{
@@ -287,6 +287,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
             this.student = data.data.data;
+            this.or_print.student_name = this.request.first_name + ' ' + this.request.last_name;
             this.request.slug = this.slug;
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;

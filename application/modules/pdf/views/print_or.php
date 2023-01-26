@@ -25,7 +25,7 @@
 </table>
 <table >
     <tr style="line-height:55px;">
-        <td style="font-size:9px;text-align:left;color:#666;"><?php echo "  ".$student['strLastname'].', '.$student['strFirstname']; ?></td>
+        <td style="font-size:9px;text-align:left;color:#666;"><?php $student_name; ?></td>
     </tr>
 </table>
 <table >
