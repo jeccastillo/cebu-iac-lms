@@ -72,126 +72,54 @@
                             <h4 class="box-title">Transactions</h4>
                         </div>
                         <div class="box-body">
-                        <table class="table table-bordered table-striped">
-                                        <tr>
-                                            <th>OR Number</th>
-                                            <th>Payment Type</th>
-                                            <th>Amount Paid</th>
-                                            <th>Online Payment Charge</th>
-                                            <th>Total Due</th>
-                                            <th>Status</th>
-                                            <th>Date Updated</th>
-                                            <th>Actions</th>
-                                        </tr>     
-                                        <tr v-if="application_payment">
-                                            <td>{{ application_payment.or_number }}</td>
-                                            <td>{{ application_payment.description }}</td>
-                                            <td>{{ application_payment.subtotal_order }}</td>
-                                            <td>{{ application_payment.charges }}</td>
-                                            <td>{{ application_payment.total_amount_due }}</td>
-                                            <td>{{ application_payment.status }}</td>                                            
-                                            <td>{{ application_payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = application_payment.id;" 
-                                                        data-target="#myModal" class="btn btn-primary">
-                                                        Update OR
-                                                </button>
-                                                <button v-if="application_payment.or_number"                                             
-                                                        @click="printOR(application_payment)" 
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr v-if="reservation_payment">
-                                            <td>{{ reservation_payment.or_number }}</td>
-                                            <td>{{ reservation_payment.description }}</td>
-                                            <td>{{ reservation_payment.subtotal_order }}</td>
-                                            <td>{{ reservation_payment.charges }}</td>
-                                            <td>{{ reservation_payment.total_amount_due }}</td>
-                                            <td>{{ reservation_payment.status }}</td>                                            
-                                            <td>{{ reservation_payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = reservation_payment.id;" 
-                                                        data-target="#myModal" class="btn btn-primary">
-                                                        Update OR
-                                                </button>
-                                                <button v-if="reservation_payment.or_number"                                             
-                                                        @click="printOR(reservation_payment)" 
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="8">
-                                            Other Payments:
-                                            </th>
-                                        </tr>  
-                                        <tr v-for="payment in other_payments">
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = payment.id;" 
-                                                        data-target="#myModal" class="btn btn-primary">
-                                                        Update OR
-                                                </button>
-                                                <button v-if="payment.or_number"                                             
-                                                        @click="printOR(payment)" 
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                </button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
-                                            </td>
-                                        </tr>    
-                                        <tr>
-                                            <th colspan="8">
-                                            Tuition Payments:
-                                            </th>
-                                        </tr>
-                                        <tr v-for="payment in payments">
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = payment.id;" 
-                                                        data-target="#myModal" class="btn btn-primary">
-                                                        Update OR
-                                                </button>
-                                                <button v-if="payment.or_number"                                             
-                                                        @click="printOR(payment)" 
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                </button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
-                                            </td>
-                                        </tr>                                                                           
-                                        <tr>
-                                            <td class="text-green" colspan="8">
-                                            amount paid: P{{ amount_paid_formatted }}                                           
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-green" colspan="8">                                            
-                                            remaining balance: P{{ remaining_amount_formatted }}
-                                            </td>
-                                        </tr>
-                                    </table>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>OR Number</th>
+                                    <th>Payment Type</th>
+                                    <th>Amount Paid</th>
+                                    <th>Online Payment Charge</th>
+                                    <th>Total Due</th>
+                                    <th>Status</th>
+                                    <th>Online Response Message</th>
+                                    <th>Date Updated</th>
+                                    <th>Actions</th>
+                                </tr>    
+                                <tr v-if="application_payment">
+                                    <td>{{ application_payment.or_number }}</td>
+                                    <td>{{ application_payment.description }}</td>
+                                    <td>{{ application_payment.subtotal_order }}</td>
+                                    <td>{{ application_payment.charges }}</td>
+                                    <td>{{ application_payment.total_amount_due }}</td>
+                                    <td>{{ application_payment.status }}</td>                                            
+                                    <td>{{ application_payment.response_message }}</td>
+                                    <td>{{ application_payment.updated_at }}</td>            
+                                    <td>
+                                        <button v-if="!application_payment.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = application_payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                    </td>                                    
+                                </tr> 
+                                <tr v-if="reservation_payment">
+                                    <td>{{ reservation_payment.or_number }}</td>
+                                    <td>{{ reservation_payment.description }}</td>
+                                    <td>{{ reservation_payment.subtotal_order }}</td>
+                                    <td>{{ reservation_payment.charges }}</td>
+                                    <td>{{ reservation_payment.total_amount_due }}</td>
+                                    <td>{{ reservation_payment.status }}</td>
+                                    <td>{{ reservation_payment.response_message }}</td>
+                                    <td>{{ reservation_payment.updated_at }}</td>
+                                    <td>
+                                        <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = reservation_payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>                                            
+                            </table>
                             <hr />                                    
                         </div><!---box body--->
                     </div><!---box--->                      
@@ -224,13 +152,6 @@
         </div>
     </div><!---vue container--->
 </aside>
-<form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
-    <input type="hidden" name="or_number" v-model="or_print.or_number" />
-    <input type="hidden" name="description" v-model="or_print.description" />
-    <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
-    <input type="hidden" name="name" v-model="or_print.student_name" />       
-    <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
-</form>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
@@ -247,13 +168,6 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         reservation_payment: undefined,
         application_payment: undefined,
-        or_print: {
-            or_number: undefined,
-            description: undefined,
-            total_amount_due: undefined,
-            student_name: undefined,
-            transaction_date: undefined,
-        },
         request:{
             first_name: '',
             slug: '',
@@ -287,7 +201,6 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
             this.student = data.data.data;
-            this.or_print.student_name = this.request.first_name + ' ' + this.request.last_name;
             this.request.slug = this.slug;
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
@@ -307,17 +220,7 @@ new Vue({
 
     },
 
-    methods: {    
-        printOR: function(payment){
-            
-            this.or_print.or_number = payment.or_number;
-            this.or_print.description = payment.description;
-            this.or_print.total_amount_due = payment.total_amount_due;
-            this.or_print.transaction_date = payment.updated_at;         
-            this.$nextTick(() => {
-                this.$refs.print_or.submit();
-            });             
-        },    
+    methods: {        
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
