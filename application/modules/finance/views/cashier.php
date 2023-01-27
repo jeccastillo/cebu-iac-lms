@@ -53,7 +53,7 @@
                         <h4 class="modal-title">Add New Cashier</h4>
                     </div>
                     <div class="modal-body">
-                        <select v-model="request.user_id" class="select2">                            
+                        <select v-model="request.user_id" class="select3">                            
                             <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
                         </select>
                     </div>
@@ -97,8 +97,8 @@ new Vue({
         axios.get(base_url + 'finance/cashier_data/')
         .then((data) => {
             this.cashiers = data.data.cashiers;
-            this.finance_users = data.data.finance_users;
-            console.log(this.finance_users);
+            this.finance_users = data.data.finance_users;  
+            $(".select3").select2();          
         })
         .catch((error) => {
             console.log(error);
