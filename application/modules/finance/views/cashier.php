@@ -26,13 +26,13 @@
                                     <th>Current OR</th>                                                                        
                                 </tr>    
                                 <tr v-for="cashier in cashiers">
-                                    <td>Cashier {{ cashier.id }}</td>
+                                    <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_start" />                                        
+                                        <input type="number" :disabled="not_edit_mode" @keyup.enter="changeValue(cashier.intID,'or_start')" :value="cashier.or_start" />                                        
                                     </td>
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_end" />
+                                        <input type="number" :disabled="not_edit_mode" @keyup.enter="changeValue(cashier.intID,'or_end')" :value="cashier.or_end" />
                                     </td>
                                     <td>
                                         {{ cashier.or_current }}
@@ -145,7 +145,14 @@ new Vue({
                     )
                 }
             });
+        },
+        changeValue: function(id,type,event){
+            var formdata = new FormData();
+            formdata.append('intID',id);
+            formdata.append(type,event.target.value);
+            console.log(event.target.value);
         }
+
 
     }
 
