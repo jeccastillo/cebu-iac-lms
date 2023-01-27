@@ -44,19 +44,18 @@
             </div><!---row--->
         </div><!---content container--->
         <div class="modal fade" id="myModal" role="dialog">
-            <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
+            <form @submit.prevent="submitNewCashier" class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <!-- modal header  -->
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add OR Number</h4>
+                        <h4 class="modal-title">Add New Cashier</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label>OR Number <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control" v-model="or_update.or_number" required></textarea>                        
-                        </div>
+                        <select v-model="request.user_id" class="select2">                            
+                            <option v-for="user as finance_user" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
+                        </select>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
@@ -83,6 +82,7 @@ new Vue({
         
         base_url: "<?php echo base_url(); ?>",   
         cashiers: [],
+        finance_users: [],
         request:{
             user_id: undefined,            
         },        
@@ -90,11 +90,24 @@ new Vue({
     },
 
     mounted() {
+        let url_string = window.location.href;
+        let url = new URL(url_string);
 
+        this.loader_spinner = true;
+        axios.get(base_url + 'finance/cashier_data/')
+        .then((data) => {
+            this.cashiers = data.cashiers;
+            this.finance_users = data.finance_users;
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     },
 
     methods: {                
-
+        submitNewCashier: function(){
+            
+        }
 
     }
 

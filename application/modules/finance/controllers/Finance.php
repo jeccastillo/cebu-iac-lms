@@ -83,6 +83,15 @@ class Finance extends CI_Controller {
         $this->load->view("cashier",$this->data);
         $this->load->view("common/footer",$this->data);        
     }
+
+    public function cashier_data(){                             
+
+        $data['cashiers'] = $this->data_fetcher->getCashiers();        
+        $data['finance_users'] = $this->data_fetcher->getFinanceList();
+        $data['message'] = "Success";
+        $data['success'] = true;
+        echo json_encode($data);       
+    }
 		
     // public function get_other_payments($slug){
 

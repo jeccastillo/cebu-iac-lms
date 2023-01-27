@@ -1508,6 +1508,12 @@ class Data_fetcher extends CI_Model {
         return $this->db->get_where('tb_mas_faculty')->result_array();
                      
     }
+
+    function getFinanceList()
+    {
+        return $this->db->get_where('tb_mas_faculty')->where('intUserLevel','7')->result_array();
+                     
+    }
     
     function getAy($id)
     {
@@ -2318,6 +2324,20 @@ class Data_fetcher extends CI_Model {
         
     }
     
+    function getCashiers() 
+    {
+               
+        return  $this->db
+                     ->select("tb_mas_cashier.*,tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname")
+                     ->from("tb_mas_cashier")
+                        
+                     ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_cashier.user_id')                     
+                     ->order_by('strLastname','asc')   
+                     ->get()
+                     ->result_array();
+        
+    }
+
     function getClasslistDetails($id)
     {
         $d = $this->db
