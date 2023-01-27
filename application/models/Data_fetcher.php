@@ -1511,7 +1511,7 @@ class Data_fetcher extends CI_Model {
 
     function getFinanceList()
     {
-        return $this->db->get_where('tb_mas_faculty')->where('intUserLevel','7')->result_array();
+        return $this->db->get_where('tb_mas_faculty',array('intUserLevel'=>'7'))->result_array();
                      
     }
     
