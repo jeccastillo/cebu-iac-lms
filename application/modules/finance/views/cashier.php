@@ -14,6 +14,7 @@
                     <div class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">Cashiers</h4>
+                            <button class="btn btn-primary" @click="editMode">{{ edit_text }}</button>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -27,9 +28,15 @@
                                 <tr v-for="cashier in cashiers">
                                     <td>Cashier {{ cashier.id }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
-                                    <td>{{ cashier.or_start }}</td>
-                                    <td>{{ cashier.or_end }}</td>
-                                    <td>{{ cashier.or_current }}</td>                                                                        
+                                    <td>
+                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_start" />                                        
+                                    </td>
+                                    <td>
+                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_end" />
+                                    </td>
+                                    <td>
+                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_current" />
+                                    </td>                                                                        
                                 </tr>                                 
                             </table>
                             <hr />                                    
@@ -75,6 +82,8 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         cashiers: [],
         finance_users: [],
+        not_edit_mode: true,
+        edit_text:"Turn on Edit Mode",
         request:{
             user_id: undefined,            
         },        
@@ -96,7 +105,17 @@ new Vue({
         })
     },
 
-    methods: {                
+    methods: {         
+        editMode: function(){
+            if(this.not_edit_mode){
+                this.not_edit_mode = false;
+                this.edit_text = "Turn off Edit Mode";
+            }
+            else{
+                this.not_edit_mode = true;
+                this.edit_text = "Turn on Edit Mode";
+            }
+        },       
         submitNewCashier: function(){
             
             var formdata = new FormData();                    
