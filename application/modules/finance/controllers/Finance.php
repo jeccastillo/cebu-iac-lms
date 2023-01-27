@@ -56,6 +56,7 @@ class Finance extends CI_Controller {
         $data['success'] = true;
         echo json_encode($data);
     }
+    
     public function manualPay($slug,$type="Reservation Payment"){
                 
         $this->data['type'] = $type;
@@ -64,6 +65,21 @@ class Finance extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("manual_pay",$this->data);
         $this->load->view("common/footer",$this->data);
+    }
+
+    public function new_cashier(){
+        $post = $this->input->post();
+        $cashier = $this->db->get_where('tb_mas_cashier',array('user_id'=>$post['user_id']))->num_rows();
+        if($cashier > 0){
+            $data['message'] = "Failed Cashier with selected ID already exists";
+            $data['success'] = false;    
+        }
+        else{
+            $this->db->insert('tb_mas_cashier',$post);
+            $data['message'] = "Success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
 
     public function payments_no_or(){                             

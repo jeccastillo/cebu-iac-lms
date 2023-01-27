@@ -98,7 +98,31 @@ new Vue({
 
     methods: {                
         submitNewCashier: function(){
+            
+            var formdata = new FormData();                    
+            for(const [key,value] of Object.entries(this.request)){                   
+                formdata.append(key,value);
+            }
 
+            axios
+            .post(base_url + 'finance/new_cashier', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.is_done = true;
+
+                if (data.data.success) {
+                    location.reload();
+                } else {
+                    Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                    )
+                }
+            });
         }
 
     }
