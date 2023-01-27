@@ -39,19 +39,17 @@
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <!-- modal header  -->
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <!-- modal header  -->                                        
                                         <h4 class="modal-title">Add New Cashier</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <select v-model="request.user_id" class="form-control">                            
+                                        <select v-model="request.user_id" class="form-control select2">                            
                                             <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
                                         </select>
                                     </div>
                                     <div class=" modal-footer">
                                         <!-- modal footer  -->
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>                                        
                                     </div>
                                 </div>
                             </form>
