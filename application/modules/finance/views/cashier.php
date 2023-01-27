@@ -14,7 +14,7 @@
                     <div class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">Cashiers</h4>
-                            <button class="btn btn-primary" style="margin-left: auto;display: block;" @click="editMode">{{ edit_text }}</button>
+                            <button class="btn" :class="edit_class" style="margin-left: auto;display: block;" @click="editMode">{{ edit_text }}</button>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -84,6 +84,7 @@ new Vue({
         finance_users: [],
         not_edit_mode: true,
         edit_text:"Turn on Edit Mode",
+        edit_class:"btn-primary",
         request:{
             user_id: undefined,            
         },        
@@ -110,10 +111,12 @@ new Vue({
             if(this.not_edit_mode){
                 this.not_edit_mode = false;
                 this.edit_text = "Turn off Edit Mode";
+                this.edit_class = "btn-danger";
             }
             else{
                 this.not_edit_mode = true;
                 this.edit_text = "Turn on Edit Mode";
+                this.edit_class = "btn-primary";
             }
         },       
         submitNewCashier: function(){
