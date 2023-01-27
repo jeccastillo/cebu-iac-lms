@@ -53,7 +53,7 @@
                         <h4 class="modal-title">Add New Cashier</h4>
                     </div>
                     <div class="modal-body">
-                        <select v-model="request.user_id" class="select2">                            
+                        <select v-model="request.user_id">                            
                             <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
                         </select>
                     </div>
