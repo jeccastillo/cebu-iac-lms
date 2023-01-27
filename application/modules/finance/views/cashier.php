@@ -14,7 +14,7 @@
                     <div class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">Cashiers</h4>
-                            <button class="btn btn-primary" @click="editMode">{{ edit_text }}</button>
+                            <button class="btn btn-primary" style="margin-left: auto;display: block;" @click="editMode">{{ edit_text }}</button>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
