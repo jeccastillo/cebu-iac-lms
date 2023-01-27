@@ -54,7 +54,7 @@
                     </div>
                     <div class="modal-body">
                         <select v-model="request.user_id" class="select2">                            
-                            <option v-for="user as finance_user" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
+                            <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
                         </select>
                     </div>
                     <div class=" modal-footer">
@@ -106,7 +106,7 @@ new Vue({
 
     methods: {                
         submitNewCashier: function(){
-            
+
         }
 
     }
