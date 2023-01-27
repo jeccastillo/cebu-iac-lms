@@ -83,9 +83,11 @@ class Finance extends CI_Controller {
     }
     public function update_cashier(){
         $post = $this->input->post();                      
+        
         $this->db
-				 ->where('inID',$post['intID'])
+				 ->where('intID',$post['intID'])
 				 ->update('tb_mas_cashier',$post);
+
         $data['message'] = "Successfully Updated";
         $data['success'] = true;
     
