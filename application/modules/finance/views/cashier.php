@@ -97,7 +97,8 @@ new Vue({
         axios.get(base_url + 'finance/cashier_data/')
         .then((data) => {
             this.cashiers = data.data.cashiers;
-            this.finance_users = data.data.finance_users;            
+            this.finance_users = data.data.finance_users;
+            console.log(this.finance_users);
         })
         .catch((error) => {
             console.log(error);
