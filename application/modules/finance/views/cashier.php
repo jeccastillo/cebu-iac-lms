@@ -29,10 +29,10 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" @keyup.enter="changeValue(cashier.intID,'or_start', $event.target.value)" :value="cashier.or_start" />                                        
+                                        <input type="number" :disabled="not_edit_mode" @blur="changeValue(cashier.intID,'or_start', $event.target.value)" :value="cashier.or_start" />                                        
                                     </td>
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" @keyup.enter="changeValue(cashier.intID,'or_end', $event.target.value)" :value="cashier.or_end" />
+                                        <input type="number" :disabled="not_edit_mode" @blur="changeValue(cashier.intID,'or_end', $event.target.value)" :value="cashier.or_end" />
                                     </td>
                                     <td>
                                         {{ cashier.or_current }}
@@ -133,8 +133,7 @@ new Vue({
                     Authorization: `Bearer ${window.token}`
                 }
             })
-            .then(data => {
-                this.is_done = true;
+            .then(data => {                
 
                 if (data.data.success) {
                     location.reload();
@@ -150,8 +149,28 @@ new Vue({
         changeValue: function(id, type, val){
             var formdata = new FormData();
             formdata.append('intID',id);
-            //formdata.append(type);            
-            console.log(val);
+            formdata.append(type,val);                        
+            axios
+            .post(base_url + 'finance/update_cashier', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {                
+                if (data.data.success) {
+                    Swal.fire(
+                        'Updated',
+                        data.data.message,
+                        'success'
+                    )
+                } else {
+                    Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                    )
+                }
+            });
         }
 
 

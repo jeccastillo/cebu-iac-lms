@@ -81,7 +81,16 @@ class Finance extends CI_Controller {
         }
         echo json_encode($data);
     }
-
+    public function update_cashier(){
+        $post = $this->input->post();                      
+        $this->db
+				 ->where('inID',$post['intID'])
+				 ->update('tb_mas_cashier',$post);
+        $data['message'] = "Successfully Updated";
+        $data['success'] = true;
+    
+        echo json_encode($data);
+    }
     public function payments_no_or(){                             
 
         $this->data['page'] = "no_or";
