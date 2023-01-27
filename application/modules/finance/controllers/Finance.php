@@ -74,6 +74,15 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/list_conf",$this->data); 
     }
+
+    public function cashier(){                             
+
+        $this->data['page'] = "add_cashier";
+        $this->data['opentree'] = "cashier";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("cashier",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
 		
     // public function get_other_payments($slug){
 
