@@ -35,37 +35,31 @@
                             <hr />                                    
                         </div><!---box body--->
                         <div class="box-footer">
-                            <button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
-                                    Add Cashier
-                            </button>
+                            <form @submit.prevent="submitNewCashier" class="modal-dialog modal-lg">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <!-- modal header  -->
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Add New Cashier</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <select v-model="request.user_id">                            
+                                            <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
+                                        </select>
+                                    </div>
+                                    <div class=" modal-footer">
+                                        <!-- modal footer  -->
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div><!---box--->                      
                 </div><!---column--->
             </div><!---row--->
-        </div><!---content container--->
-        <div class="modal fade" id="myModal" role="dialog">
-            <form @submit.prevent="submitNewCashier" class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- modal header  -->
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add New Cashier</h4>
-                    </div>
-                    <div class="modal-body">
-                        <select v-model="request.user_id" class="select3">                            
-                            <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
-                        </select>
-                    </div>
-                    <div class=" modal-footer">
-                        <!-- modal footer  -->
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
+        </div><!---content container--->       
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -74,9 +68,6 @@
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/lib/adminlte/js/jquery.js"></script>
-<script type="text/javascript"
-    src="<?php echo base_url(); ?>assets/lib/adminlte/js/plugins/select2/select2.full.min.js"></script>
 
 <script>
 new Vue({
@@ -100,8 +91,7 @@ new Vue({
         axios.get(base_url + 'finance/cashier_data/')
         .then((data) => {
             this.cashiers = data.data.cashiers;
-            this.finance_users = data.data.finance_users;  
-            $(".select3").select2();          
+            this.finance_users = data.data.finance_users;              
         })
         .catch((error) => {
             console.log(error);
