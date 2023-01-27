@@ -98,7 +98,7 @@ new Vue({
         .then((data) => {
             this.cashiers = data.cashiers;
             this.finance_users = data.finance_users;
-            console.log(this.finance_users);
+            console.log(data);
         })
         .catch((error) => {
             console.log(error);
