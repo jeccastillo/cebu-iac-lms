@@ -35,7 +35,7 @@
                                         <input type="number" :disabled="not_edit_mode" :value="cashier.or_end" />
                                     </td>
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" :value="cashier.or_current" />
+                                        {{ cashier.or_current }}
                                     </td>                                                                        
                                 </tr>                                 
                             </table>
