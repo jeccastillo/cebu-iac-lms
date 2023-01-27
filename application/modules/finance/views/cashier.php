@@ -53,7 +53,7 @@
                         <h4 class="modal-title">Add New Cashier</h4>
                     </div>
                     <div class="modal-body">
-                        <select v-model="request.user_id">                            
+                        <select v-model="request.user_id" class="select2">                            
                             <option v-for="user in finance_users" :value="user.intID">{{ user.strFirstname + " " + user.strLastname }}</option>                            
                         </select>
                     </div>
@@ -98,6 +98,7 @@ new Vue({
         .then((data) => {
             this.cashiers = data.cashiers;
             this.finance_users = data.finance_users;
+            console.log(this.finance_users);
         })
         .catch((error) => {
             console.log(error);
