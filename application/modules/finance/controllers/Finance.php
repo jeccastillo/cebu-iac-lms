@@ -82,7 +82,8 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
     public function update_cashier(){
-        $post = $this->input->post();                      
+        $post = $this->input->post();                     
+        $valid = true; 
         
         $type = $post['type'];
         unset($post['type']);
@@ -96,12 +97,25 @@ class Finance extends CI_Controller {
         }
         else{
             $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
-            $this->db
-                    ->where('intID',$post['intID'])
-                    ->update('tb_mas_cashier',$post);
+            if($type == "or_start")
+                if($cashier['or_end'] < $post["or_start"])
+                    $valid = false;
+            if($type == "or_end")
+                if($cashier['or_start'] > $post["or_end"])
+                        $valid = false;
+            
+            if($valid){
+                $this->db
+                        ->where('intID',$post['intID'])
+                        ->update('tb_mas_cashier',$post);
 
-            $data['message'] = "Successfully Updated";
-            $data['success'] = true;
+                $data['message'] = "Successfully Updated";
+                $data['success'] = true;
+            }
+            else{
+                $data['message'] = "OR Start can not be greater than OR End";
+                $data['success'] = false;
+            }
         }
         //$data['cashier'] = $cashier;
     

@@ -169,7 +169,9 @@ new Vue({
                         'Failed!',
                         data.data.message,
                         'error'
-                    )
+                    ).then(function() {
+                        //location.reload();
+                    });
                 }
             });
         }
