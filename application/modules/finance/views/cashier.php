@@ -177,6 +177,7 @@ new Vue({
                         //location.reload();
                     });
                 }
+                document.getElementById(event.target.id).disabled = true;
             });
         }
 
