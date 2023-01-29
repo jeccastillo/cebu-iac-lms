@@ -28,11 +28,11 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" disabled="true" :id="'or_start_'+cashier.intID" v-on:keyup.enter="changeValue(cashier.intID,'or_start', $event)" @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                                
+                                        <input type="number" disabled="true" :id="'or_start_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                                
                                         <a href="#" @click.prevent.stop="enableField('or_start_'+cashier.intID)">edit</a>
                                     </td>
                                     <td>
-                                        <input type="number" disabled="true" :id="'or_end_'+cashier.intID" v-on:keyup.enter="changeValue(cashier.intID,'or_start', $event)" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
+                                        <input type="number" disabled="true" :id="'or_end_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
                                         <a href="#" @click.prevent.stop="enableField('or_end_'+cashier.intID)">edit</a>
                                     </td>
                                     <td>
