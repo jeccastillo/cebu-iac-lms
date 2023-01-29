@@ -83,14 +83,27 @@ class Finance extends CI_Controller {
     }
     public function update_cashier(){
         $post = $this->input->post();                      
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
-        $this->db
-				 ->where('intID',$post['intID'])
-				 ->update('tb_mas_cashier',$post);
+        
+        $type = $post['type'];
+        unset($post['type']);
+        
+        $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();
 
-        $data['message'] = "Successfully Updated";
-        $data['success'] = true;
-        $data['cashier'] = $cashier;
+        if($cashier_validation)
+        {
+            $data['message'] = "Conflict with one of the cashiers";
+            $data['success'] = false;
+        }
+        else{
+            $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+            $this->db
+                    ->where('intID',$post['intID'])
+                    ->update('tb_mas_cashier',$post);
+
+            $data['message'] = "Successfully Updated";
+            $data['success'] = true;
+        }
+        //$data['cashier'] = $cashier;
     
         echo json_encode($data);
     }

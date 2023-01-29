@@ -149,7 +149,8 @@ new Vue({
         changeValue: function(id, type, val){
             var formdata = new FormData();
             formdata.append('intID',id);
-            formdata.append(type,val);                        
+            formdata.append(type,val); 
+            formdata.append('type',type);                       
             axios
             .post(base_url + 'finance/update_cashier', formdata, {
                 headers: {
