@@ -32,7 +32,8 @@
                                         <a href="#" @click.prevent.stop="enableField('or_start_'+cashier.intID)">edit</a>
                                     </td>
                                     <td>
-                                        <input type="number" disabled="true" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
+                                        <input type="number" disabled="true" :id="'or_end_'+cashier.intID" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
+                                        <a href="#" @click.prevent.stop="enableField('or_end_'+cashier.intID)">edit</a>
                                     </td>
                                     <td>
                                         {{ cashier.or_current }}
@@ -136,6 +137,7 @@ new Vue({
         },
         enableField: function(id){
             document.getElementById(id).disabled = false;
+            document.getElementById(id).focus();
         },
         changeValue: function(id, type, event){
             var formdata = new FormData();
