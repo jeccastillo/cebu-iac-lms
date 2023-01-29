@@ -29,7 +29,7 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" disabled="true" @click="enableField"  @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                        
+                                        <input type="number" disabled="true" @click="enableField"  @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                                
                                     </td>
                                     <td>
                                         <input type="number" disabled="true" @click="enableField" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
