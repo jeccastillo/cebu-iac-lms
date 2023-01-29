@@ -98,10 +98,10 @@ class Finance extends CI_Controller {
         else{
             $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
             if($type == "or_start")
-                if($cashier['or_end'] < $post["or_start"])
+                if($cashier->or_end < $post["or_start"])
                     $valid = false;
             if($type == "or_end")
-                if($cashier['or_start'] > $post["or_end"])
+                if($cashier->or_start > $post["or_end"])
                         $valid = false;
             
             if($valid){
