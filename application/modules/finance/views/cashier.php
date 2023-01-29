@@ -13,8 +13,7 @@
                 <div class="col-sm-12">
                     <div class="box box-solid box-success">
                         <div class="box-header">                            
-                            <h4 class="box-title">Cashiers</h4>
-                            <button class="btn" :class="edit_class" style="margin-left: auto; display: block; margin-top: -20px;" @click="editMode">{{ edit_text }}</button>
+                            <h4 class="box-title">Cashiers</h4>                            
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -108,19 +107,7 @@ new Vue({
         })
     },
 
-    methods: {         
-        editMode: function(){
-            if(this.not_edit_mode){
-                this.not_edit_mode = false;
-                this.edit_text = "Turn off Edit Mode";
-                this.edit_class = "btn-danger";
-            }
-            else{
-                this.not_edit_mode = true;
-                this.edit_text = "Turn on Edit Mode";
-                this.edit_class = "btn-primary";
-            }
-        },       
+    methods: {                       
         submitNewCashier: function(){
             
             var formdata = new FormData();                    
@@ -174,7 +161,7 @@ new Vue({
                         data.data.message,
                         'error'
                     ).then(function() {
-                        //location.reload();
+                        location.reload();
                     });
                 }
                 document.getElementById(event.target.id).disabled = true;
