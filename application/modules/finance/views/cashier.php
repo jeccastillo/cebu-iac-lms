@@ -29,10 +29,10 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode"  @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                        
+                                        <input type="number" disabled="true" @click="enableField"  @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                        
                                     </td>
                                     <td>
-                                        <input type="number" :disabled="not_edit_mode" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
+                                        <input type="number" disabled="true" @click="enableField" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
                                     </td>
                                     <td>
                                         {{ cashier.or_current }}
@@ -145,6 +145,9 @@ new Vue({
                     )
                 }
             });
+        },
+        enableField: function(event){
+            event.target.disabled = false;
         },
         changeValue: function(id, type, event){
             var formdata = new FormData();
