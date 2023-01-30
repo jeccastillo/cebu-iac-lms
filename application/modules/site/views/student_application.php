@@ -312,8 +312,7 @@
                         <div class="form-group">
                             <label for=""
                                 >Do you have any of the following? (check
-                                all that apply)
-                                <span class="text-danger">*</span>
+                                all that apply)                                
                             </label>
 
                             <div>
