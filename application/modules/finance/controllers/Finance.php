@@ -107,7 +107,7 @@ class Finance extends CI_Controller {
         else{            
             if($type == "or_start"){
                 if($cashier->or_end < $post["or_start"] && $cashier->or_end != null)
-                    $post['or_end'] = $post["or_start"] + 1;
+                    $post['or_end'] = $post["or_start"];
                     $data['reload'] = true;
             }
             if($type == "or_end")
