@@ -185,7 +185,7 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
+                                                <button v-if="(!payment.or_number && payment.status == 'Paid') && cashier" data-toggle="modal"                                                
                                                         @click="or_update.id = payment.id;" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
@@ -195,8 +195,8 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL')  && cashier"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
                                         </tr>                                                                           
                                         <tr>
@@ -213,7 +213,7 @@
                                     <hr />
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6" v-if="cashier">
                                             <form @submit.prevent="submitManualPayment" method="post">                                                
                                                 <div class="form-group">
                                                     <label>Payment Type</label>
@@ -318,6 +318,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
         student:{},    
+        cashier: undefined,
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -392,6 +393,7 @@ new Vue({
                         this.tuition = data.data.tuition;
                         this.tuition_data = data.data.tuition_data;                                               
                         this.remaining_amount = data.data.tuition_data.total;
+                        this.cashier = data.data.cashier;
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
@@ -440,7 +442,7 @@ new Vue({
                         })      
                     }
                     else{
-                        //document.location = this.base_url + 'users/login';
+                        document.location = this.base_url + 'users/login';
                     }
                                   
                 })
