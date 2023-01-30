@@ -87,14 +87,14 @@ class Finance extends CI_Controller {
         
         $type = $post['type'];
         unset($post['type']);
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->first_row();
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
         
         $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();        
         if(!$cashier_validation){
             if($type == "or_start")
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier['or_end']))->row();
+                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
             else
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier['or_start'],'or_end <=' => $post['or_end']))->row();
+                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
         }
         
 
@@ -105,10 +105,10 @@ class Finance extends CI_Controller {
         }
         else{            
             if($type == "or_start")
-                if($cashier['or_end'] < $post["or_start"] && $cashier['or_end'] != null)
+                if($cashier->or_end < $post["or_start"] && $cashier->or_end != null)
                     $valid = false;
             if($type == "or_end")
-                if($cashier['or_start'] > $post["or_end"] && $cashier['or_start'] != null)
+                if($cashier->or_start > $post["or_end"] && $cashier->or_start != null)
                         $valid = false;
             
             if($valid){
