@@ -321,10 +321,7 @@
                                     type="checkbox"
                                     name="health_concern"
                                     v-model="request.health_concerns"
-                                    value="Diabetes"
-                                    :required="
-                                        request.health_concerns.length == 0
-                                    "
+                                    value="Diabetes"                                  
                                 />
                                 Diabetes
                             </div>
