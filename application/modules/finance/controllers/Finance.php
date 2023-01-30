@@ -84,6 +84,7 @@ class Finance extends CI_Controller {
     public function update_cashier(){
         $post = $this->input->post();                     
         $valid = true; 
+        $data['reload'] = false;
         
         $type = $post['type'];
         unset($post['type']);
@@ -104,9 +105,11 @@ class Finance extends CI_Controller {
             $data['success'] = false;
         }
         else{            
-            if($type == "or_start")
+            if($type == "or_start"){
                 if($cashier->or_end < $post["or_start"] && $cashier->or_end != null)
-                    $valid = false;
+                    $post['or_end'] = $post["or_start"] + 1;
+                    $data['reload'] = true;
+            }
             if($type == "or_end")
                 if($cashier->or_start > $post["or_end"] && $cashier->or_start != null)
                         $valid = false;
@@ -124,7 +127,7 @@ class Finance extends CI_Controller {
                 $data['success'] = false;
             }
         }
-        //$data['cashier'] = $cashier;
+        
     
         echo json_encode($data);
     }

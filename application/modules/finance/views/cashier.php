@@ -156,7 +156,10 @@ new Vue({
                         'Updated',
                         data.data.message,
                         'success'
-                    )
+                    ).then(function(){
+                        if(data.data.reload)
+                            location.reload();
+                    });
                 } else {
                     Swal.fire(
                         'Failed!',
