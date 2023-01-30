@@ -311,7 +311,7 @@
 
                         <div class="form-group">
                             <label for=""
-                                >Have you been any of the following? (check
+                                >Do you have any of the following? (check
                                 all that apply)
                                 <span class="text-danger">*</span>
                             </label>
