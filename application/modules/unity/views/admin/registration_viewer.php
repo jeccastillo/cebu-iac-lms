@@ -440,7 +440,7 @@ new Vue({
                         })      
                     }
                     else{
-                        document.location = this.base_url + 'users/login';
+                        //document.location = this.base_url + 'users/login';
                     }
                                   
                 })
