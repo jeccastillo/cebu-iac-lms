@@ -665,8 +665,8 @@ new Vue({
                                             }).then(function() {
                                                 location.reload();
                                             });       
-                                        })}
-                                    }
+                                        })
+                                    }                                    
                                     else
                                         Swal.fire({
                                             title: "Failed",
