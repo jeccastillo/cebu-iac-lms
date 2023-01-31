@@ -31,7 +31,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number:</label>
-                                            <input type="text" class="form-control" v-model="request.or_number" />
+                                            <div>{{ request.or_number }}</div>
+                                            <input type="hidden" class="form-control" v-model="request.or_number" />
                                         </div>
                                     </div>                                    
                                     <div class="col-sm-6">
