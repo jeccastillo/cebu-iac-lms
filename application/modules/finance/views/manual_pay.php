@@ -207,12 +207,19 @@ new Vue({
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
             this.request.contact_number = this.student.mobile_number;  
-            this.request.email_address = this.student.email;   
-            this.cashier = data.data.cashier;
-            if(this.cashier){
-                this.request.or_number = this.cashier.or_current;
-                this.or_update.or_number = this.cashier.or_current;
-            }
+            this.request.email_address = this.student.email; 
+            axios.get(base_url + 'finance/manualPayData/' + this.slug)
+            .then((data) => {            
+                this.cashier = data.data.cashier;
+                if(this.cashier){
+                    this.request.or_number = this.cashier.or_current;
+                    this.or_update.or_number = this.cashier.or_current;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })  
+            
             for(i in this.student.payments){
                 if(this.student.payments[i].description == "Application Payment")
                     this.application_payment = this.student.payments[i];
