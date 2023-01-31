@@ -218,6 +218,7 @@
                 <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
                     <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
                     <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>
+                    <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
                     <li class="header">Admissions</li>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
                     <a href="#">
