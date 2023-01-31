@@ -214,6 +214,7 @@
                                     <div class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6" v-if="cashier">
+                                            <h3>Cashier {{ cashier.intID }}</h3>
                                             <form @submit.prevent="submitManualPayment" method="post">                                                
                                                 <div class="form-group">
                                                     <label>Payment Type</label>
