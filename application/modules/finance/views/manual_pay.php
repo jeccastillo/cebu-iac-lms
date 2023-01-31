@@ -12,7 +12,7 @@
         <div class="content">
             <div class="row">       
                 <div class="col-sm-12">
-                    <div class="box box-solid box-success">
+                    <div v-if="cashier" class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">New Application Transaction</h4>
                         </div>
@@ -59,7 +59,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
-                                        <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
+                                        <button :disabled="!request.or_number" class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                     </div>
                                 </form>                                
                             </div>                            
@@ -144,7 +144,7 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" :disabled="!or_update.or_number" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
 
@@ -177,7 +177,7 @@ new Vue({
             email_address: '',
             mode_of_payment_id: 26,
             description: 'Reservation Payment', 
-            or_number:'',
+            or_number:undefined,
             remarks:'',
             subtotal_order: 10000,
             convenience_fee: 0,
@@ -207,6 +207,11 @@ new Vue({
             this.request.last_name = this.student.last_name;    
             this.request.contact_number = this.student.mobile_number;  
             this.request.email_address = this.student.email;   
+            this.cashier = data.data.cashier;
+            if(this.cashier){
+                this.request.or_number = this.cashier.or_current;
+                this.or_update.or_number = this.cashier.or_current;
+            }
             for(i in this.student.payments){
                 if(this.student.payments[i].description == "Application Payment")
                     this.application_payment = this.student.payments[i];

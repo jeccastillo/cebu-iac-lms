@@ -24,6 +24,7 @@ class Finance extends CI_Controller {
 			$this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
 		}
         
+        $this->data["user"] = $this->session->all_userdata();
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";	
         $this->data['student_pics'] = base_url()."assets/photos/";
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
@@ -52,6 +53,7 @@ class Finance extends CI_Controller {
 
     public function manualPayData($slug){
         $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');        
+        $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
         $data['message'] = "Success";
         $data['success'] = true;
         echo json_encode($data);
@@ -61,6 +63,7 @@ class Finance extends CI_Controller {
                 
         $this->data['type'] = $type;
         $this->data['slug'] = $slug;
+        
 
         $this->load->view("common/header",$this->data);
         $this->load->view("manual_pay",$this->data);
