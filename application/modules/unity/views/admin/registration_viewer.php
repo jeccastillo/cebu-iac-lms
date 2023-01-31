@@ -243,7 +243,7 @@
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
                                                     <div>{{ request.or_number }}</div>
-                                                    <input type="hidden" class="form-control" v-model="request.or_number" />
+                                                    <input type="hidden" required class="form-control" v-model="request.or_number" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -647,14 +647,26 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                    if(data.data.success){
+                                        var formdata= new FormData();
+                                        formdata.append('intID',this.cashier.intID);
+                                        formdata.append('or_current',this.cashier.or_current);                                        
+                
+                                        axios.post(base_url + 'finance/next_or', formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(function(){
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "error"
+                                            }).then(function() {
+                                                location.reload();
+                                            });       
+                                        })}
+                                    }
                                     else
                                         Swal.fire({
                                             title: "Failed",

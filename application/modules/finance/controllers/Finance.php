@@ -81,6 +81,21 @@ class Finance extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    public function next_or(){
+        $post = $this->input->post();
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+        
+        if($post['or_current'] >= $cashier->or_end)
+            $post['or_current'] = null;
+        else
+            $post['or_current'] += 1;
+
+        $this->db
+            ->where('intID',$post['intID'])
+            ->update('tb_mas_cashier',$post);
+        
+    }
     public function update_cashier(){
         $post = $this->input->post();                     
         $valid = true; 
