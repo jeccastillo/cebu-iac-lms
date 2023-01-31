@@ -289,12 +289,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>
-                        <input type="text" class="form-control" v-model="or_update.or_number" required></textarea>                        
+                        <div>{{ or_update.or_number }}</div>
+                        <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea>                        
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -397,8 +398,10 @@ new Vue({
                         this.remaining_amount = data.data.tuition_data.total;
                         this.cashier = data.data.cashier;
 
-                        if(this.cashier)
+                        if(this.cashier){
                             this.request.or_number = this.cashier.or_current;
+                            this.or_update.or_number = this.cashier.or_current;
+                        }
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
@@ -482,15 +485,27 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                    this.loader_spinner = false;                                    
+                                    if(data.data.success){
+                                        var formdata= new FormData();
+                                        formdata.append('intID',this.cashier.intID);
+                                        formdata.append('or_current',this.cashier.or_current);
+                                        axios.post(base_url + 'finance/next_or', formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(function(){
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });       
+                                        })
+                                    }
+                                        
                                     else
                                         Swal.fire({
                                             title: "Failed",
