@@ -14,7 +14,8 @@
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
                         <div class="box-header">                            
-                            <h4 class="box-title">New Application Transaction</h4>
+                            <h4 class="box-title">New Application Transaction - Cashier {{ cashier.intID }}</h4>
+                            
                         </div>
                         <div class="box-body">
                             <div class="row">                                
@@ -259,14 +260,25 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                    if(data.data.success){
+                                        var formdata= new FormData();
+                                        formdata.append('intID',this.cashier.intID);
+                                        formdata.append('or_current',this.cashier.or_current);
+                                        axios.post(base_url + 'finance/next_or', formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(function(){
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });       
+                                        })
+                                    }                                        
                                     else
                                         Swal.fire({
                                             title: "Failed",
@@ -322,14 +334,25 @@ new Vue({
                                     })
                                     .then(data => {
                                         this.loader_spinner = false;
-                                        if(data.data.success)
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data.data.message,
-                                                icon: "success"
-                                            }).then(function() {
-                                                location.reload();
-                                            });
+                                        if(data.data.success){
+                                            var formdata= new FormData();
+                                            formdata.append('intID',this.cashier.intID);
+                                            formdata.append('or_current',this.cashier.or_current);
+                                            axios.post(base_url + 'finance/next_or', formdata, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                            })
+                                            .then(function(){
+                                                Swal.fire({
+                                                    title: "Success",
+                                                    text: data.data.message,
+                                                    icon: "success"
+                                                }).then(function() {
+                                                    location.reload();
+                                                });       
+                                            })
+                                        }                                            
                                         else
                                             Swal.fire({
                                                 title: "Failed",
