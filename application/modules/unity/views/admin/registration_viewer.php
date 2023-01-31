@@ -242,7 +242,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
-                                                    <input type="text" class="form-control" v-model="request.or_number" />
+                                                    <input type="hidden" class="form-control" v-model="request.or_number" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -255,7 +255,7 @@
                                                     <label>Remarks:</label>
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>
-                                                <button class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
+                                                <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>
                                             </form>
                                             <hr />                                            
                                         </div>                                 
@@ -395,6 +395,9 @@ new Vue({
                         this.tuition_data = data.data.tuition_data;                                               
                         this.remaining_amount = data.data.tuition_data.total;
                         this.cashier = data.data.cashier;
+
+                        if(this.cashier)
+                            this.request.or_number = this.cashier.or_current;
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
