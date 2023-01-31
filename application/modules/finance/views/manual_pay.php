@@ -168,6 +168,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         reservation_payment: undefined,
         application_payment: undefined,
+        cashier: undefined,
         request:{
             first_name: '',
             slug: '',
