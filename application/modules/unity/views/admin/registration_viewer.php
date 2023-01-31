@@ -242,6 +242,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
+                                                    <div>{{ request.or_number }}</div>
                                                     <input type="hidden" class="form-control" v-model="request.or_number" />
                                                 </div>
                                                 <div class="form-group">
