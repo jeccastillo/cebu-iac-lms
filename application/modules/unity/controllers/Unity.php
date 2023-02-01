@@ -759,7 +759,7 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         $id = $post['studentid'];
         $this->data_poster->removeRegistration($id,$post['sem']);
-        redirect(base_url()."/unity/faculty_dashboard");
+        redirect(base_url()."unity/faculty_dashboard");
     }
     
     public function sync_users()
