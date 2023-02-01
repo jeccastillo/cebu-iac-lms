@@ -36,7 +36,18 @@
                                 <option v-for="status in status_options" :value="status">{{ status }}</option>                        
                             </select>
                         </div>
-                    </div>                    
+                    </div>   
+                    <div class="row">                                                
+                        <div class="col-md-12"><strong>Tuition Fee</strong></div>
+                        <div class="col-md-6">
+                            <label>Rate:</label>
+                            <input type="number" v-model="scholarship.tuition_fee_rate" class="form-control">
+                        </div>                        
+                        <div class="col-md-6">
+                            <label>Fixed:</label>
+                            <input type="number" v-model="scholarship.tuition_fee_fixed" class="form-control">
+                        </div>                        
+                    </div>                  
                 </div>
             </div>            
         </div>                
