@@ -79,6 +79,7 @@ class Scholarship extends CI_Controller {
         $post = $this->input->post();
         if($post['intID'] == 0){
             unset($post['intID']);
+            $post['created_by_id'] =  $this->data["user"]["intID"];
             $this->db->insert('tb_mas_scholarships',$post);
             $data['id'] = $this->db->insert_id();
         }
