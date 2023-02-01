@@ -40,7 +40,7 @@
                     <hr />
                     <div>
                         <div class="col-md-4">
-                            <div class="box box-solid">
+                            <div class="box box-solid box-primary">
                                 <div class="box-header">
                                     <strong>Tuition Fee</strong>
                                 </div>
@@ -59,13 +59,12 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="box box-solid">
+                            <div class="box box-solid box-primary">
                                 <div class="box-header">
                                     <strong>Basic Fee</strong>
                                 </div>
                                 <div class="box-body">
-                                    <div class="row">                                                
-                                        <div class="col-md-12 text-center"><strong>Basic Fee</strong></div>
+                                    <div class="row">                                                                                        
                                         <div class="col-md-6">
                                             <label>Rate:</label>
                                             <input type="number" min=0 max=100 step=1 v-model="scholarship.basic_fee_rate" class="form-control">
