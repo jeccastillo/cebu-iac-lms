@@ -179,10 +179,14 @@
                                     </div>           
                                 </div>           
                             </div>                       
-                        </div>  
-                        <hr />
-                        <input class="btn btn-primray" type="submit" :value="btn_text" />    
-                    </div>
+                        </div>                        
+                        <div class="row"> 
+                            <div class="col-sm-12">                         
+                                <hr />                                                
+                                <input class="btn btn-primray" type="submit" :value="btn_text" /> 
+                            </div>
+                        </div>
+                    </div>                       
                 </form>
             </div>            
         </div>                
