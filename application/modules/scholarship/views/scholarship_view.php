@@ -259,7 +259,8 @@ new Vue({
         submitForm: function(){
             var formdata= new FormData();
             for (const [key, value] of Object.entries(this.scholarship)) {
-                formdata.append(key,value);
+                if(value != undefined)
+                    formdata.append(key,value);
             }
             axios.post(base_url + 'scholarship/submit_form', formdata, {
             headers: {
