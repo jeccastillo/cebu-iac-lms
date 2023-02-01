@@ -229,7 +229,7 @@ new Vue({
         let url = new URL(url_string);
 
         this.loader_spinner = true;
-        if(id)
+        if(this.id)
             axios.get(base_url + 'scholarship/data/' + this.id)
             .then((data) => {
             console.log(data);
