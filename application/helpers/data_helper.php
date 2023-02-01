@@ -133,6 +133,7 @@ if (!function_exists('get_comments')) {
 if (!function_exists('get_enum_values')) {
     function get_enum_values( $table, $field )
     {
+        $ci = load_ci();
         $type = $ci->db->query( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'" )->row( 0 )->Type;
         preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
         $enum = explode("','", $matches[1]);
