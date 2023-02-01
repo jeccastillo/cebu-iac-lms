@@ -1,18 +1,18 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Advising
+                    Registrar
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i>Advising</a></li>
-                        <li class="active">Advising Student</li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i>Registrar</a></li>
+                        <li class="active">Subject Loading</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Advise Student</h3>
+                <h3 class="box-title">Subject Loading</h3>
                 
         </div>
        
