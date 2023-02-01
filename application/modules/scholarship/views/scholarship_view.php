@@ -44,7 +44,7 @@
                                 <div class="col-md-12 text-center"><strong>Tuition Fee</strong></div>
                                 <div class="col-md-6">
                                     <label>Rate:</label>
-                                    <input type="number" @keypress="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
+                                    <input type="number" @keydown="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
                                 </div>                        
                                 <div class="col-md-6">
                                     <label>Fixed:</label>
@@ -70,7 +70,7 @@
                                 <div class="col-md-12 text-center"><strong>Miscellaneous Fee</strong></div>
                                 <div class="col-md-6">
                                     <label>Rate:</label>
-                                    <input type="number" @keypress="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.misc_fee_rate" class="form-control">
+                                    <input type="number" @keydown="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.misc_fee_rate" class="form-control">
                                 </div>                        
                                 <div class="col-md-6">
                                     <label>Fixed:</label>
