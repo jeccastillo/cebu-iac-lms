@@ -15,7 +15,7 @@
 <section class="content-header">
                     <h1>
                         <small>
-                            <a class="btn btn-app" href="<?php echo base_url() ?>department/advise_student" ><i class="ion ion-arrow-left-a"></i>Select Student</a>  
+                            <a class="btn btn-app" href="<?php echo base_url() ?>department/subject_loading" ><i class="ion ion-arrow-left-a"></i>Select Student</a>  
                             <a class="btn btn-app" href="<?php echo base_url()."unity/student_viewer/".$student['intID']; ?>"><i class="ion ion-eye"></i> View</a> 
                         
                              <a class="btn btn-app" target="_blank" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
