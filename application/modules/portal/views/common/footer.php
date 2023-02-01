@@ -23,10 +23,10 @@ $(document).ready(function(){
         var tu = $('#totalSub').val();
         var rs = $('#regStat').val();
         
-        if (rs=="For Advising" || rs=="For Registration" || rs=="Registered" ) {
+        if (rs=="For Subject Loading" || rs=="For Registration" || rs=="Registered" ) {
             $('#modal-default').modal('show');
         }
-        // else if(rs=="For Advising") {
+        // else if(rs=="For Subject Loading") {
         //     $('#modal-default').modal('show'); 
         // }
         // else if(rs=="Registered") {

@@ -72,7 +72,7 @@
                         <hr />
                 <div id="regular-option" class="row">
                         <div class="col-sm-12" style="margin-bottom:1rem">
-                        <a href="#" id="load-subjects" class="btn btn-default  btn-flat">Load Advised Subjects <i class="fa fa-arrow-circle-down"></i></a>
+                        <a href="#" id="load-subjects" class="btn btn-default  btn-flat">Load Subjects <i class="fa fa-arrow-circle-down"></i></a>
                             </div>
                     </div>
                     <hr />

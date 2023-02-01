@@ -123,7 +123,7 @@
                                 
                             </div>
                             <div class="col-md-5">
-                                <h4>Advised Subjects</h4>
+                                <h4>Subject Load</h4>
                                 <select style="height:300px" class="form-control" id="advised-subjects" multiple>
                                     <?php foreach($advised_subjects as $sn): ?>
                                         <option value="<?php echo $sn['intSubjectID']; ?>"><?php echo $sn['strCode']; ?></option>

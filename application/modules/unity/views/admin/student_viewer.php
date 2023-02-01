@@ -10,11 +10,11 @@
                     <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>Reg Form Print Preview
                     </a>                     
-                    <a v-if="reg_status != 'For Advising'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
-                        <i class="ion ion-printer"></i>Print Advising Form
+                    <a v-if="reg_status != 'For Subject Loading'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                        <i class="ion ion-printer"></i>Print Subjects
                     </a> 
                     <a v-else class="btn btn-app" :href="base_url + 'department/load_subjects/' + student.intID">
-                        <i class="fa fa-book"></i>Advising/Subject Loading</a> 
+                        <i class="fa fa-book"></i>Subject Loading</a> 
                     </a>
                     <a v-if="reg_status == 'For Registration'"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections

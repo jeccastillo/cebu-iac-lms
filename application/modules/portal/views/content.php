@@ -26,7 +26,7 @@
 </section>
 <div class="content">
 <input type="hidden" id="regStat" value="<?php echo $reg_status;?>"/>
-<?php if ($reg_status =="For Advising"):  { ?>
+<?php if ($reg_status =="For Subject Loading"):  { ?>
     <!-- <div class="alert alert-info alert-dismissible"> -->
     <div class="callout callout-warning">
     <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
@@ -100,7 +100,7 @@
             </div>
          </div>
         
-        <?php if ($reg_status =="For Advising"):  { ?>
+        <?php if ($reg_status =="For Subject Loading"):  { ?>
             <div class="box-body table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -298,7 +298,7 @@
     <div class="modal-dialog">
         <div class="modal-content"> 
            
-                <?php if ($reg_status == "For Advising"): ?>
+                <?php if ($reg_status == "For Subject Loading"): ?>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">x</button>
                         <h3 class="modal-title"><i class="fa fa-warning"></i> iACADEMY Student Portal</h3>

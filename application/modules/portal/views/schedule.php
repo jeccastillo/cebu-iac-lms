@@ -27,7 +27,7 @@
 
 
                 <div class="content"><input type="hidden" id="regStat" value="<?php echo $reg_status;?>"/>
-<?php if ($reg_status =="For Advising"):  { ?>
+<?php if ($reg_status =="For Subject Loading"):  { ?>
     <div class="callout callout-warning">
     <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
         <h4> <i class="fa fa-warning"></i> iACADEMY Student Portal Advisory</h4>
@@ -57,7 +57,7 @@
          <div class="box-header">
             <h4 class="box-title">My Schedule for <?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd']; ?></h4>
         </div>
-        <?php if ($reg_status =="For Advising"):  { ?>
+        <?php if ($reg_status =="For Subject Loading"):  { ?>
         <div class="box-body table-responsive">
         <table class="table table-striped">
                 <thead>
@@ -382,7 +382,7 @@
 <div class="modal fade" id="modal-default" style="display:none;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content"> 
-        <?php if ($reg_status == "For Advising"): ?>
+        <?php if ($reg_status == "For Subject Loading"): ?>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">x</button>
                         <h3 class="modal-title"><i class="fa fa-warning"></i> iACADEMY Student Portal</h3>

@@ -1,12 +1,12 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Advised Students
+                        Students with Loaded Subjects
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i>Advising</a></li>
-                        <li class="active">Advised Students</li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i>Registrar</a></li>
+                        <li class="active">Students with Loaded Subjects</li>
                     </ol>
                 </section>
 <div class="content">
@@ -27,7 +27,7 @@
 
                         </div>
 
-                        <h3 class="box-title">Advised Students For <?php echo $course['strProgramCode']; ?></h3>
+                        <h3 class="box-title">Students with load For <?php echo $course['strProgramCode']; ?></h3>
                         <div class="box-tools">
 
                         </div>
