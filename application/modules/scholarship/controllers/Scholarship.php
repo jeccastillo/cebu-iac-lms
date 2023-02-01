@@ -74,6 +74,24 @@ class Scholarship extends CI_Controller {
         echo json_encode($data);
 
     }
+
+    public function submit_form(){
+        $post = $this->input->post();
+        if($post['intID'] == 0){
+            unset($post['intID']);
+            $this->db->insert('tb_mas_scholarships',$post);
+            $data['id'] = $this->db->insert_id();
+        }
+        else{
+            $this->db
+				 ->where('intID',$post['intID'])
+				 ->update('tb_mas_scholarships',$post);
+            
+            $data['id'] = $post['intID'];
+        }
+        $data['message'] = "Success";
+        echo json_encode($data);
+    }
    
 
     public function faculty_logged_in()

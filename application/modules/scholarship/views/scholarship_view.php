@@ -207,6 +207,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         btn_text: "Add Scholarship",
         scholarship: {
+            intID: "<?php echo $id; ?>",
             name: undefined,
             description: undefined,
             status: undefined,
@@ -260,6 +261,20 @@ new Vue({
             for (const [key, value] of Object.entries(this.scholarship)) {
                 formdata.append(key,value);
             }
+            axios.post(base_url + 'scholarship/submit_form', formdata, {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            }
+            })
+            .then((data) => {
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {                    
+                    document.location = base_url + 'scholarship/view/' + data.data.id;
+                });       
+            })
         }
     }
 
