@@ -1658,6 +1658,10 @@ class Datatables extends CI_Controller {
             $join = "JOIN tb_mas_faculty ON tb_mas_faculty.intID = tb_mas_message_user.intFacultyIDSender ";
             $join .= "JOIN tb_mas_system_message ON tb_mas_system_message.intID = tb_mas_message_user.intMessageID ";
         }        
+        if($table == 'tb_mas_scholarships')
+        {
+            $join = "JOIN tb_mas_faculty ON tb_mas_faculty.intID = tb_mas_scholarships.created_by_id ";            
+        }        
         if($table == 'tb_mas_room_schedule')
         {
             $join = "JOIN tb_mas_classrooms ON tb_mas_classrooms.intID = tb_mas_room_schedule.intRoomID ";

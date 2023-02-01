@@ -10,7 +10,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_scholarships",
             "aoColumnDefs":[
                 {
-                    "aTargets":[5],
+                    "aTargets":[6],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function(data, type, row, meta) {

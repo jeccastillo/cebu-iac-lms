@@ -27,7 +27,8 @@
                             <th>CODE</th>                       
                             <th>Description</th>
                             <th>Type</th>
-                            <th>Status</th>                            
+                            <th>Status</th>
+                            <th>Created By</th>                            
                             <th>Actions</th>
                         </tr>
                     </thead>
