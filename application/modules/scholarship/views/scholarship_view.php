@@ -44,7 +44,7 @@
                                 <div class="col-md-12 text-center"><strong>Tuition Fee</strong></div>
                                 <div class="col-md-6">
                                     <label>Rate:</label>
-                                    <input type="number" @blur="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
+                                    <input type="number"  @blur="checkVal($event)" min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
                                 </div>                        
                                 <div class="col-md-6">
                                     <label>Fixed:</label>
