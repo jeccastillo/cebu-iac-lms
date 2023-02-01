@@ -14,172 +14,176 @@
                 <div class="box-header">
                     <h3>Scholarship</h3>
                 </div>
-                <div class="box-body">
-                    <div class="row">                        
-                        <div class="col-md-6">
-                            <label>Name:</label>
-                            <input type="text" v-model="scholarship.name" class="form-control">                            
-                        </div>                        
-                        <div class="col-md-6">
-                            <label>Description:</label>
-                            <textarea v-model="scholarship.description" class="form-control"></textarea>                            
-                        </div>
-                        <div class="col-md-6">
-                            <label>Type:</label>
-                            <select type="text" v-model="scholarship.type" class="form-control">
-                                <option v-for="type in type_options" :value="type">{{ type }}</option>                         
-                            </select>
-                        </div>                        
-                        <div class="col-md-6">
-                            <label>Status:</label>
-                            <select type="text" v-model="scholarship.status" class="form-control">    
-                                <option v-for="status in status_options" :value="status">{{ status }}</option>                        
-                            </select>
-                        </div>
-                    </div>   
-                    <hr />
-                    <div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Tuition Fee</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                        
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number"  min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.tuition_fee_fixed" class="form-control">
-                                        </div>                        
-                                    </div>           
-                                </div>
+                <form method="post" @submit.prevent.stop="submitForm" >
+                    <div class="box-body">
+                        <div class="row">                        
+                            <div class="col-md-6">
+                                <label>Name:</label>
+                                <input type="text" v-model="scholarship.name" class="form-control">                            
+                            </div>                        
+                            <div class="col-md-6">
+                                <label>Description:</label>
+                                <textarea v-model="scholarship.description" class="form-control"></textarea>                            
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Basic Fee</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                        
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number" min=0 max=100 step=1 v-model="scholarship.basic_fee_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.basic_fee_fixed" class="form-control">
-                                        </div>                        
-                                    </div>           
-                                </div>
+                            <div class="col-md-6">
+                                <label>Type:</label>
+                                <select type="text" v-model="scholarship.type" class="form-control">
+                                    <option v-for="type in type_options" :value="type">{{ type }}</option>                         
+                                </select>
+                            </div>                        
+                            <div class="col-md-6">
+                                <label>Status:</label>
+                                <select type="text" v-model="scholarship.status" class="form-control">    
+                                    <option v-for="status in status_options" :value="status">{{ status }}</option>                        
+                                </select>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Miscellaneous Fee</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                        
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number" min=0 max=100 step=1 v-model="scholarship.misc_fee_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.misc_fee_fixed" class="form-control">
-                                        </div>                        
-                                    </div>           
-                                </div>           
-                            </div>           
-                        </div>
-                    </div>
-                    <hr />
-                    <div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Laboratory Fee</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                        
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number"  min=0 max=100 step=1 v-model="scholarship.lab_fee_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.lab_fee_fixed" class="form-control">
-                                        </div>                        
-                                    </div>           
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Penalty Fee</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number" min=0 max=100 step=1 v-model="scholarship.penalty_fee_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.penalty_fee_fixed" class="form-control">
-                                        </div>                        
-                                    </div> 
-                                </div>                                           
-                            </div>                                           
-                        </div>
-                        <div class="col-md-4">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Other Fees</strong>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                        
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number" min=0 max=100 step=1 v-model="scholarship.other_fees_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.other_fees_fixed" class="form-control">
-                                        </div>                        
+                        </div>   
+                        <hr />
+                        <div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Tuition Fee</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                        
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number"  min=0 max=100 step=1 v-model="scholarship.tuition_fee_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.tuition_fee_fixed" class="form-control">
+                                            </div>                        
+                                        </div>           
                                     </div>
                                 </div>
-                            </div>           
-                        </div>
-                    </div> 
-                    <hr />
-                    <div>
-                        <div class="col-md-6">
-                            <div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <strong>Total Assessment</strong>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Basic Fee</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                        
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number" min=0 max=100 step=1 v-model="scholarship.basic_fee_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.basic_fee_fixed" class="form-control">
+                                            </div>                        
+                                        </div>           
+                                    </div>
                                 </div>
-                                <div class="box-body">
-                                    <div class="row">                                                                                
-                                        <div class="col-md-6">
-                                            <label>Rate:</label>
-                                            <input type="number"  min=0 max=100 step=1 v-model="scholarship.total_assessment_rate" class="form-control">
-                                        </div>                        
-                                        <div class="col-md-6">
-                                            <label>Fixed:</label>
-                                            <input type="number" v-model="scholarship.total_assessment_fixed" class="form-control">
-                                        </div>                        
+                            </div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Miscellaneous Fee</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                        
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number" min=0 max=100 step=1 v-model="scholarship.misc_fee_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.misc_fee_fixed" class="form-control">
+                                            </div>                        
+                                        </div>           
                                     </div>           
                                 </div>           
-                            </div>           
-                        </div>                       
-                    </div>      
-                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Laboratory Fee</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                        
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number"  min=0 max=100 step=1 v-model="scholarship.lab_fee_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.lab_fee_fixed" class="form-control">
+                                            </div>                        
+                                        </div>           
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Penalty Fee</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number" min=0 max=100 step=1 v-model="scholarship.penalty_fee_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.penalty_fee_fixed" class="form-control">
+                                            </div>                        
+                                        </div> 
+                                    </div>                                           
+                                </div>                                           
+                            </div>
+                            <div class="col-md-4">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Other Fees</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                        
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number" min=0 max=100 step=1 v-model="scholarship.other_fees_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.other_fees_fixed" class="form-control">
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>           
+                            </div>
+                        </div> 
+                        <hr />
+                        <div>
+                            <div class="col-md-6">
+                                <div class="box box-solid box-primary">
+                                    <div class="box-header">
+                                        <strong>Total Assessment</strong>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">                                                                                
+                                            <div class="col-md-6">
+                                                <label>Rate:</label>
+                                                <input type="number"  min=0 max=100 step=1 v-model="scholarship.total_assessment_rate" class="form-control">
+                                            </div>                        
+                                            <div class="col-md-6">
+                                                <label>Fixed:</label>
+                                                <input type="number" v-model="scholarship.total_assessment_fixed" class="form-control">
+                                            </div>                        
+                                        </div>           
+                                    </div>           
+                                </div>           
+                            </div>                       
+                        </div>  
+                        <hr />
+                        <input class="btn btn-primray" type="submit" :value="btn_text" />    
+                    </div>
+                </form>
             </div>            
         </div>                
     </div><!---vue container--->
@@ -197,6 +201,7 @@ new Vue({
     data: {        
         id: "<?php echo $id; ?>",
         base_url: "<?php echo base_url(); ?>",   
+        btn_text: "Add Scholarship",
         scholarship: {
             name: undefined,
             description: undefined,
@@ -229,6 +234,8 @@ new Vue({
         let url = new URL(url_string);
 
         this.loader_spinner = true;
+        if(this.id != 0)
+            this.btn_text = "Update Scholarship";
         
         axios.get(base_url + 'scholarship/data/' + this.id)
         .then((data) => {
