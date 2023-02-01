@@ -12,7 +12,7 @@
         <div class="content">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3>{{ scholarship.name }}</h3>
+                    <h3>Scholarship</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">                        
