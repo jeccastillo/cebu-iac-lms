@@ -409,7 +409,7 @@ class Data_fetcher extends CI_Model {
                          ->from('tb_mas_curriculum_subject')
                          ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID')
                          ->where('tb_mas_curriculum_subject.intCurriculumID',$id)
-                         ->order_by('strCode asc, intYearLevel asc, intSem asc')
+                         ->order_by('intYearLevel asc, intSem asc, strCode asc')
                          ->get()
                          ->result_array();
         
