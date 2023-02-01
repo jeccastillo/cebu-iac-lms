@@ -3,7 +3,7 @@
 $config['tb_mas_message_user_columns'] = array('intMessageUserID','strFirstName','strLastName','strSubject', 'dteDate','intRead');
 $config['tb_mas_message_user_index'] = "intMessageUserID";
 
-$config['tb_mas_scholarships_columns'] = array('intMessageUserID','strFirstName','strLastName','strSubject', 'dteDate','intRead');
+$config['tb_mas_scholarships_columns'] = array('intID','strFirstName','strLastName','strSubject', 'dteDate','intRead');
 $config['tb_mas_scholarships_index'] = "intID";
 
 
