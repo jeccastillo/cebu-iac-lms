@@ -377,6 +377,16 @@
                                 <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
                             </ul>
+                        </li> 
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Scholarship</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">                                        
+                                <li class="<?php echo (isset($page) && $page=="add_scholarship")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/view/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Scholarship</a></li>
+                                <li class="<?php echo (isset($page) && $page=="scholarships")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/scholarships" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Scholarships</a></li>
+                            </ul>
                         </li>        
                             
                 <?php endif; ?>

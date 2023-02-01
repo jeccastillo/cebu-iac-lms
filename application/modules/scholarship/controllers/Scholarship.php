@@ -53,7 +53,8 @@ class Scholarship extends CI_Controller {
     
     
     public function scholarships(){
-        
+        $this->data['page'] = "scholarships";
+        $this->data['opentree'] = "scholarship";
         $this->load->view("common/header",$this->data);
         $this->load->view("scholarships",$this->data);
         $this->load->view("common/footer",$this->data);
@@ -61,6 +62,8 @@ class Scholarship extends CI_Controller {
     }
 
     public function view($id){
+        $this->data['page'] = "add_scholarship";
+        $this->data['opentree'] = "scholarship";
         $this->data['id'] = $id;
         $this->load->view("common/header",$this->data);
         $this->load->view("scholarship_view",$this->data);
