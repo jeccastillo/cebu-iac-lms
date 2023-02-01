@@ -79,6 +79,7 @@
                             </div>           
                         </div>
                     </div>
+                    <hr />
                     <div class="row">
                         <div class="col-md-4">
                             <div class="row">                                                
@@ -120,6 +121,7 @@
                             </div>           
                         </div>
                     </div> 
+                    <hr />
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row">                                                
