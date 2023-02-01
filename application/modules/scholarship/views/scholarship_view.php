@@ -15,7 +15,38 @@
                     <h3>{{ scholarship.name }}</h3>
                 </div>
                 <div class="box-body">
-
+                <div class="row">
+                        <div class="col-sm-6 text-right">
+                            Name:
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" v-model="scholarship.name" class="form-control">                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            Description:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ scholarship.description }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            Type:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ scholarship.type }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            Status:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ scholarship.status }}
+                        </div>
+                    </div>
                 </div>
             </div>            
         </div>                
@@ -34,7 +65,9 @@ new Vue({
     data: {        
         id: "<?php echo $id; ?>",
         base_url: "<?php echo base_url(); ?>",   
-        scholarship: {},
+        scholarship: {
+            name: undefined,
+        },
              
     },
 
