@@ -37,8 +37,9 @@
                             </select>
                         </div>
                     </div>   
+                    <hr />
                     <div class="row">                                                
-                        <div class="col-md-12"><strong>Tuition Fee</strong></div>
+                        <div class="col-md-12 text-center"><strong>Tuition Fee</strong></div>
                         <div class="col-md-6">
                             <label>Rate:</label>
                             <input type="number" v-model="scholarship.tuition_fee_rate" class="form-control">
