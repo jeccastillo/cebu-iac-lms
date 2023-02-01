@@ -59,6 +59,18 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/scholarship_list_conf",$this->data);
     }
 
+    public function view($id){
+        $this->data['id'] = $id;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("scholarship_view",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+
+    public function data($id){
+        $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID',$id))->row();
+        echo json_encode($data);
+
+    }
    
 
     public function faculty_logged_in()
