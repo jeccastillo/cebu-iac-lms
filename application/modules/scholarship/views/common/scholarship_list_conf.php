@@ -56,29 +56,17 @@ $(document).ready(function() {
                 data: "id"
             },
             {
-                data: "slug"
+                data: "name"
             },
             {
                 data: "description"
             },
             {
-                data: "subtotal_order"
-            },
-            {
-                data: "charges"
-            },
-            {
-                data: "total_amount_due"
-            },
-            {
                 data: "status"
             },
             {
-                data: "response_message"
-            },
-            {
-                data: "updated_at"
-            }
+                data: "type"
+            },          
         ],
         "aaSorting": [
             [2, 'asc']
