@@ -2,7 +2,9 @@
     <section class="content-header container ">
         <h1>
             Scholarships
-            <small></small>
+            <small>
+                <a class="btn btn-app" href="<?php echo base_url(); ?>scholarship/view/0"><i class="ion ion-plus"></i> Add New</a> 
+            </small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Students</a></li>
@@ -16,12 +18,10 @@
         </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Scholarships&nbsp;&nbsp;&nbsp;
-                    <a href="<?php echo base_url(); ?>scholarship/view/0">&plus; New Scholarship</a>
+                <h3 class="box-title">Scholarships&nbsp;&nbsp;&nbsp;                    
                 </h3>
-
             </div><!-- /.box-header -->
-            <div class="box-body table-responsive">
+            <div class="box-body table-responsive">                
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>     
