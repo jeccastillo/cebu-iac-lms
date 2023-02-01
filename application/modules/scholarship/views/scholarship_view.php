@@ -19,21 +19,21 @@
                         <div class="row">                        
                             <div class="col-md-6">
                                 <label>Name:</label>
-                                <input type="text" v-model="scholarship.name" class="form-control">                            
+                                <input type="text" required v-model="scholarship.name" class="form-control">                            
                             </div>                        
                             <div class="col-md-6">
                                 <label>Description:</label>
-                                <textarea v-model="scholarship.description" class="form-control"></textarea>                            
+                                <textarea v-model="scholarship.description" required class="form-control"></textarea>                            
                             </div>
                             <div class="col-md-6">
                                 <label>Type:</label>
-                                <select type="text" v-model="scholarship.type" class="form-control">
+                                <select required type="text" v-model="scholarship.type" class="form-control">
                                     <option v-for="type in type_options" :value="type">{{ type }}</option>                         
                                 </select>
                             </div>                        
                             <div class="col-md-6">
                                 <label>Status:</label>
-                                <select type="text" v-model="scholarship.status" class="form-control">    
+                                <select required type="text" v-model="scholarship.status" class="form-control">    
                                     <option v-for="status in status_options" :value="status">{{ status }}</option>                        
                                 </select>
                             </div>
