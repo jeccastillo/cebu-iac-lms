@@ -251,7 +251,12 @@ new Vue({
     },
 
     methods: {    
-
+        submitForm: function(){
+            var formdata= new FormData();
+            for (const [key, value] of Object.entries(this.scholarship)) {
+                formdata.append(key,value);
+            }
+        }
     }
 
 })
