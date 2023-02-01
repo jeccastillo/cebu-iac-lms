@@ -38,7 +38,7 @@
                         </div>
                     </div>   
                     <hr />
-                    <div class="row">
+                    <div>
                         <div class="col-md-4">
                             <div class="row">                                                
                                 <div class="col-md-12 text-center"><strong>Tuition Fee</strong></div>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="row">
+                    <div>
                         <div class="col-md-4">
                             <div class="row">                                                
                                 <div class="col-md-12 text-center"><strong>Laboratory Fee</strong></div>
@@ -122,7 +122,7 @@
                         </div>
                     </div> 
                     <hr />
-                    <div class="row">
+                    <div>
                         <div class="col-md-6">
                             <div class="row">                                                
                                 <div class="col-md-12 text-center"><strong>Total Assessment</strong></div>
