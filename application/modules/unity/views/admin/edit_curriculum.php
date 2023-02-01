@@ -31,7 +31,7 @@
                                 <option <?php echo ($item['intProgramID'] == $prog['intProgramID'])?'selected':''; ?> value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode']; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                        </div>
+                        </div>                        
 
                          
                         <div class="form-group col-xs-12">

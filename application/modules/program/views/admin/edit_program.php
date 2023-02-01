@@ -48,6 +48,14 @@
                                 <option <?php echo ($item['enumEnabled'] == 1)?'selected':''; ?> value="1">Yes</option>
                             </select>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="intYearLevel">Default Curriculum</label>
+                            <select class="form-control" name="default_curriculum" id="default_curriculum" >
+                                <?php foreach ($curriculum as $cur): ?>
+                                <option <?php echo ($item['default_curriculum'] == $cur['intID'])?'selected':''; ?> value="<?php echo $cur['intID']; ?>"><?php echo $cur['strName']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                         <div class="form-group col-xs-12">
                             <input type="submit" value="update" class="btn btn-default  btn-flat">
                         </div>
