@@ -1178,7 +1178,7 @@ class Data_fetcher extends CI_Model {
 
 
     function getCurriculumIDByCourse($id){
-        $course = $this->db->get_where('tb_mas_programs',array('intProgramID'=>'$id'))->row();        
+        $course = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$id))->row();        
         return $course->default_curriculum;
     }
 
