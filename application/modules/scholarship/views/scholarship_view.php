@@ -3,7 +3,9 @@
     <div id="vue-container">
         <section class="content-header">
             <h1>
-              Scholarship
+                <small>
+                    <a class="btn btn-app" :href="base_url + 'scholarship/scholarships'" ><i class="ion ion-arrow-left-a"></i>Back to Scholarships</a>                                                                                                                     
+                </small>
             </h1>
         </section>
         <hr />
@@ -13,7 +15,7 @@
                     <h3>{{ scholarship.name }}</h3>
                 </div>
                 <div class="box-body">
-                    
+
                 </div>
             </div>            
         </div>                
