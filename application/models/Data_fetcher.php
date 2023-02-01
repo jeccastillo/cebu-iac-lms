@@ -1941,12 +1941,13 @@ class Data_fetcher extends CI_Model {
         $scholarship_discount = 0;
         $discounted_price = 0;        
 
-        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');        
+
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$sem);
         
         if($scholarship != 0 && $scholarship != null)
-            $scholar = $this->db->get_where('tb_mas_scholarships',array('intID',$scholarship))->first_row('array');
+            $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
@@ -2042,10 +2043,10 @@ class Data_fetcher extends CI_Model {
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
-        if(isset($scholar)){
-            $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
-            $discounted_price = $data['total'] - $scholarship_discount;
-        }
+        // if(isset($scholar)){
+        //     $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
+        //     $discounted_price = $data['total'] - $scholarship_discount;
+        // }
         $data['discounted_price'] = $discounted_price;
 
         $data['scholarship_discount'] = $scholarship_discount;
