@@ -27,12 +27,13 @@
                         <div class="col-md-6">
                             <label>Type:</label>
                             <select type="text" v-model="scholarship.type" class="form-control">
-                                                         
+                                <option v-for="type in type_options" :value="type">{{ type }}</option>                         
                             </select>
                         </div>                        
                         <div class="col-md-6">
                             <label>Status:</label>
-                            <select type="text" v-model="scholarship.status" class="form-control">                            
+                            <select type="text" v-model="scholarship.status" class="form-control">    
+                                <option v-for="status in status_options" :value="status">{{ status }}</option>                        
                             </select>
                         </div>
                     </div>                    
@@ -75,6 +76,8 @@ new Vue({
             total_assessment_rate: undefined,
             total_assessment_fixed: undefined,
         },
+        type_options: [],
+        status_options:[],
              
     },
 
@@ -88,6 +91,8 @@ new Vue({
         .then((data) => {
            console.log(data);
            this.scholarship = data.data.scholarship;
+           this.status_options = data.data.status_options;
+           this.type_options = data.data.type_options;
         })
         .catch((error) => {
             console.log(error);
