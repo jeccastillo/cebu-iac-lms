@@ -15,7 +15,7 @@
                     <h3>{{ scholarship.name }}</h3>
                 </div>
                 <div class="box-body">
-                <div class="row">                        
+                    <div class="row">                        
                         <div class="col-md-6">
                             <label>Name:</label>
                             <input type="text" v-model="scholarship.name" class="form-control">                            
@@ -23,6 +23,17 @@
                         <div class="col-md-6">
                             <label>Description:</label>
                             <textarea v-model="scholarship.description" class="form-control"></textarea>                            
+                        </div>
+                        <div class="col-md-6">
+                            <label>Type:</label>
+                            <select type="text" v-model="scholarship.type" class="form-control">
+                                                         
+                            </select>
+                        </div>                        
+                        <div class="col-md-6">
+                            <label>Status:</label>
+                            <select type="text" v-model="scholarship.status" class="form-control">                            
+                            </select>
                         </div>
                     </div>                    
                 </div>

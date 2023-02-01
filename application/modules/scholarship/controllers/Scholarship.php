@@ -51,6 +51,7 @@ class Scholarship extends CI_Controller {
 
     }
     
+    
     public function scholarships(){
         
         $this->load->view("common/header",$this->data);
@@ -68,6 +69,8 @@ class Scholarship extends CI_Controller {
 
     public function data($id){
         $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID'=>$id))->row();
+        $data['status_options'] = get_enum_values('tb_mas_scholarships','status');
+        $data['type_options'] = get_enum_values('tb_mas_scholarships','type');
         echo json_encode($data);
 
     }
