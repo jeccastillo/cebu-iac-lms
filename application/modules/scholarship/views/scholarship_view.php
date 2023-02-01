@@ -10,7 +10,7 @@
         </section>
         <hr />
         <div class="content">
-            <div class="box box-primary">
+            <div class="box box-primary" style="max-width:800px;">
                 <div class="box-header">
                     <h3>{{ scholarship.name }}</h3>
                 </div>
