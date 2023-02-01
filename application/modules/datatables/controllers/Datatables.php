@@ -1788,6 +1788,10 @@ class Datatables extends CI_Controller {
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
+                    if(str_contains(".", $aColumns[$i])){
+                        $new = explode(".",$aColumns[$i]);
+                        $aColumns[$i] = $new[1];
+                    }
                     /* General output */
                     $row[] = $aRow->$aColumns[$i];
                 }
