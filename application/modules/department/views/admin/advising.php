@@ -19,7 +19,7 @@
                             <a class="btn btn-app" href="<?php echo base_url()."unity/student_viewer/".$student['intID']; ?>"><i class="ion ion-eye"></i> View</a> 
                         
                              <a class="btn btn-app" target="_blank" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$student['intID'] ."/". $active_sem['intID']; ?>">
-                                <i class="ion ion-printer"></i>Print Advising Form</a> 
+                                <i class="ion ion-printer"></i>Print Subjects</a> 
                             
                             <a class="btn btn-app" data-toggle="modal" data-target="#curriculumModal" href="#"><i class="ion ion-clipboard"></i> Curriculum Outline</a> 
                             
