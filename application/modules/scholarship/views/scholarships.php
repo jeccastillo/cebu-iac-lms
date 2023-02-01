@@ -16,7 +16,9 @@
         </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Scholarships</h3>
+                <h3 class="box-title">Scholarships&nbsp;&nbsp;&nbsp;
+                    <a href="<?php echo base_url(); ?>scholarship/view/0">&plus; New Scholarship</a>
+                </h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
