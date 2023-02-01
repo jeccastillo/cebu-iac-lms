@@ -40,10 +40,8 @@
                 <hr />
                 <?php echo $student_link; ?>
                 <a target="_blank" class="btn btn-primary" href="<?php echo base_url()."pdf/student_viewer_advising_print/".$sid ."/". $ayid; ?>">
-                                <i class="ion ion-printer"></i> Print Advising Form</a>
-                
-                <a target="_blank" class="btn btn-primary" href="<?php echo base_url()."pdf/student_viewer_advising_print_data/".$sid ."/". $ayid; ?>">
-                                <i class="ion ion-printer"></i> Print Advising Form Data Only</a>
+                                <i class="ion ion-printer"></i> Print Loaded Subjects</a>
+                                
             </div>
         </div>
        
