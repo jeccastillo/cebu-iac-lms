@@ -67,7 +67,7 @@ class Scholarship extends CI_Controller {
     }
 
     public function data($id){
-        $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID',$id))->row();
+        $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID'=>$id))->row();
         echo json_encode($data);
 
     }
