@@ -229,17 +229,17 @@ new Vue({
         let url = new URL(url_string);
 
         this.loader_spinner = true;
-        if(this.id != 0)
-            axios.get(base_url + 'scholarship/data/' + this.id)
-            .then((data) => {
-            console.log(data);
-            this.scholarship = data.data.scholarship;
-            this.status_options = data.data.status_options;
-            this.type_options = data.data.type_options;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        
+        axios.get(base_url + 'scholarship/data/' + this.id)
+        .then((data) => {
+        console.log(data);
+        this.scholarship = data.data.scholarship;
+        this.status_options = data.data.status_options;
+        this.type_options = data.data.type_options;
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 
     },
 
