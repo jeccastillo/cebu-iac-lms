@@ -16,11 +16,17 @@
                 </div>
                 <div class="box-body">
                 <div class="row">
-                        <div class="col-md-2 col-sm-4 col-md-offset-2 text-right">
+                        <div class="col-md-3 text-right">
                             Name:
                         </div>
-                        <div class="col-md-4 col-sm-4">
+                        <div class="col-md-3">
                             <input type="text" v-model="scholarship.name" class="form-control">                            
+                        </div>
+                        <div class="col-md-3 text-right">
+                            Description:
+                        </div>
+                        <div class="col-md-3">
+                            <textarea v-model="scholarship.description" class="form-control"></textarea>                            
                         </div>
                     </div>                    
                 </div>
@@ -43,6 +49,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         scholarship: {
             name: undefined,
+            description: undefined,
         },
              
     },
