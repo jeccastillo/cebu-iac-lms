@@ -1788,7 +1788,7 @@ class Datatables extends CI_Controller {
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
-                    if(str_contains(".", $aColumns[$i])){
+                    if(strpos($aColumns[$i], ".") !== false){
                         $new = explode(".",$aColumns[$i]);
                         $aColumns[$i] = $new[1];
                     }
