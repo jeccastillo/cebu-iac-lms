@@ -72,7 +72,7 @@ class Department extends CI_Controller {
 	}
     
     
-    public function advise_student()
+    public function subject_loading()
     {
         if($this->is_super_admin() || $this->is_department_head())
         {
@@ -201,7 +201,7 @@ class Department extends CI_Controller {
         redirect(base_url().'department/crediting/'.$post['intStudentID']);
     }
     
-    public function advising($studNum = null)
+    public function load_subjects($studNum = null)
     {
         if($this->faculty_logged_in())
         {

@@ -13,7 +13,7 @@
     <div class="span10 box box-primary">
         <div class="box-header">
                 <h3 class="box-title">Sectioning</h3>
-                <a class="btn btn-app" href="<?php echo base_url()."department/advising/".$student['intID'];?>">
+                <a class="btn btn-app" href="<?php echo base_url()."department/load_subjects/".$student['intID'];?>">
                     <i class="fa fa-arrow-left"></i>
                     back
                 </a>

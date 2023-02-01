@@ -271,7 +271,7 @@
                             </a>
                         
                             <ul class="treeview-menu">
-                                <li class="<?php echo (isset($page) && $page=="advise_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/advise_student" style="margin-left: 10px;"><i class="ion ion-compose"></i> Advise Student</a></li>
+                                <li class="<?php echo (isset($page) && $page=="advise_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/subject_loading" style="margin-left: 10px;"><i class="ion ion-compose"></i> Subject Loading</a></li>
                                 <li class="<?php echo (isset($page) && $page=="add_credits")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/add_credits" style="margin-left: 10px;"><i class="fa fa-plus"></i> Credit Subjects</a></li>
                                 <li class="<?php echo (isset($page) && $page=="rog")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/rog" style="margin-left: 10px;"><i class="fa fa-book"></i> Report of Grades</a></li>
                                 <li class="<?php echo (isset($page) && $page=="assessment")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/assessment" style="margin-left: 10px;"><i class="fa fa-book"></i> Curriculum Assessment</a></li>
