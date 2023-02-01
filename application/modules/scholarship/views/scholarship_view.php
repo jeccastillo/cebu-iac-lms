@@ -16,10 +16,10 @@
                 </div>
                 <div class="box-body">
                 <div class="row">
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-4 col-sm-offset-2 text-right">
                             Name:
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <input type="text" v-model="scholarship.name" class="form-control">                            
                         </div>
                     </div>
