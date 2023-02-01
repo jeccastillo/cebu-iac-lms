@@ -1,12 +1,12 @@
 <div class="content-wrapper ">
     <section class="content-header container ">
         <h1>
-            Online Payments
+            Scholarships
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
-            <li class="active">Online Payments without OR</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Students</a></li>
+            <li class="active">Scholarships</li>
         </ol>
     </section>
     <div class="content mcontainer container">
@@ -16,7 +16,7 @@
         </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Online Payments without OR</h3>
+                <h3 class="box-title">Scholarships</h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
