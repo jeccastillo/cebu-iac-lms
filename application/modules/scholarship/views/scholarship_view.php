@@ -8,6 +8,14 @@
         </section>
         <hr />
         <div class="content">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3>{{ scholarship.name }}</h3>
+                </div>
+                <div class="box-body">
+                    
+                </div>
+            </div>            
         </div>                
     </div><!---vue container--->
 </aside>
@@ -24,7 +32,7 @@ new Vue({
     data: {        
         id: "<?php echo $id; ?>",
         base_url: "<?php echo base_url(); ?>",   
-        scholarship: undefined,
+        scholarship: {},
              
     },
 
@@ -37,6 +45,7 @@ new Vue({
         axios.get(base_url + 'scholarship/data/' + this.id)
         .then((data) => {
            console.log(data);
+           this.scholarship = data.data.scholarship;
         })
         .catch((error) => {
             console.log(error);
