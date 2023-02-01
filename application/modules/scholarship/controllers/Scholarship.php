@@ -50,11 +50,6 @@ class Scholarship extends CI_Controller {
 		
 
     }
-
-    public function data_table(){
-        $data = $this->input->get();
-        print_r($data);
-    }
     
     public function scholarships(){
         
