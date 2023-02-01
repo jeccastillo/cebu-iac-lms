@@ -207,25 +207,25 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         btn_text: "Add Scholarship",
         scholarship: {
-            name: '',
-            description: '',
-            status: '',
-            type: '',
-            created_by_id: '',
-            tuition_fee_rate: '',
-            tuition_fee_fixed: '',
-            basic_fee_rate: '',
-            basic_fee_fixed: '',
-            misc_fee_rate: '',
-            misc_fee_fixed: '',
-            lab_fee_rate: '',
-            lab_fee_fixed: '',
-            penalty_fee_rate: '',
-            penalty_fee_fixed: '',
-            other_fees_rate: '',
-            other_fees_fixed: '',
-            total_assessment_rate: '',
-            total_assessment_fixed: '',
+            name: undefined,
+            description: undefined,
+            status: undefined,
+            type: undefined,
+            created_by_id: undefined,
+            tuition_fee_rate: undefined,
+            tuition_fee_fixed: undefined,
+            basic_fee_rate: undefined,
+            basic_fee_fixed: undefined,
+            misc_fee_rate: undefined,
+            misc_fee_fixed: undefined,
+            lab_fee_rate: undefined,
+            lab_fee_fixed: undefined,
+            penalty_fee_rate: undefined,
+            penalty_fee_fixed: undefined,
+            other_fees_rate: undefined,
+            other_fees_fixed: undefined,
+            total_assessment_rate: undefined,
+            total_assessment_fixed: undefined,
         },
         type_options: [],
         status_options:[],
@@ -242,11 +242,11 @@ new Vue({
             this.btn_text = "Update Scholarship";
         
         axios.get(base_url + 'scholarship/data/' + this.id)
-        .then((data) => {
-        console.log(data);
-        this.scholarship = data.data.scholarship;
-        this.status_options = data.data.status_options;
-        this.type_options = data.data.type_options;
+        .then((data) => {        
+            if(data.data.scholarship)
+                this.scholarship = data.data.scholarship;
+            this.status_options = data.data.status_options;
+            this.type_options = data.data.type_options;
         })
         .catch((error) => {
             console.log(error);
