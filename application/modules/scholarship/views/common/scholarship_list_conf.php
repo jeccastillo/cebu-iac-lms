@@ -14,7 +14,7 @@ $(document).ready(function() {
             var s_column = "last_name";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                "<?php echo base_url(); ?>scholarships/data_table", {
+                "<?php echo base_url(); ?>scholarship/data_table", {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
