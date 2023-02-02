@@ -38,6 +38,12 @@
                     
                     
                 </div>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label for="slots">Maximum Slots:</label>
+                        <input type="number" name="slots" class="form-control" id="slots" placeholder="ex. 30" value="<?php echo $classlist['slots']; ?>">                        
+                    </div>
+                </div>
                 <div class="form-group col-xs-6">
                         <label for="strUnits">Checked By:</label>
                         <input type="text" name="strSignatory1Name" class="form-control" id="strSignatory1Name" placeholder="Enter Name" value="<?php echo $classlist['strSignatory1Name']; ?>">
