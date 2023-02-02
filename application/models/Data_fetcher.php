@@ -760,7 +760,7 @@ class Data_fetcher extends CI_Model {
     function fetch_classlists_unassigned($sem_sel=null,$limit=null,$dept)
     {
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID,strClassName,strCode,strDescription,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
+                     ->select("tb_mas_classlist.intID as intID, slots, strSection, intFacultyID,intSubjectID,strClassName,strCode,strDescription,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -781,7 +781,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment")
+                     ->select("tb_mas_classlist.intID as intID, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -2596,7 +2596,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
         return  $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID, strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_classlist.strUnits as strUnits")
+                     ->select("tb_mas_classlist.intID as intID, slots, strSection, intFacultyID,intSubjectID, strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_classlist.strUnits as strUnits")
                      ->from("tb_mas_classlist")
                      //->group_by("intSubjectID")
                      ->where(array("intFacultyID"=>$faculty_id,"tb_mas_classlist.intID"=>$id))
@@ -2626,7 +2626,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $id;
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, intFacultyID,intSubjectID, strClassName,strCode,strDescription, strSection, intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_subjects.strUnits")
+                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID, strClassName,strCode,strDescription, strSection, intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_subjects.strUnits")
                      ->from("tb_mas_classlist")
                      ->where(array("intFacultyID"=>$faculty_id, "strAcademicYear"=>$classlist));
 
@@ -2642,7 +2642,7 @@ class Data_fetcher extends CI_Model {
     {
         $subject_id = $id;
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, intFacultyID,intSubjectID,strClassName,strCode,strSection,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_faculty.strLastname, tb_mas_faculty.strFirstname")
+                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID,strClassName,strCode,strSection,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_faculty.strLastname, tb_mas_faculty.strFirstname")
                      ->from("tb_mas_classlist")
                      ->where(array("intSubjectID"=>$subject_id,'strAcademicYear'=>$sem));
 //                    if($sem)
@@ -2681,7 +2681,7 @@ class Data_fetcher extends CI_Model {
     {
          $sectionID = $id;
                     $this->db
-                     ->select("tb_mas_classlist.intID, tb_mas_classlist.strClassName,tb_mas_classlist.intSubjectID, tb_mas_subjects.strDescription, COUNT(tb_mas_classlist_student.intStudentID) as intNumOfStudents, strLastname, strFirstname")
+                     ->select("tb_mas_classlist.intID, slots, tb_mas_classlist.strClassName,tb_mas_classlist.intSubjectID, tb_mas_subjects.strDescription, COUNT(tb_mas_classlist_student.intStudentID) as intNumOfStudents, strLastname, strFirstname")
                      ->from("tb_mas_classlist")
                      ->where(array("tb_mas_classlist.strSection"=>$sectionID,'strAcademicYear'=>$sem))
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -2714,7 +2714,7 @@ class Data_fetcher extends CI_Model {
     {
         //$faculty_id = $this->session->userdata("intID");
         return  $this->db
-                     ->select("tb_mas_classlist.intID as intID, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd")
+                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd")
                      ->from("tb_mas_classlist")
                      //->group_by("intSubjectID")
                      ->where(array("tb_mas_classlist.intID"=>$id))
@@ -2728,7 +2728,7 @@ class Data_fetcher extends CI_Model {
     {
         //$faculty_id = $this->session->userdata("intID");
         return  current($this->db
-                     ->select("tb_mas_classlist.intID as intID, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd")
+                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd")
                      ->from("tb_mas_classlist")
                      //->group_by("intSubjectID")
                      ->where(array("tb_mas_classlist.strClassName"=>$subject,"tb_mas_classlist.intSubjectID"=>$section))
