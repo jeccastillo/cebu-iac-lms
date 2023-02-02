@@ -79,7 +79,7 @@
                             <label for="include_gwa">Include in GWA?</label>
                             <select class="form-control" name="include_gwa" id="include_gwa" >
                                 <option value="0">No</option>
-                                <option value="1">Yes</option>
+                                <option selected value="1">Yes</option>
                             </select>
                         </div> 
                         <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6'); ?>
