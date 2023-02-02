@@ -65,7 +65,7 @@
         <div class="col-sm-9">
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3>Load Subjects</h3>
+                        <h3>Enlistment of Classes</h3>
                         <h4 class="text-center">Currently processing: <?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'];  ?></h4>
                     </div>
                     <div class="box-body">
