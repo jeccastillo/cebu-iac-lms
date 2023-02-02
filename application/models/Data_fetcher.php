@@ -1986,7 +1986,7 @@ class Data_fetcher extends CI_Model {
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
                                             ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab');
+                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab') * $class['intLab'];
                 $total_lab += $lab_list[$class['strCode']];
             }
             
