@@ -107,7 +107,7 @@
                     <select class="form-control" name="special_role" > 
                         <option <?php echo ($faculty['special_role'] == 0)?'selected':'' ?> value="0">None</option>
                         <option <?php echo ($faculty['special_role'] == 1)?'selected':'' ?> value="1">Asst. Manager</option>
-                        <option <?php echo ($faculty['special_role'] == 1)?'selected':'' ?> value="2">Manager</option>
+                        <option <?php echo ($faculty['special_role'] == 2)?'selected':'' ?> value="2">Manager</option>
                     </select>
                 </div>
                                 
