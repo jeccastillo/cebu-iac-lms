@@ -211,7 +211,8 @@ class Unity extends CI_Controller {
     
     public function generate_classlists($id)
     {
-        if($this->is_super_admin() || $this->is_department_head())
+        $userlevel = $this->session->userdata('intUserLevel');
+        if($userlevel == 2 || $userlevel == 3)
         {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
@@ -233,7 +234,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function submit_generate_class()
