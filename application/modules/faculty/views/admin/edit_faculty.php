@@ -85,12 +85,12 @@
                     <label for="intUserLevel">User Level</label>
                     <select class="form-control" name="intUserLevel" > 
                         <option <?php echo ($faculty['intUserLevel'] == 0)?'selected':'' ?> value="0">Faculty</option>
-                        <option <?php echo ($faculty['intUserLevel'] == 1)?'selected':'' ?> value="1">Dean</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 1)?'selected':'' ?> value="1">Faculty Admin</option>
                         <?php if($this->session->userdata('intUserLevel') == 2): ?>
                         <option <?php echo ($faculty['intUserLevel'] == 2)?'selected':'' ?> value="2">Super Admin</option>
                         <?php endif; ?>
                         <option <?php echo ($faculty['intUserLevel'] == 3)?'selected':'' ?> value="3">Registrar</option>
-                        <option <?php echo ($faculty['intUserLevel'] == 4)?'selected':'' ?> value="4">Department Head</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 4)?'selected':'' ?> value="4">Dean</option>
                         <option <?php echo ($faculty['intUserLevel'] == 5)?'selected':'' ?> value="5">Admissions Officer</option>
                         <option <?php echo ($faculty['intUserLevel'] == 6)?'selected':'' ?> value="6">Finance</option>
                     </select>

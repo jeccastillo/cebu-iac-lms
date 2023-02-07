@@ -79,12 +79,12 @@
                     <label for="intUserLevel">User Level</label>
                     <select class="form-control" name="intUserLevel" > 
                         <option value="0">Faculty</option>
-                        <option value="1">Dean</option>
+                        <option value="1">Faculty Admin</option>
                         <?php if($this->session->userdata('intUserLevel') == 2): ?>
                         <option value="2">Super Admin</option>
                         <?php endif; ?>
                         <option value="3">Registrar</option>
-                        <option value="4">Department Head</option>
+                        <option value="4">Dean</option>
                         <option value="5">Admissions Officer</option>
                         <option value="6">Finance</option>
                     </select>

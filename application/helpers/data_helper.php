@@ -622,7 +622,7 @@ if(!function_exists('switch_user_level'))
                     $num = "Faculty";
                     break;
                 case 1:
-                    $num = "Dean";
+                    $num = "Faculty Admin";
                     break;
                 case 2:
                     $num = "Super Admin";
@@ -631,7 +631,7 @@ if(!function_exists('switch_user_level'))
                     $num = "Registrar";
                     break;
                 case 4:
-                    $num = "Department Head";
+                    $num = "Dean";
                     break;
                 case 5:
                     $num = "Admissions Officer";
