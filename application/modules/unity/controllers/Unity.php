@@ -1985,7 +1985,7 @@ class Unity extends CI_Controller {
                 $post['strRemarks'] = $data['remarks'] = "Passed";
             elseif($post['enumStatus'] == "failed")
                 $post['strRemarks'] = $data['remarks'] = "Failed";
-            elseif($post['enumStatus'] == "active")
+            elseif($post['enumStatus'] == "act")
                 $post['strRemarks'] = $data['remarks'] = "";
             else
                 $post['strRemarks'] = $data['remarks'] = getRemarks($post["floatFinalGrade"]);
