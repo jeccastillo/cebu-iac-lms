@@ -453,7 +453,7 @@ class Unity extends CI_Controller {
 
             }
             $ret['payment'] = $pay;
-            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
+            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
             $ret['tuition_data'] = $data['tuition'];

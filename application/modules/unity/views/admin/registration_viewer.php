@@ -53,7 +53,7 @@
             <div class="col-sm-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li>
+                        <li v-if="advanced_privilages">
                             <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
                                 Personal Information
                             </a>
@@ -70,7 +70,7 @@
                             </a>
                         </li>
                         
-                        <li>
+                        <li v-if="advanced_privilages">
                             <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
                                 Schedule
                             </a>
