@@ -111,15 +111,14 @@
                                          ?>
                                     </td>
                                     <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
+                                    <?php endif; ?>
                                     <td>
                                     <select id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
                                     <?php 
                                      if($is_super_admin && $student['enumStatus'] =="drp")
                                         echo "";
                                      else if ($student['enumStatus'] =="drp") 
-                                        echo "disabled";
-                                    
-                                    endif;
+                                        echo "disabled";                                                                        
                                     ?>
                                     
                                     class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>">
