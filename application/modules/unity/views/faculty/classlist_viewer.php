@@ -127,6 +127,8 @@
                                             <?php if($is_admin): ?>
                                             <option <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>
                                             <?php else: ?>
+                                            <option <?php echo ($student['enumStatus'] == "passed")?'selected':''; ?> value="passed">Passed</option>
+                                            <option <?php echo ($student['enumStatus'] == "failed")?'selected':''; ?> value="passed">Failed</option>
                                             <!-- <option disabled <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>     -->
                                             <?php endif; ?>
                                         </select>
