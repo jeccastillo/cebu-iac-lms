@@ -9,6 +9,11 @@ class Subject extends CI_Controller {
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 6 && $userlevel != 4)
+		  redirect(base_url()."unity");
 		
         $settings = $this->data_fetcher->fetch_table('su-tb_sys_settings');
 		foreach($settings as $setting)

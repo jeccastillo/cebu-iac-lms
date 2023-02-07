@@ -284,8 +284,8 @@
                     </ul>
                 </li>
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3): ?>
-                        <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
+                <?php if(in_array($user['intUserLevel'],array(2,3,4)) ): ?>
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa-book fa"></i> <span>Subjects</span>
                                 <i class="fa pull-right fa-angle-left"></i>
@@ -296,6 +296,8 @@
                                 
                             </ul>
                         </li>
+                <?php endif; ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3): ?>                        
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="curriculum")?'active':''; ?>">
                             <a href="#">
                                 <i class="ion ion-university"></i> <span>Curriculum</span>
