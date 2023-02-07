@@ -196,10 +196,7 @@
                         <?php endif; ?>
                          <?php if(in_array($user['intUserLevel'],array(0,1,2)) ): ?>
                       <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i> <span>View My Classes</span></a></li>
-                <?php endif; ?>                
-                <?php if(in_array($user['intUserLevel'],array(1,2,3,4,5,6)) ): ?>
-                    <li class="header">Administrative</li>
-                <?php endif; ?>
+                <?php endif; ?>                               
                 <?php if(in_array($user['intUserLevel'],array(2,3,5,6)) ): ?>
                     <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->                    
                     <li class="header">Admissions</li>
