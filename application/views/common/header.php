@@ -284,7 +284,7 @@
                     </ul>
                 </li>
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3): ?>
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa-book fa"></i> <span>Subjects</span>
