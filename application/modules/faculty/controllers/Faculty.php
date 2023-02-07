@@ -96,7 +96,7 @@ class Faculty extends CI_Controller {
         $this->data_poster->log_action('Faculty','Added a new Faculty Member: '.$post['strFirstname']." ".$post['strLastname'],'aqua');        
         $post['strPass'] = password_hash($post['strPass'], PASSWORD_DEFAULT);
         $this->data_poster->post_data('tb_mas_faculty',$post);
-        redirect(base_url() . '/faculty/add_faculty');
+        redirect(base_url() . 'faculty/add_faculty');
             
     }
     
