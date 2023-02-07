@@ -92,7 +92,7 @@
                         <option <?php echo ($faculty['intUserLevel'] == 3)?'selected':'' ?> value="3">Registrar</option>
                         <option <?php echo ($faculty['intUserLevel'] == 4)?'selected':'' ?> value="4">Department Head</option>
                         <option <?php echo ($faculty['intUserLevel'] == 5)?'selected':'' ?> value="5">Admissions Officer</option>
-                        <option <?php echo ($faculty['intUserLevel'] == 6)?'selected':'' ?> value="6">Accounting</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 6)?'selected':'' ?> value="6">Finance</option>
                     </select>
                 </div>   
                 <div class="form-group col-xs-6">
@@ -102,6 +102,15 @@
                         <option <?php echo ($faculty['isActive'] == 1)?'selected':'' ?> value="1">Active</option>
                     </select>
                 </div>
+                <div class="form-group col-xs-6">
+                    <label for="special_role">Special Role</label>
+                    <select class="form-control" name="special_role" > 
+                        <option <?php echo ($faculty['special_role'] == 0)?'selected':'' ?> value="0">None</option>
+                        <option <?php echo ($faculty['special_role'] == 1)?'selected':'' ?> value="1">Asst. Manager</option>
+                        <option <?php echo ($faculty['special_role'] == 1)?'selected':'' ?> value="2">Manager</option>
+                    </select>
+                </div>
+                                
                 <div class="form-group col-xs-6">
                     <label for="intUserLevel">Subjects</label>
                 <select name="subject" class="form-control select2" multiple>
