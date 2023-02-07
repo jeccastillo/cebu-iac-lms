@@ -5,6 +5,12 @@ class AdmissionsV1 extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+        //User Level Validation
+        
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6)
+		  redirect(base_url()."unity");
+
 		$this->config->load('themes');		
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
