@@ -46,11 +46,13 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Program</th>
+                                <?php if($classlist['is_numerical']): ?>
                                 <th>Prelim<br/>(30%)</th>
                                 <th>Midterm<br/>(30%)</th>
                                 <th>Finals<br/>(40%)</th>
                                 <th>FINAL GRADE<br/>(100%)</th>
                                 <th>Numerical Rating</th>
+                                <?php endif; ?>
                                 <th>Status</th>
                                 <th>Remarks</th>
                                 <th>Enrolled</th>
@@ -78,6 +80,7 @@
                                     <td><?php echo $student['strProgramCode']; ?></td>
                                     <!--  newly added ^_^ 4-22-2016            -->
                                     <!--td><input <?php echo ($classlist['intFinalized']==1 || !$is_super_admin)?'disabled':''; ?> type="text" value="<?php echo $student['strStudentNumber']; ?>" name="strStudentNumber" class="studNumInput form-control" id="strStudentNumber" placeholder="Enter Stud-Number" size="3" rel="<?php echo $student['intID'] ?>"></td-->
+                                    <?php if($classlist['is_numerical']): ?>
                                     <td>
                                         
                         <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 0 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_prelim_grading['enumGradingPeriod'] != 'active' || empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputPrelimID-<?php echo $student['intCSID']; ?>"class="prelimInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatPrelimGrade']; ?>">
@@ -115,8 +118,10 @@
                                         echo "";
                                      else if ($student['enumStatus'] =="drp") 
                                         echo "disabled";
-                                          
+                                    
+                                    endif;
                                     ?>
+                                    
                                     class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>">
                                             <option <?php echo ($student['enumStatus'] == "act")?'selected':''; ?> value="act">Active</option>
                                             <?php if($classlist['intFinalized'] == 2 || $is_super_admin || $student['enumStatus'] == "inc"): ?>
