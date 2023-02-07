@@ -1970,7 +1970,7 @@ class Unity extends CI_Controller {
             $data['eq_raw'] ="inc";
             $post['strRemarks'] = $data['remarks'] = "lack of reqts.";
 
-        }
+        }        
         else
         {  
             $ave = getAve($item['floatPrelimGrade'],$item['floatMidtermGrade'],$item['floatFinalsGrade']);
@@ -1980,7 +1980,13 @@ class Unity extends CI_Controller {
             
             //$data["eq"] = $post['floatFinalGrade'];
             //$data["eq"] = $item['floatFinalGrade'];
-            $post['strRemarks'] = $data['remarks'] = getRemarks($post["floatFinalGrade"]);
+            
+            if($post['enumStatus'] == "passed")
+                $post['strRemarks'] = $data['remarks'] = "Passed";
+            elseif($post['enumStatus'] == "failed")
+                $post['strRemarks'] = $data['remarks'] = "Failed";
+            else
+                $post['strRemarks'] = $data['remarks'] = getRemarks($post["floatFinalGrade"]);
             
         }
         
