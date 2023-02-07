@@ -197,24 +197,23 @@
                          <?php if(in_array($user['intUserLevel'],array(0,1,2)) ): ?>
                       <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i> <span>View My Classes</span></a></li>
                 <?php endif; ?>                               
-                <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
+                <?php if(in_array($user['intUserLevel'],array(2,5,6)) ): ?>
                     <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->                    
                     <li class="header">Admissions</li>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
-                    <a href="#">
-                        <i class="ion ion-email"></i> <span>Student Applicants</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
-                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>                                
-                    </ul>
-                </li>                
-                
+                        <a href="#">
+                            <i class="ion ion-email"></i> <span>Student Applicants</span>
+                            <i class="fa pull-right fa-angle-left"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
+                                    href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
+                                    style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>                                
+                        </ul>
+                    </li>                                
                 <?php endif; ?>
                 <li class="header">Admin Menu</li>
-                <?php if(in_array($user['intUserLevel'],array(0,1,2,3,4,5,6)) ): ?>
+                <?php if(in_array($user['intUserLevel'],array(0,1,2,4)) ): ?>
                     
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                         <a href="#">
@@ -225,6 +224,8 @@
                             <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist" style="margin-left: 10px;"><i class="ion ion-android-person-add"></i> My Classlists</a></li>
                         </ul>
                     </li>
+                <?php endif; ?>
+                <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="students")?'active':''; ?>">
                         <a href="#">
                             <i class="fa-user fa text-teal"></i> <span>Students</span>
