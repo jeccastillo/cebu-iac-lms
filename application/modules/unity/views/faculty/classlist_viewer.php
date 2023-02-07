@@ -128,7 +128,7 @@
                                             <option <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>                                            
                                             <?php endif; ?>
                                             <option <?php echo ($student['enumStatus'] == "passed")?'selected':''; ?> value="passed">Passed</option>
-                                            <option <?php echo ($student['enumStatus'] == "failed")?'selected':''; ?> value="passed">Failed</option>
+                                            <option <?php echo ($student['enumStatus'] == "failed")?'selected':''; ?> value="failed">Failed</option>
                                         </select>
                                     </td>
                                     
