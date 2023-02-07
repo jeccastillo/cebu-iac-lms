@@ -113,7 +113,11 @@
                                     <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
                                     <?php endif; ?>
                                     <td>
-                                    <select class="<?php (empty($student['registered']))?'disabled':''; ?>"  id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
+                                    <?php if(!empty($student['registered'])): 
+                                        print_r($student['registered']);
+                                    endif;
+                                    ?>
+                                    <select  id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
                                     <?php 
                                      if($is_super_admin && $student['enumStatus'] =="drp")
                                         echo "";
