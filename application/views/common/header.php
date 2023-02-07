@@ -196,22 +196,7 @@
                         <?php endif; ?>
                          <?php if(in_array($user['intUserLevel'],array(0,1,2)) ): ?>
                       <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i> <span>View My Classes</span></a></li>
-                <?php endif; ?>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="messages")?'active':''; ?>">
-                    <a href="#">
-                        <i class="ion ion-email"></i> <span>Messages</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="compose_message")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/compose_message" style="margin-left: 10px;"><i class="fa fa-pencil-square-o"></i> Compose Message</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/" style="margin-left: 10px;"><i class="fa fa-inbox"></i> Inbox</a></li>
-                        
-                        <li class="<?php echo (isset($page) && $page=="sent_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/sent_messages" style="margin-left: 10px;"><i class="fa fa-share-square-o"></i> Outbox</a></li>
-                        <li class="<?php echo (isset($page) && $page=="trash_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/view_trash" style="margin-left: 10px;"><i class="fa fa-trash-o"></i> Trash</a></li>
-                    
-                    </ul>
-                    
-                </li>
+                <?php endif; ?>                
                 <?php if(in_array($user['intUserLevel'],array(1,2,3,4,5,6)) ): ?>
                     <li class="header">Administrative</li>
                 <?php endif; ?>
