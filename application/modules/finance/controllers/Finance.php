@@ -9,8 +9,10 @@ class Finance extends CI_Controller {
 	
     function __construct() {
         parent::__construct();
-        
-        if(!$this->is_registrar() && !$this->is_super_admin() && !$this->is_department_head())
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 0 && $userlevel != 2 && !$userlevel != 6)
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
