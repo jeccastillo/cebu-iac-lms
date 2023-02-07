@@ -81,36 +81,40 @@
                                     <!--  newly added ^_^ 4-22-2016            -->
                                     <!--td><input <?php echo ($classlist['intFinalized']==1 || !$is_super_admin)?'disabled':''; ?> type="text" value="<?php echo $student['strStudentNumber']; ?>" name="strStudentNumber" class="studNumInput form-control" id="strStudentNumber" placeholder="Enter Stud-Number" size="3" rel="<?php echo $student['intID'] ?>"></td-->
                                     <?php if($classlist['is_numerical']): ?>
-                                    <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 0 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_prelim_grading['enumGradingPeriod'] != 'active' || empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputPrelimID-<?php echo $student['intCSID']; ?>"class="prelimInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatPrelimGrade']; ?>">
-                                    </td>
-                                    <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">
-
-                                    </td>
-                                    <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatFinalsGrade']; ?>">
-                                    </td>
-                                    <td id="eq2-<?php echo $student['intCSID'] ?>">
-                                        <?php 
-                                            if ($student['enumStatus']=='drp'){
-                                                echo "UD";
-                                            }
-                                            else if ($student['enumStatus']=='odrp'){
-                                                echo "OD";
-                                            }
-                                            else if ($student['enumStatus']=='inc') {
-                                                echo "inc";
-                                            }
-                                            else {
-                                                echo number_format(getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']), 2);
-                                            }
-                                         ?>
-                                    </td>
-                                    <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
+                                        <?php if(!empty($student['registered'])): ?>
+                                        <td>                                        
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 0 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_prelim_grading['enumGradingPeriod'] != 'active' || empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputPrelimID-<?php echo $student['intCSID']; ?>"class="prelimInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatPrelimGrade']; ?>">                                        
+                                        </td>
+                                        <td>                                        
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                                        
+                                        </td>
+                                        <td>                
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatFinalsGrade']; ?>">                                        
+                                        </td>
+                                        <td id="eq2-<?php echo $student['intCSID'] ?>">
+                                            <?php 
+                                                if ($student['enumStatus']=='drp'){
+                                                    echo "UD";
+                                                }
+                                                else if ($student['enumStatus']=='odrp'){
+                                                    echo "OD";
+                                                }
+                                                else if ($student['enumStatus']=='inc') {
+                                                    echo "inc";
+                                                }
+                                                else {
+                                                    echo number_format(getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']), 2);
+                                                }
+                                            ?>
+                                        </td>
+                                        <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
+                                        <?php else: ?>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <td>
                                         <?php if(!empty($student['registered'])): ?>
