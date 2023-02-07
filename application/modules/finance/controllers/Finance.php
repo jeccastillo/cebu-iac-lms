@@ -163,7 +163,12 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function cashier(){                             
+    public function cashier(){                                     
+
+        $role = $this->session->userdata('special_role');
+        
+        if($role == 0)
+            redirect(base_url()."unity");
 
         $this->data['page'] = "add_cashier";
         $this->data['opentree'] = "cashier";
