@@ -262,8 +262,7 @@
                         </ul>
                     </li>
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
-                        <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>                        
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="department")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-aqua"></i> <span>Department</span>
@@ -349,6 +348,7 @@
                         </li>
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?>
+                    <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
