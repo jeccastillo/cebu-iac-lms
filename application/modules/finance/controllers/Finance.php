@@ -12,7 +12,7 @@ class Finance extends CI_Controller {
 
         //User Level Validation
         $userlevel = $this->session->userdata('intUserLevel');        
-        if($userlevel != 0 && $userlevel != 2 && !$userlevel != 6)
+        if($userlevel != 2 && $userlevel != 6)
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
