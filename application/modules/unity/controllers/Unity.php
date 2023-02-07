@@ -1048,6 +1048,14 @@ class Unity extends CI_Controller {
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
        
+        $user_level = $this->session->userdata('intUserLevel');
+        
+        if($user_level != 2 && $user_level != 3)
+            redirect(base_url().'unity');
+        elseif($user_level == 6)
+            redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
+        
+
         $post = $this->input->post();
         $this->data['id'] = $id;
         $this->data['sem'] = $sem;
