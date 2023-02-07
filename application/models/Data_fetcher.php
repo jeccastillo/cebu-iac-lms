@@ -1822,7 +1822,7 @@ class Data_fetcher extends CI_Model {
              ->num_rows() > 0)
             return "For Sectioning";
         else
-            return "For Subject Loading";
+            return "For Subject Enlistment";
     }
 
     function getMaxCurrentStudentNumber($sem){

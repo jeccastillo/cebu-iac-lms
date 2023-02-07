@@ -23,7 +23,7 @@ $(document).ready(function(){
         var tu = $('#totalSub').val();
         var rs = $('#regStat').val();
         
-        if (rs=="For Subject Loading" || rs=="For Registration" || rs=="Registered" ) {
+        if (rs=="For Subject Enlistment" || rs=="For Registration" || rs=="Registered" ) {
             $('#modal-default').modal('show');
         }
         // else if(rs=="For Subject Loading") {
