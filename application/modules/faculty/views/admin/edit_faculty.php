@@ -85,7 +85,7 @@
                     <label for="intUserLevel">User Level</label>
                     <select class="form-control" name="intUserLevel" > 
                         <option <?php echo ($faculty['intUserLevel'] == 0)?'selected':'' ?> value="0">Faculty</option>
-                        <option <?php echo ($faculty['intUserLevel'] == 1)?'selected':'' ?> value="1">Faculty Admin</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 1)?'selected':'' ?> value="1">Dean</option>
                         <?php if($this->session->userdata('intUserLevel') == 2): ?>
                         <option <?php echo ($faculty['intUserLevel'] == 2)?'selected':'' ?> value="2">Super Admin</option>
                         <?php endif; ?>
