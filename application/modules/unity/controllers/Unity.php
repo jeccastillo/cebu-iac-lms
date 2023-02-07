@@ -1050,10 +1050,11 @@ class Unity extends CI_Controller {
        
         $user_level = $this->session->userdata('intUserLevel');
         
+        if($user_level == 6)
+            redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
         if($user_level != 2 && $user_level != 3)
             redirect(base_url().'unity');
-        elseif($user_level == 6)
-            redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
+        
         
 
         $post = $this->input->post();
