@@ -122,7 +122,7 @@ class Unity extends CI_Controller {
             $this->load->view("dashboard_js",$this->data);
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function logs($start=null,$end=null)
@@ -142,7 +142,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data);   
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function transactions($start=null,$end=null)
@@ -173,7 +173,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/transactions_conf",$this->data);
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     
@@ -206,7 +206,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function generate_classlists($id)
@@ -321,7 +321,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function reassign_classlist($id)
@@ -342,7 +342,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -414,7 +414,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     }
     
     public function edit_registration($id,$sem = null)
@@ -437,7 +437,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/edit_registration_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function registration_viewer_data($id,$sem){
@@ -626,7 +626,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/registration_viewer_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
         
     }
 
@@ -749,7 +749,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
             
     }
     
@@ -764,7 +764,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
             
     }
     
@@ -783,7 +783,7 @@ class Unity extends CI_Controller {
             $this->data_fetcher->executeAcademicSync();
             
         }
-        redirect(base_url()."/users/login");
+        redirect(base_url()."unity");
     }
 
     public function student_viewer_data($id=0,$sem = null,$tab = null){
@@ -1166,7 +1166,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -1269,7 +1269,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -1536,7 +1536,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1568,7 +1568,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1597,7 +1597,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1625,7 +1625,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1762,7 +1762,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -2107,7 +2107,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     
@@ -2125,7 +2125,7 @@ class Unity extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function delete_classlist()

@@ -77,7 +77,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function edit_subject($id)
@@ -127,7 +127,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -240,7 +240,7 @@ class Subject extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function subject_viewer($id,$sem = null)
@@ -295,7 +295,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }

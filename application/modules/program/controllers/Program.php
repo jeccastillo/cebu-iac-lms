@@ -120,7 +120,7 @@ class Program extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function program_viewer($id,$sem = null)

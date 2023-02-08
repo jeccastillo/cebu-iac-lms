@@ -94,7 +94,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function view_messages()
@@ -112,7 +112,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function sent_messages()
@@ -130,7 +130,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function send_new_message()
@@ -161,7 +161,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -181,7 +181,7 @@ class Messages extends CI_Controller {
             $this->load->view("common/read_message_foot",$this->data);  
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
             
     }
     
@@ -267,7 +267,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -287,7 +287,7 @@ class Messages extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function post_reply()

@@ -62,7 +62,7 @@ class Faculty extends CI_Controller {
             $this->load->view("faculty_validation_js",$this->data); 
         }
         else
-            redirect(base_url()."/users/login"); 
+            redirect(base_url()."unity"); 
         
     }
     
@@ -84,7 +84,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -132,7 +132,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     
@@ -199,7 +199,7 @@ class Faculty extends CI_Controller {
             $this->load->view("common/faculty_viewer_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login"); 
+            redirect(base_url()."unity"); 
     }
     
     public function edit_profile()
@@ -215,7 +215,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
     }
     
     public function my_profile($sem = null)
@@ -252,7 +252,7 @@ class Faculty extends CI_Controller {
             $this->load->view("common/my_profile_conf",$this->data); 
             }
             else
-                redirect(base_url()."/users/login");   
+                redirect(base_url()."unity");   
         
     }
     

@@ -63,7 +63,7 @@ class Blocksection extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
 
     public function block_section_data($id){
@@ -106,7 +106,7 @@ class Blocksection extends CI_Controller {
             
     //     }
     //     else
-    //         redirect(base_url()."/users/login");    
+    //         redirect(base_url()."unity");    
         
         
     // }
@@ -148,7 +148,7 @@ class Blocksection extends CI_Controller {
             //print_r($this->data['classlist']);            
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
 

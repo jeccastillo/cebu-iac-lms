@@ -31,8 +31,7 @@
                         <th>id</th>
                         <th>Subject</th>
                         <th>Section</th>
-                        <th>Instructor Lname</th>
-                        <th>Instructor Fname</th>
+                        <th>Faculty</th>                        
                         <th>Finalized Status</th>
 <!--                        <th>No. of Students</th>-->
                         <!--th>Change Status</th-->

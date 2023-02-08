@@ -754,7 +754,10 @@ class Datatables extends CI_Controller {
                 {
                     $row[] = $aRow->$aColumns[$i].$aRow->$aColumns[$i+1].$aRow->$aColumns[$i+2].$aRow->$aColumns[$i+3];
                 }
-                else if($aColumns[$i] == 'year' || $aColumns[$i] == 'strSection' || $aColumns[$i] == 'sub_section'){
+                else if($aColumns[$i] == 'strLastname'){
+                    $row[] = $aRow->$aColumns[$i].$aRow->$aColumns[$i+1];
+                }
+                else if($aColumns[$i] == 'year' || $aColumns[$i] == 'strSection' || $aColumns[$i] == 'sub_section' || $aColumns[$i] == 'strFirstname'){
 
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
