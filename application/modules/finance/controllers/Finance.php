@@ -112,10 +112,10 @@ class Finance extends CI_Controller {
         
         $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();        
         if(!$cashier_validation){
-            if($type == "or_start")
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
-            else
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
+            if($type == "or_start" && $cashier->or_end)                
+                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
+            elseif($cashier->or_start)
+                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
         }
         
 
@@ -126,7 +126,8 @@ class Finance extends CI_Controller {
         }
         else{            
             if($type == "or_start"){
-                if($cashier->or_end < $post["or_start"] && $cashier->or_end != null){
+
+                if($cashier->or_end && $cashier->or_end < $post["or_start"] && $cashier->or_end != null){
                     $post['or_end'] = $post["or_start"];                    
                 }
                 $post['or_current'] = $post['or_start'];
@@ -134,7 +135,7 @@ class Finance extends CI_Controller {
                 
             }
             if($type == "or_end")
-                if($cashier->or_start > $post["or_end"] && $cashier->or_start != null)
+                if($cashier->or_start && $cashier->or_start > $post["or_end"] && $cashier->or_start != null)
                         $valid = false;
             
             if($valid){
