@@ -260,7 +260,7 @@ class Unity extends CI_Controller {
                 $data['intCurriculumID'] = $post['curriculum'];
                 $data['intFacultyID'] = 999;
                 $data['intSubjectID'] = $subj['intID'];
-                $data['strClassName'] = (strlen($subj['strCode']) > 4) ? substr($subj['strCode'],0,4) : $subj['strCode'];
+                $data['strClassName'] = $program['short_name'];
                 $data['strAcademicYear'] = $post['strAcademicYear'];
                 $data['strUnits'] = $subj['strUnits'];
                 $data['strSection'] = $cl;       

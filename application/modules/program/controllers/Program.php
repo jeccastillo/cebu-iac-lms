@@ -56,20 +56,16 @@ class Program extends CI_Controller {
     
     public function add_program()
     {
-        if($this->is_admin())
-        {
+       
             
-            $this->data['page'] = "add_program";
-            $this->data['opentree'] = "programs";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/add_program",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("program_validation_js",$this->data); 
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."/users/login");  
+        $this->data['page'] = "add_program";
+        $this->data['opentree'] = "programs";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/add_program",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("program_validation_js",$this->data); 
+        //print_r($this->data['classlist']);
+             
     }
     
     public function edit_program($id)
@@ -88,26 +84,26 @@ class Program extends CI_Controller {
     
     public function submit_program()
     {
-        if($this->is_admin()){
-            $post = $this->input->post();
-            //print_r($post);
-            $this->data_poster->log_action('Program','Added a new Program '.$post['strProgramCode'],'yellow');
-            $this->data_poster->post_data('tb_mas_programs',$post);
-            redirect(base_url()."program/view_all_programs");
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $this->data_poster->log_action('Program','Added a new Program '.$post['strProgramCode'],'yellow');
+        $this->data_poster->post_data('tb_mas_programs',$post);        
+        redirect(base_url()."program/edit_program/".$this->db->insert_id());
             
-        }
+        
     }
     
     public function submit_edit_program()
     {
-        if($this->is_admin()){
-            $post = $this->input->post();
-            //print_r($post);
-            $this->data_poster->log_action('Program','Updated a Program '.$post['strProgramCode'],'yellow');
-            $this->data_poster->post_data('tb_mas_programs',$post,$post['intProgramID']);
-            redirect(base_url()."program/view_all_programs");
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $this->data_poster->log_action('Program','Updated a Program '.$post['strProgramCode'],'yellow');
+        $this->data_poster->post_data('tb_mas_programs',$post,$post['intProgramID']);
+        redirect(base_url()."program/edit_program/".$post['intProgramID']);
             
-        }
+        
     }
     
     public function view_all_programs()
