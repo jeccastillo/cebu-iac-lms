@@ -23,7 +23,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Payment Type</label>
-                                            <select @change="selectDescription" class="form-control" v-model="request.description">
+                                            <select required @change="selectDescription" class="form-control" v-model="request.description">
                                                 <option v-if="application_payment && application_payment.status == 'Paid'" value="Reservation Payment">Reservation</option>
                                                 <option value="Application Payment">Application</option>                                
                                             </select>
