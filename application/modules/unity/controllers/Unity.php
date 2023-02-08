@@ -239,43 +239,55 @@ class Unity extends CI_Controller {
     
     public function submit_generate_class()
     {
-        if($this->is_super_admin() || $this->is_department_head())
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $curriculum = $this->data_fetcher->getItem('tb_mas_curriculum',$post['curriculum']);
+        $program = $this->data_fetcher->getItem('tb_mas_programs',$curriculum['intProgramID'],'intProgramID');
+        $sem = $this->data_fetcher->getItem('tb_mas_sy',$post['strAcademicYear']);
+        $wcurr['intSem'] = switch_num_rev($sem['enumSem']);
+        
+        $subjects = $this->data_fetcher->getSubjectsCurriculumSem($curriculum['intID'],$wcurr['intSem'],$post['year']);
+        
+        foreach($subjects as $subj)
         {
-            $post = $this->input->post();
-            //print_r($post);
-            $curriculum = $this->data_fetcher->getItem('tb_mas_curriculum',$post['curriculum']);
-            $program = $this->data_fetcher->getItem('tb_mas_programs',$curriculum['intProgramID'],'intProgramID');
-            $sem = $this->data_fetcher->getItem('tb_mas_sy',$post['strAcademicYear']);
-            $wcurr['intSem'] = switch_num_rev($sem['enumSem']);
+            for($i=0;$i<$post['num_sections'];$i++)
+            {       
             
-            $subjects = $this->data_fetcher->getSubjectsCurriculumSem($curriculum['intID'],$wcurr['intSem'],$post['year']);
-           
-            foreach($subjects as $subj)
-            {
-                for($i=0;$i<$post['num_sections'];$i++)
-                {       
+                $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['strProgramCode']);
+                //echo $subj['strCode']." ".$cl."<br />";
                 
-                    $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['strProgramCode']);
-                    //echo $subj['strCode']." ".$cl."<br />";
-                    
-                        
-                    $data['intFacultyID'] = 999;
-                    $data['intSubjectID'] = $subj['intID'];
-                    $data['strClassName'] = $subj['strCode'];
-                    $data['strAcademicYear'] = $post['strAcademicYear'];
-                    $data['strUnits'] = $subj['strUnits'];
-                    $data['strSection'] = $subject_data['strCode']."-".$post['year']."-".$cl;
-                    $this->data_poster->post_data('tb_mas_classlist',$data);
-                }
+                $data['intCurriculumID'] = $post['curriculum'];
+                $data['intFacultyID'] = 999;
+                $data['intSubjectID'] = $subj['intID'];
+                $data['strClassName'] = $subj['strCode'];
+                $data['strAcademicYear'] = $post['strAcademicYear'];
+                $data['strUnits'] = $subj['strUnits'];
+                $data['strSection'] = $subject_data['strCode']."-".$post['year']."-".$cl;
+                $this->data_poster->post_data('tb_mas_classlist',$data);
             }
-            
-            
-            redirect(base_url()."unity/view_classlist_archive_admin");
-            
-            
         }
+        
+        
+        redirect(base_url()."unity/view_classlist_curriculum/".$post['curriculum']."/".$post['strAcademicYear']);
+            
+            
+       
+    }
+
+    public function view_classlist_curriculum($id, $sem){
+        $active_sem = $this->data_fetcher->get_active_sem();
+
+        if($sem!=null)
+            $data['selected_ay'] = $sem;
         else
-            echo "access denied";
+            $data['selected_ay'] = $active_sem['intID'];
+        
+        $data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/classlist_curriculum_view",$data);
+        $this->load->view("common/footer",$this->data); 
     }
     
     public function edit_classlist($id)
