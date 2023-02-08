@@ -452,7 +452,7 @@ $(document).ready(function() {
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                                 var str = str + "<option value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
-                                    .classlists[j].strClassname + " " 
+                                    .classlists[j].strClassName + " " 
                                     + ret.subjects[i].classlists[j].year + " "
                                     + ret.subjects[i].classlists[j].strSection + " "
                                     + subsection
