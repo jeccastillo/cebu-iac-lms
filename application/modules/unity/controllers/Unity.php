@@ -249,11 +249,10 @@ class Unity extends CI_Controller {
         
         $subjects = $this->data_fetcher->getSubjectsCurriculumSem($curriculum['intID'],$wcurr['intSem'],$post['year']);
         
-        foreach($subjects as $subj)
-        {
-            for($i=0;$i<$post['num_sections'];$i++)
-            {       
-            
+        for($i=0;$i<$post['num_sections'];$i++)
+            {  
+            foreach($subjects as $subj)
+            {                                    
                 $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['short_name']);
                 //echo $subj['strCode']." ".$cl."<br />";                
                 $data['intCurriculumID'] = $post['curriculum'];
@@ -264,7 +263,7 @@ class Unity extends CI_Controller {
                 $data['strUnits'] = $subj['strUnits'];
                 $data['strSection'] = $cl;       
                 $data['year'] = $post['year'];         
-                $this->data_poster->post_data('tb_mas_classlist',$data);
+                $this->data_poster->post_data('tb_mas_classlist',$data);                
             }
         }
         
