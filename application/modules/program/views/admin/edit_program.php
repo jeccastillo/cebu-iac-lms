@@ -32,7 +32,10 @@
                             <label for="strProgramDescription">Program Description</label>
                              <textarea name="strProgramDescription" class="form-control"><?php echo $item['strProgramDescription']; ?></textarea>
                         </div>
-                    
+                        <div class="form-group col-xs-6">
+                            <label for="short_name">Short Name</label>
+                            <input type="text" value="<?php echo $item['short_name']; ?>"  name="short_name" class="form-control" id="short_name" placeholder="Enter Short Name">
+                        </div>
                         <div class="form-group col-xs-6">
                             <label for="type">Type</label>
                               <select class="form-control" name="type" id="type" >

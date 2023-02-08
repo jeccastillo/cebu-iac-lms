@@ -7,6 +7,12 @@ class Program extends CI_Controller {
 		parent::__construct();
 		$this->config->load('themes');		
 		$theme = $this->config->item('unity');
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 3)
+		  redirect(base_url()."unity");
+
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
 		
@@ -67,22 +73,17 @@ class Program extends CI_Controller {
     }
     
     public function edit_program($id)
-    {
-        if($this->is_admin())
-        {
+    {        
             
-            $this->data['item']= $this->data_fetcher->getProgram($id);
-            $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
-            $this->data['opentree'] = "programs";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/edit_program",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("program_validation_js",$this->data); 
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."/users/login");  
+        $this->data['item']= $this->data_fetcher->getProgram($id);
+        $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
+        $this->data['opentree'] = "programs";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_program",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("program_validation_js",$this->data); 
+        //print_r($this->data['classlist']);
+      
     }
     
     public function submit_program()

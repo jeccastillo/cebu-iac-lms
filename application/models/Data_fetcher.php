@@ -1755,7 +1755,7 @@ class Data_fetcher extends CI_Model {
         if($classlist)
             return $classlists->strSection + 1;
         else
-            return A;
+            return 1;
         
        
     }
