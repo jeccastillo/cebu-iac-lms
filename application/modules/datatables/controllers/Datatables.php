@@ -591,7 +591,7 @@ class Datatables extends CI_Controller {
         //array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
         
 
-        $aColumns = array("tb_mas_classlist.intID","strClassName","strSection","strLastname","strFirstname","intFinalized");
+        $aColumns = array("tb_mas_classlist.intID","strCode","strClassName","year","strSection","sub_section","strLastname","strFirstname","intFinalized");
         // $aColumns = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","intROG");
         //$aColumns = array("intID","strFullName","strCourse","strSection");
         $sIndexColumn = "intID";
@@ -750,15 +750,18 @@ class Datatables extends CI_Controller {
                 {
                     $row[] = time_lapsed($aRow->$aColumns[$i]);
                 }
-                else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
+                else if($aColumns[$i] == 'strClassName')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = $aRow->$aColumns[$i].$aRow->$aColumns[$i+1].$aRow->$aColumns[$i+2].$aRow->$aColumns[$i+3];
+                }
+                else if($aColumns[$i] == 'year' || $aColumns[$i] == 'strSection' || $aColumns[$i] == 'sub_section'){
+
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
                     $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
                 }
-                else if ( $aColumns[$i] != ' ' )
+                else if ( $aColumns[$i] != ' ')
                 {
                     if(strpos($aColumns[$i],".") !== false)
                     {
