@@ -415,8 +415,8 @@
                         <div class="box">
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
-                            <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strSection']; ?> Schedule</h3>
+                            <div class="box-header">                            
+                                <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> Schedule</h3>
                             </div>
                            
                             
