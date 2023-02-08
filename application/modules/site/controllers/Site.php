@@ -137,6 +137,24 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
+	public function view_active_programs(){
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1));
+        $ret = [];
+        foreach($programs as $prog){
+            
+            $temp['id'] = $prog['intProgramID'];
+            $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
+            $temp['strMajor'] = $prog['strMajor'];
+            $ret[] = $temp;
+        }
+
+        $data['data'] = $ret;
+
+        echo json_encode($data);
+
+    }
+
    }
 
 ?>

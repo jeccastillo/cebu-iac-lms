@@ -567,7 +567,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'program/view_active_programs', {
+            .get(this.base_url + 'site/view_active_programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
