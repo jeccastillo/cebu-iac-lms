@@ -29,10 +29,10 @@
                 <table id="classlist-table-admin" class="table table-bordered table-hover">
                     <thead><tr>
                         <th>id</th>
+                        <th>Program</th>
                         <th>Subject</th>
                         <th>Section</th>
-                        <th>Instructor Lname</th>
-                        <th>Instructor Fname</th>
+                        <th>Faculty</th>                        
                         <th>Finalized Status</th>
 <!--                        <th>No. of Students</th>-->
                         <!--th>Change Status</th-->

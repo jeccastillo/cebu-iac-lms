@@ -39,7 +39,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
                 </td>           
             </tr>               
             <tr>
-                <td colspan = "3" style="font-weight: bold;text-align:center; font-size:12;">SUBJECT LOAD</td>
+                <td colspan = "3" style="font-weight: bold;text-align:center; font-size:12;">SUBJECTS ENLISTED</td>
             </tr>
             <tr>
                 <td colspan = "3" style="text-align:center; color:black; font-size: 10;"> A.Y. ' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Semester' . '<br /><br /></td>                

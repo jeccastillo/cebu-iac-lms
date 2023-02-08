@@ -62,7 +62,7 @@ class Faculty extends CI_Controller {
             $this->load->view("faculty_validation_js",$this->data); 
         }
         else
-            redirect(base_url()."/users/login"); 
+            redirect(base_url()."unity"); 
         
     }
     
@@ -84,7 +84,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -96,7 +96,7 @@ class Faculty extends CI_Controller {
         $this->data_poster->log_action('Faculty','Added a new Faculty Member: '.$post['strFirstname']." ".$post['strLastname'],'aqua');        
         $post['strPass'] = password_hash($post['strPass'], PASSWORD_DEFAULT);
         $this->data_poster->post_data('tb_mas_faculty',$post);
-        redirect(base_url() . '/faculty/add_faculty');
+        redirect(base_url()."faculty/edit_faculty/".$this->db->insert_id());
             
     }
     
@@ -114,7 +114,7 @@ class Faculty extends CI_Controller {
         $this->data_poster->log_action('Faculty','Updated Faculty Info: '.$post['strFirstname']." ".$post['strLastname'],'aqua');
         
         
-        redirect(base_url()."faculty/view_all_faculty");
+        redirect(base_url()."faculty/edit_faculty/".$post['intID']);
             
     }
     
@@ -132,7 +132,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     
@@ -199,7 +199,7 @@ class Faculty extends CI_Controller {
             $this->load->view("common/faculty_viewer_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login"); 
+            redirect(base_url()."unity"); 
     }
     
     public function edit_profile()
@@ -215,7 +215,7 @@ class Faculty extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
     }
     
     public function my_profile($sem = null)
@@ -252,7 +252,7 @@ class Faculty extends CI_Controller {
             $this->load->view("common/my_profile_conf",$this->data); 
             }
             else
-                redirect(base_url()."/users/login");   
+                redirect(base_url()."unity");   
         
     }
     

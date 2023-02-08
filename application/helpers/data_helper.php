@@ -631,13 +631,13 @@ if(!function_exists('switch_user_level'))
                     $num = "Registrar";
                     break;
                 case 4:
-                    $num = "Department Head";
+                    $num = "Dean";
                     break;
                 case 5:
                     $num = "Admissions Officer";
                     break;
                 case 6:
-                    $num = "Accounting";
+                    $num = "Finance";
                     break;
             }
         

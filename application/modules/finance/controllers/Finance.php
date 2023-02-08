@@ -9,8 +9,10 @@ class Finance extends CI_Controller {
 	
     function __construct() {
         parent::__construct();
-        
-        if(!$this->is_registrar() && !$this->is_super_admin() && !$this->is_department_head())
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 6)
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
@@ -110,10 +112,10 @@ class Finance extends CI_Controller {
         
         $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();        
         if(!$cashier_validation){
-            if($type == "or_start")
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
-            else
-                $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
+            if($type == "or_start" && $cashier->or_end)                
+                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
+            elseif($cashier->or_start)
+                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
         }
         
 
@@ -124,7 +126,8 @@ class Finance extends CI_Controller {
         }
         else{            
             if($type == "or_start"){
-                if($cashier->or_end < $post["or_start"] && $cashier->or_end != null){
+
+                if($cashier->or_end && $cashier->or_end < $post["or_start"] && $cashier->or_end != null){
                     $post['or_end'] = $post["or_start"];                    
                 }
                 $post['or_current'] = $post['or_start'];
@@ -132,7 +135,7 @@ class Finance extends CI_Controller {
                 
             }
             if($type == "or_end")
-                if($cashier->or_start > $post["or_end"] && $cashier->or_start != null)
+                if($cashier->or_start && $cashier->or_start > $post["or_end"] && $cashier->or_start != null)
                         $valid = false;
             
             if($valid){
@@ -161,7 +164,13 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function cashier(){                             
+    public function cashier(){                                     
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($role == 0 && $userlevel != 2)
+            redirect(base_url()."unity");
 
         $this->data['page'] = "add_cashier";
         $this->data['opentree'] = "cashier";

@@ -147,7 +147,7 @@ class Registrar extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -350,7 +350,7 @@ class Registrar extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
 
     }
 
@@ -976,7 +976,7 @@ class Registrar extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     }
     
     public function submit_ay()
@@ -1059,7 +1059,7 @@ class Registrar extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     
@@ -1077,7 +1077,7 @@ class Registrar extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     

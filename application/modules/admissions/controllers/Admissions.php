@@ -562,7 +562,7 @@ class Admissions extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function update_data($table,$field){
@@ -596,7 +596,7 @@ class Admissions extends CI_Controller {
             $this->load->view("common/admissions_js",$this->data);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
 
         
     }

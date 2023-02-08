@@ -122,7 +122,7 @@ class Unity extends CI_Controller {
             $this->load->view("dashboard_js",$this->data);
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function logs($start=null,$end=null)
@@ -142,7 +142,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data);   
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function transactions($start=null,$end=null)
@@ -173,7 +173,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/transactions_conf",$this->data);
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     
@@ -206,12 +206,13 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function generate_classlists($id)
     {
-        if($this->is_super_admin() || $this->is_department_head())
+        $userlevel = $this->session->userdata('intUserLevel');
+        if($userlevel == 2 || $userlevel == 3)
         {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
@@ -233,48 +234,59 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function submit_generate_class()
     {
-        if($this->is_super_admin() || $this->is_department_head())
-        {
-            $post = $this->input->post();
-            //print_r($post);
-            $curriculum = $this->data_fetcher->getItem('tb_mas_curriculum',$post['curriculum']);
-            $program = $this->data_fetcher->getItem('tb_mas_programs',$curriculum['intProgramID'],'intProgramID');
-            $sem = $this->data_fetcher->getItem('tb_mas_sy',$post['strAcademicYear']);
-            $wcurr['intSem'] = switch_num_rev($sem['enumSem']);
-            
-            $subjects = $this->data_fetcher->getSubjectsCurriculumSem($curriculum['intID'],$wcurr['intSem'],$post['year']);
-           
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $curriculum = $this->data_fetcher->getItem('tb_mas_curriculum',$post['curriculum']);
+        $program = $this->data_fetcher->getItem('tb_mas_programs',$curriculum['intProgramID'],'intProgramID');
+        $sem = $this->data_fetcher->getItem('tb_mas_sy',$post['strAcademicYear']);
+        $wcurr['intSem'] = switch_num_rev($sem['enumSem']);
+        
+        $subjects = $this->data_fetcher->getSubjectsCurriculumSem($curriculum['intID'],$wcurr['intSem'],$post['year']);
+        
+        for($i=0;$i<$post['num_sections'];$i++)
+            {  
             foreach($subjects as $subj)
-            {
-                for($i=0;$i<$post['num_sections'];$i++)
-                {       
-                
-                    $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['strProgramCode']);
-                    //echo $subj['strCode']." ".$cl."<br />";
-                    
-                        
-                    $data['intFacultyID'] = 999;
-                    $data['intSubjectID'] = $subj['intID'];
-                    $data['strClassName'] = $subj['strCode'];
-                    $data['strAcademicYear'] = $post['strAcademicYear'];
-                    $data['strUnits'] = $subj['strUnits'];
-                    $data['strSection'] = $subject_data['strCode']."-".$post['year']."-".$cl;
-                    $this->data_poster->post_data('tb_mas_classlist',$data);
-                }
+            {                                    
+                $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['short_name']);
+                //echo $subj['strCode']." ".$cl."<br />";                
+                $data['intCurriculumID'] = $post['curriculum'];
+                $data['intFacultyID'] = 999;
+                $data['intSubjectID'] = $subj['intID'];
+                $data['strClassName'] = $program['short_name'];
+                $data['strAcademicYear'] = $post['strAcademicYear'];
+                $data['strUnits'] = $subj['strUnits'];
+                $data['strSection'] = $cl;       
+                $data['year'] = $post['year'];         
+                $this->data_poster->post_data('tb_mas_classlist',$data);                
             }
-            
-            
-            redirect(base_url()."unity/view_classlist_archive_admin");
-            
-            
         }
+        
+        
+        redirect(base_url()."unity/view_classlist_curriculum/".$post['curriculum']."/".$post['strAcademicYear']);
+            
+            
+       
+    }
+
+    public function view_classlist_curriculum($id, $sem){
+        $active_sem = $this->data_fetcher->get_active_sem();
+
+        if($sem!=null)
+            $data['selected_ay'] = $sem;
         else
-            echo "access denied";
+            $data['selected_ay'] = $active_sem['intID'];
+        
+        $data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/classlist_curriculum_view",$data);
+        $this->load->view("common/footer",$this->data); 
     }
     
     public function edit_classlist($id)
@@ -307,7 +319,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function reassign_classlist($id)
@@ -328,7 +340,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -400,7 +412,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     }
     
     public function edit_registration($id,$sem = null)
@@ -423,7 +435,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/edit_registration_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     public function registration_viewer_data($id,$sem){
@@ -453,7 +465,7 @@ class Unity extends CI_Controller {
 
             }
             $ret['payment'] = $pay;
-            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,4)) )?true:false;
+            $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
             $ret['tuition_data'] = $data['tuition'];
@@ -612,7 +624,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/registration_viewer_conf",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
         
     }
 
@@ -735,7 +747,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
             
     }
     
@@ -750,7 +762,7 @@ class Unity extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
             
     }
     
@@ -769,7 +781,7 @@ class Unity extends CI_Controller {
             $this->data_fetcher->executeAcademicSync();
             
         }
-        redirect(base_url()."/users/login");
+        redirect(base_url()."unity");
     }
 
     public function student_viewer_data($id=0,$sem = null,$tab = null){
@@ -1048,6 +1060,15 @@ class Unity extends CI_Controller {
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
        
+        $user_level = $this->session->userdata('intUserLevel');
+        
+        if($user_level == 6)
+            redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
+        if($user_level != 2 && $user_level != 3)
+            redirect(base_url().'unity');
+        
+        
+
         $post = $this->input->post();
         $this->data['id'] = $id;
         $this->data['sem'] = $sem;
@@ -1168,7 +1189,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -1271,7 +1292,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -1538,7 +1559,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1570,11 +1591,11 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
-    public function view_classlist_archive_admin($sem = null)
+    public function view_classlist_archive_admin($sem = null, $program = null)
     {
         if($this->is_admin() || $this->is_registrar())
         {
@@ -1586,6 +1607,7 @@ class Unity extends CI_Controller {
             else
                 $this->data['selected_ay'] = $active_sem['intID'];
             
+            $this->data['program'] = $program;
            
             //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";
@@ -1599,7 +1621,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1627,7 +1649,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1764,7 +1786,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     
@@ -1986,7 +2008,7 @@ class Unity extends CI_Controller {
             $data['eq_raw'] ="inc";
             $post['strRemarks'] = $data['remarks'] = "lack of reqts.";
 
-        }
+        }        
         else
         {  
             $ave = getAve($item['floatPrelimGrade'],$item['floatMidtermGrade'],$item['floatFinalsGrade']);
@@ -1996,7 +2018,15 @@ class Unity extends CI_Controller {
             
             //$data["eq"] = $post['floatFinalGrade'];
             //$data["eq"] = $item['floatFinalGrade'];
-            $post['strRemarks'] = $data['remarks'] = getRemarks($post["floatFinalGrade"]);
+            
+            if($post['enumStatus'] == "passed")
+                $post['strRemarks'] = $data['remarks'] = "Passed";
+            elseif($post['enumStatus'] == "failed")
+                $post['strRemarks'] = $data['remarks'] = "Failed";
+            elseif($post['enumStatus'] == "act")
+                $post['strRemarks'] = $data['remarks'] = "";
+            else
+                $post['strRemarks'] = $data['remarks'] = getRemarks($post["floatFinalGrade"]);
             
         }
         
@@ -2101,7 +2131,7 @@ class Unity extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     
@@ -2119,7 +2149,7 @@ class Unity extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function delete_classlist()

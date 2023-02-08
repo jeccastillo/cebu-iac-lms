@@ -9,6 +9,11 @@ class Subject extends CI_Controller {
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 6 && $userlevel != 4)
+		  redirect(base_url()."unity");
 		
         $settings = $this->data_fetcher->fetch_table('su-tb_sys_settings');
 		foreach($settings as $setting)
@@ -72,7 +77,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function edit_subject($id)
@@ -122,7 +127,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -235,7 +240,7 @@ class Subject extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function subject_viewer($id,$sem = null)
@@ -290,7 +295,7 @@ class Subject extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }

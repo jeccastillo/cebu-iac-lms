@@ -26,6 +26,29 @@
             }
         });
         
+
+        $("#sub-section-lock").click(function(){
+            rel = $(this).attr('rel');
+            
+            if(rel == "locked")
+            {
+                conf = confirm("Are you sure you want to unlock?");
+                if(conf){
+                    $(this).attr('rel','unlocked');
+                    $(this).find('i').removeClass('ion-locked');
+                    $(this).find('i').addClass('ion-unlocked');
+                    $("#sub_section").removeAttr('disabled');
+                }
+            }
+            else
+            {
+                $(this).attr('rel','locked');
+                $(this).find('i').removeClass('ion-unlocked');
+                $(this).find('i').addClass('ion-locked');
+                $("#sub_section").attr('disabled','disabled');
+            }
+        });
+
         $("#section-lock").click(function(){
             rel = $(this).attr('rel');
             

@@ -35,7 +35,7 @@
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
                             <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strClassName'].'-'.$classlist['strSection']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
+                            <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
                             </div>
                             
                             <table class="table table-striped">
@@ -46,11 +46,13 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Program</th>
+                                <?php if($classlist['is_numerical']): ?>
                                 <th>Prelim<br/>(30%)</th>
                                 <th>Midterm<br/>(30%)</th>
                                 <th>Finals<br/>(40%)</th>
                                 <th>FINAL GRADE<br/>(100%)</th>
                                 <th>Numerical Rating</th>
+                                <?php endif; ?>
                                 <th>Status</th>
                                 <th>Remarks</th>
                                 <th>Enrolled</th>
@@ -78,46 +80,53 @@
                                     <td><?php echo $student['strProgramCode']; ?></td>
                                     <!--  newly added ^_^ 4-22-2016            -->
                                     <!--td><input <?php echo ($classlist['intFinalized']==1 || !$is_super_admin)?'disabled':''; ?> type="text" value="<?php echo $student['strStudentNumber']; ?>" name="strStudentNumber" class="studNumInput form-control" id="strStudentNumber" placeholder="Enter Stud-Number" size="3" rel="<?php echo $student['intID'] ?>"></td-->
+                                    <?php if($classlist['is_numerical']): ?>
+                                        <?php if(!empty($student['registered'])): ?>
+                                        <td>                                        
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 0 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_prelim_grading['enumGradingPeriod'] != 'active' || empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputPrelimID-<?php echo $student['intCSID']; ?>"class="prelimInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatPrelimGrade']; ?>">                                        
+                                        </td>
+                                        <td>                                        
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                                        
+                                        </td>
+                                        <td>                
+                            <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatFinalsGrade']; ?>">                                        
+                                        </td>
+                                        <td id="eq2-<?php echo $student['intCSID'] ?>">
+                                            <?php 
+                                                if ($student['enumStatus']=='drp'){
+                                                    echo "UD";
+                                                }
+                                                else if ($student['enumStatus']=='odrp'){
+                                                    echo "OD";
+                                                }
+                                                else if ($student['enumStatus']=='inc') {
+                                                    echo "inc";
+                                                }
+                                                else {
+                                                    echo number_format(getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']), 2);
+                                                }
+                                            ?>
+                                        </td>
+                                        <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
+                                        <?php else: ?>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                     <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 0 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_prelim_grading['enumGradingPeriod'] != 'active' || empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputPrelimID-<?php echo $student['intCSID']; ?>"class="prelimInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatPrelimGrade']; ?>">
-                                    </td>
-                                    <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">
-
-                                    </td>
-                                    <td>
-                                        
-                        <input type="number" min="50" max="100" <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatFinalsGrade']; ?>">
-                                    </td>
-                                    <td id="eq2-<?php echo $student['intCSID'] ?>">
+                                        <?php if(!empty($student['registered'])): ?>
+                                        <select  id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
                                         <?php 
-                                            if ($student['enumStatus']=='drp'){
-                                                echo "UD";
-                                            }
-                                            else if ($student['enumStatus']=='odrp'){
-                                                echo "OD";
-                                            }
-                                            else if ($student['enumStatus']=='inc') {
-                                                echo "inc";
-                                            }
-                                            else {
-                                                echo number_format(getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']), 2);
-                                            }
-                                         ?>
-                                    </td>
-                                    <td style="text-align:center;" id="eq-<?php echo $student['intCSID'] ?>"><?php echo ($student['enumStatus']!='odrp')? number_format($student['floatFinalGrade'], 2):'---' ?></td>
-                                    <td>
-                                    <select id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
-                                    <?php 
-                                     if($is_super_admin && $student['enumStatus'] =="drp")
-                                        echo "";
-                                     else if ($student['enumStatus'] =="drp") 
-                                        echo "disabled";
-                                          
-                                    ?>
-                                    class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>">
+                                        if($is_super_admin && $student['enumStatus'] =="drp")
+                                            echo "";
+                                        else if ($student['enumStatus'] =="drp") 
+                                            echo "disabled";                                                                        
+                                        ?>
+                                        
+                                        class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>">
                                             <option <?php echo ($student['enumStatus'] == "act")?'selected':''; ?> value="act">Active</option>
                                             <?php if($classlist['intFinalized'] == 2 || $is_super_admin || $student['enumStatus'] == "inc"): ?>
                                             <option <?php echo ($student['enumStatus'] == "inc")?'selected':''; ?> value="inc">Incomplete</option>
@@ -125,11 +134,12 @@
                                             
                                             <option <?php echo ($student['enumStatus'] == "drp")?'selected':''; ?> value="drp">Unofficially Dropped</option>
                                             <?php if($is_admin): ?>
-                                            <option <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>
-                                            <?php else: ?>
-                                            <!-- <option disabled <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>     -->
+                                            <option <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>                                            
                                             <?php endif; ?>
+                                            <option <?php echo ($student['enumStatus'] == "passed")?'selected':''; ?> value="passed">Passed</option>
+                                            <option <?php echo ($student['enumStatus'] == "failed")?'selected':''; ?> value="failed">Failed</option>
                                         </select>
+                                        <?php endif; ?>
                                     </td>
                                     
                                     
@@ -213,7 +223,7 @@
                     <div class="tab-pane" id="tab_2">
                         <div class="box box-info">
                                 <div class="box-header">
-                                <h3 class="box-title"><?php echo $classlist['strClassName'].'-'.$classlist['strSection']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
+                                    <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
                                     <br />
                                     
                                 </div>
@@ -405,8 +415,8 @@
                         <div class="box">
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
-                            <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strSection']; ?> Schedule</h3>
+                            <div class="box-header">                            
+                                <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> Schedule</h3>
                             </div>
                            
                             
@@ -664,7 +674,7 @@
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
                             <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strClassName'].'-'.$classlist['strSection']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
+                                <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
                             </div>
                             
                             <table class="table table-striped">                                

@@ -64,7 +64,7 @@ class Classroom extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function edit_classroom($id)
@@ -84,7 +84,7 @@ class Classroom extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -133,7 +133,7 @@ class Classroom extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -153,7 +153,7 @@ class Classroom extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");   
+            redirect(base_url()."unity");   
     
     }
     

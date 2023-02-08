@@ -63,6 +63,13 @@
                             </select>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label for="is_numerical">Numerical Rating?</label>
+                            <select class="form-control" name="is_numerical" id="is_numerical" >
+                                <option <?php echo ($subject['is_numerical'] == 0)?'selected':''; ?> value="0">No</option>
+                                <option <?php echo ($subject['is_numerical'] == 1)?'selected':''; ?> value="1">Yes</option>
+                            </select>
+                        </div> 
+                        <div class="form-group col-xs-6">
                             <label for="include_gwa">Include in GWA?</label>
                             <select class="form-control" name="include_gwa" id="include_gwa" >
                                 <option <?php echo ($subject['include_gwa'] == 0)?'selected':''; ?> value="0">No</option>

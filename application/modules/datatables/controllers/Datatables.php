@@ -578,7 +578,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -591,7 +591,7 @@ class Datatables extends CI_Controller {
         //array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
         
 
-        $aColumns = array("tb_mas_classlist.intID","strClassName","strSection","strLastname","strFirstname","intFinalized");
+        $aColumns = array("tb_mas_classlist.intID","strProgramCode","strCode","strClassName","year","strSection","sub_section","strLastname","strFirstname","intFinalized");
         // $aColumns = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","intROG");
         //$aColumns = array("intID","strFullName","strCourse","strSection");
         $sIndexColumn = "intID";
@@ -650,6 +650,9 @@ class Datatables extends CI_Controller {
          */
        
        $sWhere = "WHERE $sTable.strAcademicYear = ".$active_sem['intID']." ";
+       if($program != 0)
+        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
+            
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
         {
@@ -660,7 +663,7 @@ class Datatables extends CI_Controller {
             else
             {
                 $sWhere .= " AND (";
-            }
+            }            
            
             
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -693,6 +696,8 @@ class Datatables extends CI_Controller {
         $sJoin = "JOIN tb_mas_faculty ON tb_mas_classlist.intFacultyID = tb_mas_faculty.intID ";
         //$sJoin .= "LEFT JOIN tb_mas_classlist_student ON tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID ";
         $sJoin .= "JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID ";
+        $sJoin .= "JOIN tb_mas_curriculum ON tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID ";
+        $sJoin .= "JOIN tb_mas_programs ON tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID ";
       
          //CASE WHEN tb_mas_registration.intROG IS NULL THEN -1 ELSE tb_mas_registration.intROG END AS tb_mas_registration.intROG
         /*
@@ -750,15 +755,21 @@ class Datatables extends CI_Controller {
                 {
                     $row[] = time_lapsed($aRow->$aColumns[$i]);
                 }
-                else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
+                else if($aColumns[$i] == 'strClassName')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = $aRow->$aColumns[$i].$aRow->$aColumns[$i+1].$aRow->$aColumns[$i+2].$aRow->$aColumns[$i+3];
+                }
+                else if($aColumns[$i] == 'strLastname'){
+                    $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
+                }
+                else if($aColumns[$i] == 'year' || $aColumns[$i] == 'strSection' || $aColumns[$i] == 'sub_section' || $aColumns[$i] == 'strFirstname'){
+
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
                     $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
                 }
-                else if ( $aColumns[$i] != ' ' )
+                else if ( $aColumns[$i] != ' ')
                 {
                     if(strpos($aColumns[$i],".") !== false)
                     {

@@ -84,11 +84,19 @@
                         <option value="2">Super Admin</option>
                         <?php endif; ?>
                         <option value="3">Registrar</option>
-                        <option value="4">Department Head</option>
+                        <option value="4">Dean</option>
                         <option value="5">Admissions Officer</option>
-                        <option value="6">Accounting</option>
+                        <option value="6">Finance</option>
                     </select>
-                </div>         
+                </div>    
+                <div class="form-group col-xs-6">
+                    <label for="special_role">Special Role</label>
+                    <select class="form-control" name="special_role" > 
+                        <option value="0">None</option>
+                        <option value="1">Asst. Manager</option>
+                        <option value="2">Manager</option>
+                    </select>
+                </div>     
                 <div class="form-group col-xs-12">
                     <input type="submit" value="add" class="btn btn-default  btn-flat">
                 </div>

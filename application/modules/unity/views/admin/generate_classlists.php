@@ -1,16 +1,16 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Classlist
+                    Sections
                     </h1>
                     <ol class="breadcrumb">
-                        <li class="active">Generate Classlist</li>
+                        <li class="active">Generate Sections</li>
                     </ol>
                 </section>
 <section class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Generate Classlist for <?php echo $curriculum['strName']; ?></h3>
+                <h3 class="box-title">Generate Sections for <?php echo $curriculum['strName']; ?></h3>
         </div>
        
             

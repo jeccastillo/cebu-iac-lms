@@ -88,7 +88,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function faculty_loading()
@@ -107,7 +107,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function add_credits()
@@ -126,7 +126,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function student_function($f = "rog")
@@ -154,7 +154,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     public function crediting($id=null)
     {
@@ -279,7 +279,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -306,7 +306,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");    
+            redirect(base_url()."unity");    
         
         
     }
@@ -334,7 +334,7 @@ class Department extends CI_Controller {
             
         }
         else
-            redirect(base_url()."/users/login");
+            redirect(base_url()."unity");
     }
     
     

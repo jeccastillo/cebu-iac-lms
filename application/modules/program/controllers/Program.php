@@ -7,6 +7,12 @@ class Program extends CI_Controller {
 		parent::__construct();
 		$this->config->load('themes');		
 		$theme = $this->config->item('unity');
+
+        //User Level Validation
+        $userlevel = $this->session->userdata('intUserLevel');        
+        if($userlevel != 2 && $userlevel != 3)
+		  redirect(base_url()."unity");
+
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
 		
@@ -50,63 +56,54 @@ class Program extends CI_Controller {
     
     public function add_program()
     {
-        if($this->is_admin())
-        {
+       
             
-            $this->data['page'] = "add_program";
-            $this->data['opentree'] = "programs";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/add_program",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("program_validation_js",$this->data); 
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."/users/login");  
+        $this->data['page'] = "add_program";
+        $this->data['opentree'] = "programs";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/add_program",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("program_validation_js",$this->data); 
+        //print_r($this->data['classlist']);
+             
     }
     
     public function edit_program($id)
-    {
-        if($this->is_admin())
-        {
+    {        
             
-            $this->data['item']= $this->data_fetcher->getProgram($id);
-            $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
-            $this->data['opentree'] = "programs";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/edit_program",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("program_validation_js",$this->data); 
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."/users/login");  
+        $this->data['item']= $this->data_fetcher->getProgram($id);
+        $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
+        $this->data['opentree'] = "programs";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_program",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("program_validation_js",$this->data); 
+        //print_r($this->data['classlist']);
+      
     }
     
     public function submit_program()
     {
-        if($this->is_admin()){
-            $post = $this->input->post();
-            //print_r($post);
-            $this->data_poster->log_action('Program','Added a new Program '.$post['strProgramCode'],'yellow');
-            $this->data_poster->post_data('tb_mas_programs',$post);
-            redirect(base_url()."program/view_all_programs");
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $this->data_poster->log_action('Program','Added a new Program '.$post['strProgramCode'],'yellow');
+        $this->data_poster->post_data('tb_mas_programs',$post);        
+        redirect(base_url()."program/edit_program/".$this->db->insert_id());
             
-        }
+        
     }
     
     public function submit_edit_program()
     {
-        if($this->is_admin()){
-            $post = $this->input->post();
-            //print_r($post);
-            $this->data_poster->log_action('Program','Updated a Program '.$post['strProgramCode'],'yellow');
-            $this->data_poster->post_data('tb_mas_programs',$post,$post['intProgramID']);
-            redirect(base_url()."program/view_all_programs");
+        
+        $post = $this->input->post();
+        //print_r($post);
+        $this->data_poster->log_action('Program','Updated a Program '.$post['strProgramCode'],'yellow');
+        $this->data_poster->post_data('tb_mas_programs',$post,$post['intProgramID']);
+        redirect(base_url()."program/edit_program/".$post['intProgramID']);
             
-        }
+        
     }
     
     public function view_all_programs()
@@ -123,7 +120,7 @@ class Program extends CI_Controller {
             //print_r($this->data['classlist']);
         }
         else
-            redirect(base_url()."/users/login");  
+            redirect(base_url()."unity");  
     }
     
     public function program_viewer($id,$sem = null)
@@ -200,23 +197,6 @@ class Program extends CI_Controller {
         echo json_encode($data);
     }
     
-    public function view_active_programs(){
-        $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1));
-        $ret = [];
-        foreach($programs as $prog){
-            
-            $temp['id'] = $prog['intProgramID'];
-            $temp['title'] = $prog['strProgramDescription'];
-            $temp['type'] = $prog['type'];
-            $temp['strMajor'] = $prog['strMajor'];
-            $ret[] = $temp;
-        }
-
-        $data['data'] = $ret;
-
-        echo json_encode($data);
-
-    }
 
     public function faculty_logged_in()
     {

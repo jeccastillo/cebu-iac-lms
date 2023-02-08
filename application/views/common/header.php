@@ -196,45 +196,24 @@
                         <?php endif; ?>
                          <?php if(in_array($user['intUserLevel'],array(0,1,2)) ): ?>
                       <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i> <span>View My Classes</span></a></li>
-                <?php endif; ?>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="messages")?'active':''; ?>">
-                    <a href="#">
-                        <i class="ion ion-email"></i> <span>Messages</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="compose_message")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/compose_message" style="margin-left: 10px;"><i class="fa fa-pencil-square-o"></i> Compose Message</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/" style="margin-left: 10px;"><i class="fa fa-inbox"></i> Inbox</a></li>
-                        
-                        <li class="<?php echo (isset($page) && $page=="sent_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/sent_messages" style="margin-left: 10px;"><i class="fa fa-share-square-o"></i> Outbox</a></li>
-                        <li class="<?php echo (isset($page) && $page=="trash_messages")?'active':''; ?>"><a href="<?php echo base_url(); ?>messages/view_trash" style="margin-left: 10px;"><i class="fa fa-trash-o"></i> Trash</a></li>
-                    
-                    </ul>
-                    
-                </li>
-                <?php if(in_array($user['intUserLevel'],array(1,2,3,4,5,6)) ): ?>
-                    <li class="header">Administrative</li>
-                <?php endif; ?>
-                <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
-                    <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
-                    <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>
-                    <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
+                <?php endif; ?>                               
+                <?php if(in_array($user['intUserLevel'],array(2,5,6)) ): ?>
+                    <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->                    
                     <li class="header">Admissions</li>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
-                    <a href="#">
-                        <i class="ion ion-email"></i> <span>Student Applicants</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
-                                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>                                
-                    </ul>
-                </li>                
-                
+                        <a href="#">
+                            <i class="ion ion-email"></i> <span>Student Applicants</span>
+                            <i class="fa pull-right fa-angle-left"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
+                                    href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
+                                    style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>                                
+                        </ul>
+                    </li>                                
                 <?php endif; ?>
                 <li class="header">Admin Menu</li>
-                <?php if(in_array($user['intUserLevel'],array(0,1,2,3,4,5,6)) ): ?>
+                <?php if(in_array($user['intUserLevel'],array(0,1,2,4)) ): ?>
                     
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                         <a href="#">
@@ -245,6 +224,8 @@
                             <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist" style="margin-left: 10px;"><i class="ion ion-android-person-add"></i> My Classlists</a></li>
                         </ul>
                     </li>
+                <?php endif; ?>
+                <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="students")?'active':''; ?>">
                         <a href="#">
                             <i class="fa-user fa text-teal"></i> <span>Students</span>
@@ -263,7 +244,7 @@
                         </ul>
                     </li>
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>                        
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="department")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-aqua"></i> <span>Department</span>
@@ -271,7 +252,7 @@
                             </a>
                         
                             <ul class="treeview-menu">
-                                <li class="<?php echo (isset($page) && $page=="advise_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/subject_loading" style="margin-left: 10px;"><i class="ion ion-compose"></i> Subject Loading</a></li>
+                                <li class="<?php echo (isset($page) && $page=="advise_student")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/subject_loading" style="margin-left: 10px;"><i class="ion ion-compose"></i> Subject Enlistment</a></li>
                                 <li class="<?php echo (isset($page) && $page=="add_credits")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/add_credits" style="margin-left: 10px;"><i class="fa fa-plus"></i> Credit Subjects</a></li>
                                 <li class="<?php echo (isset($page) && $page=="rog")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/rog" style="margin-left: 10px;"><i class="fa fa-book"></i> Report of Grades</a></li>
                                 <li class="<?php echo (isset($page) && $page=="assessment")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/assessment" style="margin-left: 10px;"><i class="fa fa-book"></i> Curriculum Assessment</a></li>
@@ -303,8 +284,8 @@
                     </ul>
                 </li>
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
-                        <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
+                <?php if(in_array($user['intUserLevel'],array(2,3,4)) ): ?>
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="subject")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa-book fa"></i> <span>Subjects</span>
                                 <i class="fa pull-right fa-angle-left"></i>
@@ -315,6 +296,8 @@
                                 
                             </ul>
                         </li>
+                <?php endif; ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3): ?>                        
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="curriculum")?'active':''; ?>">
                             <a href="#">
                                 <i class="ion ion-university"></i> <span>Curriculum</span>
@@ -348,6 +331,20 @@
                             </ul>
                         </li>
                 <?php endif; ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?>
+                    <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
+                    <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>                    
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">                                        
+                                <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Year</a></li>
+                                <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
+                            </ul>
+                        </li> 
+                <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>                   
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="registrar")?'active':''; ?>">
                             <a href="#">
@@ -367,17 +364,7 @@
                                 
                             </ul>
                             
-                        </li>
-                        <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
-                            <a href="#">
-                                <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
-                                <i class="fa pull-right fa-angle-left"></i>
-                            </a>
-                            <ul class="treeview-menu">                                        
-                                <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Year</a></li>
-                                <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
-                            </ul>
-                        </li> 
+                        </li>                        
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-green"></i> <span>Scholarship</span>
