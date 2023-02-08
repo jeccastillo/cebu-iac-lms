@@ -31,17 +31,10 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>OR Number:</label>
-                                            <div>{{ request.or_number }}</div>
-                                            <input type="hidden" class="form-control" v-model="request.or_number" />
-                                        </div>
-                                    </div>                                    
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
                                             <label>Contact Number:</label>
                                             <input type="text" required class="form-control" v-model="request.contact_number" />
                                         </div>
-                                    </div>
+                                    </div>                                                                                                          
                                     
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -49,6 +42,13 @@
                                             <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                         </div>                                    
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>OR Number:</label>
+                                            <div>{{ request.or_number }}</div>
+                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                        </div>
+                                    </div>  
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
