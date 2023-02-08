@@ -1087,6 +1087,31 @@ class Unity extends CI_Controller {
         
         
     }
+
+    public function compute_gwa($id){
+        
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        
+        if(!$this->data['student'])
+            $data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+
+        // $totalUnitsEarned = $this->data_fetcher->unitsEarned($ret['student']['intID'],$ret['student']['intCurriculumID']);
+        
+        // //array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+        // //$ret['grades'] = $grades;
+        
+        // $ret['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$ret['selected_ay'],$id);
+        
+        // $ret['other_data']['units_in_curriculum'] = $this->data_fetcher->countUnitsInCurriculum($ret['student']['intCurriculumID']);
+        
+        // if($ret['other_data']['totalUnitsEarned'] != 0)
+        //     $ret['other_data']['gpa_curriculum'] = round($this->data_fetcher->getGPA($ret['student']['intID'],$ret['student']['intCurriculumID'])/$ret['other_data']['totalUnitsEarned'],2);
+        // else
+        //     $ret['other_data']['gpa_curriculum'] = 0;
+
+        echo json_encode($data);
+    
+    }
     
     public function edit_sections($id=0)
     {
