@@ -60,7 +60,7 @@
                     <input type="text" disabled id="section" name="strSection" class="form-control"  value="<?php echo $classlist['strSection']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
-                    <label for="strSection">Section <a rel="locked" href="#" id="sub-section-lock"><i class="ion ion-locked"></i></a></label>
+                    <label for="strSection">Sub Section <a rel="locked" href="#" id="sub-section-lock"><i class="ion ion-locked"></i></a></label>
                     <input type="text" disabled id="sub_section" name="sub_section" class="form-control" value="<?php echo $classlist['sub_section']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
