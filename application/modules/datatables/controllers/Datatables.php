@@ -651,7 +651,7 @@ class Datatables extends CI_Controller {
        
        $sWhere = "WHERE $sTable.strAcademicYear = ".$active_sem['intID']." ";
        if($program != 0)
-        $sWhere .= " AND intProgramID = $program ";
+        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
             
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
