@@ -447,8 +447,9 @@ $(document).ready(function() {
                                 ret.subjects[i].intID +
                                 "'>";
                                 
-                            subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
+                            
                             for (j in ret.subjects[i].classlists) {
+                                subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                                 var str = str + "<option value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
                                     .classlists[j].strClassname + " " 
