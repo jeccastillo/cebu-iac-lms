@@ -263,7 +263,7 @@ class Unity extends CI_Controller {
                 $data['strClassName'] = $subj['strCode'];
                 $data['strAcademicYear'] = $post['strAcademicYear'];
                 $data['strUnits'] = $subj['strUnits'];
-                $data['strSection'] = $subject_data['strCode']."-".$post['year']."-".$cl;
+                $data['strSection'] = substr($subject_data['strCode'],0,4)."-".$post['year']."-".$cl;
                 $this->data_poster->post_data('tb_mas_classlist',$data);
             }
         }
