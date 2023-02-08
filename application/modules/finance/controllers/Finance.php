@@ -166,8 +166,9 @@ class Finance extends CI_Controller {
     public function cashier(){                                     
 
         $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
         
-        if($role == 0)
+        if($role == 0 && $userlevel != 2)
             redirect(base_url()."unity");
 
         $this->data['page'] = "add_cashier";
