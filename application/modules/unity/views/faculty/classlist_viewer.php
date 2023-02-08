@@ -35,7 +35,7 @@
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
                             <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strClassName'].'-'.$classlist['strSection']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
+                            <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].'-'.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
                             </div>
                             
                             <table class="table table-striped">
@@ -674,7 +674,7 @@
                             <div class="overlay" style="display:none;"></div>
                             <div class="loading-img" style="display:none;"></div>
                             <div class="box-header">
-                                    <h3 class="box-title"><?php echo $classlist['strClassName'].'-'.$classlist['strSection']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
+                                <h3 class="box-title"><?php echo $classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].'-'.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
                             </div>
                             
                             <table class="table table-striped">                                

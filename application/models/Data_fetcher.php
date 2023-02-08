@@ -693,7 +693,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd,count(tb_mas_classlist_student.intCSID) as numStudents")
+                     ->select("tb_mas_classlist.intID as intID, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd,count(tb_mas_classlist_student.intCSID) as numStudents")
                      ->from("tb_mas_classlist")
                      ->where(array("intFacultyID"=>$faculty_id));
                     
@@ -717,7 +717,7 @@ class Data_fetcher extends CI_Model {
     function fetch_classlists_all($limit=null,$sem_sel=null)
     {
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem, COUNT(tb_mas_classlist_student.intStudentID) as students")
+                     ->select("tb_mas_classlist.intID as intID, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem, COUNT(tb_mas_classlist_student.intStudentID) as students")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -738,7 +738,7 @@ class Data_fetcher extends CI_Model {
     function fetch_classlists_dept($dept,$admin=false,$limit=null,$sem_sel=null)
     {
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
+                     ->select("tb_mas_classlist.intID as intID, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -760,7 +760,7 @@ class Data_fetcher extends CI_Model {
     function fetch_classlists_unassigned($sem_sel=null,$limit=null,$dept)
     {
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, slots, strSection, intFacultyID,intSubjectID,strClassName,strCode,strDescription,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
+                     ->select("tb_mas_classlist.intID as intID, slots, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,strDescription,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -781,7 +781,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, is_numerical, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment")
+                     ->select("tb_mas_classlist.intID as intID, is_numerical, year, sub_section, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
