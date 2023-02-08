@@ -1747,15 +1747,15 @@ class Data_fetcher extends CI_Model {
     {
         
             
-       $classlists = $this->db->where(array('intSubjectID'=>$subject,'strAcademicYear'=>$ay,'strSection LIKE '=>$course.'%'))
-           ->order_by('strSection asc')
+       $classlist = $this->db->where(array('intSubjectID'=>$subject,'strAcademicYear'=>$ay,'strSection LIKE '=>$course.'%'))
+           ->order_by('strSection desc')
            ->get('tb_mas_classlist')
-           ->result_array();
+           ->row();
         
-        if(!empty($classlists))
-            return count($classlists)+1;
+        if($classlist)
+            return $classlists->strSection + 1;
         else
-            return 1;
+            return A;
         
        
     }

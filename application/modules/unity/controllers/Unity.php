@@ -256,14 +256,15 @@ class Unity extends CI_Controller {
             
                 $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['strProgramCode']);
                 //echo $subj['strCode']." ".$cl."<br />";
-                
+                $string = (strlen($string) > 13) ? substr($string,0,10).'...' : $string;
                 $data['intCurriculumID'] = $post['curriculum'];
                 $data['intFacultyID'] = 999;
                 $data['intSubjectID'] = $subj['intID'];
-                $data['strClassName'] = $subj['strCode'];
+                $data['strClassName'] = (strlen($subj['strCode']) > 4) ? substr($subj['strCode'],0,4) : $subj['strCode'];
                 $data['strAcademicYear'] = $post['strAcademicYear'];
                 $data['strUnits'] = $subj['strUnits'];
-                $data['strSection'] = substr($subject_data['strCode'],0,4)."-".$post['year']."-".$cl;
+                $data['strSection'] = $cl;       
+                $data['year'] = $post['year'];         
                 $this->data_poster->post_data('tb_mas_classlist',$data);
             }
         }
