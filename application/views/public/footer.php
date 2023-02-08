@@ -418,6 +418,8 @@ $(document).ready(function() {
             'sem': $("#activeSem").val()
         };
 
+        var subsection = "";
+
         $.ajax({
             'url': '<?php echo base_url(); ?>unity/load_subjects',
             'method': 'post',
@@ -439,15 +441,22 @@ $(document).ready(function() {
                                 i].strUnits +
                             "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
                         );
+
+                        
                         if (ret.subjects[i].classlists.length > 0) {
                             var str = "<div><select class='form-control' name='section-" +
                                 ret.subjects[i].intID +
-                                "'><option value=0>Auto</option><option value='new'>New</option>";
-
+                                "'>";
+                                
+                            subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                             for (j in ret.subjects[i].classlists) {
                                 var str = str + "<option value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
-                                    .classlists[j].strSection + "(" + ret.subjects[i]
+                                    .classlists[j].strClassname + " " 
+                                    + ret.subjects[i].classlists[j].year + " "
+                                    + ret.subjects[i].classlists[j].strSection + " "
+                                    + subsection
+                                    + "(" + ret.subjects[i]
                                     .classlists[j].numCount + ")</option>";
                             }
 
