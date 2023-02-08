@@ -1747,7 +1747,7 @@ class Data_fetcher extends CI_Model {
     {
         
             
-       $classlist = $this->db->where(array('intSubjectID'=>$subject,'strAcademicYear'=>$ay,'strSection LIKE '=>$course.'%'))
+       $classlist = $this->db->where(array('intSubjectID'=>$subject,'strAcademicYear'=>$ay,'strClassName LIKE '=>$course))
            ->order_by('strSection desc')
            ->get('tb_mas_classlist')
            ->row();
