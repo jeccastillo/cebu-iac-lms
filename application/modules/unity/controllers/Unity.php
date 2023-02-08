@@ -255,8 +255,7 @@ class Unity extends CI_Controller {
             {       
             
                 $cl = $this->data_fetcher->checkClasslistExistsGen($subj['intID'],$post['strAcademicYear'],$program['short_name']);
-                //echo $subj['strCode']." ".$cl."<br />";
-                $string = (strlen($string) > 13) ? substr($string,0,10).'...' : $string;
+                //echo $subj['strCode']." ".$cl."<br />";                
                 $data['intCurriculumID'] = $post['curriculum'];
                 $data['intFacultyID'] = 999;
                 $data['intSubjectID'] = $subj['intID'];
