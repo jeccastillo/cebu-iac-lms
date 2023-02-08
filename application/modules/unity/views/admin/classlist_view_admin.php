@@ -29,6 +29,7 @@
                 <table id="classlist-table-admin" class="table table-bordered table-hover">
                     <thead><tr>
                         <th>id</th>
+                        <th>Program</th>
                         <th>Subject</th>
                         <th>Section</th>
                         <th>Faculty</th>                        
