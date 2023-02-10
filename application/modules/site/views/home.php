@@ -42,7 +42,7 @@
                                     course you can take at
                                 </p>
                                 <h1 class="text-5xl font-[900] text-center color-primary">
-                                    iACADEMY Cebu 123
+                                    iACADEMY Cebu
                                 </h1>
                                 <a href="#se-section" class="w-full">
                                     <img src="<?php echo $img_dir; ?>cebu/home/ btn-arrow copy.png"
