@@ -9,7 +9,6 @@
         </div>
 
         <div class="row" v-else>
-            
             <div :class="news.type == 'blog' ? 'col-lg-9 col-sm-12' : 'col-lg-12 col-sm-12'">
 
                 <h2 class="news__title color-primary text-2xl">{{ news.title }}</h2>
