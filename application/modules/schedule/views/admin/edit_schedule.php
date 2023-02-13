@@ -12,7 +12,7 @@
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Update Schedule for <?php echo $item['strCode']." ".$item['strSection']; ?></h3>
+                <h3 class="box-title">Update Schedule for <?php echo $item['strCode']." ".$item['strClassName'].$item['year'].$item['strSection']; ?></h3>
         </div>
         <div class="col-md-6">
             <div class="alert alert-danger <?php echo ($alert == "" )?'hide':''; ?>  alert-dismissible">
