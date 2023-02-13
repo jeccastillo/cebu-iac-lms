@@ -116,7 +116,7 @@ class Blocksection extends CI_Controller {
         $data['message'] = "failed to add";
         $post = $this->input->post();  
         $section = $this->data_fetcher->fetch_single_entry('tb_mas_block_sections',$post['name'],'name');
-        if($section){
+        if($section && $id == 0){
             $data['message'] = "Section already exists";
         }
         elseif($this->is_super_admin() || $this->is_registrar())

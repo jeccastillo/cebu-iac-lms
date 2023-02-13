@@ -27,6 +27,17 @@
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramCode }}</option>                                        
                                     </select>
                                 </div>                                
+                                <div class="form-group col-xs-6">
+                                    <label for="intYearLevel">Year</label>
+                                    <select class="form-control" name="year" v-model="request.year">                                        
+                                        <option value="1">1st</option>                                        
+                                        <option value="2">2nd</option>                                        
+                                        <option value="3">3rd</option>                                        
+                                        <option value="4">4th</option>                                        
+                                        <option value="5">5th</option>                                        
+                                        <option value="6">6th</option>                                        
+                                    </select>
+                                </div>                                
                                 <div class="form-group col-xs-12">
                                     <input type="submit" value="Submit" class="btn btn-default btn-flat">
                                 </div>
@@ -55,6 +66,7 @@ new Vue({
             name: undefined,
             intProgramID: undefined,
             intSYID: undefined,
+            year: undefined,
         },                  
         programs:[],
         active_sem: {},
