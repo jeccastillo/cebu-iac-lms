@@ -47,8 +47,28 @@
                     </div>
                                                     
                     <div class="form-group">
+                        <label for="strClassName">Class Name:</label>
+                        <input type="text" name="strClassName" class="form-control" id="strClassName" >                                
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year:</label>
+                        <input type="number" name="year" class="form-control" id="year" >                                
+                    </div>                    
+                    <div class="form-group">
                         <label for="strSection">Section:</label>
                         <input type="text" name="strSection" class="form-control" id="strSection" >                                
+                    </div>
+                    <div class="form-group">
+                        <label for="sub_section">Sub Section:</label>
+                        <input type="text" name="sub_section" class="form-control" id="sub_section" >                                
+                    </div>
+                    <div class="form-group col-xs-6">
+                    <label for="">Curriculum</label>
+                        <select class="form-control" name="intCurriculumID" id="intCurriculumID" >
+                            <?php foreach ($curriculum as $curr): ?>
+                            <option value="<?php echo $curr['intID']; ?>"><?php echo $curr['strName']; ?></option>
+                            <?php endforeach; ?>
+                        </select>                        
                     </div>
                         
                             

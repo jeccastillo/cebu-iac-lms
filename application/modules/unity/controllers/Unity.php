@@ -179,7 +179,7 @@ class Unity extends CI_Controller {
     
     public function faculty_classlists($sem = null)
     {
-        if($this->is_super_admin())
+        if($this->is_super_admin() || $this->is_registrar())
         {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
@@ -187,6 +187,7 @@ class Unity extends CI_Controller {
             $this->data['page'] = "add_classlist";
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+            $this->data['curriculum'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
        
             $active_sem = $this->data_fetcher->get_active_sem();
             
