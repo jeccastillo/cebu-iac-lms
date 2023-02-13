@@ -1320,8 +1320,7 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         //print_r($post);
         $subject = $this->data_fetcher->getSubjectNoCurr($post['intSubjectID']);
-        $post['strUnits'] = $subject['strUnits'];
-        $post['strClassName'] = $subject['strCode'];                              
+        $post['strUnits'] = $subject['strUnits'];                                     
         $this->data_poster->log_action('Classlist','Added a new Classlist '.$post['strClassName'],'green');
         $this->data_poster->post_data('tb_mas_classlist',$post);
         redirect(base_url()."unity/view_classlist");
