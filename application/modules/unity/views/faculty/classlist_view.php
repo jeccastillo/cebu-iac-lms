@@ -62,7 +62,7 @@
                         <label for="sub_section">Sub Section:</label>
                         <input type="text" name="sub_section" class="form-control" id="sub_section" >                                
                     </div>
-                    <div class="form-group col-xs-6">
+                    <div class="form-group">
                     <label for="">Curriculum</label>
                         <select class="form-control" name="intCurriculumID" id="intCurriculumID" >
                             <?php foreach ($curriculum as $curr): ?>
