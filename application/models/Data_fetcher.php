@@ -2483,8 +2483,8 @@ class Data_fetcher extends CI_Model {
         
     }
 
-    function getBlockSectionsPerProgram($program, $sem){
-        return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem))
+    function getBlockSectionsPerProgram($program, $sem, $year = 1){
+        return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem, 'year' => $year))
                         ->result_array();
     }
 

@@ -68,7 +68,7 @@
                         <label for="strScheduleCode">Classlist</label>
                         <select name="strScheduleCode" class="form-control select2">
                             <?php foreach($classlists as $cl): ?>
-                                <option value="<?php echo $cl['intID']; ?>"><?php echo $cl['strCode']." ".$cl['strSection']; ?></option>
+                                <option value="<?php echo $cl['intID']; ?>"><?php echo $cl['strCode']." ".$cl['strClassName'].$cl['year'].$cl['strSection']; ?></option>
                             <?php endforeach; ?>
                          </select>
                     </div>                    
