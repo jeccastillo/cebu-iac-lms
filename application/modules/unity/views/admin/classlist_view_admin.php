@@ -31,7 +31,10 @@
                         <th>id</th>
                         <th>Program</th>
                         <th>Subject</th>
-                        <th>Section</th>
+                        <th>Section - Title</th>
+                        <th>Section - Year</th>
+                        <th>Section - Number</th>
+                        <th>Section - Sub</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
 <!--                        <th>No. of Students</th>-->
@@ -46,7 +49,10 @@
                     <th>id</th>
                         <th>Program</th>
                         <th>Subject</th>
-                        <th>Section</th>
+                        <th>Section - Title</th>
+                        <th>Section - Year</th>
+                        <th>Section - Number</th>
+                        <th>Section - Sub</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>                                                
                     </tr>

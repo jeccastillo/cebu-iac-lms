@@ -754,15 +754,11 @@ class Datatables extends CI_Controller {
                 if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
                     $row[] = time_lapsed($aRow->$aColumns[$i]);
-                }
-                else if($aColumns[$i] == 'strClassName')
-                {
-                    $row[] = $aRow->$aColumns[$i].$aRow->$aColumns[$i+1].$aRow->$aColumns[$i+2].$aRow->$aColumns[$i+3];
-                }
+                }                
                 else if($aColumns[$i] == 'strLastname'){
                     $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
                 }
-                else if($aColumns[$i] == 'year' || $aColumns[$i] == 'strSection' || $aColumns[$i] == 'sub_section' || $aColumns[$i] == 'strFirstname'){
+                else if($aColumns[$i] == 'strFirstname'){
 
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
