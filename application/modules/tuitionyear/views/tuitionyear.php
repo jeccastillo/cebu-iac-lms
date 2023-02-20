@@ -278,6 +278,7 @@ new Vue({
 
     methods: {
         selectType: function(event){
+            console.log(event.target.value);
             if(event.target.value == "isf" || event.target.value == "svf")
                 this.misc.name = event.target.getAttribute("data-name");
         },
