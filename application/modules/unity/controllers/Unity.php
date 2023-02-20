@@ -2290,7 +2290,7 @@ class Unity extends CI_Controller {
             foreach($classlists as $classlist){
                 $classlist_temp = $classlist;
                 $classlist_temp['numCount'] = $this->data_fetcher->countStudentsInClasslist($classlist['intID']);                
-                if($classlist_temp['numCount'] < $classlist['slots']);
+                if($classlist_temp['numCount'] < $classlist['slots'])
                     $cst[] = $classlist_temp;
             }
             $subj['classlists'] = $cst;
