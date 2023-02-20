@@ -278,10 +278,11 @@ new Vue({
 
     methods: {
         selectType: function(event){            
-            if(event.target.value == "isf" || event.target.value == "svf"){
-                this.misc.name = event.target.getAttribute("data-name");
-                console.log(event.target.text);
-            }
+            if(event.target.value == "isf")
+                this.misc.name = "International Student Fee";
+            if(event.target.value == "svf")    
+                this.misc.name = "Student Visa Fee";
+            
         },
         addExtra: function (type, name, data){
             Swal.fire({
