@@ -40,8 +40,7 @@ class Finance extends CI_Controller {
         
         //$this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
         //$this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
-        
-        $this->data["user"] = $this->session->all_userdata();
+                
         $this->data['unread_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intRead'=>'0','intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
         
         $this->data['all_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
@@ -143,6 +142,13 @@ class Finance extends CI_Controller {
                         ->where('intID',$post['intID'])
                         ->update('tb_mas_cashier',$post);
 
+                $cashier_up = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+
+                $message = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"]."Updated OR Series for Cashier #".$post['intID']." ";
+                $message .= "from ".$cashier->or_start." to ".$cashier_up->or_start." and ".$cashier->or_end." to ".$cashier_up->or_end." ";
+                $message .= "current OR updated from ".$cashier->or_current." to ".$cashier_up->or_current;
+
+                $this->data_poster->log_action('Cashier',$message,'orange');
                 $data['message'] = "Successfully Updated";
                 $data['success'] = true;
             }

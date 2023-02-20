@@ -125,7 +125,7 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");
     }
     
-    public function logs($start=null,$end=null)
+    public function logs($start=null,$end=null, $cat=null)
     {
         if($this->is_admin())
         {
@@ -135,7 +135,7 @@ class Unity extends CI_Controller {
             
             
             
-            $this->data['logs'] = $this->data_fetcher->fetch_logs($start,$end);
+            $this->data['logs'] = $this->data_fetcher->fetch_logs($start,$end,$cat);
         
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/logs",$this->data);

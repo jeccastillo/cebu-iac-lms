@@ -584,7 +584,7 @@ class Data_fetcher extends CI_Model {
 	}
     
     
-    function fetch_logs($start,$end)
+    function fetch_logs($start,$end,$cat)
     {
         $this->db
              ->select('strFirstname,strLastname,strAction,strCategory,dteLogDate,strColor')
@@ -596,6 +596,9 @@ class Data_fetcher extends CI_Model {
         else{
             $end .=" 23:59:59";
            $this->db->where(array('dteLogDate >='=>$start,'dteLogDate <='=>$end));
+        }
+        if($cat != null){
+            $this->db->where(array('strCategory'=>$cat));
         }
         return    $this->db
                 ->order_by('dteLogDate','desc')
