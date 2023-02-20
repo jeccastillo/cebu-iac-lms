@@ -87,7 +87,7 @@
         <hr />
             
         <?php if($tuition['new_student']!= 0): ?>
-                <div class="row">
+                <div class="row" style="margin-bottom:1rem;">
                     <div class="col-sm-6" style="text-align:right;">New Student Fees:</div>
                     <div class="col-sm-6"></div>
                 </div>
