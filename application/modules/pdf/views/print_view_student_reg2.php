@@ -103,8 +103,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 foreach($records as $record) {
                                     $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
                                     $html.='<tr style="color: #333;">
-                                            <td width="80px"> ' . $record['strSection'].'</td>                                            
-                                            <td width="218px" align ="left"> '. $record['strDescription']. '</td>
+                                            <td width="60px"> ' . $record['strSection'].'</td>                                            
+                                            <td width="198px" align ="left"> '. $record['strDescription']. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
