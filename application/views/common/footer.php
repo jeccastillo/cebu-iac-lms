@@ -423,6 +423,7 @@ $(document).ready(function() {
         };
 
         var subsection = "";
+        var selected = "";
 
         $.ajax({
             'url': '<?php echo base_url(); ?>unity/load_subjects',
@@ -434,7 +435,7 @@ $(document).ready(function() {
                 button.removeAttr('disabled');
                 if (ret.subjects.length > 0) {
                     for (i in ret.subjects) {
-                        var selected = '';
+                        selected = '';
                         container.append(
                             "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                             ret.subjects[i].intID +
