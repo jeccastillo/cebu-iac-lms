@@ -458,7 +458,7 @@ $(document).ready(function() {
                             
                             
                             for (j in ret.subjects[i].classlists) {                                
-                                if(program == classlists[j].strClassName)
+                                if(program == ret.subjects[i].classlists[j].strClassName)
                                     selected == "selected";
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                                 var str = str + "<option "+selected+" value ='" + ret.subjects[i]
