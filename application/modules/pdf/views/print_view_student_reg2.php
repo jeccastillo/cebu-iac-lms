@@ -114,13 +114,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             }
                                             $html.= '</td>
                                             <td width="100px">';                                            
-                                                if(isset($sched['dteStart']))                                                
-                                                    $html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']));
+                                                if(isset($record['schedule'][0]['strDay']))                                                
+                                                    $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).'  '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>                                            
                                             ';
                                             $html.= '<td width="45px">';                                            
-                                                if(isset($sched['strRoomCode']))
-                                                    $html.= $sched['strRoomCode'];
+                                                if(isset($record['schedule'][0]['strDay']))
+                                                    $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
                                             </tr>';                                        
                                 }
