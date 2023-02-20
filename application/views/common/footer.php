@@ -75,7 +75,11 @@ $(document).ready(function() {
         },
         function(start, end) {
             var daterange = start.format('YYYY-MM-D') + '/' + end.format('YYYY-MM-D');
-            document.location = "<?php echo base_url(); ?>unity/logs/" + daterange + "/<?php echo $cat?$cat:''; ?>";
+            <?php 
+                if(!isset($cat))
+                    $cat = "";
+            ?>
+            document.location = "<?php echo base_url(); ?>unity/logs/" + daterange + "/<?php echo $cat; ?>";
         }
     );
     $("#s1").change(function(e) {
