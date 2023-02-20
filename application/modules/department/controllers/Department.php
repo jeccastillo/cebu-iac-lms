@@ -214,7 +214,8 @@ class Department extends CI_Controller {
             //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
             
             $this->data['errors'] = $this->session->flashdata('upload_errors');
-            $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+            //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
             $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['active_sem']['intID']);
             
             
@@ -251,7 +252,7 @@ class Department extends CI_Controller {
                 $this->data['prev_records'] = null;
             
             
-            $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+            $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID'], $this->data['selected_ay']);
             
             
             
