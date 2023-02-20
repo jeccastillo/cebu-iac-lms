@@ -79,16 +79,18 @@
                 <div class="col-sm-6 text-green"><?php echo $tuition['internship_fee']; ?></div>
             </div>
             <hr />
-        <?php endif; ?>
+        <?php endif; ?>        
+        <div class="row">
+            <div class="col-sm-6">Other Fees:</div>
+            <div class="col-sm-6 text-green"></div>
+        </div>
+        <hr />
+            
         <?php if($tuition['new_student']!= 0): ?>
-            <div class="row">
-                <div class="col-sm-6">New Student Fees:</div>
-                <div class="col-sm-6 text-green"></div>
-            </div>
-            <hr />
-            
-            
-            
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:right;">New Student Fees:</div>
+                    <div class="col-sm-6"></div>
+                </div>
             <?php foreach($tuition['new_student_list'] as $key=>$val): ?>                
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
