@@ -452,9 +452,7 @@ $(document).ready(function() {
                                 "'>";
                                 
                             var selected = '';
-                            var program = "<?php isset($student['short_name'])?$student['short_name']:"" ?>";
-                            <?php print_r($student); ?>
-                            
+                            var program = "<?php echo isset($student['short_name'])?$student['short_name']:"" ?>";                                                        
                             
                             
                             for (j in ret.subjects[i].classlists) {                      
