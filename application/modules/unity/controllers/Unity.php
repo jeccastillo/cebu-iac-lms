@@ -127,7 +127,7 @@ class Unity extends CI_Controller {
     
     public function logs($start=null,$end=null, $cat=null)
     {
-        if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
+        if($this->is_super_admin() || ($this->is_accounting() && $cat == "Cashier") || $this->is_registrar())
         {
             $this->data['page'] = "logs";
             $this->data['opentree'] = "admin";
