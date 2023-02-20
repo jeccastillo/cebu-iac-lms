@@ -86,7 +86,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         <tr>
             <td width="80px" style="text-align:left; font-weight:bold;">SECTION</td>            
             <td width="218px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
-            <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
+            <td width="20px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
+            <td width="20px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
             <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
@@ -104,7 +105,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     $html.='<tr style="color: #333;">
                                             <td width="80px"> ' . $record['strSection'].'</td>                                            
                                             <td width="218px" align ="left"> '. $record['strDescription']. '</td>
-                                            <td width="40px" align = "left"> '. $units . '</td> ';
+                                            <td width="20px" align = "left"> '. $units . '</td> 
+                                            <td width="20px" align = "left"> '. $record['intLab'] . '</td> ';
                                             $html.= '<td width="45px">';
 
                                             foreach($record['schedule'] as $sched) {
