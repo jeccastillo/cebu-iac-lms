@@ -35,8 +35,7 @@
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
 <!--                        <th>No. of Students</th>-->
-                        <!--th>Change Status</th-->
-                        <th>Actions</th>
+                        <!--th>Change Status</th-->                        
                     </tr>
                     </thead>
                     <tbody>
