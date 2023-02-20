@@ -424,7 +424,7 @@ $(document).ready(function() {
 
         var subsection = "";
         var selected = "";
-
+        var done = false;
         $.ajax({
             'url': '<?php echo base_url(); ?>unity/load_subjects',
             'method': 'post',
@@ -436,6 +436,7 @@ $(document).ready(function() {
                 if (ret.subjects.length > 0) {
                     for (i in ret.subjects) {
                         selected = '';
+                        done = false;
                         container.append(
                             "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                             ret.subjects[i].intID +
@@ -458,8 +459,14 @@ $(document).ready(function() {
                             
                             
                             for (j in ret.subjects[i].classlists) {                                                         
-                                if(program == ret.subjects[i].classlists[j].strClassName && selected != 'selected')
+                                
+                                if(program == ret.subjects[i].classlists[j].strClassName && !done){
                                     selected = "selected";
+                                    done = true;
+                                }
+                                else
+                                    selected = "";
+
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                                 var str = str + "<option "+selected+" value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
