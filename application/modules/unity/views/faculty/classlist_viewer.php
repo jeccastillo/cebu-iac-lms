@@ -167,7 +167,7 @@
                                 <div class="col-sm-4">
                                     <select id="transfer-to" class="form-control">
                                         <?php foreach($cl as $c): ?>
-                                            <option value="<?php echo $c['intID']; ?>"><?php echo $c['strClassName']." ".$c['year'].$c['strSection']."-".$c['sub_section']; ?></option>
+                                            <option value="<?php echo $c['intID']; ?>"><?php echo $c['strClassName']." ".$c['year'].$c['strSection']." ".$c['sub_section']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
