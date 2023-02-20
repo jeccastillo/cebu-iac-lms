@@ -756,7 +756,7 @@ class Datatables extends CI_Controller {
                     $row[] = time_lapsed($aRow->$aColumns[$i]);
                 }                
                 else if($aColumns[$i] == 'strCode'){
-                    $row[] = "<a href='".base_url()."unity/classlist_viewer/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."unity/classlist_viewer/".$aRow->intID."'>".$aRow->$aColumns[$i]."</a>";
                 }
                 else if($aColumns[$i] == 'strLastname'){
                     $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
