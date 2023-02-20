@@ -114,12 +114,12 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             }
                                             $html.= '</td>
                                             <td width="100px">';                                            
-                                                if(isset($sched['strDay']))                                                
+                                                if(isset($sched['dteStart']))                                                
                                                     $html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']));
                                             $html.= '</td>                                            
                                             ';
                                             $html.= '<td width="45px">';                                            
-                                                if(isset($sched['strDay']))
+                                                if(isset($sched['strRoomCode']))
                                                     $html.= $sched['strRoomCode'];
                                             $html.= '</td>
                                             </tr>';                                        
