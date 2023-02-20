@@ -235,7 +235,7 @@
                                         </thead>
                                         <tbody>                                            
                                             <tr v-for="record in records"  style="font-size: 13px;">
-                                                <td>{{ record.strClassName + ' ' + record.year + record.strSection + '-' + record.sub_section }}</td>
+                                                <td>{{ record.strClassName + ' ' + record.year + record.strSection }}</td>
                                                 <td>{{ record.strCode }}</td>
                                                 <td>{{ record.strDescription }}</td>
                                                 <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
