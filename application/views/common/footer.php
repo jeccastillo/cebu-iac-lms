@@ -457,7 +457,8 @@ $(document).ready(function() {
                             
                             
                             
-                            for (j in ret.subjects[i].classlists) {                                
+                            for (j in ret.subjects[i].classlists) {                      
+                                console.log("PROGRAM",program);          
                                 if(program == ret.subjects[i].classlists[j].strClassName)
                                     selected == "selected";
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
