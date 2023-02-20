@@ -125,7 +125,7 @@
                                     <option value="thesis">Thesis</option>
                                     <option value="internship">Internship</option>
                                     <option value="nstp">NSTP/ROTC</option>
-                                    <option value="foreign">Other</option>                                    
+                                    <option value="foreign">Foreign Fee</option>                                    
                                     <option value="other">Other</option>                                    
                                 </select>
                             </div>                            
