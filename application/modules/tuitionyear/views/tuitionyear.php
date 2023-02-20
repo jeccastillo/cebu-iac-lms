@@ -118,14 +118,15 @@
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Type</label>
-                                <select required class="form-control" placeholder="Enter Fee Amount" v-model='misc.type'>
+                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='misc.type'>
                                     <option value="regular">Regular</option>
                                     <option value="nsf">New Student Misc</option>
                                     <option value="new_student">New Student Fees</option>
                                     <option value="thesis">Thesis</option>
                                     <option value="internship">Internship</option>
                                     <option value="nstp">NSTP/ROTC</option>
-                                    <option value="foreign">Foreign Fee</option>                                    
+                                    <option data-name="International Student Fee" value="isf">International Student Fee</option>                                    
+                                    <option data-name="Student Visa Fee" value="svf">Student Visa Fee</option>                                    
                                     <option value="other">Other</option>                                    
                                 </select>
                             </div>                            
@@ -276,7 +277,10 @@ new Vue({
     },
 
     methods: {
-
+        selectType: function(event){
+            if(event.target.value == "isf" || event.target.value == "svf")
+                this.misc.name = event.target.getAttribute("data-name");
+        },
         addExtra: function (type, name, data){
             Swal.fire({
                 title: 'Add New Fee: '+ name,
