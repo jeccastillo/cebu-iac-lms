@@ -776,8 +776,7 @@ class Registrar extends CI_Controller {
             }
             else
                 $this->data['student'] = $this->data_fetcher->getStudent($studNum);
-            
-            
+                            
             
             if(empty($this->data['student']))
             {

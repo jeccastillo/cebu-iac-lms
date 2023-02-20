@@ -451,10 +451,17 @@ $(document).ready(function() {
                                 ret.subjects[i].intID +
                                 "'>";
                                 
+                            var selected = '';
+                            var program = "<?php isset($student['strProgramCode'])?$student['strProgramCode']:"" ?>";
                             
-                            for (j in ret.subjects[i].classlists) {
+                            
+                            
+                            
+                            for (j in ret.subjects[i].classlists) {                                
+                                if(program == classlists[j].strClassName)
+                                    selected == "selected";
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
-                                var str = str + "<option value ='" + ret.subjects[i]
+                                var str = str + "<option "+selected+" value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
                                     .classlists[j].strClassName + " " 
                                     + ret.subjects[i].classlists[j].year + " "
