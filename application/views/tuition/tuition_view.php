@@ -104,7 +104,27 @@
                 <div class="col-sm-6 text-green"><?php echo $tuition['new_student']; ?></div>
             </div>
             <hr />
-        <?php endif; ?>
+        <?php endif; ?>     
+        <?php if($tuition['is_foreign']): ?>
+                <div class="row" style="margin-bottom:1rem;">
+                    <div class="col-sm-6" style="text-align:right;">Foreign Student Fees:</div>
+                    <div class="col-sm-6"></div>
+                </div>
+            <?php foreach($tuition['foreign_fee_list'] as $key=>$val): ?>                
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
+                    <div class="col-sm-6"><?php echo $val; ?></div>
+                </div>
+            <?php endforeach; ?>
+
+            
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Total:</div>
+                <div class="col-sm-6 text-green"><?php echo $tuition['total_foreign']; ?></div>
+            </div>
+            <hr />
+        <?php endif; ?>     
+           
             
         <div class="row">
             <div class="col-sm-6">Total:</div>

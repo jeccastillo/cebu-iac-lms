@@ -1934,13 +1934,16 @@ class Data_fetcher extends CI_Model {
         $total_lab = 0;
         $total_misc = 0;
         $total_new_student = 0;
+        $is_foreign = false;
+        $total_foreign = 0;
         $afee = 0;
         $lab_list = [];
         $misc_list = [];    
         $new_student_list = [];    
+        $foreign_fee_list = [];        
         $internship_fee_list = [];
         $nsf = 0;
-        $thesis_fee = 0;
+        $thesis_fee = 0;    
         $total_internship_fee = 0;
         $hasInternship = false;
         $sem  = $this->get_active_sem();
@@ -1966,7 +1969,22 @@ class Data_fetcher extends CI_Model {
                 $new_student_list[$nsd['name']] = getExtraFee($nsd, $sem, 'misc');
                 $total_new_student += $new_student_list[$nsd['name']];
             }
-        }                         
+        }    
+        
+        if($student['strCitizenship'] != "Philippines"){
+            $is_foreign = true;
+            if($sem['pay_student_visa']){
+                    $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'Student Visa'))
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
+                    if($student_visa)
+                        $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $sem, 'misc');
+            }
+
+            $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'International Student Fee'))
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
+            if($international_student_fee)
+                $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $sem, 'misc');
+        }
 
 
         foreach($subjects as $sid)
@@ -2034,15 +2052,18 @@ class Data_fetcher extends CI_Model {
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc'] = $total_misc;                
         $data['misc_list'] = $misc_list;
+        $data['is_foreign'] = $is_foreign;
         $data['new_student'] = $total_new_student;
         $data['new_student_list'] = $new_student_list;
         $data['internship_fee_list'] = $internship_fee_list;
+        $data['foreign_fee_list'] = $foreign_fee_list;
         $data['athletic'] = $afee;
         $data['thesis_fee'] = $thesis_fee;
-        $data['nsf'] = $nsf;     
+        $data['nsf'] = $nsf;             
+        $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
-        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
-        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee;
+        $data['total'] = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
         $data['total_installment'] = round($data['total_installment'],2);
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['down_payment'] = round($data['down_payment'],2);
