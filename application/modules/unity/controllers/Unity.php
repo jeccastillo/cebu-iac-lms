@@ -133,7 +133,7 @@ class Unity extends CI_Controller {
             $this->data['opentree'] = "admin";
             $this->data['title'] ="Logs";
             
-            
+            $this->data['cat'] = $cat;
             
             $this->data['logs'] = $this->data_fetcher->fetch_logs($start,$end,$cat);
         

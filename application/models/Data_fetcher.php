@@ -597,6 +597,7 @@ class Data_fetcher extends CI_Model {
             $end .=" 23:59:59";
            $this->db->where(array('dteLogDate >='=>$start,'dteLogDate <='=>$end));
         }
+        
         if($cat != null){
             $this->db->where(array('strCategory LIKE'=>$cat));
         }
