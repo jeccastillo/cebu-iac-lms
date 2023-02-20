@@ -452,7 +452,7 @@ $(document).ready(function() {
                                 "'>";
                                 
                             var selected = '';
-                            var program = "<?php isset($student['strProgramCode'])?$student['strProgramCode']:"" ?>";
+                            var program = "<?php isset($student['short_name'])?$student['short_name']:"" ?>";
                             
                             
                             

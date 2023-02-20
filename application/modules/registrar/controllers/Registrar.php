@@ -805,9 +805,7 @@ class Registrar extends CI_Controller {
             }
             
             $this->data['active_sem'] = $active_sem;
-            
-            
-            print_r($this->data['student']);
+                                    
             $this->data['subjects'] = $this->data_fetcher->get_subjects_by_course($this->data['student']['intProgramID'],$sem);
             
             if(!empty($this->data['subjects']))
