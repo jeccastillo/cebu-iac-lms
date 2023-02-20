@@ -434,6 +434,7 @@ $(document).ready(function() {
                 button.removeAttr('disabled');
                 if (ret.subjects.length > 0) {
                     for (i in ret.subjects) {
+                        var selected = '';
                         container.append(
                             "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                             ret.subjects[i].intID +
@@ -451,7 +452,7 @@ $(document).ready(function() {
                                 ret.subjects[i].intID +
                                 "'>";
                                 
-                            var selected = '';
+                            
                             var program = "<?php echo isset($student['short_name'])?$student['short_name']:"" ?>";                                                        
                             
                             
