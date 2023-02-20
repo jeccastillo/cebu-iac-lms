@@ -591,13 +591,13 @@ class Data_fetcher extends CI_Model {
              ->from('tb_mas_logs')
              ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_logs.intFacultyID');
            
-        if($start == null)    
+        if($start == null || $start == 0)    
             $this->db->limit(20);
         else{
             $end .=" 23:59:59";
            $this->db->where(array('dteLogDate >='=>$start,'dteLogDate <='=>$end));
         }
-        
+
         if($cat != null){
             $this->db->where(array('strCategory LIKE'=>$cat));
         }
