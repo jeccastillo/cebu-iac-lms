@@ -340,10 +340,11 @@ class Data_fetcher extends CI_Model {
         if($sem!=null && $year!=null)
             $bucket .= "AND tb_mas_curriculum_subject.intYearLevel = ".$year." AND tb_mas_curriculum_subject.intSem = ".$sem." ";
         elseif($sem!=null)
-        $bucket .= "AND tb_mas_classlist.strAcademicYear = ".$sem." ";
+            $bucket .= "AND tb_mas_classlist.strAcademicYear = ".$sem." ";
+
         
         
-        $bucket .= "ORDER BY tb_mas_curriculum_subject.intYearLevel ASC, tb_mas_curriculum_subject.intSem ASC"; 
+        $bucket .= "GROUP BY tb_mas_classlist.intSubjectID ORDER BY tb_mas_curriculum_subject.intYearLevel ASC, tb_mas_curriculum_subject.intSem ASC"; 
         
         $subjects = $this->db
              ->query($bucket)
