@@ -470,7 +470,7 @@ class Pdf extends CI_Controller {
        
         foreach($records as $record)
         {
-            $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
+            $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);            
             //print_r($record['schedule']);
             $this->data['records'][] = $record;
         }
