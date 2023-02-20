@@ -191,8 +191,8 @@
                         
                 </li>
                 <li class="<?php echo (isset($page) && $page=="my_profile")?'active':''; ?>"><a href="<?php echo base_url()."faculty/my_profile" ?>"><i class="fa fa-user text-blue"></i> <span>My Profile</span></a></li>
-                        <?php if(in_array($user['intUserLevel'],array(2)) ): ?>
-                            <li class="<?php echo (isset($page) && $page=="add_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/faculty_classlists"><i class="fa fa-plus-square"></i> <span>Add New Class List</span> </a></li>
+                        <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
+                            <li class="<?php echo (isset($page) && $page=="add_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/faculty_classlists"><i class="fa fa-plus-square"></i> <span>Add New Subject Offer</span> </a></li>
                         <?php endif; ?>
                          <?php if(in_array($user['intUserLevel'],array(0,1,2)) ): ?>
                       <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i> <span>View My Classes</span></a></li>
@@ -257,7 +257,7 @@
                                 <li class="<?php echo (isset($page) && $page=="rog")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/rog" style="margin-left: 10px;"><i class="fa fa-book"></i> Report of Grades</a></li>
                                 <li class="<?php echo (isset($page) && $page=="assessment")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/student_function/assessment" style="margin-left: 10px;"><i class="fa fa-book"></i> Curriculum Assessment</a></li>
                                 <li class="<?php echo (isset($page) && $page=="faculty_loading")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/faculty_loading" style="margin-left: 10px;"><i class="fa fa-plus"></i> Faculty Loading</a></li>
-                                <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_dept" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Classlists</a></li>
+                                <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_dept" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Subject Offering</a></li>
                                 <!-- <li class="<?php echo (isset($page) && $page=="show_advised_students")?'active':''; ?>"><a href="<?php echo base_url(); ?>department/show_advised_students" style="margin-left: 10px;"><i class="fa fa-users"></i> Advised Students</a></li> -->
                                 
                             </ul>
