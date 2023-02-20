@@ -4,7 +4,7 @@
         <section class="content-header">
             <h1>
                 <small>
-                    <a class="btn btn-app" :href="base_url + 'admissionsV1/view_all_leads'" ><i class="ion ion-arrow-left-a"></i>All Students Applicants</a>                                                                                                                     
+                    <a class="btn btn-app" :href="base_url + 'unity/logs/0/0/Cashier'" ><i class="ion ion-file"></i>View Cashier Logs</a>                                                                                                                              
                 </small>
             </h1>
         </section>
