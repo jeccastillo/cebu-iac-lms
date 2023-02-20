@@ -37,7 +37,13 @@
                                 <option value="hybrid">Hybrid</option>
                          </select>
                     </div>
-                    
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="pay_student_visa">Pay Student Visa this term?</label>
+                        <select name="pay_student_visa" class="form-control">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                         </select>
+                    </div>
                      <div class="form-group col-xs-12 col-lg-4">
                         <label for="strYearStart">Year</label>
                          <select id="year-start" name="strYearStart" class="form-control">

@@ -53,11 +53,18 @@
                             <option <?php echo $item['enumStatus']=='active'?'selected':''; ?> value="active">Active</option>
                          </select>
                     </div>      
-                     <div class="form-group col-xs-12 col-lg-4">
+                    <div class="form-group col-xs-12 col-lg-4">
                         <label for="enumFinalized">Prelim Grading Period</label>
                         <select name="enumGradingPeriod" class="form-control">
                             <option <?php echo $item['enumGradingPeriod']=='inactive'?'selected':''; ?>  value="inactive">Inactive</option>
                             <option <?php echo $item['enumGradingPeriod']=='active'?'selected':''; ?> value="active">Active</option>
+                         </select>
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="pay_student_visa">Pay Student Visa this term?</label>
+                        <select name="pay_student_visa" class="form-control">
+                            <option <?php echo $item['pay_student_visa']=='0'?'selected':''; ?>  value="0">No</option>
+                            <option <?php echo $item['pay_student_visa']=='1'?'selected':''; ?> value="1">Yes</option>
                          </select>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
