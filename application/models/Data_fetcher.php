@@ -1976,14 +1976,18 @@ class Data_fetcher extends CI_Model {
             if($sem['pay_student_visa']){
                     $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'Student Visa'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
-                    if($student_visa)
+                    if($student_visa){
                         $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $sem, 'misc');
+                        $total_foreign += $foreign_fee_list['Student Visa'];
+                    }
             }
 
             $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'International Student Fee'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
-            if($international_student_fee)
+            if($international_student_fee){
                 $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $sem, 'misc');
+                $total_foreign += $foreign_fee_list['International Student Fee'];
+            }
         }
 
 
