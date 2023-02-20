@@ -455,10 +455,9 @@ $(document).ready(function() {
                             var program = "<?php echo isset($student['short_name'])?$student['short_name']:"" ?>";                                                        
                             
                             
-                            for (j in ret.subjects[i].classlists) {                      
-                                console.log("PROGRAM",program);          
+                            for (j in ret.subjects[i].classlists) {                                                         
                                 if(program == ret.subjects[i].classlists[j].strClassName)
-                                    selected == "selected";
+                                    selected = "selected";
                                 subsection = ret.subjects[i].classlists[j].sub_section ? ret.subjects[i].classlists[j].sub_section : "";
                                 var str = str + "<option "+selected+" value ='" + ret.subjects[i]
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
