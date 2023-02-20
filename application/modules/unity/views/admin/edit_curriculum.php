@@ -131,7 +131,9 @@
                         <tr>
                             <th>Course Code</th>
                             <th>Course Description</th>
-                            <th>Units</th>
+                            <th>Lecture Units</th>
+                            <th>Lab Units</th>
+                            <th>Total Units</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -144,6 +146,8 @@
                 <tr>
                     <td><?php echo $s['strCode']; ?></td>
                     <td><?php echo $s['strDescription']; ?></td>
+                    <td><?php echo $s['intLectHours']; ?></td>
+                    <td><?php echo $s['intLab']; ?></td>
                     <td><?php echo $s['strUnits']; ?></td>
                     <td>
                         <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-curriculum" href="#">Remove</a>
