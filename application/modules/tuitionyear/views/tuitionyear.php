@@ -125,8 +125,8 @@
                                     <option value="thesis">Thesis</option>
                                     <option value="internship">Internship</option>
                                     <option value="nstp">NSTP/ROTC</option>
-                                    <option data-name="International Student Fee" value="isf">International Student Fee</option>                                    
-                                    <option data-name="Student Visa Fee" value="svf">Student Visa Fee</option>                                    
+                                    <option value="isf">International Student Fee</option>                                    
+                                    <option value="svf">Student Visa Fee</option>                                    
                                     <option value="other">Other</option>                                    
                                 </select>
                             </div>                            
@@ -280,7 +280,7 @@ new Vue({
         selectType: function(event){            
             if(event.target.value == "isf" || event.target.value == "svf"){
                 this.misc.name = event.target.getAttribute("data-name");
-                console.log(event.target.getAttribute("data-name"));
+                console.log(event.target.text);
             }
         },
         addExtra: function (type, name, data){
