@@ -981,22 +981,19 @@ class Registrar extends CI_Controller {
     {
         
         $post = $this->input->post();
-        $id2 = $post['intProcessing'];        
-        $post['enumStatus'] = "active";
-        $post2['intProcessing'] = 1;
-        $id = $post['strAcademicYear'];
-        
-        unset($post['strAcademicYear']);
+        $post['enumStatus'] = "active";        
+        $id = $post['intID'];
+                
         //print_r($post);
         $this->data_poster->set_ay_inactive();
         $this->data_poster->post_data('tb_mas_sy',$post,$id);
-        $this->data_poster->post_data('tb_mas_sy',$post2,$id2);
+        //$this->data_poster->post_data('tb_mas_sy',$post2,$id2);
         
         $activeSem = $this->data_fetcher->get_active_sem();
         $this->data_poster->log_action('Academic Term','Updated Term: '.$activeSem['enumSem']." term ".$activeSem['strYearStart']."-".$activeSem['strYearEnd'],'blue');
         //echo $activeSem['strYearStart']-1;
         
-        redirect(base_url()."/registrar/set_ay");
+        redirect(base_url()."/registrar/edit_ay/".$post['intID']);
             
     }
     
