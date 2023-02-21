@@ -3,8 +3,14 @@
         <h4 class="box-title">ASSESSMENT OF FEES</h4>
     </div>
     <div class="box-body">
+        <?php if($tuition['tuition_discount'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6">Scholarship Discount:</div>            
+                <div class="col-sm-6 text-green"><?php echo $tuition['tuition_discount']; ?></div>
+            </div>
+        <?php endif; ?>
         <div class="row">
-            <div class="col-sm-6">Tuition:</div>
+            <div class="col-sm-6">Tuition:</div>            
             <div class="col-sm-6 text-green"><?php echo $tuition['tuition']; ?></div>
         </div>
         <hr />                

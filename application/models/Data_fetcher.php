@@ -2045,13 +2045,26 @@ class Data_fetcher extends CI_Model {
                 $total_internship_fee += $internship_fee_list[$m['name']];
             }                  
         }
-
         
+        $tuition_scholarship = 0;
+        
+        if(isset($scholar)){
+            if($scholar['tuition_fee_rate'] > 0){
+                $tuition_scholarship = $tuition * ($scholar['tuition_fee_rate']/100);
+            }
+            elseif($scholar['tuition_fee_fixed'] > 0){
+                if($scholar['tuition_fee_fixed'] > $tuition)
+                    $tuition_scholarship = $tuition;
+                else
+                    $tuition_scholarship = $tuition - $scholar['tuition_fee_fixed'];
+            }
+        }
     
         $data['lab'] = $total_lab;
         $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
         $data['lab_list'] = $lab_list;
-        $data['tuition'] = $tuition;
+        $data['tuition_discount'] = $tuition_scholarship;
+        $data['tuition'] = $tuition - $tuition_scholarship;
         $data['tuition_installment'] = $tuition + $tuition * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc'] = $total_misc;                
@@ -2075,10 +2088,7 @@ class Data_fetcher extends CI_Model {
         $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
         
-        if(isset($scholar)){
-            //$scholarship_discount = $data['total'] * ($scholar['percentage']/100);
-            //$discounted_price = $data['total'] - $scholarship_discount;
-        }
+        
         
         $data['discounted_price'] = $discounted_price;
 
