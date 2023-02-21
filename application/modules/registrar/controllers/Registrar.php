@@ -981,19 +981,22 @@ class Registrar extends CI_Controller {
     {
         
         $post = $this->input->post();
-        $post['enumStatus'] = "active";        
-        $id = $post['intID'];
-                
+        $id2 = $post['intProcessing'];        
+        $post['enumStatus'] = "active";
+        $post2['intProcessing'] = 1;
+        $id = $post['strAcademicYear'];
+        
+        unset($post['strAcademicYear']);
         //print_r($post);
         $this->data_poster->set_ay_inactive();
         $this->data_poster->post_data('tb_mas_sy',$post,$id);
-        //$this->data_poster->post_data('tb_mas_sy',$post2,$id2);
+        $this->data_poster->post_data('tb_mas_sy',$post2,$id2);
         
         $activeSem = $this->data_fetcher->get_active_sem();
         $this->data_poster->log_action('Academic Term','Updated Term: '.$activeSem['enumSem']." term ".$activeSem['strYearStart']."-".$activeSem['strYearEnd'],'blue');
         //echo $activeSem['strYearStart']-1;
         
-        redirect(base_url()."/registrar/edit_ay/".$post['intID']);
+        redirect(base_url()."/registrar/set_ay");
             
     }
     
@@ -1019,7 +1022,7 @@ class Registrar extends CI_Controller {
        // $this->data_poster->set
         $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
         $this->data_poster->log_action('School Year','Updated SY Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
-        redirect(base_url()."registrar/view_all_ay");
+        redirect(base_url()."registrar/edit_ay/".$post['intID']);
             
     }
     
