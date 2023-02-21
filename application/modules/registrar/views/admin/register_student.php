@@ -6,13 +6,13 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i>Registrar</a></li>
-                        <li class="active">Register Student</li>
+                        <li class="active">Fee Assessment</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Register Student</h3>
+                <h3 class="box-title">Fee Assessment</h3>
                 
         </div>
        

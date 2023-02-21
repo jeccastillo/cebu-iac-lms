@@ -5,14 +5,14 @@
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i>Register</a></li>
-            <li class="active">Register Student</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i>Registrar</a></li>
+            <li class="active">Student Fee Assessment</li>
         </ol>
     </section>
     <div class="content">
         <div class="span10 box box-primary">
             <div class="box-header">
-                <h3 class="box-title">Register Student</h3>                                        
+                <h3 class="box-title">Fee Assessment</h3>                                        
             </div>
         
             <div class="box box-solid">
@@ -46,7 +46,7 @@
                             <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
                             <h3>Registration Details</h3>
                             
-                            Set Academic Year to Register
+                            Select Academic Year
                             <select id="strAcademicYear" name="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
                                 <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                             </select>

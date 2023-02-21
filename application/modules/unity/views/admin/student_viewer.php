@@ -20,7 +20,7 @@
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         
                     <a v-if="reg_status =='For Registration'" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
-                        <i class="fa fa-book"></i>Register Student
+                        <i class="fa fa-book"></i>Student Fee Asssessment
                     </a>                                         
                 </small>
                 
