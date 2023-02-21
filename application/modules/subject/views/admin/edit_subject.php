@@ -6,7 +6,7 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Subject</a></li>
-                        <li class="active">Edit Subject</li>
+                        <li class="active">Edit Subject <?php echo $subject['strCode']; ?></li>
                     </ol>
                 </section>
 <div class="content">

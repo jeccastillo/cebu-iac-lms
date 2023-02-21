@@ -172,9 +172,9 @@
 
                     <div class="form-group mb-6">
                         <div class="md:w-4/5">
-                            <label for="">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Country of citizenship
-                                <span class="text-danger">*</span>
+                                <span class="text-red-500">*</span>
                             </label>                        
                             <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required name="citizenship" v-model="request.citizenship">                                
                                     <option value="Afghanistan">Afghanistan</option>
