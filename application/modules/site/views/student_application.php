@@ -177,8 +177,7 @@
                         </label>
 
                         <div>
-                        <select required name="citizenship" v-model="request.citizenship">
-                                <option>country</option>
+                        <select required name="citizenship" v-model="request.citizenship">                                
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Aland Islands">Åland Islands</option>
                                 <option value="Albania">Albania</option>
@@ -432,18 +431,7 @@
                                 <option value="Zambia">Zambia</option>
                                 <option value="Zimbabwe">Zimbabwe</option>
                             </select>                            
-                        </div>
-
-                        <div>
-                            <input
-                                type="radio"
-                                required
-                                name="citizenship"
-                                value="Foreign"
-                                v-model="request.citizenship"
-                            />
-                            Foreign
-                        </div>
+                        </div>                        
                     </div>
 
 
@@ -803,6 +791,7 @@ new Vue({
             date_of_birth: "",
             program: "",
             health_concerns: [],
+            citizenship: 'Philippines',
             syid: "<?php echo $current_term; ?>",
         },
         loading_spinner: false,
