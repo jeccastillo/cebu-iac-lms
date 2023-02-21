@@ -177,7 +177,7 @@
                         </label>
 
                         <div>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required name="citizenship" v-model="request.citizenship">                                
+                        <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required name="citizenship" v-model="request.citizenship">                                
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Aland Islands">Åland Islands</option>
                                 <option value="Albania">Albania</option>
