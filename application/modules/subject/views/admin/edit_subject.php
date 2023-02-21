@@ -12,7 +12,7 @@
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Subject</h3>
+                <h3 class="box-title">Edit Subject <?php echo $subject['strCode']; ?></h3>
         </div>
        
             
