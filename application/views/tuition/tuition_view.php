@@ -25,7 +25,13 @@
             <div class="col-sm-6"><?php echo $val; ?></div>
         </div>
         <?php endforeach; ?>
-
+        
+        <?php if($tuition['misc_discount'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6">Scholarship Discount:</div>            
+                <div class="col-sm-6 text-green"><?php echo $tuition['misc_discount']; ?></div>
+            </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-sm-6" style="text-align:right;">Total:</div>
             <div class="col-sm-6 text-green"><?php echo $tuition['misc']; ?></div>
