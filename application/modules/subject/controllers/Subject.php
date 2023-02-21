@@ -56,7 +56,7 @@ class Subject extends CI_Controller {
     
     public function add_subject()
     {
-        if($this->is_admin())
+        if($this->is_admin() || $this->is_registrar())
         {
             $dpt = array(); 
             foreach($this->data['department_config'] as $dept)
@@ -131,7 +131,7 @@ class Subject extends CI_Controller {
     
     public function submit_subject()
     {
-        if($this->is_admin()){
+        if($this->is_admin() || $this->is_registrar()){
             $post = $this->input->post();
             //print_r($post);
             $this->data_poster->log_action('Subject','Added a new Subject '.$post['strCode'],'yellow');
@@ -225,8 +225,7 @@ class Subject extends CI_Controller {
     
     public function view_all_subjects()
     {
-        if($this->faculty_logged_in())
-        {
+        if($this->is_admin() || $this->is_registrar()){
             $this->data['page'] = "view_subjects";
             $this->data['opentree'] = "subject";
             //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
@@ -243,8 +242,7 @@ class Subject extends CI_Controller {
     public function subject_viewer($id,$sem = null)
     {
         
-        if($this->faculty_logged_in())
-        {
+        if($this->is_admin() || $this->is_registrar()){
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $active_sem = $this->data_fetcher->get_active_sem();
 			//$this->data['active_sem'] = $this->data_fetcher->get_active_sem();
