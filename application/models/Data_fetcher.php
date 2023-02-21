@@ -2046,39 +2046,54 @@ class Data_fetcher extends CI_Model {
             }                  
         }
         
+        $total_scholarship = 0;
         $tuition_scholarship = 0;
         $misc_scholarship = 0;
         $lab_scholarship = 0;
         
         if(isset($scholar)){
-            if($scholar->tuition_fee_rate > 0){
-                $tuition_scholarship = $tuition * ($scholar->tuition_fee_rate/100);
+            if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){
+                $total_assessment = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                if($scholar->total_assessment_rate > 0){
+                    $total_scholarship = $total_assessment * ($scholar->total_assessment_rate/100);
+                }
+                elseif($scholar->total_assessment_fixed > 0){
+                    if($scholar->total_assessment_fixed > $total_assessment)
+                        $total_scholarship = $total_assessment;
+                    else
+                        $total_scholarship = $scholar->total_assessment_fixed;
+                }
             }
-            elseif($scholar->tuition_fee_fixed > 0){
-                if($scholar->tuition_fee_fixed > $tuition)
-                    $tuition_scholarship = $tuition;
-                else
-                    $tuition_scholarship = $scholar->tuition_fee_fixed;
-            }
+            else{
+                if($scholar->tuition_fee_rate > 0){
+                    $tuition_scholarship = $tuition * ($scholar->tuition_fee_rate/100);
+                }
+                elseif($scholar->tuition_fee_fixed > 0){
+                    if($scholar->tuition_fee_fixed > $tuition)
+                        $tuition_scholarship = $tuition;
+                    else
+                        $tuition_scholarship = $scholar->tuition_fee_fixed;
+                }
 
-            if($scholar->misc_fee_rate > 0){
-                $misc_scholarship = $total_misc * ($scholar->misc_fee_rate/100);
-            }
-            elseif($scholar->misc_fee_fixed > 0){
-                if($scholar->misc_fee_fixed > $total_misc)
-                    $misc_scholarship = $total_misc;
-                else
-                    $misc_scholarship = $scholar->misc_fee_fixed;
-            }
+                if($scholar->misc_fee_rate > 0){
+                    $misc_scholarship = $total_misc * ($scholar->misc_fee_rate/100);
+                }
+                elseif($scholar->misc_fee_fixed > 0){
+                    if($scholar->misc_fee_fixed > $total_misc)
+                        $misc_scholarship = $total_misc;
+                    else
+                        $misc_scholarship = $scholar->misc_fee_fixed;
+                }
 
-            if($scholar->lab_fee_rate > 0){
-                $lab_scholarship = $total_lab * ($scholar->lab_fee_rate/100);
-            }
-            elseif($scholar->lab_fee_fixed > 0){
-                if($scholar->lab_fee_fixed > $total_lab)
-                    $lab_scholarship = $total_lab;
-                else
-                    $lab_scholarship = $scholar->lab_fee_fixed;
+                if($scholar->lab_fee_rate > 0){
+                    $lab_scholarship = $total_lab * ($scholar->lab_fee_rate/100);
+                }
+                elseif($scholar->lab_fee_fixed > 0){
+                    if($scholar->lab_fee_fixed > $total_lab)
+                        $lab_scholarship = $total_lab;
+                    else
+                        $lab_scholarship = $scholar->lab_fee_fixed;
+                }
             }
         }
     
@@ -2103,9 +2118,13 @@ class Data_fetcher extends CI_Model {
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
-        $data['total'] = $data['tuition'] + $total_lab + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-        $data['total_installment'] = round($data['total_installment'],2);
+        $data['total'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign - $total_scholarship;
+        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign - $total_scholarship;
+        
+        if($data['total'] == 0)
+            $data['total_installment'] = 0;
+        
+        $data['total_installment'] = round($data['total_installment'],2);        
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['down_payment'] = round($data['down_payment'],2);
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
