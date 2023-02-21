@@ -237,8 +237,8 @@ new Vue({
         },
         submitRegistration: function (){
             Swal.fire({
-                title: 'Submit Registration',
-                text: "Continue registering student?",
+                title: 'Submit Fee Assessment',
+                text: "Continue to register student?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
