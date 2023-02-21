@@ -76,7 +76,7 @@
                                 </div>
                         </div>
                         <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
-                           v-if="request.email && request.citizenship == 'Foreign'">
+                           v-if="request.email && request.citizenship != 'Philippines'">
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload1.png"
                                         class="max-w-full h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
@@ -110,7 +110,7 @@
                                 </div>                                                  
                         </div>
                         <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
-                           v-if="request.email && request.citizenship == 'Foreign'">                                
+                           v-if="request.email && request.citizenship != 'Philippines'">                                
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload5.png"
                                         class="max-w-full h-auto mx-auto block" title='Original copy of Scholastic Records'>                                    
