@@ -1974,7 +1974,7 @@ class Data_fetcher extends CI_Model {
         if($student['strCitizenship'] != "Philippines"){
             $is_foreign = true;
             if($sem['pay_student_visa'] != 0){
-                    $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'Student Visa'))
+                    $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'svf'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
                     if($student_visa){
                         $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $sem, 'misc');
@@ -1982,7 +1982,7 @@ class Data_fetcher extends CI_Model {
                     }
             }
 
-            $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'International Student Fee'))
+            $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'isf'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
             if($international_student_fee){
                 $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $sem, 'misc');
