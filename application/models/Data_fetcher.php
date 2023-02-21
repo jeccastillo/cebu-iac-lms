@@ -2049,14 +2049,14 @@ class Data_fetcher extends CI_Model {
         $tuition_scholarship = 0;
         
         if(isset($scholar)){
-            if($scholar['tuition_fee_rate'] > 0){
+            if($scholar->tuition_fee_rate > 0){
                 $tuition_scholarship = $tuition * ($scholar['tuition_fee_rate']/100);
             }
-            elseif($scholar['tuition_fee_fixed'] > 0){
-                if($scholar['tuition_fee_fixed'] > $tuition)
+            elseif($scholar->tuition_fee_fixed > 0){
+                if($scholar->tuition_fee_fixed > $tuition)
                     $tuition_scholarship = $tuition;
                 else
-                    $tuition_scholarship = $tuition - $scholar['tuition_fee_fixed'];
+                    $tuition_scholarship = $tuition - $scholar->tuition_fee_fixed;
             }
         }
     
