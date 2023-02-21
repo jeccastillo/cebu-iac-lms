@@ -2063,8 +2063,8 @@ class Data_fetcher extends CI_Model {
             if($scholar->misc_fee_rate > 0){
                 $misc_scholarship = $total_misc * ($scholar->misc_fee_rate/100);
             }
-            elseif($scholar->misc_fee_rate > 0){
-                if($scholar->misc_fee_rate > $total_misc)
+            elseif($scholar->misc_fee_fixed > 0){
+                if($scholar->misc_fee_fixed > $total_misc)
                     $misc_scholarship = $total_misc;
                 else
                     $misc_scholarship = $scholar->misc_fee_fixed;
