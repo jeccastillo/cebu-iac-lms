@@ -219,7 +219,7 @@ class Subject extends CI_Controller {
         //print_r($post);
         $this->data_poster->log_action('Subjects','Updated a Subject '.$post['strCode'],'blue');
         $this->data_poster->post_data('tb_mas_subjects',$post,$post['intID']);
-        redirect(base_url()."subject/view_all_subjects");
+        redirect(base_url()."subject/edit_subject/".$post['intID']);
             
     }
     
