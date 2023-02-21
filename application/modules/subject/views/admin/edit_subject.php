@@ -123,6 +123,7 @@
                 </div>
                 <div style="clear:both"></div>
             </form>
+            <?php if($userlevel != 6): ?>
             <div class="row">
                 <div class="col-md-5">
                     <h4>Select Prerequisites</h4>
@@ -198,6 +199,7 @@
                     </select>
                 </div>
             </div>
+            <?php endif; ?>
        
         </div>
 </aside>
