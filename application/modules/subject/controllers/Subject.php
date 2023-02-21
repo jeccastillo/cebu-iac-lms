@@ -225,18 +225,16 @@ class Subject extends CI_Controller {
     
     public function view_all_subjects()
     {
-        if($this->is_admin() || $this->is_registrar()){
-            $this->data['page'] = "view_subjects";
-            $this->data['opentree'] = "subject";
-            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/subject_view",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/subjects_conf",$this->data); 
-            //print_r($this->data['classlist']);
-        }
-        else
-            redirect(base_url()."unity");  
+        
+        $this->data['page'] = "view_subjects";
+        $this->data['opentree'] = "subject";
+        //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/subject_view",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/subjects_conf",$this->data); 
+        //print_r($this->data['classlist']);
+        
     }
     
     public function subject_viewer($id,$sem = null)
@@ -297,16 +295,18 @@ class Subject extends CI_Controller {
     
     public function delete_subject()
     {
-        $post = $this->input->post();
-        $deleted = $this->data_poster->deleteSubject($post['id']);
-        if($deleted)
-        {
-            $data['message'] = "success";
-            $this->data_poster->log_action('Subject','Deleted a Subject '.$post['code'],'red');
+        if($this->is_admin() || $this->is_registrar()){
+            $post = $this->input->post();
+            $deleted = $this->data_poster->deleteSubject($post['id']);
+            if($deleted)
+            {
+                $data['message'] = "success";
+                $this->data_poster->log_action('Subject','Deleted a Subject '.$post['code'],'red');
+            }
+            else
+                $data['message'] = "failed";
+            echo json_encode($data);
         }
-        else
-            $data['message'] = "failed";
-        echo json_encode($data);
     }
     
     public function faculty_logged_in()
