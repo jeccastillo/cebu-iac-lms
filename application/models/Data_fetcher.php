@@ -1982,7 +1982,7 @@ class Data_fetcher extends CI_Model {
                     }
             }
 
-            $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'isf'))
+            $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'isf'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
             if($international_student_fee){
                 $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $sem, 'misc');
