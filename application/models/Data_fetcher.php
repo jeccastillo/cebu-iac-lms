@@ -1973,7 +1973,7 @@ class Data_fetcher extends CI_Model {
         
         if($student['strCitizenship'] != "Philippines"){
             $is_foreign = true;
-            if($sem['pay_student_visa']){
+            if($sem['pay_student_visa'] != 0){
                     $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'name' => 'Student Visa'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
                     if($student_visa){
