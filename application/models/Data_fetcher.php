@@ -2074,10 +2074,12 @@ class Data_fetcher extends CI_Model {
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
-        // if(isset($scholar)){
-        //     $scholarship_discount = $data['total'] * ($scholar['percentage']/100);
-        //     $discounted_price = $data['total'] - $scholarship_discount;
-        // }
+        
+        if(isset($scholar)){
+            //$scholarship_discount = $data['total'] * ($scholar['percentage']/100);
+            //$discounted_price = $data['total'] - $scholarship_discount;
+        }
+        
         $data['discounted_price'] = $discounted_price;
 
         $data['scholarship_discount'] = $scholarship_discount;

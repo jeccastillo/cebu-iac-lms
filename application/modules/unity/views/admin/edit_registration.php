@@ -76,12 +76,10 @@
                          <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship Grant</label>
                             <select class="form-control" id="enumScholarship" name="enumScholarship">
-                                <option <?php echo ($registration['enumScholarship'] == "paying")?'selected':''; ?> value="paying">Paying</option>
-                                <option <?php echo ($registration['enumScholarship'] == "7th district")?'selected':''; ?> value="7th district">7th District</option>
-                                <option <?php echo ($registration['enumScholarship'] == "resident scholar")?'selected':''; ?> value="resident scholar">Resident Scholar</option>
-                                <option <?php echo ($registration['enumScholarship'] == "tagaytay resident")?'selected':''; ?> value="tagaytay resident">Tagaytay Resident</option>
-                                <option <?php echo ($registration['enumScholarship'] == "DILG scholar")?'selected':''; ?> value="DILG scholar">DILG Scholar</option>
-                                <option <?php echo ($registration['enumScholarship'] == "FREE HIGHER EDUCATION PROGRAM (R.A. 10931)")?'selected':''; ?> value="FREE HIGHER EDUCATION PROGRAM (R.A. 10931)">FREE HIGHER EDUCATION PROGRAM (R.A. 10931)</option>
+                                <?php foreach($scholarships as $scholarship): ?>
+                                    <option <?php echo ($registration['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="paying"><?php echo $scholarship['name']; ?></option>
+                                <?php endforeach; ?>
+                                
                             </select>
                         </div>
 

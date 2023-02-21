@@ -421,6 +421,7 @@ class Unity extends CI_Controller {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
 
             if($sem!=null)
                 $this->data['selected_ay'] = $sem;
