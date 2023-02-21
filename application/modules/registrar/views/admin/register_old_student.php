@@ -87,7 +87,7 @@
                                 <div v-html="tuition_text" id="tuitionContainer">
                                 
                                 </div>
-                                <input type="submit" :disabled="reg_status != 'For Registration' || !subjects_loaded || loader_spinner" value="Register" class="btn btn-default  btn-flat btn-block">
+                                <input type="submit" :disabled="reg_status != 'For Registration' || !subjects_loaded || loader_spinner" value="Submit" class="btn btn-default  btn-flat btn-block">
                             </div>                             
                         </div>
                     </form>                           
