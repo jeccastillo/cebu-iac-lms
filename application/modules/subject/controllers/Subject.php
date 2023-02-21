@@ -83,52 +83,49 @@ class Subject extends CI_Controller {
     public function edit_subject($id)
     {
         
-        if($this->is_admin())
-        { 
-             $dpt = array(); 
-            foreach($this->data['department_config'] as $dept)
-                $dpt[$dept] = $dept;
-            
-            $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
-            $this->data['dpt'] = $dpt;
-            $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);
-            
-            $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
-            
-            $this->data['rooms'] = $this->data_fetcher->getRoomsNotSelected($id);
-            $this->data['selected_rooms'] = $this->data_fetcher->getRoomsSelected($id);
-            
-            $this->data['selected_prereq'] = $this->data_fetcher->getPrereq($id);
-            
-            $days = array("1 2 3 4 5 6","1 3","1 3 5","3 5","2 4","2 4 6");
-            $selected_days = $this->data_fetcher->getSelectedDays($id);
-            $dy = array();
-            
-            foreach($selected_days as $sel)
-            {
-                $dy[] = $sel['strDays'];
-            }
-            
-            
-            $this->data['selected_days'] = $dy;
-            $this->data['days'] = array_diff($days,$dy);
-            
-            $this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-            
-            
-            
-            $this->data['prereq'] = $prereq;
-            
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/edit_subject",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("subject_validation_js",$this->data); 
-           // print_r($this->data['classlists']);
-            
-        }
-        else
-            redirect(base_url()."unity");    
         
+        $dpt = array(); 
+        foreach($this->data['department_config'] as $dept)
+        $dpt[$dept] = $dept;
+
+        $this->data['userlevel'] = $this->session->userdata('intUserLevel');
+        
+        $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
+        $this->data['dpt'] = $dpt;
+        $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);
+        
+        $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
+        
+        $this->data['rooms'] = $this->data_fetcher->getRoomsNotSelected($id);
+        $this->data['selected_rooms'] = $this->data_fetcher->getRoomsSelected($id);
+        
+        $this->data['selected_prereq'] = $this->data_fetcher->getPrereq($id);
+        
+        $days = array("1 2 3 4 5 6","1 3","1 3 5","3 5","2 4","2 4 6");
+        $selected_days = $this->data_fetcher->getSelectedDays($id);
+        $dy = array();
+        
+        foreach($selected_days as $sel)
+        {
+            $dy[] = $sel['strDays'];
+        }
+        
+        
+        $this->data['selected_days'] = $dy;
+        $this->data['days'] = array_diff($days,$dy);
+        
+        $this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        
+        
+        
+        $this->data['prereq'] = $prereq;
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_subject",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("subject_validation_js",$this->data); 
+        // print_r($this->data['classlists']);
+                
         
     }
     

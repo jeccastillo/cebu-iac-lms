@@ -18,102 +18,106 @@
             
             <form id="validate-subject" action="<?php echo base_url(); ?>subject/edit_submit_subject" method="post" role="form">
                 <input type="hidden" name="intID"  id="intID" value="<?php echo $subject['intID']; ?>">
+
                  <div class="box-body">
-                     <div class="form-group col-xs-6">
-                        <label for="strCode">Subject Code</label>
-                        <input type="text" value="<?php echo $subject['strCode']; ?>" name="strCode" class="form-control" id="strCode" placeholder="Enter Subject Code">
-                    </div>
-                     
-                     <div class="form-group col-xs-6">
-                        <label for="strUnits">Number of Units</label>
-                        <input type="number" value="<?php echo $subject['strUnits']; ?>"  name="strUnits" class="form-control" id="strUnits" placeholder="Enter Number of Units">
-                    </div>
+                    <?php if($userlevel != 6): ?>
+                        <div class="form-group col-xs-6">
+                            <label for="strCode">Subject Code</label>
+                            <input type="text" value="<?php echo $subject['strCode']; ?>" name="strCode" class="form-control" id="strCode" placeholder="Enter Subject Code">
+                        </div>
+                        
+                        <div class="form-group col-xs-6">
+                            <label for="strUnits">Number of Units</label>
+                            <input type="number" value="<?php echo $subject['strUnits']; ?>"  name="strUnits" class="form-control" id="strUnits" placeholder="Enter Number of Units">
+                        </div>
+                    <?php endif; ?>
                     <div class="form-group col-xs-6">
                             <label for="strUnits">Number of Units for Tuition</label>
                             <input type="number" name="strTuitionUnits" value="<?php echo $subject['strTuitionUnits'] ?>" class="form-control" id="strTuitionUnits" placeholder="Enter Number of Units">
                     </div>
-                    <?php echo cms_dropdown('strLabClassification','Lab Type',$lab_types,'col-sm-6',$subject['strLabClassification']); ?>                                                
-                     <div class="form-group col-xs-6">
-                            <label for="intLab">Laboratory Units</label>
-                            <input type="number" class="form-control" value="<?php echo $subject['intLab'] ?>" name="intLab" id="intLab" />
-                        </div>
-                     <div class="form-group col-xs-6">
-                            <label for="intLectHours">Lecture/Class Units</label>
-                            <input type="number" class="form-control" value="<?php echo $subject['intLectHours'] ?>" name="intLectHours" id="intLectHours" />
-                    </div>                        
+                    <?php if($userlevel != 6): ?>
+                        <?php echo cms_dropdown('strLabClassification','Lab Type',$lab_types,'col-sm-6',$subject['strLabClassification']); ?>                                                
                         <div class="form-group col-xs-6">
-                            <label for="isNSTP">NSTP Subject?</label>
-                            <select class="form-control" name="isNSTP" id="isNSTP" >
-                                <option <?php echo ($subject['isNSTP'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['isNSTP'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div>
+                                <label for="intLab">Laboratory Units</label>
+                                <input type="number" class="form-control" value="<?php echo $subject['intLab'] ?>" name="intLab" id="intLab" />
+                            </div>
                         <div class="form-group col-xs-6">
-                            <label for="isInternshipSubject">Internship Subject?</label>
-                            <select class="form-control" name="isInternshipSubject" id="isInternshipSubject" >
-                                <option <?php echo ($subject['isInternshipSubject'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['isInternshipSubject'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div> 
+                                <label for="intLectHours">Lecture/Class Units</label>
+                                <input type="number" class="form-control" value="<?php echo $subject['intLectHours'] ?>" name="intLectHours" id="intLectHours" />
+                        </div>                        
+                            <div class="form-group col-xs-6">
+                                <label for="isNSTP">NSTP Subject?</label>
+                                <select class="form-control" name="isNSTP" id="isNSTP" >
+                                    <option <?php echo ($subject['isNSTP'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['isNSTP'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="isInternshipSubject">Internship Subject?</label>
+                                <select class="form-control" name="isInternshipSubject" id="isInternshipSubject" >
+                                    <option <?php echo ($subject['isInternshipSubject'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['isInternshipSubject'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div> 
+                            <div class="form-group col-xs-6">
+                                <label for="isThesisSubject">Thesis Subject?</label>
+                                <select class="form-control" name="isThesisSubject" id="isThesisSubject" >
+                                    <option <?php echo ($subject['isThesisSubject'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['isThesisSubject'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="is_numerical">Numerical Rating?</label>
+                                <select class="form-control" name="is_numerical" id="is_numerical" >
+                                    <option <?php echo ($subject['is_numerical'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['is_numerical'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div> 
+                            <div class="form-group col-xs-6">
+                                <label for="include_gwa">Include in GWA?</label>
+                                <select class="form-control" name="include_gwa" id="include_gwa" >
+                                    <option <?php echo ($subject['include_gwa'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['include_gwa'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div> 
+                            <div class="form-group col-xs-6">
+                                <label for="intBridging">Bridging</label>
+                                <select class="form-control" name="intBridging" id="intBridging" >
+                                    <option  <?php echo ($subject['intBridging'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['intBridging'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div>
                         <div class="form-group col-xs-6">
-                            <label for="isThesisSubject">Thesis Subject?</label>
-                            <select class="form-control" name="isThesisSubject" id="isThesisSubject" >
-                                <option <?php echo ($subject['isThesisSubject'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['isThesisSubject'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="is_numerical">Numerical Rating?</label>
-                            <select class="form-control" name="is_numerical" id="is_numerical" >
-                                <option <?php echo ($subject['is_numerical'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['is_numerical'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div> 
-                        <div class="form-group col-xs-6">
-                            <label for="include_gwa">Include in GWA?</label>
-                            <select class="form-control" name="include_gwa" id="include_gwa" >
-                                <option <?php echo ($subject['include_gwa'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['include_gwa'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div> 
-                        <div class="form-group col-xs-6">
-                            <label for="intBridging">Bridging</label>
-                            <select class="form-control" name="intBridging" id="intBridging" >
-                                <option  <?php echo ($subject['intBridging'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['intBridging'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div>
-                     <div class="form-group col-xs-6">
-                            <label for="intYearLevel">Major Subject</label>
-                            <select class="form-control" name="intMajor" id="intMajor" >
-                                <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">No</option>
-                                <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">Yes</option>
-                            </select>
-                        </div>
-                      <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6',$subject['strDepartment']); ?>
-                        <div class="form-group col-xs-6">
-                            <label for="intEquivalentID1">Equivalent Subject 1</label>
-                            <select class="form-control select2" name="intEquivalentID1">
-                                <option value="0">None</option>
-                                <?php foreach($subjects as $s1): ?>
-                                    <option <?php echo ($subject['intEquivalentID1'] == $s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label for="intEquivalentID2">Equivalent Subject 2</label>
-                            <select class="form-control select2" name="intEquivalentID2">
-                                <option <?php echo ($subject['intEquivalentID2']==0)?'selected':''; ?> value="0">None</option>
-                                <?php foreach($subjects as $s1): ?>
-                                    <option <?php echo ($subject['intEquivalentID2']==$s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                <div class="form-group col-xs-6">
-                        <label>Description</label>
-                        <textarea class="form-control"  name="strDescription" rows="3" placeholder="Enter Description"><?php echo $subject['strDescription']; ?></textarea>
-                    </div>
-                
+                                <label for="intYearLevel">Major Subject</label>
+                                <select class="form-control" name="intMajor" id="intMajor" >
+                                    <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div>
+                        <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6',$subject['strDepartment']); ?>
+                            <div class="form-group col-xs-6">
+                                <label for="intEquivalentID1">Equivalent Subject 1</label>
+                                <select class="form-control select2" name="intEquivalentID1">
+                                    <option value="0">None</option>
+                                    <?php foreach($subjects as $s1): ?>
+                                        <option <?php echo ($subject['intEquivalentID1'] == $s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="intEquivalentID2">Equivalent Subject 2</label>
+                                <select class="form-control select2" name="intEquivalentID2">
+                                    <option <?php echo ($subject['intEquivalentID2']==0)?'selected':''; ?> value="0">None</option>
+                                    <?php foreach($subjects as $s1): ?>
+                                        <option <?php echo ($subject['intEquivalentID2']==$s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label>Description</label>
+                                <textarea class="form-control"  name="strDescription" rows="3" placeholder="Enter Description"><?php echo $subject['strDescription']; ?></textarea>
+                            </div>
+                        <?php endif; ?>
                 <div class="form-group col-xs-12">
                     <input type="submit" value="update" class="btn btn-default  btn-flat">
                 </div>
