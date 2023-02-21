@@ -2056,7 +2056,7 @@ class Data_fetcher extends CI_Model {
                 if($scholar->tuition_fee_fixed > $tuition)
                     $tuition_scholarship = $tuition;
                 else
-                    $tuition_scholarship = $tuition - $scholar->tuition_fee_fixed;
+                    $tuition_scholarship = $scholar->tuition_fee_fixed;
             }
         }
     
@@ -2065,7 +2065,7 @@ class Data_fetcher extends CI_Model {
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;
         $data['tuition'] = $tuition - $tuition_scholarship;
-        $data['tuition_installment'] = $tuition + $tuition * ($tuition_year['installmentIncrease']/100) - $tuition_scholarship;
+        $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc'] = $total_misc;                
         $data['misc_list'] = $misc_list;
