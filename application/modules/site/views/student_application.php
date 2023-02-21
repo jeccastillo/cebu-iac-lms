@@ -177,7 +177,7 @@
                         </label>
 
                         <div>
-                        <select required name="citizenship" v-model="request.citizenship">                                
+                        <select class="form-select form-control" required name="citizenship" v-model="request.citizenship">                                
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Aland Islands">Åland Islands</option>
                                 <option value="Albania">Albania</option>
