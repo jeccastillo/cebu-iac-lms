@@ -2048,6 +2048,7 @@ class Data_fetcher extends CI_Model {
         
         $tuition_scholarship = 0;
         $misc_scholarship = 0;
+        $lab_scholarship = 0;
         
         if(isset($scholar)){
             if($scholar->tuition_fee_rate > 0){
@@ -2069,10 +2070,21 @@ class Data_fetcher extends CI_Model {
                 else
                     $misc_scholarship = $scholar->misc_fee_fixed;
             }
+
+            if($scholar->lab_fee_rate > 0){
+                $lab_scholarship = $total_lab * ($scholar->lab_fee_rate/100);
+            }
+            elseif($scholar->lab_fee_fixed > 0){
+                if($scholar->lab_fee_fixed > $total_lab)
+                    $lab_scholarship = $total_lab;
+                else
+                    $lab_scholarship = $scholar->lab_fee_fixed;
+            }
         }
     
-        $data['lab'] = $total_lab;
-        $data['lab_installment'] = $total_lab + $total_lab * ($tuition_year['installmentIncrease']/100);
+        $data['lab_discount'] = $lab_scholarship;
+        $data['lab'] = $total_lab - $lab_scholarship;
+        $data['lab_installment'] = $data['lab'] + $data['lab'] * ($tuition_year['installmentIncrease']/100);
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition'] = $tuition - $tuition_scholarship;
