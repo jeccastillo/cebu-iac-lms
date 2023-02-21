@@ -76,8 +76,9 @@
                          <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship Grant</label>
                             <select class="form-control" id="enumScholarship" name="enumScholarship">
+                                <option <?php echo ($registration['enumScholarship'] == "0")?'selected':''; ?> value="0">None</option>    
                                 <?php foreach($scholarships as $scholarship): ?>
-                                    <option <?php echo ($registration['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="paying"><?php echo $scholarship['name']; ?></option>
+                                    <option <?php echo ($registration['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="<?php echo $scholarship['intID']; ?>"><?php echo $scholarship['name']; ?></option>
                                 <?php endforeach; ?>
                                 
                             </select>
