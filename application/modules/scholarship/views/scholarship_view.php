@@ -59,7 +59,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <div class="box box-solid box-primary">
                                     <div class="box-header">
                                         <strong>Basic Fee</strong>
@@ -77,7 +77,7 @@
                                         </div>           
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-4">
                                 <div class="box box-solid box-primary">
                                     <div class="box-header">
@@ -214,9 +214,7 @@ new Vue({
             type: undefined,
             created_by_id: undefined,
             tuition_fee_rate: undefined,
-            tuition_fee_fixed: undefined,
-            basic_fee_rate: undefined,
-            basic_fee_fixed: undefined,
+            tuition_fee_fixed: undefined,            
             misc_fee_rate: undefined,
             misc_fee_fixed: undefined,
             lab_fee_rate: undefined,
