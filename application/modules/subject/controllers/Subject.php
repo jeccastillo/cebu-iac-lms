@@ -12,7 +12,7 @@ class Subject extends CI_Controller {
 
         //User Level Validation
         $userlevel = $this->session->userdata('intUserLevel');        
-        if($userlevel != 2 && $userlevel != 6 && $userlevel != 4)
+        if($userlevel != 2 && $userlevel != 6 && $userlevel != 4 && $userlevel != 3) 
 		  redirect(base_url()."unity");
 		
         $settings = $this->data_fetcher->fetch_table('su-tb_sys_settings');
