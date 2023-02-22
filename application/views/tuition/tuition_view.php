@@ -150,7 +150,7 @@
                 <div class="col-sm-6" style="text-align:right;">Total Other Fees:</div>
                 <div class="col-sm-6 text-green"><?php echo $tuition['total_other']; ?></div>
             </div>
-           
+        <hr />
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Scholarship Discount:</div>            
@@ -158,7 +158,7 @@
             </div>
         <?php endif; ?>
         <div class="row">
-            <div class="col-sm-6">Total:</div>
+            <div class="col-sm-6">Total Matriculation:</div>
             <div class="col-sm-6 text-green"><?php echo $tuition['total'] ?></div>
         </div>
         <hr />
