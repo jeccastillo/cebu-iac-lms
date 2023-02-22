@@ -1277,7 +1277,7 @@ class Unity extends CI_Controller {
     public function edit_curriculum($id)
     {
         
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
           
             $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);
@@ -1402,7 +1402,7 @@ class Unity extends CI_Controller {
     
     public function submit_curriculum()
     {
-        if($this->is_admin()){
+        if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
             //print_r($post);
             $this->data_poster->log_action('Subject','Added a new Curriculum '.$post['strName'],'blue');
@@ -1444,11 +1444,12 @@ class Unity extends CI_Controller {
     
     public function submit_edit_curriculum()
     {
-        
-        $post = $this->input->post();
-        //print_r($post);
-        $this->data_poster->post_data('tb_mas_curriculum',$post,$post['intID']);
-        $this->data_poster->log_action('Curriculum','Updated Curriculum Info: '.$post['strName'],'green');
+        if($this->is_registrar() || $this->is_super_admin()){
+            $post = $this->input->post();
+            //print_r($post);
+            $this->data_poster->post_data('tb_mas_curriculum',$post,$post['intID']);
+            $this->data_poster->log_action('Curriculum','Updated Curriculum Info: '.$post['strName'],'green');
+        }
         redirect(base_url()."unity/view_all_curriculum");
 
 
@@ -2117,7 +2118,7 @@ class Unity extends CI_Controller {
     
     public function add_curriculum()
     {
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
             $this->data['page'] = "add_curriculum";
             $this->data['opentree'] = "curriculum";
@@ -2138,7 +2139,7 @@ class Unity extends CI_Controller {
     
     public function view_all_curriculum()
     {
-        if($this->faculty_logged_in())
+        if($this->is_registrar() || $this->is_super_admin())
         {
             $this->data['page'] = "view_curriculum";
             $this->data['opentree'] = "curriculum";
