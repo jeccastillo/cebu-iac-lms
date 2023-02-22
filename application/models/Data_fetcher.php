@@ -2131,8 +2131,10 @@ class Data_fetcher extends CI_Model {
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
-        $data['total'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign - $total_scholarship;
-        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign - $total_scholarship;
+        $data['other_discount'] = $other_scholarship;
+        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
+        $data['total'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee - $total_scholarship;
+        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee - $total_scholarship;
         
         if($data['total'] == 0)
             $data['total_installment'] = 0;
@@ -2143,8 +2145,7 @@ class Data_fetcher extends CI_Model {
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
-        $data['other_discount'] = $other_scholarship;
-        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
+        
         
         
         
