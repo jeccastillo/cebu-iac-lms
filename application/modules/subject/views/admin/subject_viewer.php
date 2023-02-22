@@ -82,8 +82,10 @@
                     if(!empty($classlist)): 
                     foreach($classlist as $class): ?>
                         <tr>
-                            <td><a
-                                    href="<?php echo base_url().'unity/classlist_viewer/'.$class['intID']; ?>"><?php echo $class['strSection']; ?></a>
+                            <td>
+                                <a href="<?php echo base_url().'unity/classlist_viewer/'.$class['intID']; ?>">
+                                    <?php echo $class['strClassName']." ".$class['year'].$class['strSection']." ".$class['sub_section']; ?>
+                                </a>
                             </td>
                             <td><?php echo $class['strCode']; ?></td>
                             <td>
