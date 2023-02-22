@@ -2050,6 +2050,7 @@ class Data_fetcher extends CI_Model {
         $tuition_scholarship = 0;
         $misc_scholarship = 0;
         $lab_scholarship = 0;
+        $other_scholarship = 0;
         
         if(isset($scholar)){
             if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){
@@ -2094,6 +2095,17 @@ class Data_fetcher extends CI_Model {
                     else
                         $lab_scholarship = $scholar->lab_fee_fixed;
                 }
+
+                if($scholar->other_fees_rate > 0){
+                    $total_other = $total_foreign + $total_new_student;
+                    $other_scholarship = $total_other * ($scholar->other_fees_rate/100);
+                }
+                elseif($scholar->other_fees_fixed > 0){
+                    if($scholar->other_fees_fixed > $total_lab)
+                        $other_scholarship = $total_other;
+                    else
+                        $other_scholarship = $scholar->other_fees_fixed;
+                }
             }
         }
     
@@ -2131,6 +2143,8 @@ class Data_fetcher extends CI_Model {
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
         $data['class_type'] = $sem['classType'];
+        $data['other_discount'] = $other_scholarship;
+        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
         
         
         

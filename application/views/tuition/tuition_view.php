@@ -121,7 +121,7 @@
             </div>
             <hr />
         <?php endif; ?>     
-        <?php if($tuition['is_foreign']): ?>
+            <?php if($tuition['is_foreign']): ?>
                 <div class="row" style="margin-bottom:1rem;">
                     <div class="col-sm-6" style="text-align:right;">Foreign Student Fees:</div>
                     <div class="col-sm-6"></div>
@@ -137,9 +137,19 @@
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total:</div>
                 <div class="col-sm-6 text-green"><?php echo $tuition['total_foreign']; ?></div>
-            </div>
-            <hr />
+            </div>            
         <?php endif; ?>     
+            <hr />            
+            <?php if($tuition['other_discount'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo $tuition['other_discount']; ?></div>
+            </div>
+            <?php endif; ?>
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Total Other Fees:</div>
+                <div class="col-sm-6 text-green"><?php echo $tuition['total_other']; ?></div>
+            </div>
            
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
