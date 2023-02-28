@@ -185,12 +185,14 @@ new Vue({
             subtotal_order: 10000,
             convenience_fee: 0,
             total_amount_due: 10000,            
-            charges: 0,            
+            charges: 0,       
+            cashier_id: undefined,     
             status: 'Paid',
         },
         or_update:{
             id: undefined,
             or_number: undefined,
+            cashier_id: undefined,
         },
              
     },
@@ -216,6 +218,8 @@ new Vue({
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
                     this.or_update.or_number = this.cashier.or_current;
+                    this.request.cashier_id = this.cashier.user_id;
+                    this.or_update.cashier_id = this.cashier.user_id;
                 }
             })
             .catch((error) => {

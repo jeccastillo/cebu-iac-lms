@@ -344,12 +344,14 @@ new Vue({
             convenience_fee: 0,
             total_amount_due: 0,            
             charges: 0,
+            cashier_id: undefined,
             sy_reference: '<?php echo $selected_ay; ?>',
             status: 'Paid',
         },
         or_update:{
             id: undefined,
             or_number: undefined,
+            cashier_id: undefined,
         },
         amount_to_pay: 0,        
         advanced_privilages: false,      
@@ -401,6 +403,8 @@ new Vue({
                         if(this.cashier){
                             this.request.or_number = this.cashier.or_current;
                             this.or_update.or_number = this.cashier.or_current;
+                            this.request.cashier_id = this.cashier.user_id;
+                            this.or_update.cashier_id = this.cashier.user_id;
                         }
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
