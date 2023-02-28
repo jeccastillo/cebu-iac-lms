@@ -89,7 +89,7 @@
                                 </tr>    
                                 <tr v-if="application_payment">
                                     <td>{{ application_payment.or_number }}</td>
-                                    <td><a href="#" @click="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
+                                    <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
                                     <td>{{ application_payment.description }}</td>
                                     <td>{{ application_payment.subtotal_order }}</td>
                                     <td>{{ application_payment.charges }}</td>
@@ -107,7 +107,7 @@
                                 </tr> 
                                 <tr v-if="reservation_payment">
                                     <td>{{ reservation_payment.or_number }}</td>
-                                    <td><a href="#" @click="cashierDetails(reservation_payment.cashier_id)">{{ reservation_payment.cashier_id }}</a></td>
+                                    <td><a href="#" @click.prevent.stop="cashierDetails(reservation_payment.cashier_id)">{{ reservation_payment.cashier_id }}</a></td>
                                     <td>{{ reservation_payment.description }}</td>
                                     <td>{{ reservation_payment.subtotal_order }}</td>
                                     <td>{{ reservation_payment.charges }}</td>
@@ -243,7 +243,16 @@ new Vue({
     },
 
     methods: {      
-        cashierDetails: function(){
+        cashierDetails: function(id){
+            axios.get(base_url + 'finance/cashier_details/' + id)
+            .then((data) => {            
+                var cashier_details = this.data.data.cashier_details
+                Swal.fire({
+                    title: "Cashier",
+                    text: cashier_details.strFirstname+" "+cashier_details.strLastname,
+                    icon: "info"
+                })
+            })
 
         },  
         updateOR: function(){
