@@ -63,7 +63,7 @@ window.moment || document.write(
                                     </label>
                                     <date-picker :time-picker-options="
                                                         reserve_time_picker_options
-                                                    " v-model="request.from" type="time" lang="en" format="hh:mm A"
+                                                    " disabled-days="day === 1 || day === 2 || day === 3 || day === 4 || day === 5 || day === 6" v-model="request.from" type="time" lang="en" format="hh:mm A"
                                         @change="checkTime" placeholder="HH:MM AM" :input-attr="{
                                                     required: true,
                                                     id: 'time_from'
