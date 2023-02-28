@@ -193,6 +193,14 @@ class Finance extends CI_Controller {
         $data['success'] = true;
         echo json_encode($data);       
     }
+
+    public function cashier_details($id){                             
+
+        $data['cashier_data'] = $this->data_fetcher->getUserData($id);                
+        $data['message'] = "Success";
+        $data['success'] = true;
+        echo json_encode($data);       
+    }
 		
     // public function get_other_payments($slug){
 

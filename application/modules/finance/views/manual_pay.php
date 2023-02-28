@@ -77,6 +77,7 @@
                             <table class="table table-bordered">
                                 <tr>
                                     <th>OR Number</th>
+                                    <th>Cashier</th>
                                     <th>Payment Type</th>
                                     <th>Amount Paid</th>
                                     <th>Online Payment Charge</th>
@@ -88,6 +89,7 @@
                                 </tr>    
                                 <tr v-if="application_payment">
                                     <td>{{ application_payment.or_number }}</td>
+                                    <td><a href="#" @click=""cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
                                     <td>{{ application_payment.description }}</td>
                                     <td>{{ application_payment.subtotal_order }}</td>
                                     <td>{{ application_payment.charges }}</td>
@@ -105,6 +107,7 @@
                                 </tr> 
                                 <tr v-if="reservation_payment">
                                     <td>{{ reservation_payment.or_number }}</td>
+                                    <td><a href="#" @click=""cashierDetails(reservation_payment.cashier_id)">{{ reservation_payment.cashier_id }}</a></td>
                                     <td>{{ reservation_payment.description }}</td>
                                     <td>{{ reservation_payment.subtotal_order }}</td>
                                     <td>{{ reservation_payment.charges }}</td>
@@ -239,7 +242,10 @@ new Vue({
 
     },
 
-    methods: {        
+    methods: {      
+        cashierDetails: function(){
+            
+        },  
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
