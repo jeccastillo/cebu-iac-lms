@@ -119,7 +119,7 @@
 
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>
-                        <p class="text-muted">
+                        <p :class="request.crime=='Yes'?'text-red':'text-muted'">
                             {{request.crime}}
                         </p>
                         <hr>
