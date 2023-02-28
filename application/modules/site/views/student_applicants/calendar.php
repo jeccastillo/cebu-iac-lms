@@ -129,7 +129,7 @@ new Vue({
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
-            end: "17:00"
+            end: "16:00"
         },
         events: [],
         tags: ['foo', 'bar'],
