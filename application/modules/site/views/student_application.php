@@ -666,7 +666,8 @@
                            </div>
                        </div>
                    </div> -->
-
+                </div>
+                <div class="md:w-1/2 w-full">
                    <div class="mb-6">
                        <div class="md:w-4/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
