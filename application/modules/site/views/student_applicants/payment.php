@@ -29,6 +29,7 @@
 
                             {{ payment_type == 'admissions_student_payment_reservation' ? 'Payment for Reservation Fee' : payment_type == 'admissions_student_payment' ? 'Payment for Application Fee' : '' }}
                         </h1>
+                        <h4>(If you would like to pay on-site please ignore this step)</h4>
                     </div>
                     <p class="max-w-[800px] color-primary mt-[60px]">
                     </p>
