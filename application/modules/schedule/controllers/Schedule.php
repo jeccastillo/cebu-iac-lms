@@ -89,7 +89,7 @@ class Schedule extends CI_Controller {
     public function edit_schedule($id)
     {
         
-        if($this->is_admin() || $this->is_department_head())
+        if($this->is_admin() || $this->is_department_head() || $this->is_registrar())
         {
             $this->data['item'] = $this->data_fetcher->getSchedule($id,$this->session->userdata('strDepartment'),$this->is_super_admin());
             if(!empty($this->data['item'])){
