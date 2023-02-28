@@ -17,7 +17,7 @@ window.moment || document.write(
 <div id="admissions-form" style="margin-top:150px" v-show="student.email">
     <div class="custom-container">
         <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
-            default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7]" :events="events"
+            default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7,1,2,3,4,5]" :events="events"
             :on-event-dblclick="showDetails" @cell-click="logEvents('cell-click', $event)" style="height: 550px">
         </vue-cal>
     </div>
@@ -63,7 +63,7 @@ window.moment || document.write(
                                     </label>
                                     <date-picker :time-picker-options="
                                                         reserve_time_picker_options
-                                                    " disabled-days="day === 1 || day === 2 || day === 3 || day === 4 || day === 5 || day === 6" v-model="request.from" type="time" lang="en" format="hh:mm A"
+                                                    "  v-model="request.from" type="time" lang="en" format="hh:mm A"
                                         @change="checkTime" placeholder="HH:MM AM" :input-attr="{
                                                     required: true,
                                                     id: 'time_from'
