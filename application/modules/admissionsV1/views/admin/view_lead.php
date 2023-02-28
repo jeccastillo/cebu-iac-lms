@@ -226,7 +226,7 @@
                         </div>
                         <hr>
                     </div> -->
-
+                    <?php if($userlevel == "2" || $userlevel == "5"): ?>
                     <div class="text-right">
                         <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
                             @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
@@ -242,8 +242,9 @@
                             Enrollment</button>
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
-                            btn-danger">Reject</button>
+                            btn-danger">Reject</button>                        
                     </div>
+                    <?php endif; ?>
                 </div>
 
             </div>
