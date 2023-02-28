@@ -197,7 +197,7 @@
                         </div>
                         <div>
                             <strong>Health Concerns</strong>
-                            <p class="text-muted">
+                            <p class="text-red">
                                 {{request.health_concern}}
                             </p>
                             <hr>
