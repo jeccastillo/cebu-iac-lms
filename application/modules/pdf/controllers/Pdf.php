@@ -1089,7 +1089,6 @@ class Pdf extends CI_Controller {
         $pdf->Output("classlist.pdf", 'I');
     
     }
-    
     function registration_viewer_account_data_print($orNumber,$studID)
     {
         if($this->is_admin() || $this->is_accounting()){

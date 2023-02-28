@@ -314,6 +314,9 @@ new Vue({
                 })
 
         },
+        printOR: function(){
+            //pdf/print_or
+        },
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
