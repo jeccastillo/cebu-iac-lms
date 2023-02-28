@@ -111,7 +111,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
-                        <p class="text-muted">
+                        <p :class="request.good_moral=='No'?'text-red':'text-muted'">
                             {{request.good_moral}}
                         </p>
                         <hr>
