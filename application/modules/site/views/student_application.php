@@ -614,9 +614,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for=""
-                                >Other health concerns/conditions the school
-                                should know about
+                            <label for="">Other health concerns/conditions the school
+                                should know about (Type None if you do not have any)
                                 <span class="text-danger">*</span>
                             </label>
                             <input
