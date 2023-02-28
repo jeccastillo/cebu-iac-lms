@@ -246,7 +246,7 @@ new Vue({
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
             .then((data) => {            
-                var cashier_details = this.data.data.cashier_details
+                var cashier_details = this.data.cashier_details
                 Swal.fire({
                     title: "Cashier",
                     text: cashier_details.strFirstname+" "+cashier_details.strLastname,
