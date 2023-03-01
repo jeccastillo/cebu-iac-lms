@@ -35,11 +35,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
-
+const current_year = new Date().getFullYear();
 new Vue({
     el: '#applicant-container',
     data: {
-        selected_year: '2023',
+        selected_year: current_year,
         tags: ['foo', 'bar'],          
     },
     computed : {
