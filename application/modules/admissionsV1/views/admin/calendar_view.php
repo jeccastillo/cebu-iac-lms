@@ -11,8 +11,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <p>Filter by Year</p>
-                <select @change="updateList" class="form-select form-control">
-                    <option v-model="selected_year" v-for="year in years" :value="year">{{ year }}</option>                 
+                <select @change="updateList" v-model="selected_year" class="form-select form-control">
+                    <option v-for="year in years" :value="year">{{ year }}</option>                 
                 </select>
             </div>
         </div>
