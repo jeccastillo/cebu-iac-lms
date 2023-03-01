@@ -118,7 +118,7 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url()."users/login");            
     }
 
-    public function fi_calendar($id) {
+    public function fi_calendar() {
         if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
         {
                
