@@ -1,6 +1,7 @@
 <link href="https://unpkg.com/vue-cal@legacy/dist/vuecal.css" rel="stylesheet">
 <script src="https://unpkg.com/vue@legacy"></script>
 <script src="https://unpkg.com/vue-cal@legacy"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
@@ -15,8 +16,8 @@
     </section>
     <div class="content container">
         <div class="custom-container">
-            <vue-cal active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
-                default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7,1,2,3,4,5]"
+            <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
+                default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7,1,2,3,4,5]" :events="events"
                  @cell-click="showEvents('cell-click', $event)" style="height: 550px">
             </vue-cal>
         </div>
@@ -54,7 +55,8 @@ new Vue({
         'vue-cal': vuecal,        
     },
     data: {
-                
+        events: [],
+        tags: ['foo', 'bar'],          
     },
 
     mounted() {
