@@ -45,8 +45,7 @@
     <tr style="line-height:15px;">
         <td width="50%" style="font-size:9px;color:#666;"><?php echo $description; ?></td>
         <td width="20%" style=""></td>
-        <?php setlocale(LC_MONETARY, 'en_US'); ?>
-        <td width="30%" style="font-size:9px;color:#666;text-align:center;"><?php echo money_format('%i', $total_amount_due); ?></td>
+        <td width="30%" style="font-size:9px;color:#666;text-align:center;"><?php echo "₱".number_format($total_amount_due,2); ?></td>
     </tr>
 </table>
 <table >
