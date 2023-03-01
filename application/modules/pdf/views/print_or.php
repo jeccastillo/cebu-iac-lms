@@ -104,7 +104,9 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;color:#666;">
                         <span style="color:#fff;">RECEIVED from &nbsp;</span>
-                        <?php echo $student_id."<br />".$student_name; ?>
+                        <?php echo $student_id; ?><br />
+                        <span style="color:#fff;">RECEIVED from &nbsp;</span>
+                        <?php echo $student_name; ?>
                     </td>
                 </tr>
             </table>
