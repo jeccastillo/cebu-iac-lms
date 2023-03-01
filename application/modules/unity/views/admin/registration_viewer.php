@@ -234,6 +234,17 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label>Payment Type</label>
+                                                    <select class="form-control" v-model="request.is_cash">
+                                                        <option value="1">Cash</option>
+                                                        <option value="0">Check</option>                                                        
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Enter type if other is selected:</label>
+                                                    <input type="text" :disabled="request.is_cash == 0" required class="form-control" v-model="request.check_number" />
+                                                </div>
+                                                <div class="form-group">
                                                     <label>Enter type if other is selected:</label>
                                                     <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
                                                     
@@ -271,6 +282,10 @@
     </div>
     <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="student_id" v-model="or_print.student_id">
+        <input type="hidden" name="student_address" v-model="or_print.student_address">
+        <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+        <input type="hidden" name="check_number" v-model="or_print.check_number">
         <input type="hidden" name="or_number" v-model="or_print.or_number" />
         <input type="hidden" name="description" v-model="or_print.description" />
         <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
@@ -330,6 +345,10 @@ new Vue({
             student_name: undefined,
             transaction_date: undefined,
             student_name: undefined,
+            student_address: undefined,
+            student_id: undefined,
+            is_cash: undefined,
+            check_number: undefined,
         },
         request:{
             first_name: '',
@@ -349,6 +368,8 @@ new Vue({
             cashier_id: undefined,
             sy_reference: '<?php echo $selected_ay; ?>',
             status: 'Paid',
+            is_cash: 1,
+            check_number: '',
         },
         or_update:{
             id: undefined,
@@ -535,6 +556,10 @@ new Vue({
             this.or_print.total_amount_due = payment.total_amount_due;
             this.or_print.transaction_date = payment.updated_at;
             this.or_print.student_name =  this.request.first_name+" "+this.request.last_name;    
+            this.or_print.student_address = this.student.strAddress;
+            this.or_print.student_id = this.student.strStudentNumber;
+            this.or_print.is_cash = payment.is_cash;
+            this.or_print.check_number = payment.check_number;
             this.$nextTick(() => {
                 this.$refs.print_or.submit();
             });             
