@@ -14,13 +14,13 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:10px;">
+    <tr style="line-height:15px;">
         <td style=""></td>
     </tr>
 </table>
 <table >
     <tr style="line-height:15px;">
-        <td witdh="30%">&nbsp;</td>
+        <td witdh="20%">&nbsp;</td>
         <td width="70%"style="font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
     </tr>
 </table>
