@@ -51,8 +51,7 @@
 new Vue({
     el: '#applicant-container',
     components: {
-        'vue-cal': vuecal,
-        'date-picker': DatePicker
+        'vue-cal': vuecal,        
     },
     data: {
                 
