@@ -1140,7 +1140,7 @@ class Pdf extends CI_Controller {
                 
         tcpdf();
         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(140.5,180.5), true, 'UTF-8', false, true);
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(960.5,680.5), true, 'UTF-8', false, true);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
