@@ -36,6 +36,31 @@
     </tr>
 </table>
 <table >
+    <tr style="line-height:5px;">
+        <td style=""></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:15px;">
+        <td style="width:40%"></td>
+        <td style="width:60%;font-size:9px;text-align:left;color:#666;"></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:5px;">
+        <td style=""></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:15px;">
+        <td style="width:30%"></td>
+        <td style="width:70%;font-size:9px;text-align:left;color:#666;">
+            <span style="color:#fff;">the amount of pesos</span>
+            <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
+        </td>
+    </tr>
+</table>
+<table >
     <tr style="line-height:6px;">
         <td style=""></td>
     </tr>
@@ -79,7 +104,7 @@
 </table>
 <table >
     <tr style="line-height:21px;">
-       <td style="font-size:9px;color:#666;"><?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?></td>
+       <td style="font-size:9px;color:#666;"></td>
     </tr>
 </table>
 <table >
