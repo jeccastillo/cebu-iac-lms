@@ -74,13 +74,17 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:6px;">
+    <tr style="line-height:5px;">
         <td style=""></td>
     </tr>
 </table>
 <table >
-    <tr style="line-height:55px;">
-        <td style="font-size:9px;text-align:left;color:#666;"><?php echo $student_address; ?></td>
+    <tr style="line-height:15px;">
+        <td style="width:30%"></td>
+        <td style="width:70%;font-size:10px;text-align:left;color:#666;">
+            <span style="color:#fff;">as full/partial payment of &nbsp;</span>
+            <?php echo $description; ?>
+        </td>
     </tr>
 </table>
 <table >
@@ -93,7 +97,7 @@
 ?>
 <table >
     <tr style="line-height:15px;">
-        <td width="50%" style="font-size:9px;color:#666;"><?php echo $description; ?></td>
+        <td width="50%" style="font-size:9px;color:#666;"></td>
         <td width="20%" style=""></td>
         <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php</td>
     </tr>
