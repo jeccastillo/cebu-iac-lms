@@ -2,6 +2,8 @@
 <script src="https://unpkg.com/vue@legacy"></script>
 <script src="https://unpkg.com/vue-cal@legacy"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<script src="https://unpkg.com/vue2-datepicker/index.min.js"></script>
+<script src="https://unpkg.com/vue2-datepicker/locale/zh-cn.js"></script>
 
 <script>
 window.moment || document.write(
@@ -23,7 +25,7 @@ window.moment || document.write(
         <div class="custom-container">
             <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
                 default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7,1,2,3,4,5]" :events="events"
-                 @cell-click="showEvents('cell-click', $event)" style="height: 550px">
+                :on-event-dblclick="showDetails" @cell-click="logEvents('cell-click', $event)" style="height: 550px">
             </vue-cal>
         </div>
     </div>
@@ -57,7 +59,8 @@ window.moment || document.write(
 new Vue({
     el: '#applicant-container',
     components: {
-        'vue-cal': vuecal,        
+        'vue-cal': vuecal,     
+        'date-picker': DatePicker   
     },
     data: {
         events: [],
@@ -72,8 +75,10 @@ new Vue({
     },
 
     methods: {
-
-        showEvents: function(event, data) {
+        showDetails: function() {
+            alert();
+        },
+        logEvents: function(event, data) {
             // console.log(event, data);
 
             let today = moment(new Date()).format("YYYY-MM-DD");
