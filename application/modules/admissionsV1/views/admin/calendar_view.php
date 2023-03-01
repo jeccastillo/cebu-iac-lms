@@ -3,6 +3,11 @@
 <script src="https://unpkg.com/vue-cal@legacy"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 
+<script>
+window.moment || document.write(
+    '\x3Cscript src="assets/plugins/moment/moment.min.js" type="text/javascript">\x3C/script>')
+</script>
+
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
         <h1>
