@@ -1166,7 +1166,7 @@ class Pdf extends CI_Controller {
         $pdf->AddPage();
         $this->data['student_name'] = strtoupper($request['student_name']);        
         $this->data['student_id'] = $request['student_id'];        
-        $this->data['student_address'] = $request['student_address'];
+        $this->data['student_address'] = strtoupper($request['student_address']);
         $this->data['is_cash'] = $request['is_cash'];        
         $this->data['check_number'] = $request['check_number'];        
         $this->data['or_number'] = (string)$request['or_number'];
