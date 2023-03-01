@@ -1,10 +1,5 @@
 <table >
-    <tr style="line-height:78px;">
-        <td style=""></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:3px;">
+    <tr style="line-height:10px;">
         <td style=""></td>
     </tr>
 </table>
@@ -31,6 +26,11 @@
 <table >
     <tr style="line-height:6px;">
         <td style=""></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:55px;">
+        <td style="font-size:9px;text-align:left;color:#666;"><?php echo $student_address; ?></td>
     </tr>
 </table>
 <table >
