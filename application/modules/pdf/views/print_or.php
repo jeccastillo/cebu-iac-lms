@@ -144,14 +144,14 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:5px;">
+                <tr style="line-height:15px;">
                     <td style=""></td>
                 </tr>
             </table>
             <table >
                 <tr style="line-height:15px;">
-                    <td style="width:80%"></td>
-                    <td style="width:20%;font-size:10px;text-align:left;color:#666;">
+                    <td style="width:85%"></td>
+                    <td style="width:15%;font-size:10px;text-align:left;color:#666;">
                         <?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
