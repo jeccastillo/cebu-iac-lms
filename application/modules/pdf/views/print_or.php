@@ -25,7 +25,7 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo $is_cash == "0"?$is_cash:""; ?></td>
+                    <td style="width:50%"><?php echo $is_cash?"yes":""; ?></td>
                 </tr>
             </table>
             <table>
@@ -36,7 +36,29 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo $is_cash != "0"?$is_cash:""; ?></td>
+                    <td style="width:50%"><?php echo !$is_cash?"yes":""; ?></td>
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
+                    <td style="width:50%"></td>
+                    <td style="width:50%"></td>
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
+                    <td style="width:50%"></td>
+                    <td style="width:50%"><?php echo !$is_cash?$check_number:""; ?></td>
                 </tr>
             </table>
         </td>
