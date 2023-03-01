@@ -56,6 +56,13 @@ window.moment || document.write(
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
+function toggleModal() {
+    document.getElementById('modal').classList.toggle('hidden')
+}
+
+Vue.component('asd', {
+    template: "<div>test</div>"
+});
 new Vue({
     el: '#applicant-container',
     components: {
