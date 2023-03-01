@@ -47,7 +47,7 @@ new Vue({
             const year = new Date().getFullYear()
             return Array.from({length: year - 2023}, (value, index) => 2023 + index)
         }
-    }
+    },
 
     mounted() {
         
