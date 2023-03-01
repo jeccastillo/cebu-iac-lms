@@ -170,14 +170,14 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:150px;">
+                <tr style="line-height:180px;">
                     <td style=""></td>
                 </tr>
             </table>
             <table >
                 <tr style="line-height:15px;">
-                    <td style="width:70%"></td>
-                    <td style="width:30%;font-size:10px;text-align:left;color:#666;">
+                    <td style="width:60%"></td>
+                    <td style="width:40%;font-size:10px;text-align:left;color:#666;">
                         <?php echo $cashier_name; ?>
                     </td>
                 </tr>
