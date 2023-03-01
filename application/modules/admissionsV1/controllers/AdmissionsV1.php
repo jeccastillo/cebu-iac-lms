@@ -117,6 +117,22 @@ class AdmissionsV1 extends CI_Controller {
         else
             redirect(base_url()."users/login");            
     }
+
+    public function fi_calendar($id) {
+        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
+        {
+               
+            $this->data['page'] = "fi_calendar";
+            $this->data['opentree'] = "leads";
+            $this->data['userlevel'] = $this->session->userdata('intUserLevel');
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/calendar_view",$this->data);
+            $this->load->view("common/footer",$this->data);             
+        }
+        else
+            redirect(base_url()."users/login");            
+    }
     
    
     
