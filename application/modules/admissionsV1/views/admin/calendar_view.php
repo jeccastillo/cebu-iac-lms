@@ -18,7 +18,26 @@
         </div>
     </section>
     <div class="content container">
-
+        <div v-if="interviews">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="interview in interviews">
+                        <td>{{ interview.applicant_name }}</td>
+                        <td>{{ interview.date }}</td>
+                        <td>{{ interview.time_from }}</td>
+                        <td>{{ interview.time_to }}</td>
+                    </tr>                
+                </tbody>
+            </table>
+        </div>
     </div>
     
 </div>
@@ -40,7 +59,8 @@ new Vue({
     el: '#applicant-container',
     data: {
         selected_year: current_year,
-        tags: ['foo', 'bar'],          
+        tags: ['foo', 'bar'],         
+        interviews: undefined, 
     },
     computed : {
         years () {            
@@ -57,7 +77,8 @@ new Vue({
         })
 
         .then((data) => {
-            console.log(data);
+            this.interviews = data.data.data;
+            // console.log(data);
         })
         .catch((e) => {
             console.log("error");
@@ -77,7 +98,8 @@ new Vue({
             })
 
             .then((data) => {
-                console.log(data);
+                this.interviews = data.data.data;
+                // console.log(data);
             })
             .catch((e) => {
                 console.log("error");
