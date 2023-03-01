@@ -20,8 +20,8 @@
 </table>
 <table >
     <tr style="line-height:15px;">
-        <td witdh="30%">TEST</td>
-        <td width="70%"style="font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
+        <td style="width:30%">TEST</td>
+        <td style="width:70%;font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
     </tr>
 </table>
 <table >
@@ -45,7 +45,7 @@
 <table >
     <tr style="line-height:15px;">
         <td width="50%" style="font-size:9px;color:#666;"><?php echo $description; ?></td>
-        <td width="20%" style="">TEST</td>
+        <td width="20%" style=""></td>
         <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php<?php echo number_format($total_amount_due,2,'.',','); ?></td>
     </tr>
 </table>
