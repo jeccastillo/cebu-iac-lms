@@ -16,7 +16,7 @@ window.moment || document.write(
 
 <div id="admissions-form" style="margin-top:150px" v-show="student.email">
     <div class="custom-container">
-        <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', '']"
+        <vue-cal v-if="events" active-view="month" :on-cell-click="true" :disable-views="['years', 'year', 'week','day']"
             default-view="month" events-on-month-view="short" twelveHour :hide-weekdays="[7,1,2,3,4,5]" :events="events"
             :on-event-dblclick="showDetails" @cell-click="logEvents('cell-click', $event)" style="height: 550px">
         </vue-cal>
