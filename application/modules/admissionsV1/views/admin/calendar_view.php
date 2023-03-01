@@ -11,8 +11,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <p>Filter by Year</p>
-                <select class="form-select form-control">
-                    <option @change="updateList" v-model="selected_year" v-for="year in years" :value="year">{{ year }}</option>                 
+                <select @change="updateList" class="form-select form-control">
+                    <option v-model="selected_year" v-for="year in years" :value="year">{{ year }}</option>                 
                 </select>
             </div>
         </div>
@@ -69,8 +69,7 @@ new Vue({
     },
 
     methods: {
-        updateList: function(){
-            console.log("update List");
+        updateList: function(){            
             axios.get(api_url + 'interview-schedules/year/' + this.selected_year, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
