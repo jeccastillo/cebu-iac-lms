@@ -10,7 +10,7 @@
 </table>
 <table >
     <tr style="line-height:33px;">
-        <td style="font-size:9px;text-align:left;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+        <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
     </tr>
 </table>
 <table >
