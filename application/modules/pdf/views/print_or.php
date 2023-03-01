@@ -95,6 +95,19 @@
                     </td>
                 </tr>
             </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">                    
+                    <td style="font-size:10px;text-align:left;color:#666;">
+                        <span style="color:#fff;">as full/partial payment of &nbsp;</span>
+                        <?php echo $description; ?>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
@@ -108,20 +121,7 @@
 
 
 
-<table >
-    <tr style="line-height:5px;">
-        <td style=""></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:15px;">
-        <td style="width:30%"></td>
-        <td style="width:70%;font-size:10px;text-align:left;color:#666;">
-            <span style="color:#fff;">as full/partial payment of &nbsp;</span>
-            <?php echo $description; ?>
-        </td>
-    </tr>
-</table>
+
 <table >
     <tr style="line-height:20px;">
         <td style=""></td>
