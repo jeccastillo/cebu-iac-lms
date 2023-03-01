@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:25px;">
+    <tr style="line-height:28px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
@@ -29,6 +29,26 @@
                     <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
+            <table >
+                <tr style="line-height:15px;">                    
+                    <td style="font-size:9px;text-align:left;color:#666;">
+                        <span style="color:#fff;">RECEIVED from &nbsp;</span>
+                        <?php echo $student_id." ".$student_name; ?>
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">                    
+                    <td style="font-size:9px;text-align:left;color:#666;">
+                    <span style="color:#fff;">Address &nbsp;</span>
+                    <?php echo $student_address; ?></td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
@@ -38,23 +58,7 @@
         <td style=""></td>
     </tr>
 </table>
-<table >
-    <tr style="line-height:15px;">
-        <td style="width:43%"></td>
-        <td style="width:57%;font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:5px;">
-        <td style=""></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:15px;">
-        <td style="width:40%"></td>
-        <td style="width:60%;font-size:9px;text-align:left;color:#666;"><?php echo $student_address; ?></td>
-    </tr>
-</table>
+
 <table >
     <tr style="line-height:5px;">
         <td style=""></td>
