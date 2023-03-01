@@ -4,13 +4,18 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:30px;">
+    <tr style="line-height:27px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
 <table>
-    <tr>
+    <tr>        
         <td style="width:30%">
+            <table>
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
@@ -26,7 +31,7 @@
             </table>
             <table >
                 <tr style="line-height:20px;">
-                    <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                    <td style="font-size:9px;text-align:right;color:#666;">P<?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
             <table >
