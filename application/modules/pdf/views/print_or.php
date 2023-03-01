@@ -18,18 +18,21 @@
                 </tr>
             </table>
         </td>
+        <td style="width:70%">
+            <table>
+                <tr style="line-height:10px;">
+                    <td style=""><?php //echo $or_number; ?></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:20px;">
+                    <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>
-<table>
-    <tr style="line-height:10px;">
-        <td style=""><?php //echo $or_number; ?></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:20px;">
-        <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
-    </tr>
-</table>
+
 <table >
     <tr style="line-height:12px;">
         <td style=""></td>
