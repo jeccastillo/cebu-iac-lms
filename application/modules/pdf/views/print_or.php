@@ -20,8 +20,8 @@
 </table>
 <table >
     <tr style="line-height:15px;">
-        <td style="width:30%">TEST</td>
-        <td style="width:70%;font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
+        <td style="width:40%">TEST</td>
+        <td style="width:60%;font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
     </tr>
 </table>
 <table >
