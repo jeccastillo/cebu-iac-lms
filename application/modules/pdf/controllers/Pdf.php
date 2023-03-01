@@ -1163,8 +1163,11 @@ class Pdf extends CI_Controller {
         // Add a page
         // This method has several options, check the source code documentation for more information.
 
-        $pdf->AddPage();
+        $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
+        
+        $pdf->AddPage();        
         $this->data['student_name'] = strtoupper($request['student_name']);        
+        $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
         $this->data['student_id'] = $request['student_id'];        
         $this->data['student_address'] = strtoupper($request['student_address']);
         $this->data['is_cash'] = $request['is_cash'];        

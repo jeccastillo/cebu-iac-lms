@@ -169,6 +169,19 @@
                     </td>
                 </tr>
             </table>
+            <table >
+                <tr style="line-height:150px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">
+                    <td style="width:75%"></td>
+                    <td style="width:25%;font-size:10px;text-align:left;color:#666;">
+                        <?php echo number_format($cashier_name,2,'.',','); ?>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>

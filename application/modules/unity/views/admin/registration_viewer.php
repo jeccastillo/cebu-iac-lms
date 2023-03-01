@@ -282,6 +282,7 @@
     </div>
     <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
         <input type="hidden" name="student_id" v-model="or_print.student_id">
         <input type="hidden" name="student_address" v-model="or_print.student_address">
         <input type="hidden" name="is_cash" v-model="or_print.is_cash">
@@ -348,6 +349,7 @@ new Vue({
             student_address: undefined,
             student_id: undefined,
             is_cash: undefined,
+            cashier_id: undefined,
             check_number: undefined,
         },
         request:{
@@ -560,6 +562,7 @@ new Vue({
             this.or_print.student_id = this.student.strStudentNumber;
             this.or_print.is_cash = payment.is_cash;
             this.or_print.check_number = payment.check_number;
+            this.or_print.cashier_id = payment.cashier_id;
             this.$nextTick(() => {
                 this.$refs.print_or.submit();
             });             
