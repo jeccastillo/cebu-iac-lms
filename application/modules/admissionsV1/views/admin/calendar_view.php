@@ -43,9 +43,8 @@ new Vue({
         tags: ['foo', 'bar'],          
     },
     computed : {
-        years () {
-            const year = new Date().getFullYear()
-            return Array.from({length: year - 2023}, (value, index) => 2050 + index)
+        years () {            
+            return Array.from({length: 2023}, (value, index) => 2050 + index)
         }
     },
 
