@@ -178,7 +178,7 @@
                 <tr style="line-height:15px;">
                     <td style="width:75%"></td>
                     <td style="width:25%;font-size:10px;text-align:left;color:#666;">
-                        <?php echo number_format($cashier_name,2,'.',','); ?>
+                        <?php echo $cashier_name; ?>
                     </td>
                 </tr>
             </table>
