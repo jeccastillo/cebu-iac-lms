@@ -4,18 +4,18 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:15px;">
+    <tr style="line-height:25px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
 <table >
-    <tr style="line-height:12px;">
+    <tr style="line-height:12px;font-size:9px;text-align:right;color:#666;">
         <td style="width:10%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
         <td style="width:15%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
     </tr>
 </table>
 <table >
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
