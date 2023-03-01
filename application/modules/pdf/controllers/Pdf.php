@@ -1170,6 +1170,12 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $request['description'];
         $this->data['total_amount_due'] = $request['total_amount_due'];
         $this->data['transaction_date'] =  $request['transaction_date'];
+        
+        if(is_numeric( $this->data['total_amount_due'] ) && floor( $this->data['total_amount_due'] ) != $this->data['total_amount_due'])
+            $this->data['decimal'] = true;
+        else
+            $this->data['decimal'] = false;
+        
         $html = $this->load->view("print_or",$this->data,true);
         //$html = $pdf->unhtmlentities($html);
 

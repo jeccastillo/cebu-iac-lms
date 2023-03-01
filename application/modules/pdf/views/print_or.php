@@ -67,7 +67,7 @@
 </table>
 <table >
     <tr style="line-height:21px;">
-       <td style="font-size:9px;color:#666;"><?php echo convert_number($total_amount_due); ?> only</td>
+       <td style="font-size:9px;color:#666;"><?php echo convert_number($total_amount_due); ?> pesos only</td>
     </tr>
 </table>
 <table >
