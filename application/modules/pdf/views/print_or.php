@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:28px;">
+    <tr style="line-height:30px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
@@ -27,6 +27,11 @@
             <table >
                 <tr style="line-height:20px;">
                     <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
                 </tr>
             </table>
             <table >
