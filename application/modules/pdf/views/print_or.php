@@ -25,14 +25,14 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:12px;">
+    <tr style="line-height:5px;">
         <td style=""></td>
     </tr>
 </table>
 <table >
     <tr style="line-height:15px;">
-        <td style="width:43%"></td>
-        <td style="width:57%;font-size:9px;text-align:left;color:#666;"><?php echo $student_address; ?></td>
+        <td style="width:40%"></td>
+        <td style="width:60%;font-size:9px;text-align:left;color:#666;"><?php echo $student_address; ?></td>
     </tr>
 </table>
 <table >
