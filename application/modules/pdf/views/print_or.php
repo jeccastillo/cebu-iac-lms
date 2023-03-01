@@ -4,7 +4,18 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:45px;">
+    <tr style="line-height:15px;">
+        <td style=""><?php //echo $or_number; ?></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:12px;">
+        <td style="width:10%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
+        <td style="width:15%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+    </tr>
+</table>
+<table >
+    <tr style="line-height:20px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
@@ -105,13 +116,6 @@
 <table >
     <tr style="line-height:6px;">
         <td width="50%" style=""></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:14px;">
-        <td width="50%" style=""></td>
-        <td width="20%" style=""></td>
-        <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php<?php echo number_format($total_amount_due,2,'.',','); ?></td>
     </tr>
 </table>
 <table >
