@@ -8,9 +8,17 @@
             <li><a href="#"><i class="fa fa-dashboard"></i>First Interview Schedules </a></li>
             <li class="active">Details</li>
         </ol>
+        <div class="row">
+            <div class="col-sm-6">
+                <p>Filter by Year</p>
+                <select class="form-select form-control">
+                    <option v-for="year in years" :value="year">{{ year }}</option>                 
+                </select>
+            </div>
+        </div>
     </section>
     <div class="content container">
-    
+
     </div>
     
 </div>
@@ -31,12 +39,31 @@
 new Vue({
     el: '#applicant-container',
     data: {
-        events: [],
+        selected_year: '2023',
         tags: ['foo', 'bar'],          
     },
+    computed : {
+        years () {
+            const year = new Date().getFullYear()
+            return Array.from({length: year - 2023}, (value, index) => 2023 + index)
+        }
+    }
 
     mounted() {
         
+        axios.get(api_url + 'all-interview-schedules/' + this.selected_year, {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            },
+        })
+
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((e) => {
+            console.log("error");
+        });
+
 
 
 
