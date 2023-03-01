@@ -70,13 +70,7 @@ new Vue({
     },
 
     methods: {
-      
-
-
-        },
-        toggleModal: function() {
-            document.getElementById('modal').classList.toggle('hidden')
-        },
+    
 
     }
 
