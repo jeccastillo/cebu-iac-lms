@@ -1,4 +1,6 @@
 <link href="https://unpkg.com/vue-cal@legacy/dist/vuecal.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/vue2-datepicker/index.css">
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/vue@legacy"></script>
 <script src="https://unpkg.com/vue-cal@legacy"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
