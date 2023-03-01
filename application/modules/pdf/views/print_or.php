@@ -57,7 +57,7 @@
     <tr style="line-height:14px;">
         <td width="50%" style=""></td>
         <td width="20%" style=""></td>
-        <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php<?php echo number_format($total_amount_due,2,',');</td>
+        <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php<?php echo number_format($total_amount_due,2,','); ?></td>
     </tr>
 </table>
 <table >
