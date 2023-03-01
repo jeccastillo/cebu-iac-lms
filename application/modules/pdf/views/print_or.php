@@ -25,7 +25,7 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"></td>
-                    <td style="width:50%">yes</td>
+                    <td style="width:50%"><?php echo $is_cash?"yes":""; ?></td>
                 </tr>
             </table>
             <table>
@@ -36,7 +36,7 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"></td>
+                    <td style="width:50%"><?php echo !$is_cash?"yes":""; ?></td>
                 </tr>
             </table>
         </td>
