@@ -19,7 +19,7 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%;height:220px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>
-                    <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                    <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
             <table>
@@ -92,7 +92,7 @@
             </table>
             <table >
                 <tr style="line-height:20px;">
-                    <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                    <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
             <table >
@@ -104,7 +104,7 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;color:#666;">
                         <span style="color:#fff;">RECEIVED from &nbsp;</span>
-                        <?php echo $student_id." ".$student_name; ?>
+                        <?php echo $student_id."<br />".$student_name; ?>
                     </td>
                 </tr>
             </table>
