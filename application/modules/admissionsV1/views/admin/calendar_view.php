@@ -45,7 +45,7 @@ new Vue({
     computed : {
         years () {
             const year = new Date().getFullYear()
-            return Array.from({length: year - 2023}, (value, index) => 2023 + index)
+            return Array.from({length: year - 2023}, (value, index) => 2050 + index)
         }
     },
 
