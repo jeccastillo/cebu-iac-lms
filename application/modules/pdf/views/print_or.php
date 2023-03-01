@@ -16,9 +16,9 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <table style="height:55px;">
+            <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
-                    <td style="width:50%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
+                    <td style="width:50%;height:55px;"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
                     <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
@@ -35,8 +35,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
-                    <td style="width:50%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
-                    <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                    <td style="width:50%"></td>
+                    <td style="width:50%"></td>
                 </tr>
             </table>
         </td>
