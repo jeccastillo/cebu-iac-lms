@@ -133,7 +133,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:20px;">
+                <tr style="line-height:23px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -223,7 +223,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:80px;">
+                <tr style="line-height:100px;">
                     <td style=""></td>
                 </tr>
             </table>
