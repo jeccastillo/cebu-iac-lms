@@ -172,7 +172,58 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:170px;">
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">
+                    <td style="width:60%"></td>
+                    <td style="width:40%;font-size:8px;text-align:center;color:#666;">                        
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">
+                    <td style="width:60%"></td>
+                    <td style="width:40%;font-size:8px;text-align:center;color:#666;">
+                    <?php echo number_format($total_amount_due,2,'.',','); ?>
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">
+                    <td style="width:60%"></td>
+                    <td style="width:40%;font-size:8px;text-align:center;color:#666;">
+                        
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">
+                    <td style="width:60%"></td>
+                    <td style="width:40%;font-size:8px;text-align:center;color:#666;">
+                    <?php echo number_format($total_amount_due,2,'.',','); ?>
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:100px;">
                     <td style=""></td>
                 </tr>
             </table>
