@@ -1139,16 +1139,16 @@ class Pdf extends CI_Controller {
         $request = $this->input->post();
                 
         tcpdf();
-        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(260.5,180.5), true, 'UTF-8', false, true);
-        $pdf->setPageOrientation('L');
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(260.5,180.5), true, 'UTF-8', false, true);
+        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("OR");
     
     
         // set margins
-        $pdf->SetMargins(15, 15, 5);
+        $pdf->SetMargins(10, 10, 5);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         //$pdf->SetAutoPageBreak(TRUE, 6);
@@ -1164,7 +1164,11 @@ class Pdf extends CI_Controller {
         // This method has several options, check the source code documentation for more information.
 
         $pdf->AddPage();
-        $this->data['student_name'] = $request['student_name'];        
+        $this->data['student_name'] = strtoupper($request['student_name']);        
+        $this->data['student_id'] = $request['student_id'];        
+        $this->data['student_address'] = $request['student_address'];
+        $this->data['is_cash'] = $request['is_cash'];        
+        $this->data['check_number'] = $request['check_number'];        
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
         $this->data['description'] = $request['description'];
