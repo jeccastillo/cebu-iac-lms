@@ -242,7 +242,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Check Number:</label>
-                                                    <input type="text" :disabled="request.is_cash == '0'" required class="form-control" v-model="request.check_number" />
+                                                    <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Enter type if other is selected:</label>
