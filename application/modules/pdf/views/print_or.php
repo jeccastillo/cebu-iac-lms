@@ -66,6 +66,16 @@
             </table>
             <table >
                 <tr style="line-height:15px;">                    
+                    <td style="font-size:9px;text-align:left;color:#666;"></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
                         <span style="color:#fff;">the amount of pesos &nbsp;</span>
                         <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
@@ -95,17 +105,7 @@
     </tr>
 </table>
 
-<table >
-    <tr style="line-height:5px;">
-        <td style=""></td>
-    </tr>
-</table>
-<table >
-    <tr style="line-height:15px;">
-        <td style="width:40%"></td>
-        <td style="width:60%;font-size:9px;text-align:left;color:#666;"></td>
-    </tr>
-</table>
+
 
 
 <table >
