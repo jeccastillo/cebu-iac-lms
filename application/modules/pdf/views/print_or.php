@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:38px;">
+    <tr style="line-height:45px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
@@ -14,13 +14,14 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:3px;">
+    <tr style="line-height:30px;">
         <td style=""></td>
     </tr>
 </table>
 <table >
-    <tr style="line-height:55px;">
-        <td style="font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
+    <tr style="line-height:15px;">
+        <td witdh="50%">&nbsp;</td>
+        <td width="50%"style="font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
     </tr>
 </table>
 <table >
