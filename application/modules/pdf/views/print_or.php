@@ -10,7 +10,7 @@
 </table>
 <table >
     <tr style="line-height:38px;">
-        <td style=""><?php echo $or_number; ?></td>
+        <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
 <table >
@@ -25,7 +25,7 @@
 </table>
 <table >
     <tr style="line-height:55px;">
-        <td style="font-size:9px;text-align:left;color:#666;"><?php $student_name; ?></td>
+        <td style="font-size:9px;text-align:left;color:#666;"><?php echo $student_id." ".$student_name; ?></td>
     </tr>
 </table>
 <table >
