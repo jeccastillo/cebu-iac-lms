@@ -70,7 +70,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:5px;">
+                <tr style="line-height:10px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -89,8 +89,8 @@
             </table>
             <table >
                 <tr style="line-height:15px;">
-                    <td style="width:70%"></td>
-                    <td style="width:30%;font-size:10px;text-align:left;color:#666;">
+                    <td style="width:75%"></td>
+                    <td style="width:25%;font-size:10px;text-align:left;color:#666;">
                         <?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
