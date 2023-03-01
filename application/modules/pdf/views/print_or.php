@@ -8,13 +8,19 @@
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
-<table >
-    <tr style="line-height:12px;font-size:9px;text-align:right;color:#666;">
-        <td style="width:10%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
-        <td style="width:15%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+<table>
+    <tr>
+        <td style="width:30%">
+            <table>
+                <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
+                    <td style="width:50%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
+                    <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>
-<table >
+<table>
     <tr style="line-height:10px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
