@@ -18,7 +18,7 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
-                    <td style="width:50%;height:200px;"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
+                    <td style="width:50%;height:200px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>
                     <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
