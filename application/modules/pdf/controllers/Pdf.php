@@ -1171,7 +1171,7 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = $request['total_amount_due'] + 0.5;
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['transaction_date'] =  $request['transaction_date'];
-        
+        setlocale(LC_MONETARY, 'en_US');
         
         $html = $this->load->view("print_or",$this->data,true);
         //$html = $pdf->unhtmlentities($html);
