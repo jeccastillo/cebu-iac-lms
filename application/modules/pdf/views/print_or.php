@@ -19,7 +19,7 @@
             <table>
                 <tr style="line-height:12px;font-size:9px;text-align:left;color:#666;">
                     <td style="width:50%"><?php echo $description; ?> <?php echo $description == "Application Payment" ? "<br />Non-Refundable":""; ?></td>
-                    <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                    <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
         </td>
@@ -31,7 +31,7 @@
             </table>
             <table >
                 <tr style="line-height:20px;">
-                    <td style="font-size:9px;text-align:right;color:#666;">P<?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                    <td style="font-size:9px;text-align:right;color:#666;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
             <table >
@@ -133,7 +133,7 @@
     <tr style="line-height:15px;">
         <td width="50%" style="font-size:9px;color:#666;"></td>
         <td width="20%" style=""></td>
-        <td width="30%" style="font-size:9px;color:#666;text-align:center;">Php</td>
+        <td width="30%" style="font-size:9px;color:#666;text-align:center;"></td>
     </tr>
 </table>
 <table >
