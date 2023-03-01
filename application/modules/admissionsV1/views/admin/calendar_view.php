@@ -70,7 +70,7 @@ new Vue({
 
     methods: {
         updateList: function(){
-
+            console.log("update List");
             axios.get(api_url + 'interview-schedules/year/' + this.selected_year, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
