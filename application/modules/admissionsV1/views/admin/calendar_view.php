@@ -51,18 +51,18 @@ new Vue({
 
     mounted() {
         
-        axios.get(api_url + 'all-interview-schedules/' + this.selected_year, {
-            headers: {
-                Authorization: `Bearer ${window.token}`
-            },
-        })
+        // axios.get(api_url + 'all-interview-schedules/' + this.selected_year, {
+        //     headers: {
+        //         Authorization: `Bearer ${window.token}`
+        //     },
+        // })
 
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((e) => {
-            console.log("error");
-        });
+        // .then((data) => {
+        //     console.log(data);
+        // })
+        // .catch((e) => {
+        //     console.log("error");
+        // });
 
 
 
