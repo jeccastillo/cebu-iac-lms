@@ -235,8 +235,7 @@
                     <?php if($userlevel == "2" || $userlevel == "5"): ?>
                     <div class="text-right">
                         <button type="button"  data-toggle="modal" data-target="#setFISchedule"
-                            class=" btn btn-info">For
-                            Update/Set FI</button>
+                            class=" btn btn-info">Update/Set FI</button>
                         <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
                             @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
