@@ -35,7 +35,21 @@
                                             <input type="text" required class="form-control" v-model="request.contact_number" />
                                         </div>
                                     </div>                                                                                                          
-                                    
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Payment Type</label>
+                                            <select class="form-control" v-model="request.is_cash">
+                                                <option value="1">Cash</option>
+                                                <option value="0">Check</option>                                                        
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Check Number:</label>
+                                            <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
+                                        </div>
+                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Remarks:</label>
@@ -191,6 +205,8 @@ new Vue({
             charges: 0,       
             cashier_id: undefined,     
             status: 'Paid',
+            is_cash: undefined,            
+            check_number: undefined,
         },
         or_update:{
             id: undefined,
