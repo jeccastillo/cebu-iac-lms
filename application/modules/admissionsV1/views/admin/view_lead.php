@@ -346,14 +346,14 @@
                         <label for="inline-full-name">
                             Select Date and Time Slot
                         </label>
-                        <date-picker v-model="request_schedule.date"                            
+                        <date-picker v-model="request_sched.date"                            
                             format="YYYY-MM-DD"
                             type="date"
                             placeholder="Select date"
                         ></date-picker>
                         <date-picker :time-picker-options="
                                             reserve_time_picker_options
-                                        "  v-model="request_schedule.from" type="time" lang="en" format="hh:mm A"
+                                        "  v-model="request_sched.from" type="time" lang="en" format="hh:mm A"
                             @change="checkTime" placeholder="HH:MM AM" :input-attr="{
                                         required: true,
                                         id: 'time_from'
