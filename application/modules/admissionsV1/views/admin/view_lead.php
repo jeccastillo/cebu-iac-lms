@@ -494,6 +494,8 @@ new Vue({
             let time_from = moment(this.request_sched.from).format('LT');
             let time_to = moment(this.request_sched.from).add(30, 'minutes').format('LT');
             
+            this.request_sched.date = moment(this.request_sched.date).format("YYYY-MM-DD");
+            
             this.request_sched.slug = this.slug;
             this.request_sched.time_from = moment(time_from, ["h:mm A"]).format("HH:mm")
             this.request_sched.time_to = moment(time_to, ["h:mm A"]).format("HH:mm")
