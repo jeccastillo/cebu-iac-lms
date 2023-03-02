@@ -349,7 +349,10 @@
                         <label for="inline-full-name">
                             Select Date and Time Slot
                         </label>
-                        <date-picker v-model="request_sched.date"                            
+                        <date-picker v-model="request_sched.date"  :input-attr="{
+                                        required: true,
+                                        id: 'date'
+                                    }"                          
                             format="YYYY-MM-DD"
                             type="date"
                             placeholder="Select date"
