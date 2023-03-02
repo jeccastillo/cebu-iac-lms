@@ -361,7 +361,7 @@
                 </div>
                 <div class="form-group">
                         <label for="inline-full-name">
-                            Select Date
+                            Select Time
                         </label>
                         <date-picker :time-picker-options="
                                             reserve_time_picker_options
