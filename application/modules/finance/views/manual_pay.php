@@ -301,7 +301,7 @@ new Vue({
 
     methods: {      
         printOR: function(payment){
-            
+            console.log("PRINT");
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
@@ -386,10 +386,7 @@ new Vue({
                 
                 })
 
-        },
-        printOR: function(){
-            //pdf/print_or
-        },
+        },        
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
