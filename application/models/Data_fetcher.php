@@ -2133,17 +2133,30 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee'] = $total_internship_fee;   
         $data['other_discount'] = $other_scholarship;
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
-        $data['total'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee - $total_scholarship;
-        $data['total_installment'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee - $total_scholarship;
+        $data['total_before_deductions'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;
+        $data['total'] = $data['total_before_deductions'] - $total_scholarship;        
+        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;
+        $data['total_installment'] = $data['ti_before_deductions']  - $total_scholarship;
+        $data['scholarship_deductions'] = $total_scholarship;
         
         if($data['total'] == 0)
             $data['total_installment'] = 0;
         
-        $data['total_installment'] = round($data['total_installment'],2);        
+        $data['total_installment'] = round($data['total_installment'],2);   
+        $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
+        
         $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
         $data['down_payment'] = round($data['down_payment'],2);
+
+        $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
+        $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
+
+        $data['if_before_deductions'] = ($data['ti_before_deductions'] - $data['dp_before_deductions'])/5;
+        $data['if_before_deductions'] = round($data['if_before_deductions'],2);
+
         $data['class_type'] = $sem['classType'];
         
         
