@@ -349,7 +349,7 @@
                         <label for="inline-full-name">
                             Select Date
                         </label>
-                        <date-picker :input-attr="{
+                        <date-picker v-model="sched"  :input-attr="{
                                         required: true,
                                         id: 'date'
                                     }"        
@@ -444,7 +444,8 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
-        date_selected: "",
+        sched:"",
+        date_selected: "",        
         date_selected_formatted: "",
         reserve_time_picker_options: {
             start: "08:00",
