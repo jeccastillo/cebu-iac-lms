@@ -529,7 +529,7 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(res => {
-                                    
+                                    location.reload();
                                 });
 
                             } else {
