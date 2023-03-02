@@ -460,6 +460,22 @@ new Vue({
     },
 
     methods: {
+        checkTime: function() {
+
+        if (this.request.from && this.request.to) {
+            if (this.request.from >= this.request.to) {
+                Swal.fire(
+                    'Failed!',
+                    "Invalid time, please select valid time.",
+                    'error'
+                )
+
+                this.request.to = "";
+
+            }
+        }
+
+        },
         submitSchedule: function() {
 
             let time_from = moment(this.request.from).format('LT');
