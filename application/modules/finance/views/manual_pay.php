@@ -47,7 +47,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Check Number:</label>
-                                            <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
+                                            <input type="text" :disabled="request.is_cash != 0" required class="form-control" v-model="request.check_number" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -205,7 +205,7 @@ new Vue({
             charges: 0,       
             cashier_id: undefined,     
             status: 'Paid',
-            is_cash: undefined,            
+            is_cash: 1,            
             check_number: undefined,
         },
         or_update:{
