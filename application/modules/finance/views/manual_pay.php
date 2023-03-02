@@ -117,6 +117,11 @@
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
+                                        <button v-if="application_payment.or_number"                                             
+                                                @click="printOR(application_payment)" 
+                                                class="btn btn-primary">
+                                                Print OR
+                                        </button>
                                     </td>                                    
                                 </tr> 
                                 <tr v-if="reservation_payment">
@@ -135,6 +140,11 @@
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
+                                        <button v-if="reservation_payment.or_number"                                             
+                                                @click="printOR(reservation_payment)" 
+                                                class="btn btn-primary">
+                                                Print OR
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>                                            
@@ -145,6 +155,19 @@
                 </div><!---column--->
             </div><!---row--->
         </div><!---content container--->
+        <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'">
+            <input type="hidden" name="student_name" v-model="or_print.student_name">
+            <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+            <input type="hidden" name="student_id" v-model="or_print.student_id">
+            <input type="hidden" name="student_address" v-model="or_print.student_address">
+            <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+            <input type="hidden" name="check_number" v-model="or_print.check_number">
+            <input type="hidden" name="or_number" v-model="or_print.or_number" />
+            <input type="hidden" name="description" v-model="or_print.description" />
+            <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
+            <input type="hidden" name="name" v-model="or_print.student_name" />       
+            <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
+        </form>
         <div class="modal fade" id="myModal" role="dialog">
             <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
                 <!-- Modal content-->
@@ -185,6 +208,7 @@ new Vue({
         type: "<?php echo $type; ?>",
         slug: "<?php echo $slug; ?>",
         base_url: "<?php echo base_url(); ?>",   
+        applicant_id: undefined,
         reservation_payment: undefined,
         application_payment: undefined,
         cashier: undefined,
@@ -208,6 +232,19 @@ new Vue({
             is_cash: 1,            
             check_number: undefined,
         },
+        or_print: {
+            or_number: undefined,
+            description: undefined,
+            total_amount_due: undefined,
+            student_name: undefined,
+            transaction_date: undefined,
+            student_name: undefined,
+            student_address: undefined,
+            student_id: undefined,
+            is_cash: undefined,
+            cashier_id: undefined,
+            check_number: undefined,
+        },
         or_update:{
             id: undefined,
             or_number: undefined,
@@ -221,11 +258,15 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
+        const d = new Date();
+        let year = d.getFullYear();
+
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
             this.student = data.data.data;
-            this.request.slug = this.slug;
+            this.request.slug = this.slug;     
+            this.applicant_id = "A"+year+"-"+String(this.student.id).padStart(3, '0');       
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
@@ -259,6 +300,22 @@ new Vue({
     },
 
     methods: {      
+        printOR: function(payment){
+            
+            this.or_print.or_number = payment.or_number;
+            this.or_print.description = payment.description;
+            this.or_print.total_amount_due = payment.total_amount_due;
+            this.or_print.transaction_date = payment.updated_at;
+            this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
+            this.or_print.student_address = this.student.strAddress;
+            this.or_print.student_id = this.applicant_id;
+            this.or_print.is_cash = payment.is_cash;
+            this.or_print.check_number = payment.check_number;
+            this.or_print.cashier_id = payment.cashier_id;
+            this.$nextTick(() => {
+                this.$refs.print_or.submit();
+            });             
+        },
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
             .then((data) => {            
