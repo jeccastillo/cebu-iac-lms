@@ -551,8 +551,7 @@ new Vue({
                 })
 
         },  
-        printOR: function(payment){
-            console.log("TEST Print OR");
+        printOR: function(payment){            
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.total_amount_due;
