@@ -352,7 +352,8 @@
                         <date-picker v-model="request_sched.date"  :input-attr="{
                                         required: true,
                                         id: 'date'
-                                    }"                          
+                                    }"        
+                            @change="logEvents"                  
                             format="YYYY-MM-DD"
                             lang="en"
                             type="date"
@@ -443,6 +444,7 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
+        date_selected_formatted: "",
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -474,18 +476,24 @@ new Vue({
     methods: {
         checkTime: function() {
 
-        if (this.request.from && this.request.to) {
-            if (this.request.from >= this.request.to) {
-                Swal.fire(
-                    'Failed!',
-                    "Invalid time, please select valid time.",
-                    'error'
-                )
+            if (this.request.from && this.request.to) {
+                if (this.request.from >= this.request.to) {
+                    Swal.fire(
+                        'Failed!',
+                        "Invalid time, please select valid time.",
+                        'error'
+                    )
 
-                this.request.to = "";
+                    this.request.to = "";
 
+                }
             }
-        }
+
+        },
+        logEvents: function(event, data) {
+            // console.log(event, data);
+            this.date_selected = moment(data).format("MMMM DD, YYYY");
+            this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
 
         },
         submitSchedule: function() {
