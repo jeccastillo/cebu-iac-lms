@@ -275,9 +275,9 @@ new Vue({
 
             axios
                 .post(api_url + 'admissions/student-info/requirements', this.uploads, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
+                    // headers: {
+                    //     Authorization: `Bearer ${window.token}`
+                    // }
                 })
                 .then(data => {
                     this.is_done = true;
