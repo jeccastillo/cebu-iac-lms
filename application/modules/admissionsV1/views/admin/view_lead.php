@@ -1,3 +1,9 @@
+
+<link rel="stylesheet" href="https://unpkg.com/vue2-datepicker/index.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<script src="https://unpkg.com/vue2-datepicker/index.min.js"></script>
+<script src="https://unpkg.com/vue2-datepicker/locale/zh-cn.js"></script>
+
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
         <h1>
@@ -325,6 +331,46 @@
     </div>
 
 
+    <div class="modal fade" id="setFISchedule" role="dialog">
+        <form @submit.prevent="submitSchedule" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update FI Schedule</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inline-full-name">
+                            Select Date and Time Slot
+                        </label>
+                        <date-picker v-model="request_schedule.date"                            
+                            format="YYYY-MM-DD"
+                            type="date"
+                            placeholder="Select date"
+                        ></date-picker>
+                        <date-picker :time-picker-options="
+                                            reserve_time_picker_options
+                                        "  v-model="request_schedule.from" type="time" lang="en" format="hh:mm A"
+                            @change="checkTime" placeholder="HH:MM AM" :input-attr="{
+                                        required: true,
+                                        id: 'time_from'
+                                    }"
+                            input-class="form-control">
+                        </date-picker>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
@@ -367,15 +413,29 @@
 <script>
 new Vue({
     el: '#applicant-container',
+    components: {        
+        'date-picker': DatePicker
+    },
     data: {
         request: {
             uploaded_requirements: []
+        },
+        request_sched: {
+            from: "",
+            to: "",
+            date: "",
+            slug: "",
         },
         loader_spinner: true,
         type: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
+        reserve_time_picker_options: {
+            start: "08:00",
+            step: "00:30",
+            end: "16:00"
+        },
     },
 
     mounted() {
@@ -400,7 +460,64 @@ new Vue({
     },
 
     methods: {
+        submitSchedule: function() {
 
+            let time_from = moment(this.request.from).format('LT');
+            let time_to = moment(this.request.from).add(30, 'minutes').format('LT');
+
+            this.request_sched.date = this.date_selected_formatted;
+            this.request_sched.slug = this.slug;
+            this.request_sched.time_from = moment(time_from, ["h:mm A"]).format("HH:mm")
+            this.request_sched.time_to = moment(time_to, ["h:mm A"]).format("HH:mm")
+
+
+
+            Swal.fire({
+                title: "Submit Schedule",
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios
+                        .post(api_url + 'interview-schedules', this.request, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.is_done = true;
+
+                            if (data.data.success) {
+
+                                Swal.fire({
+                                    title: "SUCCESS",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(res => {
+                                    window.location =
+                                        "<?php echo base_url();?>site/awesome/sched"
+                                });
+
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {}
+            })
+            },
         updateStatus: function() {
 
 
