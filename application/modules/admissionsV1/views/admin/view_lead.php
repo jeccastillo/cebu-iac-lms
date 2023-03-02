@@ -348,11 +348,10 @@
                         <label for="inline-full-name">
                             Select Date
                         </label>
-                        <date-picker v-model="sched"  :input-attr="{
+                        <date-picker v-model="request_sched.date"  :input-attr="{
                                         required: true,
                                         id: 'date'
-                                    }"        
-                            @change="logEvents"                  
+                                    }"                                              
                             format="YYYY-MM-DD"
                             lang="en"
                             type="date"
@@ -435,8 +434,6 @@ new Vue({
         request_sched: {
             from: "",
             to: "",
-            date: "",
-            slug: "",
         },
         loader_spinner: true,
         type: "",
@@ -491,18 +488,12 @@ new Vue({
             }
 
         },
-        logEvents: function(event, data) {
-            // console.log(event, data);
-            this.date_selected = moment(data).format("MMMM DD, YYYY");
-            this.date_selected_formatted = moment(data).format("YYYY-MM-DD");
-
-        },
+       
         submitSchedule: function() {
 
-            let time_from = moment(this.request.from).format('LT');
-            let time_to = moment(this.request.from).add(30, 'minutes').format('LT');
-
-            this.request_sched.date = this.date_selected_formatted;
+            let time_from = moment(this.request_sched.from).format('LT');
+            let time_to = moment(this.request_sched.from).add(30, 'minutes').format('LT');
+            
             this.request_sched.slug = this.slug;
             this.request_sched.time_from = moment(time_from, ["h:mm A"]).format("HH:mm")
             this.request_sched.time_to = moment(time_to, ["h:mm A"]).format("HH:mm")
