@@ -536,8 +536,7 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(res => {
-                                    window.location =
-                                        "<?php echo base_url();?>site/awesome/sched"
+                                    
                                 });
 
                             } else {
