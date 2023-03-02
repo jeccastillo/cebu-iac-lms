@@ -349,7 +349,7 @@
                         <label for="inline-full-name">
                             Select Date
                         </label>
-                        <date-picker v-model="date_selected"  :input-attr="{
+                        <date-picker :input-attr="{
                                         required: true,
                                         id: 'date'
                                     }"        
