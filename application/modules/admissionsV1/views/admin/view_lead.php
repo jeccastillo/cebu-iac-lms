@@ -521,7 +521,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     return axios
-                        .post(api_url + 'interview-schedules', this.request_sched, {
+                        .post(api_url + 'interview-schedules/admin/admissions', this.request_sched, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
