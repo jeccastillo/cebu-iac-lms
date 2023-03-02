@@ -354,6 +354,7 @@
                                         id: 'date'
                                     }"                          
                             format="YYYY-MM-DD"
+                            lang="en"
                             type="date"
                             placeholder="Select date"
                         ></date-picker>
