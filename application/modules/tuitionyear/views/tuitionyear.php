@@ -45,10 +45,13 @@
                                 <input step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentIncrease'>
                             </div>                            
                             <div class="form-group col-sm-6">
-                                <label for="year">Percent Installment for DP</label>
+                                <label for="year">Percent Down Payment for Installment</label>
                                 <input step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentDP'>
-                            </div>       
-                            
+                            </div> 
+                            <div class="form-group col-sm-6">
+                                <label for="year">Fixed Down Payment for Installment (if blank or set to 0 to choose percent down payment)</label>
+                                <input step="any" type="number" class="form-control" placeholder="Enter Fixed Value" v-model='request.installmentFixed'>
+                            </div>                                   
                             <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
                                 <label for="isDefault">Default Tuition</label>
                                 <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
@@ -231,6 +234,7 @@ new Vue({
             pricePerUnitHybrid: undefined,
             installmentIncrease: undefined,
             installmentDP: undefined,
+            installmentFixed: undefined,
             misc: [],
             lab_fees: [],
             isDefault: 0,            
@@ -396,6 +400,7 @@ new Vue({
                     formdata.append("isDefault",this.request.isDefault);
                     formdata.append("installmentIncrease", this.request.installmentIncrease);
                     formdata.append("installmentDP", this.request.installmentDP);
+                    formdata.append("installmentFixed", this.request.installmentFixed);
                     
                     return axios
                         .post('<?php echo base_url(); ?>tuitionyear/submit_form/' + this.id,formdata, {

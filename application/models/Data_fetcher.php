@@ -2145,11 +2145,20 @@ class Data_fetcher extends CI_Model {
         $data['total_installment'] = round($data['total_installment'],2);   
         $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
         
-        $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
-        $data['down_payment'] = round($data['down_payment'],2);
+        if(!isset($tuition_year['installmentFixed']) || $tuition_year['installmentFixed'] == 0){
+            $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
+            $data['down_payment'] = round($data['down_payment'],2);
 
-        $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
-        $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+            $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
+            $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+        }
+        else{
+            $data['down_payment'] = $tuition_year['installmentFixed'];
+            $data['down_payment'] = round($data['down_payment'],2);
+
+            $data['dp_before_deductions'] = $tuition_year['installmentFixed'];
+            $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+        }
 
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee'] = round($data['installment_fee'],2);
