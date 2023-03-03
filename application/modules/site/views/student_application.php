@@ -633,7 +633,7 @@
                            </label>
                            <ul class="text-sm font-medium bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">    
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200" v-for="t in programs" :key="t.id">
-                                    <div class="d-flex flex items-center align-items-center">
+                                    <div class="flex items-center pl-3">
                                         <input type="checkbox" class="admissions_submission_cb h-4 w-4" :id="'progId-' + t.id"
                                             @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
                                         <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
@@ -641,35 +641,7 @@
                                 </li>
                             </ul>
                        </div>
-                   </div>
-
-                   <!-- <div class="mb-6 hidden">
-                       <div class="md:w-4/5">
-                           <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                               Applying For <span class="text-red-500">*</span>
-                           </label>
-                           <div class="d-flex align-items-center">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
-                                   required />
-                               Software Engineering
-                           </div>
-                           <div class="d-flex align-items-center">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
-                                   required />
-                               Game Development
-                           </div>
-                           <div class="d-flex align-items-center">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
-                                   required />
-                               Animation
-                           </div>
-                           <div class="d-flex align-items-center">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb" name="" value="1"
-                                   required />
-                               Multimedia Arts and Design
-                           </div>
-                       </div>
-                   </div> -->
+                   </div>                   
 
                    <div class="mb-6">
                        <div class="md:w-4/5">
