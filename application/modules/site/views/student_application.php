@@ -439,13 +439,13 @@
                                 Additional Information
                         </label>
                         <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                            <label for="" class="mb-2"
+                            <label for="" 
                                 >Do you hold good moral standing in your
                                 previous school?
                                 <span class="text-danger">*</span>
                             </label>
 
-                            <div>
+                            <div class="mt-2">
                                 <input
                                     type="radio"
                                     required
