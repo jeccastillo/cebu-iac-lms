@@ -94,6 +94,7 @@
                                         <tr>
                                             <th>OR Number</th>
                                             <th>Payment Type</th>
+                                            <th>Check/Credit/Debit #</th>
                                             <th>Amount Paid</th>
                                             <th>Online Payment Charge</th>
                                             <th>Total Due</th>
@@ -104,6 +105,7 @@
                                         <tr v-if="application_payment">
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
+                                            <td>{{ application_payment.check_number }}</td>
                                             <td>{{ application_payment.subtotal_order }}</td>
                                             <td>{{ application_payment.charges }}</td>
                                             <td>{{ application_payment.total_amount_due }}</td>
@@ -125,6 +127,7 @@
                                         <tr v-if="reservation_payment">
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
+                                            <td>{{ reservation_payment.check_number }}</td>
                                             <td>{{ reservation_payment.subtotal_order }}</td>
                                             <td>{{ reservation_payment.charges }}</td>
                                             <td>{{ reservation_payment.total_amount_due }}</td>
@@ -151,6 +154,7 @@
                                         <tr v-for="payment in other_payments">
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
+                                            <td>{{ payment.check_number }}</td>
                                             <td>{{ payment.subtotal_order }}</td>
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
@@ -179,6 +183,7 @@
                                         <tr v-for="payment in payments">
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
+                                            <td>{{ payment.check_number }}</td>
                                             <td>{{ payment.subtotal_order }}</td>
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
@@ -556,7 +561,7 @@ new Vue({
         printOR: function(payment){            
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
-            this.or_print.total_amount_due = payment.total_amount_due;
+            this.or_print.total_amount_due = payment.subtotal_order;
             this.or_print.transaction_date = payment.updated_at;
             this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
             this.or_print.student_address = this.student.strAddress;
