@@ -55,7 +55,8 @@
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
                         <th>Faculty</th>                        
-                        <th>Finalized Status</th>                                                
+                        <th>Finalized Status</th>   
+                        <th>Actions</th>                                             
                     </tr>
                         </tfoot>
                 </table>
