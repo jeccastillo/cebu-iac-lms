@@ -434,7 +434,7 @@
                         </div>
 
 
-                    <div class="form-group mb-6">
+                    <div class="form-group mb-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Additional Information
                         </label>
