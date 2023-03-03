@@ -470,33 +470,35 @@
                     </div>
 
                     <div class="form-group  mb-6">
-                        <label for="" class="mb-2"
-                            >Have you been involved of any illegal
-                            activities?
-                            <span class="text-danger">*</span>
-                        </label>
+                        <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                            <label for=""
+                                >Have you been involved of any illegal
+                                activities?
+                                <span class="text-danger">*</span>
+                            </label>
 
-                        <div>
-                            <input
-                                type="radio"
-                                required
-                                name="crime"
-                                v-model="request.crime"
-                                value="Yes"
-                            />
-                            Yes
-                        </div>
+                            <div  class="mt-2">
+                                <input
+                                    type="radio"
+                                    required
+                                    name="crime"
+                                    v-model="request.crime"
+                                    value="Yes"
+                                />
+                                Yes
+                            </div>
 
-                        <div>
-                            <input
-                                type="radio"
-                                required
-                                name="crime"
-                                value="No"
-                                v-model="request.crime"
-                            />
-                            No
-                        </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="crime"
+                                    value="No"
+                                    v-model="request.crime"
+                                />
+                                No
+                            </div>
+                        </div>   
                     </div>      
                     <div class="mb-5">                        
                         <div class="form-group mb-6">
