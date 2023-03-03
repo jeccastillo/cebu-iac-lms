@@ -434,36 +434,38 @@
                         </div>
 
 
-                    <div class="form-group mb-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                    <div class="form-group mb-6">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Additional Information
                         </label>
-                        <label for="" class="mb-2"
-                            >Do you hold good moral standing in your
-                            previous school?
-                            <span class="text-danger">*</span>
-                        </label>
+                        <div class="bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                            <label for="" class="mb-2"
+                                >Do you hold good moral standing in your
+                                previous school?
+                                <span class="text-danger">*</span>
+                            </label>
 
-                        <div>
-                            <input
-                                type="radio"
-                                required
-                                name="good_moral"
-                                v-model="request.good_moral"
-                                value="Yes"
-                            />
-                            Yes
-                        </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="good_moral"
+                                    v-model="request.good_moral"
+                                    value="Yes"
+                                />
+                                Yes
+                            </div>
 
-                        <div>
-                            <input
-                                type="radio"
-                                required
-                                name="good_moral"
-                                value="No"
-                                v-model="request.good_moral"
-                            />
-                            No
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="good_moral"
+                                    value="No"
+                                    v-model="request.good_moral"
+                                />
+                                No
+                            </div>
                         </div>
                     </div>
 
