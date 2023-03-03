@@ -96,7 +96,7 @@
                                     <th>OR Number</th>
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
-                                    <th>Check Number</th>
+                                    <th>Check/Credit/Debit #</th>
                                     <th>Amount Paid</th>
                                     <th>Online Payment Charge</th>
                                     <th>Total Due</th>
