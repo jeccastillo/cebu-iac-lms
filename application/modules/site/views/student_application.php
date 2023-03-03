@@ -64,7 +64,7 @@
            <div class="flex md:space-x-5 mb-6 mt-10">
                <div class="md:w-1/2 w-full">
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Email <span class="text-red-500">*</span>
                            </label>
@@ -75,7 +75,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Re-type Email <span class="text-red-500">*</span>
                            </label>
@@ -86,7 +86,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                First Name <span class="text-red-500">*</span>
                            </label>
@@ -97,7 +97,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Middle Name
                            </label>
@@ -108,7 +108,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Last Name <span class="text-red-500">*</span>
                            </label>
@@ -119,7 +119,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Mobile Number <span class="text-red-500">*</span>
                            </label>
@@ -133,7 +133,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Telephone Number
                            </label>
@@ -147,7 +147,7 @@
                    </div>
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Address <span class="text-red-500">*</span>
                            </label>
@@ -160,7 +160,7 @@
 
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Birthday <span class="text-red-500">*</span>
                            </label>
@@ -171,7 +171,7 @@
                    </div>
 
                     <div class="form-group mb-6">
-                        <div class="md:w-4/5">
+                        <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Country of citizenship
                                 <span class="text-red-500">*</span>
@@ -438,7 +438,7 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Additional Information
                         </label>
-                        <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                        <div class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
                             <label for="" 
                                 >Do you hold good moral standing in your
                                 previous school?
@@ -470,7 +470,7 @@
                     </div>
 
                     <div class="form-group  mb-6">
-                        <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                        <div class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
                             <label for=""
                                 >Have you been involved of any illegal
                                 activities?
@@ -505,7 +505,7 @@
                             <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Health Conditions                                
                             </label>             
-                            <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                            <div class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
                                 <label for=""
                                     >Have you been hospitalized before?
                                     <span class="text-danger">*</span>
@@ -535,7 +535,7 @@
                             </div>
                         </div>
                         <div
-                            class="form-group md:w-4/5  mb-6"
+                            class="form-group md:w-5/5"
                             v-if="request.hospitalized == 'Yes'"
                         >
                             <label for=""
@@ -549,8 +549,8 @@
                             />
                         </div>
 
-                        <div class="form-group mb-6">
-                            <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                        <div class="form-group mb-6 mt-6">
+                            <div class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
                                 <label for=""
                                     >Do you have any of the following? (check
                                     all that apply)                                
@@ -621,7 +621,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group md:w-4/5">
+                        <div class="form-group md:w-5/5">
                             <label for="">Other health concerns/conditions the school
                                 should know about (Type None if you do not have any)
                                 <span class="text-danger">*</span>
@@ -635,7 +635,7 @@
                         </div>
                     </div>
                     <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
@@ -652,7 +652,7 @@
                    </div>                   
 
                    <div class="mb-6">
-                       <div class="md:w-4/5">
+                       <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Previous School <span class="text-red-500">*</span>
                            </label>
