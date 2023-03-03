@@ -182,7 +182,7 @@
                         <div class="form-group">
                             <label>OR Number <span class="text-danger">*</span> </label>
                             <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
-                            <h4>{{ or_update.or_number }}</h4>
+                            <h4>{{ String(or_update.or_number).padStart(4, '0') }}</h4>
                         </div>
                     </div>
                     <div class=" modal-footer">
