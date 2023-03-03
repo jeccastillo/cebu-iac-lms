@@ -636,7 +636,7 @@
                                     <div class="flex items-center pl-3">
                                         <input type="checkbox" class="admissions_submission_cb h-4 w-4" :id="'progId-' + t.id"
                                             @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
-                                        <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
+                                        <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }}</label>
                                     </div>
                                 </li>
                             </ul>
