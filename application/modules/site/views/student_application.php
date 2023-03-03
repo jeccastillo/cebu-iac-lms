@@ -435,6 +435,9 @@
 
 
                     <div class="form-group mb-6">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                                Additional Information
+                        </label>
                         <label for="" class="mb-2"
                             >Do you hold good moral standing in your
                             previous school?
@@ -496,11 +499,9 @@
                     <div class="mb-5">
                         <hr />
                         <div class="form-group mb-6">
-                            <h4 class="mb-3">
-                                Health Conditions
-                                <span class="text-danger"></span>
-                            </h4>
-
+                            <label class="block t color-primary font-bold  mb-3  pr-4">
+                                Health Conditions                                
+                            </label>             
                             <label for=""
                                 >Have you been hospitalized before?
                                 <span class="text-danger">*</span>
