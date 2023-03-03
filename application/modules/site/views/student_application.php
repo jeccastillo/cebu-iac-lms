@@ -622,9 +622,10 @@
                         </div>
 
                         <div class="form-group md:w-5/5">
-                            <label for="">Other health concerns/conditions the school
+                            <label class="block t color-primary font-bold  mb-3  pr-4" for="">
+                                Other health concerns/conditions the school
                                 should know about (Type None if you do not have any)
-                                <span class="text-danger">*</span>
+                                <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="text"
