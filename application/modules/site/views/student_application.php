@@ -501,7 +501,7 @@
                         </div>   
                     </div>      
                     <div class="mb-5">                        
-                        <div class="form-group mb-6">
+                        <div class="form-group">
                             <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Health Conditions                                
                             </label>             
@@ -535,7 +535,7 @@
                             </div>
                         </div>
                         <div
-                            class="form-group md:w-4/5"
+                            class="form-group md:w-4/5  mb-6"
                             v-if="request.hospitalized == 'Yes'"
                         >
                             <label for=""
@@ -550,72 +550,74 @@
                         </div>
 
                         <div class="form-group mb-6">
-                            <label for=""
-                                >Do you have any of the following? (check
-                                all that apply)                                
-                            </label>
+                            <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                                <label for=""0
+                                    >Do you have any of the following? (check
+                                    all that apply)                                
+                                </label>
 
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="health_concern"
-                                    v-model="request.health_concerns"
-                                    value="Diabetes"                                  
-                                />
-                                Diabetes
-                            </div>
+                                <div class="mt-2">
+                                    <input
+                                        type="checkbox"
+                                        name="health_concern"
+                                        v-model="request.health_concerns"
+                                        value="Diabetes"                                  
+                                    />
+                                    Diabetes
+                                </div>
 
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="health_concern"
-                                    value="Allergies"
-                                    v-model="request.health_concerns"
-                                />
-                                Allergies
-                            </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        name="health_concern"
+                                        value="Allergies"
+                                        v-model="request.health_concerns"
+                                    />
+                                    Allergies
+                                </div>
 
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="health_concern"
-                                    value="High Blood"
-                                    v-model="request.health_concerns"
-                                />
-                                High Blood
-                            </div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="health_concern"
-                                    value="Anemia"
-                                    v-model="request.health_concerns"
-                                />
-                                Anemia
-                            </div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    name="health_concern"
-                                    value="Others"
-                                    v-model="request.health_concerns"
-                                />
-                                Others (please specify)
-                            </div>
-                            <div
-                                v-if="
-                                    request.health_concerns.includes(
-                                        'Others'
-                                    )
-                                "
-                            >
-                                <input                                    
-                                    type="text"
-                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    required
-                                    value=""
-                                    v-model="request.health_concern_other"
-                                />
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        name="health_concern"
+                                        value="High Blood"
+                                        v-model="request.health_concerns"
+                                    />
+                                    High Blood
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        name="health_concern"
+                                        value="Anemia"
+                                        v-model="request.health_concerns"
+                                    />
+                                    Anemia
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        name="health_concern"
+                                        value="Others"
+                                        v-model="request.health_concerns"
+                                    />
+                                    Others (please specify)
+                                </div>
+                                <div
+                                    v-if="
+                                        request.health_concerns.includes(
+                                            'Others'
+                                        )
+                                    "
+                                >
+                                    <input                                    
+                                        type="text"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        required
+                                        value=""
+                                        v-model="request.health_concern_other"
+                                    />
+                                </div>
                             </div>
                         </div>
 
