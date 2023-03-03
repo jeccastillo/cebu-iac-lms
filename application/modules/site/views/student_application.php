@@ -551,7 +551,7 @@
 
                         <div class="form-group mb-6">
                             <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                                <label for=""0
+                                <label for=""
                                     >Do you have any of the following? (check
                                     all that apply)                                
                                 </label>
