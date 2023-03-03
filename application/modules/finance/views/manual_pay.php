@@ -3,6 +3,7 @@
     <div id="vue-container">
         <section class="content-header">
             <h1>
+                {{ student.first_name+" "+student.last_name+", "+student.middle_name }}
                 <small>
                     <a class="btn btn-app" :href="base_url + 'admissionsV1/view_all_leads'" ><i class="ion ion-arrow-left-a"></i>All Students Applicants</a>                                                                                                                     
                 </small>
