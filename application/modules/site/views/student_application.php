@@ -495,7 +495,7 @@
                     </div>      
                     <div class="mb-5">
                         <hr />
-                        <div class="form-group">
+                        <div class="form-group mb-6">
                             <h4 class="mb-3">
                                 Health Conditions
                                 <span class="text-danger"></span>
