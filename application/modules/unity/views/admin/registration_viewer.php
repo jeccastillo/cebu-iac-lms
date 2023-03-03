@@ -362,7 +362,7 @@ new Vue({
             contact_number: '',
             email_address: '',
             mode_of_payment_id: 26,
-            description: 'Tuition Full', 
+            description: undefined, 
             or_number:'',
             remarks:'',
             subtotal_order: 0,
