@@ -206,6 +206,7 @@
 new Vue({
     el: '#vue-container',
     data: {
+        student: undefined,
         type: "<?php echo $type; ?>",
         slug: "<?php echo $slug; ?>",
         base_url: "<?php echo base_url(); ?>",   
