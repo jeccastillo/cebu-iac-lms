@@ -505,31 +505,33 @@
                             <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Health Conditions                                
                             </label>             
-                            <label for=""
-                                >Have you been hospitalized before?
-                                <span class="text-danger">*</span>
-                            </label>
+                            <div class="md:w-4/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                                <label for=""
+                                    >Have you been hospitalized before?
+                                    <span class="text-danger">*</span>
+                                </label>
 
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="hospitalized"
-                                    v-model="request.hospitalized"
-                                    value="Yes"
-                                />
-                                Yes
-                            </div>
+                                <div class="mt-2">
+                                    <input
+                                        type="radio"
+                                        required
+                                        name="hospitalized"
+                                        v-model="request.hospitalized"
+                                        value="Yes"
+                                    />
+                                    Yes
+                                </div>
 
-                            <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="hospitalized"
-                                    value="No"
-                                    v-model="request.hospitalized"
-                                />
-                                No
+                                <div>
+                                    <input
+                                        type="radio"
+                                        required
+                                        name="hospitalized"
+                                        value="No"
+                                        v-model="request.hospitalized"
+                                    />
+                                    No
+                                </div>
                             </div>
                         </div>
                         <div
