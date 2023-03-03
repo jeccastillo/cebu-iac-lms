@@ -292,7 +292,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
                     <td width="264px" style= "font-size:9;">Note: Class schedule is subject to change</td>
-                    <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' '.$user['strFirstname'].' by '.$user['strLastname'].'</td>            
+                    <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
