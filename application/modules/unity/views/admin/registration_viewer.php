@@ -237,11 +237,13 @@
                                                     <label>Payment Type</label>
                                                     <select class="form-control" v-model="request.is_cash">
                                                         <option value="1">Cash</option>
-                                                        <option value="0">Check</option>                                                        
+                                                        <option value="0">Check</option> 
+                                                        <option value="2">Credit Card</option>
+                                                        <option value="3">Debit Card</option>                                                       
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Check Number:</label>
+                                                    <label>Check/Credit/Debit Number:</label>
                                                     <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
                                                 </div>
                                                 <div class="form-group">

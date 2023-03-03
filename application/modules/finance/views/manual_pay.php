@@ -42,15 +42,17 @@
                                             <select class="form-control" v-model="request.is_cash">
                                                 <option value="1">Cash</option>
                                                 <option value="0">Check</option>                                                        
+                                                <option value="2">Credit Card</option>
+                                                <option value="3">Debit Card</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Check Number:</label>
-                                            <input type="text" :disabled="request.is_cash != 0" required class="form-control" v-model="request.check_number" />
+                                            <label>Check/Credit/Debit Number:</label>
+                                            <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
                                         </div>
-                                    </div>
+                                    </div>                                   
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Remarks:</label>
@@ -94,6 +96,7 @@
                                     <th>OR Number</th>
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
+                                    <th>Check Number</th>
                                     <th>Amount Paid</th>
                                     <th>Online Payment Charge</th>
                                     <th>Total Due</th>
