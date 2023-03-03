@@ -544,7 +544,7 @@
                             />
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-6">
                             <label for=""
                                 >Do you have any of the following? (check
                                 all that apply)                                
