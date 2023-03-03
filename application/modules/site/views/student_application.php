@@ -631,7 +631,7 @@
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
-                           <ul class="font-medium bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">    
+                           <ul class="font-light bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">    
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200" v-for="t in programs" :key="t.id">
                                     <div class="flex items-center pl-3">
                                         <input type="checkbox" class="admissions_submission_cb" :id="'progId-' + t.id"
