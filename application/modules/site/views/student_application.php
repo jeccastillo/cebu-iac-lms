@@ -496,8 +496,7 @@
                             No
                         </div>
                     </div>      
-                    <div class="mb-5">
-                        <hr />
+                    <div class="mb-5">                        
                         <div class="form-group mb-6">
                             <label class="block t color-primary font-bold  mb-3  pr-4">
                                 Health Conditions                                
