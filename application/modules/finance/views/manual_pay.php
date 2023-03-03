@@ -315,7 +315,7 @@ new Vue({
             this.or_print.total_amount_due = payment.subtotal_order;
             this.or_print.transaction_date = payment.updated_at;
             this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
-            this.or_print.student_address = this.student.strAddress;
+            this.or_print.student_address = this.student.address;
             this.or_print.student_id = this.applicant_id;
             this.or_print.is_cash = payment.is_cash;
             this.or_print.check_number = payment.check_number;
