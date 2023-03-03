@@ -621,7 +621,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group md:w-4/5">
                             <label for="">Other health concerns/conditions the school
                                 should know about (Type None if you do not have any)
                                 <span class="text-danger">*</span>
