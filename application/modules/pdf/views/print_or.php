@@ -211,8 +211,8 @@
             </table>
             <table >
                 <tr style="line-height:15px;">
-                    <td style="width:60%"></td>
-                    <td style="width:40%;font-size:10px;text-align:center;color:#666;">
+                    <td style="width:50%"></td>
+                    <td style="width:50%;font-size:10px;text-align:center;color:#666;">
                     <?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
