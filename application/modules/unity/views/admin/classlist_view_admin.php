@@ -37,6 +37,7 @@
                         <th>Section - Sub</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
+                        <th>Actions</th>
 <!--                        <th>No. of Students</th>-->
                         <!--th>Change Status</th-->                        
                     </tr>
