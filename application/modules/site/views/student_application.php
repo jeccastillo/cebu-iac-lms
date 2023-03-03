@@ -633,10 +633,10 @@
                            </label>
                            <ul class="text-sm font-medium bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">    
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200" v-for="t in programs" :key="t.id">
-                                    <div class="d-flex flex items-center align-items-center pl-3 py-3">
-                                        <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
+                                    <div class="d-flex flex items-center align-items-center">
+                                        <input type="checkbox" class="admissions_submission_cb h-4 w-4" :id="'progId-' + t.id"
                                             @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
-                                        <label :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
+                                        <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
                                     </div>
                                 </li>
                             </ul>
