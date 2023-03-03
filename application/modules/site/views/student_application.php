@@ -634,7 +634,7 @@
                            <ul class="text-sm font-medium bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">    
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200" v-for="t in programs" :key="t.id">
                                     <div class="d-flex flex items-baseline align-items-center pl-3" >
-                                        <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
+                                        <input type="checkbox" class="mr-2 admissions_submission_cb w-4 h-4" :id="'progId-' + t.id"
                                             @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
                                         <label :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
                                     </div>
