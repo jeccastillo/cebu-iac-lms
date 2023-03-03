@@ -109,6 +109,7 @@
                                     <td>{{ application_payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
                                     <td>{{ application_payment.description }}</td>
+                                    <td>{{ application_payment.check_number }}</td>
                                     <td>{{ application_payment.subtotal_order }}</td>
                                     <td>{{ application_payment.charges }}</td>
                                     <td>{{ application_payment.total_amount_due }}</td>
@@ -132,6 +133,7 @@
                                     <td>{{ reservation_payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(reservation_payment.cashier_id)">{{ reservation_payment.cashier_id }}</a></td>
                                     <td>{{ reservation_payment.description }}</td>
+                                    <td>{{ reservation_payment.check_number }}</td>
                                     <td>{{ reservation_payment.subtotal_order }}</td>
                                     <td>{{ reservation_payment.charges }}</td>
                                     <td>{{ reservation_payment.total_amount_due }}</td>
@@ -310,7 +312,7 @@ new Vue({
             console.log("PRINT");
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
-            this.or_print.total_amount_due = payment.total_amount_due;
+            this.or_print.total_amount_due = payment.subtotal_order;
             this.or_print.transaction_date = payment.updated_at;
             this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
             this.or_print.student_address = this.student.strAddress;
