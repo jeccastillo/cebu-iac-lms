@@ -22,7 +22,7 @@
                                 <form @submit.prevent="submitManualPayment" method="post">                                                
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Payment Type</label>
+                                            <label>Select payment for</label>
                                             <select required @change="selectDescription" class="form-control" v-model="request.description">
                                                 <option v-if="application_payment && application_payment.status == 'Paid'" value="Reservation Payment">Reservation</option>
                                                 <option value="Application Payment">Application</option>                                
