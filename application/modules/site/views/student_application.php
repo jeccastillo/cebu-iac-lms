@@ -435,7 +435,7 @@
 
 
                     <div class="form-group mb-6">
-                        <label for=""
+                        <label for="" class="mb-2"
                             >Do you hold good moral standing in your
                             previous school?
                             <span class="text-danger">*</span>
@@ -465,7 +465,7 @@
                     </div>
 
                     <div class="form-group  mb-6">
-                        <label for=""
+                        <label for="" class="mb-2"
                             >Have you been involved of any illegal
                             activities?
                             <span class="text-danger">*</span>
