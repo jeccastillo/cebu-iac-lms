@@ -2159,7 +2159,7 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         $classlist = current($this->data_fetcher->fetch_classlist_delete($post['id']));
         
-        if($classlist['intFinalized'] != 1 && ($classlist['intFacultyID']==$this->session->userdata("intID") || $this->is_super_admin()))
+        if($classlist['intFinalized'] != 1 && ($classlist['intFacultyID']==$this->session->userdata("intID") || $this->is_super_admin() || $this->is_registrar()))
         {
             $this->data_poster->deleteClassList($post['id']);
             $data['message'] = "success";
