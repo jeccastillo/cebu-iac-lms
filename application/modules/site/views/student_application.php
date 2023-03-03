@@ -632,7 +632,7 @@
                                Applying For <span class="text-red-500">*</span>
                            </label>
                            <div class="d-flex flex items-baseline align-items-center" v-for="t in programs" :key="t.id">
-                               <input type="checkbox" class="mr-1 admissions_submission_cb" :id="'progId-' + t.id"
+                               <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
                                    @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
                                <label :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
                            </div>
