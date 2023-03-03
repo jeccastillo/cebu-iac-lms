@@ -631,11 +631,15 @@
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                                Applying For <span class="text-red-500">*</span>
                            </label>
-                           <div class="d-flex flex items-baseline align-items-center mb-2" v-for="t in programs" :key="t.id">
-                               <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
-                                   @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
-                               <label :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
-                           </div>
+                           <ul class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">    
+                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600" v-for="t in programs" :key="t.id">
+                                    <div class="d-flex flex items-baseline align-items-center mb-2" >
+                                        <input type="checkbox" class="mr-2 admissions_submission_cb" :id="'progId-' + t.id"
+                                            @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
+                                        <label :for="'progId-' + t.id"> {{ t.title }} {{ t.strMajor != "None" ? "with Major in " + t.strMajor: '' }}</label>
+                                    </div>
+                                </li>
+                            </ul>
                        </div>
                    </div>
 
