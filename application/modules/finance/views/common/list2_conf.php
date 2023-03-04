@@ -14,7 +14,7 @@ $(document).ready(function() {
             var s_column = "last_name";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions/term/<?php echo $current_sem; ?>", {
+                api_url + "finance/transactions_per_term/<?php echo $current_sem; ?>", {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
