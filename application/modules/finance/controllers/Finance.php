@@ -170,6 +170,16 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
+    public function payments(){                             
+
+        $this->data['page'] = "transactions";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("payments",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/list2_conf",$this->data); 
+    }
+    
+
     public function cashier(){                                     
 
         $role = $this->session->userdata('special_role');
