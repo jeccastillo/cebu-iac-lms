@@ -172,6 +172,10 @@ class Finance extends CI_Controller {
 
     public function payments(){                             
 
+
+        $sem = $this->data_fetcher->get_active_sem();        
+        $this->data['current_sem'] = $sem['intID'];
+
         $this->data['page'] = "transactions";
         $this->load->view("common/header",$this->data);
         $this->load->view("payments",$this->data);
