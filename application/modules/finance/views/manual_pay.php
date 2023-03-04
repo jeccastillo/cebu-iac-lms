@@ -229,6 +229,7 @@ new Vue({
             email_address: '',
             mode_of_payment_id: 26,
             description: undefined, 
+            sy_reference: undefined,
             or_number:undefined,
             remarks:'',
             subtotal_order: 0,
@@ -257,6 +258,7 @@ new Vue({
             id: undefined,
             or_number: undefined,
             cashier_id: undefined,
+            sy_reference: undefined,
         },
              
     },
@@ -280,6 +282,8 @@ new Vue({
             this.request.last_name = this.student.last_name;    
             this.request.contact_number = this.student.mobile_number;  
             this.request.email_address = this.student.email; 
+            this.request.sy_reference = data.data.current_sem;
+            this.or_update.sy_reference = data.data.current_sem;
             axios.get(base_url + 'finance/manualPayData/' + this.slug)
             .then((data) => {            
                 this.cashier = data.data.cashier;
