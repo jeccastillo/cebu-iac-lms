@@ -178,7 +178,7 @@ class Finance extends CI_Controller {
 
         $this->data['page'] = "transactions";
         $this->load->view("common/header",$this->data);
-        $this->load->view("payments",$this->data);
+        $this->load->view("payments_report",$this->data);
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/list2_conf",$this->data); 
     }
