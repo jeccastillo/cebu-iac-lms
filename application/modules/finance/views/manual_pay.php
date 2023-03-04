@@ -282,11 +282,12 @@ new Vue({
             this.request.last_name = this.student.last_name;    
             this.request.contact_number = this.student.mobile_number;  
             this.request.email_address = this.student.email;             
-            this.or_update.sy_reference = data.data.current_sem;
+            
             axios.get(base_url + 'finance/manualPayData/' + this.slug)
             .then((data) => {            
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;
+                this.or_update.sy_reference = data.data.current_sem;
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
                     this.or_update.or_number = this.cashier.or_current;
