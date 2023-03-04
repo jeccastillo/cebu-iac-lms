@@ -25,6 +25,7 @@
                         <tr>     
                             <th>id</th>
                             <th>slug</th>                       
+                            <th>OR Number</th>
                             <th>Payment For</th>
                             <th>Amount Paid</th>
                             <th>Online Payment Charge</th>

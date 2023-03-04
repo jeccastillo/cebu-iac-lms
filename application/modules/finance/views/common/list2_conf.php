@@ -63,6 +63,9 @@ $(document).ready(function() {
                 data: "slug"
             },
             {
+                data: "or_number"
+            },
+            {
                 data: "description"
             },
             {
