@@ -24,7 +24,8 @@
                     <thead>
                         <tr>     
                             <th>id</th>
-                            <th>slug</th>                       
+                            <th>slug</th>     
+                            <th>Cashier</th>                  
                             <th>OR Number</th>
                             <th>Applicant Number</th>
                             <th>Student Name</th>

@@ -36,13 +36,19 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [12],
+                "aTargets": [13],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
                         +'">Finance Viewer</a></li></ul></div>';
+                }
+            },
+            {
+                "aTargets": [2],                                
+                "mRender": function(data, type, row, meta) {
+                    return '<a class="cashier_id" rel="'+row.cashier_id+'" href="#">'+cashier_id+'</a>';
                 }
             },
             {
@@ -61,6 +67,9 @@ $(document).ready(function() {
             },
             {
                 data: "slug"
+            },
+            {
+                data: "cashier_id"
             },
             {
                 data: "or_number"
@@ -96,7 +105,24 @@ $(document).ready(function() {
         "aaSorting": [
             [2, 'asc']
         ],
-        "fnDrawCallback": function() {            
+        "fnDrawCallback": function() {          
+            $(".cashier-id").click(function(e){
+                var id = $(this).attr('rel');
+                $.ajax({
+                        'url': '<?php echo base_url(); ?>finance/cashier_details/'+id,
+                        'method': 'get',                        
+                        'dataType': 'json',
+                        'success': function(data) {
+                            var cashier_details = data.data.cashier_data;            
+                            Swal.fire({
+                                title: "Cashier",
+                                text: cashier_details.strFirstname+" "+cashier_details.strLastname,
+                                icon: "info"
+                            })
+                        }
+                    });             
+
+            });  
             $(".trash-item").click(function(e) {
                 conf = confirm("Are you sure you want to delete?");
                 if (conf) {
