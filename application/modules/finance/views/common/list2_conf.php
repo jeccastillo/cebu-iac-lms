@@ -52,6 +52,12 @@ $(document).ready(function() {
                 }
             },
             {
+                "aTargets": [4],                                
+                "mRender": function(data, type, row, meta) {
+                    return String(row.or_number).padStart(5, '0');
+                }
+            },            
+            {
                 "aTargets": [7],                                
                 "mRender": function(data, type, row, meta) {                    
                     var mode = "Online";
