@@ -94,7 +94,7 @@ $(document).ready(function() {
             },
             {
                 data: "updated_at"
-            }
+            },
             {
                 data: "or_number"
             },
