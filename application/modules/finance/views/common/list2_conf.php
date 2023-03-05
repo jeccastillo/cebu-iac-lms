@@ -68,7 +68,10 @@ $(document).ready(function() {
                                 break;
                             case 3:
                                 mode = "Debit Card";
-                                break;                        
+                                break;  
+                            case 4:     
+                                mode = "Online";
+                                break;                   
 
                         }
                     }
