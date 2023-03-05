@@ -36,7 +36,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [13],
+                "aTargets": [10],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -52,6 +52,28 @@ $(document).ready(function() {
                 }
             },
             {
+                "aTargets": [7],                                
+                "mRender": function(data, type, row, meta) {
+                    var mode = "Cash";
+                    switch(row.is_cash){
+                        case 0:
+                            mode = "Check";
+                            break;
+                        case 1:
+                            mode = "Cash";
+                            break;
+                        case 2:
+                            mode = "Credit Card";
+                            break;
+                        case 3:
+                            mode = "Debit Card";
+                            break;                        
+
+                    }
+                    return ;
+                }
+            },
+            {
                 "aTargets": [0],
                 "bVisible": false
             },
@@ -60,8 +82,7 @@ $(document).ready(function() {
                 "bVisible": false
             },
         ],
-
-        columns: [
+       columns: [
             {
                 data: "id"
             },
@@ -72,6 +93,9 @@ $(document).ready(function() {
                 data: "cashier_id"
             },
             {
+                data: "updated_at"
+            }
+            {
                 data: "or_number"
             },
             {
@@ -79,28 +103,17 @@ $(document).ready(function() {
             },
             {
                 data: "student_name"
-            },
+            },        
             {
-                data: "description"
-            },
+                data: "is_cash"
+            },            
             {
                 data: "subtotal_order"
             },
             {
-                data: "charges"
-            },
-            {
-                data: "total_amount_due"
-            },
-            {
-                data: "status"
-            },
-            {
-                data: "response_message"
-            },
-            {
-                data: "updated_at"
-            }
+                data: "description"
+            }           
+           
         ],
         "aaSorting": [
             [2, 'asc']

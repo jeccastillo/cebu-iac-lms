@@ -26,16 +26,13 @@
                             <th>id</th>
                             <th>slug</th>     
                             <th>Cashier</th>                  
+                            <th>Date Updated</th>
                             <th>OR Number</th>
                             <th>Applicant Number</th>
                             <th>Student Name</th>
-                            <th>Payment For</th>
+                            <th>Payment Mode</th>
                             <th>Amount Paid</th>
-                            <th>Online Payment Charge</th>
-                            <th>Total Due</th>
-                            <th>Status</th>
-                            <th>Online Response Message</th>
-                            <th>Date Updated</th>
+                            <th>Payment For</th>                                                                                                                                          
                             <th>Actions</th>
                         </tr>
                     </thead>
