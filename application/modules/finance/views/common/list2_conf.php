@@ -113,7 +113,7 @@ $(document).ready(function() {
                         'method': 'get',                        
                         'dataType': 'json',
                         'success': function(data) {
-                            var cashier_details = data.data.cashier_data;            
+                            var cashier_details = data.cashier_data;            
                             Swal.fire({
                                 title: "Cashier",
                                 text: cashier_details.strFirstname+" "+cashier_details.strLastname,
