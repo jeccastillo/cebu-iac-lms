@@ -48,7 +48,7 @@ $(document).ready(function() {
             {
                 "aTargets": [2],                                
                 "mRender": function(data, type, row, meta) {
-                    return '<a class="cashier_id" rel="'+row.cashier_id+'" href="#">'+cashier_id+'</a>';
+                    return '<a class="cashier-id" rel="'+row.cashier_id+'" href="#">'+row.cashier_id+'</a>';
                 }
             },
             {
