@@ -36,7 +36,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [13],
+                "aTargets": [12],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -46,26 +46,11 @@ $(document).ready(function() {
                 }
             },
             {
-                "aTargets": [3],
-                "mData": "first_name",                
-                "mRender": function(data, type, row, meta) {
-                    return row.first_name + " " + row.last_name + ", " + row.middle_name;
-                }
-            },
-            {
                 "aTargets": [0],
                 "bVisible": false
             },
             {
                 "aTargets": [1],
-                "bVisible": false
-            },
-            {
-                "aTargets": [4],
-                "bVisible": false
-            },
-            {
-                "aTargets": [5],
                 "bVisible": false
             },
         ],
@@ -81,13 +66,10 @@ $(document).ready(function() {
                 data: "or_number"
             },
             {
-                data: "first_name"
+                data: "student_information_id"
             },
             {
-                data: "last_name"
-            },
-            {
-                data: "middle_name"
+                data: "student_name"
             },
             {
                 data: "description"
