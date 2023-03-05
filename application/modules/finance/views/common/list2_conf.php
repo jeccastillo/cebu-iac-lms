@@ -53,24 +53,26 @@ $(document).ready(function() {
             },
             {
                 "aTargets": [7],                                
-                "mRender": function(data, type, row, meta) {
-                    var mode = "Cash";
-                    switch(row.is_cash){
-                        case 0:
-                            mode = "Check";
-                            break;
-                        case 1:
-                            mode = "Cash";
-                            break;
-                        case 2:
-                            mode = "Credit Card";
-                            break;
-                        case 3:
-                            mode = "Debit Card";
-                            break;                        
+                "mRender": function(data, type, row, meta) {                    
+                    var mode = "Online";
+                    if(row.is_cash){
+                        switch(row.is_cash){
+                            case 0:
+                                mode = "Check";
+                                break;
+                            case 1:
+                                mode = "Cash";
+                                break;
+                            case 2:
+                                mode = "Credit Card";
+                                break;
+                            case 3:
+                                mode = "Debit Card";
+                                break;                        
 
+                        }
                     }
-                    return ;
+                    return mode;
                 }
             },
             {
