@@ -11,7 +11,7 @@ $(document).ready(function() {
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
-            var s_column = "last_name";                        
+            var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
                 api_url + "finance/transactions_per_term/<?php echo $current_sem; ?>", {
