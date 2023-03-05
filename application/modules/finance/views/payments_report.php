@@ -26,6 +26,9 @@
                             <th>id</th>
                             <th>slug</th>                       
                             <th>OR Number</th>
+                            <th>Student Name</th>
+                            <th>Last Name</th>
+                            <th>Middle Name</th>
                             <th>Payment For</th>
                             <th>Amount Paid</th>
                             <th>Online Payment Charge</th>
