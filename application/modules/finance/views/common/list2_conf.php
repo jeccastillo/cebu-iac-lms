@@ -49,7 +49,7 @@ $(document).ready(function() {
                 "aTargets": [3],
                 "mData": "first_name",                
                 "mRender": function(data, type, row, meta) {
-                    return data + " " + row[4] + ", " + row[5];
+                    return row.first_name + " " + row.last_name + ", " + row.middle_name;
                 }
             },
             {
