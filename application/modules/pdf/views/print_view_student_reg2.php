@@ -196,9 +196,19 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:center;">'.number_format($tuition['misc'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
+                                <td>Other Fees</td>
+                                <td style="text-align:center;"></td>
+                                <td style="text-align:center;"></td>
+                            </tr>
+                            <tr>
                                 <td>New Student</td>
                                 <td style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
                                 <td style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
+                            </tr>
+                            <tr>
+                                <td>Foreign Student Fees</td>
+                                <td style="text-align:center;">'.number_format($tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                <td style="text-align:center;">'.number_format($tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
                                 <td></td>
