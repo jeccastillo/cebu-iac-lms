@@ -174,7 +174,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             <table cellpadding="0" style="color:#333; text-align:left; font-size:9;" width="528px">                                
                 <tr>
                     <td>
-                        <table cellspacing="2px" cellpadding="0"  width="258px" style="color:#333; font-size:9;">
+                        <table cellpadding="0"  width="258px" style="color:#333; font-size:9;">
                             <tr>
                                 <td width="78px"></td>
                                 <td width="78px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -201,12 +201,12 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:center;"></td>
                             </tr>
                             <tr>
-                                <td>New Student</td>
+                                <td style="text-align:right">New Student</td>
                                 <td style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
                                 <td style="text-align:center;">'.number_format($tuition['new_student'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
-                                <td>Foreign Student Fees</td>
+                                <td style="text-align:right">Foreign Student</td>
                                 <td style="text-align:center;">'.number_format($tuition['total_foreign'], 2, '.' ,',') .'</td>
                                 <td style="text-align:center;">'.number_format($tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>
