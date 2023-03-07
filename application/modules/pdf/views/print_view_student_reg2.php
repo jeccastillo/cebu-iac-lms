@@ -184,10 +184,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         </table>
         
         <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
-            <tr>
-                <td width="264px" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>
-                <td width="264px" style= "font-size:9; font-weight:bold;">MISCELANEOUS DETAIL</td>            
-            </tr>
+            
         </table>
         ';
         $html .='
@@ -195,6 +192,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 <tr>
                     <td>
                         <table cellpadding="0"  width="258px" style="color:#333; font-size:8;">
+                            <tr>
+                                <td colspan="3" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
+                            </tr>
                             <tr>
                                 <td width="78px"></td>
                                 <td width="78px" style="text-decoration:underline;">FULL PAYMENT</td>
@@ -250,7 +250,11 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </table>
                     </td>
                     <td>                                
-                        <table  width="258px"  style="color:#333; font-size:8; ">';
+                        <table  width="258px"  style="color:#333; font-size:8; ">
+                            <tr>
+                                <td colspan="2" style= "font-size:9; font-weight:bold;">MISCELANEOUS DETAIL</td>            
+                            </tr>
+                        ';
                         if($tuition['misc'] != 0){
                         foreach($tuition['misc_list'] as $key=>$val){
         
@@ -267,17 +271,21 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     }
                     $html .= 
                         '</table>                             
-                        <table  width="258px"  style="color:#333; font-size:8; ">
+                        <table  width="258px"  style="color:#333; font-size:8;">
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td style="border-top: 1px solid #555; text-align:right;"></td>                
+                            </tr>
                             <tr>
                                 <td width="159px" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
                                 <td width="99px" style="text-align:right;"></td>
                             </tr>
                             <tr>
-                                <td width="159px" style= "font-size:9;">New Student Fee</td>
+                                <td width="159px">New Student Fees</td>
                                 <td width="99px" style="text-align:right;">'.number_format($tuition['new_student'], 2, '.' ,',').'</td>
                             </tr>
                             <tr>
-                                <td width="159px" style= "font-size:9;">Foreign Fees</td>
+                                <td width="159px">Foreign Student Fees</td>
                                 <td width="99px" style="text-align:right;">'.number_format($tuition['total_foreign'], 2, '.' ,',').'</td>
                             </tr>
                             <tr>
