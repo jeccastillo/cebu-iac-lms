@@ -37,54 +37,60 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Mother's Maiden Name</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text" required class="form-control" v-model="request.mother">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
-                            <input type="number" required class="form-control" v-model="">
+                            <the-mask
+                           class="form-control"
+                           :mask="['(+63) ###-###-####']" type="text" v-model="request.mother_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Email Address</label>
-                            <input type="email" required class="form-control" v-model="">
+                            <input type="email" required class="form-control" v-model="request.mother_email">
                         </div>                                
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Father's Name</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text" required class="form-control" v-model="request.father">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
-                            <input type="number" required class="form-control" v-model="">
+                            <the-mask
+                           class="form-control"
+                           :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Email Address</label>
-                            <input type="email" required class="form-control" v-model="">
+                            <input type="email" required class="form-control" v-model="request.father_email">
                         </div>                                
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Name of Guardian</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text" required class="form-control" v-model="request.guardian">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
-                            <input type="number" required class="form-control" v-model="">
+                            <the-mask
+                           class="form-control"
+                           :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Email Address</label>
-                            <input type="email" required class="form-control" v-model="">
+                            <input type="email" required class="form-control" v-model="request.guardian_email">
                         </div>                                
                     </div>
                     
                 
-                    <h3>Educational Background</h3>
+                    <!-- <h3>Educational Background</h3>
                 
                     <div class="row">
                         <div class="col-md-4 form-group">
@@ -97,9 +103,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended (month-day-year)</label>
-                            <!-- <the-mask
+                            <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
@@ -113,9 +119,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
-                            <!-- <the-mask
+                            <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>                           
                     <div class="row">
@@ -125,9 +131,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended To (month-day-year)</label>
-                            <!-- <the-mask
+                            <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
@@ -141,9 +147,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
-                            <!-- <the-mask
+                            <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>
                     <div class="row">
@@ -159,7 +165,7 @@
                                 <option value="Foreign">Foreign</option>
                             </select>                                    
                         </div>                                                                                   
-                    </div>
+                    </div> -->
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
@@ -225,6 +231,15 @@ new Vue({
             intProgramID: undefined,
             preferedSection: undefined,
             id: undefined,
+            father: undefined,
+            father_email: undefined,
+            father_contact: undefined,
+            mother: undefined,
+            mother_email: undefined,
+            mother_contact: undefined,
+            guardian: undefined,
+            guardian_email: undefined,
+            guardian_contact: undefined,
         },
         payload:{
 
