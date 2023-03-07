@@ -38,6 +38,8 @@
                             <span class="label label-info" v-if="request.status ==  'For Reservation'">For
                                 Reservation</span>
                             <span class="label label-success" v-if="request.status ==  'Reserved'">Reserved</span>
+                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>
+                            <span class="label label-success" v-if="request.status ==  'Game Changer'">Game Changer</span>
                             <span class="label label-success" v-if="request.status ==  'For Enrollment'">For Enrollment</span>
                             <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
                             <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
