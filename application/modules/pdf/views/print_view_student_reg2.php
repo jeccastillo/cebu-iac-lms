@@ -76,21 +76,21 @@ $html .= '<tr>
      </tr>
      <tr>
       <td width="80px">&nbsp;NAME</td>
-      <td width="200px" >;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
+      <td width="200px" >' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
       <td width="80px">&nbsp;ADDRESS</td>
-      <td width="200px" >;'. $student['strAddress']. '</td>      
+      <td width="200px" >'. $student['strAddress']. '</td>      
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>
       <td width="200px" >'.$student['strProgramCode'] . '</td>      
       <td width="80px" >&nbsp;STUD NO</td>
-      <td width="200px" >;' . $student['strStudentNumber']. '</td>
+      <td width="200px" >' . $student['strStudentNumber']. '</td>
      </tr>
      <tr>
       <td width="80px" >&nbsp;MAJOR</td>
-      <td width="200px" >;' .$student['strMajor'] . '</td>
+      <td width="200px" >' .$student['strMajor'] . '</td>
       <td width="80px" >&nbsp;SY/TERM</td>
-      <td width="200px" style="text-transform:capitalize;">;' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
+      <td width="200px" style="text-transform:capitalize;">' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>
      </tr>
      <tr>
         <td >&nbsp;</td>
