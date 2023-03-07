@@ -86,12 +86,12 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:40px;">
+                <tr style="line-height:35px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
             <table >
-                <tr style="line-height:20px;">
+                <tr style="line-height:15px;">
                     <td style="font-size:10px;text-align:right;color:#666;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
@@ -104,9 +104,8 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
                         <span style="color:#fff;">RECEIVED from &nbsp;</span>
-                        <?php echo $student_id; ?><br />
-                        <span style="color:#fff;">RECEIVED from &nbsp;</span>
-                        <?php echo $student_name; ?>
+                        <?php echo $student_id; ?> <?php echo $student_name; ?>                        
+                        
                     </td>
                 </tr>
             </table>
@@ -117,7 +116,7 @@
             </table>
             <table style="min-height:35px;">
                 <tr style="line-height:15px;">                    
-                    <td style="font-size:10px;text-align:left;color:#666;">
+                    <td style="font-size:9px;text-align:left;color:#666;">
                     <span style="color:#fff;">Address &nbsp;</span>
                     <?php echo $student_address; ?></td>
                 </tr>
