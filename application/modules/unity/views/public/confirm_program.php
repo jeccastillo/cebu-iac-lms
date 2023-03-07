@@ -89,8 +89,16 @@
                                 <input type="email" required class="form-control" v-model="request.guardian_email">
                             </div>                                
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">                                
+                                <label>Gender</label>
+                                <select required class="form-control" v-model="request.enumGender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>  
+                            </div>                                
+                        </div>
                         
-                    
                         <h3>Educational Background (type n/a if not applicable)</h3>
                     
                         <div class="row">
@@ -254,6 +262,7 @@ new Vue({
             senior_high_attended: undefined,
             strand: undefined,
             student_type: undefined,
+            enumGender: undefined,
         },
         payload:{
 
