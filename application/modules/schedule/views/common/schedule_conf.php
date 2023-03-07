@@ -27,6 +27,37 @@
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>schedule/edit_schedule/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }
                 },
                 {
+                    "aTargets":[4],                    
+                    "mRender": function (data,type,row,meta) { 
+                        var day = "Monday";
+                        switch(row[4]){
+                            case 1:
+                                day = "Monday";
+                                break;
+                            case 2:
+                                day = "Tuesday";
+                                break;
+                            case 3:
+                                day = "Wednesday";
+                                break;
+                            case 4:
+                                day = "Thursday";
+                                break;
+                            case 5:
+                                day = "Friday";
+                                break;
+                            case 6:
+                                day = "Saturday";
+                                break;
+                            case 7:
+                                day = "Sunday";
+                                break;
+                        }    
+
+                        return day;
+                    }
+                },
+                {
                     "aTargets":[0],
                     "bVisible": false 
                 }
