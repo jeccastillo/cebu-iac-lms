@@ -33,7 +33,7 @@
                         </tbody>
                     </table>
                     
-                    <h3>Additional Information</h3>                                                
+                    <!-- <h3>Additional Information</h3>                                                
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Mother's Maiden Name</label>
@@ -87,7 +87,7 @@
                             <label>Email Address</label>
                             <input type="email" required class="form-control" v-model="request.guardian_email">
                         </div>                                
-                    </div>
+                    </div> -->
                     
                 
                     <!-- <h3>Educational Background</h3>
@@ -231,15 +231,15 @@ new Vue({
             intProgramID: undefined,
             preferedSection: undefined,
             id: undefined,
-            father: undefined,
-            father_email: undefined,
-            father_contact: undefined,
-            mother: undefined,
-            mother_email: undefined,
-            mother_contact: undefined,
-            guardian: undefined,
-            guardian_email: undefined,
-            guardian_contact: undefined,
+            // father: undefined,
+            // father_email: undefined,
+            // father_contact: undefined,
+            // mother: undefined,
+            // mother_email: undefined,
+            // mother_contact: undefined,
+            // guardian: undefined,
+            // guardian_email: undefined,
+            // guardian_contact: undefined,
         },
         payload:{
 
