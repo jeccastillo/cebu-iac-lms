@@ -274,7 +274,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         <table  width="258px"  style="color:#333; font-size:8;">
                             <tr>
                                 <td>&nbsp;</td>
-                                <td style="border-top: 1px solid #555; text-align:right;"></td>                
+                                <td text-align:right;"></td>                
                             </tr>
                             <tr>
                                 <td width="159px" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
