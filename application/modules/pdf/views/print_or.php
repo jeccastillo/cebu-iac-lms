@@ -81,7 +81,7 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="height:25px;">
+                <tr style="height:35px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
@@ -123,7 +123,7 @@
                 </tr>
             </table> -->
             <table >
-                <tr style="line-height:15px;">                    
+                <tr style="line-height:5px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;"></td>
                 </tr>
             </table>
@@ -197,7 +197,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:10px;">
+                <tr style="line-height:5px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;color:#666;">
                         
@@ -235,14 +235,14 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <table >
+            <!-- <table >
                 <tr style="line-height:10px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;color:#666;">
                         
                     </td>
                 </tr>
-            </table>
+            </table> -->
             <table >
                 <tr style="line-height:5px;">
                     <td style=""></td>
