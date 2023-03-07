@@ -240,7 +240,7 @@ new Vue({
         show_select: false,
     },    
     mounted() {
-
+        console.log("<?php echo $id; ?>");
         let url_string = window.location.href;           
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
