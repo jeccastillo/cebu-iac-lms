@@ -86,7 +86,7 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:35px;">
+                <tr style="line-height:33px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
@@ -103,7 +103,7 @@
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
-                        <span style="color:#fff;">RECEIVED from &nbsp;</span>
+                        <span style="color:#fff;">RECEIVED fr</span>
                         <?php echo $student_id; ?> <?php echo $student_name; ?>                        
                         
                     </td>
