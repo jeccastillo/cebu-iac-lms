@@ -83,8 +83,8 @@ $html .= '<tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>
       <td width="200px" >'.$student['strProgramCode'] . '</td>      
-      <td width="80px" >&nbsp;STUD NO</td>
-      <td width="200px" >' . $student['strStudentNumber']. '</td>
+      <td width="80px" >&nbsp;'.$snum_label.'</td>
+      <td width="200px" >' . $snum. '</td>
      </tr>
      <tr>
       <td width="80px" >&nbsp;MAJOR</td>
