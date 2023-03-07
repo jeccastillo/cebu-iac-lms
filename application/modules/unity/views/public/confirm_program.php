@@ -97,9 +97,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended (month-day-year)</label>
-                            <the-mask
+                            <!-- <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
                         </div>
                     </div> 
                     <div class="row">
@@ -113,9 +113,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
-                            <the-mask
+                            <!-- <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
                         </div>
                     </div>                           
                     <div class="row">
@@ -125,9 +125,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended To (month-day-year)</label>
-                            <the-mask
+                            <!-- <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
                         </div>
                     </div> 
                     <div class="row">
@@ -141,9 +141,9 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
-                            <the-mask
+                            <!-- <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask> -->
                         </div>
                     </div>
                     <div class="row">
