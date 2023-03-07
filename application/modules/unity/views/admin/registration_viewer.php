@@ -4,10 +4,10 @@
             <small>
                 <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                 <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
-                <a v-if="applicant_data.id" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id">
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id">
                     <i class="ion ion-printer"></i>RF Print
                 </a>                     
-                <a v-if="applicant_data.id" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/0/35''">
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
                     <i class="ion ion-printer"></i>RF No Header
                 </a>           
             </small>
@@ -388,8 +388,7 @@ new Vue({
             or_number: undefined,
             cashier_id: undefined,
         },
-        amount_to_pay: 0,    
-        applicant_data: {},    
+        amount_to_pay: 0,            
         advanced_privilages: false,      
         description: 'Tuition Full', 
         description_other: '',
@@ -441,15 +440,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
-                        }
-
-                        axios.get(api_url + 'admissions/student-info/' + this.slug)
-                        .then((data) => {
-                            this.applicant_data = data.data.data;
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        })
+                        }                        
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
