@@ -265,8 +265,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         }
                         $html.=' 
                             <tr>
-                                <td>Total</td>
-                                <td style="border-top: 1px solid #555; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
                             </tr>';
                     }
                     $html .= 
@@ -289,8 +289,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td width="99px" style="text-align:right;">'.number_format($tuition['total_foreign'], 2, '.' ,',').'</td>
                             </tr>
                             <tr>
-                                <td>Total</td>
-                                <td style="border-top: 1px solid #555; text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',').'</td>                
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',').'</td>                
                             </tr>';                
                         
                     $html.='                        
