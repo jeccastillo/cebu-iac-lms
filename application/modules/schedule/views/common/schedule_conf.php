@@ -13,6 +13,11 @@
         document.location = "<?php echo base_url(); ?>schedule/view_schedules/"+$("#select-sem-schedule").val()+"/"+$(this).val();
     
     });
+
+    $('#users_table tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="'+title+'" size="16" />' );
+    });
         
     $('#users_table').dataTable({
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
