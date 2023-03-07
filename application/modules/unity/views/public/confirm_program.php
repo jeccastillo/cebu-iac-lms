@@ -32,141 +32,133 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <h3>Additional Information</h3>
+                    
+                    <h3>Additional Information</h3>                                                
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Mother's Maiden Name</label>
+                            <input type="text" required class="form-control" v-model="">
                         </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Mother's Maiden Name</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Contact Number</label>
-                                    <input type="number" required class="form-control" v-model="">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" required class="form-control" v-model="">
-                                </div>                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Father's Name</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Contact Number</label>
-                                    <input type="number" required class="form-control" v-model="">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" required class="form-control" v-model="">
-                                </div>                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Name of Guardian</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Contact Number</label>
-                                    <input type="number" required class="form-control" v-model="">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" required class="form-control" v-model="">
-                                </div>                                
-                            </div>
+                        <div class="col-md-6 form-group">
+                            <label>Contact Number</label>
+                            <input type="number" required class="form-control" v-model="">
                         </div>
                     </div>
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <h3>Educational Background</h3>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Email Address</label>
+                            <input type="email" required class="form-control" v-model="">
+                        </div>                                
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Father's Name</label>
+                            <input type="text" required class="form-control" v-model="">
                         </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-4 form-group">
-                                    <label>High School</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>School Address</label>
-                                    <textarea required class="form-control" v-model=""></textarea>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>Years Attended (month-day-year)</label>
-                                    <the-mask
-                                        class="form-control"
-                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
-                                </div>
-                            </div> 
-                            <div class="row">
-                                <div class="col-md-4 form-group">
-                                    <label>College</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>School Address</label>
-                                    <textarea required class="form-control" v-model=""></textarea>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>Years Attended From (month-day-year)</label>
-                                    <the-mask
-                                        class="form-control"
-                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
-                                </div>
-                            </div>                           
-                            <div class="row">
-                                <div class="col-md-4 form-group">                                   
-                                </div>
-                                <div class="col-md-4 form-group">                                    
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>Years Attended To (month-day-year)</label>
-                                    <the-mask
-                                        class="form-control"
-                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
-                                </div>
-                            </div> 
-                            <div class="row">
-                                <div class="col-md-4 form-group">
-                                    <label>Señor High School</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>School Address</label>
-                                    <textarea required class="form-control" v-model=""></textarea>
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>Years Attended From (month-day-year)</label>
-                                    <the-mask
-                                        class="form-control"
-                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 form-group">
-                                    <label>Strand</label>
-                                    <input type="text" required class="form-control" v-model="">
-                                </div>
-                                <div class="col-md-8 form-group">
-                                    <label>Type of Student</label>
-                                    <select required class="form-control" v-model="">
-                                        <option value="Freshman">Freshman</option>
-                                        <option value="Transferee">Transferee</option>
-                                        <option value="Foreign">Foreign</option>
-                                    </select>                                    
-                                </div>                                
-                            </div>      
+                        <div class="col-md-6 form-group">
+                            <label>Contact Number</label>
+                            <input type="number" required class="form-control" v-model="">
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Email Address</label>
+                            <input type="email" required class="form-control" v-model="">
+                        </div>                                
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Name of Guardian</label>
+                            <input type="text" required class="form-control" v-model="">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Contact Number</label>
+                            <input type="number" required class="form-control" v-model="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Email Address</label>
+                            <input type="email" required class="form-control" v-model="">
+                        </div>                                
+                    </div>
+                    
+                
+                    <h3>Educational Background</h3>
+                
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>High School</label>
+                            <input type="text" required class="form-control" v-model="">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>School Address</label>
+                            <textarea required class="form-control" v-model=""></textarea>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Years Attended (month-day-year)</label>
+                            <the-mask
+                                class="form-control"
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>College</label>
+                            <input type="text" required class="form-control" v-model="">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>School Address</label>
+                            <textarea required class="form-control" v-model=""></textarea>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Years Attended From (month-day-year)</label>
+                            <the-mask
+                                class="form-control"
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                        </div>
+                    </div>                           
+                    <div class="row">
+                        <div class="col-md-4 form-group">                                   
+                        </div>
+                        <div class="col-md-4 form-group">                                    
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Years Attended To (month-day-year)</label>
+                            <the-mask
+                                class="form-control"
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Señor High School</label>
+                            <input type="text" required class="form-control" v-model="">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>School Address</label>
+                            <textarea required class="form-control" v-model=""></textarea>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Years Attended From (month-day-year)</label>
+                            <the-mask
+                                class="form-control"
+                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Strand</label>
+                            <input type="text" required class="form-control" v-model="">
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <label>Type of Student</label>
+                            <select required class="form-control" v-model="">
+                                <option value="Freshman">Freshman</option>
+                                <option value="Transferee">Transferee</option>
+                                <option value="Foreign">Foreign</option>
+                            </select>                                    
+                        </div>                                                                                   
                     </div>
                     <hr />    
                     <div class="text-center">
