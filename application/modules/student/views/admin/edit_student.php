@@ -217,7 +217,23 @@
                     <div class="form-group col-md-4">
                             <label>Attended To</label>
                             <input type="text" value="<?php echo $student['college_attended_to']; ?>" name="college_attended_to" class="form-control" id="college_attended_to" placeholder="Enter Attended Date">
-                    </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Strand</label>
+                        <input type="text" value="<?php echo $student['strand']; ?>" name="strand" class="form-control" id="strand" placeholder="Enter Strand">
+                   </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Student Type</label>
+                        <select class="form-control" name="student_type" id="student_type" >
+                            <option <?php echo ($student['student_type'] == "freshman")?'selected':''; ?> value="freshman">Freshman</option>
+                            <option <?php echo ($student['student_type'] == "transferee")?'selected':''; ?> value="transferee">Transferee</option>
+                            <option <?php echo ($student['student_type'] == "foreign")?'selected':''; ?> value="foreign">Foreign</option>
+                        </select>
+                   </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-xs-12">
