@@ -15,6 +15,7 @@
                 <select class="form-select form-control" id="status_filter">
                     <option value="none" selected>None</option>
                     <option value="New">New Applicant</option>
+                    <option value="Waiting for Interview">Waiting for Interview</option>
                     <option value="For Interview">For Interview</option>
                     <option value="For Reservation">For Reservation</option>
                     <option value="Reserved">Reserved</option>
