@@ -218,6 +218,7 @@
 }
 </style>
 <script>
+    console.log("TEST","<?php echo $id; ?>");
 new Vue({
     el: '#registration-container',
     data: {
@@ -239,8 +240,7 @@ new Vue({
         },
         show_select: false,
     },    
-    mounted() {        
-        console.log("start",this.id);
+    mounted() {                
         let url_string = window.location.href;           
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
