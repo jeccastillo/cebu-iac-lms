@@ -227,7 +227,9 @@ new Vue({
         programs: [],
         loaded: false,
         sections: [],
-        section: undefined,
+        section: {
+            intID: 0,
+        },
         api_data:{},        
         request: {
             intProgramID: undefined,
@@ -239,8 +241,7 @@ new Vue({
         },
         show_select: false,
     },    
-    mounted() {
-        console.log("<?php echo $id; ?>");
+    mounted() {        
         let url_string = window.location.href;           
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
