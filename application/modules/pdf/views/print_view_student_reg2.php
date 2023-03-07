@@ -82,7 +82,7 @@ $html .= '<tr>
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>
-      <td width="200px" >'.$student['strDescription'] . '</td>      
+      <td width="200px" >'.$student['strProgramDescription'] . '</td>      
       <td width="80px" >&nbsp;'.$snum_label.'</td>
       <td width="200px" >' . $snum. '</td>
      </tr>
