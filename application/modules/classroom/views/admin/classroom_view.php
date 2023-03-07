@@ -24,6 +24,7 @@
                     <thead><tr>
                         <th>id</th>
                         <th>Classroom Code</th>
+                        <th>Description</th>
                         <th>Room Type</th>
                         <th>Select Actions</th>
                     </tr>

@@ -28,7 +28,10 @@
                             <label for="strRoomCode">Classroom Code</label>
                             <input type="text" value="<?php echo $item['strRoomCode']; ?>" name="strRoomCode" class="form-control" id="strRoomCode" placeholder="Enter Subject Code">
                         </div>
-
+                        <div class="form-group col-xs-6">
+                            <label for="strRoomCode">Description</label>
+                            <input type="text"  value="<?php echo $item['description']; ?>" name="description" class="form-control" id="description" placeholder="Enter Classroom Description">
+                        </div>
                          <div class="form-group col-xs-6">
                             <label for="enumType">Classroom Type</label>
                             <select name="enumType" class="form-control">
