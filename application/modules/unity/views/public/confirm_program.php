@@ -32,6 +32,60 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Mother's Maiden Name</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Contact Number</label>
+                                    <input type="number" required class="form-control" v-model="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" required class="form-control" v-model="">
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Father's Name</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Contact Number</label>
+                                    <input type="number" required class="form-control" v-model="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" required class="form-control" v-model="">
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Name of Guardian</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Contact Number</label>
+                                    <input type="number" required class="form-control" v-model="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" required class="form-control" v-model="">
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
