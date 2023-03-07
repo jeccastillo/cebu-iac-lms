@@ -398,7 +398,7 @@ class Pdf extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $active_sem = $this->data_fetcher->get_active_sem();
         //$this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-        if($sem!=null || $sem != 0)
+        if($sem!=null && $sem != 0)
             $this->data['selected_ay'] = $sem;
         else
             $this->data['selected_ay'] = $active_sem['intID'];
