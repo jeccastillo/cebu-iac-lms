@@ -3,9 +3,9 @@
         <div class="content">                        
             <div class="box">
                 <div class="box-header">
-                    <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
-                        Please confirm your selected program and fill in additional information.
+                    <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />                        
                     </h3>
+                    <h4>Please confirm your selected program and fill in additional information.</h4>
                 </div>
                 <div class="box-body">
                     <form @submit.prevent="confirmProgram" method="post">
