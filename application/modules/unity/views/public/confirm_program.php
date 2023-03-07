@@ -40,7 +40,7 @@
                                 <label>Mother's Maiden Name</label>
                                 <input type="text" required class="form-control" v-model="request.mother">
                             </div>
-                            <div v-if="request.mother && request.mother!=''" class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!='' && request.mother!='N/A'" class="col-md-6 form-group">
                                 <label>Contact Number</label>
                                 <the-mask 
                             class="form-control"
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div v-if="request.mother && request.mother!=''" class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!='' && request.mother!='N/A'" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.mother_email">
                             </div>                                
