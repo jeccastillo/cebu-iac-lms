@@ -135,8 +135,9 @@
             <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;color:#666;">
-                    <span style="color:#fff;">Address &nbsp;</span>
-                    <?php echo $string1."<br />".$string2; ?></td>
+                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
+                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
+                </td>
                 </tr>
             </table>
             <!-- <table >
