@@ -2879,7 +2879,7 @@ class Data_fetcher extends CI_Model {
                     (dteStart >= '".$post['dteStart']."' AND dteEnd <= '".$post['dteEnd']."') OR
                     (dteStart < '".$post['dteEnd']."' AND dteEnd >= '".$post['dteEnd']."') OR 
                     (dteStart <= '".$post['dteStart']."' AND dteEnd > '".$post['dteStart']."') 
-                    )";
+                    ) AND tb_mas_room_schedule.intRoomID != 99999";
             if($id!=null)
             {
                 $query .= " AND intRoomSchedID != ".$id;
