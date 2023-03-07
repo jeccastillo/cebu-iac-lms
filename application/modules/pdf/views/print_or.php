@@ -110,7 +110,7 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <table >
+            <table style="min-height:35px;">
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
                     <span style="color:#fff;">Address &nbsp;</span>
@@ -128,7 +128,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:15px;">
+                <tr style="line-height:13px;">
                     <td style=""></td>
                 </tr>
             </table>
