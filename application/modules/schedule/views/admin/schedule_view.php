@@ -48,6 +48,21 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
+                    <tfoot>
+                    <tr>
+                        <th>id</th>
+                        <th>Subject</th>
+                        <th>Section</th>
+                        <th>Block</th>
+                        <th>Day</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Class Type</th>
+                        <th>Room</th>
+                        <th>Actions</th>                                           
+                    </tr>
+                        </tfoot>
+                </table>
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
