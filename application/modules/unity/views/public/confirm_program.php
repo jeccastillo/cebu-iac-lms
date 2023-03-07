@@ -32,7 +32,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <div class="box box-primary">
+                    <div class="box box-primary">
                         <div class="box-header">
                             <h3>Additional Information</h3>
                         </div>
@@ -167,7 +167,7 @@
                                 </div>                                
                             </div>      
                         </div>
-                    </div> -->
+                    </div>
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
