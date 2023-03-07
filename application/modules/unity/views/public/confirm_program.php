@@ -91,7 +91,7 @@
                         </div>
                         
                     
-                        <h3>Educational Background</h3>
+                        <h3>Educational Background (type n/a if not applicable)</h3>
                     
                         <div class="row">
                             <div class="col-md-4 form-group">
@@ -114,11 +114,11 @@
                                 <label>College</label>
                                 <input type="text"  class="form-control" v-model="request.college">
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div v-if="request.college!='n/a'" class="col-md-4 form-group">
                                 <label>School Address</label>
                                 <textarea class="form-control" v-model="request.college_address"></textarea>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div v-if="request.college!='n/a'" class="col-md-4 form-group">
                                 <label>Years Attended From (month-day-year)</label>
                                 <the-mask
                                     class="form-control"
@@ -130,7 +130,7 @@
                             </div>
                             <div class="col-md-4 form-group">                                    
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div v-if="request.college!='n/a'" class="col-md-4 form-group">
                                 <label>Years Attended To (month-day-year)</label>
                                 <the-mask
                                     class="form-control"
@@ -162,7 +162,7 @@
                                 <label>Type of Student</label>
                                 <select required class="form-control" v-model="request.student_type">
                                     <option value="Freshman">Freshman</option>
-                                    <option value="Transferee">Transferee</option>
+                                    <option v-if="request.college!='n/a'" value="Transferee">Transferee</option>
                                     <option value="Foreign">Foreign</option>
                                 </select>                                    
                             </div>                                                                                   
