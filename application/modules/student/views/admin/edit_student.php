@@ -143,7 +143,7 @@
                     </div>
                     <div class="form-group col-md-4">
                             <label>Mother's Email Address</label>
-                            <input type="email" value="<?php echo $student['mother_email']; ?>" name="mother_email" class="form-control" id="mother_email" placeholder="Enter Email">
+                            <input type="text" value="<?php echo $student['mother_email']; ?>" name="mother_email" class="form-control" id="mother_email" placeholder="Enter Email">
                     </div>
 
                     <div class="form-group col-md-4">
@@ -156,7 +156,7 @@
                     </div>
                     <div class="form-group col-md-4">
                             <label>Father's Email Address</label>
-                            <input type="email" value="<?php echo $student['father_email']; ?>" name="father_email" class="form-control" id="father_email" placeholder="Enter Email">
+                            <input type="text" value="<?php echo $student['father_email']; ?>" name="father_email" class="form-control" id="father_email" placeholder="Enter Email">
                     </div>
 
 
@@ -170,7 +170,7 @@
                     </div>
                     <div class="form-group col-md-4">
                             <label>Guardian's Email Address</label>
-                            <input type="email" value="<?php echo $student['guardian_email']; ?>" name="guardian_email" class="form-control" id="guardian_email" placeholder="Enter Email">
+                            <input type="text" value="<?php echo $student['guardian_email']; ?>" name="guardian_email" class="form-control" id="guardian_email" placeholder="Enter Email">
                     </div>
                 </div>
                 <div class="row">
