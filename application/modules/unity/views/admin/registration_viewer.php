@@ -3,10 +3,13 @@
         <h1>
             <small>
                 <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
-                <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a> 
-                <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID">
-                    <i class="ion ion-printer"></i>Reg Form Print Preview
-                </a>            
+                <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID">
+                    <i class="ion ion-printer"></i>RF Print
+                </a>                     
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print_no_header/' + student.intID">
+                    <i class="ion ion-printer"></i>RF No Header
+                </a>           
             </small>
         </h1>
         <div v-if="registration" class="pull-right">
