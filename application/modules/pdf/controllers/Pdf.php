@@ -391,7 +391,7 @@ class Pdf extends CI_Controller {
     
     }
     
-    function student_viewer_registration_print($id, $sem = null, $mt = 6)
+    function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {
        
         $this->data['mt'] = $mt;

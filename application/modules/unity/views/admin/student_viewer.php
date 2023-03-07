@@ -7,10 +7,10 @@
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                     <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
                     <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
-                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
+                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ this.applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
-                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID + '/35'">
+                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ this.applicant_data.id +'/'+ active_sem.intID + '/35'">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a v-if="reg_status != 'For Subject Enlistment'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
@@ -301,6 +301,7 @@ new Vue({
         sem: '<?php echo $sem; ?>',
         student: {},
         registration: undefined,
+        applicant_data:{},
         active_sem: {},
         sections: [],
         records: [],
@@ -368,6 +369,14 @@ new Vue({
                         this.other_data = data.data.other_data;
                         this.assessment = data.data.assessment;    
                         var sched = data.data.schedule;
+                        axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+                        .then((data) => {
+                            this.applicant_data = data.data.data;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+
                         setTimeout(function() {
                             // function code goes here
                             load_schedule(sched);

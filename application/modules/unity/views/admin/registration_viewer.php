@@ -4,10 +4,10 @@
             <small>
                 <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                 <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID">
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ this.applicant_data.id">
                     <i class="ion ion-printer"></i>RF Print
                 </a>                     
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID + '/0/35'">
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ this.applicant_data.id +'/0/35''">
                     <i class="ion ion-printer"></i>RF No Header
                 </a>           
             </small>
@@ -388,7 +388,8 @@ new Vue({
             or_number: undefined,
             cashier_id: undefined,
         },
-        amount_to_pay: 0,        
+        amount_to_pay: 0,    
+        applicant_data: {},    
         advanced_privilages: false,      
         description: 'Tuition Full', 
         description_other: '',
@@ -479,6 +480,14 @@ new Vue({
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
+
+                                axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+                                .then((data) => {
+                                    this.applicant_data = data.data.data;
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                })
                             })
                             .catch((error) => {
                                 console.log(error);
