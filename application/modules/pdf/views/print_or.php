@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:27px;">
+    <tr style="line-height:40px;">
         <td style=""><?php //echo $or_number; ?></td>
     </tr>
 </table>
@@ -128,7 +128,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:23px;">
+                <tr style="line-height:15px;">
                     <td style=""></td>
                 </tr>
             </table>
