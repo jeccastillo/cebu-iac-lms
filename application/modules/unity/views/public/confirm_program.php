@@ -34,6 +34,7 @@
                     </table>
                     <div class="box box-primary">
                         <div class="box-header">
+                            <h3>Additional Information</h3>
                         </div>
                         <div class="box-body">
                             <div class="row">
@@ -86,6 +87,87 @@
                             </div>
                         </div>
                     </div>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3>Educational Background</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>High School</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>School Address</label>
+                                    <textarea required class="form-control" v-model=""></textarea>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Years Attended (month-day-year)</label>
+                                    <the-mask
+                                        class="form-control"
+                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>College</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>School Address</label>
+                                    <textarea required class="form-control" v-model=""></textarea>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Years Attended From (month-day-year)</label>
+                                    <the-mask
+                                        class="form-control"
+                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                </div>
+                            </div>                           
+                            <div class="row">
+                                <div class="col-md-4 form-group">                                   
+                                </div>
+                                <div class="col-md-4 form-group">                                    
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Years Attended To (month-day-year)</label>
+                                    <the-mask
+                                        class="form-control"
+                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Señor High School</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>School Address</label>
+                                    <textarea required class="form-control" v-model=""></textarea>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Years Attended From (month-day-year)</label>
+                                    <the-mask
+                                        class="form-control"
+                                        :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Strand</label>
+                                    <input type="text" required class="form-control" v-model="">
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <label>Type of Student</label>
+                                    <select required class="form-control" v-model="">
+                                        <option value="Freshman">Freshman</option>
+                                        <option value="Transferee">Transferee</option>
+                                        <option value="Foreign">Foreign</option>
+                                    </select>                                    
+                                </div>                                
+                            </div>      
+                        </div>
+                    </div>
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
@@ -102,6 +184,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-the-mask/0.11.1/vue-the-mask.min.js"></script>    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <style scoped="">
