@@ -19,7 +19,7 @@
                                 </td>
                                 <td></td>
                             </tr>
-                            <tr>
+                            <tr v-if="sections">
                                 <th>Select Section/Schedule</th>                                
                                 <td>                                    
                                     <select v-model="request.preferedSection" @change="changeSection" class="form-control">
@@ -227,9 +227,7 @@ new Vue({
         programs: [],
         loaded: false,
         sections: [],
-        section: {
-            intID: 0,
-        },
+        section: undefined,
         api_data:{},        
         request: {
             intProgramID: undefined,
