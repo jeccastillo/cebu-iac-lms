@@ -87,8 +87,8 @@ $html .= '<tr>
       <td width="200px" >' . $snum. '</td>
      </tr>
      <tr>
-      <td width="80px" >&nbsp;MAJOR</td>
-      <td width="200px" >' .$student['strMajor'] . '</td>
+      <td width="80px" >&nbsp;</td>
+      <td width="200px" >' .($student['strMajor'] != "" && $student['strMajor'] != null)?'Major in '.$student['strMajor']:''. '</td>
       <td width="80px">&nbsp;ADDRESS</td>
       <td width="200px" >'. $student['strAddress']. '</td>        
      </tr>
