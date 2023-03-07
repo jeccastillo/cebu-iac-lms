@@ -61,6 +61,8 @@
             </tr>';
     }
 
+    $major = ($student['strMajor'] != "" && $student['strMajor'] != null)?'Major in '.$student['strMajor']:'';
+
 $html .= '<tr>
             <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">ASSESSMENT/REGISTRATION FORM</td>
         </tr>    
@@ -88,7 +90,7 @@ $html .= '<tr>
      </tr>
      <tr>
       <td width="80px" >&nbsp;</td>
-      <td width="200px" >' .($student['strMajor'] != "" && $student['strMajor'] != null)?'Major in '.$student['strMajor']:''. '</td>
+      <td width="200px" >' .$major. '</td>
       <td width="80px">&nbsp;ADDRESS</td>
       <td width="200px" >'. $student['strAddress']. '</td>        
      </tr>
