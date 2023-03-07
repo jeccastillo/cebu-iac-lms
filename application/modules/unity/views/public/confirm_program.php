@@ -40,7 +40,7 @@
                                 <label>Mother's Maiden Name</label>
                                 <input type="text" required class="form-control" v-model="request.mother">
                             </div>
-                            <div v-if="request.mother && request.mother!='' && request.mother!='n/a'" class="col-md-6 form-group">
+                            <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number</label>
                                 <the-mask 
                             class="form-control"
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div v-if="request.mother && request.mother!='' && request.mother!='n/a'" class="col-md-6 form-group">
+                            <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.mother_email">
                             </div>                                
@@ -58,7 +58,7 @@
                                 <label>Father's Name</label>
                                 <input type="text" required class="form-control" v-model="request.father">
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number</label>
                                 <the-mask
                             class="form-control"
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.father_email">
                             </div>                                
@@ -76,7 +76,7 @@
                                 <label>Name of Guardian</label>
                                 <input type="text" required class="form-control" v-model="request.guardian">
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number</label>
                                 <the-mask
                             class="form-control"
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.guardian_email">
                             </div>                                
@@ -319,41 +319,51 @@ new Vue({
             });
 
         },
-        confirmProgram: function(){
-            this.loading_spinner = true;
-            Swal.fire({
-                showCancelButton: false,
-                showCloseButton: false,
-                allowEscapeKey: false,
-                title: 'Please wait',
-                text: 'Processing confirmation',
-                icon: 'info',
-            })
-            Swal.showLoading();
-
-            axios
-                .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug , this.payload, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
+        confirmProgram: function(){    
+            if(this.request.mother == "n/a" && this.request.father == "n/a" && this.request.guardian == "n/a"){
+                Swal.fire(
+                    'Failed!',
+                    "You must have at least one guardian to contact.",
+                    'warning'
+                )
+            }
+            else{
+                this.loading_spinner = true;
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: false,
+                    allowEscapeKey: false,
+                    title: 'Please wait',
+                    text: 'Processing confirmation',
+                    icon: 'info',
                 })
-                .then(data => {     
-                    var formdata= new FormData();
-                    for (const [key, value] of Object.entries(this.request)) {
-                        formdata.append(key,value);
-                    }                                                    
-                    axios
-                    .post(this.base_url + 'unity/student_confirm_program', formdata, {
+                
+                Swal.showLoading();
+
+                axios
+                    .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug , this.payload, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
                     })
-                    .then(data => {
-                        Swal.hideLoading();
-                        location.reload();
-                    });               
-                    
-                });
+                    .then(data => {     
+                        var formdata= new FormData();
+                        for (const [key, value] of Object.entries(this.request)) {
+                            formdata.append(key,value);
+                        }                                                    
+                        axios
+                        .post(this.base_url + 'unity/student_confirm_program', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            Swal.hideLoading();
+                            location.reload();
+                        });               
+                        
+                    });
+            }
             
         }
     }
