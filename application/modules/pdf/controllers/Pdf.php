@@ -406,7 +406,8 @@ class Pdf extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
         $this->data['student'] = $this->data_fetcher->getStudent($id);
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        
+        print_r($this->data['registration']);
+        die();
         $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
 
         $this->data['transactions'] = $this->data_fetcher->getTransactions($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
