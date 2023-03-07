@@ -34,21 +34,21 @@
                             </tbody>
                         </table>
                         
-                        <h3>Additional Information</h3>                                                
+                        <h3>Additional Information (type N/A if not applicable)</h3>                                                
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Mother's Maiden Name</label>
                                 <input type="text" required class="form-control" v-model="request.mother">
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!=''" class="col-md-6 form-group">
                                 <label>Contact Number</label>
-                                <the-mask
+                                <the-mask 
                             class="form-control"
                             :mask="['(+63) ###-###-####']" type="text" v-model="request.mother_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!=''" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.mother_email">
                             </div>                                
