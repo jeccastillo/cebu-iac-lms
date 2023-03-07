@@ -34,13 +34,13 @@
                             </tbody>
                         </table>
                         
-                        <h3>Additional Information (type N/A if not applicable)</h3>                                                
+                        <h3>Additional Information (type n/a if not applicable)</h3>                                                
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Mother's Maiden Name</label>
                                 <input type="text" required class="form-control" v-model="request.mother">
                             </div>
-                            <div v-if="request.mother && request.mother!='' && request.mother!='N/A'" class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!='' && request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number</label>
                                 <the-mask 
                             class="form-control"
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div v-if="request.mother && request.mother!='' && request.mother!='N/A'" class="col-md-6 form-group">
+                            <div v-if="request.mother && request.mother!='' && request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
                                 <input type="email" required class="form-control" v-model="request.mother_email">
                             </div>                                
