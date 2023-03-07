@@ -443,6 +443,14 @@ new Vue({
                             this.or_update.cashier_id = this.cashier.user_id;
                         }
 
+                        axios.get(api_url + 'admissions/student-info/' + this.slug)
+                        .then((data) => {
+                            this.applicant_data = data.data.data;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
                             this.payments = data.data.data;
@@ -481,13 +489,7 @@ new Vue({
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
 
-                                axios.get(api_url + 'admissions/student-info/' + this.slug)
-                                .then((data) => {
-                                    this.applicant_data = data.data.data;
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                })
+                                
                             })
                             .catch((error) => {
                                 console.log(error);
