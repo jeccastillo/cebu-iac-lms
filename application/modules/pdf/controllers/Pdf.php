@@ -408,7 +408,7 @@ class Pdf extends CI_Controller {
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         if($this->data['registration']['enumStudentType'] == "new"){
             $this->data['snum_label'] = "APP NUMBER";
-            $this->data['snum'] = $this->data['student']['strStudentNumber'];
+            $this->data['snum'] = "A".$this->data['active_sem']['strYearStart']."-".str_pad($app_id,4,"0",STR_PAD_LEFT);
         }
         else{
             $this->data['snum_label'] = "STUD NUMBER";

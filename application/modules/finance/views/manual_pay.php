@@ -276,7 +276,7 @@ new Vue({
         .then((data) => {
             this.student = data.data.data;
             this.request.slug = this.slug;     
-            this.applicant_id = "A"+year+"-"+String(this.student.id).padStart(3, '0');       
+            this.applicant_id = "A"+year+"-"+String(this.student.id).padStart(4, '0');       
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
@@ -313,8 +313,7 @@ new Vue({
     },
 
     methods: {      
-        printOR: function(payment){
-            console.log("PRINT");
+        printOR: function(payment){            
             this.or_print.or_number = payment.or_number;
             this.or_print.description = payment.description;
             this.or_print.total_amount_due = payment.subtotal_order;
