@@ -4,7 +4,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
-                        Stud No :{{ student.strStudentNumber }}
+                        Please confirm your selected program and fill in additional information.
                     </h3>
                 </div>
                 <div class="box-body">
