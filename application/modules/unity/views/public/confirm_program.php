@@ -19,7 +19,7 @@
                                 </td>
                                 <td></td>
                             </tr>
-                            <tr v-if="sections">
+                            <tr>
                                 <th>Select Section/Schedule</th>                                
                                 <td>                                    
                                     <select v-model="request.preferedSection" @change="changeSection" class="form-control">
@@ -218,7 +218,6 @@
 }
 </style>
 <script>
-    console.log("TEST","<?php echo $id; ?>");
 new Vue({
     el: '#registration-container',
     data: {
@@ -240,7 +239,8 @@ new Vue({
         },
         show_select: false,
     },    
-    mounted() {                
+    mounted() {
+
         let url_string = window.location.href;           
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
