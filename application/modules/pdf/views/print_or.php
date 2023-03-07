@@ -95,11 +95,11 @@
                     <td style="font-size:10px;text-align:right;color:#666;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
-            <!-- <table >
-                <tr style="line-height:15px;">
+            <table >
+                <tr style="line-height:10px;">
                     <td style=""></td>
                 </tr>
-            </table> -->
+            </table>
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
