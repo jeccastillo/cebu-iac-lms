@@ -172,7 +172,8 @@
                             <label>Guardian's Email Address</label>
                             <input type="email" value="<?php echo $student['guardian_email']; ?>" name="guardian_email" class="form-control" id="guardian_email" placeholder="Enter Email">
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="form-group col-md-4">
                             <label>High School</label>
                             <input type="text" value="<?php echo $student['high_school']; ?>" name="high_school" class="form-control" id="high_school" placeholder="Enter Name">
@@ -185,7 +186,8 @@
                             <label>Attended</label>
                             <input type="text" value="<?php echo $student['high_school_attended']; ?>" name="high_school_attended" class="form-control" id="high_school_attended" placeholder="Enter Attended Date">
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="form-group col-md-4">
                             <label>Senior High School</label>
                             <input type="text" value="<?php echo $student['senior_high']; ?>" name="senior_high" class="form-control" id="senior_high" placeholder="Enter Name">
@@ -198,7 +200,8 @@
                             <label>Attended</label>
                             <input type="text" value="<?php echo $student['senior_high_attended']; ?>" name="senior_high_attended" class="form-control" id="senior_high_attended" placeholder="Enter Attended Date">
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="form-group col-md-4">
                             <label>College</label>
                             <input type="text" value="<?php echo $student['college']; ?>" name="college" class="form-control" id="college" placeholder="Enter Name">
