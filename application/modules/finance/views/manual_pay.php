@@ -218,7 +218,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
         reservation_payment: undefined,
-        application_payment: undefined,
+        application_payment: undefined,        
         cashier: undefined,
         request:{
             first_name: '',
@@ -275,8 +275,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
             this.student = data.data.data;
-            this.request.slug = this.slug;     
-            this.applicant_id = "A"+year+"-"+String(this.student.id).padStart(4, '0');       
+            this.request.slug = this.slug;                 
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
@@ -287,7 +286,8 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;
-                this.or_update.sy_reference = data.data.current_sem;
+                this.or_update.sy_reference = data.data.current_sem;                
+                this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
                     this.or_update.or_number = this.cashier.or_current;
