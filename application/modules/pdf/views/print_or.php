@@ -81,13 +81,13 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:20px;">
+                <tr style="height:25px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
             <table >
                 <tr style="line-height:20px;">
-                    <td style="font-size:10px;text-align:right;color:#666;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
+                    <td style="font-size:10px;text-align:right;color:#666;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
             <!-- <table >
@@ -128,7 +128,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:13px;">
+                <tr style="line-height:8px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -235,19 +235,19 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <table >
+            <!-- <table >
                 <tr style="line-height:10px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;color:#666;">
                         
                     </td>
                 </tr>
-            </table>
-            <table >
+            </table> -->
+            <!-- <table >
                 <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
-            </table>
+            </table> -->
             <table >
                 <tr style="line-height:15px;">
                     <td style="width:60%"></td>
@@ -257,7 +257,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:50px;">
+                <tr style="line-height:30px;">
                     <td style=""></td>
                 </tr>
             </table>
