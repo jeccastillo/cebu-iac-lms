@@ -25,7 +25,7 @@
                     </select>
                 </div>
             </div><!-- /.box-header -->
-            <div class="box-body table-responsive">
+            <div class="box-body" style="overflow-x:auto;">
                 <table id="classlist-table-admin" class="table table-bordered table-hover">
                     <thead><tr>
                         <th>id</th>
@@ -35,6 +35,7 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
+                        <th>Slots</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
                         <th>Actions</th>
@@ -54,6 +55,7 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
+                        <th>Slots</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>   
                         <th>Actions</th>                                             
