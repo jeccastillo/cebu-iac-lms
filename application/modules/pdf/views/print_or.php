@@ -86,7 +86,7 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:55px;">
+                <tr style="line-height:40px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
