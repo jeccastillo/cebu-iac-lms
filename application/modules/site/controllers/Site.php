@@ -64,6 +64,9 @@ class Site extends CI_Controller {
 			<br /><br />
 			See you soon, <span class="font-bold">Game Changer</span>';
 		}
+		elseif($type == "confirm"){
+			$this->data['text'] = '<h3>You have successfully confirmed your program.</h3>';
+		}
 		else{
 			$this->data['text'] = 'Payment Successful';
 		}

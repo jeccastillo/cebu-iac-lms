@@ -161,9 +161,9 @@
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
                                 <select required class="form-control" v-model="request.student_type">
-                                    <option value="Freshman">Freshman</option>
-                                    <option v-if="request.college!='n/a'" value="Transferee">Transferee</option>
-                                    <option value="Foreign">Foreign</option>
+                                    <option v-if="request.college =='n/a'" value="freshman">Freshman</option>
+                                    <option v-if="request.college !='n/a'" value="transferee">Transferee</option>
+                                    <option v-if="request.college =='n/a'" value="foreign">Foreign</option>
                                 </select>                                    
                             </div>                                                                                   
                         </div>
@@ -359,7 +359,7 @@ new Vue({
                         })
                         .then(data => {
                             Swal.hideLoading();
-                            location.reload();
+                            document.location = this.base_url+'site/awesome/confirm';
                         });               
                         
                     });
