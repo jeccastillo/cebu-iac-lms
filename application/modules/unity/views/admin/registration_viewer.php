@@ -389,7 +389,9 @@ new Vue({
             cashier_id: undefined,
         },
         amount_to_pay: 0,    
-        applicant_data: {},    
+        applicant_data: {
+            id: undefined,
+        },    
         advanced_privilages: false,      
         description: 'Tuition Full', 
         description_other: '',
