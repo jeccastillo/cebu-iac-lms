@@ -33,7 +33,7 @@
                         </tbody>
                     </table>
                     
-                    <!-- <h3>Additional Information</h3>                                                
+                    <h3>Additional Information</h3>                                                
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Mother's Maiden Name</label>
@@ -60,7 +60,7 @@
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
                             <the-mask
-                           class="form-control"
+                           class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                            :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
                             <the-mask
-                           class="form-control"
+                           class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                            :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
@@ -87,41 +87,41 @@
                             <label>Email Address</label>
                             <input type="email" required class="form-control" v-model="request.guardian_email">
                         </div>                                
-                    </div> -->
+                    </div>
                     
                 
-                    <!-- <h3>Educational Background</h3>
+                    <h3>Educational Background</h3>
                 
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label>High School</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text" required class="form-control" v-model="request.high_school">
                         </div>
                         <div class="col-md-4 form-group">
                             <label>School Address</label>
-                            <textarea required class="form-control" v-model=""></textarea>
+                            <textarea required class="form-control" v-model="request.high_school_address"></textarea>
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="request.high_school_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label>College</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text"  class="form-control" v-model="request.college">
                         </div>
                         <div class="col-md-4 form-group">
                             <label>School Address</label>
-                            <textarea required class="form-control" v-model=""></textarea>
+                            <textarea class="form-control" v-model="request.college_address"></textarea>
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="request.college_attended_from" masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>                           
                     <div class="row">
@@ -133,23 +133,23 @@
                             <label>Years Attended To (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="request.college_attended_to" masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <label>Señor High School</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <label>Senior High School</label>
+                            <input type="text" required class="form-control" v-model="request.senior_high">
                         </div>
                         <div class="col-md-4 form-group">
                             <label>School Address</label>
-                            <textarea required class="form-control" v-model=""></textarea>
+                            <textarea required class="form-control" v-model="request.senior_high_address"></textarea>
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Years Attended From (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['( ##-##-####']" type="text" v-model="request.senior_high_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>
                     <div class="row">
@@ -159,13 +159,13 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <label>Type of Student</label>
-                            <select required class="form-control" v-model="">
+                            <select required class="form-control" v-model="request.student_type">
                                 <option value="Freshman">Freshman</option>
                                 <option value="Transferee">Transferee</option>
                                 <option value="Foreign">Foreign</option>
                             </select>                                    
                         </div>                                                                                   
-                    </div> -->
+                    </div>
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
@@ -231,15 +231,25 @@ new Vue({
             intProgramID: undefined,
             preferedSection: undefined,
             id: undefined,
-            // father: undefined,
-            // father_email: undefined,
-            // father_contact: undefined,
-            // mother: undefined,
-            // mother_email: undefined,
-            // mother_contact: undefined,
-            // guardian: undefined,
-            // guardian_email: undefined,
-            // guardian_contact: undefined,
+            father: undefined,
+            father_email: undefined,
+            father_contact: undefined,
+            mother: undefined,
+            mother_email: undefined,
+            mother_contact: undefined,
+            guardian: undefined,
+            guardian_email: undefined,
+            guardian_contact: undefined,
+            high_school: undefined,
+            high_school_address: undefined,
+            high_school_attended: undefined,
+            college: undefined,
+            college_address: undefined,
+            college_attended: undefined,
+            senior_high: undefined,
+            senior_high_address: undefined,
+            senior_high_attended: undefined,
+            student_type: undefined,
         },
         payload:{
 
