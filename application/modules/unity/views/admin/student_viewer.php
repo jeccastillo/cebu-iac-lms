@@ -10,7 +10,7 @@
                     <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
-                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print_no_header/' + student.intID +'/'+ active_sem.intID">
+                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID + '/8'">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a v-if="reg_status != 'For Subject Enlistment'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">

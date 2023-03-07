@@ -11,7 +11,7 @@
     $pdf->SetTitle($student['strLastname'] . ", " . $student['strFirstname'] . ', ' . substr($student['strMiddlename'], 0,1). ".-". $student['strProgramCode']);
     
     // set margins
-    $pdf->SetMargins(PDF_MARGIN_LEFT, 6 , PDF_MARGIN_RIGHT);
+    $pdf->SetMargins(PDF_MARGIN_LEFT, $mt , PDF_MARGIN_RIGHT);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     //$pdf->SetAutoPageBreak(TRUE, 6);
@@ -27,10 +27,10 @@
     $payment_division = $tuition['total'] / 4;    
 
     
-    // Set some content to print
-$html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+    if($mt == 8){
+        $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
         <tr>
-            <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="100" height="29"/></td>
+            <td width="100%" align="center" style="text-align:center;vertical-align: middle;"></td>
         </tr>
         <tr>            
             <td colspan = "3" width="100%" style="text-align: center;">             
@@ -38,12 +38,30 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
              </td>
         </tr>        
         <tr>            
-            <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-                <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
-			    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+            <td colspan = "3" width="100%" style="text-align: center;line-height:1">                             
             </td>           
-        </tr>
-        <tr>
+        </tr>';
+    }
+    else{
+    // Set some content to print
+    $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+            <tr>
+                <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="100" height="29"/></td>
+            </tr>
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center;">             
+                    
+                </td>
+            </tr>        
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
+                    <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
+                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+                </td>           
+            </tr>';
+    }
+
+$html .= '<tr>
             <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">ASSESSMENT/REGISTRATION FORM</td>
         </tr>    
     </table>
@@ -59,8 +77,8 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
      <tr>
       <td width="80px">&nbsp;NAME</td>
       <td width="200px" >:&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
-      <td width="80px">&nbsp;DATE</td>
-      <td width="200px" >:&nbsp;'. $registration['dteRegistered']. '</td>      
+      <td width="80px">&nbsp;ADDRESS</td>
+      <td width="200px" >:&nbsp;'. $student['strAddress']. '</td>      
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>

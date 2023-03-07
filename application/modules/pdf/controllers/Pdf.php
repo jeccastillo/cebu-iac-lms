@@ -391,103 +391,14 @@ class Pdf extends CI_Controller {
     
     }
     
-    function student_viewer_registration_print_no_header($id, $sem = null){
-     
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $active_sem = $this->data_fetcher->get_active_sem();
-        //$this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-        if($sem!=null)
-            $this->data['selected_ay'] = $sem;
-        else
-            $this->data['selected_ay'] = $active_sem['intID'];
-
-        $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        
-        $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-
-        $this->data['transactions'] = $this->data_fetcher->getTransactions($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
-        //--------TUITION-------------------------------------------------------------------
-        $this->data['tuition'] = $this->data_fetcher->getTuition($id, $this->data['selected_ay'], $this->data['registration']['enumScholarship']);
-        
-        $student['has_nstp'] = true;
-            
-            $records = $this->data_fetcher->checkClasslistStudentNSTP($this->data['student']['intID'],$sem);
-            if(empty($records))
-                $student['has_nstp'] = false;
-            
-            $s_array[] = $student;
-
-        $registration = $this->data['registration'];
-        $tuition = $this->data['tuition'];
-        //$total = $data['total'];
-        
-
-        switch($this->data['student']['strProgramCode'])
-        {
-            case 'BSCS':
-                $this->data['deanSignature'] = 'signat-SCS-Dean2.png';
-            break;
-            case 'BSIT':
-                $this->data['deanSignature'] = 'signat-SCS-Dean2.png';
-            break;
-            case 'BSBA-MM':
-                $this->data['deanSignature'] = 'signat-SBM-Dean2.png';
-            break;
-            case 'BSBA-HRDM':
-                $this->data['deanSignature'] = 'signat-SBM-Dean2.png';
-            break;
-            case 'BSOA':
-                $this->data['deanSignature'] = 'signat-SBM-Dean2.png';
-            break;
-            case 'BSE-E':
-                $this->data['deanSignature'] = 'signat-SOE-Dean2.png';
-            break;
-            case 'BSE-F':
-                $this->data['deanSignature'] = 'signat-SOE-Dean2.png';
-            break;
-            case 'BSE-M':
-                $this->data['deanSignature'] = 'signat-SOE-Dean2.png';
-            break;
-            case 'BSE-SS':
-                $this->data['deanSignature'] = 'signat-SOE-Dean2.png';
-            break;
-            case 'BSHM':
-                $this->data['deanSignature'] = 'signat-SHTM-Dean2.png';
-            break;
-            case 'BSTM':
-                $this->data['deanSignature'] = 'signat-SHTM-Dean2.png';
-            break;
-            default:
-                $this->data['deanSignature'] = 'signat-SCS-Dean2.png';
-        }
-        
-        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
-
-       
-        foreach($records as $record)
-        {
-            $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);            
-            //print_r($record['schedule']);
-            $this->data['records'][] = $record;
-        }
-
-        //for total units
-        $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
-        
-        $this->load->view("print_view_student_reg_no_header",$this->data);
-        //$this->load->view("save_pdf_reg2",$this->data);
-        
-    }
-    
-    function student_viewer_registration_print($id, $sem = null)
+    function student_viewer_registration_print($id, $sem = null, $mt = 6)
     {
        
+        $this->data['mt'] = $mt;
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $active_sem = $this->data_fetcher->get_active_sem();
         //$this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-        if($sem!=null)
+        if($sem!=null || $sem == 0)
             $this->data['selected_ay'] = $sem;
         else
             $this->data['selected_ay'] = $active_sem['intID'];
