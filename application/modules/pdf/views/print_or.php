@@ -18,7 +18,7 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%;height:200px;font-size:9px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
+                    <td style="width:50%;height:195px;font-size:9px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
@@ -72,11 +72,11 @@
                     <td style="width:50%"><?php echo !$is_cash?$check_number:""; ?></td>
                 </tr>
             </table>   
-            <table>
+            <!-- <table>
                 <tr style="line-height:3px;">
                     <td style=""></td>
                 </tr>
-            </table>                            
+            </table>                             -->
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
                     <td style="width:50%"></td>
@@ -248,7 +248,7 @@
                 </tr>
             </table> -->
             <table >
-                <tr style="line-height:5px;">
+                <tr style="line-height:10px;">
                     <td style=""></td>
                 </tr>
             </table>
