@@ -166,8 +166,8 @@
                                     </select>                                    
                                 </div>                                
                             </div>      
-                        </div>
-                    </div> -->
+                        </div> -->
+                    </div>
                     <hr />    
                     <div class="text-center">
                         <button class="btn btn-primary" v-if="loaded" @click="confirmProgram">Confirm Selected Program and Section</button>                        
@@ -282,6 +282,10 @@ new Vue({
             .then((data) => {                    
                 this.section = data.data.section;                 
             });
+        },
+        unmaskedValue: function(){
+            var val = this.$refs.input.clean
+            console.log(val);
         },
         changeProgram: function(){
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
