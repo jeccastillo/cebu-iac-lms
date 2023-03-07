@@ -283,6 +283,10 @@ new Vue({
                 this.section = data.data.section;                 
             });
         },
+        unmaskedValue: function(){
+            var val = this.$refs.input.clean
+            console.log(val);
+        },
         changeProgram: function(){
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
