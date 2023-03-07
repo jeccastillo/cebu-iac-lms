@@ -32,7 +32,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <div class="box box-primary">
+                    <div class="box box-primary">
                         <div class="box-header">
                             <h3>Additional Information</h3>
                         </div>
@@ -166,7 +166,7 @@
                                     </select>                                    
                                 </div>                                
                             </div>      
-                        </div> -->
+                        </div>
                     </div>
                     <hr />    
                     <div class="text-center">
