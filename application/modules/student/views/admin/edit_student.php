@@ -170,6 +170,49 @@
                         <label>Guardian's Email Address</label>
                         <input type="email" value="<?php echo $student['guardian_email']; ?>" name="guardian_email" class="form-control" id="guardian_email" placeholder="Enter Email">
                 </div>
+
+                <div class="form-group col-md-4">
+                        <label>High School</label>
+                        <input type="text" value="<?php echo $student['high_school']; ?>" name="high_school" class="form-control" id="high_school" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>High School Address</label>
+                        <textarea name="high_school_address" class="form-control" id="high_school_address" placeholder="Enter Address"><?php echo $student['high_school_address'] ?></textarea>
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Attended</label>
+                        <input type="text" value="<?php echo $student['high_school_attended']; ?>" name="high_school_attended" class="form-control" id="high_school_attended" placeholder="Enter Attended Date">
+                </div>
+
+                <div class="form-group col-md-4">
+                        <label>Senior High School</label>
+                        <input type="text" value="<?php echo $student['senior_high']; ?>" name="senior_high" class="form-control" id="senior_high" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Senior High School Address</label>
+                        <textarea name="senior_high_address" class="form-control" id="senior_high_address" placeholder="Enter Address"><?php echo $student['senior_high_address'] ?></textarea>
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Attended</label>
+                        <input type="text" value="<?php echo $student['senior_high_attended']; ?>" name="senior_high_attended" class="form-control" id="senior_high_attended" placeholder="Enter Attended Date">
+                </div>
+
+                <div class="form-group col-md-4">
+                        <label>College</label>
+                        <input type="text" value="<?php echo $student['college']; ?>" name="college" class="form-control" id="college" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>College Address</label>
+                        <textarea name="college_address" class="form-control" id="college_address" placeholder="Enter Address"><?php echo $student['college_address'] ?></textarea>
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Attended From</label>
+                        <input type="text" value="<?php echo $student['college_attended_from']; ?>" name="college_attended_from" class="form-control" id="college_attended_from" placeholder="Enter Attended Date">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Attended To</label>
+                        <input type="text" value="<?php echo $student['college_attended_to']; ?>" name="college_attended_to" class="form-control" id="college_attended_to" placeholder="Enter Attended Date">
+                </div>
                 <div class="form-group col-xs-12">
                     <input type="submit" value="update" class="btn btn-default  btn-flat">
                 </div>
