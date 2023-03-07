@@ -351,7 +351,7 @@ class Schedule extends CI_Controller {
     public function submit_edit_schedule()
     {
         $post = $this->input->post();
-        if($post['intEncoderID'] == $this->session->userdata('intID') || $this->is_super_admin())
+        if($post['intEncoderID'] == $this->session->userdata('intID') || $this->is_super_admin() || $this->is_registrar())
         {
             $referer = $this->session->flashdata('ref');
 
