@@ -105,7 +105,7 @@
                             <label>Years Attended (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="request.high_school_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['##-##-####']" type="text" v-model="request.high_school_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
@@ -121,7 +121,7 @@
                             <label>Years Attended From (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="request.college_attended_from" masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['##-##-####']" type="text" v-model="request.college_attended_from" masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>                           
                     <div class="row">
@@ -133,7 +133,7 @@
                             <label>Years Attended To (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="request.college_attended_to" masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['##-##-####']" type="text" v-model="request.college_attended_to" masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div> 
                     <div class="row">
@@ -149,13 +149,13 @@
                             <label>Years Attended From (month-day-year)</label>
                             <the-mask
                                 class="form-control"
-                                :mask="['( ##-##-####']" type="text" v-model="request.senior_high_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
+                                :mask="['##-##-####']" type="text" v-model="request.senior_high_attended" required masked="true" placeholder="mm-dd-yyyy"></the-mask>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
                             <label>Strand</label>
-                            <input type="text" required class="form-control" v-model="">
+                            <input type="text" required class="form-control" v-model="request.strand">
                         </div>
                         <div class="col-md-8 form-group">
                             <label>Type of Student</label>
@@ -250,6 +250,7 @@ new Vue({
             senior_high: undefined,
             senior_high_address: undefined,
             senior_high_attended: undefined,
+            strand: undefined,
             student_type: undefined,
         },
         payload:{
