@@ -31,7 +31,7 @@
                 </div>
             </div><!-- /.box-header -->
             
-            <div class="box-body table-responsive">
+            <div class="box-body" style="overflow-x:auto;">
                 <table id="users_table" class="table table-hover table-bordered">
                     <thead>
                         <tr>
