@@ -19,7 +19,7 @@
         $(this).html( '<input type="text" placeholder="'+title+'" size="16" />' );
     });
         
-    $('#users_table').dataTable({
+    var table = $('#users_table').DataTable({
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
