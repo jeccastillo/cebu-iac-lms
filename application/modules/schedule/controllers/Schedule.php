@@ -357,7 +357,7 @@ class Schedule extends CI_Controller {
 
             $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
             $conflict = $this->data_fetcher->schedule_conflict($post,$post['intRoomSchedID'],$post['intSem']);
-            $sconflict = $this->data_fetcher->section_conflict($post,$post['intRoomSchedID'],$classlist->strSection,$post['intSem']);
+            $sconflict = $this->data_fetcher->section_conflict($post,$post['intRoomSchedID'],$post['blockSectionID'],$post['intSem']);
             $fconflict = $this->data_fetcher->faculty_conflict($post,$post['intRoomSchedID'],$classlist->intFacultyID,$post['intSem']);
 
             if(!empty($conflict)){
