@@ -4,10 +4,10 @@
             <small>
                 <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                 <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id">
+                <a v-if="applicant_data.id" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id">
                     <i class="ion ion-printer"></i>RF Print
                 </a>                     
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/0/35''">
+                <a v-if="applicant_data.id" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/0/35''">
                     <i class="ion ion-printer"></i>RF No Header
                 </a>           
             </small>
@@ -389,9 +389,7 @@ new Vue({
             cashier_id: undefined,
         },
         amount_to_pay: 0,    
-        applicant_data: {
-            id: undefined,
-        },    
+        applicant_data: {},    
         advanced_privilages: false,      
         description: 'Tuition Full', 
         description_other: '',
