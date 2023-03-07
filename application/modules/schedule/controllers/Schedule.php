@@ -7,7 +7,7 @@ class Schedule extends CI_Controller {
         
 		parent::__construct();
 		
-        if(!$this->is_super_admin() && !$this->is_department_head())
+        if(!$this->is_super_admin() && !$this->is_department_head() && !$this->is_registrar())
             redirect(base_url()."unity");
         
         $this->config->load('themes');		
@@ -59,8 +59,7 @@ class Schedule extends CI_Controller {
     
     public function add_schedule()
     {
-        if($this->is_admin() || $this->is_department_head())
-        {
+        
             $this->data['alert'] = $this->session->flashdata('alert');
             $this->data['suggested'] = $this->session->flashdata('suggested_sched');
             
@@ -81,46 +80,39 @@ class Schedule extends CI_Controller {
             $this->load->view("schedule_validation_js",$this->data); 
             //print_r($this->data['classlist']);
             
-        }
-        else
-            redirect(base_url()."unity");  
     }
     
     public function edit_schedule($id)
     {
-        
-        if($this->is_admin() || $this->is_department_head() || $this->is_registrar())
-        {
-            $this->data['item'] = $this->data_fetcher->getSchedule($id,$this->session->userdata('strDepartment'),$this->is_super_admin());
-            if(!empty($this->data['item'])){
-                $this->load->library('user_agent');
-                if ($this->agent->is_referral())
-                {
-                        $this->session->set_flashdata('ref',$this->agent->referrer());
-                }
-                $this->data['alert'] = $this->session->flashdata('alert');
-
-
-                $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
-
-                $this->data['types'] = Array('lect','lab');
-                $this->data['timeslots'] = Array('7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00');
-                $active_sem = $this->data_fetcher->get_active_sem();
-                
-                $this->data['rooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
-                $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
-                $this->load->view("common/header",$this->data);
-                $this->load->view("admin/edit_schedule",$this->data);
-                $this->load->view("common/footer",$this->data); 
-                $this->load->view("schedule_validation_js",$this->data); 
-                $this->load->view("common/edit_schedule_conf",$this->data); 
-               // print_r($this->data['classlists']);
+        $admin = ($this->is_super_admin() || $this->is_registrar())?true:false;
+        $this->data['item'] = $this->data_fetcher->getSchedule($id,$this->session->userdata('strDepartment'),$admin);
+        if(!empty($this->data['item'])){
+            $this->load->library('user_agent');
+            if ($this->agent->is_referral())
+            {
+                    $this->session->set_flashdata('ref',$this->agent->referrer());
             }
-            else
-                redirect(base_url()."unity"); 
+            $this->data['alert'] = $this->session->flashdata('alert');
+
+
+            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
+
+            $this->data['types'] = Array('lect','lab');
+            $this->data['timeslots'] = Array('7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00');
+            $active_sem = $this->data_fetcher->get_active_sem();
+            
+            $this->data['rooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
+            $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/edit_schedule",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("schedule_validation_js",$this->data); 
+            $this->load->view("common/edit_schedule_conf",$this->data); 
+            // print_r($this->data['classlists']);
         }
         else
-            redirect(base_url()."unity");    
+            redirect(base_url()."unity"); 
+        
         
         
     }
@@ -433,25 +425,21 @@ class Schedule extends CI_Controller {
     
     public function delete_schedule()
     {
-        if($this->is_admin() || $this->is_department_head())
+       
+        $post = $this->input->post();
+        $info = $this->data_fetcher->getSchedule($post['id']);
+        if($info['strDepartment'] == $this->session->userdata('strDepartment') || $this->is_super_admin())
         {
-            $post = $this->input->post();
-            $info = $this->data_fetcher->getSchedule($post['id']);
-            if($info['strDepartment'] == $this->session->userdata('strDepartment') || $this->is_super_admin())
-            {
-                $this->data_poster->deleteSchedule($post['id'],'intRoomSchedID');
+            $this->data_poster->deleteSchedule($post['id'],'intRoomSchedID');
 
-                $data['message'] = "success";
-                $this->data_poster->log_action('Schedule','Deleted a Schedule '.$info['strScheduleCode'],'red');
-            }
-            else
-                $data['message'] = "You are unauthorized to delete this schedule"; 
+            $data['message'] = "success";
+            $this->data_poster->log_action('Schedule','Deleted a Schedule '.$info['strScheduleCode'],'red');
         }
         else
-        {
-             $data['message'] = "Must be an Administrator or Department Head to delete";   
-        }
-         echo json_encode($data);
+            $data['message'] = "You are unauthorized to delete this schedule"; 
+    
+    
+        echo json_encode($data);
     }
     
     public function faculty_logged_in()
