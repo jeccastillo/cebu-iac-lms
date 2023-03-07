@@ -481,7 +481,7 @@ new Vue({
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
 
-                                axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+                                axios.get(api_url + 'admissions/student-info/' + this.slug)
                                 .then((data) => {
                                     this.applicant_data = data.data.data;
                                 })
