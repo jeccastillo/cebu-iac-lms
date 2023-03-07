@@ -81,15 +81,16 @@
                 <div class="form-group col-xs-6">
                         <label>Address</label>
                         <textarea class="form-control" name="strAddress" rows="3" placeholder="Enter Address"><?php echo $student['strAddress']; ?></textarea>
-                    </div>
-                <div class="form-group col-xs-6">
+                </div>
+                
+                <!-- <div class="form-group col-xs-6">
                         <label for="strZipCode">Zip Code</label>
                         <input type="number" name="strZipCode" class="form-control" id="strZipCode" placeholder="Enter Zip Code" value="<?php echo $student['strZipCode']; ?>">
                 </div>
                 <div class="form-group col-xs-6">
                         <label for="strGSuiteEmail">GSuite Email</label>
                         <input type="email" name="strGSuiteEmail" class="form-control" id="strGSuiteEmail" placeholder="Enter GSuite Email" value="<?php echo $student['strGSuiteEmail']; ?>">
-                </div>     
+                </div>      -->
                 <div class="form-group col-xs-6">
                     <label for="intProgramID">Course</label>
                     <select class="form-control" name="intProgramID" >
@@ -130,6 +131,45 @@
                      
                 </div>
 
+                <div class="form-group col-md-4">
+                        <label>Mother's Maiden Name</label>
+                        <input type="text" value="<?php echo $student['mother']; ?>" name="mother" class="form-control" id="mother" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Mother's Contact Number</label>
+                        <input type="text" value="<?php echo $student['mother_contact']; ?>" name="mother_contact" class="form-control" id="mother_contact" placeholder="Enter Contact">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Mother's Email Address</label>
+                        <input type="email" value="<?php echo $student['mother_email']; ?>" name="mother_email" class="form-control" id="mother_email" placeholder="Enter Email">
+                </div>
+
+                <div class="form-group col-md-4">
+                        <label>Father's Name</label>
+                        <input type="text" value="<?php echo $student['father']; ?>" name="father" class="form-control" id="father" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Father's Contact Number</label>
+                        <input type="text" value="<?php echo $student['father_contact']; ?>" name="father_contact" class="form-control" id="father_contact" placeholder="Enter Contact">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Father's Email Address</label>
+                        <input type="email" value="<?php echo $student['father_email']; ?>" name="father_email" class="form-control" id="father_email" placeholder="Enter Email">
+                </div>
+
+
+                <div class="form-group col-md-4">
+                        <label>Guardian's Name</label>
+                        <input type="text" value="<?php echo $student['guardian']; ?>" name="guardian" class="form-control" id="guardian" placeholder="Enter Name">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Guardian's Contact Number</label>
+                        <input type="text" value="<?php echo $student['guardian_contact']; ?>" name="guardian_contact" class="form-control" id="guardian_contact" placeholder="Enter Contact">
+                </div>
+                <div class="form-group col-md-4">
+                        <label>Guardian's Email Address</label>
+                        <input type="email" value="<?php echo $student['guardian_email']; ?>" name="guardian_email" class="form-control" id="guardian_email" placeholder="Enter Email">
+                </div>
                 <div class="form-group col-xs-12">
                     <input type="submit" value="update" class="btn btn-default  btn-flat">
                 </div>
