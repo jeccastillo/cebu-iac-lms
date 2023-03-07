@@ -7,7 +7,7 @@
                 <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID">
                     <i class="ion ion-printer"></i>RF Print
                 </a>                     
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID + '/0/15'">
+                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID + '/0/35'">
                     <i class="ion ion-printer"></i>RF No Header
                 </a>           
             </small>
