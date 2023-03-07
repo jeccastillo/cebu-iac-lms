@@ -114,11 +114,29 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <table style="min-height:35px;">
+            <?php
+                $text = $student_address;
+
+                $splitstring1 = substr($text, 0, floor(strlen($text) / 2));
+                $splitstring2 = substr($text, floor(strlen($text) / 2));
+                
+                if (substr($splitstring1, 0, -1) != ' ' AND substr($splitstring2, 0, 1) != ' ')
+                {
+                    $middle = strlen($splitstring1) + strpos($splitstring2, ' ') + 1;
+                }
+                else
+                {
+                    $middle = strrpos(substr($text, 0, floor(strlen($text) / 2)), ' ') + 1;    
+                }
+                
+                $string1 = substr($text, 0, $middle);  // "The Quick : Brown Fox Jumped "
+                $string2 = substr($text, $middle);  // "Over The Lazy / Dog"
+            ?>
+            <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;color:#666;">
                     <span style="color:#fff;">Address &nbsp;</span>
-                    <?php echo $student_address; ?></td>
+                    <?php echo $string1."<br />".$string2; ?></td>
                 </tr>
             </table>
             <!-- <table >
