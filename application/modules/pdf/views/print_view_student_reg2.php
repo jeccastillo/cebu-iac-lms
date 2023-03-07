@@ -217,13 +217,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>
                             <tr>
                                 <td>Other Fees</td>
-                                <td style="text-align:center;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
-                                <td style="text-align:center;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                <td style="text-align:center;border-bottom: 1px solid #555;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                <td style="text-align:center;border-bottom: 1px solid #555;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold; border-bottom: 1px solid #555; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                             </tr>
                         </table>
                         <table cellpadding="0"  width="258px" style="color:#333; font-size:8;">
