@@ -60,7 +60,7 @@
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
                             <the-mask
-                           class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                           class="form-control"
                            :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <div class="col-md-6 form-group">
                             <label>Contact Number</label>
                             <the-mask
-                           class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                           class="form-control"
                            :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
                         </div>
                     </div>
