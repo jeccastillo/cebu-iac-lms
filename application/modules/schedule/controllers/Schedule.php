@@ -428,7 +428,7 @@ class Schedule extends CI_Controller {
        
         $post = $this->input->post();
         $info = $this->data_fetcher->getSchedule($post['id']);
-        if($info['strDepartment'] == $this->session->userdata('strDepartment') || $this->is_super_admin())
+        if($info['strDepartment'] == $this->session->userdata('strDepartment') || $this->is_super_admin() || $this->is_registrar())
         {
             $this->data_poster->deleteSchedule($post['id'],'intRoomSchedID');
 
