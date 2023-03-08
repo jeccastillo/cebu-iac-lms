@@ -284,7 +284,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     if($tuition['new_student'] != 0){
 
                         $html.='<tr>
-                        <td colspan="2" style= "font-size:9; font-weight:bold;">NEW STUDENT FEES</td></tr>';
+                        <td colspan="2" style= "font-size:8;">NEW STUDENT FEES</td></tr>';
                     
                         foreach($tuition['new_student_list'] as $key=>$val){
         
