@@ -317,12 +317,14 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                         <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
-                        $html.=' 
-                            <tr>
-                                <td style="font-weight:bold;">Total</td>
-                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
-                            </tr>';
-                    }                                
+                      
+                    }        
+                    
+                    $html.=' 
+                    <tr>
+                        <td style="font-weight:bold;">Total</td>
+                        <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
+                    </tr>';
                         
                     $html.='                        
                     </table>
