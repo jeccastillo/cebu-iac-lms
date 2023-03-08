@@ -1,7 +1,7 @@
 <div class="content-wrapper ">
     <section class="content-header container ">
         <h1>
-            Payments
+            Daily Collection Report
             <small></small>
         </h1>
         <ol class="breadcrumb">
@@ -14,14 +14,14 @@
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
+            </div>
+        </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Daily Collection Report for <?php echo date('M j, Y',strtotime($date)); ?></h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
-                    </div>
-                </div>
+                <h3 class="box-title"><?php echo date('M j, Y',strtotime($date)); ?></h3>                
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
