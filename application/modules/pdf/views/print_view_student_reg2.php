@@ -84,13 +84,13 @@ $html .= '<tr>
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>
-      <td width="200px" >'.$student['strProgramDescription'] . '</td>      
+      <td width="200px" >'.$student['strCode'] .'</td>      
       <td width="80px" >&nbsp;'.$snum_label.'</td>
       <td width="200px" >' . $snum. '</td>
      </tr>
      <tr>
       <td width="80px" >&nbsp;</td>
-      <td width="200px" >' .$major. '</td>
+      <td width="200px" ></td>
       <td width="80px">&nbsp;ADDRESS</td>
       <td width="200px" >'. $student['strAddress']. '</td>        
      </tr>
@@ -306,7 +306,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         <td width="80px"></td>
                         <td width="60px" style="text-align:right;"></td>
                     </tr>';     
-                    
+
                     if($tuition['total_foreign'] != 0){
 
                         $html.='<tr>
