@@ -336,8 +336,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
-                    <td width="132px" style= "font-size:9;">Official Receipt Number/date</td>
-                    <td width="132px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
+                    <td width="130px" style= "font-size:9;">Official Receipt Number/date</td>
+                    <td width="120px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
                 </tr>
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
