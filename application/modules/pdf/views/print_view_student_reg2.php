@@ -255,7 +255,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td colspan="2" style= "font-size:9; font-weight:bold;">MISCELANEOUS DETAIL</td>            
                             </tr>
                         ';
+                        
                         if($tuition['misc'] != 0){
+                            
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
@@ -277,12 +279,28 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
                                 
-                            </tr>
+                            </tr>';
+
+                    if($tuition['new_student'] != 0){
+
+                        $html.='<tr>
+                        <td colspan="2" style= "font-size:9; font-weight:bold;">NEW STUDENT FEES</td></tr>';
+                    
+                        foreach($tuition['new_student'] as $key=>$val){
+        
+                            $html .= '<tr>
+                                        <td width="80px">'.$key.'</td>
+                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                    </tr>';                
+                        }
+                        $html.=' 
                             <tr>
-                                <td width="70px">New Student Fees</td>
-                                <td width="60px" style="text-align:right;">'.number_format($tuition['new_student'], 2, '.' ,',').'</td>
-                            </tr>
-                            <tr>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['new_student'], 2, '.' ,',').'</td>                
+                            </tr>';
+                    }
+
+                    $html.= '<tr>
                                 <td width="70px">Foreign Student Fees</td>
                                 <td width="60px" style="text-align:right;">'.number_format($tuition['total_foreign'], 2, '.' ,',').'</td>
                             </tr>
