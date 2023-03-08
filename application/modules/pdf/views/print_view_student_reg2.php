@@ -123,9 +123,10 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         else {
                                 foreach($records as $record) {
                                     $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
+                                    $desc = strlen($record['strDescription']) > 50 ? substr($record['strDescription'],0,50)."..." : $record['strDescription'];
                                     $html.='<tr style="color: #333;">
                                             <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
-                                            <td width="198px" align ="left"> '. strlen($record['strDescription']) > 50 ? substr($record['strDescription'],0,50)."..." : $record['strDescription']. '</td>
+                                            <td width="198px" align ="left"> '.$desc. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
