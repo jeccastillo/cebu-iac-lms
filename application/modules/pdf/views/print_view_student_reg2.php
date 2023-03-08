@@ -300,14 +300,24 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>';
                     }
 
-                    $html.= '<tr>
-                                <td width="70px">Foreign Student Fees</td>
-                                <td width="60px" style="text-align:right;">'.number_format($tuition['total_foreign'], 2, '.' ,',').'</td>
-                            </tr>
+                    if($tuition['total_foreign'] != 0){
+
+                        $html.='<tr>
+                        <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
+                    
+                        foreach($tuition['foreign_fee_list'] as $key=>$val){
+        
+                            $html .= '<tr>
+                                        <td width="80px">'.$key.'</td>
+                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                    </tr>';                
+                        }
+                        $html.=' 
                             <tr>
                                 <td style="font-weight:bold;">Total</td>
-                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',').'</td>                
-                            </tr>';                
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'], 2, '.' ,',').'</td>                
+                            </tr>';
+                    }                                
                         
                     $html.='                        
                     </table>
