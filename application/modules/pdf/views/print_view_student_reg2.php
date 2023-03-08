@@ -125,7 +125,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
                                     $html.='<tr style="color: #333;">
                                             <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
-                                            <td width="198px" align ="left"> '. $record['strDescription']. '</td>
+                                            <td width="198px" align ="left" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"> '. $record['strDescription']. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
