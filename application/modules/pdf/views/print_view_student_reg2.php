@@ -78,9 +78,7 @@ $html .= '<tr>
       
      </tr>
      <tr>
-        <td width="80px" >
-            '.$snum_label.'<br />
-            NAME
+        <td width="80px">'.$snum_label.'<br />NAME
         </td>
         <td width="200px" >' 
             . $snum.'<br />'
