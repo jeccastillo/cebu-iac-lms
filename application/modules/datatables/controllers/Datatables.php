@@ -746,6 +746,8 @@ class Datatables extends CI_Controller {
 
         foreach ($rResult->result() as $aRow)
         {
+            $slots_taken = $this->db->get_where('tb_mas_classlist_student',array('intClassListID'=>$aRow->intID))->num_rows();
+            
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
             {
@@ -764,6 +766,9 @@ class Datatables extends CI_Controller {
                 else if($aColumns[$i] == 'strFirstname'){
 
                 }
+                else if($aColumns[$i] == 'slots'){
+                    $row[] = $slots_taken."/".$aRow->$aColumns[$i];
+                }                
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
                     $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
