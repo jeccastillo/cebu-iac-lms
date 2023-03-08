@@ -2,8 +2,24 @@
 ?>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
+
+    const d = new Date();
+    let date = formatDate(d);
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
@@ -14,7 +30,7 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions_per_term/<?php echo $current_sem; ?>", {
+                api_url + "finance/transactions_per_term/"+date, {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
