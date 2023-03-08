@@ -21,15 +21,10 @@ $(document).ready(function() {
     $('.datepicker').datepicker({
         pickTime: false
     }).on('changeDate',function(e){
-        console.log(formatDate($(this).val()));
-        
-        
+        document.location = "<?php echo base_url();?>finance/payments/"+formatDate($(this).val());        
     });
-    
-
-    const d = new Date();
-    let date = formatDate(d);
-    let url = api_url + "finance/transactions_per_term/"+date;
+        
+    let url = api_url + "finance/transactions_per_term/<?php echo $date; ?>";
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],

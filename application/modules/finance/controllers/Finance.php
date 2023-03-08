@@ -173,11 +173,14 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function payments(){                             
+    public function payments($date = null){                        
 
+        if($date == null)
+            $date = date("Y-m-d");
 
         $sem = $this->data_fetcher->get_active_sem();        
         $this->data['current_sem'] = $sem['intID'];
+        $this->data['date'] = $date;
 
         $this->data['page'] = "transactions";
         $this->load->view("common/header",$this->data);
