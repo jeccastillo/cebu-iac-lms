@@ -374,7 +374,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="500px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9; color:#666;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
