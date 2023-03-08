@@ -20,10 +20,16 @@ $(document).ready(function() {
 
     $('.datepicker').datepicker({
         pickTime: false
+    }).on('changeDate',function(e){
+        console.log(formatDate($(this).val()));
+        
+        
     });
+    
 
     const d = new Date();
     let date = formatDate(d);
+    let url = api_url + "finance/transactions_per_term/"+date;
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
@@ -34,7 +40,7 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions_per_term/"+date, {
+                url, {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
