@@ -78,28 +78,20 @@ $html .= '<tr>
       
      </tr>
      <tr>
-        <td width="80px">'.$snum_label.'<br />NAME
+        <td width="80px">'.$snum_label.'<br />NAME<br />PROGRAM
         </td>
         <td width="200px" >' 
             . $snum.'<br />'
-            . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .
+            . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'<br />'
+            .$student['strProgramCode'] .
         '</td>
-        <td width="80px" >&nbsp;SY/TERM</td>
-        <td width="200px" style="text-transform:capitalize;">' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>   
+        <td width="80px" >SY/TERM<br />ADDRESS</td>
+        <td width="200px" style="text-transform:capitalize;">'
+            .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '<br />'
+            . $student['strAddress'].
+        '</td>   
      </tr>
-     <tr>
-        <td width="80px"></td>
-        <td width="200px" ></td>
-        <td width="80px">&nbsp;ADDRESS</td>
-        <td width="200px" >'. $student['strAddress']. '</td>        
-     </tr>
-     <tr>
-        <td width="80px" >&nbsp;PROGRAM</td>
-        <td width="200px" >'.$student['strProgramCode'] .'</td>      
-        <td >&nbsp;</td>
-        <td>&nbsp;</td>
-     </tr>
-     
+
      <tr>
         <td >&nbsp;</td>
         <td>&nbsp;</td>
@@ -382,7 +374,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:9; color:#666;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
+                    <td colspan="2" style="font-size:9;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
