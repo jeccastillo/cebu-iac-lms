@@ -78,14 +78,20 @@ $html .= '<tr>
       
      </tr>
      <tr>
-        <td width="80px" >&nbsp;'.$snum_label.'</td>
-        <td width="200px" >' . $snum. '</td>
+        <td width="80px" >
+            &nbsp;'.$snum_label.'<br />        
+            &nbsp;NAME
+        </td>
+        <td width="200px" >' 
+            . $snum.'<br />'
+            . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .
+        '</td>
         <td width="80px" >&nbsp;SY/TERM</td>
         <td width="200px" style="text-transform:capitalize;">' .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . ", " . $active_sem['enumSem'].' Term' . '</td>   
      </tr>
      <tr>
-        <td width="80px">&nbsp;NAME</td>
-        <td width="200px" >' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
+        <td width="80px"></td>
+        <td width="200px" ></td>
         <td width="80px">&nbsp;ADDRESS</td>
         <td width="200px" >'. $student['strAddress']. '</td>        
      </tr>
