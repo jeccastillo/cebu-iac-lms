@@ -273,14 +273,10 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         '</table>  
                     </td>
                     <td width="170px">
-                        <table style="color:#333; font-size:8;">
+                        <table style="color:#333; font-size:8;">                            
                             <tr>
-                                <td>&nbsp;</td>
-                                <td style="text-align:right;"></td>                
-                            </tr>
-                            <tr>
-                                <td width="65px" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
-                                <td width="60px" style="text-align:right;"></td>
+                                <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
+                                
                             </tr>
                             <tr>
                                 <td width="65px">New Student Fees</td>
