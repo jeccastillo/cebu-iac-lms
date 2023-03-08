@@ -156,7 +156,17 @@
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="users_table" class="table table-hover">
-                    <thead><tr><th>id</th><th>Student Number</th><th>Name</th><th>Course</th><th>Year Level</th><th>Status</th><th>Actions</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>slug</th>
+                            <th>Student Number</th>
+                            <th>Name</th>
+                            <th>Program</th>
+                            <th>Year Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                     <tfoot>
                         <tr>
@@ -164,10 +174,9 @@
                             <th>slug</th>
                             <th>Student Number</th>
                             <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Middle Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
+                            <th>Actions</th>
                         </tr>
                     </tfoot>
                 </table>
