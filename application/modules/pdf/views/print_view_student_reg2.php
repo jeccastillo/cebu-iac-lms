@@ -336,7 +336,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
-                    <td width="130px" style= "font-size:9;">Official Receipt Number/date</td>
+                    <td width="120px" style= "font-size:9;">Official Receipt Number/date</td>
                     <td width="120px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
                 </tr>
             </table>
@@ -345,12 +345,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="264px" style= "font-size:9;">Enrollment Confirmed by:</td>
                     <td width="264px" style= "font-size:9;"></td>            
                 </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
-                </tr>
-            </table>
+            </table>            
             <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="500px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
