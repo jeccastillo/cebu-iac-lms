@@ -286,7 +286,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         $html.='<tr>
                         <td colspan="2" style= "font-size:9; font-weight:bold;">NEW STUDENT FEES</td></tr>';
                     
-                        foreach($tuition['new_student'] as $key=>$val){
+                        foreach($tuition['new_student_list'] as $key=>$val){
         
                             $html .= '<tr>
                                         <td width="80px">'.$key.'</td>
