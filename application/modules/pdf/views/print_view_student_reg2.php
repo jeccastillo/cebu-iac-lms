@@ -226,7 +226,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-weight:bold; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                             </tr>
                         </table>
-                        <table cellpadding="0"  width="140px" style="color:#333; font-size:8;">
+                        <table cellpadding="0"  width="240px" style="color:#333; font-size:8;">
                             <tr>
                                 <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
@@ -244,7 +244,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                     $html .= 
                         '<tr>
-                            <td width="65px" style="font-weight:bold;">Total</td>
+                            <td width="80px" style="font-weight:bold;">Total</td>
                             <td width="60px" style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
