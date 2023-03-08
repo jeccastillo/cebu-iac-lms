@@ -17,7 +17,7 @@
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">Payments</h3>
-
+                <input class="form-control datepicker" id="chooseDay"  placeholder="">
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
