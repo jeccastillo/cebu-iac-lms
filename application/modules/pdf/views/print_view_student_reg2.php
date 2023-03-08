@@ -270,7 +270,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>';
                     }
                     $html .= 
-                        '</table>                             
+                        '</table>  
+                    </td>
+                    <td>
                         <table  width="258px"  style="color:#333; font-size:8;">
                             <tr>
                                 <td>&nbsp;</td>
