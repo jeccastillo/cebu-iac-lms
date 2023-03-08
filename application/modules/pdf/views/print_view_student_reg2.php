@@ -14,7 +14,7 @@
     $pdf->SetMargins(10, $mt , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->SetFont('cid0ct','',10);
+    $pdf->SetFont('helvetica','',10);
     //$pdf->SetAutoPageBreak(TRUE, 6);
     
    //font setting
@@ -106,13 +106,13 @@ $html .= '<tr>
 $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:9;" width="528" >
    
         <tr>
-            <td width="60px" style="text-align:left; font-weight:bold; color: #000;">SECTION</td>            
-            <td width="198px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
-            <td width="40px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">LAB</td>
-            <td width="40px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">UNITS</td>
-            <td width="45px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">DAY</td>
-            <td width="100px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">TIME</td>
-            <td width="45px" style="text-align:left; font-weight:bold; color: #000;  border-bottom: 1px solid #333;">ROOM</td>
+            <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
+            <td width="198px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
+            <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
+            <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
+            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
+            <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
+            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
         </tr> ';        
                 
                         $totalUnits = 0;
@@ -196,7 +196,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="240px">
                         <table cellpadding="0"  style="color:#333; font-size:8;">
                             <tr>
-                                <td colspan="3" style= "font-size:9; font-weight:bold; color: #000;">ASSESSMENT SUMMARY</td>                                
+                                <td colspan="3" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
                             </tr>
                             <tr>
                                 <td width="85px"></td>
@@ -224,9 +224,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:center;border-bottom: 1px solid #555;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
-                                <td style="font-weight:bold; color: #000;">Total</td>
-                                <td style="font-weight:bold; color: #000; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold; color: #000; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                             </tr>
                         </table>
                         <table cellpadding="0"  width="240px" style="color:#333; font-size:8;">
@@ -247,15 +247,15 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                     $html .= 
                         '<tr>
-                            <td width="80px" style="font-weight:bold; color: #000;">Total</td>
-                            <td width="60px" style="text-align:right; font-weight:bold; color: #000; border-top:1px solid #333;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+                            <td width="80px" style="font-weight:bold;">Total</td>
+                            <td width="60px" style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
                     </td>
                     <td width="150px">                                
                         <table style="color:#333; font-size:8; ">
                             <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold; color: #000;">MISCELLANEOUS DETAIL</td>            
+                                <td colspan="2" style= "font-size:9; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
                             </tr>
                         ';
                         
@@ -270,8 +270,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         }
                         $html.=' 
                             <tr>
-                                <td style="font-weight:bold; color: #000;">Total</td>
-                                <td style="border-top: 1px solid #555; font-weight:bold; color: #000; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['misc'], 2, '.' ,',').'</td>                
                             </tr>';
                     }
                     $html .= 
@@ -280,7 +280,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="130px">
                         <table style="color:#333; font-size:8;">                            
                             <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold; color: #000;">OTHER FEES DETAIL</td>
+                                <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
                                 
                             </tr>';
 
@@ -300,14 +300,14 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                     
                     
-                    $html .= '<tr>
-                        <td width="80px"></td>
-                        <td width="60px" style="text-align:right;"></td>
-                    </tr>';     
+                     
 
                     if($tuition['total_foreign'] != 0){
-
-                        $html.='<tr>
+                        $html .= '<tr>
+                            <td width="80px"></td>
+                            <td width="60px" style="text-align:right;"></td>
+                        </tr>
+                        <tr>
                         <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
                     
                         foreach($tuition['foreign_fee_list'] as $key=>$val){
@@ -322,8 +322,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     
                     $html.=' 
                     <tr>
-                        <td style="font-weight:bold; color: #000;">Total</td>
-                        <td style="border-top: 1px solid #555; font-weight:bold; color: #000; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
+                        <td style="font-weight:bold;">Total</td>
+                        <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
                     </tr>';
                         
                     $html.='                        
