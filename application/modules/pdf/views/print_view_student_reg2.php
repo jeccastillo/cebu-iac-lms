@@ -300,6 +300,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>';
                     }
 
+                    
+                    
+                    $html .= '<tr>
+                        <td width="80px"></td>
+                        <td width="60px" style="text-align:right;"></td>
+                    </tr>';     
+                    
                     if($tuition['total_foreign'] != 0){
 
                         $html.='<tr>
