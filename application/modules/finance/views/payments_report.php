@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Payments</a></li>
-            <li class="active">Payments Report</li>
+            <li class="active">Daily Collection Report</li>
         </ol>
     </section>
     <div class="content mcontainer container">
@@ -16,8 +16,12 @@
         </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Payments</h3>
-                <input class="form-control datepicker" id="chooseDay"  placeholder="">
+                <h3 class="box-title">Daily Collection Report for <?php echo date('M j, Y',strtotime($date)); ?></h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
+                    </div>
+                </div>
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
