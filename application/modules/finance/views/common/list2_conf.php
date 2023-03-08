@@ -18,6 +18,10 @@ function formatDate(date) {
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
 
+    $('.datepicker').datepicker({
+        pickTime: false
+    });
+
     const d = new Date();
     let date = formatDate(d);
     
