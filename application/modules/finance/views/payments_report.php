@@ -19,6 +19,7 @@
                 <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
             </div>
         </div>
+        <hr />
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title"><?php echo date('M j, Y',strtotime($date)); ?></h3>                
