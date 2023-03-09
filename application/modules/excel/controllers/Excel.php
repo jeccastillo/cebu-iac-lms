@@ -1935,8 +1935,8 @@ class Excel extends CI_Controller {
         foreach($data as $d){                        
             // Add some datat
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $d['student_name'])
-                    ->setCellValue('B'.$i, $d['description']);
+                    ->setCellValue('A'.$i, $d->student_name)
+                    ->setCellValue('B'.$i, $d->description);
                                                        
             $i++;
         }
