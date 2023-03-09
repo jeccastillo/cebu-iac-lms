@@ -23,7 +23,7 @@
                             <input type="text" name="strRoomCode" class="form-control" id="strRoomCode" placeholder="Enter Classroom Number">
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="strRoomCode">Description</label>
+                            <label for="description">Description</label>
                             <input type="text" name="description" class="form-control" id="description" placeholder="Enter Classroom Description">
                         </div>
                          <div class="form-group col-xs-6">
