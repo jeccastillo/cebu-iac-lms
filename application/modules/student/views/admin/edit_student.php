@@ -108,6 +108,7 @@
                     <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship: </label>
                             <select class="form-control" name="enumScholarship">
+                                <option value="0">None</option>
                                 <?php foreach($scholarships as $scholarship): ?>                                
                                 <option <?php echo ($student['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="<?php echo $scholarship['intID']; ?>"><?php echo $scholarship['name']; ?></option>
                                 <?php endforeach; ?>
