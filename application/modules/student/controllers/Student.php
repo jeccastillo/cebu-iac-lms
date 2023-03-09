@@ -99,6 +99,7 @@ class Student extends CI_Controller {
             $this->data['student'] = $this->data_fetcher->getStudent($id);            
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
             $this->data['curriculum'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
+            $this->data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_student",$this->data);

@@ -35,15 +35,10 @@
                         </div>
                         <div class="form-group col-xs-4">
                             <label for="enumGender">Gender: </label>
-                            <select class="form-control" name="enumGender" >
-                        <!-- <option>---Select Gender---</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-        -->
-                            <option <?php echo ($student['enumGender'] == "male")?'selected':''; ?> value="male">Male</option>
-                            <option <?php echo ($student['enumGender'] == "female")?'selected':''; ?> value="female">Female</option>
-
-                        </select>
+                            <select class="form-control" name="enumGender" >                                
+                                <option <?php echo ($student['enumGender'] == "male")?'selected':''; ?> value="male">Male</option>
+                                <option <?php echo ($student['enumGender'] == "female")?'selected':''; ?> value="female">Female</option>
+                            </select>
                         </div>
                         <div class="form-group col-xs-4">
                             <label for="strStudentNumber">Student Number<a rel="locked" href="#" id="studentnumber-lock"><i class="ion ion-locked"></i></a></label>
@@ -110,6 +105,14 @@
                         </select>
                         
                     </div>
+                    <div class="form-group col-xs-6">
+                            <label for="enumScholarship">Scholarship: </label>
+                            <select class="form-control" name="enumScholarship">
+                                <?php foreach($scholarships as $scholarship): ?>                                
+                                <option <?php echo ($student['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="<?php echo $scholarship['intID']; ?>"><?php echo $scholarship['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     <!--div class="form-group col-xs-6">
                         <label for="enumEnrolledStatus">Student Status</label>
                         <select class="form-control" name="enumEnrolledStatus" >
