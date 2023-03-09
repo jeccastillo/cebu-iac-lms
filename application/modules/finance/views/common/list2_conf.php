@@ -51,7 +51,7 @@ $(document).ready(function() {
                         recordsFiltered: json.meta.total,
                         data: json.data
                     });
-                    console.log(data);
+                    console.log(json);
                     $("#print_form").click(function(e){
                         e.preventDefault();
                         // The rest of this code assumes you are not using a library.
