@@ -59,6 +59,7 @@ $(document).ready(function() {
                         const form = document.createElement('form');
                         form.method = "post";
                         form.action = "<?php echo base_url() ?>excel/daily_collection_report";
+                        form.dataType = "json";
 
                         
                         const hiddenField = document.createElement('input');
