@@ -92,8 +92,8 @@
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-sm-3 size-96">                                    
-                                            <img v-if="!student.strPicture" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
-                                            <img v-else class="img-responsive" :src="photo_dir + student.strPicture" />                                    
+                                            <img v-if="!applicant_data.uploaded_requirements[2]" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
+                                            <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
                                         </div>
                                         <div class="col-sm-9">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
