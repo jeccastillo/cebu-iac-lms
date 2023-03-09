@@ -1935,7 +1935,7 @@ class Excel extends CI_Controller {
         
         foreach($data as $d){                        
             // Add some datat
-            $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d['cashier']);
+            $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d->cashier);
             if($cashier)
                 $cashier_name = $cashier['strLastname']." ".$cashier['strFirstname'].", ".$cashier['strMiddlename'];
             else
