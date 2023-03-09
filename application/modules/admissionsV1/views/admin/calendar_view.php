@@ -19,7 +19,7 @@
     </section>
     <div class="content container">
         <div v-if="interviews">
-            <table class="table table-bordered">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Name</th>
