@@ -1944,12 +1944,8 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
                 
-
-         // Rename worksheet
-        if($course!=0 && $year!=0)
-            $objPHPExcel->getActiveSheet()->setTitle("collection_data");
-        else
-            $objPHPExcel->getActiveSheet()->setTitle('Collection');
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Collection');
 
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
