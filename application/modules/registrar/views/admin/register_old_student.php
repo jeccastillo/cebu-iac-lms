@@ -58,7 +58,7 @@
                                 </select>
                                     <br />
                                 <label for="enumScholarship">Scholarship Grant</label><br />
-                                <input type="hidden" value="scholarship.intID" model="request.enumScholarship">
+                                <input type="hidden" model="request.enumScholarship">
                                 {{ scholarship.intID != 0?scholarship.name:'None' }}
                                     <br />
                                     <hr />
@@ -167,6 +167,8 @@ new Vue({
                         this.scholarship = data.data.data.scholarship;                                                
                     else
                         this.scholarship.intID = 0;
+
+                    this.request.enumScholarship = this.scholarship.intID;
 
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
