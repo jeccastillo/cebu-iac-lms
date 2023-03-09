@@ -2,8 +2,8 @@
     <section class="content-header container ">
         <h1>
             Daily Collection Report
-            <small>
-                <a href="#" id="print_form">Print Form</a>
+            <small>            
+                <a class="btn btn-app" href="#" id="print_form">Export to Excel</a>
             </small>
         </h1>
         <ol class="breadcrumb">
