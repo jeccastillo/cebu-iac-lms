@@ -1899,7 +1899,7 @@ class Excel extends CI_Controller {
 
         $data = $this->input->post();
         foreach($data as $d)
-            print_r($d);
+            echo $d->student_name." ".$d->description."<br />";
         
         // error_reporting(E_ALL);
         // ini_set('display_errors', TRUE);
