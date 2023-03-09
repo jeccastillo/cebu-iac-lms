@@ -1943,12 +1943,7 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        
-        
-        // Miscellaneous glyphs, UTF-8
-        //$objPHPExcel->setActiveSheetIndex(0)
-        //          ->setCellValue('A4', 'Miscellaneous glyphs')
-        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+                
 
          // Rename worksheet
         if($course!=0 && $year!=0)
