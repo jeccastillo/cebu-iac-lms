@@ -57,7 +57,7 @@
                                     <option value="irregular">Irregular</option>
                                 </select>
                                     <br />
-                                <label for="enumScholarship">Scholarship Grant</label>
+                                <label for="enumScholarship">Scholarship Grant</label><br />
                                 <input type="hidden" value="scholarship.intID" model="request.enumScholarship">
                                 {{ scholarship.intID != 0?scholarship.name:'None' }}
                                     <br />
