@@ -1926,17 +1926,24 @@ class Excel extends CI_Controller {
         
             
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Student Name')
-                    ->setCellValue('B1', 'Payment For');                    
+                    ->setCellValue('A1', 'Cashier')
+                    ->setCellValue('B1', 'Student Name')
+                    ->setCellValue('C1', 'Payment For');
                     
         
         $i = 2;
         
         foreach($data as $d){                        
             // Add some datat
+            $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d['cashier']);
+            if($cashier)
+                $cashier_name = $cashier['strLastname']." ".$cashier['strFirstname'].", ".$cashier['strMiddlename'];
+            else
+                $cashier_name = "N/A";
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $d->student_name)
-                    ->setCellValue('B'.$i, $d->description);
+                    ->setCellValue('A'.$i, $d->cashier_name)
+                    ->setCellValue('B'.$i, $d->student_name)
+                    ->setCellValue('C'.$i, $d->description);
                                                        
             $i++;
         }
