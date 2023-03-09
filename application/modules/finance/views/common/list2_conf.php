@@ -51,7 +51,7 @@ $(document).ready(function() {
                         recordsFiltered: json.meta.total,
                         data: json.data
                     });
-                    console.log(json.data);
+                    
                     $("#print_form").click(function(e){
                         e.preventDefault();
                         // The rest of this code assumes you are not using a library.
@@ -64,7 +64,7 @@ $(document).ready(function() {
                         const hiddenField = document.createElement('input');
                         hiddenField.type = 'hidden';
                         hiddenField.name = 'data';
-                        hiddenField.value = data;
+                        hiddenField.value = json.data;
 
                         form.appendChild(hiddenField);
                         
