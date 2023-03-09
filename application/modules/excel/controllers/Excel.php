@@ -1922,27 +1922,15 @@ class Excel extends CI_Controller {
                                      ->setCategory("Daily Collection Report");
 
         
-        // Add some datat
-        
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
-        
-        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
-        
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', switch_num($year)." Year ".$active_sem['enumSem']." Sem ".$active_sem['strYearStart']." - ".$active_sem['strYearEnd']);
+      
         
             
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A2', 'Student Name')
-                    ->setCellValue('B2', 'Payment For');                    
+                    ->setCellValue('A1', 'Student Name')
+                    ->setCellValue('B1', 'Payment For');                    
                     
         
-        $i = 3;
+        $i = 2;
         
         foreach($data as $d){                        
             // Add some datat
