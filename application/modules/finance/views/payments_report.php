@@ -3,7 +3,7 @@
         <h1>
             Daily Collection Report
             <small>            
-                <a class="btn btn-app" href="#" id="print_form">Export to Excel</a>
+                <a class="btn btn-app" href="#" id="print_form"><i class="ion ion-arrow-left-a"></i> Export to Excel</a>
             </small>
         </h1>
         <ol class="breadcrumb">
