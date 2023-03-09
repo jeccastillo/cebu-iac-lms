@@ -2,7 +2,9 @@
     <section class="content-header container ">
         <h1>
             Daily Collection Report
-            <small></small>
+            <small>
+                <a href="#" id="print_form">Print Form</a>
+            </small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Payments</a></li>

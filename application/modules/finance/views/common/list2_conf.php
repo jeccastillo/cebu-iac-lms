@@ -36,7 +36,7 @@ $(document).ready(function() {
             filter_status = $("#status_filter").val();           
             $.get(
                 url, {
-                    limit: data.length,
+                    limit: 100,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
                     search_field: "student_name",
@@ -52,7 +52,27 @@ $(document).ready(function() {
                         data: json.data
                     });
 
-                    console.log(data);
+                    $("#print_form").click(function(e){
+                        e.preventDefault();
+                        // The rest of this code assumes you are not using a library.
+                        // It can be made less verbose if you use one.
+                        const form = document.createElement('form');
+                        form.method = "post";
+                        form.action = "<?php echo base_url() ?>excel/daily_collection_report";
+
+                        
+                        const hiddenField = document.createElement('input');
+                        hiddenField.type = 'hidden';
+                        hiddenField.name = 'data';
+                        hiddenField.value = data;
+
+                        form.appendChild(hiddenField);
+                        
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
+                                        
                 }
             );
         },
