@@ -1898,8 +1898,7 @@ class Excel extends CI_Controller {
         
 
         $data = $this->input->post();
-        foreach($data as $d)
-            echo $d->student_name." ".$d->description."<br />";
+        print_r(json_decode($data[0]));
         
         // error_reporting(E_ALL);
         // ini_set('display_errors', TRUE);
