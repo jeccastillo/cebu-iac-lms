@@ -65,7 +65,7 @@ $(document).ready(function() {
                         const hiddenField = document.createElement('input');
                         hiddenField.type = 'hidden';
                         hiddenField.name = 'data';
-                        hiddenField.value = json.data;
+                        hiddenField.value = JSON.stringify(json.data);
 
                         form.appendChild(hiddenField);
                         
