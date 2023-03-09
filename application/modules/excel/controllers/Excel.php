@@ -1898,8 +1898,9 @@ class Excel extends CI_Controller {
         
 
         $data = $this->input->post();
-        $data = json_decode($data['data']);
         $date = $data['date'];
+        $data = json_decode($data['data']);
+        
         
         
         error_reporting(E_ALL);
