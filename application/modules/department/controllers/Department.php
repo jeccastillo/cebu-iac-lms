@@ -4,9 +4,9 @@ class Department extends CI_Controller {
 
 	public function __construct()
 	{
-		parent::__construct();
-        
-        if(!$this->is_department_head() && !$this->is_super_admin())
+		parent::__construct();                
+
+        if(!$this->is_registrar() && !$this->is_super_admin() && !$this->is_department_head())
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');
@@ -74,87 +74,68 @@ class Department extends CI_Controller {
     
     public function subject_loading()
     {
-        if($this->is_super_admin() || $this->is_department_head())
-        {
-            $this->data['error_message'] = $this->session->flashdata('error_message');
-            $this->data['page'] = "advise_student";
-            $this->data['opentree'] = "department";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/advise_student",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/advise_student_conf",$this->data);
+       
+        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['page'] = "advise_student";
+        $this->data['opentree'] = "department";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/advise_student",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/advise_student_conf",$this->data);
+        
+        //print_r($this->data['classlist']);
             
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."unity");  
+       
     }
     
     public function faculty_loading()
     {
-        if($this->is_super_admin() || $this->is_department_head())
-        {
-            $this->data['error_message'] = $this->session->flashdata('error_message');
-            $this->data['page'] = "faculty_loading";
-            $this->data['opentree'] = "department";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/faculty_search",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/faculty_search_conf",$this->data);
-            
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."unity");  
+        
+        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['page'] = "faculty_loading";
+        $this->data['opentree'] = "department";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/faculty_search",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/faculty_search_conf",$this->data);
+                
     }
     
     public function add_credits()
     {
-        if($this->is_super_admin() || $this->is_department_head())
-        {
-            $this->data['error_message'] = $this->session->flashdata('error_message');
-            $this->data['page'] = "add_credits";
-            $this->data['opentree'] = "department";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/add_credits",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/advise_student_conf",$this->data);
-            
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."unity");  
+        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['page'] = "add_credits";
+        $this->data['opentree'] = "department";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/add_credits",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/advise_student_conf",$this->data);
+        
+        //print_r($this->data['classlist']);
+                    
     }
     
     public function student_function($f = "rog")
     {
-        if($this->is_super_admin() || $this->is_department_head())
+        
+        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        
+        $this->load->view("common/header",$this->data);
+        switch($f)
         {
-            $this->data['error_message'] = $this->session->flashdata('error_message');
-            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-            
-            $this->load->view("common/header",$this->data);
-            switch($f)
-            {
-                case 'rog':
-                    $this->load->view("admin/rog_student",$this->data);
-                break;
-                case 'assessment':
-                    $this->load->view("admin/curriculum_assessment",$this->data);
-                break;
-                
-            }
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/advise_student_conf",$this->data);
-            
-            //print_r($this->data['classlist']);
+            case 'rog':
+                $this->load->view("admin/rog_student",$this->data);
+            break;
+            case 'assessment':
+                $this->load->view("admin/curriculum_assessment",$this->data);
+            break;
             
         }
-        else
-            redirect(base_url()."unity");  
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/advise_student_conf",$this->data);
+        
+        //print_r($this->data['classlist']);0        
     }
     public function crediting($id=null)
     {
@@ -314,28 +295,24 @@ class Department extends CI_Controller {
     
     public function show_advised_students($program=0)
     {
-        if($this->is_department_head() || $this->is_super_admin())
-        {
-            $this->data['page'] = "show_advised_students";
-            $this->data['opentree'] = "department";
-            $this->data['course'] = current($this->data_fetcher->fetch_table('tb_mas_programs',array('strProgramCode','asc'),null,array('intProgramID'=>$program)));
+       
+        $this->data['page'] = "show_advised_students";
+        $this->data['opentree'] = "department";
+        $this->data['course'] = current($this->data_fetcher->fetch_table('tb_mas_programs',array('strProgramCode','asc'),null,array('intProgramID'=>$program)));
+        
+        $this->data['courses'] = $this->data_fetcher->fetch_table('tb_mas_programs',array('strProgramCode','asc'));
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->data['program'] = $program;
+        $as[$program] = $this->data_fetcher->getItem('tb_mas_programs',$program,'intProgramID'); 
             
-            $this->data['courses'] = $this->data_fetcher->fetch_table('tb_mas_programs',array('strProgramCode','asc'));
-            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-            $this->data['program'] = $program;
-            $as[$program] = $this->data_fetcher->getItem('tb_mas_programs',$program,'intProgramID'); 
-                
-            
-            
-            $this->data['as'] = $as;
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/advised_students",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/advised_students_conf",$this->data);
-            
-        }
-        else
-            redirect(base_url()."unity");
+        
+        
+        $this->data['as'] = $as;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/advised_students",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/advised_students_conf",$this->data);
+                   
     }
     
     
