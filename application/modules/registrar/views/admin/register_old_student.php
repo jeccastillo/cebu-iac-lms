@@ -161,8 +161,10 @@ new Vue({
             axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
-                    this.scholarship = data.data.data.scholarship;
-                    if(!this.scholarship)
+                    
+                    if(data.data.data.scholarship)
+                        this.scholarship = data.data.data.scholarship;                                                
+                    else
                         this.scholarship.intID = 0;
 
                     this.term_type = data.data.data.term_type;
