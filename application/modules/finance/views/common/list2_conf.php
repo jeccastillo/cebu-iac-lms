@@ -68,6 +68,13 @@ $(document).ready(function() {
                         hiddenField.value = JSON.stringify(json.data);
 
                         form.appendChild(hiddenField);
+
+                        const hiddenField2 = document.createElement('input');
+                        hiddenField2.type = 'hidden';
+                        hiddenField2.name = 'date';
+                        hiddenField2.value = "<?php echo $date; ?>";
+
+                        form.appendChild(hiddenField2);
                         
 
                         document.body.appendChild(form);

@@ -1899,6 +1899,7 @@ class Excel extends CI_Controller {
 
         $data = $this->input->post();
         $data = json_decode($data['data']);
+        $date = $data['date'];
         
         
         error_reporting(E_ALL);
@@ -1927,29 +1928,67 @@ class Excel extends CI_Controller {
             
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'Cashier')
-                    ->setCellValue('B1', 'Student Name')
-                    ->setCellValue('C1', 'Payment For');
+                    ->setCellValue('B1', 'Date')
+                    ->setCellValue('C1', 'OR Number')
+                    ->setCellValue('D1', 'Applicant Number')
+                    ->setCellValue('E1', 'Student Name')
+                    ->setCellValue('F1', 'Payment Mode')
+                    ->setCellValue('G1', 'Amount Paid')
+                    ->setCellValue('H1', 'Payment For');
                     
         
         $i = 2;
         
-        foreach($data as $d){                        
+        foreach($data as $d){             
+            $or_number = str_pad($d->or_number, 5, '0', STR_PAD_LEFT);           
             // Add some datat
             $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d->cashier_id);
             if($cashier)
                 $cashier_name = $cashier['strLastname']." ".$cashier['strFirstname'].", ".$cashier['strMiddlename'];
             else
                 $cashier_name = "N/A";
+
+            $mode = "";
+            switch($d->is_cash){
+                case 0:
+                    $mode = "Check";
+                    break;
+                case 1:
+                    $mode = "Cash";
+                    break;
+                case 2:
+                    $mode = "Credit Card";
+                    break;
+                case 3:
+                    $mode = "Debit Card";
+                    break;  
+                case 4:     
+                    $mode = "Online";
+                    break;                   
+
+            }
+
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $cashier_name)
-                    ->setCellValue('B'.$i, $d->student_name)
-                    ->setCellValue('C'.$i, $d->description);
+                    ->setCellValue('B'.$i, $d->updated_at)
+                    ->setCellValue('C'.$i, $or_number)
+                    ->setCellValue('D'.$i, $d->student_information_id)
+                    ->setCellValue('E'.$i, $d->student_name)
+                    ->setCellValue('F'.$i, $mode)
+                    ->setCellValue('G'.$i, $d->subtotal_order)
+                    ->setCellValue('H'.$i, $d->description);
                                                        
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(40);
                 
          
         $objPHPExcel->getActiveSheet()->setTitle('Collection');
@@ -1963,7 +2002,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="payment_collection_daily.xls"');
+        header('Content-Disposition: attachment;filename="daily_collection_'.$date.'.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
