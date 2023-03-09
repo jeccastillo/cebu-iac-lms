@@ -1945,7 +1945,7 @@ class Excel extends CI_Controller {
             // Add some datat
             $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d->cashier_id);
             if($cashier)
-                $cashier_name = $cashier['strLastname']." ".$cashier['strFirstname'].", ".$cashier['strMiddlename'];
+                $cashier_name = $cashier['strLastname']." ".$cashier['strFirstname']." ".$cashier['strMiddlename'];
             else
                 $cashier_name = "N/A";
 
