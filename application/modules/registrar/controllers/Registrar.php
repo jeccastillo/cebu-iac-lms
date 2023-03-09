@@ -824,8 +824,9 @@ class Registrar extends CI_Controller {
     public function register_old_student_data($studNum){
 
         $data['student'] = $this->data_fetcher->getStudent($studNum);
+                
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy',array('intProcessing','desc'));
-        $data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
+        $data['scholarship'] = $this->data_fetcher->fetch_single_entry('tb_mas_scholarships',$data['student']['enumScholarship']);
         $active_sem = $this->data_fetcher->get_processing_sem();
         $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($data['student']['intID'],$active_sem['intID']);
             $sem = 1;

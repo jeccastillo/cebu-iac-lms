@@ -58,10 +58,8 @@
                                 </select>
                                     <br />
                                 <label for="enumScholarship">Scholarship Grant</label>
-                                <select class="form-control" name="enumScholarship" id="enumScholarship" v-model="request.enumScholarship">                        
-                                    <option value="0">None</option>                                                
-                                    <option v-for="scholarship in scholarships" :value="scholarship.intID">{{scholarship.name}}</option>
-                                </select>
+                                <input type="hidden" value="scholarship.intID" model="request.enumScholarship">
+                                {{ scholarship.intID != 0?scholarship.name:'None' }}
                                     <br />
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
@@ -121,7 +119,9 @@ new Vue({
             enumRegistrationStatus: 'regular',
             strAcademicYear: undefined,
         },
-        scholarships: [],
+        scholarship: {
+            intID: 0
+        },
         school_years: [],
         term_type: 'Term',
         total_units: 0,
@@ -161,7 +161,10 @@ new Vue({
             axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
-                    this.scholarships = data.data.data.scholarships;
+                    this.scholarship = data.data.data.scholarship;
+                    if(!scholarship)
+                        scholarship.intID = 0;
+
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
