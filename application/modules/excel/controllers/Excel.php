@@ -1898,157 +1898,102 @@ class Excel extends CI_Controller {
         
 
         $data = $this->input->post();
-        print_r(json_decode($data['data']));
+        $data = json_decode($data['data']);
         
-        // error_reporting(E_ALL);
-        // ini_set('display_errors', TRUE);
-        // ini_set('display_startup_errors', TRUE);
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
 
-        // if (PHP_SAPI == 'cli')
-        //     die('This example should only be run from a Web Browser');
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
 
 
-        // // Create new PHPExcel object
-        // $objPHPExcel = new PHPExcel();
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
 
-        // // Set document properties
-        // $objPHPExcel->getProperties()->setCreator("Jec Castillo")
-        //                              ->setLastModifiedBy("Jec Castillo")
-        //                              ->setTitle("Daily Collection Report")
-        //                              ->setSubject("Daily Collection Report Download")
-        //                              ->setDescription("Daily Collection Report Download.")
-        //                              ->setKeywords("office 2007 openxml php")
-        //                              ->setCategory("Daily Collection Report");
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Daily Collection Report")
+                                     ->setSubject("Daily Collection Report Download")
+                                     ->setDescription("Daily Collection Report Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Daily Collection Report");
 
         
-        // // Add some datat
+        // Add some datat
         
-        // if($sem == 0 )
-        // {
-        //     $s = $this->data_fetcher->get_active_sem();
-        //     $sem = $s['intID'];
-        // }
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
         
-        // $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         
         
-        // $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue('A1', switch_num($year)." Year ".$active_sem['enumSem']." Sem ".$active_sem['strYearStart']." - ".$active_sem['strYearEnd']);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', switch_num($year)." Year ".$active_sem['enumSem']." Sem ".$active_sem['strYearStart']." - ".$active_sem['strYearEnd']);
         
             
-        // $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue('A2', 'Student Number')
-        //             ->setCellValue('B2', 'Last Name')
-        //             ->setCellValue('C2', 'First Name')
-        //             ->setCellValue('D2', 'Middle Name')
-        //             ->setCellValue('E2', 'Gender')
-        //             ->setCellValue('F2', 'Year Level')
-        //             ->setCellValue('G2', 'Program')
-        //             ->setCellValue('H2', 'GSuite Email');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'Student Name')
+                    ->setCellValue('B2', 'Payment For');                    
                     
         
-        // $i = 3;
+        $i = 3;
         
-        // foreach($students as $student)
-        // {
-        //     $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
-            
-        //     // Add some datat
-        //     $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue('A'.$i, $student['strStudentNumber'])
-        //             ->setCellValue('B'.$i, $student['strLastname'])
-        //             ->setCellValue('C'.$i, $student['strFirstname'])
-        //             ->setCellValue('D'.$i, $student['strMiddlename'])
-        //             ->setCellValue('E'.$i, $student['enumGender'])
-        //             ->setCellValue('F'.$i, $student['intStudentYear'])
-        //             ->setCellValue('G'.$i, $student['strProgramCode'])
-        //             ->setCellValue('H'.$i, $student['strGSuiteEmail']);
-                    
-        //     $col = 'I';
-        //     foreach($cl as $c)
-        //     {
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col."2", "Course Code");
-                
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col.$i, $c['strCode']);
-                
-        //         $col++;
-                
-        //          $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col."2", "Course Title");
-                
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col.$i, $c['strDescription']);
-                
-        //         $col++;
-                
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col.$i, $c['strUnits']);
-                
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col."2", "Units");
-                
-        //         $col++;
+        foreach($data as $d){                        
+            // Add some datat
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $d['student_name'])
+                    ->setCellValue('B'.$i, $d['description']);
+                                                       
+            $i++;
+        }
 
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col."2", "FacultyID");
-                
-        //         $objPHPExcel->setActiveSheetIndex(0)
-        //             ->setCellValue($col.$i, $c['facID']);
-                
-        //         $col++;
-        //     }
-            
-        //     $i++;
-        // }
-
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
         
         
-        // // Miscellaneous glyphs, UTF-8
-        // //$objPHPExcel->setActiveSheetIndex(0)
-        // //          ->setCellValue('A4', 'Miscellaneous glyphs')
-        // //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+        // Miscellaneous glyphs, UTF-8
+        //$objPHPExcel->setActiveSheetIndex(0)
+        //          ->setCellValue('A4', 'Miscellaneous glyphs')
+        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
 
-        //  // Rename worksheet
-        // if($course!=0 && $year!=0)
-        //     $objPHPExcel->getActiveSheet()->setTitle($student['strProgramCode'], "-", $student['intStudentYear']);
-        // else
-        //     $objPHPExcel->getActiveSheet()->setTitle('Students');
-
-
-        // // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        // $objPHPExcel->setActiveSheetIndex(0);
+         // Rename worksheet
+        if($course!=0 && $year!=0)
+            $objPHPExcel->getActiveSheet()->setTitle("collection_data");
+        else
+            $objPHPExcel->getActiveSheet()->setTitle('Collection');
 
 
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
 
-        // // Redirect output to a client’s web browser (Excel2007)
-        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // if($registered != 0)
-        //     header('Content-Disposition: attachment;filename="enrolment-list-'.$active_sem['enumSem'].'sem'."-".$active_sem['strYearStart']."-".$active_sem['strYearEnd'].'.xls"');
-        // else
-        //     header('Content-Disposition: attachment;filename="student_list.xls"');
-        // header('Cache-Control: max-age=0');
-        // // If you're serving to IE 9, then the following may be needed
-        // header('Cache-Control: max-age=1');
 
-        // // If you're serving to IE over SSL, then the following may be needed
-        // header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        // header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        // header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        // header ('Pragma: public'); // HTTP/1.0
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        if($registered != 0)
+            header('Content-Disposition: attachment;filename="payment_collection_daily.xls"');
+        else
+            header('Content-Disposition: attachment;filename="student_list.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
 
         
-        // $objWriter->save('php://output');
-        // exit;
+        $objWriter->save('php://output');
+        exit;
     }
     
     
