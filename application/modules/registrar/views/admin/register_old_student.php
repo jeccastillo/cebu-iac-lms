@@ -162,8 +162,8 @@ new Vue({
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
                     this.scholarship = data.data.data.scholarship;
-                    if(!scholarship)
-                        scholarship.intID = 0;
+                    if(!this.scholarship)
+                        this.scholarship.intID = 0;
 
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
