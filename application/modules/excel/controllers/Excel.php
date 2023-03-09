@@ -1898,7 +1898,7 @@ class Excel extends CI_Controller {
         
 
         $data = $this->input->post();
-        print_r($data);
+        print_r(json_decode($data));
         
         // error_reporting(E_ALL);
         // ini_set('display_errors', TRUE);

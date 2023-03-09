@@ -17,7 +17,7 @@ function formatDate(date) {
 }
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
-
+    $("#print_form").hide();
     $('.datepicker').datepicker({
         pickTime: false
     }).on('changeDate',function(e){
@@ -51,7 +51,7 @@ $(document).ready(function() {
                         recordsFiltered: json.meta.total,
                         data: json.data
                     });
-                    
+                    $("#print_form").show();
                     $("#print_form").click(function(e){
                         e.preventDefault();
                         // The rest of this code assumes you are not using a library.
