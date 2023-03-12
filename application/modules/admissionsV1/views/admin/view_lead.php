@@ -539,7 +539,7 @@ new Vue({
 
         },
         changeProgram: function(event){
-            console.log(event.target[select.selectedIndex].text);
+            console.log(event.target[event.target.selectedIndex].text);
         },
         confirmProgram: function(){    
            
