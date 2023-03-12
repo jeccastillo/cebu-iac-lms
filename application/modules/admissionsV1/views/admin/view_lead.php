@@ -564,7 +564,7 @@ new Vue({
                     .then(data => {     
             
                         Swal.hideLoading();
-                        document.location = this.base_url+'admissionsV1/view_lead/'+this.slug;
+                        document.location = base_url+'admissionsV1/view_lead/'+this.slug;
         
                         
                     });
