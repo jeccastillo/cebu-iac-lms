@@ -556,7 +556,7 @@ new Vue({
                 };
 
                 axios
-                    .post(api_url + 'admissions/student-info/update-field/custom/' + this.student.slug , this.payload, {
+                    .post(api_url + 'admissions/student-info/update-field/custom/' + this.slug , this.payload, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
