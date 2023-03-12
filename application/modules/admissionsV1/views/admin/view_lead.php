@@ -278,7 +278,7 @@
                                         <th>Select Program</th>                                
                                         <td>                                    
                                             <select v-model="program_update" required class="form-control">
-                                                <option v-for="program in programs" :value="request.type_id">{{ program.strProgramDescription }}</option>
+                                                <option v-for="program in programs">{{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>                                        
                                     </tr>                                    
@@ -502,6 +502,7 @@ new Vue({
             .then((data) => {
                 this.request = data.data.data;
                 this.loader_spinner = false;
+                this.program_update = this.request.type_id;
                 axios.get(base_url + 'program/programs')
                 .then((data) => {
                     this.programs = data.data.programs; 
