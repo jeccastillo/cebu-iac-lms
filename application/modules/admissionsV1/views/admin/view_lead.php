@@ -560,7 +560,7 @@ new Vue({
                     });
             
             
-        }
+        },
        
         submitSchedule: function() {
 
