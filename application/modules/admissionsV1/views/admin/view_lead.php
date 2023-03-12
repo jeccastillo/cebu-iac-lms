@@ -286,7 +286,7 @@
                             </table>
                             <hr />
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary" v-if="loaded" >Update Program</button>                        
+                                <button type="submit" class="btn btn-primary">Update Program</button>                        
                             </div> 
                         </form>
                     </div>
