@@ -592,6 +592,8 @@ class Unity extends CI_Controller {
         $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);              
         $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
         $ret['sections'] = $sections;
+        $selected = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$ret['student']['intProgramID']))->first();
+        $ret['selected'] = $selected->strProgramDescription;
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['success']= true;
         

@@ -279,7 +279,7 @@ new Vue({
                 .then((data) => {  
                     this.student = data.data.student;     
                     this.request.intProgramID = this.student.intProgramID;    
-                    this.program_text = select.options[select.selectedIndex].text;
+                    this.program_text = data.data.selected;
                     console.log(this.program_text);     
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
