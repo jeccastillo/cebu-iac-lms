@@ -277,7 +277,7 @@
                                     <tr>
                                         <th>Select Program</th>                                
                                         <td>                                    
-                                            <select v-model="program_update" required @change="changeProgram" class="form-control">
+                                            <select v-model="program_update" required class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>                                        
