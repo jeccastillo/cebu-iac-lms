@@ -277,7 +277,7 @@
                                     <tr>
                                         <th>Select Program</th>                                
                                         <td>                                    
-                                            <select v-model="program_update" required class="form-control">
+                                            <select v-model="program_update" @change="changeProgram($event)" required class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>                                        
@@ -480,6 +480,7 @@ new Vue({
         date_selected_formatted: "",
         programs: [],
         program_update: undefined,
+        program_text: undefined,
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -502,10 +503,10 @@ new Vue({
             .then((data) => {
                 this.request = data.data.data;
                 this.loader_spinner = false;
-                this.program_update = this.request.type_id;
+                //this.program_update = this.request.type_id;
                 axios.get(base_url + 'program/programs')
                 .then((data) => {
-                    this.programs = data.data.programs; 
+                    this.programs = data.data.programs;                     
                 })
                 .catch((error) => {
                     console.log(error);
@@ -537,6 +538,9 @@ new Vue({
             }
 
         },
+        changeProgram: function(event){
+            console.log(event.target[select.selectedIndex].text);
+        },
         confirmProgram: function(){    
            
                 this.loading_spinner = true;
@@ -552,7 +556,8 @@ new Vue({
                 Swal.showLoading();
                 this.payload = {
                     field: 'type_id',
-                    value: this.program_update
+                    value: this.program_update,
+                    program: this.program_text
                 };
 
                 axios
