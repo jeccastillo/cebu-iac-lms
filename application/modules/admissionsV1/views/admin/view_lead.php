@@ -478,6 +478,7 @@ new Vue({
         sched:"",
         date_selected: "",        
         date_selected_formatted: "",
+        programs: [],
         program_update: undefined,
         reserve_time_picker_options: {
             start: "08:00",
@@ -501,6 +502,14 @@ new Vue({
             .then((data) => {
                 this.request = data.data.data;
                 this.loader_spinner = false;
+                axios.get(base_url + 'program/programs')
+                .then((data) => {
+                    this.programs = data.data.programs; 
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                
             })
             .catch((error) => {
                 console.log(error);

@@ -122,6 +122,11 @@ class Program extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    public function programs(){
+        $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+        echo json_encode($ret);
+    }
     
     public function program_viewer($id,$sem = null)
     {
