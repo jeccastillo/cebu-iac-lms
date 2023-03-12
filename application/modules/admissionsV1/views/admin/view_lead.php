@@ -264,6 +264,38 @@
     </div>
 
     <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title text-left text-primary">Update Program</h3>
+                    </div>
+                    <div class="box-body" style="padding:2rem">
+                        <form @submit.prevent="confirmProgram" method="post">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program</th>                                
+                                        <td>                                    
+                                            <select v-model="program_update" required @change="changeProgram" class="form-control">
+                                                <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
+                                            </select>
+                                        </td>                                        
+                                    </tr>                                    
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" v-if="loaded" >Update Program</button>                        
+                            </div> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
 
         <div class="row">
 
@@ -446,11 +478,15 @@ new Vue({
         sched:"",
         date_selected: "",        
         date_selected_formatted: "",
+        program_update: undefined,
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
             end: "16:00"
         },
+        payload:{
+            field: undefined,            
+        }
     },
 
     mounted() {
@@ -491,6 +527,40 @@ new Vue({
             }
 
         },
+        confirmProgram: function(){    
+           
+                this.loading_spinner = true;
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: false,
+                    allowEscapeKey: false,
+                    title: 'Please wait',
+                    text: 'Processing confirmation',
+                    icon: 'info',
+                })
+                
+                Swal.showLoading();
+                this.payload = {
+                    field: 'type_id',
+                    value: this.program_update
+                };
+
+                axios
+                    .post(api_url + 'admissions/student-info/update-field/custom/' + this.student.slug , this.payload, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {     
+            
+                        Swal.hideLoading();
+                        document.location = this.base_url+'admissionsV1/view_lead/'+this.slug;
+        
+                        
+                    });
+            
+            
+        }
        
         submitSchedule: function() {
 
