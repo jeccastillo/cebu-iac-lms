@@ -14,7 +14,7 @@
                                 <tr>
                                     <th>Select Program</th>                                
                                     <td>                                    
-                                        <select v-model="request.intProgramID" @change="changeProgram" class="form-control">
+                                        <select id="program" v-model="request.intProgramID" @change="changeProgram($event)" class="form-control">
                                             <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
                                         </select>
                                     </td>
@@ -237,6 +237,7 @@ new Vue({
         sections: [],
         section: undefined,
         api_data:{},        
+        program_text: undefined,
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -271,12 +272,15 @@ new Vue({
     },    
     mounted() {
 
-        let url_string = window.location.href;           
+        let url_string = window.location.href;      
+        const select = document.getElementById('program');     
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
                 .then((data) => {  
                     this.student = data.data.student;     
-                    this.request.intProgramID = this.student.intProgramID;         
+                    this.request.intProgramID = this.student.intProgramID;    
+                    this.program_text = select.options[select.selectedIndex].text;
+                    console.log(this.program_text);     
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
                     
@@ -317,7 +321,8 @@ new Vue({
             var val = this.$refs.input.clean
             console.log(val);
         },
-        changeProgram: function(){
+        changeProgram: function(event){
+            this.program_text = event.target[event.target.selectedIndex].text;
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
                 if(data.data.sections.length > 0){ 
@@ -348,6 +353,11 @@ new Vue({
                 })
                 
                 Swal.showLoading();
+
+                this.payload = {
+                    type_id: this.request.intProgramID,
+                    program: this.program_text,                    
+                };
 
                 axios
                     .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug , this.payload, {
