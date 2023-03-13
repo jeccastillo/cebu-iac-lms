@@ -516,7 +516,7 @@
             <div class="col-lg-12">
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title text-left text-primary">Update Program</h3>
+                        <h3 class="box-title text-left text-primary">Program</h3>
                     </div>
                     <div class="box-body" style="padding:2rem">
                         <div>
@@ -530,7 +530,7 @@
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
-                                        <th>Select Program</th>                                
+                                        <th>Select Program to Change</th>                                
                                         <td>                                    
                                             <select v-model="program_update" @change="changeProgram($event)" required class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramDescription }}</option>
