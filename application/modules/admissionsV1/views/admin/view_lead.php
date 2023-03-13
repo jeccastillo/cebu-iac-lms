@@ -801,7 +801,8 @@ new Vue({
             this.program_text = event.target[event.target.selectedIndex].text;
         },
         updateField: function(type,event){
-            this.loading_spinner = true;
+            //this.loading_spinner = true;
+            <?php if($userlevel == "2" || $userlevel == "5"):  ?>
             Swal.fire({
                 showCancelButton: false,
                 showCloseButton: false,
@@ -831,6 +832,17 @@ new Vue({
 
                 
             });
+            <?php else: ?>
+                Swal.fire({
+                showCancelButton: false,
+                showCloseButton: true,
+                allowEscapeKey: false,
+                title: 'Unauthorized Access',
+                text: 'You do not have access to this function',
+                icon: 'warning',
+            })      
+            <?php endif; ?>
+            
             
         },
         confirmProgram: function(){    
