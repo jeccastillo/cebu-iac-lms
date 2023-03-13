@@ -586,12 +586,12 @@ new Vue({
         deleteApplicant: function(){
             this.loading_spinner = true;
             Swal.fire({
-                title: "Submit Schedule",
-                text: "Are you sure you want to submit?",
+                title: "Delete Applicant",
+                text: "Are you sure you want to delete?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
-                icon: "question",
+                icon: "warning",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
