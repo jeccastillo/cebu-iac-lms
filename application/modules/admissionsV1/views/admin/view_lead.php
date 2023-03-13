@@ -119,8 +119,11 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
-                        <p :class="request.good_moral=='No'?'text-red':'text-muted'">
-                            {{request.good_moral}}
+                        <p :class="request.good_moral=='No'?'text-red':'text-muted'">                            
+                            <select class="form-control" @change="updateField('good_moral',$event)" v-model="request.good_moral">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>                            
                         </p>
                         <hr>
                     </div>
@@ -547,39 +550,73 @@ new Vue({
             //console.log(event.target[event.target.selectedIndex].text);
             this.program_text = event.target[event.target.selectedIndex].text;
         },
+        updateField: function(type,event){
+            this.loading_spinner = true;
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Processing update',
+                icon: 'info',
+            })            
+
+            Swal.showLoading();
+            this.payload = {
+                field: type,
+                value: event.target.value,                
+                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+            };
+
+            axios
+            .post(api_url + 'admissions/student-info/update-field/custom/' + this.slug , this.payload, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {     
+    
+                Swal.hideLoading();
+                document.location = base_url+'admissionsV1/view_lead/'+this.slug;
+
+                
+            });
+            
+        },
         confirmProgram: function(){    
            
-                this.loading_spinner = true;
-                Swal.fire({
-                    showCancelButton: false,
-                    showCloseButton: false,
-                    allowEscapeKey: false,
-                    title: 'Please wait',
-                    text: 'Processing confirmation',
-                    icon: 'info',
-                })
-                
-                Swal.showLoading();
-                this.payload = {
-                    field: 'type_id',
-                    value: this.program_update,
-                    program: this.program_text
-                };
+            this.loading_spinner = true;
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Processing update',
+                icon: 'info',
+            })
+            
+            Swal.showLoading();
+            this.payload = {
+                field: 'type_id',
+                value: this.program_update,
+                program: this.program_text,
+                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+            };
 
-                axios
-                    .post(api_url + 'admissions/student-info/update-field/custom/' + this.slug , this.payload, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    })
-                    .then(data => {     
-            
-                        Swal.hideLoading();
-                        document.location = base_url+'admissionsV1/view_lead/'+this.slug;
+            axios
+            .post(api_url + 'admissions/student-info/update-field/custom/' + this.slug , this.payload, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {     
+    
+                Swal.hideLoading();
+                document.location = base_url+'admissionsV1/view_lead/'+this.slug;
+
+                
+            });
         
-                        
-                    });
-            
             
         },
 
