@@ -596,7 +596,7 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    return axios.delete(api_url + 'admissions/student-info/delete/'+ this.slug, this.delete_applicant, {
+                    return axios.delete(api_url + 'admissions/student-info/'+ this.slug, this.delete_applicant, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
