@@ -419,12 +419,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 </ul><br />
                 One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
             </td>
-        </tr> 
-        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
-            <tr>
-                <td colspan="2" style="font-size:9; line-height:15; color:#fff;">Space</td>
-            </tr>
-        </table>
+        </tr>         
         <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
             <tr>
                 <td width="400px"></td>
