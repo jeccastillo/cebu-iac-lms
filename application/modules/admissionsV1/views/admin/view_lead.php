@@ -122,16 +122,18 @@
                         <p :class="request.good_moral=='No'?'text-red':'text-muted'">                            
                             <select class="form-control" @change="updateField('good_moral',$event)" v-model="request.good_moral">
                                 <option value="Yes">Yes</option>
-                                <option value="No">No</option>
+                                <option value="No"><span class="text-red">No</span></option>
                             </select>                            
                         </p>
                         <hr>
                     </div>
 
                     <div>
-                        <strong><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>
-                        <p :class="request.crime=='Yes'?'text-red':'text-muted'">
-                            {{request.crime}}
+                        <strong><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>                                                    
+                            <select class="form-control" @change="updateField('crime',$event)" v-model="request.crime">
+                                <option value="Yes"><span class="text-red">Yes</span></option>
+                                <option value="No">No</option>
+                            </select> 
                         </p>
                         <hr>
                     </div>
