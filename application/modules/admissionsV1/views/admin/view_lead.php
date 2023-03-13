@@ -97,9 +97,7 @@
 
                     <div>
                         <strong><i class="fa fa-home margin-r-5"></i> Previous School</strong>
-                        <p class="text-muted">
-                            {{request.school}}
-                        </p>
+                        <input type="text" class="form-control" v-model="request.school" @blur="updateField('school',$event)" />                        
                         <hr>
                     </div>                    
                     <div>
