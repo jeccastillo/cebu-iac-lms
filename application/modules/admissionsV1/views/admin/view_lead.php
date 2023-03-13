@@ -121,8 +121,8 @@
                         <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
                         <p :class="request.good_moral=='No'?'text-red':'text-muted'">                            
                             <select class="form-control" @change="updateField('good_moral',$event)" v-model="request.good_moral">
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                             </select>                            
                         </p>
                         <hr>
