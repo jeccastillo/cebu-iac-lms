@@ -378,7 +378,7 @@ new Vue({
                         })
                         .then(data => {
                             Swal.hideLoading();
-                            document.location = this.base_url+'site/awesome/confirm';
+                            //document.location = this.base_url+'site/awesome/confirm';
                         });               
                         
                     });
