@@ -118,18 +118,16 @@
                         <hr>
                     </div>
                     <div>
-                        <strong><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>
-                        <p :class="request.good_moral=='No'?'text-red':'text-muted'">                            
+                        <strong :class="request.good_moral=='No'?'text-red':''"><i class="fa fa-user margin-r-5"></i>Holds a good moral standing in previous school</strong>\                        
                             <select class="form-control" @change="updateField('good_moral',$event)" v-model="request.good_moral">
                                 <option value="Yes">Yes</option>
-                                <option value="No"><span class="text-red">No</span></option>
-                            </select>                            
-                        </p>
+                                <option value="No">No</option>
+                            </select>                                                    
                         <hr>
                     </div>
 
                     <div>
-                        <strong><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>                                                    
+                        <strong :class="request.crime=='Yes'?'text-red':''"><i class="fa fa-user margin-r-5"></i>Has been involved of any illegal activities</strong>                                                    
                             <select class="form-control" @change="updateField('crime',$event)" v-model="request.crime">
                                 <option value="Yes"><span class="text-red">Yes</span></option>
                                 <option value="No">No</option>
