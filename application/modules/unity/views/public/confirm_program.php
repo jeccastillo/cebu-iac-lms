@@ -323,6 +323,7 @@ new Vue({
         },
         changeProgram: function(event){
             this.program_text = event.target[event.target.selectedIndex].text;
+            console.log(this.program_text);
             axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID)
             .then((data) => {
                 if(data.data.sections.length > 0){ 
@@ -378,7 +379,7 @@ new Vue({
                         })
                         .then(data => {
                             Swal.hideLoading();
-                            //document.location = this.base_url+'site/awesome/confirm';
+                            document.location = this.base_url+'site/awesome/confirm';
                         });               
                         
                     });
