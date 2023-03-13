@@ -239,7 +239,7 @@
                     <div class="text-right">
                         <button type="button"  data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
-                        <button type="button" v-if="request.status == 'New'"  @click="deleteApplicant"
+                        <button type="button" v-if="request.status == 'New' || request.status == 'Waiting For Interview'"  @click="deleteApplicant"
                             class=" btn btn-danger">Delete applicant</button>
                         <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
                             @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
