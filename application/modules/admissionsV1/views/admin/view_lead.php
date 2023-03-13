@@ -840,7 +840,10 @@ new Vue({
                 title: 'Unauthorized Access',
                 text: 'You do not have access to this function',
                 icon: 'warning',
-            })      
+            }).then(data => {           
+                document.location = base_url+'admissionsV1/view_lead/'+this.slug;
+                
+            });      
             <?php endif; ?>
             
             
