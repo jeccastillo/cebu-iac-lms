@@ -383,19 +383,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
-            </table>
-            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
-                <tr>
-                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
-                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
-                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
-                </tr>                   
-                <tr>
-                    <td style= "font-size:9; text-align:center">&nbsp;</td>
-                    <td style= "font-size:9; text-align:center;">&nbsp;</td>
-                    <td style= "font-size:9; text-align:center">Student Signature/Date</td>            
-                </tr>
-            </table>       
+            </table>               
             <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
@@ -419,18 +407,21 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 </ul><br />
                 One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
             </td>
-        </tr>                             
-        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
-            <tr>
-                <td colspan="2" style="font-size:9; line-height:15; color:#fff;">Space</td>
-            </tr>
-            <tr>
-                <td width="400px"></td>
-                <td width="128px" colspan="2" style="font-size:9; text-align:center line-height:15; border-top:1px solid #333">Student Signature/Date</td>
-            </tr>
-        </table>     
-        
-    </table> ';             
+        </tr>                                              
+    </table> 
+    <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+                <tr>
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
+                </tr>                   
+                <tr>
+                    <td style= "font-size:9; text-align:center">&nbsp;</td>
+                    <td style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td style= "font-size:9; text-align:center">Student Signature/Date</td>            
+                </tr>
+            </table>    
+    ';             
         
     // </table> ';
 
