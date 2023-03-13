@@ -21,8 +21,8 @@
         integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-    
-    
+
+
 
     <title>iACADEMY Cebu</title>
 </head>
@@ -58,7 +58,7 @@
         <a href="<?php echo base_url(); ?>site/applicant_first_step">
             <img src="<?php echo $img_dir; ?>btn-apply.png" class="w-[170px] img-btn" alt="" />
         </a>
-        <a href="<?php echo base_url(); ?>"> <img src=" <?php echo $img_dir; ?> logo.png"
+        <a href="<?php echo base_url(); ?>"> <img src=" <?php echo $img_dir; ?>iac-cebu.png"
                 class="h-[50px] hidden md:block" alt="" /></a>
 
     </div>
