@@ -101,15 +101,7 @@
                             {{request.school}}
                         </p>
                         <hr>
-                    </div>
-
-                    <div>
-                        <strong><i class="fa fa-user margin-r-5"></i>Student Type</strong>
-                        <p class="text-muted">
-                            {{request.program}}
-                        </p>
-                        <hr>
-                    </div>
+                    </div>                    
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Citizenship</strong>
                         <select class="form-control" @change="updateField('citizenship',$event)" v-model="request.citizenship">                                
@@ -527,6 +519,13 @@
                         <h3 class="box-title text-left text-primary">Update Program</h3>
                     </div>
                     <div class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
+                            <p class="text-muted">
+                                {{request.program}}
+                            </p>
+                            <hr>
+                        </div>
                         <form @submit.prevent="confirmProgram" method="post">
                             <table class="table table-bordered table-striped">
                                 <tbody>
