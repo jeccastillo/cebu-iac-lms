@@ -24,7 +24,7 @@
     $pdf->setPrintFooter(false);
     // Add a page
     // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage();
+    $pdf->AddPage('P', 'A4');    
     $payment_division = $tuition['total'] / 4;    
 
     
@@ -404,22 +404,35 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                           
         ';
 
-    //     $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
-    //     <tr>
-    //         <td>Policy on School Charges and Refund of Fees<br /><br />
-    //             Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
-    //             five hundred pesos (PhP 2,500.00).<br /><br />
-    //             Officially Enrolled Students who withdraw their enrollment after the official start of classes, and have already paid the pertinent tuition and other
-    //             school fees in full or for any length longer than one month (regardless of whether or not he has actually attended classes) shall be charged the
-    //             appropriate retention fee as stipulated in CHED Manual of Regulations for Private Higher Education (MORPHE) of 2009, as follows:  
-    //             <ul>
-    //                 <li>Within the first week of classes - twenty-five percent (25%) of the total school fees.</li>
-    //                 <li>Within the second week of classes - fifty percent (50%) of the total school fees.</li>
-    //                 <li>Beyond the second week of classes - one hundred percent (100%) of the total school fees.</li>
-    //             </ul><br />
-    //             One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
-    //         </td>
-    //     </tr>                   
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
+        <tr>
+            <td>Policy on School Charges and Refund of Fees<br /><br />
+                Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
+                five hundred pesos (PhP 2,500.00).<br /><br />
+                Officially Enrolled Students who withdraw their enrollment after the official start of classes, and have already paid the pertinent tuition and other
+                school fees in full or for any length longer than one month (regardless of whether or not he has actually attended classes) shall be charged the
+                appropriate retention fee as stipulated in CHED Manual of Regulations for Private Higher Education (MORPHE) of 2009, as follows:  
+                <ul>
+                    <li>Within the first week of classes - twenty-five percent (25%) of the total school fees.</li>
+                    <li>Within the second week of classes - fifty percent (50%) of the total school fees.</li>
+                    <li>Beyond the second week of classes - one hundred percent (100%) of the total school fees.</li>
+                </ul><br />
+                One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
+            </td>
+        </tr> 
+        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <tr>
+                <td colspan="2" style="font-size:9; line-height:15; color:#fff;">Space</td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <tr>
+                <td width="400px"></td>
+                <td width="128px" colspan="2" style="font-size:9; text-align:center line-height:15; border-top:1px solid #333">Student Signature/Date</td>
+            </tr>
+        </table>     
+        
+    </table> ';             
         
     // </table> ';
 
