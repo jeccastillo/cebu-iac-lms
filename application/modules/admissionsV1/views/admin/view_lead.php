@@ -239,6 +239,8 @@
                     <div class="text-right">
                         <button type="button"  data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
+                        <button type="button" v-if="request.status == 'New'"  @click="deleteApplicant"
+                            class=" btn btn-danger">Delete applicant</button>
                         <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
                             @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
@@ -488,6 +490,9 @@ new Vue({
         },
         payload:{
             field: undefined,            
+        },
+        delete_applicant:{
+
         }
     },
 
@@ -577,7 +582,53 @@ new Vue({
             
             
         },
-       
+
+        deleteApplicant: function(){
+            this.loading_spinner = true;
+            Swal.fire({
+                title: "Submit Schedule",
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios.delete(api_url + 'admissions/student-info/delete/'+ this.slug, this.delete_applicant, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.is_done = true;
+
+                            if (data.data.success) {
+
+                                Swal.fire({
+                                    title: "SUCCESS",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(res => {
+                                    document.location = base_url+"admissionsV1/view_all_leads";
+                                });
+
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {}
+            })
+        },       
         submitSchedule: function() {
 
             let time_from = moment(this.request_sched.from).format('LT');
@@ -635,7 +686,7 @@ new Vue({
             }).then((result) => {
                 if (result.isConfirmed) {}
             })
-            },
+        },
         updateStatus: function() {
 
 
