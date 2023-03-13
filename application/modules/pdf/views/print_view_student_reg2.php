@@ -24,7 +24,7 @@
     $pdf->setPrintFooter(false);
     // Add a page
     // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage();    
+    $pdf->AddPage('P', 'A6');    
     $payment_division = $tuition['total'] / 4;    
 
     
