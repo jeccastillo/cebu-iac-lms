@@ -409,7 +409,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </td>
         </tr>                                              
     </table> 
-    <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+    <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
