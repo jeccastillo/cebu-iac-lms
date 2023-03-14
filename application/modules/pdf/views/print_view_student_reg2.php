@@ -413,6 +413,11 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>            
+                </tr>                   
+                <tr>
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
                 </tr>                   
                 <tr>
