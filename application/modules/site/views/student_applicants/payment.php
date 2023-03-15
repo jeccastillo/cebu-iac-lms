@@ -414,7 +414,10 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        } else {}
+                        } else {
+
+                            
+                        }
                     } else {
                         Swal.fire(
                             'Failed!',
