@@ -24,7 +24,7 @@
     $pdf->setPrintFooter(false);
     // Add a page
     // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage('P', 'A4');    
+    $pdf->AddPage('P', 'LEGAL');    
     $payment_division = $tuition['total'] / 4;    
 
     
@@ -392,7 +392,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                           
         ';
 
-        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
         <tr>
             <td>Policy on School Charges and Refund of Fees<br /><br />
                 Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
@@ -409,7 +409,12 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </td>
         </tr>                                              
     </table> 
-    <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+    <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+                <tr>
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                    <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>            
+                </tr>                   
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
