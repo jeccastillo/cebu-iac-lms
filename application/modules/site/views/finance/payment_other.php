@@ -266,7 +266,7 @@ new Vue({
             this.payload = {
                 "description": "Reservation Payment",
                 "order_items": [{
-                    "price_default": "700",
+                    "price_default": this.total_single_without_charge,
                     "title": "Reservation Payment",
                     "qty": "1",
                     "id": 1
