@@ -343,7 +343,7 @@ new Vue({
             this.payload = {
                 "description": title,
                 "order_items": [{
-                    "price_default": "700",
+                    "price_default": this.total_single_without_charge,
                     "title": title,
                     "qty": "1",
                     "id": 1
