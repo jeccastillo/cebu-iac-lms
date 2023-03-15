@@ -419,9 +419,9 @@ new Vue({
                             title: "Payment is Pending",
                             text: data.data.message,
                             icon: "success"
-                            }).then(
+                            }).then(function() {
                                 window.location = base_url;
-                            );
+                            });
                             
                         }
                     } else {
