@@ -415,7 +415,13 @@ new Vue({
                             }, 500);
 
                         } else {
-
+                            Swal.fire({
+                            title: "Payment is Pending",
+                            text: data.data.message,
+                            icon: "success"
+                            }).then(
+                                window.location = base_url;
+                            );
                             
                         }
                     } else {
