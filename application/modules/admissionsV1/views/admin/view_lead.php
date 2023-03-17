@@ -376,25 +376,25 @@
                         </p>
                         <hr>
                     </div>
-                    <?php if($userlevel == "2" || $userlevel == "5"): ?>
-                        <div class="" v-if="request.uploaded_requirements.length > 0">
-                            <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
-                                    class=" text-primary">Initial
-                                    Requirements</span>
-                            </strong>
+                    
+                    <div class="" v-if="request.uploaded_requirements.length > 0">
+                        <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
+                                class=" text-primary">Initial
+                                Requirements</span>
+                        </strong>
 
-                            <hr>
-                        </div>
+                        <hr>
+                    </div>
 
-                        <div v-for="requirement in request.uploaded_requirements">
-                            <strong><i class="fa fa-user margin-r-5"></i>{{ requirement.type }}</strong>
-                            <p class="text-muted">
-                                <a :href="requirement.path" target="_blank">
-                                    {{requirement.filename}}</a>
-                            </p>
-                            <hr>
-                        </div>
-                    <?php endif; ?>
+                    <div v-for="requirement in request.uploaded_requirements">
+                        <strong><i class="fa fa-user margin-r-5"></i>{{ requirement.type }}</strong>
+                        <p class="text-muted">
+                            <a :href="requirement.path" target="_blank">
+                                {{requirement.filename}}</a>
+                        </p>
+                        <hr>
+                    </div>
+                    
 
                     <div v-if="request.schedule_date">
                         <div class="">
