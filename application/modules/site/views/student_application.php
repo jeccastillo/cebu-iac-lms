@@ -49,6 +49,9 @@
                Student Information Sheet <strong>(Cebu Campus)</strong></h4>
            <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
                to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
+            <p>
+                Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati (Main Campus) click <a href="https://portalv2.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a>.
+            </p>
        </div>
 
        <form @submit.prevent="
