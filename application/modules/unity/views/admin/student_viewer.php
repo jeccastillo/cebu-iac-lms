@@ -91,11 +91,11 @@
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-md-3 size-96">                                    
+                                        <div class="col-lg-3 size-96">                                    
                                             <img v-if="!applicant_data.uploaded_requirements[2]" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
                                             <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
                                             <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                                             <p><strong>Block Section: </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
@@ -107,7 +107,7 @@
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
                                             <hr />                                        
                                         </div>                            
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <table class="table table-bordered">
                                                 <tr>
                                                     <th>Mother:</th><td>{{ student.mother }}</td><td>{{ student.mother_contact }}</td><td>{{ student.mother_email }}</td>
