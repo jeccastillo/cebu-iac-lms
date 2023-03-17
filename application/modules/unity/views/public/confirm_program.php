@@ -41,10 +41,8 @@
                                 <input type="text" required class="form-control" v-model="request.mother">
                             </div>
                             <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
-                                <label>Contact Number</label>
-                                <the-mask 
-                            class="form-control"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.mother_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                                <label>Contact Number (please specify country code)</label>
+                                <input type="number" class="form-control" v-model="request.mother_contact" required masked="true" placeholder="(Country Code) XXX-XXX-XXXX" />
                             </div>
                         </div>
                         <div class="row">
@@ -59,10 +57,8 @@
                                 <input type="text" required class="form-control" v-model="request.father">
                             </div>
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
-                                <label>Contact Number</label>
-                                <the-mask
-                            class="form-control"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                                <label>Contact Number (please specify country code)</label>
+                                <input type="number" class="form-control" v-model="request.father_contact" required masked="true" placeholder="(Country Code) XXX-XXX-XXXX" />
                             </div>
                         </div>
                         <div class="row">
@@ -77,10 +73,8 @@
                                 <input type="text" required class="form-control" v-model="request.guardian">
                             </div>
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
-                                <label>Contact Number</label>
-                                <the-mask
-                            class="form-control"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" required masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                                <label>Contact Number (please specify country code)</label>
+                                <input type="number" class="form-control" v-model="request.guardian_contact" required masked="true" placeholder="(Country Code) XXX-XXX-XXXX" />
                             </div>
                         </div>
                         <div class="row">
