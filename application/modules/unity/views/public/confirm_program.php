@@ -42,7 +42,7 @@
                             </div>
                             <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="number" class="form-control" v-model="request.mother_contact" required masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.mother_contact" required masked="true" placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +58,7 @@
                             </div>
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="number" class="form-control" v-model="request.father_contact" required masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.father_contact" required masked="true" placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
@@ -74,7 +74,7 @@
                             </div>
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="number" class="form-control" v-model="request.guardian_contact" required masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.guardian_contact" required masked="true" placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
