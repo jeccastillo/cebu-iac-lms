@@ -248,6 +248,7 @@
                                                         <option value="0">Check</option> 
                                                         <option value="2">Credit Card</option>
                                                         <option value="3">Debit Card</option>                                                       
+                                                        <option value="4">Online Payment</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
