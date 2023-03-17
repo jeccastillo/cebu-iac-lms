@@ -91,11 +91,11 @@
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-sm-3 size-96">                                    
+                                        <div class="col-md-3 size-96">                                    
                                             <img v-if="!applicant_data.uploaded_requirements[2]" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
                                             <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
                                         </div>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-3">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
                                             <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                                             <p><strong>Block Section: </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
@@ -107,13 +107,22 @@
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
                                             <hr />                                        
                                         </div>                            
-                                        <div class="col-sm-4">
-                                            <p><strong>Mother: </strong>{{ student.mother }}</p>
-                                            <p><strong>Father: </strong>{{ student.father }}</p>                                            
-                                            <p><strong>Guardian: </strong>{{ student.guardian }}</p>
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th>Mother:</th><td>{{ student.mother }}</td><td>{{ student.mother_contact }}</td><td>{{ student.mother_email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Father:</th><td>{{ student.father }}</td><td>{{ student.father_contact }}</td><td>{{ student.father_email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Guardian:</th><td>{{ student.guardian }}</td><td>{{ student.guardian_contact }}</td><td>{{ student.guardian_email }}</td>
+                                                </tr>
+                                            </table>
                                             
                                             <hr />                                        
-                                        </div>                                                                        
+                                        </div>            
+                                                              
                                     </div>
                                     <div>
                                         <strong>Graduated Status:</strong>                                            
