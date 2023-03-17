@@ -46,7 +46,7 @@
    <div class="custom-container" id="adminssions-form" style="margin-top:10px;">        
        <div class="color-primary">
            <h4 class="font-medium text-2xl mb-5">
-               Student Information Sheet</h4>
+               Student Information Sheet (Cebu Campus)</h4>
            <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
                to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
        </div>
