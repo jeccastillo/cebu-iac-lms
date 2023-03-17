@@ -118,6 +118,11 @@
                                                 <tr>
                                                     <th>Guardian:</th><td>{{ student.guardian }}</td><td>{{ student.guardian_contact }}</td><td>{{ student.guardian_email }}</td>
                                                 </tr>
+                                            </table>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th></th><th>Name</th><th>Address</th><th>Date(s) Attended</th>
+                                                </tr>
                                                 <tr>
                                                     <th>High School:</th><td>{{ student.high_school }}</td><td>{{ student.high_school_address }}</td><td>{{ student.high_school_attended }}</td>
                                                 </tr>
