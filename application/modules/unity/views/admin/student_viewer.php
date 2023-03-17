@@ -95,7 +95,7 @@
                                             <img v-if="!applicant_data.uploaded_requirements[2]" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
                                             <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-5">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
                                             <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                                             <p><strong>Block Section: </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
@@ -103,20 +103,28 @@
                                             <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
                                             <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
                                             <p><strong>Personal Email: </strong>{{ student.strEmail }}</p>  
-                                            <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>  
+                                            <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>                                            
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
-                                            <hr />
-                                            <strong>Graduated Status:</strong>
+                                            <hr />                                        
+                                        </div>                            
+                                        <div class="col-sm-4">
+                                            <p><strong>Mother: </strong>{{ student.mother }}</p>
+                                            <p><strong>Father: </strong>{{ student.father }}</p>                                            
+                                            <p><strong>Guardian: </strong>{{ student.guardian }}</p>
                                             
-                                            <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
-                                                <option value="0">No</option>
-                                                <option value="1">Yes</option>
-                                            </select>
-                                            <hr />                                            
-                                            <div v-else>
-                                                {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
-                                            </div>
+                                            <hr />                                        
                                         </div>                                                                        
+                                    </div>
+                                    <div>
+                                        <strong>Graduated Status:</strong>                                            
+                                        <select v-model="grad_status" v-if="registrar_privilages" class="form-control" @change="updateGradStatus">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                        <hr />                                            
+                                        <div v-else>
+                                            {{ student.isGraduate ? 'Grad' : 'Not Grad' }}
+                                        </div>
                                     </div>    
                                 </div>
                             </div>
