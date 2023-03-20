@@ -116,7 +116,7 @@
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = application_payment.id;" 
+                                                        @click="prepUpdate(application_payment.id,application_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -138,7 +138,7 @@
                                             <td>{{ reservation_payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = reservation_payment.id;" 
+                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -165,7 +165,7 @@
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
-                                                        @click="or_update.id = payment.id;" 
+                                                        @click="prepUpdate(payment.id,payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -194,7 +194,7 @@
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="(!payment.or_number && payment.status == 'Paid') && cashier" data-toggle="modal"                                                
-                                                        @click="or_update.id = payment.id;" 
+                                                        @click="prepUpdate(payment.id,payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -318,7 +318,7 @@
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>
                         <div>{{ or_update.or_number }}</div>
-                        <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea>                        
+                        <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea>                                                
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -384,6 +384,7 @@ new Vue({
             is_cash: 1,
             check_number: '',
         },
+        or_update_description: undefined,
         or_update:{
             id: undefined,
             or_number: undefined,
@@ -504,6 +505,10 @@ new Vue({
     },
 
     methods: {      
+        prepUpdate: function(id,desc){
+            this.or_update.id = id;
+            this.or_update_description = desc;
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
@@ -534,7 +539,7 @@ new Vue({
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
                                         formdata.append('payments',pay_length);
-                                        formdata.append('description',this.request.description);
+                                        formdata.append('description',this.or_update_description);
                                         formdata.append('registration_id',this.registration.intRegistrationID);1
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
