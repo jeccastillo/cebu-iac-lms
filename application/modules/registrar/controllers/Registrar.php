@@ -395,7 +395,7 @@ class Registrar extends CI_Controller {
             $reg['enlisted_by'] = $this->data["user"]["intID"];
             $reg['intAYID'] = $post['strAcademicYear'];
             $reg['intYearLevel'] = $academic_standing['year'];
-            $reg['date_enlisted'] = date("Y-m-d h:i:s");
+            $reg['date_enlisted'] = date("Y-m-d h:i:s");            
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
             $reg['enumScholarship'] = $post['enumScholarship'];        
             $reg['enumStudentType'] = $post['enumStudentType'];
