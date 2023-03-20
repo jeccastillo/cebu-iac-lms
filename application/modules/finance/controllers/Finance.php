@@ -92,8 +92,11 @@ class Finance extends CI_Controller {
     public function next_or(){
         $post = $this->input->post();
         $data = $post;
-        unset($data['payments']);
-        unset($data['description']);
+        if(isset($data['registration_id'])){
+            unset($data['payments']);
+            unset($data['description']);
+            unset($data['registration_id']);
+        }
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
         
@@ -105,14 +108,24 @@ class Finance extends CI_Controller {
         $this->db
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
+            
+        if(isset($data['registration_id']))
+            if(substr( $post['description'], 0, 7 ) === "Tuition" && $data['payments'] == 0){
+                $ret['message'] = "First Tuition Payment";
+                $reg_update = [
+                    "dteRegistered" => date("Y-m-d h:i:s")
+                ];
+                $this->db
+                    ->where('intRegistrationID',$post['registration_id'])
+                    ->update('tb_mas_registration',$reg_update);
 
-        if(substr( $post['description'], 0, 7 ) === "Tuition"){
-            $ret['message'] = "Tuition";
-        }
-        else{
-            $ret['message'] = "Other";
-        }
-        $ret['test'] = $post;
+            }
+            else{
+                $ret['message'] = "Payments";
+            }
+        else
+            $ret['message'] = "Payments";
+        
 
         echo json_encode($ret);
     }
