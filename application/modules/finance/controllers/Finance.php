@@ -108,12 +108,13 @@ class Finance extends CI_Controller {
         $this->db
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
-            
+
         if(isset($data['registration_id']))
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $data['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $reg_update = [
-                    "dteRegistered" => date("Y-m-d h:i:s")
+                    "dteRegistered" => date("Y-m-d h:i:s"),
+                    "intROG" => 1,
                 ];
                 $this->db
                     ->where('intRegistrationID',$post['registration_id'])
