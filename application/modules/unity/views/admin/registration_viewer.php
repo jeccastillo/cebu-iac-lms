@@ -389,6 +389,7 @@ new Vue({
             id: undefined,
             or_number: undefined,
             cashier_id: undefined,
+            sy_reference: undefined,
         },
         amount_to_pay: 0,            
         advanced_privilages: false,      
@@ -418,7 +419,8 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
-                    if(data.data.success){                                                                                           
+                    if(data.data.success){      
+                        this.or_update.sy_reference = this.sem;                                                                                      
                         this.registration = data.data.registration;            
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
