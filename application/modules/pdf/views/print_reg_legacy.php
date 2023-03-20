@@ -37,7 +37,7 @@ $html = '<table border="0" cellpadding="0">
                 $html .= '<td style="font-size:10px;text-align:center;color:red;font-weight:bold;" width="80%">' . strtoupper($registration['enumScholarship']). '</td>';
             }
                 
-               $html .= '<td style="font-size:9px;" width="20%">'.date("m-d-Y", strtotime($registration['dteRegistered'])).'</td>
+               $html .= '<td style="font-size:9px;" width="20%">'.date("m-d-Y", strtotime($registration['date_enlisted'])).'</td>
             </tr>
         </table>';
 $html .= '<table border="0" cellpadding="0">

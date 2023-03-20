@@ -55,7 +55,7 @@
                    <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue"><?php echo $student['strName']; ?></span></a></li>
                   <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right"><?php echo $reg_status; ?></span></a> </li>
                     <li><a href="<?php echo base_url()."unity/delete_registration/".$student['intID']."/".$active_sem['intID']; ?>"><i class="ion ion-android-close"></i> Reset Status</a> </li>
-                <li><a style="font-size:13px;" href="#">Date Registered <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">'.$registration['dteRegistered'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span></a></li>
+                <li><a style="font-size:13px;" href="#">Date Registered <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">'.$registration['date_enlisted'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span></a></li>
                   <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right"><?php echo $registration['enumScholarship']; ?></span></a></li>
                   
               </ul>

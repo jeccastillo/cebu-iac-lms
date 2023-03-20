@@ -404,7 +404,7 @@
                 <div class="info-box-content">
                   <span class="info-box-text">ENROLMENT STATUS and DATE</span>
                   <span class="info-box-number"><?php echo ($registration['intROG'])?'<span style="color:#009000;">Enrolled</span>':'<span style="color:#900000;">Not Enrolled</span>'; ?></span>
-                    <span class="info-box-text"><?php echo ($registration['intROG'])?'<span style="color:#009000;">'.$registration['dteRegistered'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span>
+                    <span class="info-box-text"><?php echo ($registration['intROG'])?'<span style="color:#009000;">'.$registration['date_enlisted'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span>
 
 
                 </div>

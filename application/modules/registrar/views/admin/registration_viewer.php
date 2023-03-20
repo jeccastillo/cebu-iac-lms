@@ -36,7 +36,7 @@
               <ul class="nav nav-stacked">
                 <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue"><?php echo $student['strStudentNumber']; ?></span></a></li>
                 <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">Registered</span>':'<span style="color:#900000;">Not Registered</span>'; ?></span></a></li>
-                <li><a style="font-size:13px;" href="#">Date Registered <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">'.$registration['dteRegistered'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span></a></li>
+                <li><a style="font-size:13px;" href="#">Date Registered <span class="pull-right"><?php echo ($registration)?'<span style="color:#009000;">'.$registration['date_enlisted'].'</span>':'<span style="color:#900000;">N/A</span>'; ?></span></a></li>
                   <li><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right"><?php echo $student['enumScholarship']; ?></span></a></li>
                   
               </ul>

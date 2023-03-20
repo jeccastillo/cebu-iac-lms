@@ -277,7 +277,7 @@ class Registrar extends CI_Controller {
                 $reg['intStudentID'] = $post['studentID'];
                 $reg['intAYID'] = $post['strAcademicYear'];
                 $reg['intYearLevel'] = $academic_standing['year'];
-                $reg['dteRegistered'] = date("Y-m-d");
+                $reg['date_enlisted'] = date("Y-m-d");
                 $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
                 
                 if($post['enumStudentType']=="cross")
@@ -392,9 +392,10 @@ class Registrar extends CI_Controller {
         
         if(!$this->data_fetcher->checkRegistered($post['studentID'],$post['strAcademicYear'])){
             $reg['intStudentID'] = $post['studentID'];
+            $reg['enlisted_by'] = $this->data["user"]["intID"];
             $reg['intAYID'] = $post['strAcademicYear'];
             $reg['intYearLevel'] = $academic_standing['year'];
-            $reg['dteRegistered'] = date("Y-m-d");
+            $reg['date_enlisted'] = date("Y-m-d h:i:s");
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
             $reg['enumScholarship'] = $post['enumScholarship'];        
             $reg['enumStudentType'] = $post['enumStudentType'];
@@ -506,7 +507,7 @@ class Registrar extends CI_Controller {
                 $reg['intStudentID'] = $post['studentID'];
                 $reg['intAYID'] = $post['strAcademicYear'];
                 $reg['intYearLevel'] = $post['intYearLevel'];
-                $reg['dteRegistered'] = date("Y-m-d");
+                $reg['date_enlisted'] = date("Y-m-d h:i:s");
                 $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
 
                 if($post['enumStudentType']=="cross")

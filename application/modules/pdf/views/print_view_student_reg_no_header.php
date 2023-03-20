@@ -58,7 +58,7 @@ $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; fo
       <td width="80px">&nbsp;NAME</td>
       <td width="200px" >:&nbsp;' . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'</td>
       <td width="80px">&nbsp;DATE</td>
-      <td width="200px" >:&nbsp;'. $registration['dteRegistered']. '</td>      
+      <td width="200px" >:&nbsp;'. $registration['date_enlisted']. '</td>      
      </tr>
      <tr>
       <td width="80px" >&nbsp;PROGRAM</td>

@@ -43,7 +43,7 @@
                         <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
                         <li>
                             <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
-                                <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
+                                <span style="color:#009000" v-if="registration" >{{ registration.date_enlisted }}</span>
                                 <span style="color:#900000;" v-else>N/A</span>                                
                             </a>
                         </li>

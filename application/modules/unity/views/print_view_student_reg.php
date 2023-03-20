@@ -69,7 +69,7 @@
             <div class="col-lg-4 col-xs-12" style="width:40%;">
                 <p><strong>Student Number: </strong><?php echo date("Y",strtotime($student['dteCreated']))."-".$student['strStudentNumber']; ?></p>
                 <p><strong>Registration Status: </strong><span style="text-transform:uppercase;"><?php echo $registration['enumRegistrationStatus']; ?></span></p>
-                <p><strong>Date of Registration: </strong><?php echo $registration['dteRegistered']; ?></p>
+                <p><strong>Date of Registration: </strong><?php echo $registration['date_enlisted']; ?></p>
                 <p style="text-transform:capitalize"><strong>Scholarship Grant: </strong><?php echo $student['enumScholarship']; ?></p>
              
             </div>

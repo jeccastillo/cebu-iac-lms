@@ -65,7 +65,7 @@
                             <li><a :href="base_url + 'unity/delete_registration/' + student.intID + '/' + active_sem.intID"><i class="ion ion-android-close"></i> Reset Status</a> </li>
                             <li>
                                 <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
-                                    <span style="color:#009000" v-if="registration" >{{ registration.dteRegistered }}</span>
+                                    <span style="color:#009000" v-if="registration" >{{ registration.date_enlisted }}</span>
                                     <span style="color:#900000;" v-else>N/A</span>                                
                                 </a>
                             </li>                                                

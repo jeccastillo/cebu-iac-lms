@@ -61,7 +61,7 @@ $html = '<table border="0" cellpadding="0" style="color:#014fb3; font-size:10;">
       <td width="80px">&nbsp;</td>
       <td width="250px">&nbsp;</td>
       <td width="113px">&nbsp;DATE:</td>
-      <td width="85px" style="color: black;"> '. $registration['dteRegistered']. '</td>
+      <td width="85px" style="color: black;"> '. $registration['date_enlisted']. '</td>
      </tr>
      <tr>
       <td width="80px">&nbsp;NAME:</td>
