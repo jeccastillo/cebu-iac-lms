@@ -91,6 +91,7 @@ class Finance extends CI_Controller {
 
     public function next_or(){
         $post = $this->input->post();
+        
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
         
         if($post['or_current'] >= $cashier->or_end)
@@ -101,6 +102,9 @@ class Finance extends CI_Controller {
         $this->db
             ->where('intID',$post['intID'])
             ->update('tb_mas_cashier',$post);
+
+        $ret['message'] = "success";
+        $ret['test'] = $post;
         
     }
     public function update_cashier(){
