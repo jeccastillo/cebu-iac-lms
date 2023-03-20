@@ -110,7 +110,7 @@ class Finance extends CI_Controller {
             ->update('tb_mas_cashier',$data);
 
         if(isset($post['registration_id']))
-            if(substr( $post['description'], 0, 7 ) === "Tuition" && $data['payments'] == 0){
+            if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d h:i:s"),
