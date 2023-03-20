@@ -1972,10 +1972,13 @@ class Unity extends CI_Controller {
                  ->first_row();
             
             $this->data_poster->log_action('Registration Status','Updated Registration Status of:  '.$st->strFirstname." ".$st->strLastname." to ".$st->intROG,'green');
-            $data['message'] = "success";
+            $data['message'] = "Success";
+            $data['success'] = true;
         }
-        else
+        else{
             $data['message'] = "Failed";
+            $data['success'] = false;
+        }
         echo json_encode($data);
     }
     
