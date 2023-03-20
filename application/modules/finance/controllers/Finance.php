@@ -107,7 +107,8 @@ class Finance extends CI_Controller {
 
         $ret['message'] = "success";
         $ret['test'] = $post;
-        
+
+        echo json_encode($ret);
     }
     public function update_cashier(){
         $post = $this->input->post();                     
