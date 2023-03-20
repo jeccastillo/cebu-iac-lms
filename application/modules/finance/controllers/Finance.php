@@ -92,7 +92,7 @@ class Finance extends CI_Controller {
     public function next_or(){
         $post = $this->input->post();
         $data = $post;
-        if(isset($data['registration_id'])){
+        if(isset($post['registration_id'])){
             unset($data['payments']);
             unset($data['description']);
             unset($data['registration_id']);
@@ -109,7 +109,7 @@ class Finance extends CI_Controller {
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
 
-        if(isset($data['registration_id']))
+        if(isset($post['registration_id']))
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $data['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $reg_update = [
