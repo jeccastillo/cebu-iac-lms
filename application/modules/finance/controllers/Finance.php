@@ -91,17 +91,19 @@ class Finance extends CI_Controller {
 
     public function next_or(){
         $post = $this->input->post();
+        $data = $post;
+        unset($data['payments']);
         
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
         
-        if($post['or_current'] >= $cashier->or_end)
-            $post['or_current'] = null;
+        if($data['or_current'] >= $cashier->or_end)
+            $data['or_current'] = null;
         else
-            $post['or_current'] += 1;
+            $data['or_current'] += 1;
 
         $this->db
-            ->where('intID',$post['intID'])
-            ->update('tb_mas_cashier',$post);
+            ->where('intID',$data['intID'])
+            ->update('tb_mas_cashier',$data);
 
         $ret['message'] = "success";
         $ret['test'] = $post;
