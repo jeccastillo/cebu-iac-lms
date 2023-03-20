@@ -93,6 +93,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();
         $data = $post;
         unset($data['payments']);
+        unset($data['description']);
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
         
@@ -105,7 +106,12 @@ class Finance extends CI_Controller {
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
 
-        $ret['message'] = "success";
+        if(substr( $post['description'], 0, 7 ) === "Tuition"){
+            $ret['message'] = "Tuition";
+        }
+        else{
+            $ret['message'] = "Other";
+        }
         $ret['test'] = $post;
 
         echo json_encode($ret);
