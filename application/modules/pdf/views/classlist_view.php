@@ -44,7 +44,7 @@
         <td style="font-size:10px;"><b>Instructor:</b></td>        
         <td colspan="3" style="font-size:10px;"><?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>                
     </tr>  
-    <tr style="line-height:12px;">
+    <tr style="line-height:25px;">
         <td></td>
         <td></td>
         <td></td>
@@ -55,13 +55,13 @@
 </table>
 <table>
     <tr style="line-height:12px;text-align:center;">
-        <td style="font-size:10px;" width="3%">#</td>
-        <td style="font-size:10px;" width="20%">Student Number </td>
-        <td style="font-size:10px;" width="35%">Student Name</td>        
-        <td style="font-size:10px;" width="10%">Course</td>
-        <td style="font-size:10px;" width="12%">Enrollment Status</td>
-        <td style="font-size:10px;" width="10%">Date/Time Enrolled</td>
-        <td style="font-size:10px;" width="10%">Date/Time Subject Added</td>
+        <th style="font-size:10px;" width="3%">#</th>
+        <th style="font-size:10px;" width="20%">Student Number</th>
+        <th style="font-size:10px;" width="35%">Student Name</th>
+        <th style="font-size:10px;" width="10%">Course</th>
+        <th style="font-size:10px;" width="12%">Enrollment Status</th>
+        <th style="font-size:10px;" width="10%">Date/Time Enrolled</th>
+        <th style="font-size:10px;" width="10%">Date/Time Subject Added</th>
     
     </tr>
     <?php 
