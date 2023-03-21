@@ -54,7 +54,7 @@
     </tr>  
 </table>
 <table>
-    <tr style="line-height:20px;text-align:center;">
+    <tr style="line-height:12px;text-align:center;">
         <td style="font-size:10px;" width="3%">#</td>
         <td style="font-size:10px;" width="20%">Student Number </td>
         <td style="font-size:10px;" width="35%">Student Name</td>        
