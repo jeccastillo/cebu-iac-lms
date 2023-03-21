@@ -24,9 +24,9 @@
 </table>
 <table border="0">    
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Course: <?php echo $subject['strClassName']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;"> Year: <?php echo $subject['year']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;"> Section: <?php echo $subject['strClassName'].$subject['year'].$subject['strSection']." ".$subject['sub_section']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Course: <?php echo $classlist['strClassName']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Year: <?php echo $classlist['year']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Section: <?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
     </tr>
 </table>
 <table border="0">    
