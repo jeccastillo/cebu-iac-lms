@@ -1,24 +1,21 @@
-<table border="0">
-    <tr style="line-height:40px;">
-        <td style="font-size:9px;text-align:left">CCT-AA FORM NO. 5</td>
-    </tr>
-</table>
-<table border="0" cellpadding="0" style="color:#333; font-size:10;">
-        <tr style="line-height:25px;">
-            <td width="64" align="right"><img src= "<?php echo $img_dir."tagaytayseal.png"; ?>"  width="50" height="50" /></td>
-            <td width="400" style="text-align: center; line-height:100%">
-                
-             <font style="font-family:Calibri Light; font-size: 10;">Republic of the Philippines<br />City of Makati</font><br /><br />
-             <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">Information & Communications Technology Academy</font><br />
-			 <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
-             <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470</font><br />
-            </td>
-            <td width="64" align="left" valign="middle"><img src= "<?php echo $img_dir; ?>iacademy-logo.png"  width="50" height="50"/></td>
-        </tr>
-</table>
+<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+            <tr>
+                <td width="100%" align="center" style="text-align:center;vertical-align: middle;font-weight:bold;">iACADEMY</td>
+            </tr>
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center;">             
+                    
+                </td>
+            </tr>        
+            <tr>            
+                <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
+                    <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
+                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+                </td>           
+            </tr>
 <table border="0">
     <tr style="line-height:20px;">
-        <td style="font-size:12px;text-align:center;letter-spacing: 7px"><b>GRADING SHEET</b></td>
+        <td style="font-size:12px;text-align:center;letter-spacing: 7px"><b>OFFICIAL CLASSLIST</b></td>
     </tr>
     
     <tr style="line-height:20px;">
