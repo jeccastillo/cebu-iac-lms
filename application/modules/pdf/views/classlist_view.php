@@ -26,23 +26,23 @@
     <tr style="line-height:10px;">
         <td style="font-size:10px;width:15%"><b>Course:</b></td>
         <td style="font-size:10px;width:35%"><?php echo $classlist['strClassName']; ?></td>
-        <td style="font-size:10px;width:10%"><b>Year:</b></td>
+        <td style="font-size:10px;width:15%"><b>Year:</b></td>
         <td style="font-size:10px;width:15%"><?php echo $classlist['year']; ?></td>
         <td style="font-size:10px;width:10%"><b>Section:</b></td>
-        <td style="font-size:10px;width:15%"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
+        <td style="font-size:10px;width:10%"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:10px;"><b>Subject:</b></td>
         <td style="font-size:10px;"><?php echo $subject['strCode']; ?></td>
-        <td colspan="2" style="font-size:10px;"> <b>Descriptive Title:</b></td>    
-        <td colspan="2" style="font-size:10px;"><?php echo $subject['strDescription']; ?></td>
+        <td style="font-size:10px;"><b>Descriptive Title:</b></td>    
+        <td colspan="3" style="font-size:10px;"><?php echo $subject['strDescription']; ?></td>
         
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:10px;"><b>Time/Day/Room:</b></td>    
         <td style="font-size:10px;"><?php echo $schedule; ?></td>
-        <td colspan="2" style="font-size:10px;"> <b>Instructor:</b></td>        
-        <td colspan="2" style="font-size:10px;"><?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>
+        <td style="font-size:10px;"><b>Instructor:</b></td>        
+        <td colspan="3" style="font-size:10px;"><?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>
         <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->            
     </tr>    
 </table>
