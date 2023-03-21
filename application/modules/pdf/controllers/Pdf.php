@@ -1016,7 +1016,11 @@ class Pdf extends CI_Controller {
             }
             else
             {
-                $this->data['students'] = $students;
+                foreach($students as $student){
+                    $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
+                    $st[] = $student;
+                }
+                $this->data['students'] = $st;
             }
 
             $this->data['snum'] = 1;
@@ -1054,8 +1058,7 @@ class Pdf extends CI_Controller {
             
             foreach($students as $student)
             { 
-                $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$this->data['classlist']['strAcademicYear']);
-                $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
+                $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$this->data['classlist']['strAcademicYear']);                
                 $st[] = $student;
                 $ave = getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']);
                 $eq = getEquivalent($ave);
