@@ -64,6 +64,9 @@
         <th style="font-size:10px;" width="15%">Date Added</th>
     
     </tr>
+    <tr style="line-height:10px;">
+        <td colspan="7"></td>        
+    </tr>  
     <?php 
     $cs = count($students);
     $i = $snum;
