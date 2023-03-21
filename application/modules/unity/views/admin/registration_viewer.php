@@ -34,7 +34,7 @@
                     <div class="widget-user-header bg-red">
                         <!-- /.widget-user-image -->
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
-                        <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ student.strMajor?'Major in '+student.strMajor:'' }}</h5>
+                        <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
                     </div>
                     <div class="box-footer no-padding">
                         <ul class="nav nav-stacked">
