@@ -8,6 +8,24 @@
         <hr />
     <div class="content">
         <div class="row">
+            <div class="col-md-4 col-sm-8 col-xs-12">
+                 <!-- small box -->
+                 <div class="small-box bg-yellow">
+                     <div class="inner">
+                         <h3>Classlists</h3>
+
+                         <p>Classlists for this Term</p>
+                     </div>
+                     <div class="icon">
+                         <i class="fa fa-list"></i>
+                     </div>
+                     <a href="<?php echo base_url(); ?>registrar/reports_classlist" class="small-box-footer">
+                         View Classlists <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                 </div>
+
+                 <!-- small box -->
+             </div>
         </div>
     </div>
 </aside>
