@@ -248,6 +248,7 @@ class Data_poster extends CI_Model {
         $post['floatPrelimGrade'] = 50;
         $post['floatMidtermGrade'] = 50;
         $post['floatFinalsGrade'] = 50;
+        $post['date_added'] = date("Y-m-d h:i:s");
         $this->db->insert('tb_mas_classlist_student',$post);
         
     }

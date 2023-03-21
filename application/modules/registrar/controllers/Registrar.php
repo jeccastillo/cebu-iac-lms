@@ -341,7 +341,7 @@ class Registrar extends CI_Controller {
                 $d['floatFinalsGrade'] = $completion['floatNewFinalTermGrade'];
                 $d['floatFinalGrade'] = $data['eq'];
                 $d['strRemarks'] = $data['remarks'] = getRemarks($data['eq']);
-                $d['enumStatus'] = 'act';
+                $d['enumStatus'] = 'act';                
 
                 $this->data_poster->update_classlist('tb_mas_classlist_student',$d,$completion['intClasslistStudentID']);
                 $this->data_poster->approve_completion($id);
