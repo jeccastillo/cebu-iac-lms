@@ -19,8 +19,11 @@
                      <div class="icon">
                          <i class="fa fa-list"></i>
                      </div>
-                     <a href="<?php echo base_url(); ?>registrar/reports_enrollment" class="small-box-footer">
-                         View Report <i class="fa fa-arrow-circle-right"></i>
+                     <a href="<?php echo base_url(); ?>pdf/reports_enrollment" class="small-box-footer">
+                         View Report PDF <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                     <a href="<?php echo base_url(); ?>excel/reports_enrollment" class="small-box-footer">
+                         View Report Excel <i class="fa fa-arrow-circle-right"></i>
                      </a>
                  </div>
 
