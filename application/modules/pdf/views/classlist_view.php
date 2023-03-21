@@ -72,7 +72,7 @@
     $i = $snum;
     foreach($students as $st): 
         $name = $st['strLastname'].", ".$st['strFirstname']; 
-        $name .= isset($st['strMiddlename'])?", ".$st['strMiddlename'].".":'';
+        $name .= isset($st['strMiddlename'])?", ".$st['strMiddlename']:'';
     ?>
     
     <tr style="line-height:12px;text-align:center;">
