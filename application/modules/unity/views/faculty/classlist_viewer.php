@@ -25,9 +25,9 @@
                     <!--li><a href="#tab_3" data-toggle="tab">Quiz Record</a></li-->
                     <li class="pull-right"><a  href="<?php echo base_url() ?>unity/edit_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-gear"></i> Edit</a></li>
                     <li class="pull-right"><a href="<?php echo base_url() ?>excel/download_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-table"></i> Download Spreadsheet</a></li>
-                    <li class="pull-right"><a target="_blank" href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/front" class="text-muted"><i class="fa fa-print"></i> CL Report (front) </a></li>
+                    <li class="pull-right"><a target="_blank" href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/front" class="text-muted"><i class="fa fa-print"></i> CL Report</a></li>
                     <!-- <li class="pull-right"><a href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/back" class="text-muted"><i class="fa fa-print"></i> CL Report (back) </a></li> -->
-                    <li class="pull-right"><a href="#" id="addStudentModal" class="text-muted"><i class="fa fa-plus"></i> Add Student</a></li>
+                    <!-- <li class="pull-right"><a href="#" id="addStudentModal" class="text-muted"><i class="fa fa-plus"></i> Add Student</a></li> -->
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
