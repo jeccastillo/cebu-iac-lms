@@ -71,6 +71,7 @@
                                 <label for="type_of_class">Class Type</label>
                                 <select id="type_of_class" class="form-control" name="enumStudentType" v-model="request.type_of_class">                        
                                     <option value="regular">Regular</option>
+                                    <option value="online">Online</option>
                                     <option value="hyflex">Hyflex</option>
                                     <option value="hybrid">Hybrid</option>                                    
                                 </select>
