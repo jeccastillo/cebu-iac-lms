@@ -50,12 +50,12 @@
 </table>
 <table>
     <tr style="line-height:20px;text-align:center;">
-        <td style="font-size:10px;" width="5%">No.</td>
-        <td style="font-size:10px;" width="35%">Name of Student <br /> Last Name, First Name, M.I.</td>
-        <td style="font-size:10px;" width="20%">Student Number </td>
-        <td style="font-size:10px;" width="10%">Grade</td>
-        <td style="font-size:10px;" width="10%">Credit</td>
-        <td style="font-size:10px;" width="20%">Remarks</td>
+        <td style="font-size:10px;border:1px solid #444;" width="5%">No.</td>
+        <td style="font-size:10px;border:1px solid #444;" width="35%">Name of Student <br /> Last Name, First Name, M.I.</td>
+        <td style="font-size:10px;border:1px solid #444;" width="20%">Student Number </td>
+        <td style="font-size:10px;border:1px solid #444;" width="10%">Grade</td>
+        <td style="font-size:10px;border:1px solid #444;" width="10%">Credit</td>
+        <td style="font-size:10px;border:1px solid #444;" width="20%">Remarks</td>
     
     </tr>
     <?php 
