@@ -1470,7 +1470,7 @@ class Unity extends CI_Controller {
     public function edit_class()
     {
         $post = $this->input->post();
-        
+        $date = date("Y-m-d h:i:s");
         
         unset($post['student-chooser_length']);
         if($post['r1'] == "student"){
@@ -1481,6 +1481,7 @@ class Unity extends CI_Controller {
                 {
                     $p['intStudentID'] = $s;
                     $p['intClassLIstID'] = $post['intID'];
+                    $p['date_added'] = $date;
                    
                     $t = $this->data_fetcher->getCS($s,$post['intID']);
                     //for units
@@ -1500,6 +1501,7 @@ class Unity extends CI_Controller {
 
                     $p['intStudentID'] = $st['intID'];
                     $p['intClassLIstID'] = $post['intID'];
+                    $p['date_added'] = $date;
                     $t = $this->data_fetcher->getCS($st['intID'],$post['intID']);
                 
                     $p['strUnits'] = $post['strUnits'];
@@ -1660,9 +1662,9 @@ class Unity extends CI_Controller {
     
     public function duplicate_classlist($id)
     {
-        if($this->is_super_admin())
+        if($this->is_super_admin() || $this->is_registrar())
         {
-            
+            $date = date("Y-m-d h:i:s");
             $classlist = current($this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('intID'=>$id)));
             if(!$classlist['intFinalized']){
                 $st = $this->data_fetcher->fetch_table('tb_mas_classlist_student',null,null,array('intClassListID'=>$id));
@@ -1678,6 +1680,7 @@ class Unity extends CI_Controller {
 
 
                     $s['intClassListID'] = $new_id;
+                    $s['date_added'] = $date;
                     unset($s['intCSID']);
                     $this->data_poster->post_data('tb_mas_classlist_student',$s);
 
@@ -1831,6 +1834,7 @@ class Unity extends CI_Controller {
         if($this->is_admin() || $this->is_department_head())
         {
             $post = $this->input->post();
+            $post['date_added'] = date("Y-m-d h:i:s");
             $cs = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
             $this->data_poster->post_data('tb_mas_classlist_student',$post,$post['intCSID'],'intCSID');
             $this->data_poster->log_action('Change student section','Updated Section of Student ID:  '.$cs['intStudentID']." to ClasslistID: ".$cs['intClassListID'],'red');
@@ -1919,6 +1923,7 @@ class Unity extends CI_Controller {
                 $post['floatFinalGrade'] = $data['eq'];
                 $post['strRemarks'] = $data['remarks'];
             }
+            $post['date_added'] = date("Y-m-d h:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
             $data['message'] = "success";
