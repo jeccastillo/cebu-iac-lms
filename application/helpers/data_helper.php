@@ -56,8 +56,8 @@ function getGradeAveragesSubject($sem,$subject)
     
 }
 if (!function_exists('getUnitPrice')) {
-    function getUnitPrice($ty,$sem){
-        switch($sem['classType']){
+    function getUnitPrice($ty,$type){
+        switch($type){
             case 'regular':
                 $ret = $ty['pricePerUnit'];
                 break;
@@ -75,8 +75,8 @@ if (!function_exists('getUnitPrice')) {
     }
 }
 if (!function_exists('getExtraFee')) {
-    function getExtraFee($entry, $sem, $pretext){        
-        switch($sem['classType']){
+    function getExtraFee($entry, $type, $pretext){        
+        switch($type){
             case 'regular':
                 $ret = $entry[$pretext.'Regular'];
                 break;

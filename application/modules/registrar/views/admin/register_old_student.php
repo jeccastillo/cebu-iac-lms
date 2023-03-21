@@ -68,6 +68,12 @@
                                     <option value="old">RETURNING</option>
                                     <option value="transferee">TRANSFEREE</option>                                    
                                 </select>
+                                <label for="type_of_class">Class Type</label>
+                                <select id="type_of_class" class="form-control" name="enumStudentType" v-model="request.type_of_class">                        
+                                    <option value="regular">Regular</option>
+                                    <option value="hyflex">Hyflex</option>
+                                    <option value="hybrid">Hybrid</option>                                    
+                                </select>
                                 <br />                    
                                 
                                 <hr />
@@ -119,6 +125,7 @@ new Vue({
             enumStudentType: 'new',
             enumRegistrationStatus: 'regular',
             strAcademicYear: undefined,
+            type_of_class: 'regular',
         },
         scholarship: {
             intID: 0
@@ -225,7 +232,9 @@ new Vue({
                         formdata.append("studentID",this.id);
                         formdata.append("subjects_loaded",this.subject_ids);    
                         formdata.append("scholarship",this.request.enumScholarship);    
-                        formdata.append("stype",this.request.enumStudentType);    
+                        formdata.append("stype",this.request.enumStudentType);   
+                        formdata.append("type_of_class",this.request.type_of_class);   
+
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`

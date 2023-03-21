@@ -1923,11 +1923,11 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
 
-        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id);
+        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id,$registration['type_of_class']);
         
     }
 
-    function getTuitionSubjects($stype,$scholarship,$subjects,$id)
+    function getTuitionSubjects($stype,$scholarship,$subjects,$id,$class_type="regular")
     {
 
         $tuition = 0;
@@ -1953,7 +1953,7 @@ class Data_fetcher extends CI_Model {
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');        
 
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
-        $unit_fee = getUnitPrice($tuition_year,$sem);
+        $unit_fee = getUnitPrice($tuition_year,$class_type);
         
         if($scholarship != 0 && $scholarship != null)
             $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
@@ -1966,7 +1966,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($new_student_data as $nsd){
-                $new_student_list[$nsd['name']] = getExtraFee($nsd, $sem, 'misc');
+                $new_student_list[$nsd['name']] = getExtraFee($nsd, $class_type, 'misc');
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }    
@@ -1977,7 +1977,7 @@ class Data_fetcher extends CI_Model {
                     $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'svf'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
                     if($student_visa){
-                        $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $sem, 'misc');
+                        $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $class_type, 'misc');
                         $total_foreign += $foreign_fee_list['Student Visa'];
                     }
             }
@@ -1985,7 +1985,7 @@ class Data_fetcher extends CI_Model {
             $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'isf'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
             if($international_student_fee){
-                $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $sem, 'misc');
+                $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $class_type, 'misc');
                 $total_foreign += $foreign_fee_list['International Student Fee'];
             }
         }
@@ -2004,7 +2004,7 @@ class Data_fetcher extends CI_Model {
             if($class['isNSTP']){
                 $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $nstp_fee = getExtraFee($nstp_fee, $sem, 'misc');
+                $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
                 $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
             }
@@ -2014,14 +2014,14 @@ class Data_fetcher extends CI_Model {
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
                                             ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $sem, 'lab') * $class['intLab'];
+                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
                 $total_lab += $lab_list[$class['strCode']];
             }
             
             if($class['isThesisSubject']){                
                 $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $thesis_fee = getExtraFee($thesis, $sem, 'misc');                                
+                $thesis_fee = getExtraFee($thesis, $class_type, 'misc');                                
             }
 
             if($class['isInternshipSubject']){                
@@ -2032,7 +2032,7 @@ class Data_fetcher extends CI_Model {
 
         foreach($misc as $m){            
             if($stype != 'new' || $m['name'] != 'ID Validation' ){
-                $misc_list[$m['name']] = getExtraFee($m, $sem, 'misc');
+                $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                 $total_misc += $misc_list[$m['name']];
             }
         }
@@ -2041,7 +2041,7 @@ class Data_fetcher extends CI_Model {
             ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($internship as $m){            
-                $internship_fee_list[$m['name']] = getExtraFee($m, $sem, 'misc');
+                $internship_fee_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                 $total_internship_fee += $internship_fee_list[$m['name']];
             }                  
         }
