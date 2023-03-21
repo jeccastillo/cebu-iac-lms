@@ -24,9 +24,12 @@
 </table>
 <table border="0">    
     <tr style="line-height:10px;">
-        <td style="font-size:10px;width:50%"> <b>Course:</b> <?php echo $classlist['strClassName']; ?></td>
-        <td style="font-size:10px;width:25%"> <b>Year:</b> <?php echo $classlist['year']; ?></td>
-        <td style="font-size:10px;width:25%"> <b>Section:</b> <?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
+        <td style="font-size:10px;width:25%"><b>Course:</b></td>
+        <td style="font-size:10px;width:25%"><?php echo $classlist['strClassName']; ?></td>
+        <td style="font-size:10px;width:15%"><b>Year:</b></td>
+        <td style="font-size:10px;width:10%"><?php echo $classlist['year']; ?></td>
+        <td style="font-size:10px;width:15%"><b>Section:</b></td>
+        <td style="font-size:10px;width:10%"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:10px;"> <b>Subject:</b> <?php echo $subject['strCode']; ?></td>
