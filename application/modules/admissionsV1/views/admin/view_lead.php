@@ -48,7 +48,7 @@
                     </div>
 
                     <div>
-                        <strong><i class="fa fa-book margin-r-5"></i> Date Applied</strong>
+                        <strong><i class="fa fa-calendar margin-r-5"></i> Date Applied</strong>
                         <p class="text-muted">
                             {{request.date}}
                         </p>
