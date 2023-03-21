@@ -68,7 +68,8 @@
     $cs = count($students);
     $i = $snum;
     foreach($students as $st): 
-        $name = $st['strLastname'].", ".$st['strFirstname']; echo isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":'';
+        $name = $st['strLastname'].", ".$st['strFirstname']; 
+        $name .= isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":'';
     ?>
     
     <tr style="line-height:12px;text-align:center;">
