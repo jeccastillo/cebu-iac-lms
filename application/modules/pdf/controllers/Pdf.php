@@ -959,7 +959,7 @@ class Pdf extends CI_Controller {
         $times = "";
         
         $schedule = $this->data_fetcher->getScheduleByCode($id);        
-        $sched_text.= '';
+        $sched_text = '';
 
         foreach($schedule as $sched) {
             if(isset($sched['strDay']))
