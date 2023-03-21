@@ -104,7 +104,7 @@
                     
                 <h4>Select Students</h4>
                 <table id="student-chooser" class="table table-hover">
-                                        <thead><tr><th>id</th><th>Student Number</th><th>Name</th><th>Course</th><th>Actions</th></tr></thead>
+                                        <thead><tr><th>id</th><th>Slug</th><th>Student Number</th><th>Name</th><th>Course</th><th>Actions</th></tr></thead>
                                         <tbody></tbody>
                                     </table>
                 <?php /*
