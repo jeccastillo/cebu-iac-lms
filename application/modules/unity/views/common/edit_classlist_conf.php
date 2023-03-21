@@ -78,13 +78,17 @@
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users",
             "aoColumnDefs":[
                 {
-                    "aTargets":[4],
+                    "aTargets":[5],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<input type="button" class="add-to-classlist" name="students[]" value="add" rel="'+row[0]+'">'; }
                 },
                 {
                     "aTargets":[0],
+                    "bVisible": false 
+                },
+                {
+                    "aTargets":[1],
                     "bVisible": false 
                 }
             ],
