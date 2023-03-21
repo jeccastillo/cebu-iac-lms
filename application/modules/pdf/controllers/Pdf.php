@@ -968,7 +968,7 @@ class Pdf extends CI_Controller {
         }
         $sched_text.= ' ';                                            
             if(isset($schedule[0]['strDay']))                                                
-                $sched_text.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
+                $sched_text.= date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));                                                            
         
         $sched_text.= ' ';                                            
             if(isset($schedule[0]['strDay']))
