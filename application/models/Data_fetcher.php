@@ -2344,7 +2344,7 @@ class Data_fetcher extends CI_Model {
 
     function getClasslistStudent($id){
         return  current($this->db
-                     ->select("tb_mas_classlist_student.intCSID, tb_mas_classlist.intID, tb_mas_classlist.strSignatory1Name, tb_mas_classlist.strSignatory2Name, tb_mas_faculty.strFirstname as facFname,tb_mas_faculty.strLastname as facLname, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber, strCode, strDescription, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,tb_mas_classlist_student.enumStatus,strRemarks, strProgramCode, strMajor, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd")
+                     ->select("tb_mas_classlist_student.intCSID, tb_mas_classlist.intID, tb_mas_classlist.strSignatory1Name, tb_mas_classlist.strSignatory2Name, tb_mas_faculty.strFirstname as facFname,tb_mas_faculty.strLastname as facLname, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,tb_mas_users.intID as studentId,strStudentNumber, strCode, strDescription, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,tb_mas_classlist_student.enumStatus,strRemarks, strProgramCode, strMajor, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd")
                      ->from("tb_mas_classlist_student")
                      //->group_by("intSubjectID")
                      ->where(array("intCSID"=>$id))

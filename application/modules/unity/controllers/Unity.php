@@ -2282,11 +2282,16 @@ class Unity extends CI_Controller {
     {
         if($this->is_admin() || $this->is_registrar()){
             $post = $this->input->post();
+            $cs = $this->data_fetcher->getClasslistStudent($post['intCSID']);
             $this->data_poster->deleteStudentCS('tb_mas_classlist_student',$post['intCSID']);
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data_poster->log_action('Sectioning','Deleted From Classlist: '.$cs['strStudentNumber']." ".$cs['strFirstname']." ".$cs['strLastname'],'red',$cs['studentId'],$active_sem['intID']);
             $data['message'] = "success";
+            $data['success'] = true;
         }
         else
             $data['message'] = "failed";
+
         
         echo json_encode($data);
     }
