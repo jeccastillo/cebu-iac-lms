@@ -236,9 +236,13 @@ class Data_poster extends CI_Model {
     }
     
     
-    function log_action($category,$action,$color)
+    function log_action($category,$action,$color,$student=null,$registration=null)
     {
-        $data = array('strCategory'=>$category,'strAction'=>$action,'dteLogDate'=>date("Y-m-d H:i:s"),'intFacultyID'=>$this->session->userdata('intID'),'strColor'=>$color);
+        $data = array('strCategory'=>$category,'strAction'=>$action,'dteLogDate'=>date("Y-m-d H:i:s"),'intFacultyID'=>$this->session->userdata('intID'),
+                    'strColor'=>$color,
+                    'student_id'=>$student,
+                    'registration_id'=>$registration);
+                    
         $this->post_data('tb_mas_logs',$data);
         
     }
