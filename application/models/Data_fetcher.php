@@ -787,7 +787,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, is_numerical, year, sub_section, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment")
+                     ->select("tb_mas_classlist.intID as intID, is_numerical, year, sub_section, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,intWithPayment,classType")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -2367,7 +2367,7 @@ class Data_fetcher extends CI_Model {
                      //->group_by("intSubjectID")
                      ->where(array("intClassListID"=>$id))
                      ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
-                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')                                                               
                      ->order_by('strLastName asc, strFirstname asc')
                      ->get()
                      ->result_array();
