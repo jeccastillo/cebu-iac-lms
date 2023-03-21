@@ -41,6 +41,7 @@
                         <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber }}</span></a></li>
                         <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
                         <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
+                        <li><a style="font-size:13px;" href="#">Class Type <span class="pull-right">{{ registration.type_of_class }}</span></a></li>
                         <li>
                             <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
                                 <span style="color:#009000" v-if="registration" >{{ registration.date_enlisted }}</span>
