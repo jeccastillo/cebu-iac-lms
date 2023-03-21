@@ -11,11 +11,11 @@
                 </td>           
             </tr>
 <table border="0">
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style="font-size:12px;text-align:center;"><b>OFFICIAL CLASSLIST</b></td>
     </tr>
     
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style="font-size:10px;text-align:center">A.Y. <?php echo $sy['strYearStart'] . "-" . $sy['strYearEnd'] . "-" . $sy['enumSem'] . " Semester" ?></td>
     </tr>
     <tr style="line-height:10px;">
@@ -24,22 +24,20 @@
 </table>
 <table border="0">    
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Course: <?php echo $classlist['strClassName']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;"> Year: <?php echo $classlist['year']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;"> Section: <?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
+        <td style="font-size:10px;"> Course: <?php echo $classlist['strClassName']; ?></td>
+        <td style="font-size:10px;"> Year: <?php echo $classlist['year']; ?></td>
+        <td style="font-size:10px;"> Section: <?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
     </tr>
 </table>
 <table border="0">    
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Subject: <?php echo $subject['strCode']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;"> Descriptive Title: <?php echo $subject['strDescription']; ?></td>    
+        <td style="font-size:10px;"> Subject: <?php echo $subject['strCode']; ?></td>
+        <td style="font-size:10px;"> Descriptive Title: <?php echo $subject['strDescription']; ?></td>    
     </tr>
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Time/Day/Room: <?php echo $schedule; ?></td>    
-        <td style="font-size:10px;border:1px solid #444;"> Instructor: <?php echo $classlist['strSection']; ?></td>
-        <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->
-        
-    
+        <td style="font-size:10px;"> Time/Day/Room: <?php echo $schedule; ?></td>    
+        <td style="font-size:10px;"> Instructor: <?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>
+        <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->            
     </tr>    
 </table>
 <table>

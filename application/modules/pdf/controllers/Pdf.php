@@ -953,7 +953,7 @@ class Pdf extends CI_Controller {
         $students = $this->data_fetcher->getClassListStudents($id);
         $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
         $schedule = $this->data_fetcher->fetch_table('tb_mas_room_schedule',null,null,array('strScheduleCode'=>$id));
-        $this->data['faculty'] =  current($this->data_fetcher->fetch_table('tb_mas_faculty',null,null,array('intID'=>$this->data['classlist']['intFacultyID'])));
+        $this->data['faculty'] =  current($this->data_fetcher->fetch_table('tb_mas_faculty',null,null,array('intID'=>$this->data['classlist']['intFacultyID'])));        
         $days = "";
         $added_days = array();
         $times = "";
@@ -961,18 +961,21 @@ class Pdf extends CI_Controller {
         $schedule = $this->data_fetcher->getScheduleByCode($id);        
         $sched_text = '';
 
+        
+        
+        if(isset($schedule[0]['strDay']))                                                
+            $sched_text.= date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+    
+        $sched_text.= ' ';                                                            
         foreach($schedule as $sched) {
             if(isset($sched['strDay']))
                 $sched_text.= $sched['strDayAbvr'];                    
                 //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
         }
-        $sched_text.= ' ';                                            
-            if(isset($schedule[0]['strDay']))                                                
-                $sched_text.= date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));                                                            
         
         $sched_text.= ' ';                                            
-            if(isset($schedule[0]['strDay']))
-                $sched_text.= $schedule[0]['strRoomCode'];
+        if(isset($schedule[0]['strDay']))
+            $sched_text.= $schedule[0]['strRoomCode'];
 
         $this->data['schedule'] = $sched_text;
 
