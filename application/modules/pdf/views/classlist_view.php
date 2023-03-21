@@ -63,12 +63,12 @@
     $i = $snum;
     foreach($students as $st): ?>
     <tr style="line-height:18px;text-align:center;">
-        <td style="font-size:10px;" width="5%"><?php echo $i; ?></td>
-        <td style="font-size:9px;text-align:left;" width="35%"> <?php echo $st['strLastname'].", ".$st['strFirstname']; echo isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":''; ?></td>
-        <td style="font-size:10px;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
-        <td style="font-size:10px;"><?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
-        <td style="font-size:10px;"><?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
-        <td style="font-size:10px;"><?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;" width="5%"><?php echo $i; ?></td>
+        <td style="font-size:9px;border:1px solid #444;text-align:left;" width="35%"> <?php echo $st['strLastname'].", ".$st['strFirstname']; echo isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":''; ?></td>
+        <td style="font-size:10px;border:1px solid #444;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
+        <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td>
     
     </tr>
     <?php   
@@ -78,13 +78,13 @@
 <?php if($nothing_follows): ?>
 <table>
     <tr style="line-height:20px;">
-        <td style="font-size:10px;text-align:center;color:#555;">----------------------------------------------NOTHING FOLLOWS----------------------------------------------</td>
+        <td style="font-size:10px;border:1px solid #444;text-align:center;color:#555;">----------------------------------------------NOTHING FOLLOWS----------------------------------------------</td>
     </tr>
 </table>
 <?php else: ?>
 <table>
     <tr style="line-height:20px;">
-        <td style="font-size:10px;text-align:center;color:#555;">----------------------------------------------NEXT PAGE----------------------------------------------</td>
+        <td style="font-size:10px;border:1px solid #444;text-align:center;color:#555;">----------------------------------------------NEXT PAGE----------------------------------------------</td>
     </tr>
 </table>
 
