@@ -57,11 +57,11 @@
     <tr style="line-height:12px;text-align:center;">
         <th style="font-size:10px;" width="3%">#</th>
         <th style="font-size:10px;" width="20%">Student Number</th>
-        <th style="font-size:10px;" width="35%">Student Name</th>
+        <th style="font-size:10px;" width="25%">Student Name</th>
         <th style="font-size:10px;" width="10%">Course</th>
         <th style="font-size:10px;" width="12%">Enrollment Status</th>
-        <th style="font-size:10px;" width="10%">Date/Time Enrolled</th>
-        <th style="font-size:10px;" width="10%">Date/Time Subject Added</th>
+        <th style="font-size:10px;" width="10%">Date Enrolled</th>
+        <th style="font-size:10px;" width="15%">Date Added</th>
     
     </tr>
     <?php 
@@ -74,11 +74,11 @@
     <tr style="line-height:12px;text-align:center;">
         <td style="font-size:10px;" width="3%"><?php echo $i; ?></td>
         <td style="font-size:10px;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
-        <td style="font-size:9px;text-align:left;" width="35%"> <?php echo strtoupper($name); ?></td>        
+        <td style="font-size:9px;text-align:left;" width="25%"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:10px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:10px;" width="12%"><?php echo $st['strStudentNumber']; ?></td>
         <td style="font-size:10px;" width="10%"><?php echo $st['reg_info']['dteRegistered']; ?></td>
-        <td style="font-size:10px;" width="10%"><?php echo $st['date_added']; ?></td>
+        <td style="font-size:10px;" width="15%"><?php echo $st['date_added']; ?></td>
         <!-- <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td> -->
