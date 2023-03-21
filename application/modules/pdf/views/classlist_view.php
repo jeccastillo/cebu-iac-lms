@@ -42,20 +42,25 @@
         <td style="font-size:10px;"><b>Time/Day/Room:</b></td>    
         <td style="font-size:10px;"><?php echo $schedule; ?></td>
         <td style="font-size:10px;"><b>Instructor:</b></td>        
-        <td colspan="3" style="font-size:10px;"><?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>
-        <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->            
+        <td colspan="3" style="font-size:10px;"><?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>                
     </tr>  
     <tr style="line-height:12px;">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>  
 </table>
 <table>
     <tr style="line-height:20px;text-align:center;">
-        <td style="font-size:10px;border:1px solid #444;" width="5%">No.</td>
-        <td style="font-size:10px;border:1px solid #444;" width="35%">Name of Student <br /> Last Name, First Name, M.I.</td>
-        <td style="font-size:10px;border:1px solid #444;" width="20%">Student Number </td>
-        <td style="font-size:10px;border:1px solid #444;" width="10%">Grade</td>
-        <td style="font-size:10px;border:1px solid #444;" width="10%">Credit</td>
-        <td style="font-size:10px;border:1px solid #444;" width="20%">Remarks</td>
+        <td style="font-size:10px;" width="5%">No.</td>
+        <td style="font-size:10px;" width="35%">Name of Student <br /> Last Name, First Name, M.I.</td>
+        <td style="font-size:10px;" width="20%">Student Number </td>
+        <td style="font-size:10px;" width="10%">Grade</td>
+        <td style="font-size:10px;" width="10%">Credit</td>
+        <td style="font-size:10px;" width="20%">Remarks</td>
     
     </tr>
     <?php 
