@@ -48,13 +48,19 @@
                     </div>
 
                     <div>
+                        <strong><i class="fa fa-book margin-r-5"></i> Date Applied</strong>
+                        <p class="text-muted">
+                            {{request.date}}
+                        </p>
+                        <hr>
+                    </div>
+                    <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
                             {{request.first_name + ' ' + request.last_name}}
                         </p>
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                         <p class="text-muted">
