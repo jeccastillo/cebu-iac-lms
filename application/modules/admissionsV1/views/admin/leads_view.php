@@ -20,8 +20,9 @@
                     <option value="For Reservation">For Reservation</option>
                     <option value="Reserved">Reserved</option>
                     <option value="For Enrollment">For Enrollment</option>
-                    <option value="Confirmed">Confirmed</option>
+                    <option value="Confirmed">Confirmed</option>                    
                     <option value="Game Changer">Game Changer</option>
+                    <option value="Rejected">Rejected</option>
                 </select>
             </div>
         </div>
@@ -41,6 +42,7 @@
                     <thead>
                         <tr>
                             <th>slug</th>
+                            <th>Date</th>
                             <th>Last Name</th>
                             <th>First Name</th>
                             <th>Email</th>

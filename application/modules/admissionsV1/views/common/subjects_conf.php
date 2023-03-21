@@ -14,16 +14,22 @@ $(document).ready(function() {
             var s_column = "last_name";                        
             filter_status = $("#status_filter").val();
             switch(data.order[0].column){
+                case 1:
+                    s_column = "created_at";
+                break;
                 case 2:
-                    s_column = "first_name";
+                    s_column = "last_name";
                 break;
                 case 3:
-                    s_column = "email";
+                    s_column = "first_name";
                 break;
                 case 4:
-                    s_column = "program";
+                    s_column = "email";
                 break;
                 case 5:
+                    s_column = "program";
+                break;
+                case 6:
                     s_column = "status";
                 break;
             }
@@ -50,7 +56,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [6],
+                "aTargets": [7],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -70,6 +76,9 @@ $(document).ready(function() {
 
         columns: [{
                 data: "id"
+            },
+            {
+                data: "date"
             },
             {
                 data: "last_name"
