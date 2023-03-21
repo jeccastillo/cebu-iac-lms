@@ -1,7 +1,4 @@
-<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
-            <tr>
-                <td width="100%" align="center" style="text-align:center;vertical-align: middle;font-weight:bold;">iACADEMY</td>
-            </tr>
+<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">            
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;">             
                     
@@ -9,40 +6,41 @@
             </tr>        
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-                    <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
+                    <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">iACADEMY CEBU</font><br /><br />
                     <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
                 </td>           
             </tr>
 <table border="0">
     <tr style="line-height:20px;">
-        <td style="font-size:12px;text-align:center;letter-spacing: 7px"><b>OFFICIAL CLASSLIST</b></td>
+        <td style="font-size:12px;text-align:center;"><b>OFFICIAL CLASSLIST</b></td>
     </tr>
     
     <tr style="line-height:20px;">
-        <td style="font-size:9px;text-align:center">A.Y. <?php echo $sy['strYearStart'] . "-" . $sy['strYearEnd'] . "-" . $sy['enumSem'] . " Semester" ?></td>
+        <td style="font-size:10px;text-align:center">A.Y. <?php echo $sy['strYearStart'] . "-" . $sy['strYearEnd'] . "-" . $sy['enumSem'] . " Semester" ?></td>
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:9px;text-align:center"></td>
     </tr>
 </table>
-<table>
+<table border="0">    
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Course Code: <?php echo $subject['strCode']; ?></td>
-        <td  style="font-size:10px;border:1px solid #444;"> Course Title: <?php echo $subject['strDescription']; ?></td>
-    
+        <td style="font-size:10px;border:1px solid #444;"> Course: <?php echo $subject['strClassName']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Year: <?php echo $subject['year']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Section: <?php echo $subject['strClassName'].$subject['year'].$subject['strSection']." ".$subject['sub_section']; ?></td>
+    </tr>
+</table>
+<table border="0">    
+    <tr style="line-height:20px;">
+        <td style="font-size:10px;border:1px solid #444;"> Subject: <?php echo $subject['strCode']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Descriptive Title: <?php echo $subject['strDescription']; ?></td>    
     </tr>
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Program, Year &amp; Section: <?php echo $classlist['strSection']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;"> Time/Day/Room: <?php echo $time; ?></td>    
+        <td style="font-size:10px;border:1px solid #444;"> Instructor: <?php echo $classlist['strSection']; ?></td>
         <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->
-        <td style="font-size:10px;border:1px solid #444;"> Time: <?php echo $time; ?></td>
+        
     
-    </tr>
-    <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Unit/s: <?php echo $subject['strUnits']; ?></td>
-        <!--td style="font-size:10px;border:1px solid #444;"> Academic Year: <?php echo $sy['strYearStart']."-".$sy['strYearEnd']; ?></td-->
-        <td  style="font-size:10px;border:1px solid #444;"> Day/s: <?php echo $days; ?> </td>
-    
-    </tr>
+    </tr>    
 </table>
 <table>
     <tr style="line-height:20px;text-align:center;">
