@@ -1229,7 +1229,7 @@ class Unity extends CI_Controller {
         elseif(!empty($taken))
             $data['message'] = "failed4";
         elseif(empty($student)){
-            $this->data_poster->addStudentClasslist($send);
+            $this->data_poster->addStudentClasslist($send,$this->data["user"]["intID"]);
             $data['message'] = "success";
         }
        
@@ -1482,6 +1482,7 @@ class Unity extends CI_Controller {
                     $p['intStudentID'] = $s;
                     $p['intClassLIstID'] = $post['intID'];
                     $p['date_added'] = $date;
+                    $p['enlisted_user'] = $this->data["user"]["intID"];
                    
                     $t = $this->data_fetcher->getCS($s,$post['intID']);
                     //for units
@@ -1502,6 +1503,7 @@ class Unity extends CI_Controller {
                     $p['intStudentID'] = $st['intID'];
                     $p['intClassLIstID'] = $post['intID'];
                     $p['date_added'] = $date;
+                    $p['enlisted_user'] = $this->data["user"]["intID"];
                     $t = $this->data_fetcher->getCS($st['intID'],$post['intID']);
                 
                     $p['strUnits'] = $post['strUnits'];
@@ -1540,6 +1542,7 @@ class Unity extends CI_Controller {
 
                 $p['intStudentID'] = $s;
                 $p['intClassLIstID'] = $post['intID'];
+                $p['enlisted_user'] = $this->data["user"]["intID"];
                 $t = $this->data_fetcher->getCS($s,$post['intID']);
                 if(empty($t))
                     $this->data_poster->post_data('tb_mas_classlist_student',$p);
@@ -1678,9 +1681,9 @@ class Unity extends CI_Controller {
                 foreach($st as $s)
                 {
 
-
                     $s['intClassListID'] = $new_id;
                     $s['date_added'] = $date;
+                    $s['enlisted_user'] = $this->data["user"]["intID"];
                     unset($s['intCSID']);
                     $this->data_poster->post_data('tb_mas_classlist_student',$s);
 
@@ -1808,7 +1811,7 @@ class Unity extends CI_Controller {
                 $this->data_poster->deleteStudentFromClassList($post['classlistFrom'],$st);
                 $d['intStudentID'] = $st;
                 $d['intClassListID'] = $post['transferTo'];
-                $this->data_poster->addStudentClasslist($d);
+                $this->data_poster->addStudentClasslist($d,$this->data["user"]["intID"]);
             }
             $data['message'] = "success";
         }
@@ -1835,6 +1838,7 @@ class Unity extends CI_Controller {
         {
             $post = $this->input->post();
             $post['date_added'] = date("Y-m-d h:i:s");
+            $post['enlisted_user'] = $this->data["user"]["intID"];
             $cs = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
             $this->data_poster->post_data('tb_mas_classlist_student',$post,$post['intCSID'],'intCSID');
             $this->data_poster->log_action('Change student section','Updated Section of Student ID:  '.$cs['intStudentID']." to ClasslistID: ".$cs['intClassListID'],'red');
@@ -2204,7 +2208,7 @@ class Unity extends CI_Controller {
        
         
         
-        if(!$this->is_super_admin())
+        if(!$this->is_super_admin() && !$this->is_registrar())
         {
             $data['message'] = "failed3";
         }
@@ -2213,7 +2217,7 @@ class Unity extends CI_Controller {
         elseif(!empty($enlisted))
             $data['message'] = "enlisted in different classlist section: ".$enlisted['strSection'];
         elseif(empty($student)){
-            $this->data_poster->addStudentClasslist($send);
+            $this->data_poster->addStudentClasslist($send,$this->data["user"]["intID"]);
             $data['message'] = "success";
         }
         echo json_encode($data);

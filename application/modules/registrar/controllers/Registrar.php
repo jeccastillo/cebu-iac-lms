@@ -180,7 +180,7 @@ class Registrar extends CI_Controller {
 
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
-                        $this->data_poster->addStudentClasslist($cl_data);
+                        $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strSection'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
                         
@@ -193,7 +193,7 @@ class Registrar extends CI_Controller {
                        
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
-                        $this->data_poster->addStudentClasslist($cl_data);
+                        $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strSection'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
                     }
@@ -252,7 +252,7 @@ class Registrar extends CI_Controller {
                         
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cid;
-                        $this->data_poster->addStudentClasslist($cl_data);
+                        $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cname;
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cid."'>View Classlist</a>";
                         
@@ -448,7 +448,7 @@ class Registrar extends CI_Controller {
 
                             $cl_data['intStudentID'] = $post['studentID'];
                             $cl_data['intClassListID'] = $cl_get['intID'];
-                            $this->data_poster->addStudentClasslist($cl_data);
+                            $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                             $this->data['col2'][] = "Student Registered to ";
                             $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
                         }
@@ -488,7 +488,7 @@ class Registrar extends CI_Controller {
 
                             $cl_data['intStudentID'] = $post['studentID'];
                             $cl_data['intClassListID'] = $cid;
-                            $this->data_poster->addStudentClasslist($cl_data);
+                            $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                             $this->data['col2'][] = "Student Registered to Section ".$cname;
                             $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cid."'>View Classlist</a>";
                         }
