@@ -858,7 +858,7 @@ class Data_fetcher extends CI_Model {
     {
         
         $this->db
-            ->select('tb_mas_users.*,strProgramCode, short_name')
+            ->select('tb_mas_users.*,strProgramCode, short_name, strProgramDescription')
             ->from('tb_mas_users')
             ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
             ->order_by('strLastname','asc');
