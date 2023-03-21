@@ -12,15 +12,15 @@
                  <!-- small box -->
                  <div class="small-box bg-yellow">
                      <div class="inner">
-                         <h3>Classlists</h3>
+                         <h3>Enrollment List</h3>
 
-                         <p>Classlists for this Term</p>
+                         <p>CHED Enrollment List Report for this Term</p>
                      </div>
                      <div class="icon">
                          <i class="fa fa-list"></i>
                      </div>
-                     <a href="<?php echo base_url(); ?>registrar/reports_classlist" class="small-box-footer">
-                         View Classlists <i class="fa fa-arrow-circle-right"></i>
+                     <a href="<?php echo base_url(); ?>registrar/reports_enrollment" class="small-box-footer">
+                         View Report <i class="fa fa-arrow-circle-right"></i>
                      </a>
                  </div>
 
