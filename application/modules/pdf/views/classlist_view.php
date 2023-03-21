@@ -11,7 +11,7 @@
                 </td>           
             </tr>
 <table border="0">
-    <tr style="line-height:10px;">
+    <tr style="line-height:12px;">
         <td style="font-size:12px;text-align:center;"><b>OFFICIAL CLASSLIST</b></td>
     </tr>
     
@@ -23,17 +23,17 @@
     </tr>
 </table>
 <table border="0">    
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style="font-size:10px;width:50%"> <b>Course:</b> <?php echo $classlist['strClassName']; ?></td>
         <td style="font-size:10px;width:25%"> <b>Year:</b> <?php echo $classlist['year']; ?></td>
         <td style="font-size:10px;width:25%"> <b>Section:</b> <?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
     </tr>
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style="font-size:10px;"> <b>Subject:</b> <?php echo $subject['strCode']; ?></td>
         <td colspan="2" style="font-size:10px;"> <b>Descriptive Title:</b> <?php echo $subject['strDescription']; ?></td>    
         
     </tr>
-    <tr style="line-height:20px;">
+    <tr style="line-height:10px;">
         <td style="font-size:10px;"> <b>Time/Day/Room:</b> <?php echo $schedule; ?></td>    
         <td colspan="2" style="font-size:10px;"> <b>Instructor:</b> <?php echo $faculty['strFirstname']." ".$faculty['strLastname']; ?></td>        
         <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->            
