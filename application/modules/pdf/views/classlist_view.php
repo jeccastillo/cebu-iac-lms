@@ -75,7 +75,7 @@
         <td style="font-size:10px;border:1px solid #444;" width="10%"><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:10px;border:1px solid #444;" width="12%"><?php echo $st['strStudentNumber']; ?></td>
         <td style="font-size:10px;border:1px solid #444;" width="10%"><?php echo $st['reg_info']['dteRegistered']; ?></td>
-        <td style="font-size:10px;border:1px solid #444;" width="10%"><?php echo $st['reg_info']['date_enlisted']; ?></td>
+        <td style="font-size:10px;border:1px solid #444;" width="10%"><?php echo $st['date_added']; ?></td>
         <!-- <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
         <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
         <td style="font-size:10px;border:1px solid #444;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td> -->
