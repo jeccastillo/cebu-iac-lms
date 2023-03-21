@@ -67,11 +67,14 @@
     <?php 
     $cs = count($students);
     $i = $snum;
-    foreach($students as $st): ?>
+    foreach($students as $st): 
+        $name = $st['strLastname'].", ".$st['strFirstname']; echo isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":'';
+    ?>
+    
     <tr style="line-height:12px;text-align:center;">
         <td style="font-size:10px;" width="3%"><?php echo $i; ?></td>
         <td style="font-size:10px;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
-        <td style="font-size:9px;text-align:left;" width="35%"> <?php echo $st['strLastname'].", ".$st['strFirstname']; echo isset($st['strMiddlename'][0])?", ".$st['strMiddlename'][0].".":''; ?></td>        
+        <td style="font-size:9px;text-align:left;" width="35%"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:10px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:10px;" width="12%"><?php echo $st['strStudentNumber']; ?></td>
         <td style="font-size:10px;" width="10%"><?php echo $st['reg_info']['dteRegistered']; ?></td>
