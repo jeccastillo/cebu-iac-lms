@@ -38,10 +38,10 @@
                          <i class="fa fa-list"></i>
                      </div>
                      <a href="<?php echo base_url(); ?>pdf/reports_enlisted" class="small-box-footer">
-                         View Report PDF<i class="fa fa-arrow-circle-right"></i>
+                         View Report PDF <i class="fa fa-arrow-circle-right"></i>
                      </a>
                      <a href="<?php echo base_url(); ?>excel/reports_enlisted" class="small-box-footer">
-                         View Report Excel<i class="fa fa-arrow-circle-right"></i>
+                         View Report Excel <i class="fa fa-arrow-circle-right"></i>
                      </a>
                  </div>
 
