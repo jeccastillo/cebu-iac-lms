@@ -60,8 +60,7 @@
                                 <label for="enumScholarship">Scholarship Grant</label><br />
                                 <input type="hidden" model="request.enumScholarship">
                                 {{ scholarship.intID != 0?scholarship.name:'None' }}
-                                    <br />
-                                    <hr />
+                                    <br />                                    
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">NEW</option>
