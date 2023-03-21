@@ -56,11 +56,7 @@
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>
-                                    <br />
-                                <label for="enumScholarship">Scholarship Grant</label><br />
-                                <input type="hidden" model="request.enumScholarship">
-                                {{ scholarship.intID != 0?scholarship.name:'None' }}
-                                    <br />                                    
+                                    <br />                                                                    
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">NEW</option>
@@ -75,7 +71,10 @@
                                     <option value="hybrid">Hybrid</option>                                    
                                 </select>
                                 <br />                    
-                                
+                                <label for="enumScholarship">Scholarship Grant</label><br />
+                                <input type="hidden" model="request.enumScholarship">
+                                {{ scholarship.intID != 0?scholarship.name:'None' }}
+                                    <br />
                                 <hr />
                                 
                             <div id="regular-option" class="row">
