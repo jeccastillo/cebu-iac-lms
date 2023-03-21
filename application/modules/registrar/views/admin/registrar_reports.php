@@ -26,6 +26,24 @@
 
                  <!-- small box -->
              </div>
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <!-- small box -->
+                 <div class="small-box bg-green">
+                     <div class="inner">
+                         <h3>Enlisted Students</h3>
+
+                         <p>Enlisted Students Report</p>
+                     </div>
+                     <div class="icon">
+                         <i class="fa fa-list"></i>
+                     </div>
+                     <a href="<?php echo base_url(); ?>registrar/reports_enrollment" class="small-box-footer">
+                         View Report <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                 </div>
+
+                 <!-- small box -->
+             </div>
         </div>
     </div>
 </aside>
