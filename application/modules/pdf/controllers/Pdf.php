@@ -958,18 +958,24 @@ class Pdf extends CI_Controller {
         $added_days = array();
         $times = "";
         
-        foreach($schedule as $sc)
-        {
-            if(!in_array($sc['strDay'],$added_days))
-            {
-                $added_days[] = $sc['strDay'];
-                $days.=get_day($sc['strDay'])." ";
-            }
-            $times .= date("h:ia",strtotime($sc['dteStart']))."-".date("h:ia",strtotime($sc['dteEnd'])).", ";
+        $schedule = $this->data_fetcher->getScheduleByCode($id);        
+        $sched_text.= '';
+
+        foreach($schedule as $sched) {
+            if(isset($sched['strDay']))
+                $sched_text.= $sched['strDayAbvr'];                    
+                //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
         }
-        $this->data['days'] = $days;
-        $this->data['time'] = $times;
-        //print_r($schedule);
+        $sched_text.= ' ';                                            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_text.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
+        
+        $sched_text.= ' ';                                            
+            if(isset($schedule[0]['strDay']))
+                $sched_text.= $schedule[0]['strRoomCode'];
+
+        $this->data['schedule'] = $sched_text;
+
         $this->data['program'] = current($this->data_fetcher->fetch_table('tb_mas_programs',null,null,array('intProgramID'=>$this->data['subject']['intProgramID'])));
        
         // set margins

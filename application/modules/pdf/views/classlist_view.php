@@ -35,7 +35,7 @@
         <td style="font-size:10px;border:1px solid #444;"> Descriptive Title: <?php echo $subject['strDescription']; ?></td>    
     </tr>
     <tr style="line-height:20px;">
-        <td style="font-size:10px;border:1px solid #444;"> Time/Day/Room: <?php echo $time; ?></td>    
+        <td style="font-size:10px;border:1px solid #444;"> Time/Day/Room: <?php echo $schedule; ?></td>    
         <td style="font-size:10px;border:1px solid #444;"> Instructor: <?php echo $classlist['strSection']; ?></td>
         <!--td style="font-size:10px;border:1px solid #444;"> Semester: <?php echo $sy['enumSem']; ?> Sem</td-->
         
