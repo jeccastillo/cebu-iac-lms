@@ -19,7 +19,7 @@
                      <div class="icon">
                          <i class="fa fa-list"></i>
                      </div>
-                     <a href="<?php echo base_url(); ?>pdf/reports_enrollment" class="small-box-footer">
+                     <a href="<?php echo base_url(); ?>registrar/enrollment_report" class="small-box-footer">
                          PDF <i class="fa fa-arrow-circle-right"></i>
                      </a>
                      <!-- <a href="<?php echo base_url(); ?>excel/reports_enrollment" class="small-box-footer">
