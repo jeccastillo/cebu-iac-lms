@@ -85,7 +85,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [10],
+                "aTargets": [12],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -166,13 +166,19 @@ $(document).ready(function() {
             },        
             {
                 data: "is_cash"
+            }, 
+            {
+                data: "check_number"
             },            
             {
                 data: "subtotal_order"
             },
             {
                 data: "description"
-            }           
+            },      
+            {
+                data: "remarks"
+            }     
            
         ],
         "aaSorting": [

@@ -38,8 +38,10 @@
                             <th>Applicant Number</th>
                             <th>Student Name</th>
                             <th>Payment Mode</th>
+                            <th>Check/CC/Debit #</th>
                             <th>Amount Paid</th>
                             <th>Payment For</th>                                                                                                                                          
+                            <th>Remarks</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
