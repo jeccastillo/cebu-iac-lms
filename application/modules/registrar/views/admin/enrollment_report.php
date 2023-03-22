@@ -1,0 +1,55 @@
+<div class="content-wrapper ">
+    <section class="content-header container ">
+        <h1>
+            Enrollment
+            <small>            
+                <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> PDF</a>
+            </small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Enrollment</a></li>
+            <li class="active">Enrollment Report</li>
+        </ol>
+    </section>
+    <div class="content mcontainer container">
+        <div class="alert alert-danger" style="display:none;">
+            <i class="fa fa-ban"></i>
+            <span id="alert-text"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
+            </div>
+        </div>
+        <hr />
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><?php echo date('M j, Y',strtotime($date)); ?></h3>                
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
+                <table id="subjects-table" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>     
+                            <th>id</th>
+                            <th>slug</th>     
+                            <th>Cashier</th>                  
+                            <th>Date Updated</th>
+                            <th>OR Number</th>
+                            <th>Applicant Number</th>
+                            <th>Student Name</th>
+                            <th>Payment Mode</th>
+                            <th>Check/CC/Debit #</th>
+                            <th>Amount Paid</th>
+                            <th>Payment For</th>                                                                                                                                          
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+</div>
