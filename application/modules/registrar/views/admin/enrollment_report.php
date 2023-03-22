@@ -18,13 +18,13 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
+                Filters go here
             </div>
         </div>
         <hr />
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title"><?php echo date('M j, Y',strtotime($date)); ?></h3>                
+                <h3 class="box-title">Enrollment List</h3>                
             </div><!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
                 <table id="subjects-table" class="table table-hover table-bordered">
