@@ -362,6 +362,14 @@ class Registrar extends CI_Controller {
         $this->load->view("common/completions_conf",$this->data); 
     }
 
+    public function enrollment_report(){
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/enrollment_report",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/enrollment_report_conf",$this->data); 
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        
