@@ -26,7 +26,7 @@
             <div class="box-header">
                 <h3 class="box-title"><?php echo date('M j, Y',strtotime($date)); ?></h3>                
             </div><!-- /.box-header -->
-            <div class="box-body" style="overflow-x:auto;">
+            <div class="box-body table-responsive" style="overflow-x:auto;padding-right:20px;">
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>     
