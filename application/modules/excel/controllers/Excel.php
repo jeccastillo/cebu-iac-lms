@@ -1934,8 +1934,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('D1', 'Applicant Number')
                     ->setCellValue('E1', 'Student Name')
                     ->setCellValue('F1', 'Payment Mode')
-                    ->setCellValue('G1', 'Amount Paid')
-                    ->setCellValue('H1', 'Payment For');
+                    ->setCellValue('G1', 'Check/CC/Debit #')
+                    ->setCellValue('H1', 'Amount Paid')
+                    ->setCellValue('I1', 'Payment For')
+                    ->setCellValue('J1', 'Remarks');
                     
         
         $i = 2;
@@ -1976,8 +1978,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, $d->student_information_id)
                     ->setCellValue('E'.$i, $d->student_name)
                     ->setCellValue('F'.$i, $mode)
-                    ->setCellValue('G'.$i, $d->subtotal_order)
-                    ->setCellValue('H'.$i, $d->description);
+                    ->setCellValue('G'.$i, $d->check_number)
+                    ->setCellValue('H'.$i, $d->subtotal_order)
+                    ->setCellValue('I'.$i, $d->description)
+                    ->setCellValue('J'.$i, $d->remarks);
                                                        
             $i++;
         }
