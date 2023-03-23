@@ -46,19 +46,7 @@
                             <option <?php echo ($gender == 1)?'selected':''; ?> value="1">male</option>
                             <option <?php echo ($gender == 2)?'selected':''; ?> value="2">female</option>
                         </select>
-                    </div>       
-                    <div class="form-group col-sm-4">
-                     <label for="">Scholarship Grant</label>
-                    <select id="scholarship" class="form-control select2">
-                        <option value="0">-----------------SELECT---------------</option>
-                        <option <?php echo ($scholarship == 1)?'selected':''; ?> value="1">Paying</option>
-                         <option <?php echo ($scholarship == 2)?'selected':''; ?> value="2">Resident Scholar</option>
-                        <option <?php echo ($scholarship == 3)?'selected':''; ?> value="3">7th District Scholar</option>
-                        <option <?php echo ($scholarship == 4)?'selected':''; ?> value="4">DILG Scholar</option>
-                          <option <?php echo ($scholarship == 5)?'selected':''; ?> value="5">Tagaytay Resident</option>
-                        <option <?php echo ($scholarship == 6)?'selected':''; ?> value="6">FREE H.E.</option>
-                    </select>         
-                        </div>
+                    </div>                                                   
                     <div class="col-sm-4">
                         <label for="sem">Select Term:</label>
                         <select id="sem" class="form-control select2" >
