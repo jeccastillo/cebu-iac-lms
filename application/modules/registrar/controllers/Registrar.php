@@ -362,7 +362,7 @@ class Registrar extends CI_Controller {
         $this->load->view("common/completions_conf",$this->data); 
     }
 
-    public function enrollment_report($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0)    
+    public function enrollment_report($course = 0, $year=0,$gender = 0,$sem=0)    
     {
 
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');

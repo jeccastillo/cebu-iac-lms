@@ -5,14 +5,12 @@
     $(document).ready(function(){
         
     $('#advanced-search-enrolled').click(function(){
-        var course = $("#intProgramID").val();
-        var status = $("#academicStatus").val();
+        var course = $("#intProgramID").val();        
         var year = $("#intYearLevel").val();
         var gender = $("#gender").val();        
         var sem = $("#sem").val();        
-        var registered = $("#registered").val();
-        
-        document.location = "<?php echo base_url(); ?>registrar/enrollment_report/"+course+"/"+status+"/"+year+"/"+gender+"/0/"+sem+"/"+scholarship+'/2';
+                        
+        document.location = "<?php echo base_url(); ?>registrar/enrollment_report/"+course+"/"+year+"/"+gender+"/"+sem;
         
     });
 
