@@ -2381,7 +2381,7 @@ class Data_fetcher extends CI_Model {
                  ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
                  ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                  ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
-                 ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_registration.enlisted_by')        
+                 ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_registration.enlisted_by','left')        
                  ->group_by('tb_mas_users.intID')                                                       
                  ->order_by('strLastName asc, strFirstname asc')
                  ->get()
