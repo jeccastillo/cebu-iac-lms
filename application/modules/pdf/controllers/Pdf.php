@@ -988,7 +988,7 @@ class Pdf extends CI_Controller {
         else
         {
             foreach($students as $student){
-                $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
+                $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
                 $st[] = $student;
             }
             $this->data['students'] = $st;
