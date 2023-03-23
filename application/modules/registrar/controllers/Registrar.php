@@ -362,8 +362,8 @@ class Registrar extends CI_Controller {
         $this->load->view("common/completions_conf",$this->data); 
     }
 
-    public function enrollment_report(){
-
+    public function enrollment_report($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=1)    
+    {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/enrollment_report",$this->data);
         $this->load->view("common/footer",$this->data); 
