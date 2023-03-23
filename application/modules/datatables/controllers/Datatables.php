@@ -1501,44 +1501,44 @@ class Datatables extends CI_Controller {
         //             $sWhere .= "WHERE $table.strAcademicStanding = 'new' ";
         // }
         
-        // if($gender!=0  && $table =='tb_mas_users'){
-        //     if($astatus != 0 || $scholarship!=0)
-        //         if($gender == 1)
-        //             $sWhere .= "AND $table.enumGender = 'male' ";
-        //         else
-        //             $sWhere .= "AND $table.enumGender = 'female' ";
-        //     else
-        //         if($gender == 1)
-        //             $sWhere .= "WHERE $table.enumGender = 'male' ";
-        //         else
-        //             $sWhere .= "WHERE $table.enumGender = 'female' ";
+        if($gender!=0  && $table =='tb_mas_users'){
+            if($astatus != 0 || $scholarship!=0)
+                if($gender == 1)
+                    $sWhere .= "AND $table.enumGender = 'male' ";
+                else
+                    $sWhere .= "AND $table.enumGender = 'female' ";
+            else
+                if($gender == 1)
+                    $sWhere .= "WHERE $table.enumGender = 'male' ";
+                else
+                    $sWhere .= "WHERE $table.enumGender = 'female' ";
             
-        // }
-        // if($graduate!=0  && $table =='tb_mas_users'){
-        //     if($astatus != 0 || $gender != 0 || $scholarship!=0)
-        //         if($graduate == 1)
-        //             $sWhere .= "AND $table.isGraduate = 1 ";
-        //         else
-        //             $sWhere .= "AND $table.isGraduate = 0 ";
-        //     else
-        //         if($graduate == 1)
-        //             $sWhere .= "WHERE $table.isGraduate = 1 ";
-        //         else
-        //             $sWhere .= "WHERE $table.isGraduate = 0 ";
+        }
+        if($graduate!=0  && $table =='tb_mas_users'){
+            if($astatus != 0 || $gender != 0 || $scholarship!=0)
+                if($graduate == 1)
+                    $sWhere .= "AND $table.isGraduate = 1 ";
+                else
+                    $sWhere .= "AND $table.isGraduate = 0 ";
+            else
+                if($graduate == 1)
+                    $sWhere .= "WHERE $table.isGraduate = 1 ";
+                else
+                    $sWhere .= "WHERE $table.isGraduate = 0 ";
             
-        // }
-        // if($yearlevel!=0 && $table =='tb_mas_users')
-        //     if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
-        //         $sWhere .= "AND $table.intStudentYear = ".$yearlevel." ";
-        //     else
-        //         $sWhere .= "WHERE $table.intStudentYear = ".$yearlevel." ";
+        }
+        if($yearlevel!=0 && $table =='tb_mas_users')
+            if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
+                $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
+            else
+                $sWhere .= "WHERE tb_mas_registration.intYearLevel = ".$yearlevel." ";
         
         
-        // if($course!=0 && $table =='tb_mas_users')
-        //     if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 )
-        //         $sWhere .= "AND $table.intProgramID = '".$course."' ";
-        //     else
-        //         $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
+        if($course!=0 && $table =='tb_mas_users')
+            if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 )
+                $sWhere .= "AND $table.intProgramID = '".$course."' ";
+            else
+                $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
        
         
         if($sem == 0)
