@@ -368,12 +368,9 @@ class Registrar extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
-        $this->data['course'] = $course;
-        $this->data['postreg'] = $regular;
+        $this->data['course'] = $course;        
         $this->data['postyear'] = $year;
-        $this->data['gender'] = $gender;
-        $this->data['graduate'] = $graduate;
-        $this->data['scholarship'] = $scholarship;        
+        $this->data['gender'] = $gender;                
         $this->data['sem'] = $sem;
 
         $this->load->view("common/header",$this->data);
