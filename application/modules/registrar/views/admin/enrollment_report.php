@@ -60,7 +60,7 @@
                     </select>         
                         </div>
                     <div class="col-sm-4">
-                        <label for="sem">Sem For Grades Spreadsheet:</label>
+                        <label for="sem">Select Term:</label>
                         <select id="sem" class="form-control select2" >
                             <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
                             <?php foreach($sy as $s): ?>
