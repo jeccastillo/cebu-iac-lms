@@ -955,7 +955,7 @@ class Pdf extends CI_Controller {
        
         // set margins
         //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetMargins(5, .25, 5);
+        $pdf->SetMargins(3, .25, 3);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         //$pdf->SetAutoPageBreak(TRUE, 6);
