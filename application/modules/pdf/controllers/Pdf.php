@@ -947,8 +947,8 @@ class Pdf extends CI_Controller {
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("Enlisted");
               
-        $this->data['sy'] = $this->data_fetcher->get_sem_by_id($this->data['classlist']['strAcademicYear']);
-        $students = $this->data_fetcher->getClassListStudents($id,$this->data['sy']['intID']);                        
+        $active_sem = $this->data_fetcher->get_active_sem();
+        $students = $this->data_fetcher->getClassListStudents($id,$active_sem['intID']);                        
       
                                
        
