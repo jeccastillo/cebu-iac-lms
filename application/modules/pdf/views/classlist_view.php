@@ -16,7 +16,7 @@
     </tr>
     
     <tr style="line-height:10px;">
-        <td style="font-size:10px;text-align:center">A.Y. <?php echo $sy['strYearStart'] . "-" . $sy['strYearEnd'] . "-" . $sy['enumSem'] . " Semester" ?></td>
+        <td style="font-size:10px;text-align:center"><?php echo $sy['enumSem'] . " Term, School Year ".$sy['strYearStart'] . "-" . $sy['strYearEnd']; ?></td>
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:9px;text-align:center"></td>
