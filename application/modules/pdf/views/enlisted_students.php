@@ -29,8 +29,8 @@
         <th style="font-size:10px;" width="25%">Student Name</th>
         <th style="font-size:10px;" width="10%">Course</th>
         <th style="font-size:10px;" width="12%">Enrollment Status</th>
-        <th style="font-size:10px;" width="10%">Date Enrolled</th>
-        <th style="font-size:10px;" width="15%">Date Added</th>
+        <th style="font-size:10px;" width="10%">Date Enlisted</th>
+        <th style="font-size:10px;" width="15%">Enlisted By</th>
     
     </tr>
     <tr style="line-height:10px;">
@@ -50,8 +50,8 @@
         <td style="font-size:9px;text-align:left;" width="25%"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:10px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:10px;" width="12%"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:10px;" width="10%"><?php echo date("M j, Y h:ia",strtotime($st['reg_info']['dteRegistered']));?></td>
-        <td style="font-size:10px;" width="15%"><?php echo date("M j, Y h:ia",strtotime($st['date_added'])); ?></td>           
+        <td style="font-size:10px;" width="10%"><?php echo date("M j, Y h:ia",strtotime($st['date_added']));?></td>
+        <td style="font-size:10px;" width="15%"><?php echo $st['fusername'] ?></td>           
     </tr>
     <?php   
     $i++;
