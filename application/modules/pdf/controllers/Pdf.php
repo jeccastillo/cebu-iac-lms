@@ -970,7 +970,7 @@ class Pdf extends CI_Controller {
         // helvetica or times to reduce file size.
         
         $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
-        $pdf->SetFont('helvetica','',10);
+        $pdf->SetFont('courier','',10);
         
         
         $pdf->setPrintHeader(false);
