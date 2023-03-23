@@ -1,19 +1,19 @@
 <aside class="right-side">
-<section class="content-header">
-                    <h1>
-                        Student
-                        <small></small>
-                    </h1> 
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
-                        <li class="active">View All Student</li>
-                    </ol>
-                </section>
+    <section class="content-header">
+        <h1>
+            Student
+            <small></small>
+        </h1> 
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
+            <li class="active">View All Student</li>
+        </ol>
+    </section>
     <div class="content">
-            <div class="alert alert-danger" style="display:none;">
-                <i class="fa fa-ban"></i>
-                <b>Alert!</b> Only admins can delete student records.
-            </div>
+        <div class="alert alert-danger" style="display:none;">
+            <i class="fa fa-ban"></i>
+            <b>Alert!</b> Only admins can delete student records.
+        </div>
         
         <div class="box">
             <div class="box-header with-border">

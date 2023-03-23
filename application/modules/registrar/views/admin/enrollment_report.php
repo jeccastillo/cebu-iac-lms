@@ -1,55 +1,66 @@
-<div class="content-wrapper ">
-    <section class="content-header container ">
-        <h1>
-            Enrollment
-            <small>            
-                <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> PDF</a>
-            </small>
-        </h1>
+<aside class="right-side">
+    <section class="content-header">
+            <h1>
+            Student
+            <small></small>
+        </h1> 
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Enrollment</a></li>
-            <li class="active">Enrollment Report</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
+            <li class="active">View All Student</li>
         </ol>
     </section>
-    <div class="content mcontainer container">
-        <div class="alert alert-danger" style="display:none;">
-            <i class="fa fa-ban"></i>
-            <span id="alert-text"></span>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                Filters go here
-            </div>
-        </div>
-        <hr />
-        <div class="box box-solid box-primary">
-            <div class="box-header">
-                <h3 class="box-title">Enrollment List</h3>                
+    <div class="content">
+            <div class="alert alert-danger" style="display:none;">
+                <i class="fa fa-ban"></i>
+                <b>Alert!</b> Only admins can delete student records.
+            </div>                
+        <div class="box box-solid box-default">
+            <div class="box-header">                  
+                <div>
+
+                    <div style="width:50%;float:right; text-align:right;">
+<!--
+                        <form method="post" action="<?php echo base_url(). student/view_all_students/20 ?>">
+                            <h5>Search: <input type="text" name="search_string"/>
+                            </h5>
+                        </form>
+-->
+                    </div>
+                </div>
+
+                <h3 class="box-title">List of Enrolled Students</h3>
+                <div class="box-tools">
+
+                </div>
             </div><!-- /.box-header -->
-            <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
-                <table id="subjects-table" class="table table-hover table-bordered">
+            <div class="box-body table-responsive">
+                <table id="users_table" class="table table-hover">
                     <thead>
-                        <tr>     
+                        <tr>
                             <th>id</th>
-                            <th>slug</th>     
-                            <th>Cashier</th>                  
-                            <th>Date Updated</th>
-                            <th>OR Number</th>
-                            <th>Applicant Number</th>
-                            <th>Student Name</th>
-                            <th>Payment Mode</th>
-                            <th>Check/CC/Debit #</th>
-                            <th>Amount Paid</th>
-                            <th>Payment For</th>                                                                                                                                          
-                            <th>Remarks</th>
+                            <th>slug</th>
+                            <th>Student Number</th>
+                            <th>Name</th>
+                            <th>Program</th>
+                            <th>Year Level</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th>id</th>
+                            <th>slug</th>
+                            <th>Student Number</th>
+                            <th>Last Name</th>
+                            <th>Program</th>
+                            <th>Year Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
     </div>
-</div>
-</div>
+    
+</aside>
