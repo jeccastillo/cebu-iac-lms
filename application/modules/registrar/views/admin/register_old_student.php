@@ -56,13 +56,15 @@
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>
-                                    <br />                                                                    
+                                <br />                                                    
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">New</option>
                                     <option value="continuing">Continuing</option>
                                     <option value="transferee">Transferee</option>                                    
                                 </select>
+                                <br />       
+                                <label for="intYearLevel">Year Level</label>
                                 <select id="intYearLevel" name="intYearLevel" class="form-control" v-model="request.intYearLevel">                        
                                     <option value="1">1</option>
                                     <option value="2">2</option>
