@@ -946,6 +946,7 @@ class Pdf extends CI_Controller {
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("Enlisted");
+        $pdf->SetFont('helvetica','',10);
               
         $active_sem = $this->data_fetcher->get_active_sem();
         $this->data['sy'] = $active_sem;
