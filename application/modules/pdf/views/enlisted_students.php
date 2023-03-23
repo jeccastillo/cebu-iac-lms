@@ -50,7 +50,7 @@
         <td style="font-size:9px;text-align:left;" width="32%"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:9px;" ><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:9px;" ><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:9px;" ><?php echo date("M j, Y h:ia",strtotime($st['date_added']));?></td>
+        <td style="font-size:9px;" ><?php echo $st['date_added'];?></td>
         <td style="font-size:9px;" ><?php echo $st['fusername'] ?></td>           
     </tr>
     <?php   
