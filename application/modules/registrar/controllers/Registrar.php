@@ -365,6 +365,8 @@ class Registrar extends CI_Controller {
     public function enrollment_report($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0)    
     {
 
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $this->data['course'] = $course;
         $this->data['postreg'] = $regular;
