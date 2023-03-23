@@ -8,13 +8,11 @@
         var course = $("#intProgramID").val();
         var status = $("#academicStatus").val();
         var year = $("#intYearLevel").val();
-        var gender = $("#gender").val();
-        var graduate = $("#graduate").val();
-        var sem = $("#sem").val();
-        var scholarship = $("#scholarship").val();
+        var gender = $("#gender").val();        
+        var sem = $("#sem").val();        
         var registered = $("#registered").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered;
+        document.location = "<?php echo base_url(); ?>registrar/enrollment_report/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/2';
         
     });
 

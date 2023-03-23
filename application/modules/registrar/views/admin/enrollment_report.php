@@ -64,7 +64,7 @@
             <div class="box-footer" style="display: block;">
                 <div class="row">
                     <div class="col-sm-4">
-                        <a href="#" class="btn btn-flat btn-info" id="advanced-search"><i class="ion ion-search"></i> Search</a>
+                        <a href="#" class="btn btn-flat btn-info" id="advanced-search-enrolled"><i class="ion ion-search"></i> Search</a>
                     </div>
                 </div>
               <!-- /.row -->
