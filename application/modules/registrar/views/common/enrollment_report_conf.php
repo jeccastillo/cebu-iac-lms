@@ -4,7 +4,7 @@
     
     $(document).ready(function(){
         
-    $('#advanced-search').click(function(){
+    $('#advanced-search-enrolled').click(function(){
         var course = $("#intProgramID").val();
         var status = $("#academicStatus").val();
         var year = $("#intYearLevel").val();
