@@ -946,7 +946,7 @@ class Pdf extends CI_Controller {
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("Enlisted");
-        $pdf->SetFont('helvetica','',10);
+        
               
         $active_sem = $this->data_fetcher->get_active_sem();
         $this->data['sy'] = $active_sem;
@@ -970,6 +970,7 @@ class Pdf extends CI_Controller {
         // helvetica or times to reduce file size.
         
         $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
+        $pdf->SetFont('helvetica','',10);
         
         
         $pdf->setPrintHeader(false);
