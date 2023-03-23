@@ -11,25 +11,7 @@
     </section>
     <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Advanced Search</h3>
-              <div class="box-tools pull-right">
-                    <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fa fa-table"></i> Download
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <?php if($registered >= 1): ?>
-                        <li><a href="<?php echo base_url(); ?>pdf/zipAndDownload/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>">Download Registration Forms</a></li>
-                        <?php endif; ?>
-                        <li><a href="<?php echo base_url() ?>excel/download_students_with_grades/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download With Subjects</a></li>
-                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download Spreadsheet</a></li>
-                         <li><a href="<?php echo base_url() ?>excel/download_repeated_subjects/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download Repeated Subjects</a></li>                         
-                          <li><a href="<?php echo base_url() ?>excel/free_he_billing_details/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download Free HE Billing Details</a></li>
-                          <li><a href="<?php echo base_url() ?>excel/download_cor_data/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download COR Data Elements</a></li>  
-                      </ul>
-                    </div>
-              </div>
+              <h3 class="box-title">Advanced Search</h3>              
             </div>
             <!-- /.box-header -->            
             <div class="box-body" style="display: block;">
