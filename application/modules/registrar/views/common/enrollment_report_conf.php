@@ -9,7 +9,7 @@
         var year = $("#intYearLevel").val();
         var gender = $("#gender").val();        
         var sem = $("#sem").val();        
-                        
+
         document.location = "<?php echo base_url(); ?>registrar/enrollment_report/"+course+"/"+year+"/"+gender+"/"+sem;
         
     });
@@ -25,7 +25,7 @@
             "bProcessing": true,
             "bServerSide": true,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/2/".$sem; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/0/".$postyear."/".$gender."/0/0/2/".$sem; ?>",
             "aoColumnDefs":[               
                 {
                     "aTargets":[0],
