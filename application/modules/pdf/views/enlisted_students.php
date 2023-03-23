@@ -22,7 +22,7 @@
         <td style="font-size:9px;text-align:center"></td>
     </tr>
 </table>
-<table>
+<table style="font-size:9px;">
     <tr style="line-height:12px;text-align:center;">
         <th style="font-size:10px;" width="3%">#</th>
         <th style="font-size:10px;" width="20%">Student Number</th>
@@ -44,14 +44,14 @@
         $name .= isset($st['strMiddlename'])?", ".$st['strMiddlename']:'';
     ?>
     
-    <tr style="line-height:12px;text-align:center;">
-        <td style="font-size:10px;" width="3%"><?php echo $i; ?></td>
-        <td style="font-size:10px;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
+    <tr style="line-height:10px;text-align:center;">
+        <td style="font-size:9px;" width="3%"><?php echo $i; ?></td>
+        <td style="font-size:9px;" width="20%"><?php echo $st['strStudentNumber']; ?></td>
         <td style="font-size:9px;text-align:left;" width="25%"> <?php echo strtoupper($name); ?></td>        
-        <td style="font-size:10px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
-        <td style="font-size:10px;" width="12%"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:10px;" width="10%"><?php echo date("M j, Y h:ia",strtotime($st['date_added']));?></td>
-        <td style="font-size:10px;" width="15%"><?php echo $st['fusername'] ?></td>           
+        <td style="font-size:9px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
+        <td style="font-size:9px;" width="12%"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
+        <td style="font-size:9px;" width="10%"><?php echo date("M j, Y h:ia",strtotime($st['date_added']));?></td>
+        <td style="font-size:9px;" width="15%"><?php echo $st['fusername'] ?></td>           
     </tr>
     <?php   
     $i++;
