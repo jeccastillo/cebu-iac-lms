@@ -25,11 +25,11 @@
 <table style="font-size:9px;">
     <tr style="line-height:12px;text-align:center;">
         <th style="font-size:10px;" width="3%">#</th>
-        <th style="font-size:10px;" width="20%">Student Number</th>
-        <th style="font-size:10px;" width="25%">Student Name</th>
+        <th style="font-size:10px;" width="15%">Student Number</th>
+        <th style="font-size:10px;" width="32%">Student Name</th>
         <th style="font-size:10px;" width="10%">Course</th>
-        <th style="font-size:10px;" width="12%">Enrollment Status</th>
-        <th style="font-size:10px;" width="10%">Date Enlisted</th>
+        <th style="font-size:10px;" width="10%">Enrollment Status</th>
+        <th style="font-size:10px;" width="15%">Date Enlisted</th>
         <th style="font-size:10px;" width="15%">Enlisted By</th>
     
     </tr>
