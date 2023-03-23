@@ -1470,7 +1470,7 @@ class Unity extends CI_Controller {
     public function edit_class()
     {
         $post = $this->input->post();
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         
         unset($post['student-chooser_length']);
         if($post['r1'] == "student"){
@@ -1667,7 +1667,7 @@ class Unity extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_registrar())
         {
-            $date = date("Y-m-d h:i:s");
+            $date = date("Y-m-d H:i:s");
             $classlist = current($this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('intID'=>$id)));
             if(!$classlist['intFinalized']){
                 $st = $this->data_fetcher->fetch_table('tb_mas_classlist_student',null,null,array('intClassListID'=>$id));
@@ -1837,7 +1837,7 @@ class Unity extends CI_Controller {
         if($this->is_admin() || $this->is_department_head())
         {
             $post = $this->input->post();
-            $post['date_added'] = date("Y-m-d h:i:s");
+            $post['date_added'] = date("Y-m-d H:i:s");
             $post['enlisted_user'] = $this->data["user"]["intID"];
             $cs = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
             $this->data_poster->post_data('tb_mas_classlist_student',$post,$post['intCSID'],'intCSID');
@@ -1927,7 +1927,7 @@ class Unity extends CI_Controller {
                 $post['floatFinalGrade'] = $data['eq'];
                 $post['strRemarks'] = $data['remarks'];
             }
-            $post['date_added'] = date("Y-m-d h:i:s");
+            $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
             $data['message'] = "success";
@@ -1976,7 +1976,7 @@ class Unity extends CI_Controller {
             $post = $this->input->post();
             
             if($post['intROG'] == 2)
-                $post['dteRegistered'] = date("Y-m-d h:i:s");
+                $post['dteRegistered'] = date("Y-m-d H:i:s");
 
             $this->data_poster->post_data('tb_mas_registration',$post,$post['intRegistrationID']);
             

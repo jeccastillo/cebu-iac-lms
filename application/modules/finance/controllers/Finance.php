@@ -113,7 +113,7 @@ class Finance extends CI_Controller {
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $reg_update = [
-                    "dteRegistered" => date("Y-m-d h:i:s"),
+                    "dteRegistered" => date("Y-m-d H:i:s"),
                     "intROG" => 1,
                 ];
                 $this->db

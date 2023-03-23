@@ -208,11 +208,11 @@ class Admissions extends CI_Controller {
 
         $active_sem = $this->data_fetcher->get_active_sem();
         
-        $post['strAppDate'] = date("Y-m-d h:i:s");
+        $post['strAppDate'] = date("Y-m-d H:i:s");
         $post['strAppNumber'] = $this->data_fetcher->generateAppNumber(date('Y'));
         $post['strConfirmationCode'] = $this->data_fetcher->generateConfirmationCode(date('Y'));
-        $post['dteAppBirthdate'] = date("Y-m-d h:i:s",strtotime($post['dteAppBirthdate']));
-        $post['dteScheduleExam'] = date("Y-m-d h:i:s",strtotime($post['dteScheduleExam']));
+        $post['dteAppBirthdate'] = date("Y-m-d H:i:s",strtotime($post['dteAppBirthdate']));
+        $post['dteScheduleExam'] = date("Y-m-d H:i:s",strtotime($post['dteScheduleExam']));
         $post['enumSem'] = $active_sem['intID'];
         $this->data_poster->post_data('tb_mas_applications',$post);
         
