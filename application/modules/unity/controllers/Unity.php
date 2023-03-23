@@ -1974,6 +1974,10 @@ class Unity extends CI_Controller {
         {
             
             $post = $this->input->post();
+            
+            if($post['intROG'] == 2)
+                $post['dteRegistered'] = date("Y-m-d h:i:s");
+
             $this->data_poster->post_data('tb_mas_registration',$post,$post['intRegistrationID']);
             
             $st = $this->db

@@ -81,8 +81,8 @@
         <td style="font-size:9px;text-align:left;" width="25%"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:10px;" width="10%"><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:10px;" width="12%"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:10px;" width="10%"><?php echo $st['reg_info']['dteRegistered']; ?></td>
-        <td style="font-size:10px;" width="15%"><?php echo $st['date_added']; ?></td>
+        <td style="font-size:10px;" width="10%"><?php echo date("M j, Y h:ia",strtotime($st['reg_info']['dteRegistered']));?></td>
+        <td style="font-size:10px;" width="15%"><?php echo date("M j, Y h:ia",strtotime($st['date_added'])); ?></td>
         <!-- <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td> -->
