@@ -2363,7 +2363,7 @@ class Data_fetcher extends CI_Model {
         $faculty_id = $this->session->userdata("intID");
         if($sem == 0)
             return  $this->db
-                     ->select("tb_mas_classlist_student.intCSID,intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
+                     ->select("tb_mas_classlist_student.intCSID,tb_mas_users.intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
                      ->from("tb_mas_classlist_student")
                      //->group_by("intSubjectID")
                      ->where(array("intClassListID"=>$id))
