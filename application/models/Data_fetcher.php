@@ -2374,7 +2374,7 @@ class Data_fetcher extends CI_Model {
                      ->result_array();
         else        
             return  $this->db
-                 ->select("intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, strProgramCode,date_added")
+                 ->select("intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, strProgramCode")
                  ->from("tb_mas_registration")
                  //->group_by("intSubjectID")             
                  ->where(array("tb_mas_registration.intAYID"=>$sem))    
