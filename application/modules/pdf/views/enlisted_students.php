@@ -44,8 +44,8 @@
     <tr style="line-height:10px;text-align:center;">
         <td style="font-size:9px;" ><?php echo $i; ?></td>
         <td style="font-size:9px;" ><?php echo $st['strStudentNumber']; ?></td>
-        <td style="font-size:9px;"> <?php echo strtoupper($name); ?></td>        
-        <td style="font-size:9px;" ><?php echo $st['strProgramCode']; ?></td>
+        <td style="font-size:9px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
+        <td style="font-size:9px;text-align:left;" ><?php echo $st['strProgramCode']; ?></td>
         <td style="font-size:9px;" ><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
         <td style="font-size:9px;" ><?php echo $st['date_added'];?></td>
         <td style="font-size:9px;" ><?php echo $st['fusername'] ?></td>           
