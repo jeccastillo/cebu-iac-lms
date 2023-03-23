@@ -1658,11 +1658,8 @@ class Datatables extends CI_Controller {
         if($table == 'tb_mas_users')
         {
             $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";            
-        }        
-        
-        if($registered!=0  && $table =='tb_mas_users'){
             
-            $join .= "JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
+            $join .= "LEFT JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
         }
         if($registered == -1){
             $join .= "JOIN tb_mas_advised ON (tb_mas_users.intID = tb_mas_advised.intStudentID AND tb_mas_advised.intSYID = ".$active_sem['intID'].") ";            
