@@ -42,8 +42,7 @@
                             <th>Student Number</th>
                             <th>Name</th>
                             <th>Program</th>
-                            <th>Year Level</th>
-                            <th>Actions</th>
+                            <th>Year Level</th>                            
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -54,8 +53,7 @@
                             <th>Student Number</th>
                             <th>Last Name</th>
                             <th>Program</th>
-                            <th>Year Level</th>
-                            <th>Actions</th>
+                            <th>Year Level</th>                            
                         </tr>
                     </tfoot>
                 </table>
