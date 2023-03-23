@@ -59,10 +59,19 @@
                                     <br />                                                                    
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
-                                    <option value="new">NEW</option>
-                                    <option value="old">RETURNING</option>
-                                    <option value="transferee">TRANSFEREE</option>                                    
+                                    <option value="new">New</option>
+                                    <option value="continuing">Continuing</option>
+                                    <option value="transferee">Transferee</option>                                    
                                 </select>
+                                <select id="intYearLevel" name="intYearLevel" class="form-control" v-model="request.intYearLevel">                        
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                                <br />                                                                    
                                 <label for="type_of_class">Class Type</label>
                                 <select id="type_of_class" class="form-control" name="enumStudentType" v-model="request.type_of_class">                        
                                     <option value="regular">Regular</option>
@@ -125,6 +134,7 @@ new Vue({
             enumRegistrationStatus: 'regular',
             strAcademicYear: undefined,
             type_of_class: 'regular',
+            intYearLevel: 1,
         },
         scholarship: {
             intID: 0
