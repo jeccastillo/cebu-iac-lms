@@ -58,11 +58,11 @@
         
         <th style="font-size:9px;" width="2%"><b>#</b></th>
         <th style="font-size:9px;" width="13%"><b>Student No.</b></th>
-        <th style="font-size:9px;" width="26%"><b>Student Name</b></th>
+        <th style="font-size:9px;" width="22%"><b>Student Name</b></th>
         <th style="font-size:9px;" width="10%"><b>Course</b></th>
         <th style="font-size:9px;" width="15%"><b>Enrollment Status</b></th>
         <th style="font-size:9px;" width="19%"><b>Date Enrolled</b></th>
-        <th style="font-size:9px;" width="15%"><b>Date Added</b></th>
+        <th style="font-size:9px;" width="19%"><b>Date Added</b></th>
     
     </tr>
     <tr style="line-height:10px;">
@@ -77,13 +77,13 @@
     ?>
     
     <tr style="line-height:12px;text-align:center;">
-        <td style="font-size:10px;"><?php echo $i; ?></td>
-        <td style="font-size:10px;"><?php echo $st['strStudentNumber']; ?></td>
-        <td style="font-size:9px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
-        <td style="font-size:10px;"><?php echo $st['strProgramCode']; ?></td>
-        <td style="font-size:10px;"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:10px;"><?php echo date("M j, Y h:ia",strtotime($st['reg_info']['dteRegistered']));?></td>
-        <td style="font-size:10px;"><?php echo date("M j, Y h:ia",strtotime($st['date_added'])); ?></td>
+        <td style="font-size:9px;"><?php echo $i; ?></td>
+        <td style="font-size:9px;"><?php echo $st['strStudentNumber']; ?></td>
+        <td style="font-size:8px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
+        <td style="font-size:9px;"><?php echo $st['strProgramCode']; ?></td>
+        <td style="font-size:9px;"><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
+        <td style="font-size:9px;"><?php echo date("Y-m-d h:ia",strtotime($st['reg_info']['dteRegistered']));?></td>
+        <td style="font-size:9px;"><?php echo date("Y-m-d h:ia",strtotime($st['date_added'])); ?></td>
         <!-- <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['strRemarks']=="lack of reqts.")?'inc':number_format($st['floatFinalGrade'], 2); ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>" width="10%"><?php echo ($st['floatFinalGrade']>=3.5) || $st['strRemarks']=="lack of reqts." ?'0':$subject['strUnits']; ?></td>
         <td style="font-size:10px;<?php echo ($st['floatFinalGrade']>=3.5)?'color:#a00':''; ?>; " width="20%"><?php echo $st['strRemarks']; ?></td> -->
