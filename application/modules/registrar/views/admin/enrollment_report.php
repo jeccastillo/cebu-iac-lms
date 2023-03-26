@@ -1,8 +1,11 @@
 <aside class="right-side">
     <section class="content-header">
             <h1>
-            Student
-            <small></small>
+            Enrolled Students
+            <small>
+                <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" >Print PDF</a> 
+            </small>
+            
         </h1> 
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>

@@ -372,6 +372,7 @@ class Registrar extends CI_Controller {
         $this->data['postyear'] = $year;
         $this->data['gender'] = $gender;                
         $this->data['sem'] = $sem;
+        $this->data['pdf_link'] = base_url()."pdf/ched_enrollment_list/".$course."/".$year."/".$gender."/".$sem;
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/enrollment_report",$this->data);
