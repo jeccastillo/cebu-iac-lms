@@ -62,7 +62,8 @@
         <td style="font-size:8px;text-align:left;"> <?php echo $i == 1?strtoupper($name):''; ?></td>        
         <td style="font-size:9px;"><?php echo $i == 1?$student['intYearLevel']:''; ?></td>
         <td style="font-size:9px;"><?php echo $i == 1?$student['enumGender']:''; ?></td>
-        <td style="font-size:9px;"></td>
+        <td style="font-size:9px;"><?php echo $class['strCode']; ?></td>
+        <td style="font-size:9px;"></td>        
         <td style="font-size:9px;"></td>        
     
     </tr>
