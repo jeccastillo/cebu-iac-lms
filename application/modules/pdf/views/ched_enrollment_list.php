@@ -60,7 +60,7 @@
         <td style="font-size:9px;"><?php echo $student['strStudentNumber']; ?></td>
         <td style="font-size:8px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
         <td style="font-size:9px;"><?php echo $student['intYearLevel']; ?></td>
-        <td style="font-size:9px;"></td>
+        <td style="font-size:9px;"><?php echo $student['enumGender']; ?></td>
         <td style="font-size:9px;"></td>
         <td style="font-size:9px;"></td>        
     
