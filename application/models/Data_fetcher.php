@@ -877,6 +877,9 @@ class Data_fetcher extends CI_Model {
                 $this->db->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG'=>2));
                 break;
             }
+
+            if($year!=0)
+                $this->db->where('tb_mas_registration.intYearLevel',$year);
         }
         
          if($course!=0)
@@ -894,9 +897,7 @@ class Data_fetcher extends CI_Model {
                 $this->db->where('enumGender','male');
             else
                 $this->db->where('enumGender','female');
-        
-        if($year!=0)
-            $this->db->where('intStudentYear',$year);
+            
         
         if($graduate!=0)
             if($graduate == 1)
