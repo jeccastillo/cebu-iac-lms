@@ -857,8 +857,11 @@ class Data_fetcher extends CI_Model {
     function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0)
     {
         
+        
+        $select = $registered!=0?"tb_mas_users.*,strProgramCode, short_name, strProgramDescription,tb_mas_registration.intYearLevel":"tb_mas_users.*,strProgramCode, short_name, strProgramDescription";
+
         $this->db
-            ->select('tb_mas_users.*,strProgramCode, short_name, strProgramDescription')
+            ->select($select)
             ->from('tb_mas_users')
             ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
             ->order_by('strLastname','asc');
