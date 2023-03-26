@@ -821,9 +821,7 @@ class Pdf extends CI_Controller {
     }
 
     public function ched_enrollment_list($course = 0, $year=0,$gender = 0,$sem=0)
-    {
-        
-        $students = $this->data_fetcher->getStudents($course,0,$year,$gender,0,0,2,$sem);        
+    {                
         
         if($sem == 0 )
         {
@@ -834,6 +832,8 @@ class Pdf extends CI_Controller {
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
                 
         $this->data['sy'] = $active_sem;
+
+        $students = $this->data_fetcher->getStudents($course,0,$year,$gender,0,0,2,$sem);        
 
          //print_r($this->data['spouse']);
          tcpdf();
