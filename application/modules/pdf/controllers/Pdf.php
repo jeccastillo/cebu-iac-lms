@@ -902,7 +902,7 @@ class Pdf extends CI_Controller {
                 foreach($per_page as $chunk){
                     $this->data['students'] = $chunk;                
                     $pdf->AddPage();
-                    if(count($per_page) == $chuks_count)
+                    if(count($per_page) == $chunks_count)
                         $this->data['last_page'] = true;
                     $html = $this->load->view("ched_enrollment_list",$this->data,true);
                     $pdf->writeHTML($html, true, false, true, false, '');            
