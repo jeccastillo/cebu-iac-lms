@@ -84,7 +84,7 @@ foreach($students as $student): ?>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="2%"></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="22%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><</th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"></th>
