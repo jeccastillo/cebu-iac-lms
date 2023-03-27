@@ -63,14 +63,14 @@
 <table>
     <tr style="line-height:14px;text-align:center;">        
         
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dashed #333;" width="2%"><b>#</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dashed #333;" width="13%"><b>Student No.</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="22%"><b>Student Name</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="5%"><b>Yr</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="10%"><b>Gender</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="13%"><b>Subject Code</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="30%"><b>Descriptive Title</b></th>
-        <th style="font-size:8px;border-top:1px dotted #333;border-bottom:1px dotted #333;" width="5%"><b>Units</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="2%"><b>#</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"><b>Student No.</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="22%"><b>Student Name</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Yr</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Gender</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"><b>Subject Code</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b>Descriptive Title</b></th>
+        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Units</b></th>
     
     </tr>
     <tr style="line-height:10px;">
