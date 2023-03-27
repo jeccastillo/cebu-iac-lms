@@ -22,7 +22,7 @@
                     <div class="col-sm-4">
                         <label for="intProgramID">By Program:</label>
                         <select id="intProgramID" class="form-control select2">
-                            <option class="text-muted" value="0">-----------------SELECT---------------</option>
+                            <option class="text-muted" value="0">-----------------ALL PROGRAMS---------------</option>
                             <?php foreach($programs as $program): ?>
                             <option <?php echo ($course == $program['intProgramID'])?'selected':''; ?>  value="<?php echo $program['intProgramID']; ?>">
                                 <?php echo $program['strProgramCode']; ?>
@@ -44,7 +44,7 @@
                     <div class="col-sm-4">
                         <label for="gender">By Gender:</label>
                         <select id="gender" class="form-control select2">
-                            <option <?php echo ($gender == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
+                            <option <?php echo ($gender == 0)?'selected':''; ?> value="0">-----------------ALL GENDERS---------------</option>
                             <option <?php echo ($gender == 1)?'selected':''; ?> value="1">male</option>
                             <option <?php echo ($gender == 2)?'selected':''; ?> value="2">female</option>
                         </select>
@@ -52,7 +52,7 @@
                     <div class="col-sm-4">
                         <label for="sem">Select Term:</label>
                         <select id="sem" class="form-control select2" >
-                            <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
+                            <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------ACTIVE SEM---------------</option>
                             <?php foreach($sy as $s): ?>
                                 <option <?php echo ($sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                             <?php endforeach; ?>
