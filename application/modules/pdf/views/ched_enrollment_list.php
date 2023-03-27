@@ -40,8 +40,8 @@
         <td colspan="3" style="font-size:9px;"></td>                
     </tr>  
     <tr>
-        <td style="font-size:9px;width:10%"><b>Tel No.:</b></td>
-        <td style="font-size:9px;width:10%">+63 32 520 4888</td>
+        <td style="font-size:9px;"><b>Tel No.:</b></td>
+        <td style="font-size:9px;">+63 32 520 4888</td>
         <td style="font-size:9px;"><b>Year Level:</b></td>    
         <td colspan="3" style="font-size:9px;"><?php echo $student['intYearLevel']; ?></td>
     </tr>
