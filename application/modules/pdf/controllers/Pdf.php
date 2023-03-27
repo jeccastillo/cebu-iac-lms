@@ -866,7 +866,11 @@ class Pdf extends CI_Controller {
         
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
-        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        if($course == 0)
+            $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        else
+            $programs = $this->data_fetcher->fetch_table('tb_mas_programs',null,null,array('intProgramID'=>$course));
+        
 
 
         foreach($programs as $program){
