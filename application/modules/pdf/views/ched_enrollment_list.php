@@ -80,15 +80,15 @@
 $num = 1;
 foreach($students as $student): ?>
 <table>    
-    <tr style="line-height:16px;text-align:center;">                
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="2%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="22%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"></th>
+    <tr style="line-height:14px;text-align:center;">                
+        <th style="font-size:8px;" width="2%"></th>
+        <th style="font-size:8px;" width="13%"></th>
+        <th style="font-size:8px;" width="22%"></th>
+        <th style="font-size:8px;" width="5%"></th>
+        <th style="font-size:8px;" width="10%"></th>
+        <th style="font-size:8px;" width="13%"></th>
+        <th style="font-size:8px;" width="30%"></th>
+        <th style="font-size:8px;" width="5%"></th>
     </tr>
     <?php 
     $i = 1;
