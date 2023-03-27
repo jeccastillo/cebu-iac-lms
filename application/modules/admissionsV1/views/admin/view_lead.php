@@ -766,7 +766,7 @@ new Vue({
                 this.request = data.data.data;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
-                axios.get(base_url + 'program/programs')
+                axios.get(base_url + 'admissionsV1/programs')
                 .then((data) => {
                     this.programs = data.data.programs;                     
                 })

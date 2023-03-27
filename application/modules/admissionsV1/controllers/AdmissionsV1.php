@@ -102,6 +102,11 @@ class AdmissionsV1 extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function programs(){
+        $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+        echo json_encode($ret);
+    }
+
 
     public function view_lead($id) {
         if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
