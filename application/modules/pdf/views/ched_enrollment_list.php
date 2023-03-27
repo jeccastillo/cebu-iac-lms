@@ -40,8 +40,8 @@
         <th style="font-size:9px;" width="22%"><b>Student Name</b></th>
         <th style="font-size:9px;" width="10%"><b>Yr</b></th>
         <th style="font-size:9px;" width="10%"><b>Gender</b></th>
-        <th style="font-size:9px;" width="19%"><b>Subject Code</b></th>
-        <th style="font-size:9px;" width="19%"><b>Descriptive Title</b></th>
+        <th style="font-size:9px;" width="15%"><b>Subject Code</b></th>
+        <th style="font-size:9px;" width="23%"><b>Descriptive Title</b></th>
         <th style="font-size:9px;" width="5%"><b>Units</b></th>
     
     </tr>
