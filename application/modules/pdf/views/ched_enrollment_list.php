@@ -12,11 +12,14 @@
             </tr>
 <table border="0">
     <tr style="line-height:12px;">
+        <td style="font-size:9px;text-align:center;">OFFICE OF THE REGISTRAR</td>
+    </tr>
+    <tr style="line-height:12px;">
         <td style="font-size:9px;text-align:center;"><b>CHED ENROLLMENT LIST REPORT</b></td>
     </tr>
     
     <tr style="line-height:10px;">
-        <td style="font-size:9px;text-align:center"><?php echo $sy['enumSem'] . " Term, School Year ".$sy['strYearStart'] . "-" . $sy['strYearEnd']; ?></td>
+        <td style="font-size:9px;text-align:center"><?php echo  "ACADEMIC ".$sy['strYearStart'] . "-" . $sy['strYearEnd'].", ".$sy['enumSem'] . " TERM"; ?></td>
     </tr>
     <tr style="line-height:10px;">
         <td style="font-size:9px;text-align:center"></td>
