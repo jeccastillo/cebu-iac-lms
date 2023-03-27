@@ -35,14 +35,14 @@
 <table>
     <tr style="line-height:12px;text-align:center;">        
         
-        <th style="font-size:9px;" width="2%"><b>#</b></th>
-        <th style="font-size:9px;" width="13%"><b>Student No.</b></th>
-        <th style="font-size:9px;" width="22%"><b>Student Name</b></th>
-        <th style="font-size:9px;" width="10%"><b>Yr</b></th>
-        <th style="font-size:9px;" width="10%"><b>Gender</b></th>
-        <th style="font-size:9px;" width="15%"><b>Subject Code</b></th>
-        <th style="font-size:9px;" width="23%"><b>Descriptive Title</b></th>
-        <th style="font-size:9px;" width="5%"><b>Units</b></th>
+        <th style="font-size:8px;" width="2%"><b>#</b></th>
+        <th style="font-size:8px;" width="13%"><b>Student No.</b></th>
+        <th style="font-size:8px;" width="22%"><b>Student Name</b></th>
+        <th style="font-size:8px;" width="10%"><b>Yr</b></th>
+        <th style="font-size:8px;" width="10%"><b>Gender</b></th>
+        <th style="font-size:8px;" width="14%"><b>Subject Code</b></th>
+        <th style="font-size:8px;" width="24%"><b>Descriptive Title</b></th>
+        <th style="font-size:8px;" width="5%"><b>Units</b></th>
     
     </tr>
     <tr style="line-height:10px;">
@@ -57,14 +57,14 @@
     ?>
     
     <tr style="line-height:12px;text-align:center;">
-        <td style="font-size:9px;"><?php echo $i == 1?"1":""; ?></td>
-        <td style="font-size:9px;"><?php echo $i == 1?$student['strStudentNumber']:''; ?></td>
+        <td style="font-size:8px;"><?php echo $i == 1?"1":""; ?></td>
+        <td style="font-size:8px;"><?php echo $i == 1?$student['strStudentNumber']:''; ?></td>
         <td style="font-size:8px;text-align:left;"> <?php echo $i == 1?strtoupper($name):''; ?></td>        
-        <td style="font-size:9px;"><?php echo $i == 1?$student['intYearLevel']:''; ?></td>
-        <td style="font-size:9px;"><?php echo $i == 1?$student['enumGender']:''; ?></td>
-        <td style="font-size:9px;text-align:left;"><?php echo $class['strCode']; ?></td>
-        <td style="font-size:9px;text-align:left;"><?php echo $class['strDescription']; ?></td>        
-        <td style="font-size:9px;"><?php echo $class['strUnits']; ?></td>        
+        <td style="font-size:8px;"><?php echo $i == 1?$student['intYearLevel']:''; ?></td>
+        <td style="font-size:8px;"><?php echo $i == 1?$student['enumGender']:''; ?></td>
+        <td style="font-size:8px;text-align:left;"><?php echo $class['strCode']; ?></td>
+        <td style="font-size:8px;text-align:left;"><?php echo $class['strDescription']; ?></td>        
+        <td style="font-size:8px;"><?php echo $class['strUnits']; ?></td>        
     
     </tr>
    <?php 
