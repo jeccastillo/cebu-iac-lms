@@ -28,27 +28,27 @@
 </table>
 <table border="0">     
     <tr style="line-height:12px;">
-        <td style="font-size:9px;width:15%"><b>Institutional Identifier:</b></td>
-        <td style="font-size:9px;width:35%">11315</td>
-        <td style="font-size:9px;width:15%"><b>Semester/ Trimester:</b></td>
-        <td style="font-size:9px;width:15%"><?php echo switch_num_word($sy['enumSem'])." Term" ?></td>        
+        <td style="font-size:8px;width:15%"><b>Institutional Identifier:</b></td>
+        <td style="font-size:8px;width:35%">11315</td>
+        <td style="font-size:8px;width:15%"><b>Semester/ Trimester:</b></td>
+        <td style="font-size:8px;width:35%"><?php echo switch_num_word($sy['enumSem'])." Term" ?></td>        
     </tr>
     <tr style="line-height:12px;">
-        <td style="font-size:9px;"><b>Name of Institution:</b></td>
-        <td style="font-size:9px;">iACADEMY Cebu</td>
-        <td style="font-size:9px;"><b>Course/Program:</b></td>    
-        <td colspan="3" style="font-size:9px;"><?php echo $student['strProgramDescription']; ?></td>                
+        <td style="font-size:8px;"><b>Name of Institution:</b></td>
+        <td style="font-size:8px;">iACADEMY Cebu</td>
+        <td style="font-size:8px;"><b>Course/Program:</b></td>    
+        <td colspan="3" style="font-size:8px;"><?php echo $student['strProgramDescription']; ?></td>                
     </tr>  
     <tr>
-        <td style="font-size:9px;"><b>Address:</b></td>
-        <td style="font-size:9px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</td>
-        <td style="font-size:9px;"><b>Year Level:</b></td>    
-        <td colspan="3" style="font-size:9px;"><?php echo $student['intYearLevel']; ?></td>
+        <td style="font-size:8px;"><b>Address:</b></td>
+        <td style="font-size:8px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</td>
+        <td style="font-size:8px;"><b>Year Level:</b></td>    
+        <td colspan="3" style="font-size:8px;"><?php echo $student['intYearLevel']; ?></td>
     </tr>
     <tr>
-        <td style="font-size:9px;"><b>Tel No.:</b></td>
-        <td style="font-size:9px;">+63 32 520 4888</td>
-        <td style="font-size:9px;"></td>    
+        <td style="font-size:8px;"><b>Tel No.:</b></td>
+        <td style="font-size:8px;">+63 32 520 4888</td>
+        <td style="font-size:8px;"></td>    
         <td colspan="3" style="font-size:9px;"></td>
     </tr>
     <tr style="line-height:25px;">
