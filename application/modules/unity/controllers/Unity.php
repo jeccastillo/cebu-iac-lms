@@ -1303,7 +1303,7 @@ class Unity extends CI_Controller {
     
     public function add_subjects_curriculum()
     {
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
             $post = $this->input->post();
             //print_r($post);
@@ -2249,7 +2249,7 @@ class Unity extends CI_Controller {
     public function delete_subject_curriculum()
     {
         $data['message'] = "failed";
-        if($this->is_admin()){
+        if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
             $this->data_poster->deleteItem('tb_mas_curriculum_subject',$post['id'],'intID');
             $data['message'] = "success";
