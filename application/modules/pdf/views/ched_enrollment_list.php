@@ -61,7 +61,7 @@
     </tr>  
 </table>
 <table>
-    <tr style="line-height:14px;text-align:center;">        
+    <tr style="line-height:16px;text-align:center;">        
         
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="2%"><b>#</b></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"><b>Student No.</b></th>
