@@ -832,48 +832,54 @@ class Pdf extends CI_Controller {
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
                 
         $this->data['sy'] = $active_sem;
+        
 
-        $students = $this->data_fetcher->getStudents($course,0,$year,$gender,0,0,2,$sem);        
-
-         //print_r($this->data['spouse']);
-         tcpdf();
-         // create new PDF document
-         $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-         //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //print_r($this->data['spouse']);
+        tcpdf();
         // create new PDF document
-         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
-         // set document information
-         $pdf->SetCreator(PDF_CREATOR);
-         $pdf->SetTitle("Ched Enrollment");
-         
- 
-         // set margins
-         //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-         $pdf->SetMargins(5, .25, 5);
-         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        //  $pdf->SetLineStyle(array('dash'=>'1,1','color'=>array(40,40,40)));
-         //$pdf->SetAutoPageBreak(TRUE, 6);
- 
-        //font setting
-         //$pdf->SetFont('calibril_0', '', 15, '', 'false');
-         // set default font subsetting mode
-         // Set font
-         // dejavusans is a UTF-8 Unicode font, if you only need to
-         // print standard ASCII chars, you can use core fonts like
-         // helvetica or times to reduce file size.
-         
-         $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
-         
-         
-         $pdf->setPrintHeader(false);
-         $pdf->setPrintFooter(false);         
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Ched Enrollment");
+        
 
-         foreach($students as $student)
-        {
-            $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
-            $student['classes'] = $cl;
-            $this->data['student'] = $student;
+        // set margins
+        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(5, .25, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);        
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+    //font setting
+        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
+        // set default font subsetting mode
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        
+        $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
+        
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);         
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+
+
+        foreach($programs as $program){
+            $st = [];
+            $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
+            foreach($students as $student)
+            {
+                $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
+                $student['classes'] = $cl;                
+                $st[] = $student;
+            }
+
+            $this->data['students'] = $st;                
             $pdf->AddPage();
             $html = $this->load->view("ched_enrollment_list",$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');            

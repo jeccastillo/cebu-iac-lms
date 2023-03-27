@@ -60,6 +60,7 @@
         <td></td>
     </tr>  
 </table>
+<?php foreach($students as $student): ?>
 <table>
     <tr style="line-height:16px;text-align:center;">        
         
@@ -78,7 +79,7 @@
     </tr>  
     <?php 
     $i = 1;
-    $total_units = 0;
+    $total_units = 0;    
     foreach($student['classes'] as $class):
     $name = $student['strLastname'].", ".$student['strFirstname']; 
     $name .= isset($st['strMiddlename'])?", ".$student['strMiddlename']:'';
@@ -141,3 +142,4 @@
         <td style="font-size:8px;"><b><?php echo $total_units; ?></b></td>            
     </tr>
 </table>
+<?php endforeach; ?>
