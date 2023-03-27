@@ -60,7 +60,9 @@
         <td></td>
     </tr>  
 </table>
-<?php foreach($students as $student): ?>
+<?php 
+$num = 1;
+foreach($students as $student): ?>
 <table>
     <tr style="line-height:16px;text-align:center;">        
         
@@ -87,7 +89,7 @@
     ?>
     
     <tr style="line-height:12px;text-align:center;">
-        <td style="font-size:8px;"><?php echo $i == 1?"1":""; ?></td>
+        <td style="font-size:8px;"><?php echo $i == 1?$num:""; ?></td>
         <td style="font-size:8px;"><?php echo $i == 1?$student['strStudentNumber']:''; ?></td>
         <td style="font-size:8px;text-align:left;"> <?php echo $i == 1?strtoupper($name):''; ?></td>        
         <td style="font-size:8px;"><?php echo $i == 1?$student['intYearLevel']:''; ?></td>
@@ -142,4 +144,6 @@
         <td style="font-size:8px;"><b><?php echo $total_units; ?></b></td>            
     </tr>
 </table>
-<?php endforeach; ?>
+<?php 
+$num++;
+endforeach; ?>
