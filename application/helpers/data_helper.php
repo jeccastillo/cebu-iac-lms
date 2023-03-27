@@ -541,6 +541,36 @@ if(!function_exists('switch_num_rev'))
             return $num;
     }
 }
+
+if(!function_exists('switch_num_word'))
+{
+    function switch_num_word($num)
+    {
+        switch($num)
+            {
+                case '1st':
+                    $num = "First";
+                    break;
+                case '2nd':
+                    $num = "Second";
+                    break;
+                case '3rd':
+                    $num = "Third";
+                    break;
+                case '4th':
+                    $num = "Fourth";
+                    break;
+                case '5th':
+                    $num = "Fifth";
+                    break;
+                case '6th':
+                    $num = "Sixth";
+                    break;
+            }
+        
+            return $num;
+    }
+}
 if(!function_exists('increment_student_number'))
 {
     function increment_student_number($matches)
