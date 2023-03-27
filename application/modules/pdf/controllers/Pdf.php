@@ -872,17 +872,19 @@ class Pdf extends CI_Controller {
         foreach($programs as $program){
             $st = [];
             $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
-            foreach($students as $student)
-            {
-                $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
-                $student['classes'] = $cl;                
-                $st[] = $student;
-            }
+            if(!empty($students)){
+                foreach($students as $student)
+                {
+                    $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
+                    $student['classes'] = $cl;                
+                    $st[] = $student;
+                }
 
-            $this->data['students'] = $st;                
-            $pdf->AddPage();
-            $html = $this->load->view("ched_enrollment_list",$this->data,true);
-            $pdf->writeHTML($html, true, false, true, false, '');            
+                $this->data['students'] = $st;                
+                $pdf->AddPage();
+                $html = $this->load->view("ched_enrollment_list",$this->data,true);
+                $pdf->writeHTML($html, true, false, true, false, '');            
+            }
         }
          
          
