@@ -31,19 +31,20 @@
         <td style="font-size:9px;width:15%"><b>Institutional Identifier:</b></td>
         <td style="font-size:9px;width:35%">11315</td>
         <td style="font-size:9px;width:15%"><b>Semester/ Trimester:</b></td>
-        <td style="font-size:9px;width:15%"><?php echo switch_num_word($sy['enumSem'])." Term" ?></td>
-        <td style="font-size:9px;width:10%"><b>Tel No.:</b></td>
-        <td style="font-size:9px;width:10%">+63 32 520 4888</td>
+        <td style="font-size:9px;width:15%"><?php echo switch_num_word($sy['enumSem'])." Term" ?></td>        
     </tr>
     <tr style="line-height:12px;">
         <td style="font-size:9px;"><b>Name of Institution:</b></td>
         <td style="font-size:9px;">iACADEMY Cebu</td>
         <td style="font-size:9px;"><b>Course/Program:</b></td>    
-        <td colspan="3" style="font-size:9px;"></td>
+        <td colspan="3" style="font-size:9px;"></td>                
+    </tr>  
+    <tr>
+        <td style="font-size:9px;width:10%"><b>Tel No.:</b></td>
+        <td style="font-size:9px;width:10%">+63 32 520 4888</td>
         <td style="font-size:9px;"><b>Year Level:</b></td>    
         <td colspan="3" style="font-size:9px;"><?php echo $student['intYearLevel']; ?></td>
-        
-    </tr>  
+    </tr>
     <tr style="line-height:25px;">
         <td></td>
         <td></td>
