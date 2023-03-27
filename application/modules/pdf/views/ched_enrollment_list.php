@@ -78,6 +78,7 @@
     </tr>  
     <?php 
     $i = 1;
+    $total_units = 0;
     foreach($student['classes'] as $class):
     $name = $student['strLastname'].", ".$student['strFirstname']; 
     $name .= isset($st['strMiddlename'])?", ".$student['strMiddlename']:'';
@@ -97,5 +98,27 @@
     </tr>
    <?php 
     $i++;
+    $total_units += $class['strUnits'];
     endforeach; ?>
+
+    <tr style="line-height:12px;text-align:center;">
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>        
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>
+        <td style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;">&nbsp;</td>        
+        <td style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;">&nbsp;</td>            
+    </tr>
+    <tr style="line-height:12px;text-align:center;">
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>        
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>
+        <td style="font-size:8px;text-align:left;"><b>Total Units:</b></td>        
+        <td style="font-size:8px;"><b><?php echo $total_units; ?></b></td>            
+    </tr>
 </table>
