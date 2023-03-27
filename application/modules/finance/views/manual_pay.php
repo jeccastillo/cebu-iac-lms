@@ -301,10 +301,14 @@ new Vue({
             })  
             
             for(i in this.student.payments){
-                if(this.student.payments[i].description == "Application Payment")
-                    this.application_payment = this.student.payments[i];
-                if(this.student.payments[i].description == "Reservation Payment")
-                    this.reservation_payment = this.student.payments[i];
+                if(this.student.payments[i].description == "Application Payment"){
+                    if(this.student.payments[i].status == "Paid")
+                        this.application_payment = this.student.payments[i];
+                }
+                if(this.student.payments[i].description == "Reservation Payment"){
+                    if(this.student.payments[i].status == "Paid")
+                        this.reservation_payment = this.student.payments[i];
+                }
             }
         })
         .catch((error) => {
