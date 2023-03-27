@@ -884,10 +884,13 @@ class Pdf extends CI_Controller {
                     $st[] = $student;
                 }
 
-                $this->data['students'] = $st;                
-                $pdf->AddPage();
-                $html = $this->load->view("ched_enrollment_list",$this->data,true);
-                $pdf->writeHTML($html, true, false, true, false, '');            
+                $per_page = array_chunk($st, 2);
+                foreach($per_page as $chunk){
+                    $this->data['students'] = $chunk;                
+                    $pdf->AddPage();
+                    $html = $this->load->view("ched_enrollment_list",$this->data,true);
+                    $pdf->writeHTML($html, true, false, true, false, '');            
+                }
             }
         }
          
