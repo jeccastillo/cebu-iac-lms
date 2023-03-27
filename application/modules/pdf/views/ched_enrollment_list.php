@@ -60,9 +60,6 @@
         <td></td>
     </tr>  
 </table>
-<?php 
-$num = 1;
-foreach($students as $student): ?>
 <table>
     <tr style="line-height:16px;text-align:center;">        
         
@@ -76,6 +73,11 @@ foreach($students as $student): ?>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Units</b></th>
     
     </tr>
+</table>
+<?php 
+$num = 1;
+foreach($students as $student): ?>
+<table>
     <tr style="line-height:10px;">
         <td colspan="7"></td>        
     </tr>  
