@@ -166,7 +166,7 @@ endforeach; ?>
         <tr style="line-height:16px;">        
             
             <th style="font-size:8px;" width="10%"><b>Year Level Total: <?php echo $year_level_total; ?></b></th>
-            <th style="font-size:8px;" width="30%"><b><?php echo !empty($students)?$students[0]['strProgramDescription']:''; ?></b></th>
+            <th style="font-size:8px;" width="40%"><b><?php echo !empty($students)?$students[0]['strProgramDescription']:''; ?></b></th>
             <th style="font-size:8px;" width="10%"><b><?php echo $male; ?> Male(s)</b></th>
             <th style="font-size:8px;" width="10%"><b><?php echo $female; ?> Female(s)</b></th>           
         </tr>
