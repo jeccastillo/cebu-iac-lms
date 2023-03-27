@@ -106,6 +106,30 @@
                                     <th>Date Updated</th>
                                     <th>Actions</th>
                                 </tr>    
+                                <tr v-for="refunded in refunded_payments">
+                                    <td>{{ refunded.or_number }}</td>
+                                    <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ refunded.cashier_id }}</a></td>
+                                    <td>{{ refunded.description }}</td>
+                                    <td>{{ refunded.check_number }}</td>
+                                    <td>{{ refunded.subtotal_order }}</td>
+                                    <td>{{ refunded.charges }}</td>
+                                    <td>{{ refunded.total_amount_due }}</td>
+                                    <td>{{ refunded.status }}</td>                                            
+                                    <td>{{ refunded.response_message }}</td>
+                                    <td>{{ refunded.updated_at }}</td>            
+                                    <td>
+                                        <button v-if="!refunded.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = application_payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                        <button v-if="refunded.or_number"                                             
+                                                @click="printOR(application_payment)" 
+                                                class="btn btn-primary">
+                                                Print OR
+                                        </button>
+                                    </td>                                    
+                                </tr>
                                 <tr v-if="application_payment">
                                     <td>{{ application_payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
@@ -219,7 +243,8 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
         reservation_payment: undefined,
-        application_payment: undefined,        
+        application_payment: undefined,   
+        refunded_payments: [],     
         cashier: undefined,
         request:{
             first_name: '',
@@ -301,13 +326,15 @@ new Vue({
             })  
             
             for(i in this.student.payments){
-                if(this.student.payments[i].description == "Application Payment"){
-                    if(this.student.payments[i].status == "Paid")
-                        this.application_payment = this.student.payments[i];
-                }
-                if(this.student.payments[i].description == "Reservation Payment"){
-                    if(this.student.payments[i].status == "Paid")
-                        this.reservation_payment = this.student.payments[i];
+                if(this.student.payments[i].status == "Refunded")
+                        this.refunded_payments.push(this.student.payments[i]);
+                else if(this.student.payments[i].status == "Paid"){
+                    if(this.student.payments[i].description == "Application Payment"){                     
+                            this.application_payment = this.student.payments[i];                    
+                    }
+                    if(this.student.payments[i].description == "Reservation Payment"){                        
+                        this.reservation_payment = this.student.payments[i];                    
+                    }
                 }
             }
         })
