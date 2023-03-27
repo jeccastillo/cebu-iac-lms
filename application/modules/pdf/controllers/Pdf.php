@@ -877,6 +877,7 @@ class Pdf extends CI_Controller {
             $st = [];
             $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
             if(!empty($students)){
+                
                 foreach($students as $student)
                 {
                     $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
@@ -885,11 +886,13 @@ class Pdf extends CI_Controller {
                 }
 
                 $per_page = array_chunk($st, 2);
+                $this->data['count_start'] = 1;
                 foreach($per_page as $chunk){
                     $this->data['students'] = $chunk;                
                     $pdf->AddPage();
                     $html = $this->load->view("ched_enrollment_list",$this->data,true);
                     $pdf->writeHTML($html, true, false, true, false, '');            
+                    $this->data['count_start'] += 2;
                 }
             }
         }

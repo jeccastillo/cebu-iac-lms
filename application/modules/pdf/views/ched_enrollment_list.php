@@ -77,7 +77,7 @@
     </tr>  
 </table>
 <?php 
-$num = 1;
+$num = $count_start;
 foreach($students as $student): ?>
 <table>    
     <tr style="line-height:14px;text-align:center;">                
