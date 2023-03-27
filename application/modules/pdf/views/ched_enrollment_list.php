@@ -158,3 +158,20 @@ foreach($students as $student): ?>
 <?php 
 $num++;
 endforeach; ?>
+<?php if($last_page): ?>
+    <table>
+        <tr style="line-height:10px;">
+            <td colspan="7"></td>        
+        </tr> 
+        <tr style="line-height:16px;text-align:center;">        
+            
+            <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Year Level Total: <?php echo $year_level_total; ?></b></th>
+            <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b><?php echo !empty($students)?$students[0]['strProgramDescription']:''; ?></b></th>
+            <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b><?php echo $male; ?> Male(s)</b></th>
+            <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b><?php echo $female; ?> Female(s)</b></th>           
+        </tr>
+        <tr style="line-height:10px;">
+            <td colspan="7"></td>        
+        </tr>  
+    </table>
+<?php endif; ?>
