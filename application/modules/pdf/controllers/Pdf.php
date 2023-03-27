@@ -861,7 +861,7 @@ class Pdf extends CI_Controller {
         // print standard ASCII chars, you can use core fonts like
         // helvetica or times to reduce file size.
         
-        $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
         
         $pdf->setPrintHeader(false);

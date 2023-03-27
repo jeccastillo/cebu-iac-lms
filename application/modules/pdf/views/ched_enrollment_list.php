@@ -71,16 +71,15 @@
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="13%"><b>Subject Code</b></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b>Descriptive Title</b></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Units</b></th>
-    
     </tr>
+    <tr style="line-height:10px;">
+        <td colspan="7"></td>        
+    </tr>  
 </table>
 <?php 
 $num = 1;
 foreach($students as $student): ?>
-<table>
-    <tr style="line-height:10px;">
-        <td colspan="7"></td>        
-    </tr>  
+<table>    
     <?php 
     $i = 1;
     $total_units = 0;    
