@@ -100,8 +100,17 @@
     $i++;
     $total_units += $class['strUnits'];
     endforeach; ?>
-
-    <tr style="line-height:12px;text-align:center;">
+    <tr style="line-height:4px;text-align:center;">
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>        
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;"></td>
+        <td style="font-size:8px;text-align:left;"></td>
+        <td style="font-size:8px;">&nbsp;</td>        
+        <td style="font-size:8px;">&nbsp;</td>            
+    </tr>
+    <tr style="line-height:8px;text-align:center;">
         <td style="font-size:8px;"></td>
         <td style="font-size:8px;"></td>
         <td style="font-size:8px;text-align:left;"></td>        
