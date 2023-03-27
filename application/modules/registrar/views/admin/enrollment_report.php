@@ -52,7 +52,7 @@
                     <div class="col-sm-4">
                         <label for="sem">Select Term:</label>
                         <select id="sem" class="form-control select2" >
-                            <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------ACTIVE SEM---------------</option>
+                            <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------ACTIVE TERM---------------</option>
                             <?php foreach($sy as $s): ?>
                                 <option <?php echo ($sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                             <?php endforeach; ?>
