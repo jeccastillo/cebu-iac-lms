@@ -37,13 +37,13 @@
         <td style="font-size:8px;"><b>Name of Institution:</b></td>
         <td style="font-size:8px;">iACADEMY Cebu</td>
         <td style="font-size:8px;"><b>Course/Program:</b></td>    
-        <td colspan="3" style="font-size:8px;"><?php echo $student['strProgramDescription']; ?></td>                
+        <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['strProgramDescription']:''; ?></td>                
     </tr>  
     <tr>
         <td style="font-size:8px;"><b>Address:</b></td>
         <td style="font-size:8px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</td>
         <td style="font-size:8px;"><b>Year Level:</b></td>    
-        <td colspan="3" style="font-size:8px;"><?php echo $student['intYearLevel']; ?></td>
+        <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['intYearLevel']:''; ?></td>
     </tr>
     <tr>
         <td style="font-size:8px;"><b>Tel No.:</b></td>
