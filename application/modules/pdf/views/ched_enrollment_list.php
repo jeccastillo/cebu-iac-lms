@@ -38,10 +38,10 @@
         <th style="font-size:8px;" width="2%"><b>#</b></th>
         <th style="font-size:8px;" width="13%"><b>Student No.</b></th>
         <th style="font-size:8px;" width="22%"><b>Student Name</b></th>
-        <th style="font-size:8px;" width="10%"><b>Yr</b></th>
+        <th style="font-size:8px;" width="5%"><b>Yr</b></th>
         <th style="font-size:8px;" width="10%"><b>Gender</b></th>
-        <th style="font-size:8px;" width="10%"><b>Subject Code</b></th>
-        <th style="font-size:8px;" width="28%"><b>Descriptive Title</b></th>
+        <th style="font-size:8px;" width="13%"><b>Subject Code</b></th>
+        <th style="font-size:8px;" width="30%"><b>Descriptive Title</b></th>
         <th style="font-size:8px;" width="5%"><b>Units</b></th>
     
     </tr>
