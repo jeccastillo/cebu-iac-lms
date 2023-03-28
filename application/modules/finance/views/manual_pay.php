@@ -67,7 +67,7 @@
                                             <select class="form-control" v-model="request.status">
                                                 <option value="Paid">Paid</option>
                                                 <option value="Pending">Pending</option>                                                        
-                                                <option value="Pending">Refunded</option>
+                                                <option value="Refunded">Refunded</option>
                                             </select>
                                         </div>
                                     </div>
