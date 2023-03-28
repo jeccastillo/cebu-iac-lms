@@ -32,12 +32,16 @@
                                         </div>                                                
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Enter type if other is selected:</label>
-                                        <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="description_other" />
+                                        <div class="form-group">
+                                            <label>Enter type if other is selected:</label>
+                                            <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="description_other" />
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Enter amount to pay:</label>
-                                        <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                        <div class="form-group">
+                                            <label>Enter amount to pay:</label>
+                                            <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
