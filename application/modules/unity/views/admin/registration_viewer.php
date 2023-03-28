@@ -422,8 +422,11 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){      
                         this.or_update.sy_reference = this.sem;                                                                                      
-                        this.registration = data.data.registration;            
-                        this.registration_status = data.data.registration.intROG;
+                        this.registration = data.data.registration;   
+                        
+                        if(this.registration)         
+                            this.registration_status = data.data.registration.intROG;
+
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
                         this.or_print.student_name = this.request.strFirstname + ' ' + this.request.strLastname;
