@@ -505,7 +505,8 @@
                             Enrollment</button>
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
-                            btn-danger">Reject</button>                        
+                            btn-danger">Reject</button>      
+                        <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update Requirements</a>                        
                     </div>
                     <?php endif; ?>
                 </div>
