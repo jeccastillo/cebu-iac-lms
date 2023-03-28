@@ -49,6 +49,14 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Payment Status</label>
+                                        <select class="form-control" v-model="request.status">
+                                            <option value="Paid">Paid</option>
+                                            <option value="Pending">Pending</option>                                                        
+                                            <option value="Pending">Refunded</option>
+                                        </select>
+                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Check/Credit/Debit Number:</label>
@@ -60,6 +68,14 @@
                                             <label>Remarks:</label>
                                             <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                         </div>                                    
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Enter type if other is selected:</label>
+                                        <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="description_other" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Enter amount to pay:</label>
+                                        <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="amount_to_pay" />
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -245,7 +261,9 @@ new Vue({
         applicant_id: undefined,
         reservation_payment: undefined,
         application_payment: undefined,   
-        refunded_payments: [],     
+        refunded_payments: [],    
+        amount_to_pay: 0,
+        description_other: '', 
         cashier: undefined,
         request:{
             first_name: '',
@@ -464,6 +482,15 @@ new Vue({
                     showLoaderOnConfirm: true,
                         preConfirm: (login) => {
 
+
+                            if(this.request.description == 'Other'){
+                                this.request.description = this.description_other;                                
+                            }
+
+                            this.request.subtotal_order = this.amount_to_pay;
+                            this.request.total_amount_due = this.amount_to_pay;
+
+                            
                             return axios.post(url, this.request, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
@@ -509,14 +536,14 @@ new Vue({
 
         selectDescription: function(){
             if(this.request.description == "Reservation Payment"){
-                this.request.subtotal_order = 10000;
-                this.request.total_amount_due = 10000;
+                this.amount_to_pay = 10000;                
+            }
+            else if(this.request.description == "Application Payment"){{
+                this.amount_to_pay = 500;            
             }
             else{
-                this.request.subtotal_order = 500;
-                this.request.total_amount_due = 500;
+                this.amount_to_pay = 0;
             }
-            
         }
 
 
