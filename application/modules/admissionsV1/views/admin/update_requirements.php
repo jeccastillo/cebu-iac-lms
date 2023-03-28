@@ -583,6 +583,33 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
+                if(this.request.citizenship != "Philippines")
+                    this.uploads.requirements = [
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                        {
+                            "file_id": ""
+                        },
+                    ]
                 for(i in this.request.uploaded_requirements){
                     if (this.request.uploaded_requirements[i].type == '2x2') {
                         this.uploads.requirements[0].file_id = this.request.uploaded_requirements[i].id;
@@ -603,7 +630,6 @@ new Vue({
                         this.uploads.requirements[3].file_id = this.request.uploaded_requirements[i].id;
                         this.uploaded_paths.passport_filepath = this.request.uploaded_requirements[i].path;
                     }
-
 
                     if (this.request.uploaded_requirements[i].type == 'arc') {
                         this.uploads.requirements[1].file_id = this.request.uploaded_requirements[i].id;
