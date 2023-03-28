@@ -564,7 +564,23 @@ new Vue({
         loading_spinner: false,
         types: [],
         uploads: {
-            requirements: [{
+            requirements: [
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
+                    "file_id": ""
+                },
+                {
                     "file_id": ""
                 },
                 {
@@ -583,33 +599,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
-                if(this.request.citizenship != "Philippines")
-                    this.uploads.requirements = [
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                    ]
+               
                 for(i in this.request.uploaded_requirements){
                     if (this.request.uploaded_requirements[i].type == '2x2') {
                         this.uploads.requirements[0].file_id = this.request.uploaded_requirements[i].id;
