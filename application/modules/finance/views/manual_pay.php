@@ -86,12 +86,12 @@
                                             <input type="hidden" class="form-control" v-model="request.or_number" />
                                         </div>
                                     </div>  
-                                    <div class="col-sm-6">
+                                    <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
                                             {{ request.subtotal_order }}
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Email: {{ request.email_address }}</label>                                                    
