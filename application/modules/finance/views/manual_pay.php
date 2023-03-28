@@ -49,13 +49,15 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Payment Status</label>
-                                        <select class="form-control" v-model="request.status">
-                                            <option value="Paid">Paid</option>
-                                            <option value="Pending">Pending</option>                                                        
-                                            <option value="Pending">Refunded</option>
-                                        </select>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Payment Status</label>
+                                            <select class="form-control" v-model="request.status">
+                                                <option value="Paid">Paid</option>
+                                                <option value="Pending">Pending</option>                                                        
+                                                <option value="Pending">Refunded</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
