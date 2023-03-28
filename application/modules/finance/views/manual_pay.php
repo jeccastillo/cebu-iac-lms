@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Enter amount to pay:</label>
+                                            <label>Enter amount to pay/refund:</label>
                                             <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="amount_to_pay" />
                                         </div>
                                     </div>
