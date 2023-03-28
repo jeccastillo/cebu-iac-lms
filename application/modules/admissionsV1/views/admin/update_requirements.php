@@ -47,7 +47,7 @@
                                     <div class="w-[200px] my-3 block mx-auto">
                                         <input ref="file_2x2" @change="uploadReq('2x2',$event)"
                                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                            type="file" required>
+                                            type="file" >
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -57,7 +57,7 @@
                                     <div class="w-[200px] my-3 block mx-auto">
                                         <input ref="file_nso" @change="uploadReq('psa',$event)"
                                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                            type="file" required>
+                                            type="file" >
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@
                                     <div class="w-[200px] my-3 block mx-auto">
                                         <input ref="file_id" @change="uploadReq('school_id',$event)"
                                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                            type="file" required>
+                                            type="file" >
                                     </div>
 
                                 </div>
@@ -82,7 +82,7 @@
                                         Note: Present the original passport for verification'>                                        
                                     <input ref="file_passport" @change="uploadReq('passport',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
+                                        type="file" >
                                 </div>
                                 
                                 <div class="col-md-3">
@@ -97,14 +97,14 @@
                                         class="img-responsive" style="padding:15px" title='Quarantine Medical Examination by the Bureau of Quarantine (BOQ)'>                                    
                                     <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
+                                        type="file" >
                                 </div>
                                 <div class="col-md-3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload4.png"
                                         class="img-responsive" style="padding:15px" title='Copy of Birth Certificate.'>
                                     <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
+                                        type="file" >
                                 </div>                                                  
                         </div>
                         <div class="row"
@@ -121,7 +121,7 @@
                                         class="img-responsive" style="padding:15px" title='Recommendation letter from the Principal/Guidance Counselor/Class Adviser'>                                    
                                     <input ref="file_recommendation" @change="uploadReq('recommendation',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
+                                        type="file" >
                                 </div>
                                 <div class="col-md-3">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload7.png"
@@ -135,7 +135,7 @@
                                         class="img-responsive" style="padding:15px" title='2x2 ID picture (white background with name tag below)'>                                    
                                     <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
+                                        type="file" >
                                 </div>
                             </span>
                        </div>
