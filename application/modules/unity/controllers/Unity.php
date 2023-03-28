@@ -451,25 +451,30 @@ class Unity extends CI_Controller {
                 $ret['selected_ay'] = $active_sem['intID'];
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+            if($ret['registration'])
+                $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+            else
+                $data['tuition'] = "";
+                
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
             $ret['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
-            $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            $pay =  array();
-            foreach($payment as $p){
-                if(isset($pay[$p['strTransactionType']]))
-                    $pay[$p['strTransactionType']] += $p['intAmountPaid'];
-                else
-                    $pay[$p['strTransactionType']] = $p['intAmountPaid'];
+            //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+            //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+            // $pay =  array();
+            // foreach($payment as $p){
+            //     if(isset($pay[$p['strTransactionType']]))
+            //         $pay[$p['strTransactionType']] += $p['intAmountPaid'];
+            //     else
+            //         $pay[$p['strTransactionType']] = $p['intAmountPaid'];
 
-            }
-            $ret['payment'] = $pay;
+            // }
+            // $ret['payment'] = $pay;
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
-            $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+            
             $ret['tuition_data'] = $data['tuition'];
             $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
             $ret['success']= true;
