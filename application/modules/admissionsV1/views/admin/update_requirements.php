@@ -745,8 +745,7 @@ new Vue({
                     }
                 });
 
-        }   
-
+        },   
         uploadReq: function(type, event) {
 
              Swal.fire({
