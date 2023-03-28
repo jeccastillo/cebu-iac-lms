@@ -27,7 +27,7 @@
                                             <select required @change="selectDescription" class="form-control" v-model="request.description">
                                                 <option v-if="application_payment && application_payment.status == 'Paid'" value="Reservation Payment">Reservation</option>
                                                 <option value="Application Payment">Application</option>
-                                                <option value="Other Payment">Other</option>                                
+                                                <option value="Other">Other</option>                                
                                             </select>
                                         </div>                                                
                                     </div>
