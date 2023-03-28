@@ -540,7 +540,7 @@ new Vue({
             if(this.request.description == "Reservation Payment"){
                 this.amount_to_pay = 10000;                
             }
-            else if(this.request.description == "Application Payment"){{
+            else if(this.request.description == "Application Payment"){
                 this.amount_to_pay = 500;            
             }
             else{
