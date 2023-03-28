@@ -1,4 +1,4 @@
-<div class="content-wrapper">    
+<div class="content-wrapper pt-5 px-5">    
     <section id="adminssions-form" class="section section_port relative container">
         <div v-if="loading_spinner" wire:loading class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
@@ -33,10 +33,10 @@
 
                <div class="md:flex  md:mt-0 h-full items-center justify-center">
                    <div class="md:w-12/12 py-3">
-                       <p class="max-w-[800px] color-primary mt-[60px]  text-2xl">
+                       <h3 class="text-center">
                             <span class="font-bold"> Update Intial Requirements!
                             <br />                            
-                       </p>
+                        </h3>
 
                         <div class="row"
                            v-if="request.email && request.citizenship == 'Philippines'">                            
