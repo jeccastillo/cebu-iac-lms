@@ -617,67 +617,7 @@ new Vue({
     },
 
     methods: {
-
-
-        submitPost: function() {
-
-            this.loading_spinner = true;
-
-            // Swal.fire({
-            //     title: "Submit Requirements",
-            //     text: "Are you sure you want to submit?",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Yes",
-            //     imageWidth: 100,
-            //     icon: "question",
-            //     cancelButtonText: "No, cancel!",
-            //     showCloseButton: true,
-            //     showLoaderOnConfirm: true,
-            //     preConfirm: (login) => {
-            //         return 
-            //     },
-            //     allowOutsideClick: () => !Swal.isLoading()
-            // }).then((result) => {
-            //     if (result.isConfirmed) {}
-            // })
-
-            axios
-                .post(api_url + 'admissions/student-info/requirements', this.uploads, {
-                    // headers: {
-                    //     Authorization: `Bearer ${window.token}`
-                    // }
-                })
-                .then(data => {
-                    this.is_done = true;
-
-                    if (data.data.success) {
-                        this.loading_spinner = false;
-                        Swal.fire({
-                            title: "Success!",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(d => {
-                            window.location =
-                                "<?php echo base_url();?>admissionsV1/view_lead/" +
-                                this.slug;
-                        });
-
-                    } else {
-                        this.loading_spinner = false;
-                        Swal.fire(
-                            'Failed!',
-                            data.data.message,
-                            'error'
-                        )
-                        // window.location =
-                        // "<?php echo base_url();?>site/admissions_student_payment/" +
-                        // this.slug;
-                    }
-                });
-
-        },
-
-        uploadReq: function(type, event) {
+        submitReq: function(type,event){
 
             this.loading_spinner = true;
             let formDataUp = "";
@@ -718,7 +658,7 @@ new Vue({
             console.log(formDataUp);
 
             axios
-                .post(api_url + 'admissions/student-info/upload',
+                .post(api_url + 'admissions/student-info/update-requirements',
                     formDataUp, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
@@ -805,6 +745,29 @@ new Vue({
                     }
                 });
 
+        }   
+
+        uploadReq: function(type, event) {
+
+             Swal.fire({
+                title: "Update Requirements",
+                text: "Are you sure you want to update?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return submitReq(type, event);
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {}
+            })
+
+            
 
 
         }
