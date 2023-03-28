@@ -424,8 +424,12 @@ new Vue({
                         this.or_update.sy_reference = this.sem;                                                                                      
                         this.registration = data.data.registration;   
                         
-                        if(this.registration)         
+                        if(this.registration){         
                             this.registration_status = data.data.registration.intROG;
+                            this.tuition = data.data.tuition;
+                            this.tuition_data = data.data.tuition_data;                                               
+                            this.remaining_amount = data.data.tuition_data.total;
+                        }
 
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
@@ -438,9 +442,7 @@ new Vue({
                         this.request.contact_number = this.student.strMobileNumber;  
                         this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
-                        this.tuition = data.data.tuition;
-                        this.tuition_data = data.data.tuition_data;                                               
-                        this.remaining_amount = data.data.tuition_data.total;
+                        
                         this.cashier = data.data.cashier;
 
                         if(this.cashier){
