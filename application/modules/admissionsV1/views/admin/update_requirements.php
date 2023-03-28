@@ -143,12 +143,12 @@
                </div>
 
 
-               <div class="text-center" v-if="request.email">
+               <!-- <div class="text-center" v-if="request.email">
                     <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
                     <div v-else>
                         <button  type="submit" class="btn btn-primary">Submit</button>
                     </div>
-               </div>
+               </div> -->
 
 
            </form>
@@ -194,6 +194,7 @@ new Vue({
         request: {
             type_id: "",
             date_of_birth: ""
+            uploaded_requirements: [],
         },
         programs: [],
         programs_group: [],
