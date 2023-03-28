@@ -715,6 +715,8 @@ new Vue({
                         
                         if(this.description == 'Other')
                             this.request.description = this.description_other;
+                        else
+                            this.request.description = this.description;
 
                         this.request.subtotal_order = this.amount_to_pay;
                         this.request.total_amount_due = this.amount_to_pay;
