@@ -34,11 +34,8 @@
                <div class="md:flex  md:mt-0 h-full items-center justify-center">
                    <div class="md:w-12/12 py-3">
                        <p class="max-w-[800px] color-primary mt-[60px]  text-2xl">
-                            <span class="font-bold"> Great! </span> Next, is to upload your initial requirements:
-                            <br />
-                            <span class="small">
-                                PS: We also sent you an <span class="font-bold">email</span> with the link to this page if you want to continue later.
-                            </span>
+                            <span class="font-bold"> Update Intial Requirements!
+                            <br />                            
                        </p>
 
                         <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
@@ -149,8 +146,7 @@
                <div class="text-center" v-if="request.email">
                     <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
                     <div v-else>
-                        <button  type="submit"> <img src="<?php echo $img_dir; ?>admissions/form/proceed_payment.png"
-                            class="max-w-full h-auto mx-auto block img-btn"></button>
+                        <button  type="submit" class="btn btn-primary">Submit</button>
                     </div>
                </div>
 
@@ -183,8 +179,7 @@
             transform: rotate(360deg);
         }
     }
-   </style>
-   <script src="https://cdn.tailwindcss.com"></script>
+   </style>   
    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
@@ -300,7 +295,7 @@ new Vue({
                             icon: "success"
                         }).then(d => {
                             window.location =
-                                "<?php echo base_url();?>site/admissions_student_payment/" +
+                                "<?php echo base_url();?>admissionsV1/view_lead/" +
                                 this.slug;
                         });
 
