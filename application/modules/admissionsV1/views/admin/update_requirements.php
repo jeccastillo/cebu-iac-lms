@@ -617,7 +617,8 @@ new Vue({
     },
 
     methods: {
-        submitReq: function(type,event){
+        
+        uploadReq: function(type, event) {
 
             this.loading_spinner = true;
             let formDataUp = "";
@@ -655,99 +656,6 @@ new Vue({
             formDataUp.append("type", type);
             formDataUp.append("slug", this.slug);
 
-            console.log(formDataUp);
-
-            axios
-                .post(api_url + 'admissions/student-info/update-requirements',
-                    formDataUp, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    })
-                .then(data => {
-                    if (data.data.success) {
-                        // this.successMessageApi(data.data.message);
-                        // location.reload();
-                        Swal.fire(
-                            'Success!',
-                            data.data.message,
-                            'success'
-                        )
-
-                        if (type == '2x2') {
-                            this.uploads.requirements[0].file_id = data.data.data.id;
-                            this.uploaded_paths.digital_2x2_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'psa') {
-                            this.uploads.requirements[1].file_id = data.data.data.id;
-                            this.uploaded_paths.digital_psa_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'school_id') {
-                            this.uploads.requirements[2].file_id = data.data.data.id;
-                            this.uploaded_paths.digital_school_id_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'passport') {
-                            this.uploads.requirements[3].file_id = data.data.data.id;
-                            this.uploaded_paths.passport_filepath = data.data.data.path;
-                        }
-
-
-                        if (type == 'arc') {
-                            this.uploads.requirements[1].file_id = data.data.data.id;
-                            this.uploaded_paths.acr_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'qme') {
-                            this.uploads.requirements[2].file_id = data.data.data.id;
-                            this.uploaded_paths.qme_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'birthcert') {
-                            this.uploads.requirements[3].file_id = data.data.data.id;
-                            this.uploaded_paths.birth_certificate_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'schrecords') {
-                            this.uploads.requirements[4].file_id = data.data.data.id;
-                            this.uploaded_paths.scholastic_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'recommendation') {
-                            this.uploads.requirements[5].file_id = data.data.data.id;
-                            this.uploaded_paths.recommendation_filepath = data.data.data.path;
-                        }
-
-                        if (type == 'financial_support') {
-                            this.uploads.requirements[6].file_id = data.data.data.id;
-                            this.uploaded_paths.financial_filepath = data.data.data.path;
-                        }
-
-                        if (type == '2x2_foreign') {
-                            this.uploads.requirements[7].file_id = data.data.data.id;
-                            this.uploaded_paths.foreign_2x2_filepath = data.data.data.path;
-                        }
-
-
-                        this.uploads.slug = this.slug;
-                        this.loading_spinner = false;
-
-                    } else {
-                        Swal.fire(
-                            'Failed!',
-                            data.data.message,
-                            'error'
-                        )
-                        event.target.value = null;
-                        this.loading_spinner = false;
-                    }
-                });
-
-        },   
-        uploadReq: function(type, event) {
-
              Swal.fire({
                 title: "Update Requirements",
                 text: "Are you sure you want to update?",
@@ -759,7 +667,93 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    return submitReq(type, event);
+                    return axios
+                            .post(api_url + 'admissions/student-info/update-requirements',
+                                formDataUp, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                            .then(data => {
+                                if (data.data.success) {
+                                    // this.successMessageApi(data.data.message);
+                                    // location.reload();
+                                    Swal.fire(
+                                        'Success!',
+                                        data.data.message,
+                                        'success'
+                                    )
+
+                                    if (type == '2x2') {
+                                        this.uploads.requirements[0].file_id = data.data.data.id;
+                                        this.uploaded_paths.digital_2x2_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'psa') {
+                                        this.uploads.requirements[1].file_id = data.data.data.id;
+                                        this.uploaded_paths.digital_psa_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'school_id') {
+                                        this.uploads.requirements[2].file_id = data.data.data.id;
+                                        this.uploaded_paths.digital_school_id_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'passport') {
+                                        this.uploads.requirements[3].file_id = data.data.data.id;
+                                        this.uploaded_paths.passport_filepath = data.data.data.path;
+                                    }
+
+
+                                    if (type == 'arc') {
+                                        this.uploads.requirements[1].file_id = data.data.data.id;
+                                        this.uploaded_paths.acr_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'qme') {
+                                        this.uploads.requirements[2].file_id = data.data.data.id;
+                                        this.uploaded_paths.qme_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'birthcert') {
+                                        this.uploads.requirements[3].file_id = data.data.data.id;
+                                        this.uploaded_paths.birth_certificate_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'schrecords') {
+                                        this.uploads.requirements[4].file_id = data.data.data.id;
+                                        this.uploaded_paths.scholastic_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'recommendation') {
+                                        this.uploads.requirements[5].file_id = data.data.data.id;
+                                        this.uploaded_paths.recommendation_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'financial_support') {
+                                        this.uploads.requirements[6].file_id = data.data.data.id;
+                                        this.uploaded_paths.financial_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == '2x2_foreign') {
+                                        this.uploads.requirements[7].file_id = data.data.data.id;
+                                        this.uploaded_paths.foreign_2x2_filepath = data.data.data.path;
+                                    }
+
+
+                                    this.uploads.slug = this.slug;
+                                    this.loading_spinner = false;
+
+                                } else {
+                                    Swal.fire(
+                                        'Failed!',
+                                        data.data.message,
+                                        'error'
+                                    )
+                                    event.target.value = null;
+                                    this.loading_spinner = false;
+                                }
+                            });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
