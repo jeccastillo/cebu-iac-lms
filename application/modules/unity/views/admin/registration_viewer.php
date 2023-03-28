@@ -240,6 +240,7 @@
                                                     <select class="form-control" v-model="request.status">
                                                         <option value="Paid">Paid</option>
                                                         <option value="Pending">Pending</option>                                                        
+                                                        <option value="Pending">Refunded</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
