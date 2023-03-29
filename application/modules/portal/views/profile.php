@@ -26,14 +26,17 @@
                <img src="<?php echo $img_dir?>default_image2.png"  width="100%"/>
               <?php else: ?>
                     <img class="img-responsive" src="<?php echo $photo_dir.$student['strPicture']; ?>" />
-                  <?php endif; ?>
-            </div>
+                  <?php endif; 
+                  
+                  $major = $student['strMajor']!="None"?'major in '. $student['strMajor']:"";
+                  ?>
+            </div>            
             <div class="col-xs-6 col-md-6">
               <h3 class="student-name" style="margin-top: 5px;"><?php 
                         $middleInitial = substr($student['strMiddlename'], 0,1);
                         echo $student['strLastname'].", ". $student['strFirstname'] . " " .  $middleInitial . "."; ?></h3>
                <p><?php echo $student['strProgramDescription']; ?></p>
-              <p> <?php  echo 'major in '. $student['strMajor']; ?></p>
+              <p> <?php  echo $major; ?></p>
             </div>
             <div class="col-md-4 col-xs-12">
             
