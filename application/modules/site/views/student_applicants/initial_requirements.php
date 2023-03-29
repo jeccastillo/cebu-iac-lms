@@ -75,7 +75,7 @@
 
                                 </div>
                         </div>
-                        <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
+                        <div class="md:flex md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship != 'Philippines'">
                                 <div class="md-w-1/4">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
@@ -101,7 +101,7 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Scanned Birth Certificate Scanned Birth Certificate</p>
+                                                <p class="p-3">Scanned Birth Certificate</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
                                                 </h2>
