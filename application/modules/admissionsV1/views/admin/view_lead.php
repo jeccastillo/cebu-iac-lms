@@ -485,8 +485,9 @@
                         </div>
                         <hr>
                     </div> -->
-                    <?php if($userlevel == "2" || $userlevel == "5"): ?>
+                    
                     <div class="text-right">
+                        <?php if($userlevel == "2" || $userlevel == "5"): ?>
                         <button type="button"  data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
                         <button type="button" v-if="request.status == 'New'"  @click="deleteApplicant"
@@ -506,9 +507,12 @@
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
                             btn-danger">Reject</button>      
-                        <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update Requirements</a>                        
+                        <?php endif; ?>
+                        <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
+                            <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update Requirements</a>  
+                        <?php endif; ?>                      
                     </div>
-                    <?php endif; ?>
+                    
                 </div>
 
             </div>
