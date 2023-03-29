@@ -79,7 +79,7 @@
                            v-if="request.email && request.citizenship != 'Philippines'">
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload1.png"
-                                        class="max-w-full h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
+                                        class="max-w-140 h-auto mx-auto block" title='Photocopy of the valid (unexpired) passport pages bearing the bio-page, 
                                         the latest admission/arrival in the Philippines with "valid authorized stay" date and the Bureau of Quarantine (BOQ) stamp.
                                         Note: Present the original passport for verification'>                                        
                                     <input ref="file_passport" @change="uploadReq('passport',$event)"
@@ -88,14 +88,14 @@
                                 </div>                                
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload4.png"
-                                        class="max-w-full h-auto mx-auto block" title='Copy of Birth Certificate.'>
+                                        class="max-w-140 h-auto mx-auto block" title='Copy of Birth Certificate.'>
                                     <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>         
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload8.png"
-                                        class="max-w-full h-auto mx-auto block" title='2x2 ID picture (white background with name tag below)'>                                    
+                                        class="max-w-140 h-auto mx-auto block" title='2x2 ID picture (white background with name tag below)'>                                    
                                     <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
