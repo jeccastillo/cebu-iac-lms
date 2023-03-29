@@ -659,38 +659,38 @@ new Vue({
                         this.uploaded_paths.passport_filepath = this.request.uploaded_requirements[i].path;
                     }
 
-                    if (this.request.uploaded_requirements[i].type == 'arc') {
-                        this.uploads.requirements[1].file_id = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.acr_filepath = this.request.uploaded_requirements[i].path;
-                    }
+                    // if (this.request.uploaded_requirements[i].type == 'arc') {
+                    //     this.uploads.requirements[1].file_id = this.request.uploaded_requirements[i].id;
+                    //     this.uploaded_paths.acr_filepath = this.request.uploaded_requirements[i].path;
+                    // }
 
-                    if (this.request.uploaded_requirements[i].type == 'qme') {
-                        this.uploads.requirements[2].file_id = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.qme_filepath = this.request.uploaded_requirements[i].path;
-                    }
+                    // if (this.request.uploaded_requirements[i].type == 'qme') {
+                    //     this.uploads.requirements[2].file_id = this.request.uploaded_requirements[i].id;
+                    //     this.uploaded_paths.qme_filepath = this.request.uploaded_requirements[i].path;
+                    // }
 
                     if (this.request.uploaded_requirements[i].type == 'birthcert') {
-                        this.uploads.requirements[3].file_id = this.request.uploaded_requirements[i].id;
+                        this.uploads.requirements[4].file_id = this.request.uploaded_requirements[i].id;
                         this.uploaded_paths.birth_certificate_filepath = this.request.uploaded_requirements[i].path;
                     }
 
-                    if (this.request.uploaded_requirements[i].type == 'schrecords') {
-                        this.uploads.requirements[4].file_id = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.scholastic_filepath = this.request.uploaded_requirements[i].path;
-                    }
+                    // if (this.request.uploaded_requirements[i].type == 'schrecords') {
+                    //     this.uploads.requirements[4].file_id = this.request.uploaded_requirements[i].id;
+                    //     this.uploaded_paths.scholastic_filepath = this.request.uploaded_requirements[i].path;
+                    // }
 
-                    if (this.request.uploaded_requirements[i].type == 'recommendation') {
-                        this.uploads.requirements[5].file_id = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.recommendation_filepath =this.request.uploaded_requirements[i].path;
-                    }
+                    // if (this.request.uploaded_requirements[i].type == 'recommendation') {
+                    //     this.uploads.requirements[5].file_id = this.request.uploaded_requirements[i].id;
+                    //     this.uploaded_paths.recommendation_filepath =this.request.uploaded_requirements[i].path;
+                    // }
 
-                    if (this.request.uploaded_requirements[i].type == 'financial_support') {
-                        this.uploads.requirements[6].file_id = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.financial_filepath = this.request.uploaded_requirements[i].path;
-                    }
+                    // if (this.request.uploaded_requirements[i].type == 'financial_support') {
+                    //     this.uploads.requirements[6].file_id = this.request.uploaded_requirements[i].id;
+                    //     this.uploaded_paths.financial_filepath = this.request.uploaded_requirements[i].path;
+                    // }
 
                     if (this.request.uploaded_requirements[i].type == '2x2_foreign') {
-                        this.uploads.requirements[7].file_id = this.request.uploaded_requirements[i].id;
+                        this.uploads.requirements[5].file_id = this.request.uploaded_requirements[i].id;
                         this.uploaded_paths.foreign_2x2_filepath = this.request.uploaded_requirements[i].path;
                     }
                 }
