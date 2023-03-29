@@ -163,9 +163,9 @@
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
                                 <select required class="form-control" v-model="request.student_type">
-                                    <option v-if="request.college =='n/a'" value="freshman">Freshman</option>
-                                    <option v-if="request.college !='n/a'" value="transferee">Transferee</option>
-                                    <option v-if="request.college =='n/a'" value="foreign">Foreign</option>
+                                    <option value="freshman">Freshman</option>
+                                    <option value="transferee">Transferee</option>
+                                    <option value="foreign">Foreign</option>
                                 </select>                                    
                             </div>                                                                                   
                         </div>
@@ -248,7 +248,7 @@ new Vue({
             high_school: undefined,
             high_school_address: undefined,
             high_school_attended: undefined,
-            college: undefined,
+            college: 'n/a',
             college_address: undefined,
             college_attended_from: undefined,
             college_attended_to: undefined,
