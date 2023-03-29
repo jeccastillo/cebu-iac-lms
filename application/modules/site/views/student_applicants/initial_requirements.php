@@ -90,16 +90,24 @@
                                             </h2>
                                             </div>
                                         </div>                                        
-
-                                        </div>
+                                    </div>
                                     <input ref="file_passport" @change="uploadReq('passport',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>                                
-                                <div class="md-w-1/4">
-                                <h4>Scanned Birth Certificate</h4>
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload4.png" style="max-width:140px"
-                                        class="h-auto mx-auto block" title='Copy of Birth Certificate.'>
+                                <div class="md-w-1/4">                               
+                                    <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload4.png" style="max-width:140px"
+                                        class="h-auto mx-auto block" title='Copy of Birth Certificate.'> -->
+                                        <div class="bg-gray-700 h-48 min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                            <p class="p-3">Scanned Birth Certificate</p>
+                                            <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
+                                            </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
                                     <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
