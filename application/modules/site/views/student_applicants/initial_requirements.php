@@ -85,62 +85,34 @@
                                     <input ref="file_passport" @change="uploadReq('passport',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
-                                </div>
-                                
-                                <div class="md-w-1/4">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload2.png"
-                                        class="max-w-full h-auto mx-auto block" title='Copy of Alien Certificate of Registration (i-CARD) if any'>                                    
-                                    <input ref="file_icard" @change="uploadReq('icard',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file">
-                                </div>                                                        
-                                <div class="md-w-1/4">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload3.png"
-                                        class="max-w-full h-auto mx-auto block" title='Quarantine Medical Examination by the Bureau of Quarantine (BOQ)'>                                    
-                                    <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
-                                </div>
+                                </div>                                
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload4.png"
                                         class="max-w-full h-auto mx-auto block" title='Copy of Birth Certificate.'>
                                     <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
-                                </div>                                                  
-                        </div>
-                        <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
-                           v-if="request.email && request.citizenship != 'Philippines'">                                
-                                <div class="md-w-1/4">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload5.png"
-                                        class="max-w-full h-auto mx-auto block" title='Original copy of Scholastic Records'>                                    
-                                    <input ref="file_schrecords" @change="uploadReq('schrecords',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file">
-                                </div>              
-                                <div class="md-w-1/4">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload6.png"
-                                        class="max-w-full h-auto mx-auto block" title='Recommendation letter from the Principal/Guidance Counselor/Class Adviser'>                                    
-                                    <input ref="file_recommendation" @change="uploadReq('recommendation',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
-                                </div>
-                                <div class="md-w-1/4">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload7.png"
-                                        class="max-w-full h-auto mx-auto block" title="Proof of adequate financial support to cover expenses for the student's accommodation and subsistence, as well as school dues and other incidental expenses (to be notarized by a lawyer in the country of residence) and to be authenticated by the Philippine Embassy.">                                    
-                                    <input ref="file_financial_support" @change="uploadReq('financial_support',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file">
-                                </div>                                
+                                </div>         
                                 <div class="md-w-1/4">
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload8.png"
                                         class="max-w-full h-auto mx-auto block" title='2x2 ID picture (white background with name tag below)'>                                    
                                     <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
-                                </div>
-                            </span>
-                       </div>
+                                </div>     
+                                <div class="md-w-1/3">
+                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
+                                        class="max-w-full h-auto mx-auto block">
+
+                                    <div class="w-[200px] my-3 block mx-auto">
+                                        <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                            type="file" required>
+                                    </div>
+
+                                </div>                                    
+                        </div>
+                        
                    </div>
                </div>
 
@@ -227,19 +199,7 @@ new Vue({
                         },
                         {
                             "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
-                        {
-                            "file_id": ""
-                        },
+                        },                        
                     ]
             })
             .catch((error) => {
@@ -375,21 +335,13 @@ new Vue({
                         }
                         else{
                             if (type == 'passport')
-                                this.uploads.requirements[0].file_id = data.data.data.id;
-                            if (type == 'icard')
-                                this.uploads.requirements[1].file_id = data.data.data.id;
-                            if (type == 'quarantine_med_exam')
-                                this.uploads.requirements[2].file_id = data.data.data.id;
+                                this.uploads.requirements[0].file_id = data.data.data.id;                            
                             if (type == 'birthcert')
-                                this.uploads.requirements[3].file_id = data.data.data.id;
-                            if (type == 'schrecords')
-                                this.uploads.requirements[4].file_id = data.data.data.id;
-                            if (type == 'recommendation')
-                                this.uploads.requirements[5].file_id = data.data.data.id;                            
-                            if (type == 'financial_support')
-                                this.uploads.requirements[6].file_id = data.data.data.id;
+                                this.uploads.requirements[1].file_id = data.data.data.id;                            
                             if (type == '2x2_foreign')
-                                this.uploads.requirements[7].file_id = data.data.data.id;
+                                this.uploads.requirements[2].file_id = data.data.data.id;
+                            if (type == 'school_id')
+                                this.uploads.requirements[3].file_id = data.data.data.id;
                         }
                         
                         this.uploads.slug = this.slug;
