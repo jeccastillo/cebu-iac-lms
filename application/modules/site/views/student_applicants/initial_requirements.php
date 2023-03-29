@@ -77,7 +77,7 @@
                         </div>
                         <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship != 'Philippines'">
-                                <div class="md-w-1/4">                                    
+                                <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
                                     -->
@@ -95,7 +95,7 @@
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>                                
-                                <div class="md-w-1/4">                               
+                                <div class="mb-5">                               
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload4.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Copy of Birth Certificate.'> -->
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
@@ -112,7 +112,7 @@
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>         
-                                <div class="md-w-1/4">
+                                <div class="mb-5">
                                     <h4>Scanned 2x2 Photo</h4>
                                     <img src="<?php echo $img_dir; ?>admissions/form/upload8.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='2x2 ID picture (white background with name tag below)'>                                    
@@ -120,7 +120,7 @@
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>  
-                                <div class="md-w-1/4">
+                                <div class="mb-5">
                                     <h4>Scanned School ID</h4>
                                     <img src="<?php echo $img_dir; ?>admissions/form/id.png"
                                         class="max-w-full h-auto mx-auto block" title='school id'>                                    
