@@ -639,6 +639,47 @@
                             />
                         </div>
                     </div>
+
+                    <div class="form-group mb-6">                        
+                        <div class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+                            <label for="" 
+                                >Student Type
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="mt-2">
+                                <input
+                                    type="radio"
+                                    required
+                                    name="student_type"
+                                    v-model="request.student_type"
+                                    value="freshman"
+                                />
+                                Freshman
+                            </div>
+
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="student_type"
+                                    value="transferee"
+                                    v-model="request.student_type"
+                                />
+                                Transferee
+                            </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="student_type"
+                                    value="foreign"
+                                    v-model="request.student_type"
+                                />
+                                Foreign
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-6">
                        <div class="md:w-5/5">
                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
@@ -780,6 +821,7 @@ new Vue({
             health_concerns: [],
             citizenship: 'Philippines',
             syid: "<?php echo $current_term; ?>",
+            student_type: 'freshman',            
         },
         loading_spinner: false,
         programs: [],
