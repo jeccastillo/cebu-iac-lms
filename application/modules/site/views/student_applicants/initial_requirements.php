@@ -81,7 +81,7 @@
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
                                     -->
-                                    <div class="bg-gray-700 h-48 text-gray-400">                                        
+                                    <div class="bg-gray-700 h-48 min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
                                             <p class="p-3">Scanned copy unexpired Passport (bio page and all the pages with stamp)</p>
