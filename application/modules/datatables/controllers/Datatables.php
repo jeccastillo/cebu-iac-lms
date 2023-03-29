@@ -1639,8 +1639,12 @@ class Datatables extends CI_Controller {
                     $sWhere .= " AND ";
                 }
                
+                if($table == "tb_mas_users" && $i > 3)
+                    $col = $i + 2;
+                else
+                    $col = $i;
                 
-                $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
+                $sWhere .= $aColumns[$col]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
         
                 
                 
