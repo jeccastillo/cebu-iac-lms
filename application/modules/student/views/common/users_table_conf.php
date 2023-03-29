@@ -20,8 +20,9 @@
 
     $('#users_table tfoot th').each( function () {
         var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="'+title+'" size="15" />');
+        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
     });
+
     //var table = $('#users_table').DataTable( {
     //$('#users_table').dataTable( {
     var table = $('#users_table').DataTable( {
