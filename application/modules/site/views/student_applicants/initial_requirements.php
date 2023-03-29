@@ -75,7 +75,7 @@
 
                                 </div>
                         </div>
-                        <div class="md:flex md:items-center justify-between my-[90px]"
+                        <div class="md:flex md:space-x-20 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship != 'Philippines'">
                                 <div class="md-w-1/4">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
