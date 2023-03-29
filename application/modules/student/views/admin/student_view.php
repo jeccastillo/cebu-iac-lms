@@ -177,7 +177,7 @@
                         </tr>
                     </thead>                    
                     <tbody></tbody>
-                    <tfoot>
+                    <!-- <tfoot>
                         <tr>
                             <th>id</th>
                             <th>slug</th>
@@ -187,7 +187,7 @@
                             <th>Year Level</th>
                             <th>Actions</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> -->
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->

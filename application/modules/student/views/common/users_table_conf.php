@@ -18,13 +18,16 @@
         
     });
 
-    $('#users_table tfoot th').each( function () {
-        var title = $(this).text();
-        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
-    });
+    // $('#users_table tfoot th').each( function () {
+    //     var title = $(this).text();
+    //     $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
+    // });
     $('#users_table thead tr.search td').each( function () {
         var title = $(this).text();
-        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
+        if(title != "Actions")
+            $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
+        else
+            $(this).html('');
     });
 
     //var table = $('#users_table').DataTable( {
@@ -56,7 +59,7 @@
                     "bVisible": false 
                 },
             ],
-            "aaSorting": [[2,'asc']],
+            "aaSorting": [[3,'asc']],
             "fnDrawCallback": function () {  
                 $(".trash-item").click(function(e){
                     conf = confirm("Are you sure you want to delete?");
@@ -96,14 +99,14 @@
          table.columns().every( function () {
             var that = this;
 
-            $( 'input', this.footer() ).on( 'keyup change', function () {
-                if ( that.search() !== this.value ) {
-                    that
-                        .search( this.value )
-                        //.search( "^" + $(this).val() + "$", true, false, true )
-                        .draw();
-                }
-            } );
+            // $( 'input', this.footer() ).on( 'keyup change', function () {
+            //     if ( that.search() !== this.value ) {
+            //         that
+            //             .search( this.value )
+            //             //.search( "^" + $(this).val() + "$", true, false, true )
+            //             .draw();
+            //     }
+            // } );
 
             $( 'input', this.header() ).on( 'keyup change', function () {
                 if ( that.search() !== this.value ) {
