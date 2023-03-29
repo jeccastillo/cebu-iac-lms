@@ -166,18 +166,7 @@
                             <th>Year Level</th>
                             <th>Actions</th>
                         </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>id</th>
-                            <th>slug</th>
-                            <th>Student Number</th>
-                            <th>Last Name</th>
-                            <th>Program</th>
-                            <th>Year Level</th>
-                            <th>Actions</th>
-                        </tr>
-                    </tfoot>
+                    </thead>                    
                     <tbody></tbody>
                     <tfoot>
                         <tr>
