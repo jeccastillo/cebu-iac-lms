@@ -529,6 +529,13 @@
                     </div>
                     <div class="box-body" style="padding:2rem">
                         <div>
+                            <strong><i class="fa fa-calendar margin-r-5"></i> Student Type Selected</strong>
+                            <p class="text-muted">
+                                {{request.tos}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
                             <p class="text-muted">
                                 {{request.program}}
