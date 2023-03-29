@@ -112,18 +112,33 @@
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>         
-                                <div class="mb-5">
-                                    <h4>Scanned 2x2 Photo</h4>
-                                    <img src="<?php echo $img_dir; ?>admissions/form/upload8.png" style="max-width:140px"
-                                        class="h-auto mx-auto block" title='2x2 ID picture (white background with name tag below)'>                                    
+                                <div class="mb-5">                                    
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Scanned 2x2 Photo</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
                                     <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>  
                                 <div class="mb-5">
                                     <h4>Scanned School ID</h4>
-                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
-                                        class="max-w-full h-auto mx-auto block" title='school id'>                                    
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Scanned School ID</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>                                 
                                     <input ref="file_id" @change="uploadReq('school_id',$event)"
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
