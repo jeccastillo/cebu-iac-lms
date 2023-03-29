@@ -22,7 +22,7 @@
         var title = $(this).text();
         $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
     });
-    $('#users_table thead tr.search th').each( function () {
+    $('#users_table thead tr.search td').each( function () {
         var title = $(this).text();
         $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
     });

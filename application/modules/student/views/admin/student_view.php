@@ -167,13 +167,13 @@
                             <th>Actions</th>
                         </tr>
                         <tr class="search">
-                            <th>id</th>
-                            <th>slug</th>
-                            <th>Student Number</th>
-                            <th>Last Name</th>
-                            <th>Program</th>
-                            <th>Year Level</th>
-                            <th>Actions</th>
+                            <td>id</td>
+                            <td>slug</td>
+                            <td>Student Number</td>
+                            <td>Last Name</td>
+                            <td>Program</td>
+                            <td>Year Level</td>
+                            <td>Actions</td>
                         </tr>
                     </thead>                    
                     <tbody></tbody>
