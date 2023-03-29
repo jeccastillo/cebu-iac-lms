@@ -287,7 +287,7 @@ new Vue({
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;                        
-                        this.request.student_type = this.api_data.student_type;
+                        this.request.student_type = this.api_data.tos;
                         if(this.api_data.status == "Confirmed")
                             document.location = this.base_url;
                         else
