@@ -62,6 +62,14 @@
                         <hr>
                     </div>
                     <div>
+                        <strong><i class="fa fa-book margin-r-5"></i> Application Payment Link</strong>
+                        <p class="text-muted">
+                            {{base_url+'site/admissions_student_payment/'+slug}}
+                        </p>
+                        <hr>
+                    
+                    </div>
+                    <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                         <p class="text-muted">
                             {{ request.email }}
