@@ -18,7 +18,7 @@
         
     });
 
-    $('#users_table thead th').each( function () {
+    $('#users_table tfoot th').each( function () {
         var title = $(this).text();
         $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
     });
