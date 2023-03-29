@@ -33,6 +33,7 @@
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
+            "ordering": false,
             "autoWidth": false,
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
             "aoColumnDefs":[
