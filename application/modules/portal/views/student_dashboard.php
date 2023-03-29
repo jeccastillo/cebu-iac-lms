@@ -93,7 +93,7 @@
         </div>
 
 
-        <div class="col-md-4 col-sm-8 col-xs-12">
+        <!-- <div class="col-md-4 col-sm-8 col-xs-12">
            
            <div class="small-box bg-blue">
                <div class="inner">
@@ -106,7 +106,7 @@
                <a href="<?php echo base_url(); ?>portal/accounting_summary" class="small-box-footer">
                View Transactions <i class="fa fa-arrow-circle-right"></i>
                </a>
-         </div>
+         </div> -->
        </div>
     </div>
 </div>
