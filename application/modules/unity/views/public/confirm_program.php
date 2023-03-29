@@ -278,6 +278,7 @@ new Vue({
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
                     
+                    
                     if(data.data.sections.length > 0){ 
                         this.sections = data.data.sections;
                         this.section = data.data.sections[0];
@@ -286,6 +287,7 @@ new Vue({
                     axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;                        
+                        this.request.student_type = api_data.student_type;
                         if(this.api_data.status == "Confirmed")
                             document.location = this.base_url;
                         else
