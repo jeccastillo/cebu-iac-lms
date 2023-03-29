@@ -376,7 +376,7 @@
                                     </svg>
                                     <p> <small>2x2 ID picture (white background with name tag below)</small></p>
                                     <p v-if="uploaded_paths.foreign_2x2_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.financial_filepath" target="_blank"><u>View
+                                            :href="uploaded_paths.foreign_2x2_filepath" target="_blank"><u>View
                                                 Uploaded
                                                 File</u></a></p>
 
