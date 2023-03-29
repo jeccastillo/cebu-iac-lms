@@ -205,7 +205,7 @@
                                     type="file" style="margin-bottom:2rem;">
                             </div>
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="file-upload-box text-center">
                                     <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                         width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -275,7 +275,7 @@
                                 <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam',$event)"
                                     class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     type="file" style="margin-bottom:2rem;">
-                            </div>
+                            </div> -->
                             <!-- birthcert -->
                             <div class="col-md-3">
                                 <div class="file-upload-box text-center">
@@ -313,10 +313,6 @@
                                     class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     type="file" style="margin-bottom:2rem;">
                             </div>
-                            <!-- end -->
-                        </div>
-                        <div class="row" v-if="request.email && request.citizenship != 'Philippines'">
-                            <!-- scholastic records  -->
                             <div class="col-md-3">
                                 <div class="file-upload-box text-center">
                                     <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -340,99 +336,19 @@
                                             </g>
                                         </g>
                                     </svg>
-                                    <p> <small>Original Copy of Scholastic Records</small></p>
-                                    <p v-if="uploaded_paths.scholastic_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.scholastic_filepath" target="_blank"><u>View
+                                    <p> <small>Digital Copy of Current School ID</small></p>
+                                    <p v-if="uploaded_paths.digital_school_id_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.digital_school_id_filepath" target="_blank"><u>View
                                                 Uploaded
                                                 File</u></a></p>
 
 
                                 </div>
 
-                                <input ref="file_schrecords" @change="uploadReq('schrecords',$event)"
+                                <input ref="file_id" @change="uploadReq('school_id',$event)"
                                     class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     type="file" style="margin-bottom:2rem;">
-                            </div>
-                            <!-- end -->
 
-                            <!-- recommendation -->
-                            <div class="col-md-3">
-                                <div class="file-upload-box text-center">
-                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title>1126</title>
-                                            <defs> </defs>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
-                                                    <path
-                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                    <path
-                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <p> <small>Recommendation letter from the Principal or Guidance Counselor, or class
-                                            Adviser</small></p>
-                                    <p v-if="uploaded_paths.recommendation_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.recommendation_filepath" target="_blank"><u>View
-                                                Uploaded
-                                                File</u></a></p>
-
-
-                                </div>
-
-                                <input ref="file_recommendation" @change="uploadReq('recommendation',$event)"
-                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="file" style="margin-bottom:2rem;">
-                            </div>
-                            <!-- end -->
-
-                            <!-- financial support -->
-                            <div class="col-md-3">
-                                <div class="file-upload-box text-center">
-                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title>1126</title>
-                                            <defs> </defs>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
-                                                    <path
-                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                    <path
-                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <p> <small>Proof of adequate financial support to cover expenses for the student's
-                                            accommodation and subsistence, as well as school dues and other incidental
-                                            expenses.</small></p>
-                                    <p v-if="uploaded_paths.financial_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.financial_filepath" target="_blank"><u>View
-                                                Uploaded
-                                                File</u></a></p>
-
-
-                                </div>
-
-                                <input ref="file_financial_support" @change="uploadReq('financial_support',$event)"
-                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="file" style="margin-bottom:2rem;">
                             </div>
                             <div class="col-md-3">
 
@@ -473,6 +389,128 @@
 
 
                             </div>
+                            <!-- end -->
+                        </div>
+                        <div class="row" v-if="request.email && request.citizenship != 'Philippines'">
+                            <!-- scholastic records  -->
+                            <!-- <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Original Copy of Scholastic Records</small></p>
+                                    <p v-if="uploaded_paths.scholastic_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.scholastic_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_schrecords" @change="uploadReq('schrecords',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div> -->
+                            <!-- end -->
+
+                            <!-- recommendation -->
+                            <!-- <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Recommendation letter from the Principal or Guidance Counselor, or class
+                                            Adviser</small></p>
+                                    <p v-if="uploaded_paths.recommendation_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.recommendation_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_recommendation" @change="uploadReq('recommendation',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div> -->
+                            <!-- end -->
+
+                            <!-- financial support -->
+                            <!-- <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Proof of adequate financial support to cover expenses for the student's
+                                            accommodation and subsistence, as well as school dues and other incidental
+                                            expenses.</small></p>
+                                    <p v-if="uploaded_paths.financial_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.financial_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_financial_support" @change="uploadReq('financial_support',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div> -->
+                            
                             </span>
                         </div>
                     </div>
