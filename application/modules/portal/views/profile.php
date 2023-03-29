@@ -96,8 +96,8 @@
                                  </div>
 
                                  <div class="col-md-6">
-                                            <div class="col-sm-6">Learner's Reference Number: </div>
-                                            <div class="col-sm-6"><label><input type="text" disabled="disabled" class ="form-control"  value="<?php echo $student['strLRN'];?> "></label></div>
+                                            <!-- <div class="col-sm-6">Learner's Reference Number: </div>
+                                            <div class="col-sm-6"><label><input type="text" disabled="disabled" class ="form-control"  value="<?php echo $student['strLRN'];?> "></label></div> -->
 
                                             <div class="col-sm-6">Permanent Address:</div>
                                             <div class="col-sm-6"><label><input type="text" disabled="disabled" class ="form-control" value="<?php echo $student['strAddress'];?>"></label></div>
@@ -105,7 +105,7 @@
                                             <div class="col-sm-6"><label><input type="text" disabled="disabled" class ="form-control" value="<?php echo $student['strZipCode'];?>"></label></div>
                                             <div class="col-sm-6">Contact Number: </div>
                                             <div class="col-sm-6"><label>
-                                                <input type="text" class ="form-control" disabled="disabled" value="<?php echo $student['strMobileNumber'];?>"></label></div>
+                                            <input type="text" class ="form-control" disabled="disabled" value="<?php echo $student['strMobileNumber'];?>"></label></div>
                                             <div class="col-sm-6">Email Address:</div>
                                             <div class="col-sm-6"><label><input type="text" disabled="disabled" class ="form-control" value="<?php echo $student['strEmail'];?>"></label></div>
                                             
