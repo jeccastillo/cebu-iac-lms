@@ -678,6 +678,16 @@
                                 />
                                 Foreign
                             </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    required
+                                    name="student_type"
+                                    value="second degree"
+                                    v-model="request.student_type"
+                                />
+                                Second Degree
+                            </div>
                         </div>
                     </div>
                     <div class="mb-6">
