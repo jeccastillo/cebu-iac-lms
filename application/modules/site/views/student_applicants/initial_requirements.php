@@ -127,8 +127,7 @@
                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                         type="file" required>
                                 </div>  
-                                <div class="mb-5">
-                                    <h4>Scanned School ID</h4>
+                                <div class="mb-5">                                    
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
