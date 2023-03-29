@@ -166,6 +166,15 @@
                             <th>Year Level</th>
                             <th>Actions</th>
                         </tr>
+                        <tr class="search">
+                            <th>id</th>
+                            <th>slug</th>
+                            <th>Student Number</th>
+                            <th>Last Name</th>
+                            <th>Program</th>
+                            <th>Year Level</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>                    
                     <tbody></tbody>
                     <tfoot>

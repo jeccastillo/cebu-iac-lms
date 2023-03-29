@@ -22,6 +22,10 @@
         var title = $(this).text();
         $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
     });
+    $('#users_table thead tr.search th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
+    });
 
     //var table = $('#users_table').DataTable( {
     //$('#users_table').dataTable( {
@@ -99,7 +103,19 @@
                         .draw();
                 }
             } );
+
+            $( 'input', this.header() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        //.search( "^" + $(this).val() + "$", true, false, true )
+                        .draw();
+                }
+            } );
+
         } );
+
+        
         
     });
 
