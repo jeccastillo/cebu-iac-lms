@@ -1647,7 +1647,8 @@ class Datatables extends CI_Controller {
                 if($table == "tb_mas_users" && $i  == 2){                        
                     $st = "";
                     $ct = 0;
-                    foreach($_GET['sSearch_'.$i] as $letter){
+                    $str = str_split($_GET['sSearch_'.$i]);
+                    foreach($str as $letter){
                         if($ct == 5 || $ct == 8)
                             $st .= "-";
                         $st .= $letter;
