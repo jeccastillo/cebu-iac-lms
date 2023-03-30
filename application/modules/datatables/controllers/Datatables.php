@@ -1652,8 +1652,9 @@ class Datatables extends CI_Controller {
                         if($ct == 5 || $ct == 8)
                             $st .= "-";
                         $st .= $letter;
+                        $ct++;
                     }                    
-                    $ct++;
+                    
                     $_GET['sSearch_'.$i] =  $st;
                 }
                     
