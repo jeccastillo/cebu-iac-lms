@@ -446,15 +446,7 @@ new Vue({
                             data.data.message,
                             'success'
                         )
-                        if(this.request.citizenship == "Philippines"){
-                            if (type == 'school_id')
-                                this.uploads.requirements[0].file_id = data.data.data.id;
-                            if (type == 'psa')
-                                this.uploads.requirements[1].file_id = data.data.data.id;
-                            if (type == '2x2')
-                                this.uploads.requirements[2].file_id = data.data.data.id;
-                        }
-                        else{
+                        if(this.request.tos == "foreign"){
                             if (type == 'passport')
                                 this.uploads.requirements[0].file_id = data.data.data.id;                            
                             if (type == 'birthcert')
@@ -464,6 +456,25 @@ new Vue({
                             if (type == 'school_id')
                                 this.uploads.requirements[3].file_id = data.data.data.id;
                         }
+                        else if(this.request.tos == "transferee" || this.request.tos == "second degree"){
+                            if (type == 'transcript')
+                                this.uploads.requirements[0].file_id = data.data.data.id;                            
+                            if (type == 'birthcert')
+                                this.uploads.requirements[1].file_id = data.data.data.id;                            
+                            if (type == '2x2_foreign')
+                                this.uploads.requirements[2].file_id = data.data.data.id;
+                            if (type == 'school_id')
+                                this.uploads.requirements[3].file_id = data.data.data.id;
+                        }
+                        else{
+                            if (type == 'school_id')
+                                this.uploads.requirements[0].file_id = data.data.data.id;
+                            if (type == 'psa')
+                                this.uploads.requirements[1].file_id = data.data.data.id;
+                            if (type == '2x2')
+                                this.uploads.requirements[2].file_id = data.data.data.id;
+                        }
+                        
                         
                         this.uploads.slug = this.slug;
                         this.loading_spinner = false;
