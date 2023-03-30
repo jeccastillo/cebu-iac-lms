@@ -1653,6 +1653,7 @@ class Datatables extends CI_Controller {
                             $st .= "-";
                         $st .= $letter;
                     }
+                    echo $st;
                     $_GET['sSearch_'.$i] =  $st;
                 }
                     
