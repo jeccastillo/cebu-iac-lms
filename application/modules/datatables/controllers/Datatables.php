@@ -1649,14 +1649,13 @@ class Datatables extends CI_Controller {
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){
-                        if($ct == 5 || $ct == 8)
+                        if($ct == 5 || $ct == 7)
                             $st .= "-";
                         $st .= $letter;
                         $ct++;
                     }                    
                     
-                    $_GET['sSearch_'.$i] =  $st;
-                    echo $st;
+                    $_GET['sSearch_'.$i] =  $st;                    
                 }
                     
                 $sWhere .= $aColumns[$col]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
