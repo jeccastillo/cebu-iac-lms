@@ -96,7 +96,7 @@
                                             <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
                                         </div>
                                         <div class="col-lg-3">
-                                            <p><strong>Student Number: </strong>{{ student.strStudentNumber }}</p>
+                                            <p><strong>Student Number: </strong>{{ student.strStudentNumber.replace(/-/g, '') }}</p>
                                             <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                                             <p><strong>Block Section: </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
                                             <p><strong>Address: </strong>{{ student.strAddress }}</p>                                            
