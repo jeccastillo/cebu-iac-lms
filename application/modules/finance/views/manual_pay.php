@@ -11,6 +11,9 @@
         </section>
         <hr />
         <div class="content">
+            <div class="alert alert-danger" role="alert" v-if="!uploaded_requirements">
+                This student has not submitted any requirements.
+            </div>
             <div class="row">       
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
@@ -267,6 +270,7 @@ new Vue({
         applicant_id: undefined,
         reservation_payment: undefined,
         application_payment: undefined,   
+        uploaded_requirements: false,
         refunded_payments: [],    
         amount_to_pay: 0,
         description_other: '', 
@@ -331,7 +335,9 @@ new Vue({
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
             this.request.contact_number = this.student.mobile_number;  
-            this.request.email_address = this.student.email;             
+            this.request.email_address = this.student.email;      
+            if(this.student.uploaded_requirements.length > 0)       
+                this.uploaded_requirements = true;
             
             axios.get(base_url + 'finance/manualPayData/' + this.slug)
             .then((data) => {            
