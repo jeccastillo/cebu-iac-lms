@@ -40,7 +40,7 @@
                             </span>
                        </p>
                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
-                           v-if="request.student_type == 'foreign'">
+                           v-if="request.tos == 'foreign'">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
@@ -109,7 +109,7 @@
                                                                 
                         </div>
                         <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
-                           v-else-if="request.student_type == 'transferee' || request.student_type == 'second degree'">
+                           v-else-if="request.tos == 'transferee' || request.tos == 'second degree'">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
