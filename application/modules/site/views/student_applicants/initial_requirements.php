@@ -112,7 +112,7 @@
                                 </div>     
                                                                 
                         </div>
-                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
+                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between mb-[90px] mt-[40px]"
                            v-else-if="request.tos == 'transferee' || request.tos == 'second degree'">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
@@ -181,7 +181,7 @@
                                 </div>     
                                                                 
                         </div>
-                        <div class="grid grid-cols-3 gap-4 md:items-center justify-between my-[90px]"
+                        <div class="grid grid-cols-3 gap-4 md:items-center justify-between mb-[90px] mt-[40px]"
                            v-else>                            
                                 <div class="md-w-1/3">
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
