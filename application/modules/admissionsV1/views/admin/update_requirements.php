@@ -39,130 +39,9 @@
                                 <br />
                         </h3>
 
-                        <div class="row" style="margin-top:3rem"
-                            v-if="request.email && request.citizenship == 'Philippines'">
-
-                            <!-- 2x2 -->
-                            <div class="col-md-4">
-                                <div class="file-upload-box text-center">
-                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title>1126</title>
-                                            <defs> </defs>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
-                                                    <path
-                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                    <path
-                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <p> <small>Digital Copy of 2x2 Photo</small></p>
-                                    <p v-if="uploaded_paths.digital_2x2_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.digital_2x2_filepath" target="_blank"><u>View
-                                                Uploaded
-                                                File</u></a></p>
-                                </div>
-
-                                <input ref="file_2x2" @change="uploadReq('2x2',$event)"
-                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="file" style="margin-bottom:2rem;">
-                            </div>
-                            <!-- end -->
-
-                            <!-- PSA / NSO -->
-                            <div class="col-md-4">
-                                <div class="file-upload-box text-center">
-                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title>1126</title>
-                                            <defs> </defs>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
-                                                    <path
-                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                    <path
-                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <p> <small>Digital Copy of PSA or NSO Birth Certificate</small></p>
-                                    <p v-if="uploaded_paths.digital_psa_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.digital_psa_filepath" target="_blank"><u>View
-                                                Uploaded
-                                                File</u></a></p>
-
-
-                                </div>
-
-                                <input ref="file_nso" @change="uploadReq('psa',$event)"
-                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="file" style="margin-bottom:2rem;">
-                            </div>
-                            <!-- end -->
-
-                            <!-- school id -->
-                            <div class="col-md-4">
-                                <div class="file-upload-box text-center">
-                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title>1126</title>
-                                            <defs> </defs>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
-                                                    <path
-                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                    <path
-                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
-                                                        class="si-glyph-fill"> </path>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <p> <small>Digital Copy of Current School ID</small></p>
-                                    <p v-if="uploaded_paths.digital_school_id_filepath"><a class="font-weight-bold"
-                                            :href="uploaded_paths.digital_school_id_filepath" target="_blank"><u>View
-                                                Uploaded
-                                                File</u></a></p>
-
-
-                                </div>
-
-                                <input ref="file_id" @change="uploadReq('school_id',$event)"
-                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="file" style="margin-bottom:2rem;">
-
-                            </div>
-                            <!-- end -->
-                        </div>
-
-
                         <!-- Not PH  -->
                         <div class="row" style="margin-top:5rem;"
-                            v-if="request.email && request.citizenship != 'Philippines'">
+                            v-if="request.tos == 'foreign'">
                             <div class="col-md-3">
 
                                 <div class="file-upload-box text-center">
@@ -391,6 +270,355 @@
                             </div>
                             <!-- end -->
                         </div>
+                        <!-- Not PH  -->
+                        <div class="row" style="margin-top:5rem;"
+                            v-else-if="request.tos == 'transferee' || request.tos == 'second degree'">
+                            <div class="col-md-3">
+
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Transcript of Records.</small></p>
+                                    <p v-if="uploaded_paths.transcript_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.transcript_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="transcript" @change="uploadReq('transcript',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div>
+
+                            <!-- <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Copy of Alien Certificate of Registration (i-CARD) if any</small></p>
+                                    <p v-if="uploaded_paths.acr_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.acr_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+                                </div>
+
+                                <input ref="file_acr" @change="uploadReq('acr',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Quarantine Medical Examination by the Bureau of Quarantine</small></p>
+                                    <p v-if="uploaded_paths.acr_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.acr_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+                                </div>
+
+                                <input ref="file_quarantine" @change="uploadReq('quarantine_med_exam',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div> -->
+                            <!-- birthcert -->
+                            <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Copy of Birth Certificate.</small></p>
+                                    <p v-if="uploaded_paths.birth_certificate_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.birth_certificate_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Digital Copy of Current School ID</small></p>
+                                    <p v-if="uploaded_paths.digital_school_id_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.digital_school_id_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>2x2 ID picture (white background with name tag below)</small></p>
+                                    <p v-if="uploaded_paths.foreign_2x2_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.foreign_2x2_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+
+
+                            </div>
+                            <!-- end -->
+                        </div>
+                        <div class="row" style="margin-top:3rem"
+                            v-else>
+
+                            <!-- 2x2 -->
+                            <div class="col-md-4">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Digital Copy of 2x2 Photo</small></p>
+                                    <p v-if="uploaded_paths.digital_2x2_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.digital_2x2_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+                                </div>
+
+                                <input ref="file_2x2" @change="uploadReq('2x2',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div>
+                            <!-- end -->
+
+                            <!-- PSA / NSO -->
+                            <div class="col-md-4">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Digital Copy of PSA or NSO Birth Certificate</small></p>
+                                    <p v-if="uploaded_paths.digital_psa_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.digital_psa_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_nso" @change="uploadReq('psa',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+                            </div>
+                            <!-- end -->
+
+                            <!-- school id -->
+                            <div class="col-md-4">
+                                <div class="file-upload-box text-center">
+                                    <svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                        width="60px" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="si-glyph si-glyph-file-upload" fill="#034fb3">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <title>1126</title>
+                                            <defs> </defs>
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(1.000000, 1.000000)" fill="#034fb3">
+                                                    <path
+                                                        d="M14,8.047 L14,12.047 L2,12.047 L2,8.047 L0,8.047 L0,15 L15.969,15 L15.969,8.047 L14,8.047 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                    <path
+                                                        d="M7.997,0 L5,3.963 L7.016,3.984 L7.016,8.969 L8.953,8.969 L8.953,3.984 L10.953,3.984 L7.997,0 Z"
+                                                        class="si-glyph-fill"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p> <small>Digital Copy of Current School ID</small></p>
+                                    <p v-if="uploaded_paths.digital_school_id_filepath"><a class="font-weight-bold"
+                                            :href="uploaded_paths.digital_school_id_filepath" target="_blank"><u>View
+                                                Uploaded
+                                                File</u></a></p>
+
+
+                                </div>
+
+                                <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                    class="bg-gray-200 form-control appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="file" style="margin-bottom:2rem;">
+
+                            </div>
+                            <!-- end -->
+                        </div>
+
+
+                        
                         <div class="row" v-if="request.email && request.citizenship != 'Philippines'">
                             <!-- scholastic records  -->
                             <!-- <div class="col-md-3">
@@ -595,7 +823,8 @@ new Vue({
             birth_certificate_filepath: "",
             scholastic_filepath: "",
             recommendation_filepath: "",
-            foreign_2x2_filepath: ""
+            foreign_2x2_filepath: "",
+            transcript_filepath:""
         },
         programs: [],
         programs_group: [],
@@ -659,6 +888,7 @@ new Vue({
                         this.uploaded_paths.passport_filepath = this.request.uploaded_requirements[i].path;
                     }
 
+
                     // if (this.request.uploaded_requirements[i].type == 'arc') {
                     //     this.uploads.requirements[1].file_id = this.request.uploaded_requirements[i].id;
                     //     this.uploaded_paths.acr_filepath = this.request.uploaded_requirements[i].path;
@@ -692,6 +922,11 @@ new Vue({
                     if (this.request.uploaded_requirements[i].type == '2x2_foreign') {
                         this.uploads.requirements[5].file_id = this.request.uploaded_requirements[i].id;
                         this.uploaded_paths.foreign_2x2_filepath = this.request.uploaded_requirements[i].path;
+                    }
+
+                    if (this.request.uploaded_requirements[i].type == 'transcript') {
+                        this.uploads.requirements[6].transcript = this.request.uploaded_requirements[i].id;
+                        this.uploaded_paths.transcript = this.request.uploaded_requirements[i].path;
                     }
                 }
                 
@@ -734,7 +969,9 @@ new Vue({
                 file = this.$refs.file_financial_support.files[0];
             } else if (type == '2x2_foreign') {
                 file = this.$refs.file_2x2_foreign.files[0];
-            } else {
+            } else if (type == 'transcript') {
+                file = this.$refs.transcript.files[0];
+            }else {
                 file = '';
             }
 
@@ -791,39 +1028,24 @@ new Vue({
                                     }
 
 
-                                    if (type == 'arc') {
-                                        this.uploads.requirements[1].file_id = data.data.data.id;
-                                        this.uploaded_paths.acr_filepath = data.data.data.path;
-                                    }
-
-                                    if (type == 'qme') {
-                                        this.uploads.requirements[2].file_id = data.data.data.id;
-                                        this.uploaded_paths.qme_filepath = data.data.data.path;
-                                    }
+                               
 
                                     if (type == 'birthcert') {
-                                        this.uploads.requirements[3].file_id = data.data.data.id;
+                                        this.uploads.requirements[4].file_id = data.data.data.id;
                                         this.uploaded_paths.birth_certificate_filepath = data.data.data.path;
                                     }
 
-                                    if (type == 'schrecords') {
-                                        this.uploads.requirements[4].file_id = data.data.data.id;
-                                        this.uploaded_paths.scholastic_filepath = data.data.data.path;
-                                    }
-
-                                    if (type == 'recommendation') {
-                                        this.uploads.requirements[5].file_id = data.data.data.id;
-                                        this.uploaded_paths.recommendation_filepath = data.data.data.path;
-                                    }
-
-                                    if (type == 'financial_support') {
-                                        this.uploads.requirements[6].file_id = data.data.data.id;
-                                        this.uploaded_paths.financial_filepath = data.data.data.path;
-                                    }
+                                 
+                                    
 
                                     if (type == '2x2_foreign') {
-                                        this.uploads.requirements[7].file_id = data.data.data.id;
+                                        this.uploads.requirements[5].file_id = data.data.data.id;
                                         this.uploaded_paths.foreign_2x2_filepath = data.data.data.path;
+                                    }
+
+                                    if (type == 'transcript') {
+                                        this.uploads.requirements[6].file_id = data.data.data.id;
+                                        this.uploaded_paths.transcript = data.data.data.path;
                                     }
 
 
