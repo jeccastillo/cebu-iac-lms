@@ -104,7 +104,7 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;color:#666;">
                         <span style="color:#fff;">RECEIVED fr</span>
-                        <?php echo $student_id; ?> <?php echo $student_name; ?>                        
+                        <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php echo $student_name; ?>                        
                         
                     </td>
                 </tr>
