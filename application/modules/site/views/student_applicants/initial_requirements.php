@@ -46,7 +46,7 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Digital Copy of 2x2 Photo</p>
+                                                <p class="p-3">Digital/Scanned Copy of 2x2 Photo</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
                                                 </h2>
@@ -59,26 +59,36 @@
                                     
                                 </div>
                                 <div class="md-w-1/3">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/nso.png"
-                                        class="max-w-full h-auto mx-auto block">
-
-                                    <div class="w-[200px] my-3 block mx-auto">
-                                        <input ref="file_nso" @change="uploadReq('psa',$event)"
-                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                            type="file" required>
-                                    </div>
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned Copy of PSA or NSO Birth Certificate</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>    
+                                    <input ref="file_nso" @change="uploadReq('psa',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                
                                 </div>
 
                                 <div class="md-w-1/3">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/id.png"
-                                        class="max-w-full h-auto mx-auto block">
-
-                                    <div class="w-[200px] my-3 block mx-auto">
-                                        <input ref="file_id" @change="uploadReq('school_id',$event)"
-                                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                            type="file" required>
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned of current school ID</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
                                     </div>
-
+                                    <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>                                    
                                 </div>
                         </div>
                         <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
@@ -90,7 +100,7 @@
                                     <div class="bg-gray-700 h-48 min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto md-w-full px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Scanned copy unexpired Passport (bio page and all the pages with stamp)</p>
+                                                <p class="p-3">Digital/Scanned copy unexpired Passport (bio page and all the pages with stamp)</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">Passport</span>
                                                 </h2>
@@ -107,7 +117,7 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Scanned Birth Certificate</p>
+                                                <p class="p-3">Digital/Scanned copy of your Birth Certificate</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
                                                 </h2>
@@ -122,7 +132,7 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Scanned 2x2 Photo</p>
+                                                <p class="p-3">Digital/Scanned 2x2 Photo</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
                                                 </h2>
