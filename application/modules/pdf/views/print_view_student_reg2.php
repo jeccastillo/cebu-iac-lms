@@ -81,7 +81,7 @@ $html .= '<tr>
         <td width="80px">'.$snum_label.'<br />NAME<br />PROGRAM
         </td>
         <td width="200px" >' 
-            . $snum.'<br />'
+            . preg_replace("/[^a-zA-Z0-9]+/", "", $snum).'<br />'
             . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'<br />'
             .$student['strProgramCode'] .
         '</td>
