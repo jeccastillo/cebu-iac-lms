@@ -40,12 +40,19 @@
                             </span>
                        </p>
 
-                        <div class="md:flex md:space-x-10 md:items-center justify-between my-[90px]"
+                        <div class="grid grid-cols-3 gap-4 md:items-center justify-between my-[90px]"
                            v-if="request.email && request.citizenship == 'Philippines'">                            
                                 <div class="md-w-1/3">
-                                    <img src="<?php echo $img_dir; ?>admissions/form/2x2.png"
-                                        class="max-w-full h-auto mx-auto block">
-
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital Copy of 2x2 Photo</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>     
                                     <div class="w-[200px] my-3 block mx-auto">
                                         <input ref="file_2x2" @change="uploadReq('2x2',$event)"
                                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
