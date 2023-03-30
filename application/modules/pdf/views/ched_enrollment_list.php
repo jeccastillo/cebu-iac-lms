@@ -101,7 +101,7 @@ foreach($students as $student): ?>
     
     <tr style="line-height:12px;text-align:center;">
         <td style="font-size:8px;"><?php echo $i == 1?$num:""; ?></td>
-        <td style="font-size:8px;"><?php echo $i == 1?$student['strStudentNumber']:''; ?></td>
+        <td style="font-size:8px;"><?php echo $i == 1?preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']):''; ?></td>
         <td style="font-size:8px;text-align:left;"> <?php echo $i == 1?strtoupper($name):''; ?></td>        
         <td style="font-size:8px;"><?php echo $i == 1?$student['intYearLevel']:''; ?></td>
         <td style="font-size:8px;"><?php echo $i == 1?$student['enumGender']:''; ?></td>
