@@ -925,8 +925,8 @@ new Vue({
                     }
 
                     if (this.request.uploaded_requirements[i].type == 'transcript') {
-                        this.uploads.requirements[6].transcript = this.request.uploaded_requirements[i].id;
-                        this.uploaded_paths.transcript = this.request.uploaded_requirements[i].path;
+                        this.uploads.requirements[6].file_id = this.request.uploaded_requirements[i].id;
+                        this.uploaded_paths.transcript_filepath = this.request.uploaded_requirements[i].path;
                     }
                 }
                 
@@ -1027,14 +1027,12 @@ new Vue({
                                         this.uploaded_paths.passport_filepath = data.data.data.path;
                                     }
 
-
                                
 
                                     if (type == 'birthcert') {
                                         this.uploads.requirements[4].file_id = data.data.data.id;
                                         this.uploaded_paths.birth_certificate_filepath = data.data.data.path;
                                     }
-
                                  
                                     
 
