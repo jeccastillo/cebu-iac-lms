@@ -39,60 +39,8 @@
                                 PS: We also sent you an <span class="font-bold">email</span> with the link to this page if you want to continue later.
                             </span>
                        </p>
-
-                        <div class="grid grid-cols-3 gap-4 md:items-center justify-between my-[90px]"
-                           v-if="request.email && request.citizenship == 'Philippines'">                            
-                                <div class="md-w-1/3">
-                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
-                                        <div class="container mx-auto px-5 py-10">
-                                            <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Digital/Scanned Copy of 2x2 Photo</p>
-                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                    <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
-                                                </h2>
-                                            </div>
-                                        </div>                                        
-                                    </div>                                     
-                                    <input ref="file_2x2" @change="uploadReq('2x2',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
-                                    
-                                </div>
-                                <div class="md-w-1/3">
-                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
-                                        <div class="container mx-auto px-5 py-10">
-                                            <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Digital/Scanned Copy of PSA or NSO Birth Certificate</p>
-                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
-                                                </h2>
-                                            </div>
-                                        </div>                                        
-                                    </div>    
-                                    <input ref="file_nso" @change="uploadReq('psa',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>
-                                
-                                </div>
-
-                                <div class="md-w-1/3">
-                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
-                                        <div class="container mx-auto px-5 py-10">
-                                            <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Digital/Scanned of current school ID</p>
-                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
-                                                </h2>
-                                            </div>
-                                        </div>                                        
-                                    </div>
-                                    <input ref="file_id" @change="uploadReq('school_id',$event)"
-                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                        type="file" required>                                    
-                                </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
-                           v-if="request.email && request.citizenship != 'Philippines'">
+                       <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
+                           v-if="request.student_type != 'foreign'">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
@@ -160,6 +108,127 @@
                                 </div>     
                                                                 
                         </div>
+                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between my-[90px]"
+                           v-else-if="request.student_type != 'transferee' || request.student_type != 'second degree'">
+                                <div class="mb-5">                                    
+                                    <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
+                                        class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
+                                    -->
+                                    <div class="bg-gray-700 h-48 min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto md-w-full px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Scanned copy Transcript of Records (TOR) or Copy of Grades</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">TOR or COG</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <input ref="transcript" @change="uploadReq('transcript',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>                                
+                                <div class="mb-5">                               
+                                    <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload4.png" style="max-width:140px"
+                                        class="h-auto mx-auto block" title='Copy of Birth Certificate.'> -->
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned copy of your Birth Certificate</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <input ref="file_birthcert" @change="uploadReq('birthcert',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>         
+                                <div class="mb-5">                                    
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned 2x2 Photo</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <input ref="file_2x2_foreign" @change="uploadReq('2x2_foreign',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>  
+                                <div class="mb-5">                                    
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Scanned School ID</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>                                 
+                                    <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                </div>     
+                                                                
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 md:items-center justify-between my-[90px]"
+                           v-else>                            
+                                <div class="md-w-1/3">
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned Copy of 2x2 Photo</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">2x2 Photo</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>                                     
+                                    <input ref="file_2x2" @change="uploadReq('2x2',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                    
+                                </div>
+                                <div class="md-w-1/3">
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned Copy of PSA or NSO Birth Certificate</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Birth Certificate</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>    
+                                    <input ref="file_nso" @change="uploadReq('psa',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>
+                                
+                                </div>
+
+                                <div class="md-w-1/3">
+                                    <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
+                                        <div class="container mx-auto px-5 py-10">
+                                            <div class="relative rounded-md border border-gray-600">
+                                                <p class="p-3">Digital/Scanned of current school ID</p>
+                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
+                                                </h2>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <input ref="file_id" @change="uploadReq('school_id',$event)"
+                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                        type="file" required>                                    
+                                </div>
+                        </div>
+                        
                         
                    </div>
                </div>
@@ -347,9 +416,13 @@ new Vue({
                 file = this.$refs.file_financial_support.files[0];
             } else if (type == '2x2_foreign') {
                 file = this.$refs.file_2x2_foreign.files[0];                
-            }else {
+            }else if (type == 'transcript') {
+                file = this.$refs.transcript.files[0];                
+            }
+            else {
                 file = '';
             }
+            
 
             formDataUp.append("file", file);
             formDataUp.append("type", type);
