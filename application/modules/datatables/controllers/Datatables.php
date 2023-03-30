@@ -1656,6 +1656,7 @@ class Datatables extends CI_Controller {
                     }                    
                     
                     $_GET['sSearch_'.$i] =  $st;
+                    echo $st;
                 }
                     
                 $sWhere .= $aColumns[$col]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
