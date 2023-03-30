@@ -1760,6 +1760,11 @@ class Datatables extends CI_Controller {
                     /* Special output formatting for 'version' column */
                     $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
                 }
+                else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
+                {
+                    /* Special output formatting for 'version' column */
+                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->$aColumns[$i]);
+                }
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_users')
                 {
                     
