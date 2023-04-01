@@ -299,6 +299,9 @@ new Vue({
                 {
                     "file_id": ""
                 },
+                {
+                    "file_id": ""
+                },
             ]
         },
         slug: '<?php echo $this->uri->segment('3'); ?>'
