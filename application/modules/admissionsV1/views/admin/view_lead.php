@@ -476,6 +476,13 @@
                             </p>
                             <hr>
                         </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i> Student Type</strong>
+                            <p class="text-muted">
+                                {{request.tos}}
+                            </p>
+                            <hr>
+                        </div>
                     </div>
                     <!-- <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>
@@ -535,14 +542,7 @@
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Program</h3>
                     </div>
-                    <div class="box-body" style="padding:2rem">
-                        <div>
-                            <strong><i class="fa fa-user margin-r-5"></i> Student Type Selected</strong>
-                            <p class="text-muted">
-                                {{request.tos}}
-                            </p>
-                            <hr>
-                        </div>
+                    <div class="box-body" style="padding:2rem">                        
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
                             <p class="text-muted">
