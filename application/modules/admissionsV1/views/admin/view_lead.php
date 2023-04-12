@@ -602,7 +602,7 @@
                                     <td>{{payment.request_id}}</td>
                                     <td>₱ {{payment.total_amount_due}}</td>
                                     <td>{{payment.status}}</td>
-                                    <td>{{payment.status == 'Paid' ? payment.date_paid : payment.date_expired  }}</td>
+                                    <td>{{payment.status == 'Paid' ? (payment.date_paid ? payment.date_paid : payment.updated_at) : payment.date_expired  }}</td>
                                 </tr>
                             </tbody>
                         </table>
