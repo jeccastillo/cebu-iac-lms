@@ -95,17 +95,15 @@
 
                     <div>
                         <strong><i class="fa fa-location-arrow margin-r-5"></i> Address</strong>
-                        <p class="text-muted">
-                            {{request.address}}
-                        </p>
+                        <textarea class="form-control" v-model="request.address" @blur="updateField('address',$event)"></textarea>                            
+                        
                         <hr>
                     </div>
 
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Birthday</strong>
-                        <p class="text-muted">
-                            <input type="text" class="form-control" v-model="request.date_of_birth" @blur="updateField('date_of_birth',$event)" />                            
-                        </p>
+                        <input type="text" class="form-control" v-model="request.date_of_birth" @blur="updateField('date_of_birth',$event)" />                            
+                        
                         <hr>
                     </div>
 
