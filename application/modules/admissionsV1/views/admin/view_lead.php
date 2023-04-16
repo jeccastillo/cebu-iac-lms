@@ -58,7 +58,22 @@
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
                             {{request.first_name + ' ' + request.last_name}}
-                        </p>
+                        </p>                        
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-book margin-r-5"></i>Edit First Name</strong>                                                
+                        <input type="text" class="form-control" v-model="request.first_name" @blur="updateField('first_name',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-book margin-r-5"></i>Edit Last Name</strong>                                                
+                        <input type="text" class="form-control" v-model="request.last_name" @blur="updateField('last_name',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-book margin-r-5"></i>Edit Middle Name</strong>                                                
+                        <input type="text" class="form-control" v-model="request.middle_name" @blur="updateField('middle_name',$event)" />
                         <hr>
                     </div>
                     <div>
@@ -71,25 +86,19 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                        <p class="text-muted">
-                            {{ request.email }}
-                        </p>
+                        <input type="text" class="form-control" v-model="request.email" @blur="updateField('email',$event)" />                        
                         <hr>
                     </div>
 
                     <div>
-                        <strong><i class="fa fa-phone margin-r-5"></i> Mobile Number</strong>
-                        <p class="text-muted">
-                            {{request.mobile_number}}
-                        </p>
+                        <strong><i class="fa fa-phone margin-r-5"></i> Mobile Number</strong>                        
+                        <input type="text" class="form-control" v-model="request.mobile_number" @blur="updateField('mobile_number',$event)" />
                         <hr>
                     </div>
 
                     <div>
-                        <strong><i class="fa fa-phone-square margin-r-5"></i> Telephone Number</strong>
-                        <p class="text-muted">
-                            {{request.tel_number}}
-                        </p>
+                        <strong><i class="fa fa-phone-square margin-r-5"></i> Telephone Number</strong>                        
+                        <input type="text" class="form-control" v-model="request.tel_number" @blur="updateField('tel_number',$event)" />
                         <hr>
                     </div>
 
