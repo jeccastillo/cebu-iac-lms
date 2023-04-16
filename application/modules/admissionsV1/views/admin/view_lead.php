@@ -104,7 +104,7 @@
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Birthday</strong>
                         <p class="text-muted">
-                            {{request.date_of_birth}}
+                            <input type="text" class="form-control" v-model="request.date_of_birth" @blur="updateField('date_of_birth',$event)" />                            
                         </p>
                         <hr>
                     </div>
