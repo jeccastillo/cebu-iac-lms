@@ -1050,7 +1050,7 @@ class Pdf extends CI_Controller {
               
         $active_sem = $this->data_fetcher->get_active_sem();
         $this->data['sy'] = $active_sem;
-        $students = $this->data_fetcher->getClassListStudents(0,$active_sem['intID']);                        
+        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID']);                        
       
                                
        
