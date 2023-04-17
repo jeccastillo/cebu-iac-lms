@@ -57,24 +57,26 @@
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
-                            {{request.first_name + ' ' + request.last_name}}
+                            {{request.first_name + ' ' + request.last_name}} <button class="btn btn-primary" @click="showEdit">Edit</button>
                         </p>                        
                         <hr>
                     </div>
-                    <div>
-                        <strong><i class="fa fa-book margin-r-5"></i>Edit First Name</strong>                                                
-                        <input type="text" class="form-control" v-model="request.first_name" @blur="updateField('first_name',$event)" />
-                        <hr>
-                    </div>
-                    <div>
-                        <strong><i class="fa fa-book margin-r-5"></i>Edit Last Name</strong>                                                
-                        <input type="text" class="form-control" v-model="request.last_name" @blur="updateField('last_name',$event)" />
-                        <hr>
-                    </div>
-                    <div>
-                        <strong><i class="fa fa-book margin-r-5"></i>Edit Middle Name</strong>                                                
-                        <input type="text" class="form-control" v-model="request.middle_name" @blur="updateField('middle_name',$event)" />
-                        <hr>
+                    <div id="edit-name">
+                        <div>
+                            <strong><i class="fa fa-book margin-r-5"></i>Edit First Name</strong>                                                
+                            <input type="text" class="form-control" v-model="request.first_name" @blur="updateField('first_name',$event)" />
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-book margin-r-5"></i>Edit Last Name</strong>                                                
+                            <input type="text" class="form-control" v-model="request.last_name" @blur="updateField('last_name',$event)" />
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-book margin-r-5"></i>Edit Middle Name</strong>                                                
+                            <input type="text" class="form-control" v-model="request.middle_name" @blur="updateField('middle_name',$event)" />
+                            <hr>
+                        </div>
                     </div>
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Application Payment Link</strong>
