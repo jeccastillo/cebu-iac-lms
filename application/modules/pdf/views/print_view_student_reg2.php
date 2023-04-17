@@ -56,9 +56,8 @@
             </tr>
             </table>
             <table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>            
-                <td width="30%" align="center" style="text-align:center;vertical-align: middle;border-bottom:1px solid #333"></td>  
-                <td width="70%" style="text-align: center; border-bottom:1px solid #333">             
+            <tr>                            
+                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">ASSESSMENT/REGISTRATION FORM</font>
                 </td>
             </tr>        
