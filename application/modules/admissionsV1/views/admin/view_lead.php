@@ -57,11 +57,11 @@
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
-                            {{request.first_name + ' ' + request.last_name}} <button class="btn btn-primary" @click="showEdit">Edit</button>
+                            {{request.first_name + ' ' + request.last_name}} <button class="btn btn-primary" @click="showEdit">{{show_edit_title}}</button>
                         </p>                        
                         <hr>
                     </div>
-                    <div id="edit-name">
+                    <div v-if="show_edit_name">
                         <div>
                             <strong><i class="fa fa-book margin-r-5"></i>Edit First Name</strong>                                                
                             <input type="text" class="form-control" v-model="request.first_name" @blur="updateField('first_name',$event)" />
@@ -764,6 +764,8 @@ new Vue({
         update_status: "",
         status_remarks: "",
         sched:"",
+        show_edit_name: false,
+        show_edit_title: "Edit",
         date_selected: "",        
         date_selected_formatted: "",
         programs: [],
@@ -813,6 +815,16 @@ new Vue({
     },
 
     methods: {
+        showEdit: function(){
+            if(this.show_edit_name){
+                this.show_edit_name = false;
+                this.show_edit_title = "Edit";
+            }
+            else{
+                this.show_edit_name = true;
+                this.show_edit_title = "Hide";
+            }
+        },
         checkTime: function() {
 
             if (this.request.from && this.request.to) {
