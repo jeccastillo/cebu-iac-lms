@@ -49,9 +49,9 @@
             <tr>
                 <td width="20%" align="center" style="text-align:center;vertical-align: middle"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="120" height="114"/></td>
                 <td width="80%" style="text-align: center;line-height:1;vertical-align: middle">  
-                    <br /><br /><br /><br />
+                    <br /><br /><br /><br /><br /><br />
                     <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
+                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font>
                 </td>  
             </tr>
             </table>
