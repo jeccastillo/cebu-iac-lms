@@ -57,7 +57,7 @@
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Name</strong>
                         <p class="text-muted">
-                            {{request.first_name + ' ' + request.last_name}} <button class="btn btn-primary" @click="showEdit">{{show_edit_title}}</button>
+                            {{request.first_name + ' ' + request.last_name}} <button v-if="request.status !=  'Game Changer'" class="btn btn-primary" @click="showEdit">{{show_edit_title}}</button>
                         </p>                        
                         <hr>
                     </div>
