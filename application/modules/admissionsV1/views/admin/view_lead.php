@@ -88,13 +88,19 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                        <input type="text" class="form-control" v-model="request.email" @blur="updateField('email',$event)" />                        
+                        <input type="text" v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'" class="form-control" v-model="request.email" @blur="updateField('email',$event)" />                        
+                        <p v-else class="text-muted">
+                            {{request.email}}
+                        </p>
                         <hr>
                     </div>
 
                     <div>
                         <strong><i class="fa fa-phone margin-r-5"></i> Mobile Number</strong>                        
-                        <input type="text" class="form-control" v-model="request.mobile_number" @blur="updateField('mobile_number',$event)" />
+                        <input v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'" type="text" class="form-control" v-model="request.mobile_number" @blur="updateField('mobile_number',$event)" />
+                        <p v-else class="text-muted">
+                            {{request.mobile_number}}
+                        </p>
                         <hr>
                     </div>
 
