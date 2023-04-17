@@ -54,8 +54,8 @@
                 </td>  
             </tr>
             <tr>            
-                <td colspan = "2" width="100%" style="text-align: center;">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold; border-bottom:1px solid #333">ASSESSMENT/REGISTRATION FORM</font>
+                <td colspan = "2" width="100%" style="text-align: center; border-bottom:1px solid #333">             
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">ASSESSMENT/REGISTRATION FORM</font>
                 </td>
             </tr>        
            ';
