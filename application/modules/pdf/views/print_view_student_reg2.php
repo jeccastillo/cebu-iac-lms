@@ -47,12 +47,14 @@
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
             <tr>
-                <td width="20%" align="center" style="text-align:center;vertical-align: middle; border-bottom:1px solid #333"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="154" height="146"/></td>
-                <td colspan = "3" width="80%" style="text-align: center;line-height:1; border-bottom:1px solid #333">             
+                <td width="20%" align="center" style="text-align:center;vertical-align: middle;><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="154" height="146"/></td>
+                <td colspan = "3" width="80%" style="text-align: center;line-height:1;">             
                     <font style="font-family:Calibri Light; font-size: 14;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br /><br />   
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">ASSESSMENT/REGISTRATION FORM</font>          
+                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br /><br />                               
                 </td>  
+            </tr>
+            <tr>
+            <td colspan = "3" style="font-weight: bold;text-align:center; font-size:11; border-bottom:1px solid #333;">ASSESSMENT/REGISTRATION FORM</td>
             </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;">             
