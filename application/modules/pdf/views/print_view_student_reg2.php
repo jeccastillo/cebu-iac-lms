@@ -47,7 +47,7 @@
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
             <tr>
-                <td width="20%" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="100" height="90"/></td>
+                <td width="20%" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="100" height="95"/></td>
                 <td width="80%" style="text-align: center;line-height:1;vertical-align: middle">  
                     <br /><br /><br />
                     <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
