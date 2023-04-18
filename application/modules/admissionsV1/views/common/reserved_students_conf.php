@@ -2,8 +2,7 @@
 ?>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-    var filter_status = $("#status_filter").val();
+$(document).ready(function() {    
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
@@ -12,7 +11,7 @@ $(document).ready(function() {
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
             var s_column = "last_name";                        
-            filter_status = $("#status_filter").val();
+            filter_status = 'Reserved';
             switch(data.order[0].column){
                 case 1:
                     s_column = "created_at";

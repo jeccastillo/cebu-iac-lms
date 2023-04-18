@@ -54,6 +54,9 @@ class AdmissionsV1 extends CI_Controller {
         
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
         $this->data['page'] = "subjects";
+
+        $sem = $this->data_fetcher->get_active_sem();        
+        $this->data['current_sem'] = $sem['intID'];
     }
     
     
@@ -68,6 +71,23 @@ class AdmissionsV1 extends CI_Controller {
             $this->load->view("admin/leads_view",$this->data);
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/subjects_conf",$this->data); 
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
+
+    public function view_reserved_leads()
+    {
+        if($this->faculty_logged_in())
+        {
+            $this->data['page'] = "view_leads";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/reserved_students",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/reserved_students_conf",$this->data); 
             //print_r($this->data['classlist']);
         }
         else
