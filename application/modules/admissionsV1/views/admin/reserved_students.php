@@ -5,8 +5,8 @@
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
-            <li class="active">View All Leads</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Applicants</a></li>
+            <li class="active">Reserved</li>
         </ol>
         <hr />        
     </section>
@@ -17,7 +17,7 @@
         </div>
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Student Applicants</h3>
+                <h3 class="box-title">Reserved List</h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
