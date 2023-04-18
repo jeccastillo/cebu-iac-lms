@@ -81,7 +81,7 @@ class AdmissionsV1 extends CI_Controller {
     {
         if($this->faculty_logged_in())
         {
-            $this->data['page'] = "view_leads";
+            $this->data['page'] = "view_reserved";
             $this->data['opentree'] = "leads";
             //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
             $this->load->view("common/header",$this->data);
