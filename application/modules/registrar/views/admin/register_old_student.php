@@ -144,6 +144,7 @@ new Vue({
         school_years: [],
         term_type: 'Term',
         tuition_data: undefined,
+        applicant_data: undefined,
         total_units: 0,
         subjectList: '',
         reg_status: null,
@@ -177,7 +178,8 @@ new Vue({
         if(this.id != 0){
         
             this.header_title = 'Edit Tuition Year';
-            //this.loader_spinner = true;
+           
+
             axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
@@ -194,7 +196,18 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
-                    this.loader_spinner = false;
+                    
+
+                     //this.loader_spinner = true;
+                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug)
+                    .then((data) => {
+                        this.applicant_data = data.data.data;
+                        this.loader_spinner = false;                        
+                        this.loader_spinner = false;    
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
                 })
                 .catch((error) => {
                     console.log(error);

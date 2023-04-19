@@ -429,8 +429,7 @@ class Registrar extends CI_Controller {
                 $stud['strStudentNumber'] = $tempNum = $this->data_fetcher->generateNewStudentNumber();
 
             $stud['intStudentYear'] = $academic_standing['year']; 
-            $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);
-
+            $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);            
 
             $ledger['student_id'] = $post['studentID'];
             $ledger['name'] = "tuition";
