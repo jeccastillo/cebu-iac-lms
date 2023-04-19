@@ -440,7 +440,7 @@ class Registrar extends CI_Controller {
 
             if($post['reservation_payment_amount'] > 0){
                 $ledger['student_id'] = $post['studentID'];
-                $ledger['name'] = "tuition";
+                $ledger['name'] = "reservation";
                 $ledger['amount'] = -1 * $post['reservation_payment_amount'];
                 $ledger['date'] = date("Y-m-d H:i:s");
                 $ledger['syid'] = $data['ayid'];
