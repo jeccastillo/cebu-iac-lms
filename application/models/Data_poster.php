@@ -183,6 +183,10 @@ class Data_poster extends CI_Model {
         $this->db
             ->where(array('intStudentID'=>$sid,'intAYID'=>$ay))
             ->delete('tb_mas_registration');
+
+        $this->db
+            ->where(array('name'=>'tuition','syid'=>$ay,'student_id'=>$sid))
+            ->delete('tb_mas_student_ledger');
         
          $sql = "DELETE tb_mas_classlist_student FROM tb_mas_classlist_student JOIN tb_mas_classlist ON tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID WHERE tb_mas_classlist_student.intStudentID = ".$sid." AND tb_mas_classlist.strAcademicYear = ".$ay;
         $this->db->query($sql);
