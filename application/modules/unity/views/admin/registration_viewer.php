@@ -738,6 +738,7 @@ new Vue({
                                         formdata.append('student_id',this.student.intID);
                                         formdata.append('description',this.request.description);
                                         formdata.append('registration_id',this.registration.intRegistrationID);
+                                        formdata.append('installment',this.tuition_data.total_installment);
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`

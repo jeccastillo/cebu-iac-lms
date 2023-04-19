@@ -100,6 +100,7 @@ class Finance extends CI_Controller {
             unset($data['student_id']);
             unset($data['total_amount']);            
             unset($data['or_number']);
+            unset($data['installment']);
         }
 
         $sem = $this->data_fetcher->get_active_sem();  
@@ -137,6 +138,13 @@ class Finance extends CI_Controller {
                 $this->db
                     ->where('intRegistrationID',$post['registration_id'])
                     ->update('tb_mas_registration',$reg_update);
+
+                if($post['description'] == "Tuition Down Payment"){
+                    $ledger = $this->data_fetcher->fetch_ledger('tuition',$sem['intID']);
+                    $this->db
+                        ->where(array('name'=>'tuition','syid'=>$sem['intID']))
+                        ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
+                }
 
             }
             else{
