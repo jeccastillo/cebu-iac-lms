@@ -438,6 +438,15 @@ class Registrar extends CI_Controller {
             $ledger['syid'] = $data['ayid'];
             $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
 
+            if($post['reservation_payment_amount'] > 0){
+                $ledger['student_id'] = $post['studentID'];
+                $ledger['name'] = "tuition";
+                $ledger['amount'] = -1 * $post['reservation_payment_amount'];
+                $ledger['date'] = date("Y-m-d H:i:s");
+                $ledger['syid'] = $data['ayid'];
+                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+            }
+
             //SEND AND GENERATE PAYMENT FOR TUITION LINK
         }
         else
