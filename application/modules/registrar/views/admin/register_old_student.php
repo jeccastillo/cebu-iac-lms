@@ -143,6 +143,7 @@ new Vue({
         },
         school_years: [],
         term_type: 'Term',
+        tuition_data: undefined,
         total_units: 0,
         subjectList: '',
         reg_status: null,
@@ -254,6 +255,8 @@ new Vue({
                         .then(data => {
                             console.log(data.data);
                             this.tuition_text = data.data.tuition;  
+                            this.tuition_data = data.data.full_data;
+                            console.log(this.tuition_data);
                             this.subjects_loaded =  true;                          
                             
                         });
