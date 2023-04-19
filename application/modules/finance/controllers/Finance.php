@@ -96,6 +96,8 @@ class Finance extends CI_Controller {
             unset($data['payments']);
             unset($data['description']);
             unset($data['registration_id']);
+            unset($data['student_id'])
+            unset($data['total_amount'])            
         }
 
         $sem = $this->data_fetcher->get_active_sem();  
