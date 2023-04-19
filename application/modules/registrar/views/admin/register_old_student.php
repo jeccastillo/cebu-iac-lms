@@ -283,6 +283,8 @@ new Vue({
                     for(const [key,value] of Object.entries(this.request)){                   
                         formdata.append(key,value);
                     }
+
+                    formdata.append("tuition",this.tuition_data.total);
                     
                     return axios
                         .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {
