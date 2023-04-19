@@ -218,8 +218,7 @@ new Vue({
                             Authorization: `Bearer ${window.token}`
                         }
                     })
-                .then(data => {
-                    console.log(data.data);
+                .then(data => {                    
                     var containerText = "";
                     if (data.data.subjects.length > 0) {
                         for (i in data.data.subjects) {
@@ -252,11 +251,9 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                        .then(data => {
-                            console.log(data.data);
+                        .then(data => {                            
                             this.tuition_text = data.data.tuition;  
-                            this.tuition_data = data.data.full_data;
-                            console.log(this.tuition_data);
+                            this.tuition_data = data.data.full_data;                            
                             this.subjects_loaded =  true;                          
                             
                         });
