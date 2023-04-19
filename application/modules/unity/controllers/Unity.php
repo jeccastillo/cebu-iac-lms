@@ -743,6 +743,7 @@ class Unity extends CI_Controller {
         $post['subjects_loaded'] =  explode(',', $post['subjects_loaded']);
         $data['tuition'] = $this->data_fetcher->getTuitionSubjects($post['stype'],$post['scholarship'],$post['subjects_loaded'],$post['studentID'],$post['type_of_class']);
         $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);                
+        $ret['full_data'] = $data['tuition'];
         
         echo json_encode($ret);
     }
