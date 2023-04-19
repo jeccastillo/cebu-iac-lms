@@ -442,6 +442,7 @@ class Registrar extends CI_Controller {
                 $ledger['student_id'] = $post['studentID'];
                 $ledger['name'] = "reservation";
                 $ledger['amount'] = -1 * $post['reservation_payment_amount'];
+                $ledger['or_number'] = $post['reservation_or_number'];
                 $ledger['date'] = date("Y-m-d H:i:s");
                 $ledger['syid'] = $data['ayid'];
                 $this->data_poster->post_data('tb_mas_student_ledger',$ledger);

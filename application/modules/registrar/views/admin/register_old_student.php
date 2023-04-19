@@ -146,6 +146,7 @@ new Vue({
         tuition_data: undefined,
         applicant_data: undefined,
         reservation_payment_amount: 0,
+        reservation_or_number: "",
         total_units: 0,
         subjectList: '',
         reg_status: null,
@@ -206,6 +207,7 @@ new Vue({
                         for(i in this.applicant_data.payments){
                             if(this.applicant_data.payments[i].description == "Reservation Payment"){
                                 this.reservation_payment_amount = this.applicant_data.payments[i].subtotal_order;
+                                this.reservation_or_number = this.applicant_data.payments[i].or_number;
                             }
                         }
                         this.loader_spinner = false;                                                
@@ -301,6 +303,7 @@ new Vue({
 
                     formdata.append("tuition",this.tuition_data.total);
                     formdata.append("reservation_payment_amount", this.reservation_payment_amount);
+                    formdata.append("reservation_or_number", this.reservation_or_number);
                     
                     return axios
                         .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {

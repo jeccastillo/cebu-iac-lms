@@ -92,12 +92,14 @@ class Finance extends CI_Controller {
     public function next_or(){
         $post = $this->input->post();
         $data = $post;
+        $current_or = $post['or_current'];
         if(isset($post['registration_id'])){
             unset($data['payments']);
             unset($data['description']);
             unset($data['registration_id']);
             unset($data['student_id']);
             unset($data['total_amount']);            
+            unset($data['or_number']);
         }
 
         $sem = $this->data_fetcher->get_active_sem();  
@@ -123,6 +125,7 @@ class Finance extends CI_Controller {
             $ledger['amount'] = -1 * $post['total_amount'];
             $ledger['date'] = date("Y-m-d H:i:s");
             $ledger['syid'] = $sem['intID'];
+            $ledger['or_number'] = $current_or;
             $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
 
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
