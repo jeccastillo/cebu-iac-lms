@@ -43,7 +43,7 @@ class PortalApi extends CI_Controller {
             $data['strGSuiteEmail'] = $post['token'];
             $this->db
              ->where('intID',$user['intID'])
-             ->update('tb_mas_message_user',$data);
+             ->update('tb_mas_users',$data);
 
             $data['message'] = "Successfully saved token"; 
             $data['success'] = true;
