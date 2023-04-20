@@ -2077,8 +2077,10 @@ class Data_fetcher extends CI_Model {
                     if($scholar->tuition_fee_fixed > $tuition)
                         $tuition_scholarship = $tuition;
                     else
-                        $tuition_scholarship = $scholar->tuition_fee_fixed;
+                        $tuition_scholarship = $scholar->tuition_fee_fixed;                                            
                 }
+
+                $total_scholarship += $tuition_scholarship;
 
                 if($scholar->misc_fee_rate > 0){
                     $misc_scholarship = $total_misc * ($scholar->misc_fee_rate/100);
@@ -2087,8 +2089,10 @@ class Data_fetcher extends CI_Model {
                     if($scholar->misc_fee_fixed > $total_misc)
                         $misc_scholarship = $total_misc;
                     else
-                        $misc_scholarship = $scholar->misc_fee_fixed;
+                        $misc_scholarship = $scholar->misc_fee_fixed;                    
                 }
+
+                $total_scholarship += $misc_scholarship;
 
                 if($scholar->lab_fee_rate > 0){
                     $lab_scholarship = $total_lab * ($scholar->lab_fee_rate/100);
@@ -2100,6 +2104,8 @@ class Data_fetcher extends CI_Model {
                         $lab_scholarship = $scholar->lab_fee_fixed;
                 }
 
+                $total_scholarship += $lab_scholarship;
+
                 if($scholar->other_fees_rate > 0){
                     $total_other = $total_foreign + $total_new_student;
                     $other_scholarship = $total_other * ($scholar->other_fees_rate/100);
@@ -2110,6 +2116,8 @@ class Data_fetcher extends CI_Model {
                     else
                         $other_scholarship = $scholar->other_fees_fixed;
                 }
+
+                $total_scholarship += $other_scholarship;
             }
         }
     
