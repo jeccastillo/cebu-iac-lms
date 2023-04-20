@@ -451,8 +451,7 @@ class Registrar extends CI_Controller {
             if($post['scholarship_deductions'] > 0){
                 $ledger['student_id'] = $post['studentID'];
                 $ledger['name'] = "scholarship deduction";
-                $ledger['amount'] = -1 * $post['scholarship_deductions'];
-                $ledger['or_number'] = $post['reservation_or_number'];
+                $ledger['amount'] = -1 * $post['scholarship_deductions'];                
                 $ledger['date'] = date("Y-m-d H:i:s");
                 $ledger['syid'] = $data['ayid'];
                 $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
@@ -461,8 +460,7 @@ class Registrar extends CI_Controller {
             if($post['discount'] > 0){
                 $ledger['student_id'] = $post['studentID'];
                 $ledger['name'] = "scholarship deduction";
-                $ledger['amount'] = -1 * $post['discount'];
-                $ledger['or_number'] = $post['reservation_or_number'];
+                $ledger['amount'] = -1 * $post['discount'];                
                 $ledger['date'] = date("Y-m-d H:i:s");
                 $ledger['syid'] = $data['ayid'];
                 $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
