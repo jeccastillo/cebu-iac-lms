@@ -36,7 +36,7 @@ class PortalApi extends CI_Controller {
     {
        
         $post = $this->input->post();
-        $user = $this->db->get_where('tb_mas_users',array('strEmail'=>$post['email']))->first();
+        $user = $this->db->get_where('tb_mas_users',array('strEmail'=>$post['email']))->first_row();
 
         if($user){
             
@@ -53,7 +53,47 @@ class PortalApi extends CI_Controller {
             $data['success'] = false;
         }
         
+        echo json_encode($data);
              
+    }
+
+    public function student_data(){
+        
+        $post = $this->input->post();
+        $ret['success'] = false;
+        $user = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
+                        ->where(array('strGSuiteEmail'=>$post['token']))
+                        ->get()
+                        ->first_row();
+        if($user){
+            $latest_registration = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd')
+                                        ->from('tb_mas_registration')
+                                        ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID');
+            $registered = $this->db->where('intStudentID',$user->intID)
+                    ->where('dteRegistered is NOT NULL', NULL, FALSE)
+                    ->order_by('dteRegistered','desc')
+                    ->first_row();
+
+            if($registered){
+                $ret['data'] = array(
+                    'first_name' => $user['strFirstname'],
+                    'last_name' => $user['strLastname'],
+                    'personal_email'=> $user['strEmail'],
+                    'student_number'=> $user['strStudentNumber'],
+                    'contact_number'=> $user['strMobileNumber'],
+                    'course_id' => $user['intProgramID'],
+                    'course_name'=>$user['strProgramCode'],                    
+                    'last_term'=> $registered['enumSem']." Term",
+                    'last_term_sy'=> $registered['strYearStart']."-".$registered['strYearEnd']                                  
+                );
+
+                $ret['success'] = true;
+            }            
+        }
+
+        echo json_encode($ret);
     }
     
 
