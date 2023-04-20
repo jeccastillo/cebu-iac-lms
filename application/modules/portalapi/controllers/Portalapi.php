@@ -67,11 +67,12 @@ class PortalApi extends CI_Controller {
                         ->where(array('strGSuiteEmail'=>$post['token']))
                         ->get()
                         ->first_row('array');
-        if($user){
-            $latest_registration = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd')
-                                        ->from('tb_mas_registration')
-                                        ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID');
-            $registered = $this->db->where('intStudentID',$user['intID'])
+        if($user){            
+            
+            $registered = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd')
+                    ->from('tb_mas_registration')
+                    ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')
+                    ->where('intStudentID',$user['intID'])
                     ->where('dteRegistered is NOT NULL', NULL, FALSE)
                     ->order_by('dteRegistered','desc')
                     ->get()
