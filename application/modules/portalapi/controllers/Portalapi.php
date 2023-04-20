@@ -6,12 +6,7 @@ class PortalApi extends CI_Controller {
 	{
 		parent::__construct();
 		$this->config->load('themes');		
-		$theme = $this->config->item('unity');
-
-        //User Level Validation
-        $userlevel = $this->session->userdata('intUserLevel');        
-        if($userlevel != 2 && $userlevel != 3)
-		  redirect(base_url()."unity");
+		$theme = $this->config->item('unity');        
 
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
