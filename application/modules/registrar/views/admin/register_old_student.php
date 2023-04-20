@@ -151,6 +151,7 @@ new Vue({
         subjectList: '',
         reg_status: null,
         subjects_loaded: false,
+        total_tuition: 0,
         tuition_text: '',
         subject_ids:[],
         misc: {
@@ -301,7 +302,8 @@ new Vue({
                         formdata.append(key,value);
                     }
 
-                    formdata.append("tuition",this.tuition_data.total);
+                    this.total_tuition = this.tuition_data.total + this.tuition_data.total_deductions;
+                    formdata.append("tuition",this.total_tuition);
                     formdata.append("reservation_payment_amount", this.reservation_payment_amount);
                     formdata.append("reservation_or_number", this.reservation_or_number);
                     
