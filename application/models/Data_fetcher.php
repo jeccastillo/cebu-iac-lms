@@ -2119,11 +2119,11 @@ class Data_fetcher extends CI_Model {
         $data['lab_installment'] = $data['lab'] + $data['lab'] * ($tuition_year['installmentIncrease']/100);
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
-        $data['tuition'] = $tuition - $tuition_scholarship;
+        $data['tuition'] = $tuition;
         $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc_discount'] = $misc_scholarship;
-        $data['misc'] = $total_misc - $misc_scholarship;                
+        $data['misc'] = $total_misc;                
         $data['misc_list'] = $misc_list;
         $data['is_foreign'] = $is_foreign;
         $data['new_student'] = $total_new_student;
@@ -2141,8 +2141,10 @@ class Data_fetcher extends CI_Model {
         $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
-        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;        
-        
+        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
+        $data['misc'] = $total_misc - $misc_scholarship;        
+        $data['tuition'] = $tuition - $tuition_scholarship;
+
         $data['total'] = $data['total_before_deductions'] - $total_scholarship;                
         $data['total_installment'] = $data['ti_before_deductions']  - $total_scholarship;
         $data['scholarship_deductions'] = $total_scholarship;
