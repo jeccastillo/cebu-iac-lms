@@ -36,13 +36,13 @@ class PortalApi extends CI_Controller {
     {
        
         $post = $this->input->post();
-        $user = $this->db->get_where('tb_mas_users',array('strEmail'=>$post['email']))->first_row();
+        $user = $this->db->get_where('tb_mas_users',array('strEmail'=>$post['email']))->first_row('array');
 
         if($user){
             
             $data['strGSuiteEmail'] = $post['token'];
             $this->db
-             ->where('intID',$user->intD)
+             ->where('intID',$user['intD'])
              ->update('tb_mas_message_user',$data);
 
             $data['message'] = "Successfully saved token"; 
@@ -66,12 +66,12 @@ class PortalApi extends CI_Controller {
                         ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
                         ->where(array('strGSuiteEmail'=>$post['token']))
                         ->get()
-                        ->first_row();
+                        ->first_row('array');
         if($user){
             $latest_registration = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd')
                                         ->from('tb_mas_registration')
                                         ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID');
-            $registered = $this->db->where('intStudentID',$user->intID)
+            $registered = $this->db->where('intStudentID',$user['intID'])
                     ->where('dteRegistered is NOT NULL', NULL, FALSE)
                     ->order_by('dteRegistered','desc')
                     ->first_row();
