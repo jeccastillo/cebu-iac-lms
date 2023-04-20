@@ -2138,10 +2138,11 @@ class Data_fetcher extends CI_Model {
         $data['other_discount'] = $other_scholarship;
         $data['total_other'] = $data['new_student'] + $data['total_foreign'];                
         $data['total_before_deductions'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;
-        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;        
-        //deduct discounts/scholarships
+        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other'] + $nsf + $total_internship_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
+        //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;        
+        
         $data['total'] = $data['total_before_deductions'] - $total_scholarship;                
         $data['total_installment'] = $data['ti_before_deductions']  - $total_scholarship;
         $data['scholarship_deductions'] = $total_scholarship;
