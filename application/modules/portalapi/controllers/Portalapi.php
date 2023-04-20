@@ -74,7 +74,7 @@ class PortalApi extends CI_Controller {
             $registered = $this->db->where('intStudentID',$user['intID'])
                     ->where('dteRegistered is NOT NULL', NULL, FALSE)
                     ->order_by('dteRegistered','desc')
-                    ->first_row();
+                    ->first_row('array');
 
             if($registered){
                 $ret['data'] = array(
