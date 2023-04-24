@@ -59,7 +59,7 @@ class PortalApi extends CI_Controller {
 
     public function student_data(){
         
-        $post = $this->input->post();
+        $post = $this->input->get();
         $ret['success'] = false;
         $user = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
                         ->from('tb_mas_users')
