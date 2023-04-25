@@ -1117,8 +1117,7 @@ class Pdf extends CI_Controller {
             
             $pdf->AddPage();
             $this->data['snum'] = $this->data['snum'] + $per_page;
-            $start = $this->data['snum'] - 1;           
-            $count =  
+            $start = $this->data['snum'] - 1;                       
 
             if($ret > $per_page)
                 $count = $per_page;            
