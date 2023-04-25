@@ -1956,11 +1956,11 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(3);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(11);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(9);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(14);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(14);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(16);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
                 
          
         $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
