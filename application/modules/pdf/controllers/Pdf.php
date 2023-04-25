@@ -1081,11 +1081,12 @@ class Pdf extends CI_Controller {
         
         $pdf->AddPage();
         $ret = 0;
+        $per_page = 10;
         $this->data['nothing_follows'] = true;
-        if(count($students) > 10)
+        if(count($students) > $per_page)
         {
-            $ret = count($students) -10;
-            $stdn = array_slice($students, 0, 10);
+            $ret = count($students) - $per_page;
+            $stdn = array_slice($students, 0, $per_page);
             foreach($stdn as $student){
                 $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
                 $st[] = $student;
@@ -1110,12 +1111,19 @@ class Pdf extends CI_Controller {
         //$html = $pdf->unhtmlentities($html);
 
         $pdf->writeHTML($html, true, false, true, false, '');
-        if($ret > 0)
+        while($ret > 0)
         {
             $this->data['nothing_follows'] = true;
             $pdf->AddPage();
+            
+            if($ret > $per_page)
+                $ret = $ret - $per_page;
+            else
+                $ret = 0;
+
+            
             $this->data['students'] = array_slice($students, -$ret);
-            $this->data['snum'] = 41;
+            $this->data['snum'] = 11;
             $html = $this->load->view('enlisted_students',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
         }
