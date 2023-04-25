@@ -1084,13 +1084,13 @@ class Pdf extends CI_Controller {
         $per_page = 5;        
         $this->data['nothing_follows'] = true;
         if(count($students) > $per_page)
-        {
-            $ret = count($students) - $per_page;
+        {            
             $stdn = array_slice($students, 0, $per_page);
             foreach($stdn as $student){
                 $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
                 $st[] = $student;
             }
+            $ret = count($students) - $per_page;
             $this->data['students'] = $st;
             $this->data['nothing_follows'] = false;
         }
@@ -1117,11 +1117,16 @@ class Pdf extends CI_Controller {
             
             $pdf->AddPage();
             $this->data['snum'] = $this->data['snum'] + $per_page;
+            $start = $this->data['snum'] - 1;           
+            $count =  
 
-            
+            if($ret > $per_page)
+                $count = $per_page;            
+            else{
+                $count = $ret;
+            }
 
-            
-            $stdn = array_slice($stdn, -$ret);   
+            $stdn = array_slice($students, $start , $count);   
             $st = [];          
             foreach($stdn as $student){
                 $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
@@ -1132,7 +1137,7 @@ class Pdf extends CI_Controller {
             $html = $this->load->view('enlisted_students',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
 
-            if($ret > $per_page){
+            if($ret > $per_page){                
                 $ret = $ret - $per_page;                            
                 $this->data['nothing_follows'] = false;
             }
@@ -1140,6 +1145,7 @@ class Pdf extends CI_Controller {
                 $ret = 0;
                 $this->data['nothing_follows'] = true;
             }
+            
         }
             
         
