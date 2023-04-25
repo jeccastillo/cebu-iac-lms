@@ -26,10 +26,10 @@
     <tr style="line-height:12px;text-align:center;">
         <th style="font-size:9px;" width="2%"><b>#</b></th>
         <th style="font-size:9px;" width="13%"><b>Student No.</b></th>
-        <th style="font-size:9px;" width="26%"><b>Student Name</b></th>
-        <th style="font-size:9px;" width="8%"><b>Course</b></th>
-        <th style="font-size:9px;" width="15%"><b>Enrollment Status</b></th>
-        <th style="font-size:9px;" width="19%"><b>Date Enlisted</b></th>
+        <th style="font-size:9px;" width="31%"><b>Student Name</b></th>
+        <th style="font-size:9px;" width="12%"><b>Course</b></th>
+        <th style="font-size:9px;" width="10%"><b>Enrollment Status</b></th>
+        <th style="font-size:9px;" width="15%"><b>Date Enlisted</b></th>
         <th style="font-size:9px;" width="15%"><b>Enlisted By</b></th>
     
     </tr>    
@@ -42,13 +42,13 @@
     ?>
     
     <tr style="line-height:10px;text-align:center;">
-        <td style="font-size:9px;" ><?php echo $i; ?></td>
-        <td style="font-size:9px;" ><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $st['strStudentNumber']); ?></td>
-        <td style="font-size:9px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
-        <td style="font-size:9px;text-align:left;" ><?php echo $st['strProgramCode']; ?></td>
-        <td style="font-size:9px;text-align:left;" ><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
-        <td style="font-size:9px;" ><?php echo $st['date_added'];?></td>
-        <td style="font-size:9px;" ><?php echo $st['fusername'] ?></td>           
+        <td style="font-size:8px;" ><?php echo $i; ?></td>
+        <td style="font-size:8px;" ><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $st['strStudentNumber']); ?></td>
+        <td style="font-size:8px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
+        <td style="font-size:8px;text-align:left;" ><?php echo $st['strProgramCode']; ?></td>
+        <td style="font-size:8px;text-align:left;" ><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
+        <td style="font-size:8px;" ><?php echo $st['date_added'];?></td>
+        <td style="font-size:8px;" ><?php echo $st['fusername'] ?></td>           
     </tr>
     <?php   
     $i++;
