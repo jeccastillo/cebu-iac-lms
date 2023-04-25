@@ -1897,6 +1897,97 @@ class Excel extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();        
         $this->data['sy'] = $active_sem;
         $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID']);  
+        foreach($students as $student){
+            $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
+            $st[] = $student;
+        }
+        $student_data = $st;
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Daily Collection Report")
+                                     ->setSubject("Daily Collection Report Download")
+                                     ->setDescription("Daily Collection Report Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Daily Collection Report");
+
+        
+      
+        
+            
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', '#')
+                    ->setCellValue('B1', 'Student No.')
+                    ->setCellValue('C1', 'Student Name')
+                    ->setCellValue('D1', 'Course')
+                    ->setCellValue('E1', 'Enrollment Status')
+                    ->setCellValue('F1', 'Date Enlisted')
+                    ->setCellValue('G1', 'Enlisted By');
+                            
+        $i = 2;
+        $ctr = 1;
+        foreach($students as $st){
+            $name = $st['strLastname'].", ".$st['strFirstname']; 
+            $name .= isset($st['strMiddlename'])?", ".$st['strMiddlename']:'';                
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $ctr)
+                    ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $st['strStudentNumber']))
+                    ->setCellValue('C'.$i, strtoupper($name))
+                    ->setCellValue('D'.$i, $st['strProgramCode'])
+                    ->setCellValue('E'.$i, $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType'])
+                    ->setCellValue('F'.$i, $st['date_added'])
+                    ->setCellValue('G'.$i, $st['fusername']);
+        
+            $i++;
+            $ctr++;
+        }
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(3);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(11);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(9);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(14);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(14);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+                
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="enlisted_students'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        $objWriter->save('php://output');
+        exit;
         
     }
 
