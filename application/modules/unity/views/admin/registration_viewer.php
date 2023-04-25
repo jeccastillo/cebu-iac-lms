@@ -734,8 +734,11 @@ new Vue({
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);                                        
                                         formdata.append('payments',this.payments.length);
+                                        formdata.append('total_amount',this.request.total_amount_due);
+                                        formdata.append('student_id',this.student.intID);
                                         formdata.append('description',this.request.description);
                                         formdata.append('registration_id',this.registration.intRegistrationID);
+                                        formdata.append('installment',this.tuition_data.total_installment);
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`

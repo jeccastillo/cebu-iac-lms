@@ -143,10 +143,15 @@ new Vue({
         },
         school_years: [],
         term_type: 'Term',
+        tuition_data: undefined,
+        applicant_data: undefined,
+        reservation_payment_amount: 0,
+        reservation_or_number: "",
         total_units: 0,
         subjectList: '',
         reg_status: null,
         subjects_loaded: false,
+        total_tuition: 0,
         tuition_text: '',
         subject_ids:[],
         misc: {
@@ -176,7 +181,8 @@ new Vue({
         if(this.id != 0){
         
             this.header_title = 'Edit Tuition Year';
-            //this.loader_spinner = true;
+           
+
             axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
@@ -193,7 +199,23 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
-                    this.loader_spinner = false;
+                    
+
+                     //this.loader_spinner = true;
+                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug)
+                    .then((data) => {
+                        this.applicant_data = data.data.data;
+                        for(i in this.applicant_data.payments){
+                            if(this.applicant_data.payments[i].description == "Reservation Payment"){
+                                this.reservation_payment_amount = this.applicant_data.payments[i].subtotal_order;
+                                this.reservation_or_number = this.applicant_data.payments[i].or_number;
+                            }
+                        }
+                        this.loader_spinner = false;                                                
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
                 })
                 .catch((error) => {
                     console.log(error);
@@ -217,8 +239,7 @@ new Vue({
                             Authorization: `Bearer ${window.token}`
                         }
                     })
-                .then(data => {
-                    console.log(data.data);
+                .then(data => {                    
                     var containerText = "";
                     if (data.data.subjects.length > 0) {
                         for (i in data.data.subjects) {
@@ -251,9 +272,9 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                        .then(data => {
-                            console.log(data.data);
+                        .then(data => {                            
                             this.tuition_text = data.data.tuition;  
+                            this.tuition_data = data.data.full_data;                            
                             this.subjects_loaded =  true;                          
                             
                         });
@@ -280,6 +301,14 @@ new Vue({
                     for(const [key,value] of Object.entries(this.request)){                   
                         formdata.append(key,value);
                     }
+
+                    this.total_tuition = this.tuition_data.total_before_deductions;
+                    
+                    formdata.append("tuition",this.total_tuition);
+                    formdata.append("scholarship_deductions",this.tuition_data.scholarship_deductions);
+                    formdata.append("discount",this.tuition_data.scholarship_discount);
+                    formdata.append("reservation_payment_amount", this.reservation_payment_amount);
+                    formdata.append("reservation_or_number", this.reservation_or_number);
                     
                     return axios
                         .post('<?php echo base_url(); ?>registrar/submit_registration_old2',formdata, {

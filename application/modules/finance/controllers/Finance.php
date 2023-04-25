@@ -92,11 +92,19 @@ class Finance extends CI_Controller {
     public function next_or(){
         $post = $this->input->post();
         $data = $post;
+        $current_or = $post['or_current'];
         if(isset($post['registration_id'])){
             unset($data['payments']);
             unset($data['description']);
             unset($data['registration_id']);
+            unset($data['student_id']);
+            unset($data['total_amount']);            
+            unset($data['or_number']);
+            unset($data['installment']);
         }
+
+        $sem = $this->data_fetcher->get_active_sem();  
+        
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
         
@@ -109,7 +117,24 @@ class Finance extends CI_Controller {
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
 
-        if(isset($post['registration_id']))
+        
+
+        if(isset($post['registration_id'])){
+            
+            $ledger['student_id'] = $post['student_id'];
+            $ledger['name'] = $post['description'];
+            $ledger['amount'] = -1 * $post['total_amount'];
+            $ledger['date'] = date("Y-m-d H:i:s");
+            $ledger['syid'] = $sem['intID'];
+            $ledger['or_number'] = $current_or;
+            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+
+            if($post['description'] == "Tuition Down Payment"){                
+                $this->db
+                    ->where(array('name'=>'tuition','syid'=>$sem['intID']))
+                    ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
+            }
+
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $reg_update = [
@@ -118,12 +143,13 @@ class Finance extends CI_Controller {
                 ];
                 $this->db
                     ->where('intRegistrationID',$post['registration_id'])
-                    ->update('tb_mas_registration',$reg_update);
+                    ->update('tb_mas_registration',$reg_update);                
 
             }
             else{
                 $ret['message'] = "Payments";
             }
+        }
         else
             $ret['message'] = "Payments";
         
