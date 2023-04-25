@@ -1131,6 +1131,7 @@ class Pdf extends CI_Controller {
                 $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
                 $st[] = $student;
             }
+            $this->data['students'] = $st;
             
             $html = $this->load->view('enlisted_students',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
