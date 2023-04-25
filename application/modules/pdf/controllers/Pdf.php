@@ -1085,7 +1085,12 @@ class Pdf extends CI_Controller {
         if(count($students) > 10)
         {
             $ret = count($students) -10;
-            $this->data['students'] = array_slice($students, 0, 10);
+            $stdn = array_slice($students, 0, 10);
+            foreach($stdn as $student){
+                $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
+                $st[] = $student;
+            }
+            $this->data['students'] = $st;
             $this->data['nothing_follows'] = false;
         }
         else
