@@ -1115,15 +1115,22 @@ class Pdf extends CI_Controller {
         {
             $this->data['nothing_follows'] = true;
             $pdf->AddPage();
-            
+            $this->data['snum'] = $this->data['snum'] + $per_page;
+
             if($ret > $per_page)
-                $ret = $ret - $per_page;
-            else
+                $ret = $ret - $per_page;                            
+            else{
                 $ret = 0;
+                $this->data['nothing_follows'] = true;
+            }
 
             
-            $this->data['students'] = array_slice($students, -$ret);
-            $this->data['snum'] = 11;
+            $stdn = array_slice($students, -$ret);             
+            foreach($stdn as $student){
+                $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
+                $st[] = $student;
+            }
+            
             $html = $this->load->view('enlisted_students',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
         }
