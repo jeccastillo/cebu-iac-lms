@@ -1965,6 +1965,8 @@ class Excel extends CI_Controller {
          
         $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
 
+        $date = date("ymdhis");
+
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
