@@ -1892,6 +1892,14 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    public function enlisted_students(){
+        
+        $active_sem = $this->data_fetcher->get_active_sem();        
+        $this->data['sy'] = $active_sem;
+        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID']);  
+        
+    }
+
 
     public function daily_collection_report()
     {

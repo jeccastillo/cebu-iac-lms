@@ -1194,7 +1194,7 @@ class Pdf extends CI_Controller {
             $pdf->AddPage();
             $ret = 0;
             $this->data['nothing_follows'] = true;
-            if(count($students) > 40)
+            if(count($students) > 10)
             {
                 $ret = count($students) -40;
                 $this->data['students'] = array_slice($students, 0, 40);
