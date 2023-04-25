@@ -43,9 +43,9 @@
                      <a target="_blank" href="<?php echo base_url(); ?>pdf/print_enlisted_students" class="small-box-footer">
                          PDF <i class="fa fa-arrow-circle-right"></i>
                      </a>
-                     <!-- <a href="<?php echo base_url(); ?>excel/reports_enlisted" class="small-box-footer">
+                     <a href="<?php echo base_url(); ?>excel/enlisted_students" class="small-box-footer">
                          Excel <i class="fa fa-arrow-circle-right"></i>
-                     </a> -->
+                     </a>
                  </div>
 
                  <!-- small box -->
