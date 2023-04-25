@@ -27,9 +27,9 @@
         <th style="font-size:8px;" width="3%"><b>#</b></th>
         <th style="font-size:8px;" width="12%"><b>Student No.</b></th>
         <th style="font-size:8px;" width="35%"><b>Student Name</b></th>
-        <th style="font-size:8px;" width="11%"><b>Course</b></th>
-        <th style="font-size:8px;" width="10%"><b>Enrollment Status</b></th>
-        <th style="font-size:8px;" width="15%"><b>Date Enlisted</b></th>
+        <th style="font-size:8px;" width="10%"><b>Course</b></th>
+        <th style="font-size:8px;" width="12%"><b>Enrollment Status</b></th>
+        <th style="font-size:8px;" width="14%"><b>Date Enlisted</b></th>
         <th style="font-size:8px;" width="12%"><b>Enlisted By</b></th>
     
     </tr>    
