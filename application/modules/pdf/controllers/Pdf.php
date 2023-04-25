@@ -1114,16 +1114,11 @@ class Pdf extends CI_Controller {
         $pdf->writeHTML($html, true, false, true, false, '');
         while($ret > 0)
         {
-            $this->data['nothing_follows'] = false;
+            
             $pdf->AddPage();
             $this->data['snum'] = $this->data['snum'] + $per_page;
 
-            if($ret > $per_page)
-                $ret = $ret - $per_page;                            
-            else{
-                $ret = 0;
-                $this->data['nothing_follows'] = true;
-            }
+            
 
             
             $stdn = array_slice($stdn, -$ret);   
@@ -1136,6 +1131,15 @@ class Pdf extends CI_Controller {
             
             $html = $this->load->view('enlisted_students',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
+
+            if($ret > $per_page){
+                $ret = $ret - $per_page;                            
+                $this->data['nothing_follows'] = false;
+            }
+            else{
+                $ret = 0;
+                $this->data['nothing_follows'] = true;
+            }
         }
             
         
