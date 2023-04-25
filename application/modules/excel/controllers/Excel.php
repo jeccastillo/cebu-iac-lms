@@ -1938,7 +1938,7 @@ class Excel extends CI_Controller {
                             
         $i = 2;
         $ctr = 1;
-        foreach($students as $st){
+        foreach($student_data as $st){
             $name = $st['strLastname'].", ".$st['strFirstname']; 
             $name .= isset($st['strMiddlename'])?", ".$st['strMiddlename']:'';                
             $objPHPExcel->setActiveSheetIndex(0)
