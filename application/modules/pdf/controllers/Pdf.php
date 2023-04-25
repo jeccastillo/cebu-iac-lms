@@ -1081,8 +1081,7 @@ class Pdf extends CI_Controller {
         
         $pdf->AddPage();
         $ret = 0;
-        $per_page = 5;
-        $this->data['nothing_follows'] = true;
+        $per_page = 5;        
         if(count($students) > $per_page)
         {
             $ret = count($students) - $per_page;
@@ -1101,6 +1100,7 @@ class Pdf extends CI_Controller {
                 $st[] = $student;
             }
             $this->data['students'] = $st;
+            $this->data['nothing_follows'] = true;
         }
 
         $this->data['snum'] = 1;
