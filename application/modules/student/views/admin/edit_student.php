@@ -88,6 +88,15 @@
                             <input type="email" name="strGSuiteEmail" class="form-control" id="strGSuiteEmail" placeholder="Enter GSuite Email" value="<?php echo $student['strGSuiteEmail']; ?>">
                     </div>      -->
                     <div class="form-group col-xs-6">
+                        <label for="">Block Section</label>
+                        <select class="form-control select2" name="preferedSection" id="preferedSection" >
+                            <?php foreach ($block_sections as $sect): ?>
+                            <option <?php echo ($student['preferedSection'] == $sect['intID'])?'selected':''; ?> value="<?php echo $sect['intID']; ?>"><?php echo $sect['name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        
+                    </div>
+                    <div class="form-group col-xs-6">
                         <label for="intProgramID">Course</label>
                         <select class="form-control" name="intProgramID" >
                             <?php foreach ($programs as $prog): ?>
