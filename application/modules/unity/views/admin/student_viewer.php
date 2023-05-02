@@ -92,8 +92,8 @@
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-lg-3 size-96">                                    
-                                            <img v-if="!applicant_data.uploaded_requirements[2]" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
-                                            <img v-else class="img-responsive" :src="applicant_data.uploaded_requirements[2].path" />                                    
+                                            <img v-if="!picture" :src="img_dir + 'default_image2.png'" class="img-responsive"/>
+                                            <img v-else class="img-responsive" :src="picture" />                                    
                                         </div>
                                         <div class="col-lg-3">
                                             <p><strong>Student Number: </strong>{{ student.strStudentNumber.replace(/-/g, '') }}</p>
@@ -362,6 +362,7 @@ new Vue({
         registration_status: 0,                   
         loader_spinner: true,           
         total_units: 0,
+        picture: undefined,
         lab_units: 0,    
         gpa: 0,        
         assessment: '',         
@@ -406,6 +407,10 @@ new Vue({
                         axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                         .then((data) => {
                             this.applicant_data = data.data.data;
+                            for(i in this.applicant_data.uploaded_requirements){
+                                 if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
+                                    this.picture = this.applicant_data.uploaded_requirements[i].path;
+                            }
                         })
                         .catch((error) => {
                             console.log(error);
