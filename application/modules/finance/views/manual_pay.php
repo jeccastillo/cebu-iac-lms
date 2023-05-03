@@ -465,7 +465,17 @@ new Vue({
                                                         location.reload();
                                                     });  
                                                 });                                
-                                            } 
+                                            }
+                                            else{
+                                                Swal.fire({
+                                                        title: "Success",
+                                                        text: data.data.message,
+                                                        icon: "success"
+                                                    }).then(function() {
+                                                        location.reload();
+                                                    });                                                                                                                              
+
+                                            }  
                                                   
                                         })
                                     }                                        
@@ -572,6 +582,16 @@ new Vue({
                                                             });                                                                                                                              
                                                             
                                                         });                                
+                                                    }
+                                                    else{
+                                                        Swal.fire({
+                                                                title: "Success",
+                                                                text: data.data.message,
+                                                                icon: "success"
+                                                            }).then(function() {
+                                                                location.reload();
+                                                            });                                                                                                                              
+
                                                     } 
                                                         
                                                 })                                                     
@@ -582,7 +602,7 @@ new Vue({
                                                 text: data.data.message,
                                                 icon: "error"
                                             }).then(function() {
-                                                location.reload();
+                                                //location.reload();
                                             });
                                     });                                
                         },
