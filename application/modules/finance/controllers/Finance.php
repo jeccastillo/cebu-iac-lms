@@ -127,7 +127,8 @@ class Finance extends CI_Controller {
             $ledger['date'] = date("Y-m-d H:i:s");
             $ledger['syid'] = $sem['intID'];
             $ledger['or_number'] = $current_or;
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);            
+            
 
             if($post['description'] == "Tuition Down Payment"){                
                 $this->db
@@ -137,6 +138,7 @@ class Finance extends CI_Controller {
 
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
+                $ret['send_notif'] = true;
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d H:i:s"),
                     "intROG" => 1,
