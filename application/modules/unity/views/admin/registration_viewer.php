@@ -565,7 +565,7 @@ new Vue({
                                                         showCloseButton: false,
                                                         allowEscapeKey: false,
                                                         title: 'Loading',
-                                                        text: 'Processing Data do not leave page',
+                                                        text: 'Updating Data do not leave page',
                                                         icon: 'info',
                                                     })
                                                     Swal.showLoading();
@@ -578,7 +578,7 @@ new Vue({
                                                         this.loader_spinner = false;                                                                                                                            
                                                         Swal.fire({
                                                             title: "Success",
-                                                            text: data.data.message,
+                                                            text: "Update Success",
                                                             icon: "success"
                                                         }).then(function() {
                                                             location.reload();
