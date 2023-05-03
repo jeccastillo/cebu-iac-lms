@@ -606,16 +606,8 @@ new Vue({
                                             }).then(function() {
                                                 //location.reload();
                                             });                                        
-                                    }
-                                        
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });                                
+                                    });                                        
+                                                                   
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
@@ -836,15 +828,7 @@ new Vue({
                                             }).then(function() {
                                                 //location.reload();
                                             });                                        
-                                    }                                    
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });                                
+                                    });                             
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
