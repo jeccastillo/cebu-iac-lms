@@ -615,8 +615,7 @@ new Vue({
                                             icon: "error"
                                         }).then(function() {
                                             //location.reload();
-                                        });
-                                });
+                                        });                                
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
@@ -845,8 +844,7 @@ new Vue({
                                             icon: "error"
                                         }).then(function() {
                                             //location.reload();
-                                        });
-                                });
+                                        });                                
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
