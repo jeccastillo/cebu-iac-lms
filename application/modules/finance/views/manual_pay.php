@@ -574,9 +574,7 @@ new Vue({
                                                         });                                
                                                     } 
                                                         
-                                                })
-                                                     
-                                            })
+                                                })                                                     
                                         }                                            
                                         else
                                             Swal.fire({
@@ -586,7 +584,7 @@ new Vue({
                                             }).then(function() {
                                                 //location.reload();
                                             });
-                                    });
+                                    });                                
                         },
                         allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
