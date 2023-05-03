@@ -605,8 +605,7 @@ new Vue({
                                                 icon: "error"
                                             }).then(function() {
                                                 //location.reload();
-                                            });
-                                        });
+                                            });                                        
                                     }
                                         
                                     else
@@ -837,8 +836,7 @@ new Vue({
                                                 icon: "error"
                                             }).then(function() {
                                                 //location.reload();
-                                            });
-                                        });
+                                            });                                        
                                     }                                    
                                     else
                                         Swal.fire({
