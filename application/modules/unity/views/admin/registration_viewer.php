@@ -557,7 +557,7 @@ new Vue({
                                         })
                                         .then(function(data){
                                                 if (data.data.send_notif) {                            
-                                                    let url = api_url + 'registrar/send_notif_enrolled/' + this.student_data.slug;                                                
+                                                    let url = api_url + 'registrar/send_notif_enrolled/' + this.student.slug;                                                
                                                     let payload = {'message': "This message serves as a notification that you have been officially enrolled."}
                                                     
                                                     Swal.fire({
@@ -779,7 +779,7 @@ new Vue({
                                         })
                                         .then(function(data){
                                                 if (data.data.send_notif) {                            
-                                                    let url = api_url + 'registrar/send_notif_enrolled/' + this.student_data.slug;                                                
+                                                    let url = api_url + 'registrar/send_notif_enrolled/' + this.student.slug;                                                
                                                     let payload = {'message': "This message serves as a notification that you have been officially enrolled."}
                                                     
                                                     Swal.fire({
