@@ -156,7 +156,7 @@ $(document).ready(function() {
         endDate: moment()
     },
     function(start, end) {
-        daterange = "?start="start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D');
+        daterange = "?start=" + start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D');
         dtable.fnDraw(false);   
     }
     );  
