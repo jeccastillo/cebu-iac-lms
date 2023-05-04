@@ -48,7 +48,7 @@
                         <?php 
                             $major = ($student['strMajor'] != "None")?"Major in ".$student['strMajor']:"";
                         ?>
-              <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramCode']." ".$major; ?></h5>              
+              <h5 class="widget-user-desc" style="margin-left:0;"><?php echo $student['strProgramDescription']." ".$major; ?></h5>              
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
