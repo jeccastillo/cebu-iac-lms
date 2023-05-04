@@ -105,6 +105,12 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return String(row.or_number).padStart(5, '0');
                 }
+            }, 
+            {
+                "aTargets": [6],                                
+                "mRender": function(data, type, row, meta) {
+                    return row.student_name.toUpperCase();
+                }
             },            
             {
                 "aTargets": [7],                                

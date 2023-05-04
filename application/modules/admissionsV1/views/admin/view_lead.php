@@ -416,7 +416,7 @@
                     </div>
 
                     <div v-for="requirement in request.uploaded_requirements">
-                        <strong><i class="fa fa-user margin-r-5"></i>{{ requirement.type }}</strong>
+                        <strong><i class="fa fa-user margin-r-5"></i>{{ (requirement.type=="2x2_foreign"?"2x2":requirement.type ) }}</strong>
                         <p class="text-muted">
                             <a :href="requirement.path" target="_blank">
                                 {{requirement.filename}}</a>
@@ -495,7 +495,16 @@
                             <strong><i class="fa fa-user margin-r-5"></i> Student Type</strong>
                             <p class="text-muted">
                                 {{request.tos?request.tos:'freshman'}}
+                            </p>                   
+                            <hr />             
+                            <select class="form-control" @change="updateField('tos',$event)" v-model="request.tos">
+                                <option value="freshman">freshman</option>
+                                <option value="foreign">foreign</option>
+                                <option value="transferee">transferee</option>
+                                <option value="second degree">second degree</option>                                
+                            </select> 
                             </p>
+                            
                             <hr>
                         </div>
                     </div>
