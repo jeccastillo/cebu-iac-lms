@@ -4,26 +4,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-    $('#daterange-btn-users').daterangepicker(
-    {
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            'Last 7 Days': [moment().subtract('days', 6), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
-        },
-        startDate: moment().subtract('days', 29),
-        endDate: moment()
-    },
-    function(start, end) {
-        //var daterange = start.format('YYYY-MM-D') + '/' + end.format('YYYY-MM-D');
-        //document.location="<?php echo base_url(); ?>unity/transactions/"+daterange;
-    }
-    );                   
-        
-    
-
+    var daterange = "";
     var filter_status = $("#status_filter").val();
     
     var dtable = $('#subjects-table').dataTable({
@@ -55,7 +36,7 @@ $(document).ready(function() {
                 break;
             }
             $.get(
-                api_url + "admissions/applications", {
+                api_url + "admissions/applications"+daterange, {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
@@ -161,6 +142,24 @@ $(document).ready(function() {
 
         },
     });
+
+    $('#daterange-btn-users').daterangepicker(
+    {
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+        },
+        startDate: moment().subtract('days', 29),
+        endDate: moment()
+    },
+    function(start, end) {
+        daterange = "?start="start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D');
+        dtable.fnDraw(false);   
+    }
+    );  
 
     $("#status_filter").on('change',function(e){
         
