@@ -27,7 +27,13 @@
                 </select>
             </div>
         </div>
-    </section>
+        <div class="input-group pull-right">
+            <button class="btn btn-default pull-right" id="daterange-btn-users">
+                <i class="fa fa-calendar"></i> Choose Date Range
+                <i class="fa fa-caret-down"></i>
+            </button>
+        </div>
+    </section>    
     <div class="content mcontainer container">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>

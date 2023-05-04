@@ -3,6 +3,27 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+
+    $('#daterange-btn-users').daterangepicker(
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+                },
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },
+            function(start, end) {
+               //var daterange = start.format('YYYY-MM-D') + '/' + end.format('YYYY-MM-D');
+               //document.location="<?php echo base_url(); ?>unity/transactions/"+daterange;
+            }
+            );                   
+        
+    });
+
     var filter_status = $("#status_filter").val();
     
     var dtable = $('#subjects-table').dataTable({
