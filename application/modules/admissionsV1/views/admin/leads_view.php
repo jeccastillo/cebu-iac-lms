@@ -26,12 +26,14 @@
                     <option value="Rejected">Rejected</option>
                 </select>
             </div>
-        </div>
-        <div class="input-group pull-right">
-            <button class="btn btn-default pull-right" id="daterange-btn-users">
-                <i class="fa fa-calendar"></i> Choose Date Range
-                <i class="fa fa-caret-down"></i>
-            </button>
+            <div class="col-sm-6">
+                <div class="input-group pull-right">
+                    <button class="btn btn-default pull-right" id="daterange-btn-users">
+                        <i class="fa fa-calendar"></i> Choose Date Range
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </section>    
     <div class="content mcontainer container">
