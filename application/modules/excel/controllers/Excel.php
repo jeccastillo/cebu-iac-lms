@@ -2077,7 +2077,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('B'.$i, $d->updated_at)
                     ->setCellValue('C'.$i, $or_number)
                     ->setCellValue('D'.$i, $d->student_information_id)
-                    ->setCellValue('E'.$i, $d->student_name)
+                    ->setCellValue('E'.$i, strtoupper($d->student_name))
                     ->setCellValue('F'.$i, $mode)
                     ->setCellValue('G'.$i, $d->check_number)
                     ->setCellValue('H'.$i, $d->subtotal_order)
