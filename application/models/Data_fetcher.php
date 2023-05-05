@@ -887,8 +887,23 @@ class Data_fetcher extends CI_Model {
         
         if($course!=0)
             $this->db->where('tb_mas_users.intProgramID',$course);
-        if($type!=0)
-            $this->db->where('tb_mas_users.student_type',$type);
+        if($type!=0){
+            switch($type){
+                case 1:
+                    $this->db->where('tb_mas_users.student_type',"freshman");
+                break;
+                case 2:
+                    $this->db->where('tb_mas_users.student_type',"transferee");
+                break;
+                case 3:
+                    $this->db->where('tb_mas_users.student_type',"foreign");
+                break;
+                case 4:
+                    $this->db->where('tb_mas_users.student_type',"second degree");
+                break;                        
+
+            }
+        }
         if($regular!=0)
            if($regular == 1)
                 $this->db->where('strAcademicStanding','regular');
