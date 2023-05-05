@@ -362,6 +362,30 @@ class Registrar extends CI_Controller {
         $this->load->view("common/completions_conf",$this->data); 
     }
 
+    public function enrollment_summary_data(){
+
+        $active_sem = $this->data_fetcher->get_active_sem();
+        $sem = $active_sem['intID'];
+
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $ret = [];        
+
+        foreach($programs as $program){
+            $st = [];
+            $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem,"transferee"));
+            $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem,"freshman"));
+            $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem,"foreign"));
+            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem,"second degree"));
+             
+            $ret[] = $program; 
+        }
+
+        $data['data'] = $ret;
+
+        echo json_encode($data);
+
+    }
+
     public function enrollment_report($course = 0, $year=1,$gender = 0,$sem=0)    
     {
 

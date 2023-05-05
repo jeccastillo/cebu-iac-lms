@@ -854,7 +854,7 @@ class Data_fetcher extends CI_Model {
                      
     }
     
-    function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0)
+    function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$type=0)
     {
         
         
@@ -885,8 +885,10 @@ class Data_fetcher extends CI_Model {
                 $this->db->where('tb_mas_registration.intYearLevel',$year);
         }
         
-         if($course!=0)
+        if($course!=0)
             $this->db->where('tb_mas_users.intProgramID',$course);
+        if($type!=0)
+            $this->db->where('tb_mas_users.student_type',$type);
         if($regular!=0)
            if($regular == 1)
                 $this->db->where('strAcademicStanding','regular');
