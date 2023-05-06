@@ -862,7 +862,7 @@ new Vue({
         },
         updateField: function(type,event){
             //this.loading_spinner = true;
-            <?php if($userlevel == "2" || $userlevel == "5"):  ?>
+            <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"):  ?>
             Swal.fire({
                 showCancelButton: false,
                 showCloseButton: false,
