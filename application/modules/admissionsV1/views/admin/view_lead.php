@@ -497,7 +497,7 @@
                                 {{request.tos?request.tos:'freshman'}}
                             </p>                   
                             <hr />             
-                            <select class="form-control" @change="updateField('tos',$event)" v-model="request.tos">
+                            <select class="form-control" @change="updateField('student_type',$event)" v-model="request.tos">
                                 <option value="freshman">freshman</option>
                                 <option value="foreign">foreign</option>
                                 <option value="transferee">transferee</option>
