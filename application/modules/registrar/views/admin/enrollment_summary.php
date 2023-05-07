@@ -22,9 +22,7 @@
 <script>
 new Vue({
     el: '#registration-container',
-    data: {
-        id: '<?php echo $id; ?>',    
-        sem: '<?php echo $selected_ay; ?>',
+    data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
                       
