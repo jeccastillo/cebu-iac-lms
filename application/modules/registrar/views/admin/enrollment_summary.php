@@ -53,7 +53,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ all_reserved }}</td>
+                    <td><strong>{{ all_reserved }}</strong></td>
                 </tr>
             </table>            
         </div>
