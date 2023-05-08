@@ -63,6 +63,19 @@
                 </tr>
             </table>            
         </div>
+        <h4>Officially Enrolled</h4>
+        <div>
+            <table v-if="reserved" class="table table-bordered table-striped">
+                <tr>
+                    <th>Program</th>
+                    <th>Freshman</th>
+                    <th>Transferee</th>
+                    <th>Foreign</th>
+                    <th>Second Degree</th>
+                    <th>Total</th>
+                </tr>
+            </table>
+        </div>
         <!-- <h4>Enrolled</h4>
         <div v-for="prog in reserved" class="row">
             <div class="col-md-6">
@@ -90,7 +103,8 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
-        reserved:undefined,
+        reserved: undefined,
+        enrolled: undefined,
         totals: [],
         r_fresh: [],
         r_trans: [],
@@ -108,8 +122,9 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'registrar/enrollment_summary_data/')
                 .then((data) => {  
-                   console.log(data);
-                   this.programs = data.data.programs;
+                   this.enrolled = data.data;
+                   console.log(this.enrolled);
+                   this.programs = data.programs;
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
                         this.reserved = data.data;                         
