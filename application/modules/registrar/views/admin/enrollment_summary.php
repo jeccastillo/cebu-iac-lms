@@ -153,7 +153,7 @@ new Vue({
                 .then((data) => {  
                    this.enrolled = data.data.data;
                    for(i in this.enrolled){
-                        this.all_enrolled +=  this.enrolled.enrolled_freshman + this.enrolled.enrolled_foreign + this.enrolled.enrolled_second + this.enrolled.enrolled_transferee;
+                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
                    }
                    console.log(this.enrolled);
                    this.programs = data.data.programs;
