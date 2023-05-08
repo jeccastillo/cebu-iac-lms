@@ -27,7 +27,7 @@ new Vue({
         current_sem: '<?php echo $active_sem['intID']; ?>',
         reserved:{
 
-        }
+        },
         programs: undefined,
                       
     },
