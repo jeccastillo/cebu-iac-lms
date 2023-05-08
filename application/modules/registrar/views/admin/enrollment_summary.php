@@ -8,7 +8,7 @@
     <div class="content">        
         <h4>Reserved</h4>
         <div>
-            <table v-if="reserved" class="table table-bordered">
+            <table v-if="reserved" class="table table-bordered table-striped">
                 <tr>
                     <th>Program</th>
                     <th>Freshman</th>
@@ -22,14 +22,26 @@
                     <td v-for="type in prog" v-if="type.student_type == 'freshman'">
                         {{ type.reserved_count }}
                     </td>
+                    <td v-if="r_fresh[prog[0].type_id] == false">
+                        0
+                    </td>
                     <td v-for="type in prog" v-if="type.student_type == 'transferee'">
                         {{ type.reserved_count }}
+                    </td>
+                    <td v-if="r_trans[prog[0].type_id] == false">
+                        0
                     </td>
                     <td v-for="type in prog" v-if="type.student_type == 'foreign'">
                         {{ type.reserved_count }}
                     </td>
+                    <td v-if="r_foreign[prog[0].type_id] == false">
+                        0
+                    </td>
                     <td v-for="type in prog" v-if="type.student_type == 'second degree'">
                         {{ type.reserved_count }}
+                    </td>
+                    <td v-if="r_sd[prog[0].type_id] == false">
+                        0
                     </td>
                     <td>
                         {{ totals[prog[0].type_id] }}
@@ -74,6 +86,10 @@ new Vue({
         current_sem: '<?php echo $active_sem['intID']; ?>',
         reserved:undefined,
         totals: [],
+        r_fresh: [],
+        r_trans: [],
+        r_foreign: [],
+        r_sd: [],
         programs: undefined,
         all_reserved: 0,
                       
@@ -92,8 +108,21 @@ new Vue({
                     .then((data) => {  
                         this.reserved = data.data;                         
                         for(i in this.reserved){       
+                            this.r_fresh[i] = false;
+                            this.r_trans[i] = false;
+                            this.r_foreign[i] = false;
+                            this.r_sd[i] = false;
                             this.totals[this.reserved[i][0].type_id] = 0;                                         
-                            for(j in this.reserved[i]){                                                               
+                            for(j in this.reserved[i]){     
+                                if(this.reserved[i][j].student_type == "freshman")
+                                    this.r_fresh[i] = true;
+                                if(this.reserved[i][j].student_type == "transferee")
+                                    this.r_trans[i] = true;
+                                if(this.reserved[i][j].student_type == "foreign")
+                                    this.r_foreign[i] = true;
+                                if(this.reserved[i][j].student_type == "second degree")
+                                    this.r_sd[i] = true;
+
                                 this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                                 this.all_reserved += parseInt(this.reserved[i][j].reserved_count);
                             }
