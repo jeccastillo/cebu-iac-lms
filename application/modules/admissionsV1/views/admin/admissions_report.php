@@ -3,9 +3,9 @@
         <h1>
             Admissions Report
             <small>
-                <a class="btn btn-app" href="<?php echo base_url(); ?>registrar/registrar_reports" >
+                <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
                     <i class="ion ion-arrow-left-a"></i>
-                    All Reports
+                    View Leads
                 </a> 
             </small>
         </h1>     
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Quick Stats</h4>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                     <tr>
                         <th>New Applicants</th>
                         <td>{{ stats.new }}</td>

@@ -10,7 +10,7 @@
         </ol>
         <hr />
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <p>Filter by Status</p>
                 <select class="form-select form-control" id="status_filter">
                     <option value="none" selected>None</option>
@@ -26,7 +26,14 @@
                     <option value="Rejected">Rejected</option>
                 </select>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
+                <div class="input-group pull-right">
+                    <a href="<?php echo base_url(); ?>admissionsV1/admissions_report" class="btn btn-primary">
+                        Quick Stats
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-4">
                 <div class="input-group pull-right">
                     <button class="btn btn-default pull-right" id="daterange-btn-users">
                         <i class="fa fa-calendar"></i> Choose Date Range
