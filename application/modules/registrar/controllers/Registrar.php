@@ -368,6 +368,7 @@ class Registrar extends CI_Controller {
         $sem = $active_sem['intID'];
 
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $data['programs'] = $programs;
         $ret = [];        
 
         foreach($programs as $program){
