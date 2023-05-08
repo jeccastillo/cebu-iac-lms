@@ -21,6 +21,15 @@
                     <td v-for="type in prog" v-if="type.student_type == 'freshman'">
                         {{ type.reserved_count }}
                     </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'transferee'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'foreign'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'second degree'">
+                        {{ type.reserved_count }}
+                    </td>
                 </tr>
             </table>            
         </div>
