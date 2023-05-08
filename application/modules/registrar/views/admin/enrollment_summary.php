@@ -40,13 +40,13 @@ new Vue({
             axios.get(this.base_url + 'registrar/enrollment_summary_data/')
                 .then((data) => {  
                    console.log(data);
-                   this.programs = data.programs;
+                   this.programs = data.data.programs;
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
                         console.log(data);
                         for(i in this.programs){
-                            for(j in data.data){
-                                if(data.data[j].type_id == this.programs[i].intProgramID)
+                            for(j in data.data.data){
+                                if(data.data.data[j].type_id == this.programs[i].intProgramID)
                                     console.log(this.programs[i].strProgramCode)
                             }
                         }
