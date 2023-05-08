@@ -94,6 +94,14 @@
                         {{ item.enrolled_freshman + item.enrolled_transferee + item.enrolled_foreign + item.enrolled_second }}
                     </td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>{{ all_enrolled }}</strong></td>
+                </tr>
             </table>
         </div>
         <!-- <h4>Enrolled</h4>
@@ -132,6 +140,7 @@ new Vue({
         r_sd: [],
         programs: undefined,
         all_reserved: 0,
+        all_enrolled: 0,
                       
     },
 
@@ -143,6 +152,9 @@ new Vue({
             axios.get(this.base_url + 'registrar/enrollment_summary_data/')
                 .then((data) => {  
                    this.enrolled = data.data.data;
+                   for(i in this.enrolled){
+                        this.all_enrolled +=  this.enrolled.enrolled_freshman + this.enrolled.enrolled_foreign + this.enrolled.enrolled_second + this.enrolled.enrolled_transferee;
+                   }
                    console.log(this.enrolled);
                    this.programs = data.data.programs;
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
