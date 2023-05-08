@@ -84,7 +84,7 @@ new Vue({
                         this.reserved = data.data;                         
                         for(i in this.reserved){                                                
                             for(j in this.reserved[i]){   
-                                console.log(this.reserved[i][j].reserved_count," ");                             
+                                console.log(this.reserved[i][j].reserved_count+" "+this.reserved[i][j].program+" ");                             
                                 this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                             }
                         }
