@@ -8,7 +8,7 @@
     <div class="content">        
         <h4>Reserved</h4>
         <div>
-            <table class="table table-bordered">
+            <table v-if="reserved" class="table table-bordered">
                 <tr>
                     <th>Program</th>
                     <th>Freshman</th>
