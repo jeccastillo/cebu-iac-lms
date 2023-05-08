@@ -48,7 +48,7 @@ new Vue({
                    this.programs = data.data.programs;
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
-                        this.reserved = data.data.data; 
+                        this.reserved = data.data; 
                         console.log(this.reserved);                   
                     })
                     .catch((error) => {
