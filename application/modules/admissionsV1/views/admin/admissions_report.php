@@ -42,7 +42,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
-        reserved: undefined,
+        stats: undefined,
         enrolled: undefined,        
         programs: undefined,
         all_reserved: 0,
@@ -56,10 +56,10 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             
-            axios.get(api_url + 'admissions/applications/stats/all?current_sem='+this.current_sem)
-            .then((data) => {  
-                console.log(data);
-                //this.reserved = data.data;                                                         
+            axios.get(api_url + 'admissions/applications/adstats?current_sem='+this.current_sem)
+            .then((data) => {                  
+                this.stats = data.data.data;                                                         
+                console.log(this.stats);
             })
             .catch((error) => {
                 console.log(error);

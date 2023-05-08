@@ -94,6 +94,16 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
+    public function admissions_report()    
+    {
+        
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/admissions_report",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        
+    }
+
     public function add_new_student(){
         
         $ip = $this->input->ip_address();
