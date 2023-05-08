@@ -85,7 +85,7 @@ new Vue({
                         for(i in this.reserved){   
                             console.log(i," ");                         
                             for(j in this.reserved[i]){                                
-                                this.totals[this.reserved[i][j].type_id] += this.reserved[i][j].reserved_count;
+                                this.totals[this.reserved[i][j].type_id] += Number(this.reserved[i][j].reserved_count);
                             }
                         }
 
