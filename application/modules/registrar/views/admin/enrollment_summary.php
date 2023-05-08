@@ -82,9 +82,9 @@ new Vue({
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
                         this.reserved = data.data; 
+                        console.log(i," ");
                         for(i in this.reserved){                            
-                            for(j in this.reserved[i]){
-                                console.log(j," ");
+                            for(j in this.reserved[i]){                                
                                 this.totals[this.reserved[i][j].type_id] += this.reserved[i][j].reserved_count;
                             }
                         }
