@@ -24,7 +24,7 @@
                     <tr>
                         <th>Waiting for Interview</th>
                         <td>{{ stats.waiting }}</td>
-                        <td>{{ (stats.waiting/total)*100 }}%</td>
+                        <td>{{ ((stats.waiting/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>For Interview</th>
