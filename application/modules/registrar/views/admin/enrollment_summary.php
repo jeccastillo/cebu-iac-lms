@@ -82,12 +82,10 @@ new Vue({
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
                         this.reserved = data.data;                         
-                        for(i in this.reserved){                                   
-                            for(j in this.reserved[i]){
-                                if(this.totals[this.reserved[i][j].type_id] != null)                                                               
-                                    this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
-                                else
-                                    this.totals[this.reserved[i][j].type_id] = 0;
+                        for(i in this.reserved){       
+                            this.totals[this.reserved[i][0].type_id] = 0;                                         
+                            for(j in this.reserved[i]){                                                               
+                                this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                             }
                         }
 
