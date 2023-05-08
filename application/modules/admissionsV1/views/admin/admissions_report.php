@@ -52,6 +52,10 @@
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
                     </tr>
+                    <tr>
+                        <th>Total</th>
+                        <td><strong>{{ stats.new + stats.enrolled + stats.enlisted + stats.confirmed + stats.for_enrollment + stats.reserved + stats.for_reservation + stats.for_interview + stats.waiting }}</strong></td>
+                    </tr>
                 </table>
             </div>
         </div>
