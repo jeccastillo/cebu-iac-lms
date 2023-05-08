@@ -17,26 +17,24 @@
                     <th>Second Degree</th>
                     <th>Total</th>
                 </tr>
-                <tbody v-for="prog in reserved">
-                    <tr v-for="type in prog" >
-                        <td>{{ prog[0].program }}</td>
-                        <td v-if="type.student_type == 'freshman'">
-                            {{ type.student_type == 'freshman'?type.reserved_count:0 }}
-                        </td>
-                        <td v-if="type.student_type == 'transferee'">
-                            {{ type.student_type == 'transferee'?type.reserved_count:0 }}
-                        </td>
-                        <td v-if="type.student_type == 'foreign'">
-                            {{ type.student_type == 'foreign'?type.reserved_count:0 }}
-                        </td>
-                        <td v-if="type.student_type == 'second degree'">
-                            {{ type.student_type == 'second degree'?type.reserved_count:0 }}
-                        </td>
-                        <td>
-                            {{ totals[prog[0].type_id] }}
-                        </td>
-                    </tr>
-                </tbody>
+                <tr v-for="prog in reserved">
+                    <td>{{ prog[0].program }}</td>
+                    <td v-for="type in prog" v-if="type.student_type == 'freshman'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'transferee'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'foreign'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td v-for="type in prog" v-if="type.student_type == 'second degree'">
+                        {{ type.reserved_count }}
+                    </td>
+                    <td>
+                        {{ totals[prog[0].type_id] }}
+                    </td>
+                </tr>
                 <tr>
                     <td></td>
                     <td></td>
