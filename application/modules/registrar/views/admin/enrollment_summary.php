@@ -6,6 +6,16 @@
     </section>
         <hr />
     <div class="content">        
+        <h4>Reserved</h4>
+        <div v-for="prog in reserved" class="row">
+            <div class="col-md-6">
+                {{ prog.program }}
+            </div>
+            <div class="col-md-6">
+                {{ prog.reserved_count }}
+            </div>
+        </div>
+        <h4>Enrolled</h4>
         <div v-for="prog in reserved" class="row">
             <div class="col-md-6">
                 {{ prog.program }}
