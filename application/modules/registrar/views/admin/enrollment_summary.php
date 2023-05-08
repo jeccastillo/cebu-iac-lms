@@ -20,16 +20,16 @@
                 <tbody v-for="prog in reserved">
                     <tr v-for="type in prog" >
                         <td>{{ prog[0].program }}</td>
-                        <td>
+                        <td v-if="type.student_type == 'freshman'">
                             {{ type.student_type == 'freshman'?type.reserved_count:0 }}
                         </td>
-                        <td>
+                        <td v-if="type.student_type == 'transferee'">
                             {{ type.student_type == 'transferee'?type.reserved_count:0 }}
                         </td>
-                        <td>
+                        <td v-if="type.student_type == 'foreign'">
                             {{ type.student_type == 'foreign'?type.reserved_count:0 }}
                         </td>
-                        <td>
+                        <td v-if="type.student_type == 'second degree'">
                             {{ type.student_type == 'second degree'?type.reserved_count:0 }}
                         </td>
                         <td>
