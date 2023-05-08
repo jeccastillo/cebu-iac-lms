@@ -3,7 +3,10 @@
         <h1>
             Enrollment Summary
             <small>
-                <a class="btn btn-app" target="_blank" href="<?php echo base_url(); ?>registrar/registrar_reports" >All Reports</a> 
+                <a class="btn btn-app" target="_blank" href="<?php echo base_url(); ?>registrar/registrar_reports" >
+                    <i class="ion ion-arrow-left-a"></i>
+                    All Reports
+                </a> 
             </small>
         </h1>     
     </section>

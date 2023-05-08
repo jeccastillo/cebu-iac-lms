@@ -3,7 +3,11 @@
             <h1>
             Enrolled Students
             <small>
-                <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" >Print PDF</a> 
+                <a class="btn btn-app" target="_blank" href="<?php echo base_url(); ?>registrar/registrar_reports" >
+                    <i class="ion ion-arrow-left-a"></i>
+                    All Reports
+                </a> 
+                <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" ><i class="fa fa-book"></i>Print PDF</a> 
             </small>
             
         </h1> 
