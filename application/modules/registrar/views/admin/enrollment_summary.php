@@ -7,7 +7,22 @@
         <hr />
     <div class="content">        
         <h4>Reserved</h4>
-        <div v-for="prog in reserved" class="row">
+        <div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Program</th>
+                    <th>Freshman</th>
+                    <th>Transferee</th>
+                    <th>Foreign</th>
+                    <th>Second Degree</th>
+                </tr>
+                <tr v-for="prog in reserved">
+                    <td>{{ prog[0].program }}</td>
+                    <td v-for="type in prog" v-if="type.student_type == 'freshman'">
+                        {{ type.reserved_count }}
+                    </td>
+                </tr>
+            </table>
             <div class="col-md-6">
                 {{ prog.program }}
             </div>
@@ -15,7 +30,7 @@
                 {{ prog.reserved_count }}
             </div>
         </div>
-        <h4>Enrolled</h4>
+        <!-- <h4>Enrolled</h4>
         <div v-for="prog in reserved" class="row">
             <div class="col-md-6">
                 {{ prog.program }}
@@ -23,7 +38,7 @@
             <div class="col-md-6">
                 {{ prog.reserved_count }}
             </div>
-        </div>
+        </div> -->
     </div>
   
 </aside>
