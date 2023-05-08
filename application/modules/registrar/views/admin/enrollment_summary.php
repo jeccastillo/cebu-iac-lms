@@ -6,7 +6,14 @@
     </section>
         <hr />
     <div class="content">        
-           
+        <div v-for="prog in reserved" class="row">
+            <div class="col-md-6">
+                {{ prog.program }}
+            </div>
+            <div class="col-md-6">
+                {{ prog.reserved_count }}
+            </div>
+        </div>
     </div>
   
 </aside>
@@ -25,7 +32,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
-        reserved:[],
+        reserved:undefined,
         programs: undefined,
                       
     },
@@ -41,7 +48,7 @@ new Vue({
                    this.programs = data.data.programs;
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
-                        console.log(data);                       
+                        this.reserved = data.data.data;                    
                     })
                     .catch((error) => {
                         console.log(error);
