@@ -25,9 +25,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
-        reserved:{
-
-        },
+        reserved:[],
         programs: undefined,
                       
     },
@@ -45,11 +43,13 @@ new Vue({
                     .then((data) => {  
                         console.log(data);
                         for(i in this.programs){
+                            this.reserved[this.programs[i]] = 0;
                             for(j in data.data.data){
                                 if(data.data.data[j].type_id == this.programs[i].intProgramID)
-                                    console.log(this.programs[i].strProgramCode)
+                                    this.reserved[this.programs[i]]++;
                             }
                         }
+                     console.log(this.reserved);  
                     })
                     .catch((error) => {
                         console.log(error);
