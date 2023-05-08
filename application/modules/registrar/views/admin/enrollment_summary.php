@@ -15,6 +15,7 @@
                     <th>Transferee</th>
                     <th>Foreign</th>
                     <th>Second Degree</th>
+                    <th>Total</th>
                 </tr>
                 <tr v-for="prog in reserved">
                     <td>{{ prog[0].program }}</td>
@@ -29,6 +30,9 @@
                     </td>
                     <td v-for="type in prog" v-if="type.student_type == 'second degree'">
                         {{ type.reserved_count }}
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
             </table>            
@@ -61,6 +65,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
         reserved:undefined,
+        totals: [],
         programs: undefined,
                       
     },
@@ -77,7 +82,13 @@ new Vue({
                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
                     .then((data) => {  
                         this.reserved = data.data; 
-                        console.log(this.reserved);                   
+                        for(i in this.reserved){                            
+                            for(j in this.reserved[i]){
+                                this.totals[this.reserved[i][j].type_id] += this.reserved[i][j].reserved_count;
+                            }
+                        }
+
+                        console.log(this.totals);                   
                     })
                     .catch((error) => {
                         console.log(error);
