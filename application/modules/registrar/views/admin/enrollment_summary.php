@@ -2,6 +2,9 @@
     <section class="content-header">
         <h1>
             Enrollment Summary
+            <small>
+                <a class="btn btn-app" target="_blank" href="<?php echo base_url(); ?>registrar/registrar_reports" >All Reports</a> 
+            </small>
         </h1>     
     </section>
         <hr />
