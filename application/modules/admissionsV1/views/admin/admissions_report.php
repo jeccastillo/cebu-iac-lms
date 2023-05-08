@@ -95,8 +95,8 @@ new Vue({
             
             axios.get(api_url + 'admissions/applications/adstats?current_sem='+this.current_sem)
             .then((data) => {       
-                console.log(data);           
-                this.stats = data;                                                                         
+                // console.log(data);           
+                this.stats = data.data;                                                                         
             })
             .catch((error) => {
                 console.log(error);
