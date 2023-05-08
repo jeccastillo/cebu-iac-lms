@@ -12,8 +12,45 @@
     </section>
         <hr />
     <div class="content">        
-        <h4>Reserved</h4>
-        
+        <h4>All Statuses</h4>
+        <table class="table table-bordered">
+            <tr>
+                <th>New Applicants</th>
+                <td>{{ stats.new }}</td>
+            </tr>
+            <tr>
+                <th>Waiting for Interview</th>
+                <td>{{ stats.waiting }}</td>
+            </tr>
+            <tr>
+                <th>For Interview</th>
+                <td>{{ stats.for_interview }}</td>
+            </tr>
+            <tr>
+                <th>For Reservation</th>
+                <td>{{ stats.for_reservation }}</td>
+            </tr>
+            <tr>
+                <th>Reserved</th>
+                <td>{{ stats.reserved }}</td>
+            </tr>
+            <tr>
+                <th>For Enrollment</th>
+                <td>{{ stats.for_enrollment }}</td>
+            </tr>
+            <tr>
+                <th>Confirmed and Complete Information</th>
+                <td>{{ stats.confirmed }}</td>
+            </tr>
+            <tr>
+                <th>Enlisted</th>
+                <td>{{ stats.enlisted }}</td>
+            </tr>
+            <tr>
+                <th>Enrolled</th>
+                <td>{{ stats.enrolled }}</td>
+            </tr>
+        </table>
        
         <!-- <h4>Enrolled</h4>
         <div v-for="prog in reserved" class="row">
