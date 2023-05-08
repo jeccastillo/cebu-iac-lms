@@ -29,37 +29,37 @@
                     <tr>
                         <th>For Interview</th>
                         <td>{{ stats.for_interview }}</td>
-                        <td>{{ (stats.for_interview/total)*100 }}%</td>
+                        <td>{{ ((stats.for_interview/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>For Reservation</th>
                         <td>{{ stats.for_reservation }}</td>
-                        <td>{{ (stats.for_reservation/total)*100 }}%</td>
+                        <td>{{ ((stats.for_reservation/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Reserved</th>
                         <td>{{ stats.reserved }}</td>
-                        <td>{{ (stats.reserved/total)*100 }}%</td>
+                        <td>{{ ((stats.reserved/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>For Enrollment</th>
                         <td>{{ stats.for_enrollment }}</td>
-                        <td>{{ (stats.for_enrollment/total)*100 }}%</td>
+                        <td>{{ ((stats.for_enrollment/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Confirmed and Complete Information</th>
                         <td>{{ stats.confirmed }}</td>
-                        <td>{{ (stats.confirmed/total)*100 }}%</td>
+                        <td>{{ ((stats.confirmed/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Enlisted</th>
                         <td>{{ stats.enlisted }}</td>
-                        <td>{{ (stats.enlisted/total)*100 }}%</td>
+                        <td>{{ ((stats.enlisted/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
-                        <td>{{ (stats.enrolled/total)*100 }}%</td>
+                        <td>{{ ((stats.enrolled/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Total</th>
