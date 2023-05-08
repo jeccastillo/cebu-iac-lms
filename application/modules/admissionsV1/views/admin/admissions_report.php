@@ -19,42 +19,52 @@
                     <tr>
                         <th>New Applicants</th>
                         <td>{{ stats.new }}</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <th>Waiting for Interview</th>
                         <td>{{ stats.waiting }}</td>
+                        <td>{{ (stats.waiting/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>For Interview</th>
                         <td>{{ stats.for_interview }}</td>
+                        <td>{{ (stats.for_interview/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>For Reservation</th>
                         <td>{{ stats.for_reservation }}</td>
+                        <td>{{ (stats.for_reservation/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>Reserved</th>
                         <td>{{ stats.reserved }}</td>
+                        <td>{{ (stats.reserved/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>For Enrollment</th>
                         <td>{{ stats.for_enrollment }}</td>
+                        <td>{{ (stats.for_enrollment/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>Confirmed and Complete Information</th>
                         <td>{{ stats.confirmed }}</td>
+                        <td>{{ (stats.confirmed/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>Enlisted</th>
                         <td>{{ stats.enlisted }}</td>
+                        <td>{{ (stats.enlisted/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
+                        <td>{{ (stats.enrolled/total)*100 }}%</td>
                     </tr>
                     <tr>
                         <th>Total</th>
-                        <td><strong>{{ stats.new + stats.enrolled + stats.enlisted + stats.confirmed + stats.for_enrollment + stats.reserved + stats.for_reservation + stats.for_interview + stats.waiting }}</strong></td>
+                        <td><strong>{{ total }}</strong></td>
+                        <td></td>
                     </tr>
                 </table>
             </div>
@@ -91,6 +101,7 @@ new Vue({
         programs: undefined,
         all_reserved: 0,
         all_enrolled: 0,
+        total: 0,
                       
     },
 
@@ -103,7 +114,10 @@ new Vue({
             axios.get(api_url + 'admissions/applications/adstats?current_sem='+this.current_sem)
             .then((data) => {       
                 // console.log(data);           
-                this.stats = data.data;                                                                         
+                this.stats = data.data;  
+                this.total = this.stats.new + this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
+                            this.stats.for_enrollment + this.stats.reserved + 
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting;
             })
             .catch((error) => {
                 console.log(error);
