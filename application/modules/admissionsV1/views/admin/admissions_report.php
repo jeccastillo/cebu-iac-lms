@@ -94,7 +94,8 @@ new Vue({
             //this.loader_spinner = true;
             
             axios.get(api_url + 'admissions/applications/adstats?current_sem='+this.current_sem)
-            .then((data) => {                  
+            .then((data) => {       
+                console.log(data);           
                 this.stats = data;                                                                         
             })
             .catch((error) => {
