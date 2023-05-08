@@ -17,23 +17,33 @@
                     <th>Second Degree</th>
                     <th>Total</th>
                 </tr>
-                <tr v-for="prog in reserved">
-                    <td>{{ prog[0].program }}</td>
-                    <td v-for="type in prog" v-if="type.student_type == 'freshman'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'transferee'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'foreign'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'second degree'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td>
-                        {{ totals[prog[0].type_id] }}
-                    </td>
+                <tbody v-for="prog in reserved">
+                    <tr v-for="type in prog" >
+                        <td>{{ prog[0].program }}</td>
+                        <td>
+                            {{ type.student_type == 'freshman'?type.reserved_count:0 }}
+                        </td>
+                        <td>
+                            {{ type.student_type == 'transferee'?type.reserved_count:0 }}
+                        </td>
+                        <td>
+                            {{ type.student_type == 'foreign'?type.reserved_count:0 }}
+                        </td>
+                        <td>
+                            {{ type.student_type == 'second degree'?type.reserved_count:0 }}
+                        </td>
+                        <td>
+                            {{ totals[prog[0].type_id] }}
+                        </td>
+                    </tr>
+                </tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ all_reserved }}</td>
                 </tr>
             </table>            
         </div>
@@ -67,6 +77,7 @@ new Vue({
         reserved:undefined,
         totals: [],
         programs: undefined,
+        all_reserved: 0,
                       
     },
 
@@ -86,6 +97,7 @@ new Vue({
                             this.totals[this.reserved[i][0].type_id] = 0;                                         
                             for(j in this.reserved[i]){                                                               
                                 this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
+                                this.all_reserved += parseInt(this.reserved[i][j].reserved_count);
                             }
                         }
 
