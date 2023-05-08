@@ -32,7 +32,7 @@
                         {{ type.reserved_count }}
                     </td>
                     <td>
-
+                        {{ totals[prog[0].type_id] }}
                     </td>
                 </tr>
             </table>            
