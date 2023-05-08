@@ -84,7 +84,7 @@ new Vue({
                         this.reserved = data.data;                         
                         for(i in this.reserved){                                   
                             for(j in this.reserved[i]){
-                                if(this.totals[this.reserved[i][j].type_id])                                                               
+                                if(this.totals[this.reserved[i][j].type_id] != null)                                                               
                                     this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                                 else
                                     this.totals[this.reserved[i][j].type_id] = 0;
