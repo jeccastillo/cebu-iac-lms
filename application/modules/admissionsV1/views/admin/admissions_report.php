@@ -17,49 +17,29 @@
                 <h4>Quick Stats</h4>
                 <table class="table table-bordered table-striped">
                     <tr>
-                        <th>New Applicants</th>
-                        <td>{{ stats.new }}</td>
+                        <th>Applicants</th>
+                        <td>{{ total }}</td>
                         <td></td>
-                    </tr>
+                    </tr>                    
                     <tr>
-                        <th>Waiting for Interview</th>
-                        <td>{{ stats.waiting }}</td>
-                        <td>{{ ((stats.waiting/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>For Interview</th>
-                        <td>{{ stats.for_interview }}</td>
-                        <td>{{ ((stats.for_interview/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>For Reservation</th>
-                        <td>{{ stats.for_reservation }}</td>
-                        <td>{{ ((stats.for_reservation/total)*100).toFixed(2) }}%</td>
+                        <th>Interviewed</th>
+                        <td>{{ stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled }}</td>
+                        <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled)/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Reserved</th>
-                        <td>{{ stats.reserved }}</td>
-                        <td>{{ ((stats.reserved/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>For Enrollment</th>
-                        <td>{{ stats.for_enrollment }}</td>
-                        <td>{{ ((stats.for_enrollment/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>Confirmed and Complete Information</th>
-                        <td>{{ stats.confirmed }}</td>
-                        <td>{{ ((stats.confirmed/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>Enlisted</th>
-                        <td>{{ stats.enlisted }}</td>
-                        <td>{{ ((stats.enlisted/total)*100).toFixed(2) }}%</td>
-                    </tr>
+                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled }}</td>
+                        <td>{{ (((stats.reserved + stats.for_reservation + stats.confirmed + stats.enlisted + stats.enrolled)/total)*100).toFixed(2) }}%</td>
+                    </tr>                    
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
                         <td>{{ ((stats.enrolled/total)*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Rejected</th>
+                        <td>{{ stats.rejected }}</td>
+                        <td>{{ ((stats.rejected/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Total</th>
