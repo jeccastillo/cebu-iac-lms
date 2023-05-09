@@ -40,12 +40,7 @@
                         <th>Rejected</th>
                         <td>{{ stats.rejected }}</td>
                         <td>{{ ((stats.rejected/total)*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>Total</th>
-                        <td><strong>{{ total }}</strong></td>
-                        <td></td>
-                    </tr>
+                    </tr>                    
                 </table>
             </div>
         </div>
