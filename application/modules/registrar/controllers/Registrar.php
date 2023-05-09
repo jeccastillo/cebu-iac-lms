@@ -397,6 +397,16 @@ class Registrar extends CI_Controller {
         
     }
 
+    public function reservation_summary()    
+    {
+        
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/reservation_summary",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        
+    }
+
     public function enrollment_report($course = 0, $year=1,$gender = 0,$sem=0)    
     {
 
