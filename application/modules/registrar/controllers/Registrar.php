@@ -402,7 +402,7 @@ class Registrar extends CI_Controller {
         
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/reservation_summary",$this->data);
+        $this->load->view("admin/reserved_summary",$this->data);
         $this->load->view("common/footer",$this->data); 
         
     }
