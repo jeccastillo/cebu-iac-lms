@@ -517,14 +517,14 @@ class Data_fetcher extends CI_Model {
     function count_sent_items($user)
     {
             	
-            $this->db->select("intMessageUserID")
-                     ->where(array("intTrash"=>"0","intFacultyIDSender"=>$user))
-                      ->group_by("intMessageID"); 
+            // $this->db->select("intMessageUserID")
+            //          ->where(array("intTrash"=>"0","intFacultyIDSender"=>$user))
+            //           ->group_by("intMessageID"); 
         
-            $result = $this->db
-                  ->get("tb_mas_message_user")->result_array();
+            // $result = $this->db
+            //       ->get("tb_mas_message_user")->result_array();
         
-            return count($result);
+            return 0;
         
         
         
