@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Quick Stats</h4>
-                <table class="table table-bordered table-striped">
+                <table v-if="stats" class="table table-bordered table-striped">
                     <tr>
                         <th>Applicants</th>
                         <td>{{ total }}</td>
