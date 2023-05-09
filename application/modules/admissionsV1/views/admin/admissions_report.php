@@ -29,12 +29,12 @@
                     <tr>
                         <th>Reserved</th>
                         <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled }}</td>
-                        <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.enrolled)/total)*100).toFixed(2) }}%</td>
+                        <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.enrolled)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled))*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
-                        <td>{{ ((stats.enrolled/total)*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.enrolled))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Rejected</th>
