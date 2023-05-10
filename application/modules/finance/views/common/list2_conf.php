@@ -19,7 +19,7 @@ function formatDate(date) {
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
     var date = new Date();
-    daterange = "?start=" + date.format('YYYY-MM-D') + '&end=' + date.format('YYYY-MM-D');
+    daterange = "?start=" + date + '&end=' + date;
     $("#print_form").hide();
     $('#chooseDate').daterangepicker(
     {
