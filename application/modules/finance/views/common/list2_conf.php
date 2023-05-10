@@ -17,9 +17,8 @@ function formatDate(date) {
     return [year, month, day].join('-');
 }
 $(document).ready(function() {
-    var filter_status = $("#status_filter").val();
-    var date = new Date();
-    daterange = "?start=" + date + '&end=' + date;
+    var filter_status = $("#status_filter").val();    
+    daterange = "?start=" + <?php echo date("Y-m-d") ?> + '&end=' + <?php echo date("Y-m-d") ?>;
     $("#print_form").hide();
     $('#chooseDate').daterangepicker(
     {
