@@ -36,8 +36,7 @@ $(document).ready(function() {
         dtable.fnDraw(false);   
     }
     );     
-        
-    let url = api_url + "finance/transactions_per_term"+daterange;
+            
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
@@ -48,7 +47,7 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                url, {
+                api_url + "finance/transactions_per_term"+daterange, {
                     limit: 100,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
