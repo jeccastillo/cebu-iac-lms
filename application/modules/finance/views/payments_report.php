@@ -16,9 +16,14 @@
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <input class="form-control datepicker" id="chooseDay"  placeholder="Choose Day">
+        <div class="row">            
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <button class="btn btn-default pull-right" id="chooseDate">
+                        <i class="fa fa-calendar"></i> Choose Date Range
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <hr />

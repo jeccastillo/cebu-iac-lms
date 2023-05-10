@@ -2,6 +2,7 @@
 ?>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script type="text/javascript">
+var daterange = "";
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -18,13 +19,25 @@ function formatDate(date) {
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
     $("#print_form").hide();
-    $('.datepicker').datepicker({
-        pickTime: false
-    }).on('changeDate',function(e){
-        document.location = "<?php echo base_url();?>finance/payments/"+formatDate($(this).val());        
-    });
+    $('#chooseDate').daterangepicker(
+    {
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+        },
+        startDate: moment().subtract('days', 29),
+        endDate: moment()
+    },
+    function(start, end) {
+        daterange = "?start=" + start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D');
+        dtable.fnDraw(false);   
+    }
+    );     
         
-    let url = api_url + "finance/transactions_per_term/<?php echo $date; ?>";
+    let url = api_url + "finance/transactions_per_term"+daterange;
     
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
