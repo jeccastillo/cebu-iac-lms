@@ -67,11 +67,12 @@
 
                 <div v-if="type == 'animation'">
                     <p class="mb-2">
-                        The Bachelor of Science in Animation is an 11 term program which addresses the technical
-                        production needs of the industry where students are trained to be skilled in both 2D and 3D
-                        animation to produce pipeline ready graduates. The program prepares students to become globally
-                        competitive animators, directors and content creators to contribute to the uplifting of both the
-                        local and global Animation industry.
+                        The Bachelor of Science in Animation is an 11-term program which addresses the technical
+                        production needs of the industry. The program provides students with skills training in both 2D
+                        and 3D animation, including the use of state-of-the-art tools and software such as Toon Boom
+                        Animation software, to produce pipeline-ready graduates. The program prepares students to become
+                        globally competitive animators, directors and content creators to contribute to the uplifting of
+                        both the local and global Animation industry.
                     </p>
 
                 </div>
