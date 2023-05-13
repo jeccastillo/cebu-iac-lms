@@ -559,7 +559,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
      
     // <tr><td width="148" style="text-align:center; color:black;">' . number_format($payment_division, 2, '.' ,',') . ' </td></tr>
 $html = utf8_encode($html);
-$pdf->writeHTML($html);
+$pdf->writeHTML($html, true, false, true, false, '');
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
