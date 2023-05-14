@@ -11,7 +11,11 @@
         <hr />
         <div class="row">
             <div class="col-sm-4">
-                <p>Filter by Status</p>
+                Filter by Status
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">                
                 <select class="form-select form-control" id="status_filter">
                     <option value="none" selected>None</option>
                     <option value="New">New Applicant</option>
