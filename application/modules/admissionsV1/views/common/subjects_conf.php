@@ -20,18 +20,27 @@ $(document).ready(function() {
                     s_column = "created_at";
                 break;
                 case 2:
-                    s_column = "last_name";
+                    s_column = "date_inteviewed";
                 break;
                 case 3:
-                    s_column = "first_name";
+                    s_column = "date_registered";
                 break;
                 case 4:
-                    s_column = "email";
+                    s_column = "date_enrolled";
                 break;
                 case 5:
-                    s_column = "program";
+                    s_column = "last_name";
                 break;
                 case 6:
+                    s_column = "first_name";
+                break;
+                case 7:
+                    s_column = "email";
+                break;
+                case 8:
+                    s_column = "program";
+                break;                
+                case 9:
                     s_column = "status";
                 break;
             }
@@ -59,7 +68,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [7],
+                "aTargets": [10],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -82,6 +91,15 @@ $(document).ready(function() {
             },
             {
                 data: "date"
+            },
+            {
+                data: "date_interviewed"
+            },
+            {
+                data: "date_reserved"
+            },
+            {
+                data: "date_enrolled"
             },
             {
                 data: "last_name"

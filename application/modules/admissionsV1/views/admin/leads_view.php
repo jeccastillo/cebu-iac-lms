@@ -59,6 +59,9 @@
                         <tr>
                             <th>slug</th>
                             <th>Date</th>
+                            <th>Date Interviewed</th>
+                            <th>Date Reserved</th>
+                            <th>Date Enrolled</th>
                             <th>Last Name</th>
                             <th>First Name</th>
                             <th>Email</th>
