@@ -33,14 +33,11 @@ $(document).ready(function() {
                 break;
                 case 6:
                     s_column = "first_name";
-                break;
+                break;                
                 case 7:
-                    s_column = "email";
-                break;
-                case 8:
                     s_column = "program";
                 break;                
-                case 9:
+                case 8:
                     s_column = "status";
                 break;
             }
@@ -68,7 +65,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [10],
+                "aTargets": [9],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -106,9 +103,6 @@ $(document).ready(function() {
             },
             {
                 data: "first_name"
-            },
-            {
-                data: "email"
             },
             {
                 data: "program"
