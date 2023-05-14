@@ -34,6 +34,14 @@
                 </div>
             </div>
             <div class="col-sm-4">
+                <div class="form-group  pull-left">
+                    <select class="form-select form-control" id="range-to-select">                        
+                        <option value="created_at">Date Applied</option>
+                        <option value="date_interviewed">Date Interviewed</option>
+                        <option value="date_reserved">Date Reserved</option>
+                        <option value="date_enrolled">Date Enrolled</option>
+                    </select>
+                </div>
                 <div class="input-group pull-right">
                     <button class="btn btn-default pull-right" id="daterange-btn-users">
                         <i class="fa fa-calendar"></i> Choose Date Range
