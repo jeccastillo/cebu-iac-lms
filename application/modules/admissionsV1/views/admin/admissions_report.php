@@ -11,7 +11,12 @@
         </h1>     
     </section>
         <hr />
-    <div class="content">    
+    <div class="content"> 
+        <div class="input-group pull-right">
+            <a href="<?php echo base_url(); ?>admissionsV1/admissions_report" class="btn btn-primary">
+                Quick Stats
+            </a>
+        </div>   
         <div class="row">
             <div class="col-md-6">
                 <h4>Quick Stats</h4>
@@ -66,6 +71,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
+<?php if($start!=0): ?>
+    var query_str = 'admissions/applications/adstats?current_sem='+this.current_sem+'&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
+<?php else: ?>
+    var query_str = 'admissions/applications/adstats?current_sem='+this.current_sem;
+<?php endif; ?>
 new Vue({
     el: '#registration-container',
     data: {                    
@@ -86,7 +96,7 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             
-            axios.get(api_url + 'admissions/applications/adstats?current_sem='+this.current_sem)
+            axios.get(api_url + query_str)
             .then((data) => {       
                 // console.log(data);           
                 this.stats = data.data;  
@@ -108,5 +118,25 @@ new Vue({
     }
 
 })
+
+$(document).ready(function(){
+    $('#daterange-btn').daterangepicker(
+    {
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+        },
+        startDate: moment().subtract('days', 29),
+        endDate: moment()
+    },
+    function(start, end) {
+        document.location = base_url + 'admissionsV1/admissions_report/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
+        
+    }
+    );  
+});
 </script>
 
