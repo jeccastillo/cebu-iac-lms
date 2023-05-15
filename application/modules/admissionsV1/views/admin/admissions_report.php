@@ -13,10 +13,11 @@
         <hr />
     <div class="content"> 
         <div class="input-group pull-right">
-            <a href="<?php echo base_url(); ?>admissionsV1/admissions_report" class="btn btn-primary">
-                Quick Stats
-            </a>
-        </div>   
+            <button class="btn btn-default pull-right" id="daterange-btn-users">
+                <i class="fa fa-calendar"></i> Choose Date Range
+                <i class="fa fa-caret-down"></i>
+            </button>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <h4>Quick Stats</h4>
@@ -74,7 +75,7 @@
 <?php if($start!=0): ?>
     var query_str = 'admissions/applications/adstats?current_sem='+this.current_sem+'&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
 <?php else: ?>
-    var query_str = 'admissions/applications/adstats?current_sem='+this.current_sem;
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>';
 <?php endif; ?>
 new Vue({
     el: '#registration-container',
