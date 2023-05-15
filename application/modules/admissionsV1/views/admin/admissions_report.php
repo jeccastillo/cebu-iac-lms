@@ -73,7 +73,7 @@
 
 <script>
 <?php if($start!=0): ?>
-    var query_str = 'admissions/applications/adstats?current_sem='+this.current_sem+'&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
 <?php else: ?>
     var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>';
 <?php endif; ?>
