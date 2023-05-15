@@ -1,7 +1,10 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Admissions Report
+            Admissions Report<br />
+            <?php if($start != 0): ?>
+                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime($end)); ?>
+            <?php endif; ?>
             <small>
                 <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
                     <i class="ion ion-arrow-left-a"></i>
