@@ -13,7 +13,7 @@
         <hr />
     <div class="content"> 
         <div class="input-group pull-right">
-            <button class="btn btn-default pull-right" id="daterange-btn">
+            <button class="btn btn-default pull-right" id="daterange-btn-admissions">
                 <i class="fa fa-calendar"></i> Choose Date Range
                 <i class="fa fa-caret-down"></i>
             </button>
@@ -121,7 +121,7 @@ new Vue({
 })
 
 $(document).ready(function(){
-    $('#daterange-btn').daterangepicker(
+    $('#daterange-btn-admissions').daterangepicker(
     {
         ranges: {
             'Today': [moment(), moment()],
