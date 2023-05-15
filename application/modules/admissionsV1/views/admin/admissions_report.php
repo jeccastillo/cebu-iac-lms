@@ -13,7 +13,7 @@
         <hr />
     <div class="content"> 
         <div class="input-group pull-right">
-            <button class="btn btn-default pull-right" id="daterange-btn-users">
+            <button class="btn btn-default pull-right" id="daterange-btn">
                 <i class="fa fa-calendar"></i> Choose Date Range
                 <i class="fa fa-caret-down"></i>
             </button>
