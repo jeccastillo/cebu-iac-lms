@@ -3,7 +3,11 @@
         <h1>
             Admissions Report<br />
             <?php if($start != 0): ?>
+                <?php if($start == $end): ?>
+                    <?php echo date('M j, Y',strtotime($start)); ?>
+                <?php else: ?>
                 from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime($end)); ?>
+                <?php endif; ?>
             <?php endif; ?>
             <small>
                 <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
