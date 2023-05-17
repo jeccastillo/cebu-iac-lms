@@ -29,7 +29,7 @@
         <hr />
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title"><?php echo ($date)?date('M j, Y',strtotime($date)):date('M j, Y'); ?></h3>                
+                <h3 class="box-title">Collection Report <?php echo ($other)?'(Other Payments)':''; ?></h3>                
             </div><!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
                 <table id="subjects-table" class="table table-hover table-bordered">
