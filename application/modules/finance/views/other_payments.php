@@ -177,10 +177,8 @@ new Vue({
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
-                    this.request.or_number = this.cashier.or_current;
-                    this.or_update.or_number = this.cashier.or_current;
-                    this.request.cashier_id = this.cashier.user_id;
-                    this.or_update.cashier_id = this.cashier.user_id;
+                    this.request.or_number = this.cashier.or_current;                    
+                    this.request.cashier_id = this.cashier.user_id;                    
                 }
             })
             .catch((error) => {
@@ -221,9 +219,9 @@ new Vue({
                     preConfirm: (login) => {
 
 
-                        if(this.request.description == 'Other'){
-                            this.request.description = this.description_other;                                
-                        }
+                        
+                        this.request.description = this.description_other;                                
+                        
 
                         this.request.subtotal_order = this.amount_to_pay;
                         this.request.total_amount_due = this.amount_to_pay;
