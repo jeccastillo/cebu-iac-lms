@@ -80,7 +80,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Check/Credit/Debit Number:</label>
-                                            <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
+                                            <input type="text" :disabled="request.is_cash == 1 || request.is_cash == 4" required class="form-control" v-model="request.check_number" />
                                         </div>
                                     </div>                                   
                                     <div class="col-sm-6">
@@ -179,7 +179,7 @@ new Vue({
         cashier: undefined,
         request:{
             first_name: '',
-            slug: '',
+            slug: 'na',
             middle_name: '',
             last_name: '',
             contact_number: '',
