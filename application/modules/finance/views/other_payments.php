@@ -2,18 +2,12 @@
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
-            <h1>                
-                <small>
-                    <a class="btn btn-app" :href="base_url + 'admissionsV1/view_all_leads'" ><i class="ion ion-arrow-left-a"></i>All Students Applicants</a>                                                                                                                     
-                </small>
-                {{ student.first_name+" "+student.last_name+", "+student.middle_name }}
+            <h1>                                
+                Other Payments
             </h1>
         </section>
         <hr />
-        <div class="content">
-            <div class="alert alert-danger" role="alert" v-if="!uploaded_requirements">
-                This student has not submitted any requirements.
-            </div>
+        <div class="content">            
             <div class="row">       
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
@@ -23,34 +17,24 @@
                         </div>
                         <div class="box-body">
                             <div class="row">                                
-                                <form @submit.prevent="submitManualPayment" method="post">                                                
+                                <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
+                                    <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Select payment for</label>
-                                            <select required @change="selectDescription" class="form-control" v-model="request.description">
-                                                <option v-if="application_payment && application_payment.status == 'Paid'" value="Reservation Payment">Reservation</option>
-                                                <option value="Application Payment">Application</option>
-                                                <option value="Other">Other</option>                                
-                                            </select>
-                                        </div>                                                
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label>Enter type if other is selected:</label>
-                                            <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="description_other" />
+                                            <label>Payment for:</label>
+                                            <input type="text" required class="form-control" v-model="description_other" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Enter amount to pay/refund:</label>
-                                            <input type="text" :disabled="request.description != 'Other'" required class="form-control" v-model="amount_to_pay" />
+                                            <input type="text" required class="form-control" v-model="amount_to_pay" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Contact Number:</label>
-                                            {{ request.contact_number }}
-                                            <input type="hidden" required class="form-control" v-model="request.contact_number" />
+                                            <label>Contact Number:</label>                                            
+                                            <input type="text" required class="form-control" v-model="request.contact_number" />
                                         </div>
                                     </div>                                                                                                          
                                     <div class="col-sm-6">
@@ -102,7 +86,8 @@
                                     </div> -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Email: {{ request.email_address }}</label>                                                    
+                                            <label>Email:</label>
+                                            <input type="text" required class="form-control" v-model="request.email" />                                                    
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
@@ -113,104 +98,7 @@
                         </div>
                     </div>
                 </div>                            
-                <div class="col-sm-12">
-                    <div class="box box-solid box-success">
-                        <div class="box-header">                            
-                            <h4 class="box-title">Transactions</h4>
-                        </div>
-                        <div class="box-body">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>OR Number</th>
-                                    <th>Cashier</th>
-                                    <th>Payment Type</th>
-                                    <th>Check/Credit/Debit #</th>
-                                    <th>Amount Paid</th>
-                                    <th>Online Payment Charge</th>
-                                    <th>Total Due</th>
-                                    <th>Status</th>
-                                    <th>Online Response Message</th>
-                                    <th>Date Updated</th>
-                                    <th>Actions</th>
-                                </tr>    
-                                <tr v-for="refunded in refunded_payments">
-                                    <td>{{ refunded.or_number }}</td>
-                                    <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ refunded.cashier_id }}</a></td>
-                                    <td>{{ refunded.description }}</td>
-                                    <td>{{ refunded.check_number }}</td>
-                                    <td>{{ refunded.subtotal_order }}</td>
-                                    <td>{{ refunded.charges }}</td>
-                                    <td>{{ refunded.total_amount_due }}</td>
-                                    <td>{{ refunded.status }}</td>                                            
-                                    <td>{{ refunded.response_message }}</td>
-                                    <td>{{ refunded.updated_at }}</td>            
-                                    <td>
-                                        <button v-if="!refunded.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = application_payment.id;" 
-                                                data-target="#myModal" class="btn btn-primary">
-                                                Update OR
-                                        </button>
-                                        <button v-if="refunded.or_number"                                             
-                                                @click="printOR(application_payment)" 
-                                                class="btn btn-primary">
-                                                Print OR
-                                        </button>
-                                    </td>                                    
-                                </tr>
-                                <tr v-if="application_payment">
-                                    <td>{{ application_payment.or_number }}</td>
-                                    <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
-                                    <td>{{ application_payment.description }}</td>
-                                    <td>{{ application_payment.check_number }}</td>
-                                    <td>{{ application_payment.subtotal_order }}</td>
-                                    <td>{{ application_payment.charges }}</td>
-                                    <td>{{ application_payment.total_amount_due }}</td>
-                                    <td>{{ application_payment.status }}</td>                                            
-                                    <td>{{ application_payment.response_message }}</td>
-                                    <td>{{ application_payment.updated_at }}</td>            
-                                    <td>
-                                        <button v-if="!application_payment.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = application_payment.id;" 
-                                                data-target="#myModal" class="btn btn-primary">
-                                                Update OR
-                                        </button>
-                                        <button v-if="application_payment.or_number"                                             
-                                                @click="printOR(application_payment)" 
-                                                class="btn btn-primary">
-                                                Print OR
-                                        </button>
-                                    </td>                                    
-                                </tr> 
-                                <tr v-if="reservation_payment">
-                                    <td>{{ reservation_payment.or_number }}</td>
-                                    <td><a href="#" @click.prevent.stop="cashierDetails(reservation_payment.cashier_id)">{{ reservation_payment.cashier_id }}</a></td>
-                                    <td>{{ reservation_payment.description }}</td>
-                                    <td>{{ reservation_payment.check_number }}</td>
-                                    <td>{{ reservation_payment.subtotal_order }}</td>
-                                    <td>{{ reservation_payment.charges }}</td>
-                                    <td>{{ reservation_payment.total_amount_due }}</td>
-                                    <td>{{ reservation_payment.status }}</td>
-                                    <td>{{ reservation_payment.response_message }}</td>
-                                    <td>{{ reservation_payment.updated_at }}</td>
-                                    <td>
-                                        <button v-if="!reservation_payment.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = reservation_payment.id;" 
-                                                data-target="#myModal" class="btn btn-primary">
-                                                Update OR
-                                        </button>
-                                        <button v-if="reservation_payment.or_number"                                             
-                                                @click="printOR(reservation_payment)" 
-                                                class="btn btn-primary">
-                                                Print OR
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>                                            
-                            </table>
-                            <hr />                                    
-                        </div><!---box body--->
-                    </div><!---box--->                      
-                </div><!---column--->
+                
             </div><!---row--->
         </div><!---content container--->
         <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
@@ -264,15 +152,11 @@
 <script>
 new Vue({
     el: '#vue-container',
-    data: {
-        student: undefined,
+    data: {        
         type: "<?php echo $type; ?>",
         slug: "<?php echo $slug; ?>",
         base_url: "<?php echo base_url(); ?>",   
-        applicant_id: undefined,
-        reservation_payment: undefined,
-        application_payment: undefined,   
-        uploaded_requirements: false,
+        applicant_id: undefined,                
         refunded_payments: [],    
         amount_to_pay: 0,
         description_other: '', 
@@ -326,28 +210,13 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
-        const d = new Date();
-        let year = d.getFullYear();
-
         this.loader_spinner = true;
-        axios.get(api_url + 'admissions/student-info/' + this.slug)
-        .then((data) => {
-            this.student = data.data.data;
-            this.request.slug = this.slug;                 
-            this.request.first_name = this.student.first_name;
-            this.request.middle_name = this.student.middle_name;
-            this.request.last_name = this.student.last_name;    
-            this.request.contact_number = this.student.mobile_number;  
-            this.request.email_address = this.student.email;      
-            if(this.student.uploaded_requirements.length > 0)       
-                this.uploaded_requirements = true;
+        
             
-            axios.get(base_url + 'finance/manualPayData/' + this.slug)
+            axios.get(base_url + 'finance/other_payment_data/')
             .then((data) => {            
                 this.cashier = data.data.cashier;
-                this.request.sy_reference = data.data.current_sem;
-                this.or_update.sy_reference = data.data.current_sem;                
-                this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
+                this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
                     this.or_update.or_number = this.cashier.or_current;
@@ -359,22 +228,7 @@ new Vue({
                 console.log(error);
             })  
             
-            for(i in this.student.payments){
-                if(this.student.payments[i].status == "Refunded")
-                        this.refunded_payments.push(this.student.payments[i]);
-                else if(this.student.payments[i].status == "Paid"){
-                    if(this.student.payments[i].description == "Application Payment"){                     
-                            this.application_payment = this.student.payments[i];                    
-                    }
-                    if(this.student.payments[i].description == "Reservation Payment"){                        
-                        this.reservation_payment = this.student.payments[i];                    
-                    }
-                }
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            
 
     },
 
@@ -615,19 +469,7 @@ new Vue({
                     
                 })
             
-        },
-
-        selectDescription: function(){
-            if(this.request.description == "Reservation Payment"){
-                this.amount_to_pay = 10000;                
-            }
-            else if(this.request.description == "Application Payment"){
-                this.amount_to_pay = 500;            
-            }
-            else{
-                this.amount_to_pay = 0;
-            }
-        }
+        },        
 
 
     }
