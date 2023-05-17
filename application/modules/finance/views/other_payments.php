@@ -19,6 +19,24 @@
                             <div class="row">                                
                                 <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
+                                    <div class="col-sm-12">
+                                        <label>Name:</label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                            <input type="text" required class="form-control" placeholder="First Name" v-model="request.first_name" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                            <input type="text" required class="form-control" placeholder="Last Name" v-model="request.last_name" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">                                            
+                                            <input type="text" class="form-control" placeholder="Middle Name" v-model="request.middle_name" />
+                                        </div>
+                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Payment for:</label>
