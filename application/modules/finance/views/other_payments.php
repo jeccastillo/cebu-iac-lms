@@ -152,9 +152,7 @@
 <script>
 new Vue({
     el: '#vue-container',
-    data: {        
-        type: "<?php echo $type; ?>",
-        slug: "<?php echo $slug; ?>",
+    data: {                        
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,                
         refunded_payments: [],    
