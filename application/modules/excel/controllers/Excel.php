@@ -2033,7 +2033,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('B1', 'Date')
                     ->setCellValue('C1', 'OR Number')
                     ->setCellValue('D1', 'Applicant Number')
-                    ->setCellValue('E1', 'Student Name')
+                    ->setCellValue('E1', 'Name')
                     ->setCellValue('F1', 'Payment Mode')
                     ->setCellValue('G1', 'Check/CC/Debit #')
                     ->setCellValue('H1', 'Amount Paid')
