@@ -49,8 +49,9 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions_per_term"+daterange+"/"+other, {
+                api_url + "finance/transactions_per_term"+daterange, {
                     limit: 100,
+                    other: other,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
                     search_field: "student_name",
