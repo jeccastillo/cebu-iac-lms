@@ -6,7 +6,7 @@
                 <a class="btn btn-app" :href="base_url + 'finance/payments/0/1'" ><i class="ion ion-arrow-left-a"></i>Non-student Payments</a>                                                                                                                     
             </small>            
             <h1>                                
-                Other Payments
+                Add Non-Student Payment
             </h1>
         </section>
         <hr />
