@@ -179,7 +179,7 @@ new Vue({
         cashier: undefined,
         request:{
             first_name: '',
-            slug: 'na',
+            slug: '0',
             middle_name: '',
             last_name: '',
             contact_number: '',

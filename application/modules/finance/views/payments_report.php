@@ -41,7 +41,7 @@
                             <th>Date Updated</th>
                             <th>OR Number</th>
                             <th>Applicant Number</th>
-                            <th>Student Name</th>
+                            <th>Name</th>
                             <th>Payment Mode</th>
                             <th>Check/CC/Debit #</th>
                             <th>Amount Paid</th>
