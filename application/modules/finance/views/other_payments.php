@@ -119,45 +119,7 @@
                 
             </div><!---row--->
         </div><!---content container--->
-        <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
-            <input type="hidden" name="student_name" v-model="or_print.student_name">
-            <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
-            <input type="hidden" name="student_id" v-model="or_print.student_id">
-            <input type="hidden" name="student_address" v-model="or_print.student_address">
-            <input type="hidden" name="is_cash" v-model="or_print.is_cash">
-            <input type="hidden" name="check_number" v-model="or_print.check_number">
-            <input type="hidden" name="or_number" v-model="or_print.or_number" />
-            <input type="hidden" name="remarks" v-model="or_print.remarks">
-            <input type="hidden" name="description" v-model="or_print.description" />
-            <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
-            <input type="hidden" name="name" v-model="or_print.student_name" />       
-            <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
-        </form>
-        <div class="modal fade" id="myModal" role="dialog">
-            <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- modal header  -->
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add OR Number</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>OR Number <span class="text-danger">*</span> </label>
-                            <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
-                            <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>
-                        </div>
-                    </div>
-                    <div class=" modal-footer">
-                        <!-- modal footer  -->
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" :disabled="!or_update.or_number" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
+                
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
