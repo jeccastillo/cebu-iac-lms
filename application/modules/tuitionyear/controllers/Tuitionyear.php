@@ -175,7 +175,7 @@ class Tuitionyear extends CI_Controller {
     public function view_tuition_years(){
 
         $this->data['page'] = "tuitionyear_view";
-        $this->data['opentree'] = "registrar";
+        $this->data['opentree'] = "tuitionyear";
         $this->load->view("common/header",$this->data);
         $this->load->view("tuitionyearview",$this->data);
         $this->load->view("common/footer",$this->data);
