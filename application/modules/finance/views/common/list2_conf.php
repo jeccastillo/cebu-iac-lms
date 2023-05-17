@@ -16,7 +16,8 @@ function formatDate(date) {
 
     return [year, month, day].join('-');
 }
-var other = <?php echo $other; ?>
+var other = <?php echo $other; ?>;
+
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();    
     daterange = "?start=<?php echo date("Y-m-d") ?>&end=<?php echo date("Y-m-d") ?>";
