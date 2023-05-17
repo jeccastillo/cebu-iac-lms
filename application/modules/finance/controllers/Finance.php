@@ -262,6 +262,21 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);        
     }
 
+    public function other_payments(){                                     
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($role == 0 && $userlevel != 2)
+            redirect(base_url()."unity");
+
+        $this->data['page'] = "cashier";
+        $this->data['opentree'] = "other_payments";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("other_payments",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
     public function cashier_data(){                             
 
         $data['cashiers'] = $this->data_fetcher->getCashiers();        
