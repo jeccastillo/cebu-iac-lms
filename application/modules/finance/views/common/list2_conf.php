@@ -16,6 +16,7 @@ function formatDate(date) {
 
     return [year, month, day].join('-');
 }
+var other = <?php echo $other; ?>
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();    
     daterange = "?start=<?php echo date("Y-m-d") ?>&end=<?php echo date("Y-m-d") ?>";
@@ -48,7 +49,7 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions_per_term"+daterange, {
+                api_url + "finance/transactions_per_term"+daterange+"/"+other, {
                     limit: 100,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,

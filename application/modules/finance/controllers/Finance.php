@@ -270,7 +270,7 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function payments($date = null){                        
+    public function payments($date = null, $other = 0){                        
 
         if($date == null)
             $date = date("Y-m-d");
@@ -278,6 +278,7 @@ class Finance extends CI_Controller {
         $sem = $this->data_fetcher->get_active_sem();        
         $this->data['current_sem'] = $sem['intID'];
         $this->data['date'] = $date;
+        $this->data['other'] = $other;
 
         $this->data['page'] = "transactions";
         $this->data['opentree'] = "cashier";
