@@ -342,7 +342,7 @@
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?>
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
                             <a href="#">
-                                <i class="fa fa-circle text-green"></i> <span>Registrar</span>
+                                <i class="fa fa-circle text-green"></i> <span>Cashier</span>
                                 <i class="fa pull-right fa-angle-left"></i>
                             </a>
                             <ul class="treeview-menu">
