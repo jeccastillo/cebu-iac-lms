@@ -2,6 +2,9 @@
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
+            <small>
+                <a class="btn btn-app" :href="base_url + 'finance/payments/0/1'" ><i class="ion ion-arrow-left-a"></i>All Students Applicants</a>                                                                                                                     
+            </small>            
             <h1>                                
                 Other Payments
             </h1>
