@@ -198,26 +198,7 @@ new Vue({
             is_cash: 1,            
             check_number: undefined,
         },
-        or_print: {
-            or_number: undefined,
-            description: undefined,
-            total_amount_due: undefined,
-            student_name: undefined,
-            transaction_date: undefined,
-            student_name: undefined,
-            student_address: undefined,
-            student_id: undefined,
-            remarks: undefined,
-            is_cash: undefined,
-            cashier_id: undefined,
-            check_number: undefined,
-        },
-        or_update:{
-            id: undefined,
-            or_number: undefined,
-            cashier_id: undefined,
-            sy_reference: undefined,
-        },
+       
              
     },
 
@@ -248,23 +229,7 @@ new Vue({
 
     },
 
-    methods: {      
-        printOR: function(payment){            
-            this.or_print.or_number = payment.or_number;
-            this.or_print.description = payment.description;
-            this.or_print.total_amount_due = payment.subtotal_order;
-            this.or_print.transaction_date = payment.updated_at;
-            this.or_print.remarks = payment.remarks;
-            this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
-            this.or_print.student_address = this.student.address;
-            this.or_print.student_id = this.applicant_id;
-            this.or_print.is_cash = payment.is_cash;
-            this.or_print.check_number = payment.check_number;
-            this.or_print.cashier_id = payment.cashier_id;
-            this.$nextTick(() => {
-                this.$refs.print_or.submit();
-            });             
-        },
+    methods: {              
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
             .then((data) => {            
@@ -276,15 +241,14 @@ new Vue({
                 })
             })
 
-        },  
-        updateOR: function(){
-            let url = api_url + 'finance/update_or';
-
+        },              
+        submitManualPayment: function(){
+            let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
             
             Swal.fire({
-                title: 'Continue with the update',
-                text: "Are you sure you want to update the payment?",
+                title: 'Continue with Payment',
+                text: "Are you sure you want to add payment?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
@@ -292,9 +256,18 @@ new Vue({
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
+                    preConfirm: (login) => {
 
-                        return axios.post(url, this.or_update, {
+
+                        if(this.request.description == 'Other'){
+                            this.request.description = this.description_other;                                
+                        }
+
+                        this.request.subtotal_order = this.amount_to_pay;
+                        this.request.total_amount_due = this.amount_to_pay;
+
+                        
+                        return axios.post(url, this.request, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
                                     }
@@ -305,54 +278,14 @@ new Vue({
                                         var formdata= new FormData();
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
-                                        axios.post(base_url + 'finance/next_or', formdata, {
+                                        axios.post(base_url + 'finance/next_or_other', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
                                         }
                                         })
-                                        .then(function(data){
-                                            if (data.data.send_notif) {                            
-                                                let url = api_url + 'registrar/send_notif_enrolled/' + this.student_data.slug;                                                
-                                                let payload = {'message': "This message serves as a notification that you have been officially enrolled."}
-                                                
-                                                Swal.fire({
-                                                    showCancelButton: false,
-                                                    showCloseButton: false,
-                                                    allowEscapeKey: false,
-                                                    title: 'Loading',
-                                                    text: 'Processing Data do not leave page',
-                                                    icon: 'info',
-                                                })
-                                                Swal.showLoading();
-                                                axios.post(url, payload, {
-                                                    headers: {
-                                                        Authorization: `Bearer ${window.token}`
-                                                    }
-                                                })
-                                                .then(data => {
-                                                    this.loader_spinner = false;                                                                                                                            
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: data.data.message,
-                                                        icon: "success"
-                                                    }).then(function() {
-                                                        location.reload();
-                                                    });  
-                                                });                                
-                                            }
-                                            else{
-                                                Swal.fire({
-                                                        title: "Success",
-                                                        text: data.data.message,
-                                                        icon: "success"
-                                                    }).then(function() {
-                                                        location.reload();
-                                                    });                                                                                                                              
-
-                                            }  
-                                                  
-                                        })
-                                    }                                        
+                                        .then(function(){                                               
+                                        })                                                     
+                                    }                                            
                                     else
                                         Swal.fire({
                                             title: "Failed",
@@ -361,129 +294,12 @@ new Vue({
                                         }).then(function() {
                                             //location.reload();
                                         });
-                                });
+                                });                                
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
                 
-                })
-
-        },        
-        submitManualPayment: function(){
-            let url = api_url + 'finance/manual_payment';            
-            this.loader_spinner = true;
-            if(this.request.description == "Reservation Payment" && this.reservation_payment && this.reservation_payment.status == "Paid")
-                Swal.fire({
-                    title: "Failed",
-                    text: "Reservation Payment already exists",
-                    icon: "error"
-                }).then(function() {
-                    //location.reload();
-                });
-            else if(this.request.description == "Application Payment" && this.application_payment && this.application_payment.status == "Paid")
-                Swal.fire({
-                    title: "Failed",
-                    text: "Application Payment already exists",
-                    icon: "error"
-                }).then(function() {
-                    //location.reload();
-                });
-            else
-                Swal.fire({
-                    title: 'Continue with Payment',
-                    text: "Are you sure you want to add payment?",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    imageWidth: 100,
-                    icon: "question",
-                    cancelButtonText: "No, cancel!",
-                    showCloseButton: true,
-                    showLoaderOnConfirm: true,
-                        preConfirm: (login) => {
-
-
-                            if(this.request.description == 'Other'){
-                                this.request.description = this.description_other;                                
-                            }
-
-                            this.request.subtotal_order = this.amount_to_pay;
-                            this.request.total_amount_due = this.amount_to_pay;
-
-                            
-                            return axios.post(url, this.request, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    })
-                                    .then(data => {
-                                        this.loader_spinner = false;
-                                        if(data.data.success){
-                                            var formdata= new FormData();
-                                            formdata.append('intID',this.cashier.intID);
-                                            formdata.append('or_current',this.cashier.or_current);
-                                            axios.post(base_url + 'finance/next_or', formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                            })
-                                            .then(function(){
-                                                if (data.data.send_notif) {                            
-                                                        let url = api_url + 'registrar/send_notif_enrolled/' + this.student_data.slug;                                                
-                                                        let payload = {'message': "This message serves as a notification that you have been officially enrolled."}
-                                                        
-                                                        Swal.fire({
-                                                            showCancelButton: false,
-                                                            showCloseButton: false,
-                                                            allowEscapeKey: false,
-                                                            title: 'Loading',
-                                                            text: 'Processing Data do not leave page',
-                                                            icon: 'info',
-                                                        })
-                                                        Swal.showLoading();
-                                                        axios.post(url, payload, {
-                                                            headers: {
-                                                                Authorization: `Bearer ${window.token}`
-                                                            }
-                                                        })
-                                                        .then(data => {
-                                                            this.loader_spinner = false;     
-                                                            Swal.fire({
-                                                                title: "Success",
-                                                                text: data.data.message,
-                                                                icon: "success"
-                                                            }).then(function() {
-                                                                location.reload();
-                                                            });                                                                                                                              
-                                                            
-                                                        });                                
-                                                    }
-                                                    else{
-                                                        Swal.fire({
-                                                                title: "Success",
-                                                                text: data.data.message,
-                                                                icon: "success"
-                                                            }).then(function() {
-                                                                location.reload();
-                                                            });                                                                                                                              
-
-                                                    } 
-                                                        
-                                                })                                                     
-                                        }                                            
-                                        else
-                                            Swal.fire({
-                                                title: "Failed",
-                                                text: data.data.message,
-                                                icon: "error"
-                                            }).then(function() {
-                                                //location.reload();
-                                            });
-                                    });                                
-                        },
-                        allowOutsideClick: () => !Swal.isLoading()
-                    }).then((result) => {
-                    
-                })
+            })
             
         },        
 
