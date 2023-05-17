@@ -280,7 +280,11 @@ class Finance extends CI_Controller {
         $this->data['date'] = $date;
         $this->data['other'] = $other;
 
-        $this->data['page'] = "transactions";
+        if($other == 0)
+            $this->data['page'] = "transactions";
+        else
+            $this->data['page'] = "other_payments_report";
+
         $this->data['opentree'] = "cashier";
         $this->load->view("common/header",$this->data);
         $this->load->view("payments_report",$this->data);

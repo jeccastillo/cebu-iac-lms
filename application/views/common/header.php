@@ -350,7 +350,7 @@
                                 <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i> <span>Add Non-Student Payment</span> </a></li>                                
                                 <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>                                                    
                                 <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i> <span>Daily Collection Report</span></a></li>
-                                <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i> <span>Non Student Payment Report</span> </a></li>                                
+                                <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i> <span>Non Student Payment Report</span> </a></li>                                
                                 <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                             </ul>
                         </li>
