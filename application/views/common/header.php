@@ -340,10 +340,19 @@
                         </li>
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?>
-                    <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
-                    <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>                    
-                    <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i> <span>Daily Collection Report</span></a></li>
-                    <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Registrar</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i> <span>Cashiers</span> </a></li>
+                                <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i> <span>Transactions without OR</span> </a></li>                    
+                                <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i> <span>Daily Collection Report</span></a></li>
+                                <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
+                            </ul>
+                        </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
                                 <i class="fa pull-right fa-angle-left"></i>
