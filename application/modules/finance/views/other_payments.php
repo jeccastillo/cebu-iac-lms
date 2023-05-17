@@ -245,7 +245,8 @@ new Vue({
                                             Authorization: `Bearer ${window.token}`
                                         }
                                         })
-                                        .then(function(){                                               
+                                        .then(function(){  
+                                            location.reload();                                             
                                         })                                                     
                                     }                                            
                                     else
@@ -254,7 +255,7 @@ new Vue({
                                             text: data.data.message,
                                             icon: "error"
                                         }).then(function() {
-                                            //location.reload();
+                                            location.reload();
                                         });
                                 });                                
                     },
