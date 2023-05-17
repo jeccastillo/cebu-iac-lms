@@ -18,6 +18,11 @@ function formatDate(date) {
 }
 var other = <?php echo $other; ?>;
 
+var api = 'finance/transactions_per_term';
+if(other != 0)
+    api = 'finance/transactions_per_term_other';
+    
+
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();    
     daterange = "?start=<?php echo date("Y-m-d") ?>&end=<?php echo date("Y-m-d") ?>";
@@ -50,9 +55,8 @@ $(document).ready(function() {
             var s_column = "or_number";                        
             filter_status = $("#status_filter").val();           
             $.get(
-                api_url + "finance/transactions_per_term"+daterange, {
-                    limit: 100,
-                    other: other,
+                api_url + api +daterange, {
+                    limit: 100,                    
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
                     search_field: "student_name",
