@@ -236,6 +236,10 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label>Enter type if other is selected:</label>
+                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                                </div>
+                                                <div class="form-group">
                                                     <label>Payment Status</label>
                                                     <select class="form-control" v-model="request.status">
                                                         <option value="Paid">Paid</option>
@@ -257,10 +261,7 @@
                                                     <label>Check/Credit/Debit Number:</label>
                                                     <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Enter type if other is selected:</label>
-                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
-                                                    
+                                                <div class="form-group">                                                                                                        
                                                     <label>Enter amount to pay:</label>
                                                     <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
