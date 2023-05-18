@@ -112,18 +112,18 @@ $(document).ready(function() {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
                         +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
-                        + row.student_name.toUpperCase() +"' "
-                        +'data-slug = '+ row.slug +"' "
-                        +'data-cashier-id = '+ row.cashier_id +"' "
-                        +'data-or-number = '+ row.or_number +"' "
-                        +'data-description = '+ row.description +"' "
-                        +'data-total-amount-due = '+ row.total_amount_due +"' "
-                        +'data-transaction-date = '+ row.transaction_date +"' "
-                        +'data-remarks = '+ row.remarks +"' "                        
-                        +'data-student-id = '+ row.applicant_id +"' "
-                        +'data-student-address = "'+row.student_address+'"'
-                        +'data-is-cash = '+ row.is_cash +"' "
-                        +'data-check-number = '+ row.check_number +"' "
+                        + row.student_name.toUpperCase() +'" '
+                        +'data-slug = "'+ row.slug +'" '
+                        +'data-cashier-id = "'+ row.cashier_id +'" '
+                        +'data-or-number = "'+ row.or_number +'" '
+                        +'data-description = "'+ row.description +'" '
+                        +'data-total-amount-due = "'+ row.total_amount_due +'" '
+                        +'data-transaction-date = "'+ row.transaction_date +'" '
+                        +'data-remarks = "'+ row.remarks +'" '                        
+                        +'data-student-id = '+ row.applicant_id +'" '
+                        +'data-student-address = "'+row.student_address+'" '
+                        +'data-is-cash = "'+ row.is_cash +'" '
+                        +'data-check-number = "'+ row.check_number +'" '
                         +'">Finance Viewer</a></li></ul></div>';
                 }
             },
