@@ -113,7 +113,7 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'">Print OR</a><a href="#" class="print-or" data-student-name="'
+                        +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
                         +'data-slug = "'+ row.slug +'" '
                         +'data-cashier-id = "'+ row.cashier_id +'" '
@@ -126,7 +126,7 @@ $(document).ready(function() {
                         +'data-student-address = " " '
                         +'data-is-cash = "'+ row.is_cash +'" '
                         +'data-check-number = "'+ row.check_number +'" '
-                        +'">Finance Viewer</a></li></ul></div>';
+                        +'">Print OR</a></li></ul></div>';
                 }
             },
             <?php else: ?>
