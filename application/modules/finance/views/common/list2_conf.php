@@ -115,7 +115,7 @@ $(document).ready(function() {
                         + row.slug
                         +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
-                        +'data-slug = "'+ row.slug +'" '
+                        +'data-slug = " " '
                         +'data-cashier-id = "'+ row.cashier_id +'" '
                         +'data-or-number = "'+ row.or_number +'" '
                         +'data-description = "'+ row.description +'" '
