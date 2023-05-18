@@ -1628,7 +1628,7 @@ class Unity extends CI_Controller {
            
             //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";
-            $this->data['opentree'] = "registrar";
+            // $this->data['opentree'] = "registrar";
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/classlist_view_admin",$this->data);
             $this->load->view("common/footer",$this->data); 
