@@ -42,8 +42,13 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Payment for:</label>
-                                            <input type="text" required class="form-control" v-model="description_other" />
+                                            <label>Payment Type:</label>
+                                            <select required class="form-control" v-model="description_other">
+                                                <option value="Cash Return">Cash Return</option>
+                                                <option value="Other Liability">Other Liability</option>                                                        
+                                                <option value="Refund from Supplier">Refund from Supplier</option>
+                                                <option value="Accounts Receivable Others">Accounts Receivable Others</option>                                                
+                                            </select>                                            
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
