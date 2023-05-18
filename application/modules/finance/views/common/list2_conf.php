@@ -242,18 +242,18 @@ $(document).ready(function() {
 
             });  
             $(".print-or").click(function(e){
-                $("#student_name").val($(this).attr('data-student-name').val());
-                $("#cashier_id").val($(this).attr('data-cashier-id').val());
-                $("#student_id").val($(this).attr('data-student-id').val());
-                $("#student_address").val($(this).attr('data-student-address').val());
-                $("#is_cash").val($(this).attr('data-is-cash').val());
-                $("#check_number").val($(this).attr('data-check-number').val());                
-                $("#or_number").val($(this).attr('data-or-number').val());
-                $("#remarks").val($(this).attr('data-remarks').val());
-                $("#description").val($(this).attr('data-description').val());                                                
-                $("#total_amount_due").val($(this).attr('data-total-amount-due').val());                
-                $("#name").val($(this).attr('data-student-name').val());                
-                $("#transaction_date").val($(this).attr('data-transaction-date').val());                                      
+                $("#student_name").val($(this).attr('data-student-name'));
+                $("#cashier_id").val($(this).attr('data-cashier-id'));
+                $("#student_id").val($(this).attr('data-student-id'));
+                $("#student_address").val($(this).attr('data-student-address'));
+                $("#is_cash").val($(this).attr('data-is-cash'));
+                $("#check_number").val($(this).attr('data-check-number'));                
+                $("#or_number").val($(this).attr('data-or-number'));
+                $("#remarks").val($(this).attr('data-remarks'));
+                $("#description").val($(this).attr('data-description'));                                                
+                $("#total_amount_due").val($(this).attr('data-total-amount-due'));                
+                $("#name").val($(this).attr('data-student-name'));                
+                $("#transaction_date").val($(this).attr('data-transaction-date'));                                      
                 $("#print_or").submit();
             });
 
