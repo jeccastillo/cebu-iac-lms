@@ -104,14 +104,16 @@ $(document).ready(function() {
                 }
             );
         },
-        "aoColumnDefs": [{
+        "aoColumnDefs": [
+            <?php if($other != 0): ?>
+            {
                 "aTargets": [12],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
+                        +'">Print OR</a><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
                         +'data-slug = "'+ row.slug +'" '
                         +'data-cashier-id = "'+ row.cashier_id +'" '
@@ -127,6 +129,18 @@ $(document).ready(function() {
                         +'">Finance Viewer</a></li></ul></div>';
                 }
             },
+            <?php else: ?>
+            {
+                "aTargets": [12],
+                "mData": null,
+                "bSortable": false,
+                "mRender": function(data, type, row, meta) {
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
+                        + row.slug
+                        +'">Finance Viewer</a></li></ul></div>';
+                }
+            },
+            <?php endif ?>
             {
                 "aTargets": [2],                                
                 "mRender": function(data, type, row, meta) {
