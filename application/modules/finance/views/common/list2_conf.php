@@ -111,6 +111,19 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
+                        +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
+                        + row.student_name.toUpperCase() +"' "
+                        +'data-slug = '+ row.slug +"' "
+                        +'data-cashier-id = '+ row.cashier_id +"' "
+                        +'data-or-number = '+ row.or_number +"' "
+                        +'data-description = '+ row.description +"' "
+                        +'data-total-amount-due = '+ row.total_amount_due +"' "
+                        +'data-transaction-date = '+ row.transaction_date +"' "
+                        +'data-remarks = '+ row.remarks +"' "                        
+                        +'data-student-id = '+ row.applicant_id +"' "
+                        +'data-student-address = ""'
+                        +'data-is-cash = '+ row.is_cash +"' "
+                        +'data-check-number = '+ row.check_number +"' "
                         +'">Finance Viewer</a></li></ul></div>';
                 }
             },
@@ -228,40 +241,20 @@ $(document).ready(function() {
                     });             
 
             });  
-            $(".trash-item").click(function(e) {
-                conf = confirm("Are you sure you want to delete?");
-                if (conf) {
-                    $(".loading-img").show();
-                    $(".overlay").show();
-                    var id = $(this).attr('rel');
-                    var parent = $(this).parent().parent().parent().parent().parent();
-                    var code = parent.children(':first-child').html();
-                    var data = {
-                        'id': id,
-                        'code': code
-                    };
-                    $.ajax({
-                        'url': '<?php echo base_url(); ?>index.php/subject/delete_subject',
-                        'method': 'post',
-                        'data': data,
-                        'dataType': 'json',
-                        'success': function(ret) {
-                            if (ret.message == "failed") {
-                                $("#alert-text").html('<b>Alert! ' + code +
-                                    '</b> cannot be deleted it is connected to classlist.'
-                                )
-                                $(".alert").show();
-                                setTimeout(function() {
-                                    $(".alert").hide('fade', {}, 500)
-                                }, 3000);
-                            } else
-                                parent.hide();
-
-                            $(".loading-img").hide();
-                            $(".overlay").hide();
-                        }
-                    });
-                }
+            $(".print-or").click(function(e){
+                $("#student_name").val($(this).attr('data-student-name').val());
+                $("#cashier_id").val($(this).attr('data-cashier-id').val());
+                $("#student_id").val($(this).attr('data-student-id').val());
+                $("#student_address").val($(this).attr('data-student-address').val());
+                $("#is_cash").val($(this).attr('data-is-cash').val());
+                $("#check_number").val($(this).attr('data-check-number').val());                
+                $("#or_number").val($(this).attr('data-or-number').val());
+                $("#remarks").val($(this).attr('data-remarks').val());
+                $("#description").val($(this).attr('data-description').val());                                                
+                $("#total_amount_due").val($(this).attr('data-total-amount-due').val());                
+                $("#name").val($(this).attr('data-student-name').val());                
+                $("#transaction_date").val($(this).attr('data-transaction-date').val());                                      
+                $("#print_or").submit();
             });
 
         },

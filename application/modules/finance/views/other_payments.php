@@ -118,8 +118,7 @@
                             </div>                            
                         </div>
                     </div>
-                </div>                            
-                
+                </div>                                            
             </div><!---row--->
         </div><!---content container--->
                 
