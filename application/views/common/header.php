@@ -365,8 +365,8 @@
                             </ul>
                         </li> 
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>                   
-                        <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Subject Offering</a></li>                                
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>                                     
+                        <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin" style="margin-left: 10px;"><i class="ion ion-android-list"></i> <span>Subject Offering</span></a></li>                                
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="registrar")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-green"></i> <span>Registrar</span>
