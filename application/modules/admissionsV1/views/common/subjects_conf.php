@@ -8,7 +8,7 @@ $(document).ready(function() {
     var filter_status = $("#status_filter").val();
     
     var dtable = $('#subjects-table').dataTable({
-        "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
+        "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000,2000,10000],
         "bProcessing": true,
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
@@ -59,8 +59,29 @@ $(document).ready(function() {
                         recordsFiltered: json.meta.total,
                         data: json.data
                     });
+                    $("#print_form").show();
+                    $("#print_form").click(function(e){
+                        e.preventDefault();
+                        // The rest of this code assumes you are not using a library.
+                        // It can be made less verbose if you use one.
+                        const form = document.createElement('form');
+                        form.method = "post";
+                        form.action = "<?php echo base_url() ?>excel/export_leads";
+                        form.dataType = "json";
 
-                    console.log(data);
+                        
+                        const hiddenField = document.createElement('input');
+                        hiddenField.type = 'hidden';
+                        hiddenField.name = 'data';
+                        hiddenField.value = JSON.stringify(json.data);
+
+                        form.appendChild(hiddenField);
+                        
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
+                                        
                 }
             );
         },

@@ -1993,7 +1993,96 @@ class Excel extends CI_Controller {
         
     }
 
+    public function export_leads()
+    {
+        
+        $data = $this->input->post();
+        $date = date("Y-m-d");
+        $data = json_decode($data['data']);
+        
+        
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
 
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Export Leads")
+                                     ->setSubject("Export Leads Download")
+                                     ->setDescription("Export Leads Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Export Leads");
+
+        
+      
+        
+            
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Last Name')
+                    ->setCellValue('B1', 'First Name')
+                    ->setCellValue('C1', 'Middle Name')
+                    ->setCellValue('D1', 'Mobile Number')
+                    ->setCellValue('E1', 'Email');
+                    
+        
+        $i = 2;
+        
+        foreach($data as $d){                         
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, strtoupper($d->last_name))
+                    ->setCellValue('B'.$i, strtoupper($d->first_name))
+                    ->setCellValue('C'.$i, strtoupper($d->middle_name))
+                    ->setCellValue('D'.$i, $d->mobile_number)
+                    ->setCellValue('E'.$i, $d->email);
+                                                       
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
+        
+                
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Leads');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="export_leads'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        $objWriter->save('php://output');
+        exit;
+
+    }
     public function daily_collection_report()
     {
         
