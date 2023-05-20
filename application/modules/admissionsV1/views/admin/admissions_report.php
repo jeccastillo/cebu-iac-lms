@@ -110,7 +110,7 @@ new Vue({
             .then((data) => {       
                 // console.log(data);           
                 this.stats = data.data;  
-                this.total = this.stats.new + this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
+                this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
                             this.stats.for_enrollment + this.stats.reserved + 
                             this.stats.for_reservation + this.stats.for_interview + this.stats.waiting;
             })
