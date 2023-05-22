@@ -32,7 +32,7 @@
                 <h4>Quick Stats</h4>
                 <table v-if="stats" class="table table-bordered table-striped">
                     <tr>
-                        <th>Applicants</th>
+                        <th>Sign Ups</th>
                         <td>{{ total }}</td>
                         <td></td>
                     </tr>                    
@@ -112,7 +112,7 @@ new Vue({
                 this.stats = data.data;  
                 this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
                             this.stats.for_enrollment + this.stats.reserved + 
-                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting;
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new;
             })
             .catch((error) => {
                 console.log(error);
