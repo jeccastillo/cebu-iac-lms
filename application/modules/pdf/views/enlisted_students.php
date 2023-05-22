@@ -45,7 +45,7 @@
         <td style="font-size:8px;" ><?php echo $i; ?></td>
         <td style="font-size:8px;" ><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $st['strStudentNumber']); ?></td>
         <td style="font-size:8px;text-align:left;"> <?php echo strtoupper($name); ?></td>        
-        <td style="font-size:8px;" ><?php echo $st['strProgramCode']." "; ?> <?php echo ($st['strMajor'] != "None" && $st['strMajor'] != "")?"Major in ".$st['strMajor']:''; ?>
+        <td style="font-size:8px;" ><?php echo $st['strProgramCode']." "; ?> <?php echo ($st['strMajor'] != "None" && $st['strMajor'] != "")?"Major in ".$st['strMajor']:''; ?></td>
         <td style="font-size:8px;" ><?php echo $st['reg_info']['type_of_class']."-".$st['reg_info']['enumStudentType']; ?></td>
         <td style="font-size:8px;" ><?php echo $st['date_added'];?></td>
         <td style="font-size:8px;" ><?php echo $st['fusername'] ?></td>           
