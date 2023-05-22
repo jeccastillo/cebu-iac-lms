@@ -858,7 +858,7 @@ class Data_fetcher extends CI_Model {
     {
         
         
-        $select = $registered!=0?"tb_mas_users.*,strProgramCode, short_name, strProgramDescription,tb_mas_registration.intYearLevel":"tb_mas_users.*,strProgramCode, short_name, strProgramDescription";
+        $select = $registered!=0?"tb_mas_users.*,strProgramCode, strMajor, short_name, strProgramDescription,tb_mas_registration.intYearLevel":"tb_mas_users.*,strProgramCode, short_name, strProgramDescription";
 
         $this->db
             ->select($select)
