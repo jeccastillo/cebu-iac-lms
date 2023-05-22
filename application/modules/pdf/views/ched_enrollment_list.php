@@ -37,7 +37,10 @@
         <td style="font-size:8px;"><b>Name of Institution:</b></td>
         <td style="font-size:8px;">iACADEMY Cebu</td>
         <td style="font-size:8px;"><b>Course/Program:</b></td>    
-        <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['strProgramDescription']:''; ?></td>                
+        <td colspan="3" style="font-size:8px;">
+            <?php echo !empty($students)?$students[0]['strProgramDescription']." ":''; ?> 
+            <?php echo (!empty($students) && $students[0]['strMajor'] != "None" && $students[0]['strMajor'] != "")?"Major in ".$students[0]['strMajor']:''; ?> 
+        </td>                
     </tr>  
     <tr>
         <td style="font-size:8px;"><b>Address:</b></td>
