@@ -24,7 +24,7 @@
                     <th>Total</th>
                 </tr>
                 <tr v-for="prog in reserved">
-                    <td>{{ prog[0].program }}</td>
+                    <td>{{ prog[0].program }} {{ (prog[0].strMajor != "None" && prog[0].strMajor != "")?'Major in '+prog[0].strMajor:'' }}</td>
                     <td v-for="type in prog" v-if="type.student_type == 'freshman'">
                         {{ type.reserved_count }}
                     </td>
