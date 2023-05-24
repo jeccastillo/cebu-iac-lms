@@ -400,17 +400,28 @@ class Registrar extends CI_Controller {
 
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
+        $active_sem = $this->data_fetcher->get_active_sem();
         $app_data = json_decode($post['applicant_data']);
-        print_r($app_data);
+        $enrolled = [];
+
+        foreach($app_data as $app){
+            $enrolled[] = $this->db->select('tb_mas_users.*, type_of_class')
+                     ->from('tb_mas_users')
+                     ->where('slug',$app['slug'])
+                     ->where('intROG','>','0')
+                     ->where('intAYID',$active_sem['intID'])
+                     ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                     ->first_row();
+        }
                        
         // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
         // $program['online'] = count($this->data_fetcher->getStudentsByTypeOfClass('online'));
         // $program['hybrid'] = count($this->data_fetcher->getStudentsByTypeOfClass('hybrid'));
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
-        // $data['data'] = $program;
+        $data['data'] = $enrolled;
 
-        // echo json_encode($data);
+        echo json_encode($data);
 
     }
 
