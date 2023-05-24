@@ -63,7 +63,7 @@ new Vue({
         axios.get(api_url + query_str)
             .then((data) => {       
                 var formdata= new FormData();
-                formdata.append('applicant_data', data.data.data);                             
+                formdata.append('applicant_data', JSON.stringify(data.data.data));                             
                 axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
