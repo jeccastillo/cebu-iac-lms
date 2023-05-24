@@ -403,15 +403,37 @@ class Registrar extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();
         $app_data = json_decode($post['applicant_data']);
         $enrolled = [];
+        $data['regular'] = 0;
+        $data['hybrid'] = 0;
+        $data['hyflex'] = 0;
+        $data['online'] = 0;
 
         foreach($app_data as $app){
-            $enrolled[] = $this->db->select('tb_mas_users.*, type_of_class')
+            $d = $this->db->select('tb_mas_users.*, type_of_class')
                      ->from('tb_mas_users')
                      ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->get()
                      ->first_row();
+
+            switch($d['type_of_class']){
+                case 'regular':
+                    $data['regular'] += 1;
+                    break;
+                case 'hybrid':
+                    $data['hybrid'] += 1;
+                    break;
+                case 'hyflex':
+                    $data['hyflex'] += 1;
+                    break;
+                case 'online':
+                    $data['online'] += 1;
+                    break;
+                default:
+                    $data['regular'] += 1;
+                    
+            }
         }
                        
         // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
@@ -419,9 +441,9 @@ class Registrar extends CI_Controller {
         // $program['hybrid'] = count($this->data_fetcher->getStudentsByTypeOfClass('hybrid'));
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
-        $data['data'] = $enrolled;
+        $ret['data'] = $data;
 
-        echo json_encode($data);
+        echo json_encode($ret);
 
     }
 
