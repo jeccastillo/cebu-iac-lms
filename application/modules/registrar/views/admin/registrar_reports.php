@@ -54,6 +54,27 @@
                  <!-- small box -->
                  <div class="small-box bg-blue">
                      <div class="inner">
+                         <h3>Enrollment</h3>
+
+                         <p>Daily Enrollment Report</p>
+                     </div>
+                     <div class="icon">
+                         <i class="fa fa-list"></i>
+                     </div>
+                     <a href="<?php echo base_url(); ?>registrar/daily_enrollment_report" class="small-box-footer">
+                         View <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                     <!-- <a href="<?php echo base_url(); ?>excel/reports_enrollment" class="small-box-footer">
+                         Excel <i class="fa fa-arrow-circle-right"></i>
+                     </a> -->
+                 </div>
+
+                 <!-- small box -->
+             </div>             
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <!-- small box -->
+                 <div class="small-box bg-blue">
+                     <div class="inner">
                          <h3>Reservation Summary</h3>
 
                          <p>Summary of Reservations this Term</p>
