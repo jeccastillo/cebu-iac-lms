@@ -417,7 +417,7 @@ class Registrar extends CI_Controller {
                      ->get()
                      ->first_row();
 
-            switch($d['type_of_class']){
+            switch($d->type_of_class){
                 case 'regular':
                     $data['regular'] += 1;
                     break;
