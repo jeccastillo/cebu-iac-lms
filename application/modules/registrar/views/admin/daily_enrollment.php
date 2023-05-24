@@ -41,11 +41,16 @@
             <tbody>
                 <tr v-if="dates" v-for="date in dates">
                     <td>{{ date.date }}</td>
-                    <td>{{ date.regular }}</td>
-                    <td>{{ date.online }}</td>
-                    <td>{{ date.hybrid }}</td>
-                    <td>{{ date.hyflex }}</td>
-                    <td>{{ date.total }}</td>
+                    <td v-if="date.regular > 0"><b>{{ date.regular }}</b></td>
+                    <td v-else>{{ date.regular }}</td>
+                    <td v-if="date.online > 0"><b>{{ date.online }}</b></td>
+                    <td v-else>{{ date.online }}</td>
+                    <td v-if="date.hybrid > 0"><b>{{ date.hybrid }}</b></td>
+                    <td v-else>{{ date.hybrid }}</td>
+                    <td v-if="date.hyflex > 0"><b>{{ date.hyflex }}</b></td>
+                    <td v-else>{{ date.hyflex }}</td>
+                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
+                    <td v-else>{{ date.total }}</td>                    
                 </tr>
             </tbody>
         </table>
