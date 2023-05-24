@@ -387,6 +387,32 @@ class Registrar extends CI_Controller {
 
     }
 
+    public function daily_enrollment_report($start=0, $end=0){
+
+        $this->data['start'] = $start;
+        $this->data['end'] = $end;
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/daily_enrollment",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    
+    }
+
+    public function daily_enrollment_report_data(){
+        $post = $this->input->post();
+        print_r($post['applicant_data']);
+                       
+        // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
+        // $program['online'] = count($this->data_fetcher->getStudentsByTypeOfClass('online'));
+        // $program['hybrid'] = count($this->data_fetcher->getStudentsByTypeOfClass('hybrid'));
+        // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
+                            
+        // $data['data'] = $program;
+
+        // echo json_encode($data);
+
+    }
+
     public function enrollment_summary()    
     {
         

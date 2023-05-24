@@ -853,6 +853,11 @@ class Data_fetcher extends CI_Model {
         return  $this->db->get_where('tb_mas_users',array('intProgramID'=>$course,'dteCreated'=>$year."-01-01",'strSection'=>$section))->result_array();
                      
     }
+
+    function getStudentsByTypeOfClass($type,$start,$end){
+            
+
+    }
     
     function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$type=0)
     {
