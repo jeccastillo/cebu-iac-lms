@@ -143,7 +143,7 @@ $(document).ready(function(){
         endDate: moment()
     },
     function(start, end) {
-        document.location = base_url + 'admissionsV1/admissions_report/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
+        document.location = base_url + 'admissionsV1/admissions_report/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
         
     }
     );  
