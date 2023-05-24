@@ -408,6 +408,25 @@ class Registrar extends CI_Controller {
         $data['hyflex'] = 0;
         $data['online'] = 0;
 
+        
+
+        $begin = new DateTime($post['start']);
+        $end = new DateTime($post['end']);
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+
+        foreach ($period as $dt) {
+            //echo $dt->format("l Y-m-d H:i:s\n");
+            $date = $dt->format("Y-m-d");
+            $data[$date] = [
+                'online' => 0,
+                'regular' => 0,
+                'hybrid' => 0,
+                'hyflex' => 0,
+            ] 
+        }
+
         foreach($app_data as $app){
             $d = $this->db->select('tb_mas_users.*, type_of_class')
                      ->from('tb_mas_users')
@@ -419,19 +438,19 @@ class Registrar extends CI_Controller {
 
             switch($d->type_of_class){
                 case 'regular':
-                    $data['regular'] += 1;
+                    $data[$app->date_enrolled]['regular'] += 1;
                     break;
                 case 'hybrid':
-                    $data['hybrid'] += 1;
+                    $data[$app->date_enrolled]['hybrid'] += 1;
                     break;
                 case 'hyflex':
-                    $data['hyflex'] += 1;
+                    $data[$app->date_enrolled]['hyflex'] += 1;
                     break;
                 case 'online':
-                    $data['online'] += 1;
+                    $data[$app->date_enrolled]['online'] += 1;
                     break;
                 default:
-                    $data['regular'] += 1;
+                    $data[$app->date_enrolled]['regular'] += 1;
                     
             }
         }
