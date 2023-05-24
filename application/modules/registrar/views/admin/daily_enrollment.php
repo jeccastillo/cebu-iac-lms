@@ -43,9 +43,9 @@
 
 <script>
 <?php if($start!=0): ?>
-    var query_str = 'admissions/applications/enstats?current_sem=<?php echo $active_sem['intID']; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
+    var query_str = 'admissions/applications/enapps?current_sem=<?php echo $active_sem['intID']; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
 <?php else: ?>
-    var query_str = 'admissions/applications/enstats?current_sem=<?php echo $active_sem['intID']; ?>';
+    var query_str = 'admissions/applications/enapps?current_sem=<?php echo $active_sem['intID']; ?>';
 <?php endif; ?>
 new Vue({
     el: '#registration-container',
