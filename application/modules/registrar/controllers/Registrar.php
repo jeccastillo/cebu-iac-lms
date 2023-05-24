@@ -407,8 +407,7 @@ class Registrar extends CI_Controller {
         foreach($app_data as $app){
             $enrolled[] = $this->db->select('tb_mas_users.*, type_of_class')
                      ->from('tb_mas_users')
-                     ->where('slug',$app->slug)
-                     ->where('intROG','>','0')
+                     ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->get()
