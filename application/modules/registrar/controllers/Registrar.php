@@ -420,6 +420,8 @@ class Registrar extends CI_Controller {
                 'regular' => 0,
                 'hybrid' => 0,
                 'hyflex' => 0,
+                'total' => 0,
+                'date' => date("M j, Y", strtotime($date))
             ]; 
         }
 
@@ -431,6 +433,9 @@ class Registrar extends CI_Controller {
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->get()
                      ->first_row();
+
+
+            $data[$app->date_enrolled]['total'] += 1;
 
             switch($d->type_of_class){
                 case 'regular':

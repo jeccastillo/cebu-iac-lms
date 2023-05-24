@@ -27,6 +27,28 @@
                 <i class="fa fa-caret-down"></i>
             </button>
         </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Regular</th>
+                    <th>Online</th>
+                    <th>Hybrid</th>
+                    <th>Hyflex</th>
+                    <th>Total Enrollment</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr v-if="dates" v-for="date in dates">
+                    <td>{{ date.date }}</td>
+                    <td>{{ date.regular }}</td>
+                    <td>{{ date.online }}</td>
+                    <td>{{ date.hybrid }}</td>
+                    <td>{{ date.hyflex }}</td>
+                    <td>{{ date.total }}</td>
+                </tr>
+            </tbody>
+        </table>
                          
       
     </div>
@@ -52,9 +74,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',        
-        enrolled: undefined,        
-        programs: undefined,        
-        all_enrolled: 0,
+        dates: undefined,
                       
     },
 
@@ -77,7 +97,7 @@ new Vue({
                     }
                     })
                     .then((data) => {  
-                    
+                        this.dates = data.data;
                     
                     })
                 .catch((error) => {
