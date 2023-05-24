@@ -403,9 +403,7 @@ class Registrar extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();
         $app_data = json_decode($post['applicant_data']);
         $enrolled = [];
-
         
-
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
 

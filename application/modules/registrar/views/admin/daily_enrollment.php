@@ -91,9 +91,7 @@ new Vue({
                 formdata.append('applicant_data', JSON.stringify(data.data.data)); 
                 formdata.append('start','<?php echo ($start!=0)?$start:date("Y-m-d"); ?>');         
                 <?php
-                    if($start == $end && $start != 0){
-                        $end = date("Y-m-d", strtotime('tomorrow'));
-                    }
+                    $end = date("Y-m-d", strtotime('tomorrow'));
                 ?>
                 formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
                 axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
