@@ -97,7 +97,7 @@ new Vue({
                     }
                     })
                     .then((data) => {  
-                        this.dates = data.data;
+                        this.dates = data.data.data;
                         console.log(this.dates);
                     
                     })
