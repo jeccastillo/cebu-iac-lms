@@ -400,7 +400,8 @@ class Registrar extends CI_Controller {
 
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
-        print_r($post['applicant_data']);
+        $app_data = json_decode($post['applicant_data']);
+        print_r($app_data);
                        
         // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
         // $program['online'] = count($this->data_fetcher->getStudentsByTypeOfClass('online'));
