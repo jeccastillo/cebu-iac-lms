@@ -98,6 +98,7 @@ new Vue({
                     })
                     .then((data) => {  
                         this.dates = data.data;
+                        console.log(this.dates);
                     
                     })
                 .catch((error) => {
