@@ -106,7 +106,7 @@ $(document).ready(function(){
         endDate: moment()
     },
     function(start, end) {
-        document.location = base_url + 'registrar/daily_enrollment_report_data/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
+        document.location = base_url + 'registrar/daily_enrollment_report/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
         
     }
     );  
