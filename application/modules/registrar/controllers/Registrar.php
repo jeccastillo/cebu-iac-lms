@@ -424,7 +424,7 @@ class Registrar extends CI_Controller {
                 'regular' => 0,
                 'hybrid' => 0,
                 'hyflex' => 0,
-            ] 
+            ]; 
         }
 
         foreach($app_data as $app){
