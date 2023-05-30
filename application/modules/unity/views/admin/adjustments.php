@@ -133,13 +133,13 @@
                 <div class="modal-body">                    
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
-                        <select @change="getSections($event)" class="form-control" v-model="subject_to_add">
+                        <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
                     <h4>Select Section</h4>
                     <div v-if="sections" class="input-group">
-                        <select class="form-control" v-model="section_to_add">
+                        <select required class="form-control" v-model="section_to_add">
                             <option v-for="sec in sections" :value="sec.intID">{{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }}</option>                                                                          
                         </select>                        
                     </div>                                                                         
