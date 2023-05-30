@@ -104,7 +104,12 @@
                                     <td>{{ record.strUnits }}</td>                                                                                                
                                     <td>{{ record.facultyName }}</td>
                                     <td>{{ record.recStatus }}</td>
-                                    <td>                                                                                                        
+                                    <td>    
+                                    <button                                                
+                                            @click="dropSubject(record.intID)" 
+                                            data-target="#addSubjectModal" class="btn btn-primary">
+                                            Add Subject/Change Section
+                                    </button>                                                                                                    
                                     </td>
                                 </tr>                                            
                             </tbody>
@@ -219,6 +224,9 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
+        },
+        dropSubject(cl){
+            console.log(cl);
         },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
