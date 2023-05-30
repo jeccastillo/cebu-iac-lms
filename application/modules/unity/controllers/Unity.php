@@ -578,11 +578,13 @@ class Unity extends CI_Controller {
                 $data['tuition'] = "";
 
             $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+            
 
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
+            $ret['subjects_available'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$sem,$id);
             //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             // $pay =  array();
