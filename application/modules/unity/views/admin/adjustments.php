@@ -113,7 +113,7 @@
                         <button data-toggle="modal"                                                
                                 @click="loadAvailableSubjects()" 
                                 data-target="#addSubjectModal" class="btn btn-primary">
-                                Add Subject
+                                Add Subject/Change Section
                         </button>
                     </div>
                 </div>
