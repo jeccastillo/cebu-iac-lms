@@ -85,11 +85,11 @@
                             </a>
                         </li>
                         <li class="active"><a href="#tab_1" data-toggle="tab">Finance</a></li>
-                        <li>
+                        <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
                                 Accounting Summary
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">    

@@ -85,7 +85,7 @@
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a></li>
                         <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + selected_ay">Finance</a></li>
                         <!-- <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li> -->
-                        <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                    
+                        <!-- <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                     -->
                     </ul>
                     <div class="tab-content">
                         <div :class="[(tab == 'tab_1') ? 'active' : '']" class="tab-pane" id="tab_1">
