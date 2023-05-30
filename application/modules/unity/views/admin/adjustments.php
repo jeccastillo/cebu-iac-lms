@@ -132,7 +132,7 @@
                 </div>
                 <div class="modal-body">                    
                     <div v-if="subjects_available" class="input-group">
-                        <select @change="getSections(s.intSubjectID)" class="form-control" v-model="subject_to_add">
+                        <select @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>
                         <a :href="base_url + 'subject/subject_viewer/' + subjects_available[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
@@ -210,8 +210,8 @@ new Vue({
                     console.log(error);
                 })
         },
-        getSections(subject_id){            
-            axios.get(this.base_url + 'registrar/get_sections/' + subject_id + '/' + this.sem)
+        getSections(event){            
+            axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
                 .then((data) => {                                                              
                     this.sections = data.data.data;           
                     console.log(this.sections);
