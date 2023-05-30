@@ -128,7 +128,7 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add Subject</h4>
+                    <h4 class="modal-title">Add Subject/Change Section</h4>
                 </div>
                 <div class="modal-body">                    
                     <h4>Select Subject</h4>
