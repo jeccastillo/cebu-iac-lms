@@ -89,6 +89,7 @@
                         <button class="btn btn-danger btn-lg">
                                 Withdraw
                         </button>
+                        <hr />
                         <table class="table table-condensed table-bordered">
                             <thead>
                                 <tr>
