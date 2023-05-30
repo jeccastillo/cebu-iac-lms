@@ -135,7 +135,7 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
