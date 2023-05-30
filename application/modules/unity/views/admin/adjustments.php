@@ -210,7 +210,9 @@ new Vue({
     methods: {      
         loadAvailableSubjects(){
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
-                .then((data) => {                                                              
+                .then((data) => {     
+                    this.subject_to_add = undefined;                                                         
+                    this.section_to_add = undefined;
                     this.subjects_available = data.data.data;           
                 })
                 .catch((error) => {
