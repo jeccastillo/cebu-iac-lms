@@ -138,7 +138,44 @@ new Vue({
     },
 
     methods: {      
-        
+        changeRegStatus: function(){
+            let url = this.base_url + 'unity/update_rog_status';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("intROG",this.registration_status);
+            var missing_fields = false;
+            this.loader_spinner = true;
+            
+            //validate description
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                if(data.data.success)
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                else
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
+                    }).then(function() {
+                        //location.reload();
+                    });
+            });
+           
+            
+            
+        }
     }
 
 })
