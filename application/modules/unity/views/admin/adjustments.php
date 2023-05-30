@@ -80,11 +80,11 @@
                             </a>
                         </li>
                         <li class="active" v-if="advanced_privilages">
-                            <a href="#tab_1">                            
+                            <a href="#tab_1" data-toggle="tab">                            
                                 Adjustments
                             </a>
                         </li>
-                        <li><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + sem"  data-toggle="tab">Finance</a></li>
+                        <li><a :href="base_url + 'unity/registration_viewer/' + student.intID + '/' + sem">Finance</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
                                 Accounting Summary
