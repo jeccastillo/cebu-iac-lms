@@ -544,50 +544,18 @@ class Unity extends CI_Controller {
     public function adjustments($id,$sem = null)
     {
         
-        $user_level = $this->session->userdata('intUserLevel');
-        
-        if($user_level == 6)
-            redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
-        if($user_level != 2 && $user_level != 3)
-            redirect(base_url().'unity');
-        
-        
+        $active_sem = $this->data_fetcher->get_active_sem();
 
-        $post = $this->input->post();
-        $this->data['id'] = $id;
-        $this->data['sem'] = $sem;
-
-        if($sem!=null){
-            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-        }
+        if($sem!=null)
+            $data['selected_ay'] = $sem;
         else
-        {
-            $ret['active_sem'] = $this->data_fetcher->get_active_sem();
-            
-        }
+            $data['selected_ay'] = $active_sem['intID'];
         
-        if(!empty($post))
-            $id = $post['studentID'];
-        
-        if($tab!=null)
-            $this->data['tab'] = $tab;
-        else
-            $this->data['tab'] = "tab_1";
-                    
-        
-        
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        
-        if(!$this->data['student'])
-            $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
-        //per faculty info                        
+        $data['id'] =  $id;
 
-        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
-        
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/adjustments",$this->data);
-        $this->load->view("common/footer",$this->data);        
-        // print_r($this->data['classlists']);       
+        $this->load->view("admin/adjustments",$data);
+        $this->load->view("common/footer",$this->data);         
     }
 
     public function student_tuition_payment($id)
