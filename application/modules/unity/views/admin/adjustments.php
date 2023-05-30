@@ -131,12 +131,18 @@
                     <h4 class="modal-title">Add Subject</h4>
                 </div>
                 <div class="modal-body">                    
+                    <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
-                        </select>
-                        <a :href="base_url + 'subject/subject_viewer/' + subjects_available[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
-                    </div>                                                                            
+                        </select>                        
+                    </div>    
+                    <h4>Select Section</h4>
+                    <div v-if="sections" class="input-group">
+                        <select class="form-control" v-model="section_to_add">
+                            <option v-for="sec in sections" :value="sec.intID">{{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }}</option>                                                                          
+                        </select>                        
+                    </div>                                                                         
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
@@ -174,8 +180,9 @@ new Vue({
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
-        subjects_available: [],   
-        sections:[],                 
+        subjects_available: undefined,   
+        sections: undefined,       
+        section_to_add: undefined,          
     },
 
     mounted() {
@@ -188,7 +195,7 @@ new Vue({
                     this.registration = data.data.registration;                       
                     this.reg_status = data.data.reg_status;
                     this.student = data.data.student;
-                    this.subjects_available = data.data.subjects_available;
+                    // this.subjects_available = data.data.subjects_available;
                     this.records  = data.data.records;
                     this.slug = this.student.slug;
                     this.advanced_privilages = data.data.advanced_privilages;           
