@@ -86,6 +86,9 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
+                        <button class="btn btn-danger btn-lg">
+                                Withdraw
+                        </button>
                         <table class="table table-condensed table-bordered">
                             <thead>
                                 <tr>
