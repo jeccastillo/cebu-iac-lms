@@ -106,9 +106,8 @@
                                     <td>{{ record.recStatus }}</td>
                                     <td>    
                                     <button                                                
-                                            @click="dropSubject(record.intID)" 
-                                            data-target="#addSubjectModal" class="btn btn-primary">
-                                            Add Subject/Change Section
+                                            @click="dropSubject(record.classlistID)"  class="btn btn-danger">
+                                            Drop
                                     </button>                                                                                                    
                                     </td>
                                 </tr>                                            
