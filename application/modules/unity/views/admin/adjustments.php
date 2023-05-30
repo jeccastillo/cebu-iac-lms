@@ -132,7 +132,7 @@
                 </div>
                 <div class="modal-body">                    
                     <div v-if="subjects_available" class="input-group">
-                        <select v-model="subject_to_add" class="select2">
+                        <select v-model="subject_to_add">
                             <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>
                         <a :href="base_url + 'subject/subject_viewer/' + subjects_available[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
