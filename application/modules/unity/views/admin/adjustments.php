@@ -116,7 +116,8 @@ new Vue({
         reg_status: undefined,   
         registration: undefined,     
         registration_status: 0,
-        loader_spinner: true,                        
+        loader_spinner: true,      
+        advanced_privilages: false,                    
     },
 
     mounted() {
@@ -128,7 +129,8 @@ new Vue({
                 .then((data) => {                                          
                     this.registration = data.data.registration;                       
                     this.reg_status = data.data.reg_status;
-                    this.student = data.data.student;          
+                    this.student = data.data.student;
+                    this.advanced_privilages = data.data.advanced_privilages;           
                 })
                 .catch((error) => {
                     console.log(error);
