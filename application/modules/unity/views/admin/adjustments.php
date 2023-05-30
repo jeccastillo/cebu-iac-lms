@@ -3,13 +3,7 @@
         <h1>
             <small>
                 <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
-                <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id">
-                    <i class="ion ion-printer"></i>RF Print
-                </a>                     
-                <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
-                    <i class="ion ion-printer"></i>RF No Header
-                </a>           
+                <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                                          
             </small>
         </h1>
         <div v-if="registration" class="pull-right">
@@ -28,6 +22,74 @@
         <hr />
     <div class="content">
         <div class="row">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-red">
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
+                        <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
+                    </div>
+                    <div class="box-footer no-padding">
+                        <ul class="nav nav-stacked">
+                        <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
+                        <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
+                        <li v-if="registration"><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
+                        <li v-if="registration"><a style="font-size:13px;" href="#">Class Type <span class="pull-right">{{ registration.type_of_class }}</span></a></li>
+                        <li>
+                            <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
+                                <span style="color:#009000" v-if="registration" >{{ registration.date_enlisted }}</span>
+                                <span style="color:#900000;" v-else>N/A</span>                                
+                            </a>
+                        </li>
+                        <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
+                            
+                        </ul>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-sm-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
+                                Personal Information
+                            </a>
+                        </li>
+                        
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">                            
+                                Report of Grades
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
+                                Assessment
+                            </a>
+                        </li>
+                        
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">                            
+                                Schedule
+                            </a>
+                        </li>
+                        <li v-if="advanced_privilages">
+                            <a :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">                            
+                                Adjustments
+                            </a>
+                        </li>
+                        <li class="active"><a href="#tab_1" data-toggle="tab">Finance</a></li>
+                        <!-- <li>
+                            <a :href="base_url + 'unity/accounting/' + student.intID">                                
+                                Accounting Summary
+                            </a>
+                        </li> -->
+                    </ul>
+                    <div class="tab-content">
+                    </div>
+                </div>
+            </div>  
         </div>
     </div>
     
