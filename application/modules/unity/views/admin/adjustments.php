@@ -115,6 +115,7 @@ new Vue({
         student:{},            
         reg_status: undefined,   
         registration: undefined,     
+        registration_status: 0,
         loader_spinner: true,                        
     },
 
@@ -124,7 +125,7 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/adjustments_data/' + this.id + '/' + this.sem)
-                .then((data) => {                      
+                .then((data) => {                                          
                     this.registration = data.data.registration;                       
                     this.reg_status = data.data.reg_status;
                     this.student = data.data.student;          
