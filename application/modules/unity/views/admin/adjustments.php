@@ -87,6 +87,29 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
+                    <table class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Section Code</th>
+                                                <th>Course Code</th>
+                                                <th>Units</th>                                                
+                                                <th>Faculty</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                          
+                                            <tr v-for="record in records" style="font-size: 13px;">
+                                                <td>{{ record.strClassName + record.year + record.strSection + " " + record.sub_section }}</td>
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strUnits }}</td>                                                                                                
+                                                <td>{{ record.facultyName }}</td>
+                                                <td>{{ record.recStatus }}</td>
+                                                <td>                                                                                                        
+                                                </td>
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>
                     </div>
                 </div>
             </div>  
