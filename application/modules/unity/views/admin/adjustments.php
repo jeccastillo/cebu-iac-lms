@@ -51,7 +51,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
         student:{},            
-        reg_status: undefined,        
+        reg_status: undefined,   
+        registration: undefined,     
         loader_spinner: true,                        
     },
 
@@ -62,7 +63,9 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/adjustments_data/' + this.id + '/' + this.sem)
                 .then((data) => {                      
-                                  
+                    this.registration = data.data.registration;                       
+                    this.reg_status = data.data.reg_status;
+                    this.student = data.data.student;          
                 })
                 .catch((error) => {
                     console.log(error);
