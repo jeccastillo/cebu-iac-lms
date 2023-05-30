@@ -20,8 +20,7 @@
         <hr />
     </section>
         <hr />
-    <div class="content">
-        <div class="row">
+    <div class="content">        
         <div class="row">
             <div class="col-sm-12">
                 <div v-if="student" class="box box-widget widget-user-2">
