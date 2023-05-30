@@ -211,6 +211,7 @@ new Vue({
         loadAvailableSubjects(){
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {     
+                    this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
                     this.subjects_available = data.data.data;           
@@ -221,9 +222,10 @@ new Vue({
         },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
-                .then((data) => {                                                              
-                    this.sections = data.data.data;           
-                    console.log(this.sections);
+                .then((data) => {   
+                    this.sections = undefined;      
+                    this.section_to_add = undefined;                                                     
+                    this.sections = data.data.data;                               
                 })
                 .catch((error) => {
                     console.log(error);
