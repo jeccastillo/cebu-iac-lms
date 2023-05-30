@@ -100,7 +100,7 @@
                             </thead>
                             <tbody>                                          
                                 <tr v-for="record in records" style="font-size: 13px;">
-                                    <td>{{ record.strClassName + record.year + record.strSection + " " + (record.sub_section)?record.sub_section:'' }}</td>
+                                    <td>{{ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</td>
                                     <td>{{ record.strCode }}</td>
                                     <td>{{ record.strUnits }}</td>                                                                                                
                                     <td>{{ record.facultyName }}</td>
