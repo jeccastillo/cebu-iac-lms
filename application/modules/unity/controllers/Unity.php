@@ -577,6 +577,8 @@ class Unity extends CI_Controller {
             else
                 $data['tuition'] = "";
 
+            $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
             $ret['user_logged'] = $this->data['user']['intID'];
@@ -916,8 +918,7 @@ class Unity extends CI_Controller {
             $ret['student'] = $this->data_fetcher->getStudent($id);
             if(!$ret['student'])
                 $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
-            //per faculty info
-			$records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+            //per faculty info			
             
             $ret['grades'] = $this->data_fetcher->assessCurriculumDept($ret['student']['intID'],$ret['student']['intCurriculumID']);
             
