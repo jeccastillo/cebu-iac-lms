@@ -130,6 +130,7 @@ new Vue({
                     this.registration = data.data.registration;                       
                     this.reg_status = data.data.reg_status;
                     this.student = data.data.student;
+                    this.slug = this.student.slug;
                     this.advanced_privilages = data.data.advanced_privilages;           
                 })
                 .catch((error) => {
