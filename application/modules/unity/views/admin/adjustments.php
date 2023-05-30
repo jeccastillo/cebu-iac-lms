@@ -128,11 +128,11 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add OR Number</h4>
+                    <h4 class="modal-title">Add Subject</h4>
                 </div>
                 <div class="modal-body">                    
                     <div v-if="subjects_available" class="input-group">
-                        <select class="form-control" v-model="subject_to_add">
+                        <select @change="getSections(s.intSubjectID)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>
                         <a :href="base_url + 'subject/subject_viewer/' + subjects_available[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
@@ -174,7 +174,8 @@ new Vue({
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
-        subjects_available: [],                    
+        subjects_available: [],   
+        sections:[],                 
     },
 
     mounted() {
@@ -204,6 +205,16 @@ new Vue({
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {                                                              
                     this.subjects_available = data.data.data;           
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
+        getSections(subject_id){            
+            axios.get(this.base_url + 'registrar/get_sections/' + subject_id + '/' + this.sem)
+                .then((data) => {                                                              
+                    this.sections = data.data.data;           
+                    console.log(this.sections);
                 })
                 .catch((error) => {
                     console.log(error);

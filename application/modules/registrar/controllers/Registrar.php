@@ -1070,6 +1070,11 @@ class Registrar extends CI_Controller {
             
             
     }
+
+    public function get_sections($subject,$sem){
+        $ret['data'] = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
+        echo json_encode($ret);
+    }
     
     public function register_old_student_not_post()
     {
