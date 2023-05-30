@@ -109,12 +109,39 @@
                                 </tr>                                            
                             </tbody>
                         </table>
+                        <hr />
+                        <button data-toggle="modal"                                                
+                                @click="loadAvailableSubjects()" 
+                                data-target="#addSubjectModal" class="btn btn-primary">
+                                Add Subject
+                        </button>
                     </div>
                 </div>
             </div>  
         </div>
     </div>
-    
+    <div class="modal fade" id="addSubjectModal" role="dialog">
+        <form @submit.prevent="addSubject" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add OR Number</h4>
+                </div>
+                <div class="modal-body">
+                    Subjects Here
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
     
 </aside>
 
@@ -140,7 +167,8 @@ new Vue({
         registration: undefined,     
         registration_status: 0,
         loader_spinner: true,      
-        advanced_privilages: false,                    
+        advanced_privilages: false,
+        subjects_available: [],                    
     },
 
     mounted() {
@@ -165,6 +193,15 @@ new Vue({
     },
 
     methods: {      
+        loadAvailableSubjects(){
+            axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
+                .then((data) => {                                                              
+                    this.subjects_available = data.data.data;           
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
@@ -202,6 +239,58 @@ new Vue({
            
             
             
+        },
+        addSubject: function(){
+            let url = base_url + 'registrar/add_subject_student';
+            let slug = this.slug;      
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue adding Subject',
+                text: "Are you sure you want add this subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+                        var formdata= new FormData();
+                        formdata.append('intID','test');
+                        return axios.post(url, formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;                                    
+                            if(data.data.success){                                            
+                                Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });                                                                                                                              
+
+                                }                                        
+                                else
+                                    Swal.fire({
+                                        title: "Failed",
+                                        text: data.data.message,
+                                        icon: "error"
+                                    }).then(function() {
+                                        //location.reload();
+                                    });                                        
+                            });                                        
+                                                                   
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
         }
     }
 
