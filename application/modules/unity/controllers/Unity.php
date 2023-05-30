@@ -541,6 +541,23 @@ class Unity extends CI_Controller {
         $this->load->view("common/footer",$this->data);         
     }
 
+    public function adjustments($id,$sem = null)
+    {
+        
+        $active_sem = $this->data_fetcher->get_active_sem();
+
+        if($sem!=null)
+            $data['selected_ay'] = $sem;
+        else
+            $data['selected_ay'] = $active_sem['intID'];
+        
+        $data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/adjustments",$data);
+        $this->load->view("common/footer",$this->data);         
+    }
+
     public function student_tuition_payment($id)
     {
         $active_sem = $this->data_fetcher->get_active_sem();
