@@ -343,12 +343,12 @@ new Vue({
                                 //             });                                        
                                 //     });                                        
                                                                         
-                            }
+                            },
                             allowOutsideClick: () => !Swal.isLoading()
                         }).then((result) => {
                         
                         })
-                    }
+                    },
                     allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
                         
