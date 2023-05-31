@@ -965,6 +965,11 @@ class Registrar extends CI_Controller {
         $section_to .= ($add_to['sub_section'])?"-".$add_to['sub_section']:"";
         foreach($records as $record){
             if($subject == $record['subjectID']){
+                if($record['classlistID'] == $post['section_to_add'])
+                {
+                    $data['message'] = "You are transferring the student to the same section";            
+                    $data['success'] =  false;
+                }
                 $replace = true;
                 $replace_id = $record['classlistID'];
                 $classlist_data = $this->db->where(array('intID'=>$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
@@ -1002,9 +1007,7 @@ class Registrar extends CI_Controller {
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
 
             $data['message'] = "Done";            
-            $data['adj'] = $classlist_data;
-            $data['ad2'] = $add_to;
-            //$data['success'] =  true;
+            $data['success'] =  true;
 
             
         //record in adjustments table
