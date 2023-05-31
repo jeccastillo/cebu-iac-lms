@@ -343,7 +343,7 @@ new Vue({
                                 //             });                                        
                                 //     });                                        
                                                                         
-                            },
+                            }
                             allowOutsideClick: () => !Swal.isLoading()
                         }).then((result) => {
                         
