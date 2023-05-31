@@ -960,14 +960,14 @@ class Registrar extends CI_Controller {
         $section_from = "";        
         $section_to = "";
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
-        $add_to = $this->db->where(array('intID',$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
+        $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
         $section_to .= ($add_to['sub_section'])?"-".$add_to['sub_section']:"";
         foreach($records as $record){
             if($subject == $record['subjectID']){
                 $replace = true;
                 $replace_id = $record['classlistID'];
-                $classlist_data = $this->db->where(array('intID',$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
+                $classlist_data = $this->db->where(array('intID'=>$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
                 $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
                 $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
             }
