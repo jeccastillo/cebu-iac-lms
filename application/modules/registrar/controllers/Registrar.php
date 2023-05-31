@@ -960,7 +960,7 @@ class Registrar extends CI_Controller {
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
-            $adj['classlist_student_id'] = $subject;
+            $adj['classlist_student_id'] = $post['section_to_delete'];
             $adj['adjustment_type'] = "Removed";
             $adj['from_subject'] =  "";
             $adj['to_subject'] =  $section_to;
