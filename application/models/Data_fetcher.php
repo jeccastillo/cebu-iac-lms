@@ -1953,6 +1953,45 @@ class Data_fetcher extends CI_Model {
         
     }
 
+    function getTuitionSubject($sid,$student_id){
+
+        $tuition = 0;
+
+        $class =  current($this->db
+                            ->select("*")
+                            ->from("tb_mas_subjects")
+                            ->where(array("intID"=>$sid))
+                            ->get()
+                            ->result_array());      
+                            
+        $student = $this->db->where('intID',$student_id)->get('tb_mas_users')->first_row('array');                             
+        
+        //Checks if subject is NSTP nstp fee is different from normal fee                                
+        if($class['isNSTP']){
+            $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+            ->get('tb_mas_tuition_year_misc')->first_row('array');
+            $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
+
+            $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+        }
+        else
+            $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+        
+        if($class['strLabClassification'] != "none"){
+            $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                                        ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
+            $tuition += getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
+            
+        }
+        
+        if($class['isThesisSubject']){                
+            $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
+            ->get('tb_mas_tuition_year_misc')->first_row('array');
+            $tuition += getExtraFee($thesis, $class_type, 'misc');                                
+        }
+        
+    }
+
     function getTuitionSubjects($stype,$scholarship,$subjects,$id,$class_type="regular")
     {
 

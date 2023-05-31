@@ -952,6 +952,38 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
         
     }
+
+    public function drop_subject(){
+
+        if($post['date'] == date("Y-m-d")){
+            $post = $this->input->post();        
+            $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
+            $section_to = $section['strClassName'].$section['year'].$section['strSection'];
+            $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
+
+            $adj['classlist_student_id'] = $subject;
+            $adj['adjustment_type'] = "Removed";
+            $adj['from_subject'] =  "";
+            $adj['to_subject'] =  $section_to;
+            $adj['syid'] = $post['sem'];
+            $adj['date'] = date("Y-m-d H:i:s");  
+            $adj['student_id'] =  $post['student'];
+            
+            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
+            $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            
+            $data['success'] = true;
+            $data['message'] = "Success";
+            
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Invalid";
+        }
+
+        echo json_encode($data);
+        
+    }
     
     public function add_subject_student(){
         $post = $this->input->post();
@@ -983,7 +1015,7 @@ class Registrar extends CI_Controller {
         //remove subject and add new section also add changes to ledger
         if($data['success']){
             if($replace){
-                $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id));
+                $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id,'intStudentID'=>$post['student']));
                 $adj['adjustment_type'] = "Change Section";
             }
             else
@@ -1009,10 +1041,13 @@ class Registrar extends CI_Controller {
                 $adj['student_id'] =  $post['student'];
                 
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
+
+                //record in adjustments table
+                
                 
         }
                 
-            //record in adjustments table
+            
 
         echo json_encode($data);
     }
