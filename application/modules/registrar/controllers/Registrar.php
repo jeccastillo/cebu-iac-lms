@@ -1001,9 +1001,10 @@ class Registrar extends CI_Controller {
             
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
 
-            $data['message'] = "Done";
-            $data['add'] = $add;
-            $data['adj'] = $adj;
+            $data['message'] = "Done";            
+            $data['adj'] = $classlist_data;
+            $data['ad2'] = $add_to;
+            //$data['success'] =  true;
 
             
         //record in adjustments table
