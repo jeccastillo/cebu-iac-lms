@@ -967,7 +967,7 @@ class Registrar extends CI_Controller {
             if($subject == $record['subjectID']){
                 $replace = true;
                 $replace_id = $record['classlistID'];
-                $classlist_data = $this->db->get_where('tb_mas_classlist',array('intID',$record['classlistID']))->first_row()
+                $classlist_data = $this->db->get_where('tb_mas_classlist',array('intID',$record['classlistID']))->first_row();
                 $section_from = $classlist_data->strClassName.$classlist_data->year.$classlist_data->strSection;
                 $section_from .= ($classlist_data->sub_section)?"-".$classlist_data->sub_section:"";
             }
