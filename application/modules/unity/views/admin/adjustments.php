@@ -300,9 +300,15 @@ new Vue({
                     preConfirm: (login) => {       
                         Swal.fire({
                         title: 'Continue deleting Subject',
-                        text: "Are you absolutely sure you want drop this subject?",
-                        type:"input",
-                        inputPlaceholder: "Enter today's date in yyyy-mm-dd format",
+                        text: "Are you absolutely sure you want drop this subject?",                        
+                        content: {
+                            element: "input",
+                            attributes: {
+                                Placeholder: "Enter today's date in yyyy-mm-dd format",
+                                type: "text",
+                                required: "required"
+                            }
+                        },
                         showCancelButton: true,
                         confirmButtonText: "Yes",
                         imageWidth: 100,
