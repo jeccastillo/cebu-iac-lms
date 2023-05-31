@@ -311,6 +311,7 @@ new Vue({
                                 formdata.append('section_to_delete',section);                                
                                 formdata.append('student',this.id);
                                 formdata.append('sem',this.sem);
+                                formdata.append('date',inputValue);
                                 return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
