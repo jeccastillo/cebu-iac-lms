@@ -974,7 +974,7 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
-        if($replace{
+        if($replace){
             $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id));
             $adj['adjustment_type'] = "Change Section";
         }
