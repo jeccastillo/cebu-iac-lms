@@ -230,9 +230,6 @@ new Vue({
                     console.log(error);
                 })
         },
-        dropSubject(cl){
-            console.log(cl);
-        },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
                 .then((data) => {   
@@ -311,36 +308,36 @@ new Vue({
                             showLoaderOnConfirm: true,
                             preConfirm: (inputValue) => {   
                                 console.log(inputValue);                                      
-                                // var formdata= new FormData();
-                                // formdata.append('section_to_delete',section);                                
-                                // formdata.append('student',this.id);
-                                // formdata.append('sem',this.sem);
-                                // return axios.post(url, formdata, {
-                                //     headers: {
-                                //         Authorization: `Bearer ${window.token}`
-                                //     }
-                                // })
-                                // .then(data => {
-                                //     this.loader_spinner = false;                                    
-                                //     if(data.data.success){                                            
-                                //         Swal.fire({
-                                //                 title: "Success",
-                                //                 text: data.data.message,
-                                //                 icon: "success"
-                                //             }).then(function() {
-                                //                 location.reload();
-                                //             });                                                                                                                              
+                                var formdata= new FormData();
+                                formdata.append('section_to_delete',section);                                
+                                formdata.append('student',this.id);
+                                formdata.append('sem',this.sem);
+                                return axios.post(url, formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;                                    
+                                    if(data.data.success){                                            
+                                        Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });                                                                                                                              
 
-                                //         }                                        
-                                //         else
-                                //             Swal.fire({
-                                //                 title: "Failed",
-                                //                 text: data.data.message,
-                                //                 icon: "error"
-                                //             }).then(function() {
-                                //                 //location.reload();
-                                //             });                                        
-                                //     });                                        
+                                        }                                        
+                                        else
+                                            Swal.fire({
+                                                title: "Failed",
+                                                text: data.data.message,
+                                                icon: "error"
+                                            }).then(function() {
+                                                //location.reload();
+                                            });                                        
+                                    });                                        
                                                                         
                             },
                             allowOutsideClick: () => !Swal.isLoading()
