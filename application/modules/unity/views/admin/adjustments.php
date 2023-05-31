@@ -297,7 +297,10 @@ new Vue({
                 showLoaderOnConfirm: true,
                     preConfirm: (login) => {                                                
                         var formdata= new FormData();
-                        formdata.append('intID','test');
+                        formdata.append('section_to_add',this.section_to_add);
+                        formdata.append('subject_to_add',this.subject_to_add);
+                        formdata.append('student',this.id);
+                        formdata.append('sem',this.sem);
                         return axios.post(url, formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`

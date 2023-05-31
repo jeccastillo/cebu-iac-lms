@@ -953,6 +953,63 @@ class Registrar extends CI_Controller {
         
     }
     
+    public function add_subject_student(){
+        $post = $this->input->post();
+        $subject = $post['subject_to_add'];
+        $replace = false;
+        $section_from = "";        
+        $section_to = "";
+        $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
+        $add_to = $this->db->get_where('tb_mas_classlist',array('intID',$post['section_to_add']))->first_row()
+        $section_to = $add_to->strClassName.$add_to->year.$add_to->strSection;
+        $section_to .= ($add_to->sub_section)?"-".$add_to->sub_section:"";
+        foreach($records as $record){
+            if($subject == $record['subjectID']){
+                $replace = true;
+                $replace_id = $record['classlistID'];
+                $classlist_data = $this->db->get_where('tb_mas_classlist',array('intID',$record['classlistID']))->first_row()
+                $section_from = $classlist_data->strClassName.$classlist_data->year.$classlist_data->strSection;
+                $section_from .= ($classlist_data->sub_section)?"-".$classlist_data->sub_section:"";
+            }
+        }
+
+        //remove subject and add new section also add changes to ledger
+        if($replace{
+            $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id));
+            $adj['adjustment_type'] = "Change Section";
+        }
+        else
+            $adj['adjustment_type'] = "Add Subject";
+
+            $add['floatPrelimGrade'] = 50;
+            $add['floatMidtermGrade'] = 50;
+            $add['floatFinalsGrade'] = 50;
+            $add['date_added'] = date("Y-m-d H:i:s");
+            $add['enlisted_user'] = $this->data["user"]["intID"];
+            $add['intStudentID'] = $post['student'];
+            $add['intClassListID'] = $post['section_to_add'];
+            $add['enumStatus'] = "act";   
+            $add['intsyID'] = $post['sem'];         
+            $this->db->insert('tb_mas_classlist_student',$add);  
+            
+            
+            $adj['classlist_student_id'] = $subject;
+            $adj['from_subject'] =  $section_from;
+            $adj['to_subject'] =  $section_to;
+            $adj['syid'] = $post['sem'];
+            $adj['date'] = date("Y-m-d H:i:s");            
+            
+            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
+
+            $data['message'] = "Done";
+            $data['add'] = $add;
+            $data['adj'] = $adj;
+
+            
+        //record in adjustments table
+
+        echo json_encode($data);
+    }
 
     public function register_old_student($studNum=null)
     {
