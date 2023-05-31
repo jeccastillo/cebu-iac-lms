@@ -98,6 +98,7 @@
                                     <th>Units</th>                                                
                                     <th>Faculty</th>
                                     <th>Status</th>
+                                    <th>Adjustments</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -108,6 +109,7 @@
                                     <td>{{ record.strUnits }}</td>                                                                                                
                                     <td>{{ record.facultyName }}</td>
                                     <td>{{ record.recStatus }}</td>
+                                    <td><span v-if="record.adjustments">{{ record.adjustments.adjustment_type }}</span></td>
                                     <td>    
                                     <button                                                
                                             @click="dropSubject(record.classlistID)"  class="btn btn-danger">
