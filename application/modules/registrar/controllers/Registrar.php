@@ -1005,7 +1005,8 @@ class Registrar extends CI_Controller {
                 $adj['from_subject'] =  $section_from;
                 $adj['to_subject'] =  $section_to;
                 $adj['syid'] = $post['sem'];
-                $adj['date'] = date("Y-m-d H:i:s");            
+                $adj['date'] = date("Y-m-d H:i:s");  
+                $adj['student_id'] =  $post['student'];
                 
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
                 

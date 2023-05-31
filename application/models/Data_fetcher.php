@@ -2502,12 +2502,14 @@ class Data_fetcher extends CI_Model {
     
     function getClassListStudentsSt($id,$classlist) 
     {
+
+        $ret = [];
                
-        return  $this->db
+        $cl =  $this->db
                      ->select("tb_mas_classlist_student.intCSID,strCode,strSection,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")
                      ->from("tb_mas_classlist_student")
             
-                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,))
+                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))
                         
                         
                      ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2516,7 +2518,19 @@ class Data_fetcher extends CI_Model {
                      ->order_by('strCode','asc')   
                      ->get()
                      ->result_array();
+
         
+        foreach($cl as $c){
+                $c['adjustments'] = $this->db->where(array('classlist_student_id'=> $c['subjectID'],'syid'=>$classlist,'student_id'=>$id))                                          
+                                          ->order_by('date','desc')
+                                          ->get('tb_mas_classlist_student_adjustment_log')
+                                          ->first_row('array');
+                    
+                $ret[] =  $c;
+
+        }
+
+        return $ret;
     }
     
     function getClassListStudentsAndInfo($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0) 
