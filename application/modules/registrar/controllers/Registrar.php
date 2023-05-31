@@ -969,6 +969,8 @@ class Registrar extends CI_Controller {
                 {
                     $data['message'] = "You are transferring the student to the same section";            
                     $data['success'] =  false;
+
+                    echo json_encode($data);
                 }
                 $replace = true;
                 $replace_id = $record['classlistID'];
