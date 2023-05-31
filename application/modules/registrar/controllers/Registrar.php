@@ -954,9 +954,8 @@ class Registrar extends CI_Controller {
     }
 
     public function drop_subject(){
-
-        if($post['date'] == date("Y-m-d")){
-            $post = $this->input->post();        
+        $post = $this->input->post();        
+        if($post['date'] == date("Y-m-d")){            
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";

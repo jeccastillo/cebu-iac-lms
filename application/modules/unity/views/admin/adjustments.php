@@ -306,8 +306,7 @@ new Vue({
                             cancelButtonText: "No, cancel!",
                             showCloseButton: true,
                             showLoaderOnConfirm: true,
-                            preConfirm: (inputValue) => {   
-                                console.log(inputValue);                                      
+                            preConfirm: (inputValue) => {                                                                       
                                 var formdata= new FormData();
                                 formdata.append('section_to_delete',section);                                
                                 formdata.append('student',this.id);
