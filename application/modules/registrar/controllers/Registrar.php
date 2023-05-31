@@ -959,6 +959,8 @@ class Registrar extends CI_Controller {
         $replace = false;
         $section_from = "";        
         $section_to = "";
+        $data['message'] = "Done";            
+        $data['success'] =  true;
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
@@ -968,9 +970,7 @@ class Registrar extends CI_Controller {
                 if($record['classlistID'] == $post['section_to_add'])
                 {
                     $data['message'] = "You are transferring the student to the same section";            
-                    $data['success'] =  false;
-
-                    echo json_encode($data);
+                    $data['success'] =  false;                    
                 }
                 $replace = true;
                 $replace_id = $record['classlistID'];
@@ -981,38 +981,37 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
-        if($replace){
-            $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id));
-            $adj['adjustment_type'] = "Change Section";
+        if($data['success']){
+            if($replace){
+                $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id));
+                $adj['adjustment_type'] = "Change Section";
+            }
+            else
+                $adj['adjustment_type'] = "Add Subject";
+
+                $add['floatPrelimGrade'] = 50;
+                $add['floatMidtermGrade'] = 50;
+                $add['floatFinalsGrade'] = 50;
+                $add['date_added'] = date("Y-m-d H:i:s");
+                $add['enlisted_user'] = $this->data["user"]["intID"];
+                $add['intStudentID'] = $post['student'];
+                $add['intClassListID'] = $post['section_to_add'];
+                $add['enumStatus'] = "act";   
+                $add['intsyID'] = $post['sem'];         
+                $this->db->insert('tb_mas_classlist_student',$add);  
+                
+                
+                $adj['classlist_student_id'] = $subject;
+                $adj['from_subject'] =  $section_from;
+                $adj['to_subject'] =  $section_to;
+                $adj['syid'] = $post['sem'];
+                $adj['date'] = date("Y-m-d H:i:s");            
+                
+                $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
+                
         }
-        else
-            $adj['adjustment_type'] = "Add Subject";
-
-            $add['floatPrelimGrade'] = 50;
-            $add['floatMidtermGrade'] = 50;
-            $add['floatFinalsGrade'] = 50;
-            $add['date_added'] = date("Y-m-d H:i:s");
-            $add['enlisted_user'] = $this->data["user"]["intID"];
-            $add['intStudentID'] = $post['student'];
-            $add['intClassListID'] = $post['section_to_add'];
-            $add['enumStatus'] = "act";   
-            $add['intsyID'] = $post['sem'];         
-            $this->db->insert('tb_mas_classlist_student',$add);  
-            
-            
-            $adj['classlist_student_id'] = $subject;
-            $adj['from_subject'] =  $section_from;
-            $adj['to_subject'] =  $section_to;
-            $adj['syid'] = $post['sem'];
-            $adj['date'] = date("Y-m-d H:i:s");            
-            
-            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
-
-            $data['message'] = "Done";            
-            $data['success'] =  true;
-
-            
-        //record in adjustments table
+                
+            //record in adjustments table
 
         echo json_encode($data);
     }
