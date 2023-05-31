@@ -960,7 +960,7 @@ class Registrar extends CI_Controller {
         $section_from = "";        
         $section_to = "";
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
-        $add_to = $this->db->get_where('tb_mas_classlist',array('intID',$post['section_to_add']))->first_row()
+        $add_to = $this->db->get_where('tb_mas_classlist',array('intID',$post['section_to_add']))->first_row();
         $section_to = $add_to->strClassName.$add_to->year.$add_to->strSection;
         $section_to .= ($add_to->sub_section)?"-".$add_to->sub_section:"";
         foreach($records as $record){
