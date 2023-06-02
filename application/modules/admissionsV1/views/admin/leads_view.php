@@ -30,6 +30,7 @@
                     <option value="Enlisted">Enlisted</option>
                     <option value="Enrolled">Enrolled</option>
                     <option value="Rejected">Rejected</option>
+                    <option value="Disqualified">Disqualified</option>
                 </select>
             </div>
             <div class="col-sm-4">

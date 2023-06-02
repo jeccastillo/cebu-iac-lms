@@ -54,6 +54,11 @@
                     <tr>
                         <th>Rejected</th>
                         <td>{{ stats.rejected }}</td>
+                        <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Disqualified</th>
+                        <td>{{ stats.rejected }}</td>
                         <td>{{ ((stats.rejected/total)*100).toFixed(2) }}%</td>
                     </tr>                    
                 </table>
@@ -112,7 +117,7 @@ new Vue({
                 this.stats = data.data;  
                 this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
                             this.stats.for_enrollment + this.stats.reserved + 
-                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new;
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + this.stats.disqualified;
             })
             .catch((error) => {
                 console.log(error);
