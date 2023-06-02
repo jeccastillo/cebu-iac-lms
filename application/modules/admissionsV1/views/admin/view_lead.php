@@ -548,7 +548,7 @@
                             btn-danger">Reject</button> 
                         <button type="button" v-if="request.status == 'New' || request.status == 'Rejected'" data-toggle="modal"
                             @click="update_status = 'Disqualified'" data-target="#myModal" class=" btn
-                            btn-danger">Disqualify</button>      
+                            btn-warning">Disqualify</button>      
                         <?php endif; ?>
                         <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
                             <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update Requirements</a>  
