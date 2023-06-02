@@ -58,8 +58,8 @@
                     </tr>
                     <tr>
                         <th>Disqualified</th>
-                        <td>{{ stats.rejected }}</td>
-                        <td>{{ ((stats.rejected/total)*100).toFixed(2) }}%</td>
+                        <td>{{ stats.disqualified }}</td>
+                        <td>{{ ((stats.disqualified/total)*100).toFixed(2) }}%</td>
                     </tr>                    
                 </table>
             </div>
