@@ -546,7 +546,7 @@
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
                             btn-danger">Reject</button> 
-                        <button type="button" v-if="request.status == 'New' || request.status != 'Rejected'" data-toggle="modal"
+                        <button type="button" v-if="request.status == 'New' || request.status == 'Rejected'" data-toggle="modal"
                             @click="update_status = 'Disqualified'" data-target="#myModal" class=" btn
                             btn-danger">Disqualify</button>      
                         <?php endif; ?>
