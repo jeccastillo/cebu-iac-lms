@@ -44,7 +44,7 @@
                             <p>Note: Documents are subject for evaluation and other supporting documents may be asked to be submitted.</p>
                         </div>   
                        <div class="grid grid-cols-2 gap-4 md:items-center justify-between mb-[50px] mt-[40px]"
-                           v-if="request.tos == 'foreign'">
+                           v-if="request.citizenship != 'Philippines'">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
@@ -113,7 +113,7 @@
                                                                 
                         </div>
                         <div class="grid grid-cols-2 gap-4 md:items-center justify-between mb-[50px] mt-[40px]"
-                           v-else-if="request.tos == 'transferee' || request.tos == 'second degree'">
+                           v-else-if="request.citizenship == 'Philippines' && (request.tos == 'transferee' || request.tos == 'second degree')">
                                 <div class="mb-5">                                    
                                     <!-- <img src="<?php echo $img_dir; ?>admissions/form/upload1.png" style="max-width:140px"
                                         class="h-auto mx-auto block" title='Scanned copy unexpired Passport (bio page and all the pages with stamp)'>                                        
