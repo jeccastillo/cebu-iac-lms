@@ -668,7 +668,7 @@
                                 />
                                 Transferee
                             </div>
-                            <div>
+                            <!-- <div>
                                 <input
                                     type="radio"
                                     required
@@ -677,7 +677,7 @@
                                     v-model="request.student_type"
                                 />
                                 Foreign
-                            </div>
+                            </div> -->
                             <div>
                                 <input
                                     type="radio"

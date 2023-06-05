@@ -308,7 +308,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
-                if(this.request.tos == "foreign" || this.request.tos == "second degree" || this.request.tos == "transferee")
+                if(this.request.citizenship != "Philippines" || this.request.tos == "second degree" || this.request.tos == "transferee")
                     this.uploads.requirements = [
                         {
                             "file_id": ""
@@ -451,7 +451,7 @@ new Vue({
                             data.data.message,
                             'success'
                         )
-                        if(this.request.tos == "foreign"){
+                        if(this.request.citizenship != 'Philippines'){
                             if (type == 'passport')
                                 this.uploads.requirements[0].file_id = data.data.data.id;                            
                             if (type == 'birthcert')

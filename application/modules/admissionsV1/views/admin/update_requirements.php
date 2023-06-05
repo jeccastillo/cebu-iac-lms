@@ -41,7 +41,7 @@
 
                         <!-- Not PH  -->
                         <div class="row" style="margin-top:5rem;"
-                            v-if="request.tos == 'foreign'">
+                            v-if="request.citizenship != 'Philippines'">
                             <div class="col-md-3">
 
                                 <div class="file-upload-box text-center">
@@ -272,7 +272,7 @@
                         </div>
                         <!-- Not PH  -->
                         <div class="row" style="margin-top:5rem;"
-                            v-else-if="request.tos == 'transferee' || request.tos == 'second degree'">
+                            v-else-if="request.citizenship == 'Philippines' && (request.tos == 'transferee' || request.tos == 'second degree')">
                             <div class="col-md-3">
 
                                 <div class="file-upload-box text-center">
