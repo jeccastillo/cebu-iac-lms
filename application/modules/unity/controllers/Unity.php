@@ -1956,52 +1956,12 @@ class Unity extends CI_Controller {
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
         if($this->is_super_admin() || $this->is_admin() || $active_sem['enumGradingPeriod'] == "active"){                
-            switch($term)
-            {
-                case 1:
-                    $grade = getAve($post['floatPrelimGrade'],$item['floatMidtermGrade'],$item['floatFinalsGrade']);
-                break;
-                case 2:
-                    $grade = getAve($item['floatPrelimGrade'],$post['floatMidtermGrade'],$item['floatFinalsGrade']);
-                break;
-                case 3:
-                    if ($item['enumStatus'] == 'inc') {
-                        $grade = 'inc';
-                    }
-                    else if ($item['enumStatus'] == 'drp') {
-                        $grade ='UD';
-                    }
-                    else {
-                        $grade = getAve($item['floatPrelimGrade'],$item['floatMidtermGrade'],$post['floatFinalsGrade']); 
-                    }
-                break;
-            }
-
-            $data['eq'] = getEquivalent($grade);
-            $data['eq_raw'] = $grade;
-        
-            //updated final Grade
-            if ($term == 3) {
-                    if ($item['enumStatus'] == 'inc') {
-                        $grade = 'inc';
-                        $post['strRemarks'] = $data['remarks'] = "lack of reqts.";
-                    }
-                    else if ($item['enumStatus'] == 'drp') {
-                        $grade = 'UD';
-                        $post['strRemarks'] = $data['remarks'] = "Failed(U.D.)";
-                    }
-                    else {
-                        $post['floatFinalGrade'] = $data['eq'];
-                        $post['strRemarks'] = $data['remarks'] = getRemarks($data['eq']);
-                    }
-                    
-            }
-            else {
-                $data['eq'] = '0.00';
-                $data['remarks'] = '--';
-                $post['floatFinalGrade'] = $data['eq'];
-                $post['strRemarks'] = $data['remarks'];
-            }
+           
+            $data['eq'] = $post['floatFinalsGrade'];
+            $data['remarks'] = '--';
+            $post['floatFinalGrade'] = $data['eq'];
+            $post['strRemarks'] = $data['remarks'];
+           
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 

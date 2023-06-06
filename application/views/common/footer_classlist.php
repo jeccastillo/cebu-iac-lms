@@ -108,17 +108,10 @@
         $(".finalsInput").blur(function(){
              $(".loading-img").show();
             $(".overlay").show();
-            var csid = $(this).attr('rel');
-            
-            if(parseInt($(this).val()) < 50 || $(this).val()==""){
-                var points = 50;
-                $(this).val('50');
-            }
-            else
-                var points = $(this).val();
+            var csid = $(this).attr('rel');                    
             
             var parent = $(this).parent();
-            var data = {'intCSID':csid,'floatFinalsGrade':points};
+            var data = {'intCSID':csid,'floatFinalsGrade': $(this).val()};
             $.ajax({
                 'url':'<?php echo base_url(); ?>unity/update_grade/3',
                 'method':'post',
@@ -127,9 +120,9 @@
                 'success':function(ret){
                     $(".loading-img").hide();
                     $(".overlay").hide();
-                    $("#eq-"+csid).html(''+ret.eq);
-                    $("#eq2-"+csid).html(''+ret.eq_raw); 
-					 $("#rem-"+csid).html(''+ret.remarks);
+                    // $("#eq-"+csid).html(''+ret.eq);
+                    // $("#eq2-"+csid).html(''+ret.eq_raw); 
+					//  $("#rem-"+csid).html(''+ret.remarks);
                 }
             });
         
