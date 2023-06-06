@@ -78,41 +78,41 @@
            
         });
         
-        $(".finalsInput").keyup(function(key) {
+        // $(".finalsInput").keyup(function(key) {
             
            
-               if(key.keyCode == 13){
-                   var next = $(this).parent().parent().next();
-                    if(!next.find('.finalsInput').prop('disabled')){
-                        next.find('.finalsInput').focus();
-                        next.find('.finalsInput').select(); 
-                        if(next.find('.finalsInput').val() == 0){                       
-                            next.find('.finalsInput').val('');
-                        }
-                    }
-                    else{
-                        while(next.next().find('.finalsInput').prop('disabled')){
-                            //console.log("line ");
-                            next = next.next();
-                        }
+        //        if(key.keyCode == 13){
+        //            var next = $(this).parent().parent().next();
+        //             if(!next.find('.finalsInput').prop('disabled')){
+        //                 next.find('.finalsInput').focus();
+        //                 next.find('.finalsInput').select(); 
+        //                 if(next.find('.finalsInput').val() == 0){                       
+        //                     next.find('.finalsInput').val('');
+        //                 }
+        //             }
+        //             else{
+        //                 while(next.next().find('.finalsInput').prop('disabled')){
+        //                     //console.log("line ");
+        //                     next = next.next();
+        //                 }
                         
-                        next.next().find('.finalsInput').focus(); 
-                        if(next.next().find('.finalsInput').val() == 0)                            
-                            next.next().find('.finalsInput').val('');
+        //                 next.next().find('.finalsInput').focus(); 
+        //                 if(next.next().find('.finalsInput').val() == 0)                            
+        //                     next.next().find('.finalsInput').val('');
                         
                         
-                    }
-                }
+        //             }
+        //         }
 
-                if($(this).val().length > 3)
-                    key.preventDefault();
+        //         if($(this).val().length > 3)
+        //             key.preventDefault();
 
-                if(parseInt($(this).val()) >= 100)
-                   $(this).val('100');
+        //         if(parseInt($(this).val()) >= 100)
+        //            $(this).val('100');
                 
             
            
-        });
+        // });
         
     
         $(".Mon").each(function(){
