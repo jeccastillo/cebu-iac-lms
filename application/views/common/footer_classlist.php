@@ -105,7 +105,7 @@
         
         });
         
-        $(".finalsInput").blur(function(){
+        $(".finalsInput").change(function(){
              $(".loading-img").show();
             $(".overlay").show();
             var csid = $(this).attr('rel');                    
