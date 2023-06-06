@@ -109,9 +109,9 @@
              $(".loading-img").show();
             $(".overlay").show();
             var csid = $(this).attr('rel');                    
-            
+            var points = $(this).val();
             var parent = $(this).parent();
-            var data = {'intCSID':csid,'floatFinalsGrade': $(this).val()};
+            var data = {'intCSID':csid,'floatFinalsGrade': points};
             $.ajax({
                 'url':'<?php echo base_url(); ?>unity/update_grade/3',
                 'method':'post',
