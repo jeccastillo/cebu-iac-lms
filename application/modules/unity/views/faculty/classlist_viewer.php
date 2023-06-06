@@ -93,11 +93,7 @@
                                                 <option <?php echo $student['floatFinalGrade'] == '3.5'?'selected':''; ?> value="3.5">incomplete</option>          
                                             </select>                                            
                                         </td>                                        
-                                        <?php else: ?>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                        <?php else: ?>                
                                             <td></td>
                                         <?php endif; ?>
                                     <?php endif; ?>
