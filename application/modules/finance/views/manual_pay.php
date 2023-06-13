@@ -297,6 +297,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
+            campus: 'Cebu',
         },
         or_print: {
             or_number: undefined,
