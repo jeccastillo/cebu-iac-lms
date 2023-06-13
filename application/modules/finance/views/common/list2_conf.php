@@ -63,7 +63,8 @@ $(document).ready(function() {
                     count_content: data.length,
                     sort_field: s_column,
                     order_by: data.order[0].dir,
-                    filter: filter_status,                    
+                    filter: filter_status,      
+                    campus: '<?php echo $campus; ?>'              
                 },
                 function(json) {
                     callback({
