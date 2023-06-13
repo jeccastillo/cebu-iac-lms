@@ -52,7 +52,7 @@ $(document).ready(function() {
                     order_by: data.order[0].dir,
                     filter: filter_status,
                     current_sem: <?php echo $current_sem; ?>,
-                    campus: "Makati"
+                    campus: '<?php echo $campus; ?>',
                 },
                 function(json) {
                     callback({
