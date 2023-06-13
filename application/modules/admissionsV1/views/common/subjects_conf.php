@@ -6,43 +6,43 @@ $(document).ready(function() {
 
     var daterange = "";
     var filter_status = $("#status_filter").val();
-    
+
     var dtable = $('#subjects-table').dataTable({
-        "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000,2000,10000],
+        "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000, 2000, 10000],
         "bProcessing": true,
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
-            var s_column = "last_name";                        
+            var s_column = "last_name";
             filter_status = $("#status_filter").val();
-            switch(data.order[0].column){
+            switch (data.order[0].column) {
                 case 1:
                     s_column = "created_at";
-                break;
+                    break;
                 case 2:
                     s_column = "date_inteviewed";
-                break;
+                    break;
                 case 3:
                     s_column = "date_registered";
-                break;
+                    break;
                 case 4:
                     s_column = "date_enrolled";
-                break;
+                    break;
                 case 5:
                     s_column = "last_name";
-                break;
+                    break;
                 case 6:
                     s_column = "first_name";
-                break;                
+                    break;
                 case 7:
                     s_column = "program";
-                break;                
+                    break;
                 case 8:
                     s_column = "status";
-                break;
+                    break;
             }
             $.get(
-                api_url + "admissions/applications"+daterange, {
+                api_url + "admissions/applications" + daterange, {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
@@ -52,6 +52,7 @@ $(document).ready(function() {
                     order_by: data.order[0].dir,
                     filter: filter_status,
                     current_sem: <?php echo $current_sem; ?>
+                    campus: "Makati"
                 },
                 function(json) {
                     callback({
@@ -60,7 +61,7 @@ $(document).ready(function() {
                         data: json.data
                     });
                     $("#print_form").show();
-                    $("#print_form").click(function(e){
+                    $("#print_form").click(function(e) {
                         e.preventDefault();
                         // The rest of this code assumes you are not using a library.
                         // It can be made less verbose if you use one.
@@ -69,19 +70,19 @@ $(document).ready(function() {
                         form.action = "<?php echo base_url() ?>excel/export_leads";
                         form.dataType = "json";
 
-                        
+
                         const hiddenField = document.createElement('input');
                         hiddenField.type = 'hidden';
                         hiddenField.name = 'data';
                         hiddenField.value = JSON.stringify(json.data);
 
                         form.appendChild(hiddenField);
-                        
+
 
                         document.body.appendChild(form);
                         form.submit();
                     });
-                                        
+
                 }
             );
         },
@@ -90,12 +91,12 @@ $(document).ready(function() {
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/'
-                        +row.slug 
-                        +'">View Details</a></li>'
-                        +'<li><a href="<?php echo base_url(); ?>finance/manualPay/'
-                        + row.slug
-                        +'">Finance Viewer</a></li></ul></div>';
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/' +
+                        row.slug +
+                        '">View Details</a></li>' +
+                        '<li><a href="<?php echo base_url(); ?>finance/manualPay/' +
+                        row.slug +
+                        '">Finance Viewer</a></li></ul></div>';
                 }
             },
             {
@@ -176,26 +177,28 @@ $(document).ready(function() {
         },
     });
 
-    $('#daterange-btn-users').daterangepicker(
-    {
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            'Last 7 Days': [moment().subtract('days', 6), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+    $('#daterange-btn-users').daterangepicker({
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1)
+                    .endOf('month')
+                ]
+            },
+            startDate: moment().subtract('days', 29),
+            endDate: moment()
         },
-        startDate: moment().subtract('days', 29),
-        endDate: moment()
-    },
-    function(start, end) {
-        daterange = "?start=" + start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D') +'&range_field='+$("#range-to-select").val();
-        dtable.fnDraw(false);   
-    }
-    );  
+        function(start, end) {
+            daterange = "?start=" + start.format('YYYY-MM-D') + '&end=' + end.format('YYYY-MM-D') +
+                '&range_field=' + $("#range-to-select").val();
+            dtable.fnDraw(false);
+        }
+    );
 
-    $("#status_filter").on('change',function(e){
-        
+    $("#status_filter").on('change', function(e) {
+
         dtable.fnDraw(false);
     })
 
