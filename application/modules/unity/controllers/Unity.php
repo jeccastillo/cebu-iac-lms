@@ -6,6 +6,7 @@ class Unity extends CI_Controller {
 	{
 		parent::__construct();
 		$this->config->load('themes');		
+        $this->config->load('courses');
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');

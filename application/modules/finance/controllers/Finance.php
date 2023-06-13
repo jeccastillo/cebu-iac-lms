@@ -10,12 +10,14 @@ class Finance extends CI_Controller {
     function __construct() {
         parent::__construct();
 
+        
         //User Level Validation
         $userlevel = $this->session->userdata('intUserLevel');        
         if($userlevel != 2 && $userlevel != 6)
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
+        $this->config->load('courses');
 		$theme = $this->config->item('unity');
 		if($theme == "" || !isset($theme))
 			$theme = $this->config->item('global_theme');
