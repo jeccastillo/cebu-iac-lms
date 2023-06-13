@@ -4,15 +4,15 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var filter_status = $("#status_filter").val();
-    
+
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
-            var s_column = "last_name";                        
-            filter_status = $("#status_filter").val();           
+            var s_column = "last_name";
+            filter_status = $("#status_filter").val();
             $.get(
                 api_url + "finance/transactions_not_filed", {
                     limit: data.length,
@@ -23,6 +23,7 @@ $(document).ready(function() {
                     sort_field: s_column,
                     order_by: data.order[0].dir,
                     filter: filter_status,
+                    campus: "Makati"
                 },
                 function(json) {
                     callback({
@@ -40,9 +41,9 @@ $(document).ready(function() {
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
-                        + row.slug
-                        +'">Finance Viewer</a></li></ul></div>';
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/' +
+                        row.slug +
+                        '">Finance Viewer</a></li></ul></div>';
                 }
             },
             {
@@ -55,8 +56,7 @@ $(document).ready(function() {
             },
         ],
 
-        columns: [
-            {
+        columns: [{
                 data: "id"
             },
             {
@@ -87,7 +87,7 @@ $(document).ready(function() {
         "aaSorting": [
             [2, 'asc']
         ],
-        "fnDrawCallback": function() {            
+        "fnDrawCallback": function() {
             $(".trash-item").click(function(e) {
                 conf = confirm("Are you sure you want to delete?");
                 if (conf) {
@@ -127,8 +127,8 @@ $(document).ready(function() {
         },
     });
 
-    $("#status_filter").on('change',function(e){
-        
+    $("#status_filter").on('change', function(e) {
+
         dtable.fnDraw(false);
     })
 
