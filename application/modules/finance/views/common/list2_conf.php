@@ -64,6 +64,7 @@ $(document).ready(function() {
                     sort_field: s_column,
                     order_by: data.order[0].dir,
                     filter: filter_status,
+                    campus: 'Cebu',
                 },
                 function(json) {
                     callback({
