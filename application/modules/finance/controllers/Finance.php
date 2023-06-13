@@ -26,6 +26,7 @@ class Finance extends CI_Controller {
 			$this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
 		}
         
+        $this->data['campus'] = $this->config->item('campus');
         $this->data["user"] = $this->session->all_userdata();
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";	
         $this->data['student_pics'] = base_url()."assets/photos/";

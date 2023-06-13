@@ -363,6 +363,7 @@ $config['modules_locations'] = array(
 );
 
 
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
 
