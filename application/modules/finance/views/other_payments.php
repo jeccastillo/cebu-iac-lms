@@ -166,6 +166,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
+            campus: '<?php echo $campus; ?>',
         },
        
              
