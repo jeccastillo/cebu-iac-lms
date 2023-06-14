@@ -79,7 +79,7 @@ new Vue({
                 this.ledger = data.data.ledger;
                 this.student = data.data.student;
                 for(i in this.ledger){
-                    this.running_balance += this.ledger[i].amount;
+                    this.running_balance += Number(this.ledger[i].amount);
                 }
                 // console.log(data);
             })
