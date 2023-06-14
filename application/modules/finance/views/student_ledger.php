@@ -29,6 +29,13 @@
                         <td>{{ item.amount }}</td>
                         <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Running Balance</td>
+                        <td>{{ running_balance }}</td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>       
         </section>
@@ -56,6 +63,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],
         student: undefined,
+        running_balance: 0,
     },
     mounted() {
        
@@ -70,6 +78,9 @@ new Vue({
             .then((data) => {
                 this.ledger = data.data.ledger;
                 this.student = data.data.student;
+                for(i in this.ledger){
+                    this.running_balance += this.ledger[i].amount;
+                }
                 // console.log(data);
             })
             .catch((e) => {
