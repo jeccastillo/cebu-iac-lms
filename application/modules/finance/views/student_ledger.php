@@ -22,19 +22,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <form @submit.prevent="submitLedgerItem" method="post">
                     <tr>
-                        <form @submit.prevent="submitLedgerItem" method="post">
-                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
-                            <td><input type="text" class="form-control" required v-model="request.name"></td>
-                            <td>
-                                <select class="form-control" required v-model="request.syid">
-                                    <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                                </select>
-                            </td>
-                            <td><input type="number" required v-model="request.amount" class="form-control"></td>
-                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>
-                        </form>
+                        
+                        <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
+                        <td><input type="text" class="form-control" required v-model="request.name"></td>
+                        <td>
+                            <select class="form-control" required v-model="request.syid">
+                                <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                            </select>
+                        </td>
+                        <td><input type="number" required v-model="request.amount" class="form-control"></td>
+                        <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
                     </tr>
+                    </form>
                     <tr v-for="item in ledger">
                         <td>{{ item.date }}</td>
                         <td>{{ item.name }}</td>
