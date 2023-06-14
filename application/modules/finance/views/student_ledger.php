@@ -10,7 +10,7 @@
         </ol>
     </section>
     <div class="content">
-        <section class="section section_port relative" id="vue-container">     
+        <section class="section section_port relative" id="vue-container">                 
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -22,6 +22,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <select class="form-control" v-model="request.syid">
+                                <option v-for="opt_sy as sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td><a class="btn btn-primary">Add to Ledger</a></td>
+                    </tr>
                     <tr v-for="item in ledger">
                         <td>{{ item.date }}</td>
                         <td>{{ item.name }}</td>
@@ -64,6 +75,13 @@ new Vue({
         ledger: [],
         student: undefined,
         running_balance: 0,
+        sy: undefined,
+        request:{
+            date: undefined,
+            name: undefined,
+            syid: undefined,
+            amount: undefined,            
+        }
     },
     mounted() {
        
@@ -78,6 +96,7 @@ new Vue({
             .then((data) => {
                 this.ledger = data.data.ledger;
                 this.student = data.data.student;
+                this.sy = data.data.sy;
                 for(i in this.ledger){
                     this.running_balance += Number(this.ledger[i].amount);
                 }
