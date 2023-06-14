@@ -14,15 +14,18 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        <th>Date/Time</th>
                         <th>Detail</th>
                         <th>Sem/Term</th>
                         <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="">
-
+                    <tr v-for="item in ledger">
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
+                        <td>{{ item.amount }}</td>
                     </tr>
                 </tbody>
             </table>       
