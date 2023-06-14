@@ -51,7 +51,7 @@ new Vue({
     el: "#vue-container",
     data: {
         id: '<?php echo $id; ?>',
-        base_url: '<?php echo base_url(); ?>'
+        base_url: '<?php echo base_url(); ?>',
         ledger: [],
         student: undefined,
     },
