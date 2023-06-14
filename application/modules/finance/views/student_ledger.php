@@ -1,7 +1,7 @@
 <aside class="right-side">
     <section class="content-header">
         <h1>
-            Finance
+            Student Ledger
             <small></small>
         </h1>
         <ol class="breadcrumb">
@@ -11,6 +11,9 @@
     </section>
     <div class="content">
         <section class="section section_port relative" id="vue-container">                 
+            <h4>
+                {{ student.strLastname + " " + student.strFirstname + " " + student.strMiddlename }}
+            </h4>
             <form @submit.prevent="submitLedgerItem" method="post">
                 <table class="table table-bordered table-striped">
                     <thead>
