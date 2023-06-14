@@ -97,8 +97,9 @@ new Vue({
                 this.ledger = data.data.ledger;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
-                this.request.syid = data.data.active_sem;
-                console.log(this.request.syid);
+                this.request.syid = data.data.active_sem;    
+                console.log(this.request);
+
                 for(i in this.ledger){
                     this.running_balance += Number(this.ledger[i].amount);
                 }
