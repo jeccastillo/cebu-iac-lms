@@ -23,15 +23,17 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td></td>
-                        <td><input type="text" class="form-control" v-model="request.name"></td>
-                        <td>
-                            <select class="form-control" v-model="request.syid">
-                                <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                            </select>
-                        </td>
-                        <td><input type="number" v-model="request.amount" class="form-control"></td>
-                        <td><a class="btn btn-primary">Add to Ledger</a></td>
+                        <form @submit.prevent="submitLedgerItem" method="post">
+                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
+                            <td><input type="text" class="form-control" required v-model="request.name"></td>
+                            <td>
+                                <select class="form-control" required v-model="request.syid">
+                                    <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                </select>
+                            </td>
+                            <td><input type="number" required v-model="request.amount" class="form-control"></td>
+                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>
+                        </form>
                     </tr>
                     <tr v-for="item in ledger">
                         <td>{{ item.date }}</td>
