@@ -11,9 +11,15 @@
     </section>
     <div class="content">
         <section class="section section_port relative" id="vue-container">                 
-            <h4>
-                {{ student.strLastname + " " + student.strFirstname + " " + student.strMiddlename }}
-            </h4>
+        
+            <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-red">
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
+                    <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
+                </div>                
+            </div>                            
             <form @submit.prevent="submitLedgerItem" method="post">
                 <table class="table table-bordered table-striped">
                     <thead>
