@@ -73,6 +73,30 @@ class Finance extends CI_Controller {
         $data['success'] = true;
         echo json_encode($data);
     }
+
+    public function student_ledger($id){
+
+        $this->data['id'] = $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("student_ledger",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+
+    public function student_ledger_data($id){
+        
+        $data['ledger'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd')        
+                    ->from('tb_mas_student_ledger')
+                    ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                    ->where(array('student_id'=>$id))        
+                    ->get()
+                    ->result_array();
+                    
+        $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
+
+        echo json_encode($data);
+    }
     
     public function manualPay($slug,$type="Reservation Payment"){
                 
