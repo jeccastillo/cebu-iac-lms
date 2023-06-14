@@ -82,7 +82,7 @@ new Vue({
         request:{
             date: undefined,
             name: undefined,
-            syid: undefined,
+            syid: 0,
             amount: undefined,            
         }
     },
