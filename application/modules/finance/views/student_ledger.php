@@ -11,47 +11,47 @@
     </section>
     <div class="content">
         <section class="section section_port relative" id="vue-container">                 
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Date/Time</th>
-                        <th>Detail</th>
-                        <th>Sem/Term</th>
-                        <th>Amount</th>
-                        <th>Added By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <form @submit.prevent="submitLedgerItem" method="post">
-                    <tr>
-                        
-                        <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
-                        <td><input type="text" class="form-control" required v-model="request.name"></td>
-                        <td>
-                            <select class="form-control" required v-model="request.syid">
-                                <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                            </select>
-                        </td>
-                        <td><input type="number" required v-model="request.amount" class="form-control"></td>
-                        <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
-                    </tr>
-                    </form>
-                    <tr v-for="item in ledger">
-                        <td>{{ item.date }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                        <td>{{ item.amount }}</td>
-                        <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>Running Balance</td>
-                        <td>{{ running_balance }}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>       
+            <form @submit.prevent="submitLedgerItem" method="post">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date/Time</th>
+                            <th>Detail</th>
+                            <th>Sem/Term</th>
+                            <th>Amount</th>
+                            <th>Added By</th>
+                        </tr>
+                    </thead>
+                    <tbody>                    
+                        <tr>
+                            
+                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
+                            <td><input type="text" class="form-control" required v-model="request.name"></td>
+                            <td>
+                                <select class="form-control" required v-model="request.syid">
+                                    <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                </select>
+                            </td>
+                            <td><input type="number" required v-model="request.amount" class="form-control"></td>
+                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
+                        </tr>            
+                        <tr v-for="item in ledger">
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
+                            <td>{{ item.amount }}</td>
+                            <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Running Balance</td>
+                            <td>{{ running_balance }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>     
+            </form>  
         </section>
     </div>
 </aside>
