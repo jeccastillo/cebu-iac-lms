@@ -24,13 +24,13 @@
                 <tbody>
                     <tr>
                         <td></td>
-                        <td></td>
+                        <td><input type="text" class="form-control" v-model="request.name"></td>
                         <td>
                             <select class="form-control" v-model="request.syid">
                                 <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                             </select>
                         </td>
-                        <td></td>
+                        <td><input type="number" v-model="request.amount" class="form-control"></td>
                         <td><a class="btn btn-primary">Add to Ledger</a></td>
                     </tr>
                     <tr v-for="item in ledger">
