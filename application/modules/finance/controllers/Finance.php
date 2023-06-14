@@ -86,13 +86,14 @@ class Finance extends CI_Controller {
 
     public function student_ledger_data($id){
         
-        $data['ledger'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd')        
+        $data['ledger'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
                     ->where(array('student_id'=>$id))        
                     ->get()
                     ->result_array();
-                    
+
         $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
 
         echo json_encode($data);

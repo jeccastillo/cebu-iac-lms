@@ -18,6 +18,7 @@
                         <th>Detail</th>
                         <th>Sem/Term</th>
                         <th>Amount</th>
+                        <th>Added By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                         <td>{{ item.name }}</td>
                         <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                         <td>{{ item.amount }}</td>
+                        <td>{{ item.added_by ? item.strLastname + " " + item.strFirstname : 'System' }}</td>
                     </tr>
                 </tbody>
             </table>       
