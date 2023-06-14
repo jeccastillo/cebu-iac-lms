@@ -26,14 +26,14 @@
                         <td>{{ item.date }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                        <td>{{ item.amount }}</td>
+                        <td>P{{ item.amount }}</td>
                         <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td></td>
                         <td>Running Balance</td>
-                        <td>{{ running_balance }}</td>
+                        <td>P{{ running_balance }}</td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -81,6 +81,7 @@ new Vue({
                 for(i in this.ledger){
                     this.running_balance += Number(this.ledger[i].amount);
                 }
+                this.running_balance = this.running_balance.toFixed(2);
                 // console.log(data);
             })
             .catch((e) => {
