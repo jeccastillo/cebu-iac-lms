@@ -96,6 +96,8 @@ class Finance extends CI_Controller {
 
         $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $sem = $this->data_fetcher->get_active_sem();  
+        $data['active_sem'] = $sem['intID'];
 
         echo json_encode($data);
     }
