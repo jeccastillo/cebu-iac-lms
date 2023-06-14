@@ -10,7 +10,22 @@
         </ol>
     </section>
     <div class="content">
-        <section class="section section_port relative" id="vue-container">            
+        <section class="section section_port relative" id="vue-container">     
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Detail</th>
+                        <th>Sem/Term</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="">
+
+                    </tr>
+                </tbody>
+            </table>       
         </section>
     </div>
 </aside>
@@ -34,6 +49,8 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',
         base_url: '<?php echo base_url(); ?>'
+        ledger: [],
+        student: undefined,
     },
     mounted() {
        
@@ -46,7 +63,9 @@ new Vue({
             })
 
             .then((data) => {
-                
+                this.ledger = data.ledger;
+                this.student = data.student;
+                console.log(data);
             })
             .catch((e) => {
                 console.log("error");
