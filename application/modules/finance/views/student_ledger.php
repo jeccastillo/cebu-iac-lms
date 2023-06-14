@@ -26,14 +26,14 @@
                         <td>{{ item.date }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                        <td>P{{ item.amount }}</td>
+                        <td>{{ item.amount }}</td>
                         <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td></td>
                         <td>Running Balance</td>
-                        <td>P{{ running_balance }}</td>
+                        <td>{{ running_balance }}</td>
                         <td></td>
                     </tr>
                 </tbody>
