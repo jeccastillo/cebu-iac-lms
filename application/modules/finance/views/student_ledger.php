@@ -117,7 +117,9 @@ new Vue({
     },
 
     methods: {
+        submitLedgerItem: function(){
 
+        },
         
     }
 
