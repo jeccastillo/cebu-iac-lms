@@ -66,9 +66,9 @@ new Vue({
             })
 
             .then((data) => {
-                this.ledger = data.ledger;
-                this.student = data.student;
-                console.log(data);
+                this.ledger = data.data.ledger;
+                this.student = data.data.student;
+                // console.log(data);
             })
             .catch((e) => {
                 console.log("error");
