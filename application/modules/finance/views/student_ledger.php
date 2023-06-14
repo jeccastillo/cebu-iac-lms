@@ -27,7 +27,7 @@
                         <td>{{ item.name }}</td>
                         <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                         <td>{{ item.amount }}</td>
-                        <td>{{ item.added_by ? item.strLastname + " " + item.strFirstname : 'System' }}</td>
+                        <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System' }}</td>
                     </tr>
                 </tbody>
             </table>       
