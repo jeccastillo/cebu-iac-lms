@@ -85,7 +85,14 @@ new Vue({
         id: '<?php echo $id; ?>',
         base_url: '<?php echo base_url(); ?>',
         ledger: [],
-        student: undefined,
+        student: {
+            strFirstname:'',
+            strLastname:'',
+            strMiddlename:'',
+            strProgramDescription: '',
+            strMajor:'',
+
+        },
         running_balance: 0,
         sy: undefined,
         today: new Date().toISOString().slice(0,10),
