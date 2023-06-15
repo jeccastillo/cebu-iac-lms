@@ -34,7 +34,7 @@
                     <tbody>                    
                         <tr>
                             
-                            <td><input class="form-control" :value="today" type="date" required v-model="request.date_of_birth"></td>
+                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
                             <td><input type="text" class="form-control" required v-model="request.name"></td>
                             <td>
                                 <select class="form-control" required v-model="request.syid">
@@ -94,10 +94,9 @@ new Vue({
 
         },
         running_balance: 0,
-        sy: undefined,
-        today: new Date().toISOString().slice(0,10),
+        sy: undefined,        
         request:{
-            date: undefined,
+            date: new Date().toISOString().slice(0,10),
             name: undefined,
             syid: 0,
             amount: undefined,            
