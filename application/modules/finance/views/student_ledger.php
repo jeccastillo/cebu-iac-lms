@@ -46,10 +46,10 @@
                         </tr>            
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                            <td>{{ item.amount }}</td>
-                            <td>{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                            <td :class="item.muted">{{ item.name }}</td>
+                            <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
+                            <td :class="item.muted">{{ item.amount }}</td>
+                            <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
                         </tr>
                         <tr>
                             <td></td>
