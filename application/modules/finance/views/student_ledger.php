@@ -275,7 +275,7 @@ new Vue({
             
             })
 
-        }
+        },
         filterByTerm: function(event){
             document.location = this.base_url + 'finance/student_ledger/' + this.id + '/' + event.target.value;
         }
