@@ -88,6 +88,7 @@ new Vue({
     el: "#vue-container",
     data: {
         id: '<?php echo $id; ?>',
+        sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
         ledger: [],
         student: {
@@ -128,7 +129,7 @@ new Vue({
         this.request.date = localDatetime;
 
         axios
-            .get(base_url + 'finance/student_ledger_data/' + this.id, {
+            .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },

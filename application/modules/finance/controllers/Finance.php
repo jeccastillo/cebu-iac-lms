@@ -74,9 +74,10 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function student_ledger($id){
+    public function student_ledger($id,$sem = 0){
 
-        $this->data['id'] = $id;
+        $this->data['id'] = $id;        
+        $this->data['sem'] = $sem;
 
         $this->load->view("common/header",$this->data);
         $this->load->view("student_ledger",$this->data);
@@ -84,13 +85,18 @@ class Finance extends CI_Controller {
 
     }
 
-    public function student_ledger_data($id){
+    public function student_ledger_data($id,$sem){
+                
+        $where = array('student_id'=>$id);
         
+        if($sem != 0)
+            $where['syid'] = $sem;
+
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
                     ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-                    ->where(array('student_id'=>$id))        
+                    ->where()        
                     ->get()
                     ->result_array();
 
