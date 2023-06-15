@@ -219,7 +219,7 @@ new Vue({
             let url = this.base_url + 'finance/update_ledger_item_status';                        
             
             Swal.fire({
-                title: 'Add to Ledger?',
+                title: 'Enable/Disble Ledger Item?',
                 text: "Are you sure you want to submit?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
