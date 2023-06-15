@@ -117,7 +117,7 @@ class Finance extends CI_Controller {
     public function update_ledger_item_status(){
         $post = $this->input->post();
 
-        $data['disabled'] = $post['type'];
+        $data['is_disabled'] = $post['type'];
         
         $this->db
             ->where('id',$post['id'])
