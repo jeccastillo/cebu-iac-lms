@@ -114,6 +114,21 @@ class Finance extends CI_Controller {
 
     }
 
+    public function update_ledger_item_status(){
+        $post = $this->input->post();
+
+        $data['disabled'] = $post['type'];
+        
+        $this->db
+            ->where('id',$post['id'])
+            ->update('tb_mas_student_ledger',$data);
+
+        $data['success'] =  true;
+        $data['message'] = "Successfully updated ledger";
+
+        echo json_encode($data);
+    }
+
     public function manualPay($slug,$type="Reservation Payment"){
                 
         $this->data['type'] = $type;

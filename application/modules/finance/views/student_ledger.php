@@ -28,7 +28,8 @@
                             <th>Detail</th>
                             <th>Sem/Term</th>
                             <th>Amount</th>
-                            <th>Added By</th>
+                            <th>Added/Changed By</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>                    
@@ -50,6 +51,10 @@
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ item.amount }}</td>
                             <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                            <td>
+                                <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
+                                <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
@@ -209,6 +214,58 @@ new Vue({
             })
             
         },
+        changeLedgerItemStatus: function(type,id){
+
+            let url = this.base_url + 'finance/update_ledger_item_status';                        
+            
+            Swal.fire({
+                title: 'Add to Ledger?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                                        
+                    formdata.append('type',type);
+                    formdata.append('id',id);
+                    
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+
+        }
         
     }
 
