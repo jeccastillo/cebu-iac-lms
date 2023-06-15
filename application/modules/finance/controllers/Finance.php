@@ -102,6 +102,17 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function submit_ledger_item(){
+        $post =  $this->input->post();
+        $this->db->insert('tb_mas_student_ledger',$post);
+
+        $data['success'] =  true;
+        $data['message'] = "Successfully added to ledger";
+
+        echo json_encode($data);
+
+    }
+
     public function manualPay($slug,$type="Reservation Payment"){
                 
         $this->data['type'] = $type;

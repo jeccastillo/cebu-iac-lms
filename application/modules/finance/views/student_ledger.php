@@ -96,7 +96,7 @@ new Vue({
         running_balance: 0,
         sy: undefined,        
         request:{
-            id: '<?php echo $id; ?>',
+            student_id: '<?php echo $id; ?>',
             date: undefined,
             name: undefined,
             syid: 0,
