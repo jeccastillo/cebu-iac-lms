@@ -34,7 +34,7 @@
                     <tbody>                    
                         <tr>
                             
-                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
+                            <td><input class="form-control" type="date" required v-model="request.date"></td>
                             <td><input type="text" class="form-control" required v-model="request.name"></td>
                             <td>
                                 <select class="form-control" required v-model="request.syid">
