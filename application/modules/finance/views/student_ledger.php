@@ -88,6 +88,7 @@ new Vue({
         student: undefined,
         running_balance: 0,
         sy: undefined,
+        today: new Date().toISOString().slice(0,10),
         request:{
             date: undefined,
             name: undefined,
@@ -97,7 +98,7 @@ new Vue({
     },
     mounted() {
        
-
+        this.request.date = this.today;
         axios
             .get(base_url + 'finance/student_ledger_data/' + this.id, {
                 headers: {
@@ -109,7 +110,8 @@ new Vue({
                 this.ledger = data.data.ledger;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
-                this.request.syid = data.data.active_sem;                    
+                this.request.syid = data.data.active_sem;  
+                                  
 
                 for(i in this.ledger){
                     this.running_balance += Number(this.ledger[i].amount);
