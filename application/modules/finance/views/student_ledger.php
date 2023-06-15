@@ -34,7 +34,7 @@
                     <tbody>                    
                         <tr>
                             
-                            <td><input class="form-control" type="date" required v-model="request.date_of_birth"></td>
+                            <td><input class="form-control" :value="today" type="date" required v-model="request.date_of_birth"></td>
                             <td><input type="text" class="form-control" required v-model="request.name"></td>
                             <td>
                                 <select class="form-control" required v-model="request.syid">
@@ -96,9 +96,7 @@ new Vue({
             amount: undefined,            
         }
     },
-    mounted() {
-       
-        this.request.date = this.today;
+    mounted() {        
         axios
             .get(base_url + 'finance/student_ledger_data/' + this.id, {
                 headers: {
