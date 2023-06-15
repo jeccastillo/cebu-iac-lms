@@ -137,7 +137,7 @@ new Vue({
                                   
 
                 for(i in this.ledger){
-                    if(this.ledger[i].disabled){
+                    if(this.ledger[i].is_disabled){
                         this.running_balance += Number(this.ledger[i].amount);                    
                         this.ledger[i].muted = "";
                     }
