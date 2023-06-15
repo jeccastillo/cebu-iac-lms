@@ -137,7 +137,7 @@ new Vue({
                                   
 
                 for(i in this.ledger){
-                    if(!this.ledger[i].disabled)
+                    if(this.ledger[i].disabled == 0)
                         this.running_balance += Number(this.ledger[i].amount);
                 }
                 this.running_balance = this.running_balance.toFixed(2);
