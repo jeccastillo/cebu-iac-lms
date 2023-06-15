@@ -45,7 +45,7 @@
                             <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
                         </tr>            
                         <tr v-for="item in ledger">
-                            <td :class="disabled == 0?text-muted:''">{{ item.date }}</td>
+                            <td :class="item.disabled == 0?text-muted:''">{{ item.date }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td>{{ item.amount }}</td>
