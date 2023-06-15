@@ -2,7 +2,15 @@
     <section class="content-header">
         <h1>
             Student Ledger
-            <small></small>
+            <small>
+                <div class="pull-right">
+                    <p>Select Term Filter</p>
+                    <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
+                        <option value=0>All</option>
+                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
+                    </select>
+                </div>
+            </small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Finance</a></li>
@@ -43,7 +51,8 @@
                                 </select>
                             </td>
                             <td><input type="number" required v-model="request.amount" class="form-control"></td>
-                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
+                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
+                            <td></td>             
                         </tr>            
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
@@ -266,6 +275,9 @@ new Vue({
             
             })
 
+        }
+        filterByTerm: function(event){
+            document.location = this.base_url + 'finance/student_ledger/' + this.id + '/' + event.target.value;
         }
         
     }
