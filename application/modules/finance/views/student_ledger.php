@@ -38,7 +38,7 @@
                             <td><input type="text" class="form-control" required v-model="request.name"></td>
                             <td>
                                 <select class="form-control" required v-model="request.syid">
-                                    <option v-for="opt_sy in sy" value="{{ opt_sy.intID }}">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                    <option v-for="opt_sy in sy" value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                                 </select>
                             </td>
                             <td><input type="number" required v-model="request.amount" class="form-control"></td>
