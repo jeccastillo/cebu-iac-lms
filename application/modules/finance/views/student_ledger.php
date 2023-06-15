@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside class="right-side" id="vue-container">
     <section class="content-header">
         <h1>
             Student Ledger
@@ -18,7 +18,7 @@
         </ol>
     </section>
     <div class="content">
-        <section class="section section_port relative" id="vue-container">                 
+        <section class="section section_port relative">                 
         
             <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
