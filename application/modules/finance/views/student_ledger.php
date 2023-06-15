@@ -96,6 +96,7 @@ new Vue({
         running_balance: 0,
         sy: undefined,        
         request:{
+            id: '<?php echo $id; ?>',
             date: undefined,
             name: undefined,
             syid: 0,
@@ -120,7 +121,7 @@ new Vue({
         ':' +
         (minute < 10 ? '0' + minute.toString() : minute);
         this.request.date = localDatetime;
-        
+
         axios
             .get(base_url + 'finance/student_ledger_data/' + this.id, {
                 headers: {
@@ -150,9 +151,57 @@ new Vue({
 
     },
 
-    methods: {
+    methods: {        
         submitLedgerItem: function(){
-
+            let url = this.base_url + 'finance/submit_ledger_item';                        
+            
+            Swal.fire({
+                title: 'Add to Ledger?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                    
+                    for(const [key,value] of Object.entries(this.request)){                   
+                        formdata.append(key,value);
+                    }
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+            
         },
         
     }
