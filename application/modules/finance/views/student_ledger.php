@@ -45,7 +45,7 @@
                             <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>                        
                         </tr>            
                         <tr v-for="item in ledger">
-                            <td :class="item.disabled?text-muted:''">{{ item.date }}</td>
+                            <td :class="item.muted">{{ item.date }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td>{{ item.amount }}</td>
@@ -137,8 +137,12 @@ new Vue({
                                   
 
                 for(i in this.ledger){
-                    if(this.ledger[i].disabled == 0)
-                        this.running_balance += Number(this.ledger[i].amount);
+                    if(this.ledger[i].disabled == 0){
+                        this.running_balance += Number(this.ledger[i].amount);                    
+                        this.ledger[i].muted = "";
+                    }
+                    else
+                        this.ledger[i].muted = "text-muted";
                 }
                 this.running_balance = this.running_balance.toFixed(2);
                 // console.log(data);
