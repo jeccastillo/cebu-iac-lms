@@ -581,24 +581,19 @@ class Unity extends CI_Controller {
                 $data['tuition'] = "";
 
             $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
-            
+            //tb_mas_classlist_student_adjustment_log
+            $ret['adjustments'] = $this->select('tb_mas_classlist_student_adjustment_log.*, tb_mas_subjects.strCode')
+                                       ->from('tb_mas_classlist_student_adjustment_log')
+                                       ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')
+                                       ->where(array('student_id'=>$id,'syid'=>$sem))
+                                       ->get()
+                                       ->result_array();
 
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
-            $ret['subjects_available'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$sem,$id);
-            //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            // $pay =  array();
-            // foreach($payment as $p){
-            //     if(isset($pay[$p['strTransactionType']]))
-            //         $pay[$p['strTransactionType']] += $p['intAmountPaid'];
-            //     else
-            //         $pay[$p['strTransactionType']] = $p['intAmountPaid'];
-
-            // }
-            // $ret['payment'] = $pay;
+            $ret['subjects_available'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$sem,$id);           
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             
