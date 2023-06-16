@@ -1048,12 +1048,17 @@ class Registrar extends CI_Controller {
                 
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
 
-                //record in adjustments table                
+                $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
+                //record in adjustments table                      
                 $tuition = $this->data_fetcher->getTuition($post['student'],$post['sem'],$registration['enumScholarship']);
-                $total = $tuition['total'];
+
+                if($down_payment)          
+                    $total = $tuition['ti_before_deductions'];
+                else
+                    $total = $tuition['total_before_deductions'];
 
                 $update['is_disabled'] = 1;
-                $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student']))->update('tb_mas_student_ledger',$update);
+                $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);
 
                 $ledger['student_id'] = $post['student'];
                 $ledger['name'] = "tuition";
