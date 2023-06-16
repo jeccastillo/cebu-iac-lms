@@ -1084,15 +1084,19 @@ class Registrar extends CI_Controller {
                 else
                     $total = $tuition['total_before_deductions'];
 
+                $current_tuition = $this->db->get_where('tb_mas_student_ledger',array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row('array');
+
                 $update['is_disabled'] = 1;
                 $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);
 
-                $ledger['student_id'] = $post['student'];
-                $ledger['name'] = "tuition";
-                $ledger['amount'] = $total;
-                $ledger['date'] = date("Y-m-d H:i:s");
-                $ledger['syid'] = $post['sem'];
-                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);                                
+                if($current_tuition['amount'] != $total){
+                    $ledger['student_id'] = $post['student'];
+                    $ledger['name'] = "tuition";
+                    $ledger['amount'] = $total;
+                    $ledger['date'] = date("Y-m-d H:i:s");
+                    $ledger['syid'] = $post['sem'];
+                    $this->data_poster->post_data('tb_mas_student_ledger',$ledger);                                
+                }
 
         }
                 
