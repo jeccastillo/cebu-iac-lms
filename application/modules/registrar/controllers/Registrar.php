@@ -1012,6 +1012,8 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
+        
+
         if($data['success']){
             if($replace){
                 $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id,'intStudentID'=>$post['student']));
@@ -1042,8 +1044,20 @@ class Registrar extends CI_Controller {
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
 
                 //record in adjustments table
-                
-                
+                $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
+                $tuition = $this->data_fetcher->getTuition($post['student'],$post['sem'],$registration['enumScholarship']);
+                $total = $tuition['total'];
+
+                $update['is_disabled'] = 1;
+                $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student']))->update('tb_mas_student_ledger',$update);
+
+                $ledger['student_id'] = $post['student'];
+                $ledger['name'] = "tuition";
+                $ledger['amount'] = $total;
+                $ledger['date'] = date("Y-m-d H:i:s");
+                $ledger['syid'] = $post['sem'];
+                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);                                
+
         }
                 
             
