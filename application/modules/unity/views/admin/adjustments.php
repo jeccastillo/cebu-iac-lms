@@ -280,130 +280,130 @@ new Vue({
             
         },        
         dropSubject: function(section){
-            // let url = base_url + 'registrar/drop_subject';
-            // let slug = this.slug;      
-            // this.loader_spinner = true;
+            let url = base_url + 'registrar/drop_subject';
+            let slug = this.slug;      
+            this.loader_spinner = true;
             
-            // Swal.fire({
-            //     title: 'Continue deleting Subject',
-            //     text: "Are you sure you want drop this subject?",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Yes",
-            //     imageWidth: 100,
-            //     icon: "question",
-            //     cancelButtonText: "No, cancel!",
-            //     showCloseButton: true,
-            //     showLoaderOnConfirm: true,
-            //         preConfirm: (login) => {       
-            //             Swal.fire({
-            //                 title: 'Continue deleting Subject',
-            //                 text: "Are you absolutely sure you want drop this subject? Enter today's date in yyyy-mm-dd format.",                            
-            //                 showCancelButton: true,
-            //                 input:"text",
-            //                 confirmButtonText: "Yes",
-            //                 imageWidth: 100,
-            //                 icon: "question",
-            //                 cancelButtonText: "No, cancel!",
-            //                 showCloseButton: true,
-            //                 showLoaderOnConfirm: true,
-            //                 preConfirm: (inputValue) => {                                                                       
-            //                     var formdata= new FormData();
-            //                     formdata.append('section_to_delete',section);                                
-            //                     formdata.append('student',this.id);
-            //                     formdata.append('sem',this.sem);
-            //                     formdata.append('date',inputValue);
-            //                     return axios.post(url, formdata, {
-            //                         headers: {
-            //                             Authorization: `Bearer ${window.token}`
-            //                         }
-            //                     })
-            //                     .then(data => {
-            //                         this.loader_spinner = false;                                    
-            //                         if(data.data.success){                                            
-            //                             Swal.fire({
-            //                                     title: "Success",
-            //                                     text: data.data.message,
-            //                                     icon: "success"
-            //                                 }).then(function() {
-            //                                     location.reload();
-            //                                 });                                                                                                                              
+            Swal.fire({
+                title: 'Continue deleting Subject',
+                text: "Are you sure you want drop this subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {       
+                        Swal.fire({
+                            title: 'Continue deleting Subject',
+                            text: "Are you absolutely sure you want drop this subject? Enter today's date in yyyy-mm-dd format.",                            
+                            showCancelButton: true,
+                            input:"text",
+                            confirmButtonText: "Yes",
+                            imageWidth: 100,
+                            icon: "question",
+                            cancelButtonText: "No, cancel!",
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: (inputValue) => {                                                                       
+                                var formdata= new FormData();
+                                formdata.append('section_to_delete',section);                                
+                                formdata.append('student',this.id);
+                                formdata.append('sem',this.sem);
+                                formdata.append('date',inputValue);
+                                return axios.post(url, formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;                                    
+                                    if(data.data.success){                                            
+                                        Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });                                                                                                                              
 
-            //                             }                                        
-            //                             else
-            //                                 Swal.fire({
-            //                                     title: "Failed",
-            //                                     text: data.data.message,
-            //                                     icon: "error"
-            //                                 }).then(function() {
-            //                                     //location.reload();
-            //                                 });                                        
-            //                         });                                        
+                                        }                                        
+                                        else
+                                            Swal.fire({
+                                                title: "Failed",
+                                                text: data.data.message,
+                                                icon: "error"
+                                            }).then(function() {
+                                                //location.reload();
+                                            });                                        
+                                    });                                        
                                                                         
-            //                 },
-            //                 allowOutsideClick: () => !Swal.isLoading()
-            //             }).then((result) => {
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then((result) => {
                         
-            //             })
-            //         },
-            //         allowOutsideClick: () => !Swal.isLoading()
-            //         }).then((result) => {
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
                         
-            //         })
+                    })
 
         },
         addSubject: function(){
-            // let url = base_url + 'registrar/add_subject_student';
-            // let slug = this.slug;      
-            // this.loader_spinner = true;
+            let url = base_url + 'registrar/add_subject_student';
+            let slug = this.slug;      
+            this.loader_spinner = true;
             
-            // Swal.fire({
-            //     title: 'Continue adding Subject',
-            //     text: "Are you sure you want add this subject?",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Yes",
-            //     imageWidth: 100,
-            //     icon: "question",
-            //     cancelButtonText: "No, cancel!",
-            //     showCloseButton: true,
-            //     showLoaderOnConfirm: true,
-            //         preConfirm: (login) => {                                                
-            //             var formdata= new FormData();
-            //             formdata.append('section_to_add',this.section_to_add);
-            //             formdata.append('subject_to_add',this.subject_to_add);
-            //             formdata.append('student',this.id);
-            //             formdata.append('sem',this.sem);
-            //             return axios.post(url, formdata, {
-            //                 headers: {
-            //                     Authorization: `Bearer ${window.token}`
-            //                 }
-            //             })
-            //             .then(data => {
-            //                 this.loader_spinner = false;                                    
-            //                 if(data.data.success){                                            
-            //                     Swal.fire({
-            //                             title: "Success",
-            //                             text: data.data.message,
-            //                             icon: "success"
-            //                         }).then(function() {
-            //                             location.reload();
-            //                         });                                                                                                                              
+            Swal.fire({
+                title: 'Continue adding Subject',
+                text: "Are you sure you want add this subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+                        var formdata= new FormData();
+                        formdata.append('section_to_add',this.section_to_add);
+                        formdata.append('subject_to_add',this.subject_to_add);
+                        formdata.append('student',this.id);
+                        formdata.append('sem',this.sem);
+                        return axios.post(url, formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;                                    
+                            if(data.data.success){                                            
+                                Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });                                                                                                                              
 
-            //                     }                                        
-            //                     else
-            //                         Swal.fire({
-            //                             title: "Failed",
-            //                             text: data.data.message,
-            //                             icon: "error"
-            //                         }).then(function() {
-            //                             //location.reload();
-            //                         });                                        
-            //                 });                                        
+                                }                                        
+                                else
+                                    Swal.fire({
+                                        title: "Failed",
+                                        text: data.data.message,
+                                        icon: "error"
+                                    }).then(function() {
+                                        //location.reload();
+                                    });                                        
+                            });                                        
                                                                    
-            //         },
-            //         allowOutsideClick: () => !Swal.isLoading()
-            //     }).then((result) => {
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
                 
-            //     })
+                })
 
         }
     }
