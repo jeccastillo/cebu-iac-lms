@@ -126,6 +126,29 @@
                                 data-target="#addSubjectModal" class="btn btn-primary">
                                 Add Subject/Change Section
                         </button>
+                        <hr />
+                        <h4>Adjustments</h4>
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Adjustment</th>
+                                    <th>From</th>                                                
+                                    <th>To</th>                                    
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                          
+                                <tr v-for="adj in adjustments" style="font-size: 13px;">
+                                    <td>{{ adj.strCode }}</td>
+                                    <td>{{ adj.adjustment_type }}</td>
+                                    <td>{{ adj.from_subject }}</td>                                                                                                
+                                    <td>{{ adj.to_subject }}</td>
+                                    <td>{{ adj.date }}</td>                                                                                                                                                                                                  
+                                </tr>                                            
+                            </tbody>
+                        </table>
+                        
                     </div>
                 </div>
             </div>  
@@ -193,7 +216,8 @@ new Vue({
         subject_to_add: undefined,
         subjects_available: undefined,   
         sections: undefined,       
-        section_to_add: undefined,          
+        section_to_add: undefined,    
+        adjustments:[],      
     },
 
     mounted() {
@@ -206,6 +230,7 @@ new Vue({
                     this.registration = data.data.registration;                       
                     this.reg_status = data.data.reg_status;
                     this.student = data.data.student;
+                    this.adjustments = data.data.adjustments;
                     // this.subjects_available = data.data.subjects_available;
                     this.records  = data.data.records;
                     this.slug = this.student.slug;
