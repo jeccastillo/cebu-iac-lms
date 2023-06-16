@@ -583,9 +583,10 @@ class Unity extends CI_Controller {
             $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
             //tb_mas_classlist_student_adjustment_log
             $ret['adjustments'] = $this->db
-                                       ->select('tb_mas_classlist_student_adjustment_log.*, strCode')
+                                       ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
                                        ->from('tb_mas_classlist_student_adjustment_log')  
                                        ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')                                     
+                                       ->join('tb_mas_users', 'tb_mas_classlist_student_adjustment_log.adjusted_by = tb_mas_faculty.intID')                                     
                                        ->where(array('student_id'=>$id,'syid'=>$sem))
                                        ->order_by('classlist_student_id','asc')
                                        ->get()
