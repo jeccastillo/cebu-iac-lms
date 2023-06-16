@@ -2001,6 +2001,7 @@ class Data_fetcher extends CI_Model {
         $total_new_student = 0;
         $is_foreign = false;
         $total_foreign = 0;
+        $total_other = 0;
         $afee = 0;
         $lab_list = [];
         $misc_list = [];    
