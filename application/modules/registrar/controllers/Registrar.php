@@ -962,10 +962,11 @@ class Registrar extends CI_Controller {
         }    
         elseif($post['date'] == date("Y-m-d")){            
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
+            $subject = $this->db->get_where('tb_mas_subjects',array('intID'=>$section['intSubjectID']))->first_row('array');
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
-            $adj['classlist_student_id'] = $post['section_to_delete'];
+            $adj['classlist_student_id'] = $subject['intID'];
             $adj['adjustment_type'] = "Removed";
             $adj['from_subject'] =  "";
             $adj['to_subject'] =  $section_to;
