@@ -585,7 +585,7 @@ class Unity extends CI_Controller {
             $ret['adjustments'] = $this->db
                                        ->select('tb_mas_classlist_student_adjustment_log.*, tb_mas_subjects.strCode')
                                        ->from('tb_mas_classlist_student_adjustment_log')
-                                       ->join('tb_mas_classlist_student', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_classlist_student.intID')
+                                       ->join('tb_mas_classlist_student', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_classlist_student.intCSID')
                                        ->join('tb_mas_classlist', 'tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
                                        ->join('tb_mas_subjects', 'tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                                        ->where(array('student_id'=>$id,'syid'=>$sem))
