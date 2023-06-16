@@ -996,6 +996,11 @@ class Registrar extends CI_Controller {
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
         $section_to .= ($add_to['sub_section'])?"-".$add_to['sub_section']:"";
+        $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
+        if(!$registration || $registration['intROG'] != 1){
+            $data['message'] = "Student has to be enrolled to make adjustments";            
+            $data['success'] =  false;
+        }
         foreach($records as $record){
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -1043,8 +1048,7 @@ class Registrar extends CI_Controller {
                 
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
 
-                //record in adjustments table
-                $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
+                //record in adjustments table                
                 $tuition = $this->data_fetcher->getTuition($post['student'],$post['sem'],$registration['enumScholarship']);
                 $total = $tuition['total'];
 
