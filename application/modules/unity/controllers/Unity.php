@@ -587,6 +587,7 @@ class Unity extends CI_Controller {
                                        ->from('tb_mas_classlist_student_adjustment_log')
                                        ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')
                                        ->where(array('student_id'=>$id,'syid'=>$sem))
+                                       ->order_by('classlist_student_id','asc')
                                        ->get()
                                        ->result_array();
 
