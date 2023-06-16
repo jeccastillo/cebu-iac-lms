@@ -954,8 +954,13 @@ class Registrar extends CI_Controller {
     }
 
     public function drop_subject(){
-        $post = $this->input->post();        
-        if($post['date'] == date("Y-m-d")){            
+        $post = $this->input->post();    
+        $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
+        if(!$registration || $registration['intROG'] != 1){
+            $data['message'] = "Student has to be enrolled to make adjustments";            
+            $data['success'] =  false;
+        }    
+        elseif($post['date'] == date("Y-m-d")){            
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
@@ -970,6 +975,25 @@ class Registrar extends CI_Controller {
             
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
             $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+
+            $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
+            //record in adjustments table                      
+            $tuition = $this->data_fetcher->getTuition($post['student'],$post['sem'],$registration['enumScholarship']);
+
+            if($down_payment)          
+                $total = $tuition['ti_before_deductions'];
+            else
+                $total = $tuition['total_before_deductions'];
+
+            $update['is_disabled'] = 1;
+            $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);
+
+            $ledger['student_id'] = $post['student'];
+            $ledger['name'] = "tuition";
+            $ledger['amount'] = $total;
+            $ledger['date'] = date("Y-m-d H:i:s");
+            $ledger['syid'] = $post['sem'];
+            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);     
             
             $data['success'] = true;
             $data['message'] = "Success";
