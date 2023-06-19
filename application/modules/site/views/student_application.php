@@ -571,38 +571,70 @@
                 </div>
 
                 <div class="form-group mb-6">
+                    <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                        Student Type <span class="text-red-500">*</span>
+                    </label>
                     <div
                         class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                        <label for="">Student Type
-                            <span class="text-danger">*</span>
-                        </label>
 
-                        <div class="mt-2">
+
+                        <!-- <div class="mt-2">
                             <input type="radio" required name="student_type" v-model="request.student_type"
                                 value="freshman" />
                             Freshman
                         </div>
 
                         <div>
+
                             <input type="radio" required name="student_type" value="transferee"
                                 v-model="request.student_type" />
                             Transferee
                         </div>
-                        <!-- <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="student_type"
-                                    value="foreign"
-                                    v-model="request.student_type"
-                                />
-                                Foreign
-                            </div> -->
                         <div>
                             <input type="radio" required name="student_type" value="second degree"
                                 v-model="request.student_type" />
                             Second Degree
+                        </div> -->
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="freshman" />
+                            UG - Freshman
                         </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="UG- Transferee" />
+                            UG- Transferee
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="SHS- Freshman" />
+                            SHS- Freshman
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="SHS- Transferee" />
+                            SHS- Transferee
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="SHS- DRIVE" />
+                            SHS- DRIVE
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" v-model="request.student_type"
+                                value="2ND- DEGREE" />
+                            2ND- DEGREE
+                        </div>
+
+
+
+
                     </div>
                 </div>
                 <div class="mb-6">
