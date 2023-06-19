@@ -597,39 +597,42 @@
                         </div> -->
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="freshman" />
-                            UG - Freshman
+                            <input type="radio" required name="student_type" id="rb-ug-freshman"
+                                v-model="request.student_type" value="freshman" />
+                            <label for="rb-ug-freshman"> UG - Freshman</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="UG- Transferee" />
-                            UG- Transferee
+                            <input type="radio" required name="student_type" id="rb-ug-transferee"
+                                v-model="request.student_type" value="UG- Transferee" />
+
+                            <label for="rb-ug-transferee"> UG- Transferee</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="SHS- Freshman" />
-                            SHS- Freshman
+                            <input type="radio" id="rb-shs-freshman" required name="student_type"
+                                v-model="request.student_type" value="SHS- Freshman" />
+                            <label for="rb-shs-freshman">SHS- Freshman</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="SHS- Transferee" />
-                            SHS- Transferee
+                            <input type="radio" required id="rb-shs-transferee" name="student_type"
+                                v-model="request.student_type" value="SHS- Transferee" />
+
+                            <label for="rb-shs-transferee">SHS- Transferee</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="SHS- DRIVE" />
-                            SHS- DRIVE
+                            <input type="radio" required id="rb-shs-drive" name="student_type"
+                                v-model="request.student_type" value="SHS- DRIVE" />
+                            <label for="rb-shs-drive">SHS- DRIVE</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="2ND- DEGREE" />
-                            2ND- DEGREE
+                            <input type="radio" required id="rb-2nd-deg" name="student_type"
+                                v-model="request.student_type" value="2ND- DEGREE" />
+                            <label for="rb-2nd-deg"> 2ND- DEGREE
+                            </label>
                         </div>
 
 
