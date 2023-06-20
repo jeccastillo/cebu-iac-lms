@@ -1227,19 +1227,19 @@ class Registrar extends CI_Controller {
         foreach($ret['data'] as $section){            
             if($section['intID']){
                 $sched_text = "";
-                $schedules = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
+                $schedules = $this->data_fetcher->getScheduleByCode($section['intID']);
                 foreach($schedules as $sched) {
                     if(isset($sched['strDay']))
                         $sched_text = $sched['strDayAbvr'];                    
                         //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
                 }
                                 
-                if(isset($sched[0]['strDay']))                                                
-                    $sched_text .= " ".date('g:ia',strtotime($sched[0]['dteStart'])).' - '.date('g:ia',strtotime($sched[0]['dteEnd']));                                                            
+                if(isset($schedules[0]['strDay']))                                                
+                    $sched_text .= " ".date('g:ia',strtotime($schedules[0]['dteStart'])).' - '.date('g:ia',strtotime($schedules[0]['dteEnd']));                                                            
                 
                                                          
-                if(isset($sched[0]['strDay']))
-                    $sched_text.= " ".$sched[0]['strRoomCode'];
+                if(isset($schedules[0]['strDay']))
+                    $sched_text.= " ".$schedules[0]['strRoomCode'];
                 
                 
             }
