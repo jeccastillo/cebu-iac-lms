@@ -261,6 +261,7 @@ new Vue({
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
                 .then((data) => {   
+                    console.log(data);
                     this.sections = undefined;      
                     this.section_to_add = undefined;                                                     
                     this.sections = data.data.data;                               
