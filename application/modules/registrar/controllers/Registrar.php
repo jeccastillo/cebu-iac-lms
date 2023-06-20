@@ -1226,9 +1226,25 @@ class Registrar extends CI_Controller {
         $ret['data'] = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
         foreach($ret['data'] as $section){            
             if($section['intID']){
-                $schedules[$section['intID']] = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
+                $sched_text = "";
+                $schedules = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
+                foreach($schedules as $sched) {
+                    if(isset($sched['strDay']))
+                        $sched_text = $sched['strDayAbvr'];                    
+                        //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+                }
+                                
+                if(isset($sched[0]['strDay']))                                                
+                    $sched_text .= " ".date('g:ia',strtotime($sched[0]['dteStart'])).' - '.date('g:ia',strtotime($sched[0]['dteEnd']));                                                            
+                
+                                                         
+                if(isset($sched[0]['strDay']))
+                    $sched_text.= " ".$sched[0]['strRoomCode'];
+                
                 
             }
+
+            $schedules[$section['intID']] = $sched_text;
         }
         $ret['schedules'] = $schedules;
         echo json_encode($ret);
