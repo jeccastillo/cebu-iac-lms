@@ -264,7 +264,7 @@ new Vue({
                     console.log(data);
                     this.sections = undefined;      
                     this.section_to_add = undefined;                                                     
-                    this.sections = data.data.data;                               
+                    this.sections = data.data;                               
                 })
                 .catch((error) => {
                     console.log(error);
