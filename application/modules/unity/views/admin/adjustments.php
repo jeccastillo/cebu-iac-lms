@@ -176,7 +176,9 @@
                     <h4>Select Section</h4>
                     <div v-if="sections" class="input-group">
                         <select required class="form-control" v-model="section_to_add">
-                            <option v-for="sec in sections" :value="sec.intID">{{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }}</option>                                                                          
+                            <option v-for="sec in sections" :value="sec.intID">
+                                {{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }} {{ schedules[sec.intID]?schedules[sec.intID]:"" }}
+                            </option>                                                                          
                         </select>                        
                     </div>                                                                         
                 </div>
