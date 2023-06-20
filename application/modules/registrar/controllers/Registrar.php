@@ -1246,7 +1246,7 @@ class Registrar extends CI_Controller {
 
             $sc[$section['intID']] = $sched_text;
         }
-        $ret['schedules'] = $schedules;
+        $ret['schedules'] = $sc;
         echo json_encode($ret);
     }
     
