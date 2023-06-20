@@ -255,8 +255,7 @@ new Vue({
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
-                    this.subjects_available = data.data.data; 
-                    this.schedules = data.data.schedules;          
+                    this.subjects_available = data.data.data;                          
                 })
                 .catch((error) => {
                     console.log(error);
@@ -267,7 +266,8 @@ new Vue({
                 .then((data) => {                       
                     this.sections = undefined;      
                     this.section_to_add = undefined;                                                     
-                    this.sections = data.data.data;                               
+                    this.sections = data.data.data;           
+                    this.schedules = data.data.schedules;                                             
                 })
                 .catch((error) => {
                     console.log(error);
