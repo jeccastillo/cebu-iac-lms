@@ -1221,15 +1221,16 @@ class Registrar extends CI_Controller {
     }
 
     public function get_sections($subject,$sem){
-        $ret['data'] = [];
-        $sections = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
+        
+        $schedules = [];
+        $ret['data'] = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
         foreach($sections as $section){            
             if($section['intID']){
-                $section['schedule'] = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
-                $ret[] = $section;
+                $schedules[$section['intID']] = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
+                
             }
         }
-
+        $ret['schedule'] = $schedules;
         echo json_encode($ret);
     }
     
