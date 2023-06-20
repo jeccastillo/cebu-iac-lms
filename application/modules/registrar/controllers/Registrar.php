@@ -1224,8 +1224,10 @@ class Registrar extends CI_Controller {
         $ret['data'] = [];
         $sections = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
         foreach($sections as $section){            
-            $section['schedule'] = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
-            $ret[] = $section;
+            if($section['intID']){
+                $section['schedule'] = $this->data_fetcher->getScheduleByCodeNew($section['intID']);
+                $ret[] = $section;
+            }
         }
 
         echo json_encode($ret);
