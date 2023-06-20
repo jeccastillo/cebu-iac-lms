@@ -1222,7 +1222,7 @@ class Registrar extends CI_Controller {
 
     public function get_sections($subject,$sem){
         
-        $schedules = [];
+        $sc = [];
         $ret['data'] = $this->data_fetcher->fetch_classlist_by_subject($subject,$sem);
         foreach($ret['data'] as $section){            
             if($section['intID']){
@@ -1244,7 +1244,7 @@ class Registrar extends CI_Controller {
                 
             }
 
-            $schedules[$section['intID']] = $sched_text;
+            $sc[$section['intID']] = $sched_text;
         }
         $ret['schedules'] = $schedules;
         echo json_encode($ret);
