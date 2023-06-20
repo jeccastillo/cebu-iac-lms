@@ -1230,7 +1230,7 @@ class Registrar extends CI_Controller {
                 
             }
         }
-        $ret['schedule'] = $schedules;
+        $ret['schedules'] = $schedules;
         echo json_encode($ret);
     }
     

@@ -218,6 +218,7 @@ new Vue({
         subject_to_add: undefined,
         subjects_available: undefined,   
         sections: undefined,       
+        schedules: undefined,
         section_to_add: undefined,    
         adjustments:[],      
     },
@@ -252,7 +253,8 @@ new Vue({
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
-                    this.subjects_available = data.data.data;           
+                    this.subjects_available = data.data.data; 
+                    this.schedules = data.data.schedules;          
                 })
                 .catch((error) => {
                     console.log(error);
@@ -260,11 +262,10 @@ new Vue({
         },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
-                .then((data) => {   
-                    console.log(data);
+                .then((data) => {                       
                     this.sections = undefined;      
                     this.section_to_add = undefined;                                                     
-                    this.sections = data.data;                               
+                    this.sections = data.data.data;                               
                 })
                 .catch((error) => {
                     console.log(error);
