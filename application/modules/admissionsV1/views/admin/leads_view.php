@@ -31,6 +31,7 @@
                     <option value="Enrolled">Enrolled</option>
                     <option value="Rejected">Rejected</option>
                     <option value="Disqualified">Disqualified</option>
+                    <option value="Not Answering">Not Answering</option>
                 </select>
             </div>
             <div class="col-sm-4">
