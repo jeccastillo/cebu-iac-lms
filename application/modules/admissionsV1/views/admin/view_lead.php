@@ -42,7 +42,7 @@
                             <span class="label label-success" v-if="request.status ==  'Game Changer'">Game Changer</span>
                             <span class="label label-success" v-if="request.status ==  'For Enrollment'">For Enrollment</span>
                             <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
-                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
+                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Cancelled Application/Rejected</span>
                         </p>
                         <hr>
                     </div>
@@ -548,7 +548,7 @@
                             Enrollment</button>
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
-                            btn-danger">Reject</button> 
+                            btn-danger">Cancel Application</button> 
                         <button type="button" v-if="request.status == 'New' || request.status == 'Rejected'" data-toggle="modal"
                             @click="update_status = 'Disqualified'" data-target="#myModal" class=" btn
                             btn-warning">Disqualify</button>      

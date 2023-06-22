@@ -42,6 +42,11 @@
                         <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled)/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
+                        <th>Cancelled Application/Rejected</th>
+                        <td>{{ stats.rejected }}</td>
+                        <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
                         <th>Reserved</th>
                         <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled }}</td>
                         <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled))*100).toFixed(2) }}%</td>
@@ -50,12 +55,7 @@
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
                         <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <th>Rejected</th>
-                        <td>{{ stats.rejected }}</td>
-                        <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
-                    </tr>
+                    </tr>                    
                     <tr>
                         <th>Disqualified</th>
                         <td>{{ stats.disqualified }}</td>
