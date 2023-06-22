@@ -34,7 +34,7 @@
                     <tr>
                         <th>Sign Ups</th>
                         <td>{{ total }}</td>
-                        <td></td>
+                        <td>Paid: {{ stats.paid }} Unpaid: {{ stats.unpaid }}</td>
                     </tr>                    
                     <tr>
                         <th>Interviewed</th>
@@ -122,7 +122,7 @@ new Vue({
                 this.stats = data.data;  
                 this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
                             this.stats.for_enrollment + this.stats.reserved + 
-                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + this.stats.disqualified + this.stats.not_answering;
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + this.stats.disqualified + this.stats.rejected + this.stats.not_answering;
             })
             .catch((error) => {
                 console.log(error);
