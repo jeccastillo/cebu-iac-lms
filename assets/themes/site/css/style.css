@@ -354,7 +354,8 @@ html {
 }
 
 .color-primary {
-  color: #014fb3;
+  /* color: #014fb3; */
+  color: #10326f;
 }
 
 .color-shs {

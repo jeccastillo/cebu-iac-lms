@@ -450,7 +450,12 @@ new Vue({
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
-                        this.request.contact_number = this.student.strMobileNumber;  
+                        
+                        if(this.student.strMobileNumber || this.student.strMobileNumber != "")
+                            this.request.contact_number = this.student.strMobileNumber;  
+                        else
+                            this.request.contact_number = "000000";
+
                         this.request.email_address = this.student.strEmail;                  
                         this.advanced_privilages = data.data.advanced_privilages;       
                         

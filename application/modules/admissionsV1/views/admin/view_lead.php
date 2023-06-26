@@ -42,7 +42,7 @@
                             <span class="label label-success" v-if="request.status ==  'Game Changer'">Game Changer</span>
                             <span class="label label-success" v-if="request.status ==  'For Enrollment'">For Enrollment</span>
                             <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
-                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
+                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Cancelled Application/Rejected</span>
                         </p>
                         <hr>
                     </div>
@@ -531,6 +531,9 @@
                             class=" btn btn-info">Update/Set FI</button>
                         <button type="button" v-if="request.status == 'New'"  @click="deleteApplicant"
                             class=" btn btn-danger">Delete applicant</button>
+                        <button type="button" v-if="request.status == 'New'" data-toggle="modal"
+                            @click="update_status = 'Not Answering';" data-target="#myModal" class=" btn
+                            btn-primary">Not Answering</button>
                         <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
                             @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
@@ -545,7 +548,7 @@
                             Enrollment</button>
                         <button type="button" v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'" data-toggle="modal"
                             @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
-                            btn-danger">Reject</button> 
+                            btn-danger">Cancel Application</button> 
                         <button type="button" v-if="request.status == 'New' || request.status == 'Rejected'" data-toggle="modal"
                             @click="update_status = 'Disqualified'" data-target="#myModal" class=" btn
                             btn-warning">Disqualify</button>      
