@@ -597,40 +597,43 @@
                         </div> -->
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" id="rb-ug-freshman"
-                                v-model="request.student_type" value="freshman" />
+                            <input type="radio" required name="student_type" id="rb-ug-freshman" data-type="college"
+                                @change="filterCourses('college')" v-model="request.student_type"
+                                value="UG - Freshman" />
                             <label for="rb-ug-freshman"> UG - Freshman</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" id="rb-ug-transferee"
-                                v-model="request.student_type" value="UG- Transferee" />
+                            <input type="radio" required name="student_type" id="rb-ug-transferee" data-type="college"
+                                @change="filterCourses('college')" v-model="request.student_type"
+                                value="UG- Transferee" />
 
                             <label for="rb-ug-transferee"> UG- Transferee</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" id="rb-shs-freshman" required name="student_type"
-                                v-model="request.student_type" value="SHS- Freshman" />
+                            <input type="radio" id="rb-shs-freshman" required name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- Freshman" />
                             <label for="rb-shs-freshman">SHS- Freshman</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required id="rb-shs-transferee" name="student_type"
-                                v-model="request.student_type" value="SHS- Transferee" />
+                            <input type="radio" required id="rb-shs-transferee" name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- Transferee" />
 
                             <label for="rb-shs-transferee">SHS- Transferee</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required id="rb-shs-drive" name="student_type"
-                                v-model="request.student_type" value="SHS- DRIVE" />
+                            <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- DRIVE" />
                             <label for="rb-shs-drive">SHS- DRIVE</label>
                         </div>
 
                         <div class="mt-2">
-                            <input type="radio" required id="rb-2nd-deg" name="student_type"
-                                v-model="request.student_type" value="2ND- DEGREE" />
+                            <input type="radio" required id="rb-2nd-deg" name="student_type" data-type="second_degree"
+                                @change="filterCourses('second_degree')" v-model="request.student_type"
+                                value="2ND- DEGREE" />
                             <label for="rb-2nd-deg"> 2ND- DEGREE
                             </label>
                         </div>
@@ -645,10 +648,10 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Applying For <span class="text-red-500">*</span>
                         </label>
-                        <ul
+                        <ul v-if="request.student_type"
                             class="bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200"
-                                v-for="t in programs" :key="t.id">
+                                v-for="t in filtered_programs" :key="t.id">
                                 <div class="flex items-center pl-3">
                                     <input type="checkbox" class="admissions_submission_cb" :id="'progId-' + t.id"
                                         @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
@@ -786,10 +789,11 @@ new Vue({
             health_concerns: [],
             citizenship: 'Philippines',
             syid: "<?php echo $current_term; ?>",
-            student_type: 'freshman',
+            student_type: '',
         },
         loading_spinner: false,
         programs: [],
+        filtered_programs: [],
         programs_group: [],
         types: [],
         base_url: "<?php echo base_url(); ?>",
@@ -797,7 +801,13 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs', {
+
+            // .get(this.base_url + 'site/view_active_programs', {
+            //     headers: {
+            //         Authorization: `Bearer ${window.token}`
+            //     },
+            // })
+            .get('https://portalv2.iacademy.edu.ph/api/v1/admissions/student-informations/programs', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -850,6 +860,10 @@ new Vue({
         unmaskedValue: function() {
             var val = this.$refs.input.clean
             console.log(val);
+        },
+
+        filterCourses: function(type) {
+            this.filtered_programs = this.programs.filter((item) => item.type == type)
         },
 
         filterProgram: function(type, title) {
