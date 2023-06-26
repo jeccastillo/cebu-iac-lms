@@ -36,17 +36,8 @@ $(document).ready(function() {
                 break;                
                 case 7:
                     s_column = "program";
-                break;  
+                break;                
                 case 8:
-                    s_column = "school"
-                break;              
-                case 9:
-                    s_column = "address";
-                break;
-                case 10:
-                    s_column = "date_of_birth"
-                break;
-                case 11:
                     s_column = "status"
                 break;
                 
@@ -97,7 +88,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [12],
+                "aTargets": [9],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -138,16 +129,7 @@ $(document).ready(function() {
             },
             {
                 data: "program"
-            },
-            {
-                data: "school"
-            },
-            {
-                data: "address"
-            },
-            {
-                data: "date_of_birth"
-            },
+            },           
             {
                 data: "status"
             }

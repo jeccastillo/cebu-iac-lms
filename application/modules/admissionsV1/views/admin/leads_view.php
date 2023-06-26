@@ -80,10 +80,7 @@
                             <th>Date Enrolled</th>
                             <th>Last Name</th>
                             <th>First Name</th>                            
-                            <th>Program</th>
-                            <th>School</th>
-                            <th>Address</th>
-                            <th>Birthday</th>
+                            <th>Program</th>                            
                             <th>Status</th>
                             <th>Actions</th>
 
