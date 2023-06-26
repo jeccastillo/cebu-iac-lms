@@ -138,10 +138,10 @@ $(document).ready(function() {
             },
             {
                 data: "school"
-            }
+            },
             {
                 data: "address"
-            }
+            },
             {
                 data: "status"
             }
