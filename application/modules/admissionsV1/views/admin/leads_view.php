@@ -80,6 +80,8 @@
                             <th>Last Name</th>
                             <th>First Name</th>                            
                             <th>Program</th>
+                            <th>School</th>
+                            <th>Address</th>
                             <th>Status</th>
                             <th>Actions</th>
 

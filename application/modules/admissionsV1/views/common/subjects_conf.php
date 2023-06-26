@@ -36,10 +36,17 @@ $(document).ready(function() {
                 break;                
                 case 7:
                     s_column = "program";
-                break;                
+                break;  
                 case 8:
-                    s_column = "status";
+                    s_column = "school"
+                break;              
+                case 9:
+                    s_column = "address";
                 break;
+                case 10:
+                    s_column = "status"
+                break;
+                
             }
             $.get(
                 api_url + "admissions/applications"+daterange, {
@@ -87,7 +94,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [9],
+                "aTargets": [11],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
@@ -129,6 +136,12 @@ $(document).ready(function() {
             {
                 data: "program"
             },
+            {
+                data: "school"
+            }
+            {
+                data: "address"
+            }
             {
                 data: "status"
             }
