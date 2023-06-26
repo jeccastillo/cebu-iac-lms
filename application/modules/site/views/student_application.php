@@ -653,8 +653,9 @@
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200"
                                 v-for="t in filtered_programs" :key="t.id">
                                 <div class="flex items-center pl-3">
-                                    <input type="checkbox" class="admissions_submission_cb" :id="'progId-' + t.id"
-                                        @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
+                                    <input type="radio" class="admissions_submission_cb" :id="'progId-' + t.id"
+                                        @click="filterProgram(t.type,t.title)" name="selected_course" :value="t.id"
+                                        required />
                                     <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }}</label>
                                 </div>
                             </li>
@@ -867,6 +868,7 @@ new Vue({
         },
 
         filterProgram: function(type, title) {
+
             var group = _.filter(this.programs, function(o) {
                 return o.type == type;
             });
@@ -918,7 +920,7 @@ new Vue({
                 );
 
                 axios
-                    .post(api_url + url, data, {
+                    .post(api_url + url + '12u1212y1u2y1uy2', data, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
