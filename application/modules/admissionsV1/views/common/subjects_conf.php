@@ -44,6 +44,9 @@ $(document).ready(function() {
                     s_column = "address";
                 break;
                 case 10:
+                    s_column = "date_of_birth"
+                break;
+                case 11:
                     s_column = "status"
                 break;
                 
@@ -141,6 +144,9 @@ $(document).ready(function() {
             },
             {
                 data: "address"
+            },
+            {
+                data: "date_of_birth"
             },
             {
                 data: "status"

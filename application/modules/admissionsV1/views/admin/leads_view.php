@@ -83,6 +83,7 @@
                             <th>Program</th>
                             <th>School</th>
                             <th>Address</th>
+                            <th>Birthday</th>
                             <th>Status</th>
                             <th>Actions</th>
 
