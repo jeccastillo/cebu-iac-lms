@@ -20,8 +20,8 @@
                                 Visit Us
                             </h4>
                             <p class="text-[16px] mt-2" data-aos="fade-up">
-                                Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug,
-                                Cebu City
+                                7434 Yakal St.,
+                                Barangay San Antonio, Makati, Philippines
                             </p>
                         </div>
 
@@ -30,21 +30,22 @@
                                 Contact Us
                             </h4>
                             <p class="text-[16px] mt-2" data-aos="fade-up">
-                            Email:
-                            <br /><br />                            
-                            inquirecebu@iacademy.edu.ph<br />
-                            admissionscebu@iacademy.edu.ph
+                                Email:
+                                <br /><br />
+                                inquire@iacademy.edu.ph<br />
+                                admissions@iacademy.edu.ph
                             </p>
                             <p class="text-[16px] mt-2" data-aos="fade-up">
-                            Landline:
-                            <br /><br />
-                            +63 32 520 4888
+                                Landline:
+                                <br /><br />
+                                +63 32 520 4888
                             </p>
                         </div>
 
                         <div class="md:w-1/3">
                             <h4 class="uppercase color-primary font-bold text-2xl" data-aos="fade-up">
-                                <a href="https://iacademy.edu.ph/privacypolicy.htm" target="_blank"><u>Privacy Policy</u></a>
+                                <a href="https://iacademy.edu.ph/privacypolicy.htm" target="_blank"><u>Privacy
+                                        Policy</u></a>
                             </h4>
                             <p class="text-[19px] mt-2" data-aos="fade-up">
 

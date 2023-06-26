@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/site/css/style.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/site/css/style.css?v=1.0.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/site/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/site/css/owl.theme.default.css" />
     <link rel="icon" type="image/png" href="<?php echo base_url() ?>assets/themes/site/images/fav.png">

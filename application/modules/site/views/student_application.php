@@ -1,22 +1,6 @@
 <section id="hero" class="section section_port relative">
-    <div class="custom-container md:h-[500px] relative z-1">
-        <!-- parallax object? -->
-        <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
-            alt="" data-scroll-speed="4" data-aos="zoom-in" />
+    <div class="custom-container  relative z-1" style="margin-top:100px">
 
-        <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
-            class="absolute top-[10%] md:left-[17%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-        <img src="<?php echo $img_dir; ?>home-poly/red-poly.png" class="absolute top-[30%] md:left-[0%] hidden md:block"
-            alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/peach-poly.png"
-            class="absolute top-[25%] md:left-[33%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/lyellow-poly.png"
-            class="absolute top-[50%] md:right-[0%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
-            class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
 
         <!-- parallax object end -->
         <div class="custom-container relative h-full mb-[100px] md:mb-[10px]">
@@ -27,9 +11,6 @@
                         <h1 class="text-4xl font-[900] text-center color-primary">
                             iACADEMY Makati
                         </h1>
-                        <h1 class="text-4xl uppercase text-center color-primary">
-                            School management system
-                        </h1>
                     </div>
                 </div>
             </div>
@@ -38,7 +19,7 @@
 </section>
 
 <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
-    <div class="color-primary">
+    <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet <strong>(Makati Campus)</strong></h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
@@ -60,29 +41,8 @@
             )
         " method="post">
 
-        <div class="flex md:space-x-5 mb-6 mt-10">
+        <div class="flex md:space-x-5 mb-6 mt-10 justify-center">
             <div class="md:w-1/2 w-full">
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Email <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" required v-model="request.email">
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Re-type Email <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" required v-model="request.email_confirmation">
-                    </div>
-                </div>
 
                 <div class="mb-6">
                     <div class="md:w-5/5">
@@ -109,11 +69,33 @@
                 <div class="mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Last Name <span class="text-red-500">*</span>
+                            Last/Family Name <span class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required v-model="request.last_name">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Email Address <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email" required v-model="request.email">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Confirm Email Address <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email" required v-model="request.email_confirmation">
                     </div>
                 </div>
 
@@ -654,12 +636,12 @@
                                 v-for="t in filtered_programs" :key="t.id">
                                 <div class="flex items-center pl-3">
                                     <input type="radio" class="admissions_submission_cb" :id="'progId-' + t.id"
-                                        @click="filterProgram(t.type,t.title)" name="selected_course" :value="t.id"
-                                        required />
+                                        v-model="request.type_id" name="" :value="t.id" required />
                                     <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }}</label>
                                 </div>
                             </li>
                         </ul>
+
                     </div>
                 </div>
 
@@ -673,64 +655,6 @@
                             type="text" required v-model="request.school">
                     </div>
                 </div>
-            </div>
-            <div class="md:w-1/2 md:block hidden">
-                <div class="relative">
-                    <div class="md:flex md:space-x-4 items-center">
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/rocket.png" class="max-w-full h-auto">
-                        </div>
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/blue.png" class="max-w-full h-auto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative mt-[70px]">
-                    <div class="md:flex md:space-x-4 items-center">
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/red.png" class="max-w-full h-auto">
-                        </div>
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/tablet.png" class="max-w-full h-auto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative mt-[70px]">
-                    <div class="md:flex md:space-x-4 items-center">
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/gamepad.png" class="max-w-full h-auto">
-                        </div>
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/yel.png" class="max-w-full h-auto mx-auto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative mt-[70px]">
-                    <div class="md:flex md:space-x-4 items-center">
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/peach.png" class="max-w-full h-auto">
-                        </div>
-                        <div class="md:w-1/2 mt-5">
-                            <img src="<?php echo $img_dir; ?>admissions/form/cam.png" class="max-w-full h-auto mx-auto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative mt-[70px]">
-                    <div class="md:flex md:space-x-4 items-center">
-                        <div class="md:w-1/2">
-                            <img src="<?php echo $img_dir; ?>admissions/form/laptop.png" class="max-w-full h-auto">
-                        </div>
-                        <div class="md:w-1/2 mt-5">
-                            <img src="<?php echo $img_dir; ?>admissions/form/dblue.png"
-                                class="max-w-full h-auto mx-auto">
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -836,6 +760,7 @@ new Vue({
                             .prop("checked", false);
                         if ($(e.currentTarget).is(":checked")) {
                             this.request.type_id = e.currentTarget.value;
+                            console.log(this.request.type_id)
                             $(".admissions_submission_cb").removeAttr(
                                 "required"
                             );
@@ -875,6 +800,7 @@ new Vue({
             var others = _.filter(this.programs, function(o) {
                 return o.type == "others";
             });
+
             this.programs_group = _.concat(group, others);
             this.request.program = title;
 
@@ -891,7 +817,8 @@ new Vue({
                         $(".admissions_submission_pg").attr("required", true);
                     }
                 });
-            }, 500);
+            }, 1000);
+
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
@@ -920,7 +847,7 @@ new Vue({
                 );
 
                 axios
-                    .post(api_url + url + '12u1212y1u2y1uy2', data, {
+                    .post(api_url + url, data, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
