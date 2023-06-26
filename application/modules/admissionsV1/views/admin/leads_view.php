@@ -59,7 +59,7 @@
             </div>
         </div>
     </section>    
-    <div class="content mcontainer container">
+    <div class="content container">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
