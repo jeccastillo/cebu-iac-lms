@@ -89,7 +89,14 @@
                         <option value="6">Finance</option>
                         <option value="7">OSAS</option>
                     </select>
-                </div>    
+                </div>  
+                <div class="form-group col-xs-6">
+                    <label for="teaching">Teaching</label>
+                    <select class="form-control" name="teaching" > 
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>                        
+                    </select>
+                </div>   
                 <div class="form-group col-xs-6">
                     <label for="special_role">Special Role</label>
                     <select class="form-control" name="special_role" > 
