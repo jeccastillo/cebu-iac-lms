@@ -333,7 +333,7 @@ class Unity extends CI_Controller {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
             $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
-            $this->data['teacher'] = $this->data_fetcher->fetch_table('tb_mas_faculty',array('strLastName','asc'));
+            $this->data['teacher'] = $this->data_fetcher->fetch_table('tb_mas_faculty',array('strLastName','asc'), null, array('teaching'=>1));
             
           
             $this->load->view("common/header",$this->data);
