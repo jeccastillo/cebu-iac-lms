@@ -396,7 +396,7 @@
                                 <i class="fa pull-right fa-angle-left"></i>
                             </a>
                             <ul class="treeview-menu">                                        
-                            <li class="<?php echo (isset($page) && $page=="assign_scholarship")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/assign_scholarship" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Assign Scholarship</a></li>
+                                <li class="<?php echo (isset($page) && $page=="assign_scholarship")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/assign_scholarship" style="margin-left: 10px;"><i class="fa fa-user"></i> Assign Scholarship</a></li>
                                 <li class="<?php echo (isset($page) && $page=="add_scholarship")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/view/0" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Scholarship</a></li>
                                 <li class="<?php echo (isset($page) && $page=="scholarships")?'active':''; ?>"><a href="<?php echo base_url(); ?>scholarship/scholarships" style="margin-left: 10px;"><i class="ion ion-android-list"></i> Scholarships</a></li>
                             </ul>
