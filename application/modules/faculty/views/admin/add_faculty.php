@@ -87,6 +87,7 @@
                         <option value="4">Dean</option>
                         <option value="5">Admissions Officer</option>
                         <option value="6">Finance</option>
+                        <option value="7">OSAS</option>
                     </select>
                 </div>    
                 <div class="form-group col-xs-6">
