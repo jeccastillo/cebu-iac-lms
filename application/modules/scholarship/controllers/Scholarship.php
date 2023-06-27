@@ -62,6 +62,7 @@ class Scholarship extends CI_Controller {
     }
 
     public function assign_scholarship(){
+        $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
         $this->load->view("common/header",$this->data);
