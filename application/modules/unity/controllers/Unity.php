@@ -2143,7 +2143,7 @@ class Unity extends CI_Controller {
     {
         $get = $this->input->get();
         # Perform the query
-        $query = "SELECT intID, strFirstname, strLastname from tb_mas_faculty WHERE teaching = 1 AND strFirstname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' OR strLastname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' ORDER BY strLastname DESC LIMIT 10";
+        $query = "SELECT intID, strFirstname, strLastname from tb_mas_faculty WHERE teaching = 1 AND (strFirstname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' OR strLastname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%') ORDER BY strLastname DESC LIMIT 10";
         $arr = array();
         $rs = $this->db->query($query);
 
