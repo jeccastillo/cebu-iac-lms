@@ -121,6 +121,11 @@ class Student extends CI_Controller {
         
         if($this->is_osas() || $this->is_super_admin() )
         {  
+            $post = $this->input->post();
+            
+            if($post['studentID'])
+                $id = $post['studentID'];
+
             $this->data['page'] = "student_scholarship";
             $this->data['opentree'] = "osas";
           

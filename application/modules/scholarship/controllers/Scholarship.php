@@ -61,6 +61,15 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/scholarship_list_conf",$this->data);
     }
 
+    public function assign_scholarship(){
+        $this->data['page'] = "assign_scholarship";
+        $this->data['opentree'] = "scholarship";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("assign_scholarship",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/assign_scholarship_conf",$this->data);
+    }
+
     public function view($id){
         $this->data['page'] = "add_scholarship";
         $this->data['opentree'] = "scholarship";
