@@ -116,7 +116,7 @@ class Student extends CI_Controller {
         
     }
 
-    public function edit_student_scholarship($id)
+    public function edit_student_scholarship($id = 0)
     {
         
         if($this->is_osas() || $this->is_super_admin() )
