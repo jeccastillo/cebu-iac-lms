@@ -233,7 +233,7 @@
                         </ul>
                     </li>
                 <?php endif; ?>
-                <?php if(in_array($user['intUserLevel'],array(2,3,6)) ): ?>
+                <?php if(in_array($user['intUserLevel'],array(2,3,6,7)) ): ?>
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="students")?'active':''; ?>">
                         <a href="#">
                             <i class="fa-user fa text-teal"></i> <span>Students</span>
