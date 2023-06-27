@@ -131,9 +131,8 @@ class Student extends CI_Controller {
             $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
             
             $this->load->view("common/header",$this->data);
-            $this->load->view("admin/edit_student",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("student_validation_js",$this->data); 
+            $this->load->view("admin/student_scholarship",$this->data);
+            $this->load->view("common/footer",$this->data);             
             $this->load->view("common/edit_student_conf",$this->data); 
            // print_r($this->data['classlists']);
             
