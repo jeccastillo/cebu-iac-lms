@@ -121,6 +121,8 @@ class Student extends CI_Controller {
         
         if($this->is_osas() || $this->is_super_admin() )
         {  
+            $this->data['page'] = "student_scholarship";
+            $this->data['opentree'] = "osas";
           
             $this->data['student'] = $this->data_fetcher->getStudent($id);            
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');

@@ -10,7 +10,7 @@ class Scholarship extends CI_Controller {
     function __construct() {
         parent::__construct();
         
-        if(!$this->is_registrar() && !$this->is_super_admin() && !$this->is_department_head())
+        if(!$this->is_osas() && !$this->is_super_admin())
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
@@ -129,6 +129,16 @@ class Scholarship extends CI_Controller {
     {
         $admin = $this->session->userdata('intUserLevel');
         if($admin == 3)
+            return true;
+        else
+            return false;
+        
+    }
+
+    public function is_osas()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 7)
             return true;
         else
             return false;

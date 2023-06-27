@@ -1144,7 +1144,7 @@ class Unity extends CI_Controller {
         
         if($user_level == 6)
             redirect(base_url().'unity/registration_viewer/'.$id.'/'.$sem);
-        if($user_level != 2 && $user_level != 3)
+        if($user_level != 2 && $user_level != 3 && $user_level != 7)
             redirect(base_url().'unity');
         
         
