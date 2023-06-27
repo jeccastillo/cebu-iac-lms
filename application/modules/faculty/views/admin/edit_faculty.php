@@ -93,6 +93,7 @@
                         <option <?php echo ($faculty['intUserLevel'] == 4)?'selected':'' ?> value="4">Dean</option>
                         <option <?php echo ($faculty['intUserLevel'] == 5)?'selected':'' ?> value="5">Admissions Officer</option>
                         <option <?php echo ($faculty['intUserLevel'] == 6)?'selected':'' ?> value="6">Finance</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 7)?'selected':'' ?> value="7">OSAS</option>
                     </select>
                 </div>   
                 <div class="form-group col-xs-6">

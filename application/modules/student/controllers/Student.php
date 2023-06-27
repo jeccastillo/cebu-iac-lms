@@ -115,6 +115,32 @@ class Student extends CI_Controller {
         
         
     }
+
+    public function edit_student_scholarship($id)
+    {
+        
+        if($this->is_osas() || $this->is_super_admin() )
+        {  
+          
+            $this->data['student'] = $this->data_fetcher->getStudent($id);            
+            $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+            $this->data['curriculum'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
+            $this->data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
+            $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
+            
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/edit_student",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("student_validation_js",$this->data); 
+            $this->load->view("common/edit_student_conf",$this->data); 
+           // print_r($this->data['classlists']);
+            
+        }
+        else
+            redirect(base_url()."unity");    
+        
+        
+    }
     
     public function update_passwords($sem,$program){
         $users = $this->db->get('tb_mas_users')
@@ -420,6 +446,16 @@ class Student extends CI_Controller {
     {
         $admin = $this->session->userdata('intUserLevel');
         if($admin == 3)
+            return true;
+        else
+            return false;
+        
+    }
+
+    public function is_osas()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 7)
             return true;
         else
             return false;
