@@ -24,7 +24,13 @@
                     </a>                         
                     <a v-if="reg_status =='For Registration'" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Student Fee Asssessment
-                    </a>                                         
+                    </a>  
+                    <a v-if="reg_status =='For Registration'" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
+                        <i class="fa fa-book"></i>Student Fee Asssessment
+                    </a> 
+                    <a class="btn btn-app" :href="base_url + 'student/edit_student_scholarship/' + student.intID">
+                        <i class="fa fa-book"></i>Scholarship
+                    </a>                                       
                 </small>
                 
                 <div class="box-tools pull-right">
