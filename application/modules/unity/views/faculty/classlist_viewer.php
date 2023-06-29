@@ -24,7 +24,7 @@
                     <!--li><a href="#tab_3" data-toggle="tab">More Class Data</a></li-->
                     <!--li><a href="#tab_3" data-toggle="tab">Quiz Record</a></li-->
                     <?php if(($is_super_admin || $is_registrar) && $showall): ?>
-                        <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/0" class="text-muted"><i class="fa fa-check"></i> Show Enlisted</a></li>
+                        <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/0" class="text-muted"><i class="fa fa-check"></i> Hide Enlisted</a></li>
                     <?php else: ?>
                         <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/1" class="text-muted"><i class="fa fa-check"></i> Show All</a></li>
                     <?php endif; ?>
