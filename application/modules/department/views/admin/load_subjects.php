@@ -44,7 +44,7 @@
         
     
         <div class="col-sm-12">
-            <div class="box box-solid box-primary">
+            <div class="box box-solid box-primary hidden">
                 <div class="box-header">
                     <h4 class="box-title">Schedule View of Courses Handled - 
                         <?php echo "A.Y." . " " .$active_sem['strYearStart']."-".$active_sem['strYearEnd'] . " " . $active_sem['enumSem']." ".$term_type ; ?>
