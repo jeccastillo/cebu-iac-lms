@@ -282,7 +282,7 @@ class Department extends CI_Controller {
             $classlists = $this->data_fetcher->fetch_classlists_unassigned($this->data['active_sem']['intID'],null,$this->data['faculty']['strDepartment']);
             $ret = [];
             foreach($classlists as $record){
-                $record['classlist_sched'] = $this->data_fetcher->getScheduleByCodeNew($record['intID']);
+                $record['schedule'] = $this->data_fetcher->getScheduleByCodeNew($record['intID']);
                 $ret[] = $record;
             }
 

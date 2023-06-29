@@ -323,7 +323,7 @@
                                         $section = $sn['strClassName'].$sn['year'].$sn['strSection']." ".$sn['sub_section'];
                                         ?>
                                         
-                                        <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['strCode']." Section: ".$section." Desc: ".$sn['strDescription']; ?></option>
+                                        <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['strCode']." Section: ".$section." Desc: ".$sn['strDescription']." Schedule:".$sn['schedule']['schedString']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
