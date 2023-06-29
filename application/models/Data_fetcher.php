@@ -2890,7 +2890,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $id;
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID, strClassName,strCode,strDescription, strSection, intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_subjects.strUnits")
+                     ->select("tb_mas_classlist.intID as intID, slots, intFacultyID,intSubjectID, strClassName,strCode,strDescription, strSection, year, sub_section, intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd, tb_mas_subjects.strUnits")
                      ->from("tb_mas_classlist")
                      ->where(array("intFacultyID"=>$faculty_id, "strAcademicYear"=>$classlist));
 
