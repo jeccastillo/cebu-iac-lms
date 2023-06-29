@@ -214,9 +214,6 @@ class Excel extends CI_Controller {
         $subject = $this->data_fetcher->getSubjectNoCurr($classlist['intSubjectID']);
         
       
-
-
-
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -243,7 +240,7 @@ class Excel extends CI_Controller {
 
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strSection'])
+                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strClassname'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
                     ->setCellValue('C1', $sy['enumSem']." Sem")
                     ->setCellValue('D1', "A.Y. " . $sy['strYearStart']."-".$sy['strYearEnd']);
         
@@ -335,7 +332,7 @@ class Excel extends CI_Controller {
  
          // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-         header('Content-Disposition: attachment;filename="export_leads'.$date.'.xls"');
+         header('Content-Disposition: attachment;filename="classlist'.$date.'.xls"');
          header('Cache-Control: max-age=0');
          // If you're serving to IE 9, then the following may be needed
          header('Cache-Control: max-age=1');
