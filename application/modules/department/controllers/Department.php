@@ -286,8 +286,10 @@ class Department extends CI_Controller {
                 $ret[] = $record;
             }
 
-            $this->data['all_classlist'] = $ret;
 
+
+            $this->data['all_classlist'] = $ret;
+            print_r($this->data['all_classlist']);
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/load_subjects",$this->data);
             $this->load->view("common/footer",$this->data);
