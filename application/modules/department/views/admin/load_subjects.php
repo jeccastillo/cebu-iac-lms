@@ -415,7 +415,7 @@
                         <div class="col-md-12">
                             <h4>Loaded Classlists</h4>
                             <select style="height:300px" class="form-control" id="loaded-classlist" multiple>
-                                <?php foreach($faculty_classlist as $sn): 
+                                <?php foreach($classlist as $sn): 
                                     $section = $sn['strClassName'].$sn['year'].$sn['strSection']." ".$sn['sub_section'];
                                     ?>
                                     <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['strCode']." ".$section." Desc: ".$sn['strDescription']." Schedule:".$sn['schedule']['schedString']; ?></option>
