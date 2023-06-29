@@ -275,15 +275,26 @@ class Department extends CI_Controller {
             
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
             $this->data['faculty'] = $this->data_fetcher->getFaculty($id);
+            $this->data['sc'] = [];
             
             $this->data['faculty_classlist'] = $this->data_fetcher->fetch_classlist_by_faculty($id,$this->data['active_sem']['intID']);
+
+            //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
+            $records = $this->data_fetcher->fetch_classlist_by_faculty($id,$this->data['active_sem']['intID']);
+            
+            foreach($records as $record)
+            {
+                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['intID']);
+                //print_r($record['schedule']);
+                $this->data['sc'][] = $record;
+            }
             
             
             $classlists = $this->data_fetcher->fetch_classlists_unassigned($this->data['active_sem']['intID'],null,$this->data['faculty']['strDepartment']);
             $ret = [];
-            foreach($classlists as $record){
-                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['intID']);
-                $ret[] = $record;
+            foreach($classlists as $classlist){
+                $classlist['schedule'] = $this->data_fetcher->getScheduleByCode($classlist['intID']);
+                $ret[] = $classlist;
             }
 
             $this->data['all_classlist'] = $ret;
