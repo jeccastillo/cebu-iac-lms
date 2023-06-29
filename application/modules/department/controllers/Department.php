@@ -286,7 +286,7 @@ class Department extends CI_Controller {
             {
                 $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['intID']);
                 //print_r($record['schedule']);
-                $this->data['sc'][] = $record;
+                $this->data['classlist'][] = $record;
             }
             
             
