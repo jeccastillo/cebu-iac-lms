@@ -65,7 +65,7 @@
                                 $ctr = 1;
                                 
                             foreach($students as $student):
-                                //print_r($student);
+                                print_r($student);
                                 if($showall || (!empty($student['registered'] && $student['registered']['intROG']  >= 1))):
                                 ?>
                                 <tr>
