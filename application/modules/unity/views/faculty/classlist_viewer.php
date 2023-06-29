@@ -61,7 +61,7 @@
                                 
                             foreach($students as $student):
                                 //print_r($student);
-                                
+                                if($show_all || !empty($student['registered'])):
                                 ?>
                                 <tr>
                                 <?php if($is_super_admin): ?> 
@@ -140,7 +140,8 @@
 
                                 </tr>
                             <?php 
-                                $ctr++;        
+                                $ctr++; 
+                                        endif;       
                             endforeach; ?>
                             </table>
                             <?php if($classlist['intFinalized'] < 3): ?>

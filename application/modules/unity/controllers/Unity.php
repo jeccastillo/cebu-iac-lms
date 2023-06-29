@@ -1804,10 +1804,15 @@ class Unity extends CI_Controller {
             
             
             $this->data['is_super_admin'] = $this->is_super_admin();
+            
             if($showAll > 0 && ($this->session->userdata('intUserLevel') == 2 || $this->session->userdata('intUserLevel') == 3))
-                $students = $this->data_fetcher->getClassListStudents($id);
+                $this->data['showall'] = true;
             else
-                $students = $this->data_fetcher->getClassListStudentsEnrolled($id);
+                $this->data['showall'] = false;
+                
+            $students = $this->data_fetcher->getClassListStudents($id);
+            
+
             $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
             $passing =0;
             $incomplete =0;
