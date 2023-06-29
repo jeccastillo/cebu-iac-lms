@@ -240,7 +240,7 @@ class Excel extends CI_Controller {
 
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strClassname'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
+                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
                     ->setCellValue('C1', $sy['enumSem']." Sem")
                     ->setCellValue('D1', "A.Y. " . $sy['strYearStart']."-".$sy['strYearEnd']);
         
