@@ -319,8 +319,11 @@
                             <div class="col-md-12">
                                 <h4>Classlists</h4>
                                 <select style="height:300px" class="select2" id="classlist-selector" multiple>
-                                    <?php foreach($all_classlist as $sn): ?>
-                                        <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['strCode']." Section: ".$sn['strSection']." Desc: ".$sn['strDescription']; ?></option>
+                                    <?php foreach($all_classlist as $sn):                                         
+                                        $section = $sn['strClassName'].$sn['year'].$sn['strSection']." ".$sn['sub_section'];
+                                        ?>
+                                        
+                                        <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['strCode']." Section: ".$section." Desc: ".$sn['strDescription']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
