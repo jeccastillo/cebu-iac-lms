@@ -669,6 +669,9 @@ if(!function_exists('switch_user_level'))
                 case 6:
                     $num = "Finance";
                     break;
+                case 7:
+                    $num = "OSAS";
+                    break;
             }
         
             return $num;
