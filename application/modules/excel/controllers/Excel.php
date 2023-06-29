@@ -203,7 +203,7 @@ class Excel extends CI_Controller {
         
         
     }
-    public function download_classlist($id)
+    public function download_classlist($id,$all = 0)
     {
         $date = date("Y-m-d H:i:s");
         $classlist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
