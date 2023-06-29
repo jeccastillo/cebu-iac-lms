@@ -277,12 +277,9 @@ class Department extends CI_Controller {
             $this->data['faculty'] = $this->data_fetcher->getFaculty($id);
             $this->data['sc'] = [];
             
-            $this->data['faculty_classlist'] = $this->data_fetcher->fetch_classlist_by_faculty($id,$this->data['active_sem']['intID']);
-
-            //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
-            $records = $this->data_fetcher->fetch_classlist_by_faculty($id,$this->data['active_sem']['intID']);
+            $this->data['faculty_classlist'] = $this->data_fetcher->fetch_classlist_by_faculty($id,$this->data['active_sem']['intID']);            
             
-            foreach($records as $record)
+            foreach($this->data['faculty_classlist'] as $record)
             {
                 $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['intID']);
                 //print_r($record['schedule']);
