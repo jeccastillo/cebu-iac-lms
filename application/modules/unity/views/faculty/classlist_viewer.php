@@ -66,7 +66,7 @@
                                 
                             foreach($students as $student):
                                 //print_r($student);
-                                if($showall || (!empty($student['registered']) && $student['registered']['intROG'] == 1)):
+                                if($showall || (!empty($student['registered']) && $student['registered']['intROG']  >= 1)):
                                 ?>
                                 <tr>
                                 <?php if($is_super_admin): ?> 
@@ -80,7 +80,7 @@
                                     <!--  newly added ^_^ 4-22-2016            -->
                                     <!--td><input <?php echo ($classlist['intFinalized']==1 || !$is_super_admin)?'disabled':''; ?> type="text" value="<?php echo $student['strStudentNumber']; ?>" name="strStudentNumber" class="studNumInput form-control" id="strStudentNumber" placeholder="Enter Stud-Number" size="3" rel="<?php echo $student['intID'] ?>"></td-->
                                     <?php if($classlist['is_numerical']): ?>
-                                        <?php if(!empty($student['registered']) && $student['registered']['intROG'] == 1): ?>                                       
+                                        <?php if(!empty($student['registered']) && $student['registered']['intROG']  >= 1): ?>                                       
                                         <td id="eq2-<?php echo $student['intCSID'] ?>">
                                             <select <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
                                                 <option <?php echo $student['floatFinalGrade'] == '0'?'selected':''; ?> value="0">Not graded</option>
@@ -103,7 +103,7 @@
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <td>
-                                        <?php if(!empty($student['registered']) && $student['registered']['intROG'] == 1): ?>
+                                        <?php if(!empty($student['registered']) && $student['registered']['intROG']  >= 1): ?>
                                         <select  id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
                                         <?php 
                                         if($is_super_admin && $student['enumStatus'] =="drp")
@@ -132,7 +132,7 @@
                                     <td><textarea rows="1" cols="10" style="resize: none;font-weight:bold;" disabled="disabled" <?php echo ($classlist['intFinalized'] < 3)?'':'disabled'; ?>  rel="<?php echo $student['intCSID'] ?>" class="remarks" id="rem-<?php echo $student['intCSID']; ?>"><?php echo ($student['strRemarks']!="")?$student['strRemarks']:getRemarks(getEquivalent($student['floatFinalGrade'])); ?></textarea>
                                    </td>
                                     <td style="text-align:center;">
-                                        <?php echo (!empty($student['registered']) && $student['registered']['intROG'] == 1)?'<span style="color:#009000;">yes</span>':'<span style="color:#777;">no</span>'; ?>
+                                        <?php echo (!empty($student['registered']) && $student['registered']['intROG']  >= 1)?'<span style="color:#009000;">yes</span>':'<span style="color:#777;">no</span>'; ?>
                                     </td>
                                     <?php if($classlist['intFinalized'] < 3): ?>
                                         <?php if($is_super_admin): ?>

@@ -271,42 +271,44 @@ class Excel extends CI_Controller {
         $ctr = 1;
         foreach($students as $student)
         {
-            // Add some datat
-            $objPHPExcel->setActiveSheetIndex(0)
-                    //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
-                    ->setCellValue('A'.$i,$ctr)
-                    ->setCellValue('B'.$i, $student['strLastname'])
-                    ->setCellValue('C'.$i, $student['strFirstname'])
-                    ->setCellValue('D'.$i, $student['strMiddlename'])    
-                    ->setCellValue('E'.$i, $student['strProgramCode'])
-                    ->setCellValue('F'.$i, $student['strStudentNumber'])
-                    ->setCellValue('G'.$i, $student['floatFinalGrade'])
-                    ->setCellValue('H'.$i, $student['strRemarks'])
-                    ->setCellValue('I'.$i, $student['strGSuiteEmail'])
-                    ->setCellValue('J'.$i, ucwords(strtolower($student['strFirstname'])) . " " . ucwords(strtolower($student['strLastname'])));
+            if($all > 0 || (!empty($student['registered']) && $student['registered']['intROG'] > 1)){
+                // Add some datat
+                $objPHPExcel->setActiveSheetIndex(0)
+                        //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
+                        ->setCellValue('A'.$i,$ctr)
+                        ->setCellValue('B'.$i, $student['strLastname'])
+                        ->setCellValue('C'.$i, $student['strFirstname'])
+                        ->setCellValue('D'.$i, $student['strMiddlename'])    
+                        ->setCellValue('E'.$i, $student['strProgramCode'])
+                        ->setCellValue('F'.$i, $student['strStudentNumber'])
+                        ->setCellValue('G'.$i, $student['floatFinalGrade'])
+                        ->setCellValue('H'.$i, $student['strRemarks'])
+                        ->setCellValue('I'.$i, $student['strGSuiteEmail'])
+                        ->setCellValue('J'.$i, ucwords(strtolower($student['strFirstname'])) . " " . ucwords(strtolower($student['strLastname'])));
 
-              $styleArray = array(
-                'borders' => array(
-                    'allborders' => array(
-                        'style' => PHPExcel_Style_Border::BORDER_THIN
+                $styleArray = array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                            )
                         )
-                    )
-            );
-        
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
-            unset($styleArray);
+                );
             
-//            if($student['strRemarks'] == "Failed")
-//                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
-//                    array(
-//                        'fill' => array(
-//                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-//                            'color' => array('rgb' => 'dd6666')
-//                        )
-//                    )
-//                );
-            $i++;
-            $ctr++;
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
+                unset($styleArray);
+                
+    //            if($student['strRemarks'] == "Failed")
+    //                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
+    //                    array(
+    //                        'fill' => array(
+    //                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+    //                            'color' => array('rgb' => 'dd6666')
+    //                        )
+    //                    )
+    //                );
+                $i++;
+                $ctr++;
+            }
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
