@@ -132,7 +132,7 @@
                                     <td><textarea rows="1" cols="10" style="resize: none;font-weight:bold;" disabled="disabled" <?php echo ($classlist['intFinalized'] < 3)?'':'disabled'; ?>  rel="<?php echo $student['intCSID'] ?>" class="remarks" id="rem-<?php echo $student['intCSID']; ?>"><?php echo ($student['strRemarks']!="")?$student['strRemarks']:getRemarks(getEquivalent($student['floatFinalGrade'])); ?></textarea>
                                    </td>
                                     <td style="text-align:center;">
-                                        <?php echo (!empty($student['registered']) && $student['registered']['intROG'] == 1)?'<span style="color:#777;">no</span>':'<span style="color:#009000;">yes</span>'; ?>
+                                        <?php echo (!empty($student['registered']) && $student['registered']['intROG'] == 1)?'<span style="color:#009000;">yes</span>':'<span style="color:#777;">no</span>'; ?>
                                     </td>
                                     <?php if($classlist['intFinalized'] < 3): ?>
                                         <?php if($is_super_admin): ?>
