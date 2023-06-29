@@ -271,7 +271,8 @@ class Excel extends CI_Controller {
         $ctr = 1;
         foreach($students as $student)
         {
-            if($all > 0 || !empty($student['registered'])){
+            $registered = $this->data_fetcher->checkRegistered($student['intID'],$this->data['classlist']['strAcademicYear']);
+            if($all > 0 || !empty($registered)){
                 // Add some datat
                 $objPHPExcel->setActiveSheetIndex(0)
                         //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
