@@ -123,7 +123,7 @@ class Excel extends CI_Controller {
             $ctr = 1;
             foreach($students as $student)
             {
-                if($all || !empty($student['registered'])){
+                if($all > 0 || !empty($student['registered'])){
                     // Add some datat
                     $objPHPExcel->setActiveSheetIndex($sheet)
                             //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
