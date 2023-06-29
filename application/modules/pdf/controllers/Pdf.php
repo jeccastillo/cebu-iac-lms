@@ -1168,7 +1168,15 @@ class Pdf extends CI_Controller {
         
         $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $this->data['sy'] = $this->data_fetcher->get_sem_by_id($this->data['classlist']['strAcademicYear']);
-        $students = $this->data_fetcher->getClassListStudents($id);
+        $all_students = $this->data_fetcher->getClassListStudents($id);
+        $students = [];
+        
+        foreach($all_students as $std){
+            $registered = $this->data_fetcher->checkRegistered($std['intID'],$this->data['classlist']['strAcademicYear']);
+            if(!empty($registered))
+                $students[] = $std;
+        }
+
         $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
         $schedule = $this->data_fetcher->fetch_table('tb_mas_room_schedule',null,null,array('strScheduleCode'=>$id));
         $this->data['faculty'] =  current($this->data_fetcher->fetch_table('tb_mas_faculty',null,null,array('intID'=>$this->data['classlist']['intFacultyID'])));        
@@ -1235,8 +1243,10 @@ class Pdf extends CI_Controller {
             else
             {
                 foreach($students as $student){
+                    
                     $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
                     $st[] = $student;
+                
                 }
                 $this->data['students'] = $st;
             }
