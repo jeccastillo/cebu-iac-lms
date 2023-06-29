@@ -1720,7 +1720,7 @@ class Data_fetcher extends CI_Model {
         $arr = $this->db
              ->select('intRegistrationID')
              ->from('tb_mas_registration')
-             ->where(array("intStudentID"=>$studentID,"intAYID"=>$AYID,'intROG'=>1))
+             ->where(array("intStudentID"=>$studentID,"intAYID"=>$AYID,'intROG >'=>1))
              ->get()->result_array();
         if(empty($arr))
             return false;
