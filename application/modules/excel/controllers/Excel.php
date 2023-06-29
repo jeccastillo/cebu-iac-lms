@@ -260,9 +260,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('E3', 'Program')
                     ->setCellValue('F3', 'Student Number')
                     ->setCellValue('G3', 'Final Grade')
-                    ->setCellValue('H3', 'Remarks')
-                    ->setCellValue('I3', 'GSuite Email')
-                    ->setCellValue('J3', 'GMeet Display Name');
+                    ->setCellValue('H3', 'Remarks');
         
         $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($styleArray);
             unset($styleArray);
@@ -283,9 +281,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('E'.$i, $student['strProgramCode'])
                         ->setCellValue('F'.$i, $student['strStudentNumber'])
                         ->setCellValue('G'.$i, $student['floatFinalGrade'])
-                        ->setCellValue('H'.$i, $student['strRemarks'])
-                        ->setCellValue('I'.$i, $student['strGSuiteEmail'])
-                        ->setCellValue('J'.$i, ucwords(strtolower($student['strFirstname'])) . " " . ucwords(strtolower($student['strLastname'])));
+                        ->setCellValue('H'.$i, $student['strRemarks']);
 
                 $styleArray = array(
                     'borders' => array(
@@ -319,8 +315,6 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(60);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
         
         $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
 
