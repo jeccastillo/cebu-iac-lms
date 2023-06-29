@@ -1634,8 +1634,7 @@ class Unity extends CI_Controller {
         if($this->faculty_logged_in())
         {
             $active_sem = $this->data_fetcher->get_active_sem();            
-            $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_faculty($this->session->userdata('intID'),$active_sem['intID']);         
-            echo $this->session->userdata('intID');   
+            $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_faculty(trim($this->session->userdata('intID')),$active_sem['intID']);                     
             $this->data['page'] = "view_classlist";
             $this->load->view("common/header",$this->data);
             $this->load->view("faculty/classlist",$this->data);
