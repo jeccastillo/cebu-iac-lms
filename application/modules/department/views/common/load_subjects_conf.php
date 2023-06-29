@@ -92,7 +92,7 @@
                 'data':data,
                 'dataType':'json',
                 'success':function(ret){
-                   alert("saved"); 
+                    location.reload();
                 }
             });
             
