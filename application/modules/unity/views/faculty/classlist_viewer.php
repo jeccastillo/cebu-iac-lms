@@ -61,7 +61,7 @@
                                 
                             foreach($students as $student):
                                 //print_r($student);
-                                if($show_all || !empty($student['registered'])):
+                                if($showall || !empty($student['registered'])):
                                 ?>
                                 <tr>
                                 <?php if($is_super_admin): ?> 
