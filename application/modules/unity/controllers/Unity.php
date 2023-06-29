@@ -1770,8 +1770,9 @@ class Unity extends CI_Controller {
         redirect(base_url()."unity/view_classlist_archive_admin");
     }
     
-    public function classlist_viewer($id)
+    public function classlist_viewer($id,$showAll = 0)
     {
+
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $clist_sy_id = $clist['strAcademicYear'];
 
@@ -1803,7 +1804,10 @@ class Unity extends CI_Controller {
             
             
             $this->data['is_super_admin'] = $this->is_super_admin();
-            $students = $this->data_fetcher->getClassListStudents($id);
+            if($showAll > 0 && ($this->session->userdata('intUserLevel') == 2 || $this->session->userdata('intUserLevel') == 3))
+                $students = $this->data_fetcher->getClassListStudents($id);
+            else
+                $students = $this->data_fetcher->getClassListStudentsEnrolled($id);
             $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
             $passing =0;
             $incomplete =0;

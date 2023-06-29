@@ -2468,6 +2468,38 @@ class Data_fetcher extends CI_Model {
                  ->result_array();
     }
 
+    function getClassListStudentsEnrolled($id,$sem = 0)
+    {
+        $faculty_id = $this->session->userdata("intID");
+        if($sem == 0)
+            return  $this->db
+                     ->select("tb_mas_classlist_student.intCSID,intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
+                     ->from("tb_mas_classlist_student")
+                     //->group_by("intSubjectID")
+                     ->where(array("intClassListID"=>$id))
+                     ->where(array("tb_mas_registration.intROG >"=>0))
+                     ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
+                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')                                                               
+                     ->order_by('strLastName asc, strFirstname asc')
+                     ->get()
+                     ->result_array();
+        else        
+            return  $this->db
+                 ->select("tb_mas_classlist_student.intCSID,tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added,tb_mas_faculty.strUsername as fusername")
+                 ->from("tb_mas_classlist_student")
+                 //->group_by("intSubjectID")             
+                 ->where(array("tb_mas_registration.intAYID"=>$sem))    
+                 ->where(array("tb_mas_registration.intROG >"=>0))
+                 ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
+                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                 ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+                 ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_registration.enlisted_by','left')        
+                 ->group_by('tb_mas_users.intID')                                                       
+                 ->order_by('strLastName asc, strFirstname asc')
+                 ->get()
+                 ->result_array();
+    }
+
     function getClassListStudentsEnlistedOnly($id,$sem = 0)
     {
         $faculty_id = $this->session->userdata("intID");
