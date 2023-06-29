@@ -208,6 +208,7 @@ class Excel extends CI_Controller {
     }
     public function download_classlist($id)
     {
+        $date = date("Y-m-d H:i:s");
         $classlist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $sy = $this->data_fetcher->get_sem_by_id($classlist['strAcademicYear']);
         $students = $this->data_fetcher->getClassListStudents($id);
