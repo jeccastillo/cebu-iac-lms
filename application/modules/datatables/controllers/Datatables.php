@@ -1591,13 +1591,6 @@ class Datatables extends CI_Controller {
             
             $sWhere .= "AND $table.intTrash ='".$trashed."' ";
         }
-        if($table == 'tb_mas_faculty')
-        {
-            if($user == null)
-                $sWhere .= "WHERE $table.intUserLevel !=2 ";
-            else
-                $sWhere .= "AND $table.intUserLevel !=2 ";
-        }
         
         
         
@@ -2026,13 +2019,6 @@ class Datatables extends CI_Controller {
                 $sWhere .="WHERE ";
             
             $sWhere .= "AND $table.intTrash ='".$trashed."' ";
-        }
-        if($table == 'tb_mas_faculty')
-        {
-            if($user == null)
-                $sWhere .= "WHERE $table.intUserLevel !=2 ";
-            else
-                $sWhere .= "AND $table.intUserLevel !=2 ";
         }
         
         
