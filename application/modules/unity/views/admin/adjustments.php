@@ -428,7 +428,7 @@ new Vue({
             let slug = this.slug;      
             this.loader_spinner = true;
             
-            if(cf)
+            if(cf){
                 Swal.fire({
                     showCancelButton: false,
                     showCloseButton: false,
@@ -470,7 +470,7 @@ new Vue({
                                 //location.reload();
                             });                                        
                     });   
-
+            }
             else
                 Swal.fire({
                     title: 'Continue adding Subject',
