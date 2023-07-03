@@ -169,7 +169,7 @@
                 <div class="modal-body">     
                     <h4>Subject To Replace (optional)</h4>
                     <div v-if="records" class="input-group">
-                        <select required class="form-control" v-model="subject_to_replace">
+                        <select required @change="reloadSubjects($event)" class="form-control" v-model="subject_to_replace">
                             <option selected value="0">None</option>
                             <option v-for="record in records" :value="record.intID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                         </select>                        
@@ -177,7 +177,7 @@
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
-                            <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
+                            <option v-for="s in subjects_available" v-if="!inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
                     <h4>Select Section</h4>
@@ -212,6 +212,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
+function inArray(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+    }
+    return false;
+}
 new Vue({
     el: '#registration-container',
     data: {
@@ -224,6 +231,7 @@ new Vue({
         records:[],  
         registration: undefined,     
         registration_status: 0,
+        subjects_loaded: [],
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
@@ -248,6 +256,9 @@ new Vue({
                     this.adjustments = data.data.adjustments;
                     // this.subjects_available = data.data.subjects_available;
                     this.records  = data.data.records;
+                    for(i in this.records){
+                        this.subjects_loaded.push(this.records[i].strCode);
+                    }
                     this.slug = this.student.slug;
                     this.advanced_privilages = data.data.advanced_privilages;           
                 })
@@ -270,6 +281,14 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
+        },
+        reloadSubjects(event){
+            if(event.target.value == 0)
+                this.subjects_loaded = [];            
+            else
+                for(i in this.records){
+                    this.subjects_loaded.push(this.records[i].strCode);
+                }
         },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
