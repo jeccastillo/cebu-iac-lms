@@ -178,7 +178,7 @@
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
-                            <option v-for="s in subjects_available" v-if="!inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
+                            <option v-for="s in subjects_available" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
                     <h4>Select Section</h4>
@@ -272,15 +272,13 @@ new Vue({
 
     methods: {      
         loadAvailableSubjects(event){
-            all = event.target.value;
-            console.log(all);
+            all = event.target.value;            
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {                                             
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
-                    if(all != 0){  
-                        console.log("Test");                   
+                    if(all != 0){                                         
                         for(i in data.data.data){
                             if(!inArray(data.data.data[i].strCode, this.subjects_loaded))
                                 this.subjects_available.push(data.data.data[i]);                          
