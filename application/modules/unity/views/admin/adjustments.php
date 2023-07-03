@@ -255,10 +255,7 @@ new Vue({
                     this.student = data.data.student;
                     this.adjustments = data.data.adjustments;
                     // this.subjects_available = data.data.subjects_available;
-                    this.records  = data.data.records;
-                    for(i in this.records){
-                        this.subjects_loaded.push(this.records[i].strCode);
-                    }
+                    this.records  = data.data.records;                    
                     this.slug = this.student.slug;
                     this.advanced_privilages = data.data.advanced_privilages;           
                 })
