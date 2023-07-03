@@ -1063,7 +1063,7 @@ class Registrar extends CI_Controller {
             else{
                 $adj['adjustment_type'] = "Add Subject";
                 if($post['subject_to_replace'] != 0){
-                    $classlist_to_replace = $this->getClasslistDetails($post['subject_to_replace']);
+                    $classlist_to_replace = $this->data_fetcher->getClasslistDetails($post['subject_to_replace']);
                     $remarks = "Changed subject from ".$classlist_to_replace['strCode']." Section: ".$classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection']." ".$classlist_to_replace['sub_section'];
                 }
             }

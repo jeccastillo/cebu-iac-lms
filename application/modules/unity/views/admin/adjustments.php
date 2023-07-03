@@ -136,7 +136,8 @@
                                     <th>Adjustment</th>
                                     <th>From</th>                                                
                                     <th>To</th>  
-                                    <th>Adjusted By</th>                                  
+                                    <th>Adjusted By</th> 
+                                    <th>Remarks</th>                                 
                                     <th>Date</th>
                                 </tr>
                             </thead>
@@ -147,6 +148,7 @@
                                     <td>{{ adj.from_subject }}</td>                                                                                                
                                     <td>{{ adj.to_subject }}</td>
                                     <td>{{ adj.strLastname + ", " + adj.strFirstname }}</td>
+                                    <td>{{ adj.remarks }}</td>
                                     <td>{{ adj.date }}</td>                                                                                                                                                                                                  
                                 </tr>                                            
                             </tbody>
