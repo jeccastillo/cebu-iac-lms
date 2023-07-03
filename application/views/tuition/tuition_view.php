@@ -9,7 +9,7 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,','); ?></div>        
             </div>        
             <div class="row">
-                <div class="col-sm-6">Scholarship Discount:</div>            
+                <div class="col-sm-6">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['tuition_discount'], 2, '.' ,','); ?></div>
             </div>                    
         <?php endif; ?>
@@ -36,7 +36,7 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['misc_before_discount'], 2, '.' ,','); ?></div>
             </div>
             <div class="row">
-                <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
+                <div class="col-sm-6" style="text-align:right;">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['misc_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
@@ -70,7 +70,7 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['lab_before_discount'], 2, '.' ,','); ?></div>
             </div>
             <div class="row">
-                <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
+                <div class="col-sm-6" style="text-align:right;">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['lab_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
@@ -158,7 +158,7 @@
                     <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_other_before_discount'], 2, '.' ,','); ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
+                    <div class="col-sm-6" style="text-align:right;">Discount:</div>            
                     <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['other_discount'], 2, '.' ,','); ?></div>
                 </div>
             <?php endif; ?>
@@ -173,7 +173,7 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_before_deductions'], 2, '.' ,','); ?></div>
             </div>    
             <div class="row">
-                <div class="col-sm-6">Scholarship Discount:</div>            
+                <div class="col-sm-6">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>        
@@ -205,7 +205,7 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['ti_before_deductions'], 2, '.' ,','); ?></div>
             </div>    
             <div class="row">
-                <div class="col-sm-6">Scholarship Discount:</div>            
+                <div class="col-sm-6">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
