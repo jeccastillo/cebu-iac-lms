@@ -58,7 +58,7 @@
                     <td></td>
                     <td></td>
                     <td>Total:</td>
-                    <td>{{ full_total }}</td>
+                    <td><strong>{{ full_total }}</strong></td>
                 </tr>                
             </tbody>
         </table>
