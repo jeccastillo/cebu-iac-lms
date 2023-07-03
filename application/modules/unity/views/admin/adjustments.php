@@ -283,10 +283,8 @@ new Vue({
                 })
         },
         reloadSubjects(event){
-            if(event.target.value == 0)
-                this.subjects_loaded = [];            
-            else{
-                this.loadAvailableSubjects()
+            this.subjects_loaded = [];            
+            if(event.target.value != 0){
                 for(i in this.records){
                     this.subjects_loaded.push(this.records[i].strCode);
                 }
