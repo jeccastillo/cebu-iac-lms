@@ -121,8 +121,9 @@
                             </tbody>
                         </table>
                         <hr />
-                        <button data-toggle="modal"                                                
-                                @click="loadAvailableSubjects()" 
+                        <button data-toggle="modal"            
+                                value = 0                                    
+                                @click="loadAvailableSubjects($event)" 
                                 data-target="#addSubjectModal" class="btn btn-primary">
                                 Add Subject/Change Section
                         </button>
@@ -169,7 +170,7 @@
                 <div class="modal-body">     
                     <h4>Subject To Replace (optional)</h4>
                     <div v-if="records" class="input-group">
-                        <select required @change="reloadSubjects($event)" class="form-control" v-model="subject_to_replace">
+                        <select required @change="loadAvailableSubjects($event)" class="form-control" v-model="subject_to_replace">
                             <option selected value="0">None</option>
                             <option v-for="record in records" :value="record.intID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                         </select>                        
@@ -230,11 +231,11 @@ new Vue({
         reg_status: undefined, 
         records:[],  
         registration: undefined,     
-        registration_status: 0,
-        subjects_loaded: [],
+        registration_status: 0,        
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
+        subjects_loaded: [],
         subject_to_replace: 0,
         subjects_available: undefined,   
         sections: undefined,       
@@ -255,7 +256,10 @@ new Vue({
                     this.student = data.data.student;
                     this.adjustments = data.data.adjustments;
                     // this.subjects_available = data.data.subjects_available;
-                    this.records  = data.data.records;                    
+                    this.records  = data.data.records;     
+                    for(i in this.records){
+                        this.subjects_loaded.push(this.records[i].strCode);
+                    }               
                     this.slug = this.student.slug;
                     this.advanced_privilages = data.data.advanced_privilages;           
                 })
@@ -267,26 +271,26 @@ new Vue({
     },
 
     methods: {      
-        loadAvailableSubjects(){
+        loadAvailableSubjects(event){
+            all = event.target.value;
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {     
+                    this.subject_to_replace = 0;
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
-                    this.subjects_available = data.data.data;                          
+                    if(all > 0)
+                        for(i in data.data.data){
+                            if(!inArray(data.data.data[i].strCode, this.subjects_loaded))
+                                this.subjects_available.push(data.data.data[i]);                          
+                        }
+                    else
+                        this.subjects_available = data.data.data;
                 })
                 .catch((error) => {
                     console.log(error);
                 })
-        },
-        reloadSubjects(event){
-            this.subjects_loaded = [];            
-            if(event.target.value != 0){
-                for(i in this.records){
-                    this.subjects_loaded.push(this.records[i].strCode);
-                }
-            }
-        },
+        },        
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
                 .then((data) => {                       
