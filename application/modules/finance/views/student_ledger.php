@@ -101,7 +101,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
-        ledger: [],
+        ledger: [],        
         student: {
             strFirstname:'',
             strLastname:'',
@@ -111,7 +111,7 @@ new Vue({
 
         },
         running_balance: 0,
-        sy: undefined,        
+        sy: undefined,               
         request:{
             student_id: '<?php echo $id; ?>',
             date: undefined,
@@ -147,20 +147,23 @@ new Vue({
             })
 
             .then((data) => {
-                this.ledger = data.data.ledger;
+                ledger_temp = data.data.ledger;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
                                   
 
-                for(i in this.ledger){
-                    if(this.ledger[i].is_disabled == 0){
-                        this.running_balance += Number(this.ledger[i].amount);                                            
-                        this.ledger[i].muted = "";
+                for(i in ledger_temp){
+                    if(ledger_temp[i].is_disabled == 0){
+                        this.running_balance += Number(ledger_temp.amount);                                                                    
+                        ledger_temp[i].muted = "";
                     }
                     else{
-                        this.ledger[i].muted = "text-muted";                        
+                        ledger_temp[i].muted = "text-muted";                        
                     }
+                    ledger_temp[i]['balance'] =  this.running_balance;
+                    
+                    this.ledger.push(ledger_temp[i]);
                 }
                 this.running_balance = this.running_balance.toFixed(2);
                 // console.log(data);
