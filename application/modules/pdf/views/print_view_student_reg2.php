@@ -241,7 +241,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td>DOWN PAYMENT</td>
                                 <td></td>
-                                <td style="text-align:center;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="text-align:left;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
                             </tr>';
                             for($i=0;$i<5;$i++){
                                 $html .= '
