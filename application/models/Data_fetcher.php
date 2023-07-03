@@ -2212,7 +2212,8 @@ class Data_fetcher extends CI_Model {
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
-        $data['misc'] = $total_misc - $misc_scholarship;        
+        $data['misc'] = $total_misc - $misc_scholarship;  
+        $data['tuition_before_discount'] =  $tuition; 
         $data['tuition'] = $tuition - $tuition_scholarship;
 
         $data['total'] = $data['total_before_deductions'] - $total_scholarship;                
