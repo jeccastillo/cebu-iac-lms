@@ -151,12 +151,12 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
-                    <div class="col-sm-6 text-blue">-<?php echo $tuition['other_discount']; ?></div>
+                    <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['other_discount'], 2, '.' ,','); ?></div>
                 </div>
             <?php endif; ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total Other Fees:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['total_other']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_other'], 2, '.' ,','); ?></div>
             </div>
         <hr />
         <?php if($tuition['total_discount'] > 0): ?>
