@@ -38,6 +38,7 @@
                             <th>Assessment</th>
                             <th>Payment</th>
                             <th>Added/Changed By</th>
+                            <th>Balance</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -61,6 +62,7 @@
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
                             <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
+                            <td :class="item.muted">{{ item.balance }}</td>
                             <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
                             <td>
                                 <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
