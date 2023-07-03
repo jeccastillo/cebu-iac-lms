@@ -261,7 +261,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('F3', 'Date Enrolled')
                     ->setCellValue('G3', 'Date Added');                    
         
-        $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($styleArray);
             unset($styleArray);
         
         $i = 4;
@@ -290,7 +290,7 @@ class Excel extends CI_Controller {
                         )
                 );
             
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':G'.$i)->applyFromArray($styleArray);
                 unset($styleArray);
                 
     //            if($student['strRemarks'] == "Failed")
@@ -308,11 +308,11 @@ class Excel extends CI_Controller {
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(70);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         
         
         $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
