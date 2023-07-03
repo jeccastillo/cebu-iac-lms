@@ -2187,7 +2187,8 @@ class Data_fetcher extends CI_Model {
         $data['total_discount'] = $total_scholarship;
         $data['lab_before_discount'] = $total_lab;
         $data['lab'] = $total_lab - $lab_scholarship;
-        $data['lab_installment'] = $data['lab'] + $data['lab'] * ($tuition_year['installmentIncrease']/100);
+        $data['lab_installment_before_discount'] = $data['lab'] + $data['lab'] * ($tuition_year['installmentIncrease']/100);
+        $data['lab_installment'] = $data['lab_installment_before_discount'] - $lab_scholarship;
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition'] = $tuition;
@@ -2216,11 +2217,20 @@ class Data_fetcher extends CI_Model {
         $data['misc_before_discount'] = $total_misc;  
         $data['misc'] = $total_misc - $misc_scholarship;  
         $data['tuition_before_discount'] =  $tuition; 
+        $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
         $data['tuition'] = $tuition - $tuition_scholarship;
+        $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship;
 
-        $data['total'] = $data['total_before_deductions'] - $total_scholarship;                
-        $data['total_installment'] = $data['ti_before_deductions']  - $total_scholarship;
+        $data['total'] = $data['total_before_deductions'] - $total_scholarship;                        
         $data['scholarship_deductions'] = $total_scholarship;
+        if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0)
+            if($scholar->total_assessment_rate > 0):
+                $data['scholarship_deductions_installment'] = $data['ti_before_deductions'] * ($scholar->total_assessment_rate/100);
+            endif;
+        else
+            $data['scholarship_deductions_installment'] = $total_scholarship;
+
+        $data['total_installment'] = $data['ti_before_deductions']  - $total_scholarship;
         
         if($data['total'] == 0)
             $data['total_installment'] = 0;
