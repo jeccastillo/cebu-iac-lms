@@ -113,7 +113,7 @@
                                     <td><span v-if="record.adjustments">{{ record.adjustments.adjustment_type }}</span></td>
                                     <td>    
                                     <button                                                
-                                            @click="dropSubject(record.classlistID)"  class="btn btn-danger">
+                                            @click="dropSubject(record.classlistID,false)"  class="btn btn-danger">
                                             Drop
                                     </button>                                                                                                    
                                     </td>
@@ -191,7 +191,9 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button v-if="subject_to_replace == 0" type="submit" class="btn btn-primary">Add/Change</button>
+                    <button v-else type="button" @click="dropSubject(subject_to_replace,true)" class="btn btn-primary">Replace</button>
+                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -285,7 +287,7 @@ new Vue({
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
             formdata.append("intRegistrationID",this.registration.intRegistrationID);
-            formdata.append("intROG",this.registration_status);
+            formdata.append("intROG",this.registration_status);            
             var missing_fields = false;
             this.loader_spinner = true;
             
@@ -319,7 +321,7 @@ new Vue({
             
             
         },        
-        dropSubject: function(section){
+        dropSubject: function(section,swap){
             let url = base_url + 'registrar/drop_subject';
             let slug = this.slug;      
             this.loader_spinner = true;
@@ -391,7 +393,7 @@ new Vue({
                     })
 
         },
-        addSubject: function(){
+        addSubject: function(){            
             let url = base_url + 'registrar/add_subject_student';
             let slug = this.slug;      
             this.loader_spinner = true;
@@ -410,6 +412,7 @@ new Vue({
                         var formdata= new FormData();
                         formdata.append('section_to_add',this.section_to_add);
                         formdata.append('subject_to_add',this.subject_to_add);
+                        formdata.append('subject_to_replace',this.subject_to_replace);                        
                         formdata.append('student',this.id);
                         formdata.append('sem',this.sem);
                         return axios.post(url, formdata, {

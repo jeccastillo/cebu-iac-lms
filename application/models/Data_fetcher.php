@@ -2668,7 +2668,7 @@ class Data_fetcher extends CI_Model {
     function getClasslistDetails($id)
     {
         $d = $this->db
-             ->select('strSection,intLab,intSubjectID,intLectHours,intFacultyID')
+             ->select('strSection,strClassName,year,sub_section,intLab,intSubjectID,intLectHours,intFacultyID,strCode')
              ->from('tb_mas_classlist')
              ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
              ->where('tb_mas_classlist.intID',$id)

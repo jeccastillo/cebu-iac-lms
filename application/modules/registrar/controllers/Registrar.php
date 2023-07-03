@@ -968,11 +968,12 @@ class Registrar extends CI_Controller {
 
             $adj['classlist_student_id'] = $subject['intID'];
             $adj['adjustment_type'] = "Removed";
-            $adj['from_subject'] =  "";
-            $adj['to_subject'] =  $section_to;
+            $adj['from_subject'] =  $section_to;
+            $adj['to_subject'] =  "";
             $adj['syid'] = $post['sem'];
             $adj['date'] = date("Y-m-d H:i:s");  
             $adj['student_id'] =  $post['student'];
+            $adj['remarks'] =  "Deleted";
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
@@ -1017,6 +1018,7 @@ class Registrar extends CI_Controller {
         $section_from = "";        
         $section_to = "";
         $data['message'] = "Done";            
+        $remarks = "Added";
         $data['success'] =  true;
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
@@ -1049,9 +1051,15 @@ class Registrar extends CI_Controller {
             if($replace){
                 $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id,'intStudentID'=>$post['student']));
                 $adj['adjustment_type'] = "Change Section";
+                $remarks = "Change Section";
             }
-            else
+            else{
                 $adj['adjustment_type'] = "Add Subject";
+                if($post['subject_to_replace'] != 0){
+                    $classlist_to_replace = $this->getClasslistDetails($post['subject_to_replace']);
+                    $remarks = "Changed subject from ".$classlist_to_replace['strCode']." Section: ".$classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection']." ".$classlist_to_replace['sub_section'];
+                }
+            }
 
                 $add['floatPrelimGrade'] = 50;
                 $add['floatMidtermGrade'] = 50;
@@ -1071,6 +1079,7 @@ class Registrar extends CI_Controller {
                 $adj['syid'] = $post['sem'];
                 $adj['date'] = date("Y-m-d H:i:s");  
                 $adj['student_id'] =  $post['student'];
+                $adj['remarks'] =  $remarks;
                 $adj['adjusted_by'] =  $this->session->userdata('intID');
                 
                 $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
