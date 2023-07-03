@@ -52,14 +52,14 @@
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
                     <td v-else>{{ date.total }}</td>                    
                 </tr>
-                <tr v-if="dates" v-for="date in dates">
+                <tr v-if="dates">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Total:</td>
                     <td>{{ full_total }}</td>
-                </tr>
+                </tr>                
             </tbody>
         </table>
                          
