@@ -6,11 +6,13 @@
         <?php if($tuition['tuition_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['tuition_before_discount']; ?></div>
-                <hr />
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['tuition']; ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo $tuition['tuition_discount']; ?></div>
             </div>
         <?php endif; ?>
+        <div class="row">
+            <div class="col-sm-6">Tuition Before Discount:</div>            
+            <div class="col-sm-6 text-green"><?php echo $tuition['tuition_before_discount']; ?></div>        </div>
+        
         <div class="row">
             <div class="col-sm-6">Tuition:</div>            
             <div class="col-sm-6 text-green"><?php echo $tuition['tuition']; ?></div>
