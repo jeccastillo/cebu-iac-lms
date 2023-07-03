@@ -166,7 +166,13 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Subject/Change Section</h4>
                 </div>
-                <div class="modal-body">                    
+                <div class="modal-body">     
+                    <h4>Subject To Replace (optional)</h4>
+                    <div v-if="records" class="input-group">
+                        <select required @change="getSections($event)" class="form-control" v-model="subject_to_replace">
+                            <option v-for="record in records" :value="record.intID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
+                        </select>                        
+                    </div>               
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
@@ -218,6 +224,7 @@ new Vue({
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
+        subject_to_replace: 0,
         subjects_available: undefined,   
         sections: undefined,       
         schedules: undefined,
