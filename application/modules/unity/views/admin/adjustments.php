@@ -160,7 +160,7 @@
         </div>
     </div>
     <div class="modal fade" id="addSubjectModal" role="dialog">
-        <form @submit.prevent="addSubject" class="modal-dialog modal-lg">
+        <form @submit.prevent="addSubject(0)" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -389,7 +389,7 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
                                         if(swap){
-                                            this.addSubject();
+                                            this.addSubject(1);
                                         }
                                         else                                         
                                             Swal.fire({
@@ -423,60 +423,104 @@ new Vue({
                     })
 
         },
-        addSubject: function(){            
+        addSubject: function(cf){            
             let url = base_url + 'registrar/add_subject_student';
             let slug = this.slug;      
             this.loader_spinner = true;
             
-            Swal.fire({
-                title: 'Continue adding Subject',
-                text: "Are you sure you want add this subject?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
-                        var formdata= new FormData();
-                        formdata.append('section_to_add',this.section_to_add);
-                        formdata.append('subject_to_add',this.subject_to_add);
-                        formdata.append('subject_to_replace',this.subject_to_replace);                        
-                        formdata.append('student',this.id);
-                        formdata.append('sem',this.sem);
-                        return axios.post(url, formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;                                    
-                            if(data.data.success){                                            
-                                Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });                                                                                                                              
-
-                                }                                        
-                                else
-                                    Swal.fire({
-                                        title: "Failed",
-                                        text: data.data.message,
-                                        icon: "error"
-                                    }).then(function() {
-                                        //location.reload();
-                                    });                                        
-                            });                                        
-                                                                   
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
+            if(cf)
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: false,
+                    allowEscapeKey: false,
+                    title: 'Loading',
+                    text: 'Updating Data do not leave page',
+                    icon: 'info',
                 })
+                Swal.showLoading();
+                var formdata= new FormData();
+                formdata.append('section_to_add',this.section_to_add);
+                formdata.append('subject_to_add',this.subject_to_add);
+                formdata.append('subject_to_replace',this.subject_to_replace);                        
+                formdata.append('student',this.id);
+                formdata.append('sem',this.sem);
+                return axios.post(url, formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.loader_spinner = false;                                    
+                    if(data.data.success){                                            
+                        Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });                                                                                                                              
+
+                        }                                        
+                        else
+                            Swal.fire({
+                                title: "Failed",
+                                text: data.data.message,
+                                icon: "error"
+                            }).then(function() {
+                                //location.reload();
+                            });                                        
+                    });   
+
+            else
+                Swal.fire({
+                    title: 'Continue adding Subject',
+                    text: "Are you sure you want add this subject?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                        preConfirm: (login) => {                                                
+                            var formdata= new FormData();
+                            formdata.append('section_to_add',this.section_to_add);
+                            formdata.append('subject_to_add',this.subject_to_add);
+                            formdata.append('subject_to_replace',this.subject_to_replace);                        
+                            formdata.append('student',this.id);
+                            formdata.append('sem',this.sem);
+                            return axios.post(url, formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;                                    
+                                if(data.data.success){                                            
+                                    Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });                                                                                                                              
+
+                                    }                                        
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });                                        
+                                });                                        
+                                                                    
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                    
+                    })
 
         }
     }
