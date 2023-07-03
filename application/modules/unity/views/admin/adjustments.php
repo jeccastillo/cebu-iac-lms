@@ -347,7 +347,11 @@ new Vue({
             let url = base_url + 'registrar/drop_subject';
             let slug = this.slug;      
             this.loader_spinner = true;
-            
+            if(swap)
+                remarks = "Changed to " + this.subject_to_add;
+            else
+                remarks = "Deleted";
+
             Swal.fire({
                 title: 'Continue deleting Subject',
                 text: "Are you sure you want drop this subject?",
@@ -376,6 +380,7 @@ new Vue({
                                 formdata.append('student',this.id);
                                 formdata.append('sem',this.sem);
                                 formdata.append('date',inputValue);
+                                formdata.append('remarks',remarks);
                                 return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
@@ -384,8 +389,9 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
-                                        if(swap)
+                                        if(swap){
                                             this.addSubject();
+                                        }
                                         else                                         
                                             Swal.fire({
                                                 title: "Success",
