@@ -280,7 +280,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('D'.$i, $student['strProgramCode'])
                         ->setCellValue('E'.$i, $reg_info['type_of_class']."-".$reg_info['enumStudentType'])
                         ->setCellValue('F'.$i, date("Y-m-d h:ia",strtotime($reg_info['dteRegistered'])))
-                        ->setCellValue('G'.$i, date("Y-m-d h:ia",strtotime($reg_info['date_added'])));                                                                       
+                        ->setCellValue('G'.$i, date("Y-m-d h:ia",strtotime($student['date_added'])));                                                                       
 
                 $styleArray = array(
                     'borders' => array(
