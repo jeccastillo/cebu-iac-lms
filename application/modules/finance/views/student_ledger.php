@@ -157,7 +157,7 @@ new Vue({
 
                 for(i in ledger_temp){
                     if(ledger_temp[i].is_disabled == 0){
-                        this.running_balance += Number(ledger_temp.amount);                                                                    
+                        this.running_balance += Number(ledger_temp[i].amount);                                                                    
                         ledger_temp[i].muted = "";
                     }
                     else{
