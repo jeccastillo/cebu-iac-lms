@@ -178,7 +178,7 @@
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
-                            <option v-for="s in subjects_available" v-if="!hide_subjects" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
+                            <option v-for="s in subjects_available" v-if="!hide_subjects || !inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
                     <h4>Select Section</h4>
