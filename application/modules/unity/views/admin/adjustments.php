@@ -170,6 +170,7 @@
                     <h4>Subject To Replace (optional)</h4>
                     <div v-if="records" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_replace">
+                            <option selected value="0">None</option>
                             <option v-for="record in records" :value="record.intID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                         </select>                        
                     </div>               
