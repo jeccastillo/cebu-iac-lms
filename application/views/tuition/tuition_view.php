@@ -62,6 +62,10 @@
         <?php endforeach; ?>        
         <?php if($tuition['lab_discount'] > 0): ?>
             <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Lab Fee before discount:</div>
+                <div class="col-sm-6 text-green"><?php echo $tuition['lab_before_discount']; ?></div>
+            </div>
+            <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo $tuition['lab_discount']; ?></div>
             </div>
