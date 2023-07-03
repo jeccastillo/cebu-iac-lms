@@ -145,10 +145,14 @@
         <?php endif; ?>     
             <hr />            
             <?php if($tuition['other_discount'] > 0): ?>
-            <div class="row">
-                <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['other_discount']; ?></div>
-            </div>
+                <div class="row">
+                    <div class="col-sm-6">Total Other Fees before discount:</div>
+                    <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_other_before_discount'], 2, '.' ,','); ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
+                    <div class="col-sm-6 text-blue">-<?php echo $tuition['other_discount']; ?></div>
+                </div>
             <?php endif; ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total Other Fees:</div>
