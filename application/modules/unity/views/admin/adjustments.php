@@ -285,10 +285,12 @@ new Vue({
         reloadSubjects(event){
             if(event.target.value == 0)
                 this.subjects_loaded = [];            
-            else
+            else{
+                this.loadAvailableSubjects()
                 for(i in this.records){
                     this.subjects_loaded.push(this.records[i].strCode);
                 }
+            }
         },
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
