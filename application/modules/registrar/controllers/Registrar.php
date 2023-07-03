@@ -962,6 +962,13 @@ class Registrar extends CI_Controller {
         }    
         elseif($post['date'] == date("Y-m-d")){            
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
+            $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subject')->first_row('array');
+            if($section_to_swap){
+                $remarks = "Changed to ".$section_to_swap['strCode'];
+            }
+            else
+                $remarks = "Deleted";
+
             $subject = $this->db->get_where('tb_mas_subjects',array('intID'=>$section['intSubjectID']))->first_row('array');
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
@@ -973,7 +980,7 @@ class Registrar extends CI_Controller {
             $adj['syid'] = $post['sem'];
             $adj['date'] = date("Y-m-d H:i:s");  
             $adj['student_id'] =  $post['student'];
-            $adj['remarks'] =  $post['remarks'];
+            $adj['remarks'] =  $remarks;
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
