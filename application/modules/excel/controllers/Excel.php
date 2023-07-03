@@ -254,13 +254,12 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     //->setCellValue('A2', 'Name')
                     ->setCellValue('A3', 'No.')
-                    ->setCellValue('B3', 'Last Name')
-                    ->setCellValue('C3', 'First Name')
-                    ->setCellValue('D3', 'Middle Name')
-                    ->setCellValue('E3', 'Program')
-                    ->setCellValue('F3', 'Student Number')
-                    ->setCellValue('G3', 'Final Grade')
-                    ->setCellValue('H3', 'Remarks');
+                    ->setCellValue('B3', 'Student No.')
+                    ->setCellValue('C3', 'Student Name')
+                    ->setCellValue('D3', 'Course')
+                    ->setCellValue('E3', 'Enrollment Status')
+                    ->setCellValue('F3', 'Date Enrolled')
+                    ->setCellValue('G3', 'Date Added');                    
         
         $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($styleArray);
             unset($styleArray);
@@ -270,18 +269,18 @@ class Excel extends CI_Controller {
         foreach($students as $student)
         {
             $registered = $this->data_fetcher->checkRegistered($student['intID'],$classlist['strAcademicYear']);
+            $reg_info = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
             if($all > 0 || !empty($registered)){
                 // Add some datat
                 $objPHPExcel->setActiveSheetIndex(0)
                         //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
                         ->setCellValue('A'.$i,$ctr)
-                        ->setCellValue('B'.$i, $student['strLastname'])
-                        ->setCellValue('C'.$i, $student['strFirstname'])
-                        ->setCellValue('D'.$i, $student['strMiddlename'])    
-                        ->setCellValue('E'.$i, $student['strProgramCode'])
-                        ->setCellValue('F'.$i, $student['strStudentNumber'])
-                        ->setCellValue('G'.$i, $student['floatFinalGrade'])
-                        ->setCellValue('H'.$i, $student['strRemarks']);
+                        ->setCellValue('B'.$i, $student['strStudentNumber'])
+                        ->setCellValue('C'.$i, strtoupper($student['strLastname']." ".$student['strFirstname']." ".$student['strMiddlename']))                            
+                        ->setCellValue('D'.$i, $student['strProgramCode'])
+                        ->setCellValue('E'.$i, $reg_info['type_of_class']."-".$reg_info['enumStudentType'])
+                        ->setCellValue('F'.$i, date("Y-m-d h:ia",strtotime($reg_info['dteRegistered'])))
+                        ->setCellValue('G'.$i, date("Y-m-d h:ia",strtotime($reg_info['date_added'])));                                                                       
 
                 $styleArray = array(
                     'borders' => array(
@@ -309,12 +308,12 @@ class Excel extends CI_Controller {
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        
         
         $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
 
