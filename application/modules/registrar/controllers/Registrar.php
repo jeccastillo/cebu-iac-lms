@@ -962,7 +962,7 @@ class Registrar extends CI_Controller {
         }    
         elseif($post['date'] == date("Y-m-d")){            
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
-            $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subject')->first_row('array');
+            $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
             if($section_to_swap){
                 $remarks = "Changed to ".$section_to_swap['strCode'];
             }
