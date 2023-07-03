@@ -172,7 +172,7 @@
                     <div v-if="records" class="input-group">
                         <select required @change="loadAvailableSubjects($event)" class="form-control" v-model="subject_to_replace">
                             <option selected value="0">None</option>
-                            <option v-for="record in records" :value="record.intID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
+                            <option v-for="record in records" :value="record.intCSID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                         </select>                        
                     </div>               
                     <h4>Select Subject</h4>
@@ -280,6 +280,7 @@ new Vue({
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
                     if(all > 0){                        
+                        this.subject_to_replace = 0;
                         for(i in data.data.data){
                             if(!inArray(data.data.data[i].strCode, this.subjects_loaded))
                                 this.subjects_available.push(data.data.data[i]);                          
@@ -288,7 +289,7 @@ new Vue({
                     else
                         this.subjects_available = data.data.data;
 
-                    this.subject_to_replace = all;
+                    
                 })
                 .catch((error) => {
                     console.log(error);
