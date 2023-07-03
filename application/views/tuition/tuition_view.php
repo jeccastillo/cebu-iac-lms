@@ -6,16 +6,16 @@
         <?php if($tuition['tuition_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Tuition Before Discount:</div>            
-                <div class="col-sm-6 text-green"><?php echo $tuition['tuition_before_discount']; ?></div>        
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,','); ?></div>        
             </div>        
             <div class="row">
                 <div class="col-sm-6">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['tuition_discount']; ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['tuition_discount'], 2, '.' ,','); ?></div>
             </div>                    
         <?php endif; ?>
         <div class="row">
             <div class="col-sm-6">Tuition:</div>            
-            <div class="col-sm-6 text-green"><?php echo $tuition['tuition']; ?></div>
+            <div class="col-sm-6 text-green"><?php echo number_format($tuition['tuition'], 2, '.' ,','); ?></div>
         </div>
         <hr />                
         <div class="row">
@@ -26,25 +26,25 @@
         <?php foreach($tuition['misc_list'] as $key=>$val): ?>        
         <div class="row">
             <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
-            <div class="col-sm-6"><?php echo $val; ?></div>
+            <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
         </div>
         <?php endforeach; ?>
         
         <?php if($tuition['misc_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['misc_discount']; ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['misc_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
         <div class="row">
             <div class="col-sm-6" style="text-align:right;">Total:</div>
-            <div class="col-sm-6 text-green"><?php echo $tuition['misc']; ?></div>
+            <div class="col-sm-6 text-green"><?php echo number_format($tuition['misc'], 2, '.' ,','); ?></div>
         </div>
 
         <?php if($tuition['nsf']!= 0): ?>                             
             <div class="row">
                 <div class="col-sm-6">MISC - NEW STUDENT: </div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['nsf']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['nsf'], 2, '.' ,','); ?></div>
             </div>
             <hr />                    
         <?php endif; ?>                  
@@ -57,28 +57,28 @@
         <?php foreach($tuition['lab_list'] as $key=>$val): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
-                <div class="col-sm-6"><?php echo $val; ?></div>
+                <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
             </div>
         <?php endforeach; ?>        
         <?php if($tuition['lab_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Lab Fee before discount:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['lab_before_discount']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['lab_before_discount'], 2, '.' ,','); ?></div>
             </div>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['lab_discount']; ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['lab_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
         <div class="row">
             <div class="col-sm-6" style="text-align:right;">Total:</div>
-            <div class="col-sm-6 text-green"><?php echo $tuition['lab']; ?></div>
+            <div class="col-sm-6 text-green"><?php echo number_format($tuition['lab'], 2, '.' ,','); ?></div>
         </div>
         <hr />
         <?php if($tuition['thesis_fee']!= 0): ?>                    
             <div class="row">
                 <div class="col-sm-6">THESIS FEE: </div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['thesis_fee']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['thesis_fee'], 2, '.' ,','); ?></div>
             </div>
             <hr />                    
         <?php endif; ?>
@@ -93,14 +93,14 @@
             <?php foreach($tuition['internship_fee_list'] as $key=>$val): ?>
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
-                    <div class="col-sm-6"><?php echo $val; ?></div>
+                    <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
                 </div>
             <?php endforeach; ?>
 
             
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['internship_fee']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['internship_fee'], 2, '.' ,','); ?></div>
             </div>
             <hr />
         <?php endif; ?>        
@@ -118,14 +118,14 @@
             <?php foreach($tuition['new_student_list'] as $key=>$val): ?>                
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
-                    <div class="col-sm-6"><?php echo $val; ?></div>
+                    <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
                 </div>
             <?php endforeach; ?>
 
             
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['new_student']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['new_student'], 2, '.' ,','); ?></div>
             </div>
             <hr />
         <?php endif; ?>     
@@ -137,14 +137,14 @@
             <?php foreach($tuition['foreign_fee_list'] as $key=>$val): ?>                
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;"><?php echo $key; ?></div>
-                    <div class="col-sm-6"><?php echo $val; ?></div>
+                    <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
                 </div>
             <?php endforeach; ?>
 
             
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['total_foreign']; ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_foreign'], 2, '.' ,','); ?></div>
             </div>            
         <?php endif; ?>     
             <hr />            
