@@ -280,7 +280,6 @@ new Vue({
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
                     if(all > 0){                        
-                        this.subject_to_replace = 0;
                         for(i in data.data.data){
                             if(!inArray(data.data.data[i].strCode, this.subjects_loaded))
                                 this.subjects_available.push(data.data.data[i]);                          
@@ -289,7 +288,7 @@ new Vue({
                     else
                         this.subjects_available = data.data.data;
 
-                    
+                    this.subject_to_replace = all;
                 })
                 .catch((error) => {
                     console.log(error);
