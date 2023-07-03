@@ -158,16 +158,16 @@
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Total Matriculation before discount:</div>
-                <div class="col-sm-6 text-green"><?php echo $tuition['total_before_deductions'] ?></div>
+                <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_before_deductions'], 2, '.' ,','); ?></div>
             </div>    
             <div class="row">
                 <div class="col-sm-6">Scholarship Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo $tuition['total_discount']; ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>        
         <div class="row">
             <div class="col-sm-6">Total Matriculation:</div>
-            <div class="col-sm-6 text-green"><?php echo $tuition['total'] ?></div>
+            <div class="col-sm-6 text-green"><?php echo number_format($tuition['total'], 2, '.' ,','); ?></div>
         </div>
         <hr />
         <h4 class="box-title">FOR INSTALLMENT</h4>
