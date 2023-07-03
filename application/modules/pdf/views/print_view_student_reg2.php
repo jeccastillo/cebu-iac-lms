@@ -234,9 +234,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-weight:bold;">Total</td>
                                 <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
                                 <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
-                            </tr>
-                        </table>
-                        <table cellpadding="0"  width="240px" style="color:#333; font-size:8;">
+                            </tr>                        
                             <tr>
                                 <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
