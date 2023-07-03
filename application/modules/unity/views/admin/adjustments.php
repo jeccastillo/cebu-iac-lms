@@ -273,6 +273,7 @@ new Vue({
     methods: {      
         loadAvailableSubjects(event){
             all = event.target.value;
+            console.log(all);
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {                                             
                     this.sections = undefined;
