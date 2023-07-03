@@ -157,10 +157,14 @@
         <hr />
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
+                <div class="col-sm-6">Total Matriculation before discount:</div>
+                <div class="col-sm-6 text-green"><?php echo $tuition['total_before_deductions'] ?></div>
+            </div>    
+            <div class="row">
                 <div class="col-sm-6">Scholarship Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo $tuition['total_discount']; ?></div>
             </div>
-        <?php endif; ?>
+        <?php endif; ?>        
         <div class="row">
             <div class="col-sm-6">Total Matriculation:</div>
             <div class="col-sm-6 text-green"><?php echo $tuition['total'] ?></div>
