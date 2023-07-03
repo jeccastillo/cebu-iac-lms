@@ -236,12 +236,14 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                             </tr>                        
                             <tr>
-                                <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
                                 <td>DOWN PAYMENT</td>
                                 <td></td>
-                                <td style="text-align:left;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="text-align:center;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
                             </tr>';
                             for($i=0;$i<5;$i++){
                                 $html .= '
