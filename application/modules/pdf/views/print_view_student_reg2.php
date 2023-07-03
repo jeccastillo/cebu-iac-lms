@@ -248,9 +248,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             for($i=0;$i<5;$i++){
                                 $html .= '
                                 <tr>
-                                    <td width="80px">'.switch_num($i + 1).' INSTALLMENT</td>
+                                    <td>'.switch_num($i + 1).' INSTALLMENT</td>
                                     <td></td>
-                                    <td width="60px" style="text-align:center;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:center;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
                                 </tr>';                    
                             }
 
