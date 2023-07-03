@@ -134,8 +134,8 @@
                                 <tr>
                                     <th>Subject</th>
                                     <th>Adjustment</th>
-                                    <th>From</th>                                                
-                                    <th>To</th>  
+                                    <th>Removed</th>                                                
+                                    <th>Added</th>  
                                     <th>Adjusted By</th> 
                                     <th>Remarks</th>                                 
                                     <th>Date</th>
