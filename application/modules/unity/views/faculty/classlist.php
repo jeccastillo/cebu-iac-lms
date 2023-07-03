@@ -62,8 +62,9 @@
                         <?php echo $class['strCode']; ?>
                     </h3>
                     <p>
-                        <?php echo $class['strSection']; ?><br />
-                        Students: <?php echo $class['numStudents']; ?>
+                        <?php 
+                        $section = $class['strClassName'].$class['year'].$class['strSection']." ".$class['sub_section'];
+                        echo $section; ?><br />                        
                     </p>
                     <p>
                         <small><?php echo $class['enumSem']." ".$term_type." ".$class['strYearStart']."-".$class['strYearEnd']; ?></small>

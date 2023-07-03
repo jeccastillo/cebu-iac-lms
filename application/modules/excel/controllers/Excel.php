@@ -52,7 +52,7 @@ class Excel extends CI_Controller {
     public function index(){
         echo "php excel module";
     }
-    public function download_classlists_archive()
+    public function download_classlists_archive($all = 0)
     {
         $post = $this->input->post();
         $ids = $post['ids'];
@@ -114,9 +114,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('E3', 'Program')
                         ->setCellValue('F3', 'Student Number')
                         ->setCellValue('G3', 'Final Grade')
-                        ->setCellValue('H3', 'Remarks')
-                        ->setCellValue('I3', 'GSuite Email')
-                        ->setCellValue('J3', 'GMeet Display Name');
+                        ->setCellValue('H3', 'Remarks');
 
             $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($styleArray);
                 unset($styleArray);
@@ -125,60 +123,59 @@ class Excel extends CI_Controller {
             $ctr = 1;
             foreach($students as $student)
             {
-                // Add some datat
-                $objPHPExcel->setActiveSheetIndex($sheet)
-                        //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
-                        ->setCellValue('A'.$i,$ctr)
-                        ->setCellValue('B'.$i, $student['strLastname'])
-                        ->setCellValue('C'.$i, $student['strFirstname'])
-                        ->setCellValue('D'.$i, $student['strMiddlename'])    
-                        ->setCellValue('E'.$i, $student['strProgramCode'])
-                        ->setCellValue('F'.$i, $student['strStudentNumber'])
-                        ->setCellValue('G'.$i, $student['floatFinalGrade'])
-                        ->setCellValue('H'.$i, $student['strRemarks'])
-                        ->setCellValue('I'.$i, $student['strGSuiteEmail'])
-                        ->setCellValue('J'.$i, ucwords(strtolower($student['strFirstname'])) . " " . ucwords(strtolower($student['strLastname'])));
+                if($all > 0 || !empty($student['registered'])){
+                    // Add some datat
+                    $objPHPExcel->setActiveSheetIndex($sheet)
+                            //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
+                            ->setCellValue('A'.$i,$ctr)
+                            ->setCellValue('B'.$i, $student['strLastname'])
+                            ->setCellValue('C'.$i, $student['strFirstname'])
+                            ->setCellValue('D'.$i, $student['strMiddlename'])    
+                            ->setCellValue('E'.$i, $student['strProgramCode'])
+                            ->setCellValue('F'.$i, $student['strStudentNumber'])
+                            ->setCellValue('G'.$i, $student['floatFinalGrade'])
+                            ->setCellValue('H'.$i, $student['strRemarks']);
+                        
 
-                  $styleArray = array(
-                    'borders' => array(
-                        'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                    $styleArray = array(
+                        'borders' => array(
+                            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
                             )
-                        )
-                );
+                    );
 
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
-                unset($styleArray);
+                    $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
+                    unset($styleArray);
 
-    //            if($student['strRemarks'] == "Failed")
-    //                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
-    //                    array(
-    //                        'fill' => array(
-    //                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-    //                            'color' => array('rgb' => 'dd6666')
-    //                        )
-    //                    )
-    //                );
-                $i++;
-                $ctr++;
+        //            if($student['strRemarks'] == "Failed")
+        //                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
+        //                    array(
+        //                        'fill' => array(
+        //                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        //                            'color' => array('rgb' => 'dd6666')
+        //                        )
+        //                    )
+        //                );
+                    $i++;
+                    $ctr++;
+                }
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+                
+                
+                $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
+
+                
+                
+                $sheet++;
             }
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(60);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
-            
-            $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
-
-            
-            
-             $sheet++;
-            
         }
         
          // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -206,13 +203,15 @@ class Excel extends CI_Controller {
         
         
     }
-    public function download_classlist($id)
+    public function download_classlist($id,$all = 0)
     {
+        $date = date("Y-m-d H:i:s");
         $classlist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $sy = $this->data_fetcher->get_sem_by_id($classlist['strAcademicYear']);
         $students = $this->data_fetcher->getClassListStudents($id);
         $subject = $this->data_fetcher->getSubjectNoCurr($classlist['intSubjectID']);
         
+      
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -226,16 +225,20 @@ class Excel extends CI_Controller {
 
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
-                                     ->setLastModifiedBy("Jec Castillo")
-                                     ->setTitle($subject['strCode']." ".$classlist['strSection'])
-                                     ->setSubject("Classlist Download")
-                                     ->setDescription("Classlist Download.")
-                                     ->setKeywords("office 2007 openxml php")
-                                     ->setCategory("Classlist");
+                                        ->setLastModifiedBy("Jec Castillo")
+                                        ->setTitle("Export Classlist")
+                                        ->setSubject("Classlist Download")
+                                        ->setDescription("Export Leads Download.")
+                                        ->setKeywords("office 2007 openxml php")
+                                        ->setCategory("Classlist");
+    
+            
+          
+            
 
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strSection'])
+                    ->setCellValue('B1', $subject['strCode']." ".$classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
                     ->setCellValue('C1', $sy['enumSem']." Sem")
                     ->setCellValue('D1', "A.Y. " . $sy['strYearStart']."-".$sy['strYearEnd']);
         
@@ -257,9 +260,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('E3', 'Program')
                     ->setCellValue('F3', 'Student Number')
                     ->setCellValue('G3', 'Final Grade')
-                    ->setCellValue('H3', 'Remarks')
-                    ->setCellValue('I3', 'GSuite Email')
-                    ->setCellValue('J3', 'GMeet Display Name');
+                    ->setCellValue('H3', 'Remarks');
         
         $objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($styleArray);
             unset($styleArray);
@@ -268,42 +269,43 @@ class Excel extends CI_Controller {
         $ctr = 1;
         foreach($students as $student)
         {
-            // Add some datat
-            $objPHPExcel->setActiveSheetIndex(0)
-                    //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
-                    ->setCellValue('A'.$i,$ctr)
-                    ->setCellValue('B'.$i, $student['strLastname'])
-                    ->setCellValue('C'.$i, $student['strFirstname'])
-                    ->setCellValue('D'.$i, $student['strMiddlename'])    
-                    ->setCellValue('E'.$i, $student['strProgramCode'])
-                    ->setCellValue('F'.$i, $student['strStudentNumber'])
-                    ->setCellValue('G'.$i, $student['floatFinalGrade'])
-                    ->setCellValue('H'.$i, $student['strRemarks'])
-                    ->setCellValue('I'.$i, $student['strGSuiteEmail'])
-                    ->setCellValue('J'.$i, ucwords(strtolower($student['strFirstname'])) . " " . ucwords(strtolower($student['strLastname'])));
+            $registered = $this->data_fetcher->checkRegistered($student['intID'],$classlist['strAcademicYear']);
+            if($all > 0 || !empty($registered)){
+                // Add some datat
+                $objPHPExcel->setActiveSheetIndex(0)
+                        //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
+                        ->setCellValue('A'.$i,$ctr)
+                        ->setCellValue('B'.$i, $student['strLastname'])
+                        ->setCellValue('C'.$i, $student['strFirstname'])
+                        ->setCellValue('D'.$i, $student['strMiddlename'])    
+                        ->setCellValue('E'.$i, $student['strProgramCode'])
+                        ->setCellValue('F'.$i, $student['strStudentNumber'])
+                        ->setCellValue('G'.$i, $student['floatFinalGrade'])
+                        ->setCellValue('H'.$i, $student['strRemarks']);
 
-              $styleArray = array(
-                'borders' => array(
-                    'allborders' => array(
-                        'style' => PHPExcel_Style_Border::BORDER_THIN
+                $styleArray = array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                            )
                         )
-                    )
-            );
-        
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
-            unset($styleArray);
+                );
             
-//            if($student['strRemarks'] == "Failed")
-//                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
-//                    array(
-//                        'fill' => array(
-//                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-//                            'color' => array('rgb' => 'dd6666')
-//                        )
-//                    )
-//                );
-            $i++;
-            $ctr++;
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($styleArray);
+                unset($styleArray);
+                
+    //            if($student['strRemarks'] == "Failed")
+    //                $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray(
+    //                    array(
+    //                        'fill' => array(
+    //                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+    //                            'color' => array('rgb' => 'dd6666')
+    //                        )
+    //                    )
+    //                );
+                $i++;
+                $ctr++;
+            }
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -313,8 +315,6 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(60);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
         
         $objPHPExcel->getActiveSheet()->setTitle($subject['strCode']." ".$classlist['strSection']);
 
@@ -323,24 +323,24 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0);
 
 
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$subject['strCode']."-".$classlist['strSection'].'-classlist.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-        //$objWriter->save('assets/excel/'.$subject['strCode']."-".$classlist['strSection'].'-classlist.xlsx');
-        //unlink('assets/excel/'.$subject['strCode']."-".$classlist['strSection'].'-classlist.xlsx');
-        exit;
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="classlist'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
     }
     
     public function download_schedules($id)

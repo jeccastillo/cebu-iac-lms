@@ -123,7 +123,7 @@ class Student extends CI_Controller {
         {  
             $post = $this->input->post();
             
-            if($post['studentID'])
+            if(isset($post['studentID']))
                 $id = $post['studentID'];
 
             $this->data['page'] = "student_scholarship";

@@ -23,9 +23,16 @@
                     <li><a href="#tab_5" data-toggle="tab">Incompletes</a></li>
                     <!--li><a href="#tab_3" data-toggle="tab">More Class Data</a></li-->
                     <!--li><a href="#tab_3" data-toggle="tab">Quiz Record</a></li-->
+                    <?php if(($is_super_admin || $is_registrar) && $showall): ?>
+                        <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/0" class="text-muted"><i class="fa fa-check"></i> Hide Enlisted</a></li>
+                    <?php else: ?>
+                        <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/1" class="text-muted"><i class="fa fa-check"></i> Show All</a></li>
+                    <?php endif; ?>
                     <li class="pull-right"><a  href="<?php echo base_url() ?>unity/edit_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-gear"></i> Edit</a></li>
-                    <li class="pull-right"><a href="<?php echo base_url() ?>excel/download_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-table"></i> Download Spreadsheet</a></li>
-                    <li class="pull-right"><a target="_blank" href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/front" class="text-muted"><i class="fa fa-print"></i> CL Report</a></li>
+                    <?php if($is_super_admin || $is_registrar): ?>
+                        <li class="pull-right"><a href="<?php echo base_url() ?>excel/download_classlist/<?php echo $classlist['intID']."/".$showall; ?>" class="text-muted"><i class="fa fa-table"></i> Download Spreadsheet</a></li>
+                    <?php endif; ?>
+                    <li class="pull-right"><a target="_blank" href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/front" class="text-muted"><i class="fa fa-print"></i>PDF Report</a></li>
                     <!-- <li class="pull-right"><a href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/back" class="text-muted"><i class="fa fa-print"></i> CL Report (back) </a></li> -->
                     <!-- <li class="pull-right"><a href="#" id="addStudentModal" class="text-muted"><i class="fa fa-plus"></i> Add Student</a></li> -->
                 </ul>
@@ -61,7 +68,7 @@
                                 
                             foreach($students as $student):
                                 //print_r($student);
-                                
+                                if($showall || !empty($student['registered'])):
                                 ?>
                                 <tr>
                                 <?php if($is_super_admin): ?> 
@@ -140,7 +147,8 @@
 
                                 </tr>
                             <?php 
-                                $ctr++;        
+                                $ctr++; 
+                                        endif;       
                             endforeach; ?>
                             </table>
                             <?php if($classlist['intFinalized'] < 3): ?>
