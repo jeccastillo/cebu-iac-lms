@@ -241,9 +241,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td colspan="2" style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
-                                <td width="80px">DOWN PAYMENT</td>
+                                <td>DOWN PAYMENT</td>
                                 <td></td>
-                                <td width="60px" style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
                             </tr>';
                             for($i=0;$i<5;$i++){
                                 $html .= '
@@ -256,9 +256,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                     $html .= 
                         '<tr>
-                            <td width="80px" style="font-weight:bold;">Total</td>
+                            <td style="font-weight:bold;">Total</td>
                             <td></td>
-                            <td width="60px" style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
                     </td>
