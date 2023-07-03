@@ -383,8 +383,11 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                    
-                                    if(data.data.success){                                            
-                                        Swal.fire({
+                                    if(data.data.success){   
+                                        if(swap)
+                                            this.addSubject();
+                                        else                                         
+                                            Swal.fire({
                                                 title: "Success",
                                                 text: data.data.message,
                                                 icon: "success"
@@ -392,15 +395,15 @@ new Vue({
                                                 location.reload();
                                             });                                                                                                                              
 
-                                        }                                        
-                                        else
-                                            Swal.fire({
-                                                title: "Failed",
-                                                text: data.data.message,
-                                                icon: "error"
-                                            }).then(function() {
-                                                //location.reload();
-                                            });                                        
+                                    }                                        
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });                                        
                                     });                                        
                                                                         
                             },
