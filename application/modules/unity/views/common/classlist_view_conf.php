@@ -15,7 +15,7 @@
             "bServerSide": true,
             "autoWidth": false,
             "createdRow": function( row, data, dataIndex){
-                if( data[9] ==  0){
+                if( data[9] ==  30){
                     $(row).addClass('highlight');
                 }
             },
