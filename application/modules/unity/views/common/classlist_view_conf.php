@@ -15,7 +15,7 @@
             "bServerSide": true,
             "autoWidth": false,
             "createdRow": function( row, data, dataIndex){
-                if( data[9] ==  30){
+                if( data[9] ==  0){
                     $(row).addClass('highlight');
                 }
             },
@@ -88,10 +88,6 @@
             },
         } );
         
-
-        table.rows().every(function(value,index){
-            console.log(`For index ${index}, data value is ${value}`);
-        });
         // Apply the search
         table.columns().every( function () {
             var that = this;
