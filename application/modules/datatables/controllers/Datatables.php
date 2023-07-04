@@ -746,7 +746,18 @@ class Datatables extends CI_Controller {
 
         foreach ($rResult->result() as $aRow)
         {
-            $slots_taken = $this->db->get_where('tb_mas_classlist_student',array('intClassListID'=>$aRow->intID))->num_rows();
+            $slots_taken_enrolled = $this->db
+                                ->select('tb_mas_classlist_student.intCSID')                                
+                                ->from('tb_mas_classlist_student')
+                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                                ->where(array('intClassListID'=>$aRow->intID,'intROG >'=>0))
+                                ->num_rows();
+            $slots_taken_enlisted = $this->db
+                                ->select('tb_mas_classlist_student.intCSID')                                
+                                ->from('tb_mas_classlist_student')
+                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                                ->where(array('intClassListID'=>$aRow->intID,'intROG'=>0))
+                                ->num_rows();
             
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -767,7 +778,8 @@ class Datatables extends CI_Controller {
 
                 }
                 else if($aColumns[$i] == 'slots'){
-                    $row[] = $slots_taken."/".$aRow->$aColumns[$i];
+                    $row[] = $slots_taken_enrolled;
+                    $row[] = $slots_taken_enlisted;
                 }                
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {

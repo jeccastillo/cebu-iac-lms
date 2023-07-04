@@ -35,7 +35,8 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
-                        <th>Slots</th>
+                        <th>Slots Enrolled</th>
+                        <th>Slots Enlisted</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
                         <th>Actions</th>
@@ -55,7 +56,8 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
-                        <th>Slots</th>
+                        <th>Slots Enrolled</th>
+                        <th>Slots Enlisted</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>   
                         <th>Actions</th>                                             
