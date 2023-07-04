@@ -14,6 +14,11 @@
             "bProcessing": true,
             "bServerSide": true,
             "autoWidth": false,
+            "createdRow": function( row, data, dataIndex){
+                if( data[9] ==  0){
+                    $(row).addClass('highlight');
+                }
+            },
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>",
             "aoColumnDefs":[
                 {
