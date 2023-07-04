@@ -157,7 +157,8 @@ new Vue({
 
                 for(i in ledger_temp){
                     if(ledger_temp[i].is_disabled == 0){
-                        this.running_balance += Number(ledger_temp[i].amount);                                                                    
+                        this.running_balance += Number(ledger_temp[i].amount); 
+                        ledger_temp[i].amount = ledger_temp[i].amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                  
                         ledger_temp[i].muted = "";
                     }
                     else{
