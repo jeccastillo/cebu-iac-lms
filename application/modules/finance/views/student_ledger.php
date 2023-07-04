@@ -162,9 +162,8 @@ new Vue({
                     }
                     else{
                         ledger_temp[i].muted = "text-muted";                        
-                    }
-                    temp_amount = Number(ledger_temp[i].amount);
-                    ledger_temp[i].amount = temp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                  
+                    }                    
+                                                                                     
                     ledger_temp[i]['balance'] =  this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     
                     this.ledger.push(ledger_temp[i]);
