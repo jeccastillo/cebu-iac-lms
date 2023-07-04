@@ -157,13 +157,14 @@ new Vue({
 
                 for(i in ledger_temp){
                     if(ledger_temp[i].is_disabled == 0){
-                        this.running_balance += Number(ledger_temp[i].amount); 
-                        ledger_temp[i].amount = Number(ledger_temp[i].amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                  
+                        this.running_balance += Number(ledger_temp[i].amount);                         
                         ledger_temp[i].muted = "";
                     }
                     else{
                         ledger_temp[i].muted = "text-muted";                        
                     }
+                    ledger_temp[i].amount = Number(ledger_temp[i].amount);
+                    ledger_temp[i].amount = ledger_temp[i].amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                  
                     ledger_temp[i]['balance'] =  this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     
                     this.ledger.push(ledger_temp[i]);
