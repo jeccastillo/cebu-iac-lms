@@ -37,6 +37,7 @@
                         <th>Section - Sub</th>
                         <th>Slots Enrolled</th>
                         <th>Slots Enlisted</th>
+                        <th>Slots Remaining</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
                         <th>Actions</th>
@@ -58,6 +59,7 @@
                         <th>Section - Sub</th>
                         <th>Slots Enrolled</th>
                         <th>Slots Enlisted</th>
+                        <th>Slots Remaining</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>   
                         <th>Actions</th>                                             

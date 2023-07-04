@@ -760,6 +760,8 @@ class Datatables extends CI_Controller {
                                 ->where(array('intClassListID'=>$aRow->intID,'intROG'=>0))
                                 ->get()
                                 ->num_rows();
+
+            
             
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -782,6 +784,7 @@ class Datatables extends CI_Controller {
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
                     $row[] = $slots_taken_enlisted;
+                    $row[] = $aRow->$aColumns[$i] - $slots_taken_enlisted - $slots_taken_enrolled;
                 }                
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
