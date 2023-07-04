@@ -84,7 +84,9 @@
         } );
         
 
-        
+        table.rows().data().each(function(value,index){
+            console.log(`For index ${index}, data value is ${value}`);
+        });
         // Apply the search
         table.columns().every( function () {
             var that = this;
