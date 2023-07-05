@@ -424,6 +424,15 @@ class Data_poster extends CI_Model {
 			->where('intID',$id)
 			->delete('tb_mas_classlist');
     }
+
+    function dissolveClassList($id){
+        $post = array('isDissolved'=>1);
+        
+        $this->db
+				 ->where('intClassListID',$id)
+				 ->update('tb_mas_classlist',$post);
+
+    }
     
     function deleteFromClassList($id)
     {

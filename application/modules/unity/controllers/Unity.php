@@ -2236,6 +2236,32 @@ class Unity extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    public function dissolve_classlist()
+    {
+        $post = $this->input->post();
+        $classlist = current($this->data_fetcher->fetch_classlist_delete($post['id']));
+        
+        $slots_taken = $this->db
+        ->select('tb_mas_classlist_student.intCSID')                                
+        ->from('tb_mas_classlist_student')
+        ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+        ->where(array('intClassListID'=>$post['id']))
+        ->get()
+        ->num_rows();
+        
+        if($classlist['intFinalized'] != 1 && $slots_taken == 0 && ($classlist['intFacultyID']==$this->session->userdata("intID") || $this->is_super_admin() || $this->is_registrar()))
+        {
+            $this->data_poster->dissolveClassList($post['id']);
+            $data['message'] = "success";
+            $this->data_poster->log_action('Classlist','Dissolved a Classlist '.$post['id'],'green');
+        }
+        else
+        {
+            $data['message'] = "failed please check if classlist still has students enlisted or enrolled";
+        }
+        echo json_encode($data);
+    }
     
     
     public function add_to_classlist()
