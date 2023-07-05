@@ -87,7 +87,7 @@
                 });
 
                 $(".dissolve-classlist").click(function(e){
-                    conf = confirm("Are you sure you want to delete?");
+                    conf = confirm("Are you sure you want to dissolve?");
                     if(conf)
                     {
                         $(".loading-img").show();
