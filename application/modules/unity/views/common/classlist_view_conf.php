@@ -25,7 +25,8 @@
                     "aTargets":[12],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/classlist_viewer/'+row[0]+'">View Offering</a></li><li><a href="<?php echo base_url(); ?>unity/edit_classlist/'+row[0]+'">Edit Offering</a></li><li><a href="<?php echo base_url(); ?>unity/reassign_classlist/'+row[0]+'">Re-assign</a></li><li><a href="<?php echo base_url(); ?>unity/duplicate_classlist/'+row[0]+'">Duplicate</a></li><li><a href="#" rel="'+row[0]+'" class="finalizedOption">Change Status</a></li><li><a href="#" rel="'+row[0]+'" class="trash-classlist">Delete</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/classlist_viewer/'+row[0]+'">View Offering</a></li><li><a href="<?php echo base_url(); ?>unity/edit_classlist/'+row[0]+'">Edit Offering</a></li><li><a href="<?php echo base_url(); ?>unity/reassign_classlist/'+row[0]+'">Re-assign</a></li><li><a href="<?php echo base_url(); ?>unity/duplicate_classlist/'+row[0]+'">Duplicate</a></li><li><a href="#" rel="'+row[0]+'" class="finalizedOption">Change Status</a></li>'
+                                         +'<li><a href="#" rel="'+row[0]+'" class="trash-classlist">Delete</a></li><li><a href="#" rel="'+row[0]+'" class="dissolve-classlist">Dissolve</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
@@ -65,6 +66,39 @@
 
                         $.ajax({
                             'url':'<?php echo base_url(); ?>unity/delete_classlist',
+                            'method':'post',
+                            'data':data,
+                            'dataType':'json',
+                            'success':function(ret){
+                                if(ret.message == "failed"){
+                                    $(".alert").show();
+                                    setTimeout(function() {
+                                        $(".alert").hide('fade', {}, 500)
+                                    }, 3000);
+                                }
+                                else
+                                    parent.hide();
+
+                                $(".loading-img").hide();
+                                $(".overlay").hide();
+                        }
+                    });
+                    }
+                });
+
+                $(".dissolve-classlist").click(function(e){
+                    conf = confirm("Are you sure you want to delete?");
+                    if(conf)
+                    {
+                        $(".loading-img").show();
+                        $(".overlay").show();
+                        var id = $(this).attr('rel');
+                        var parent = $(this).parent().parent().parent().parent().parent();
+                        //alert(parent.html());
+                        var data = {'id':id};
+
+                        $.ajax({
+                            'url':'<?php echo base_url(); ?>unity/dissolve_classlist',
                             'method':'post',
                             'data':data,
                             'dataType':'json',
