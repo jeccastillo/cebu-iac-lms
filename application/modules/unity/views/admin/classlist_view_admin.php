@@ -2,7 +2,13 @@
 <section class="content-header">
                     <h1>
                         Subject Offering
-                        <small></small>
+                        <small>
+                            <?php if($dissolved == 0): ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/1" ?>" ></i>Show Dissolved</a>
+                            <?php else: ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"></i>Show Non Dissolved</a>
+                            <?php endif; ?>
+                        </small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="<?php echo base_url(); ?>unity/view_classlist"><i class="ion ion-ios7-locked"></i> Admin</a></li>
@@ -16,7 +22,7 @@
         </div>
         <div class="box box-solid box-danger">
             <div class="box-header with-border">
-                <h3 class="box-title">Classlists/Subjects Offered</h3>
+                <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>
                 <div class="box-tools pull-right">
                     <select id="select-sem-admin" class="form-control input-sm" >
                         <?php foreach($sy as $s): ?>
