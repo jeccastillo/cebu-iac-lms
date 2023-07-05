@@ -103,7 +103,7 @@
                             'data':data,
                             'dataType':'json',
                             'success':function(ret){
-                                if(ret.message == "failed"){
+                                if(!ret.success){
                                     $(".alert").show();
                                     setTimeout(function() {
                                         $(".alert").hide('fade', {}, 500)

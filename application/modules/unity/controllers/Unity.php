@@ -2252,12 +2252,14 @@ class Unity extends CI_Controller {
         
         if($classlist['intFinalized'] != 1 && $slots_taken == 0 && ($classlist['intFacultyID']==$this->session->userdata("intID") || $this->is_super_admin() || $this->is_registrar()))
         {
+            $data['success'] = true;
             $this->data_poster->dissolveClassList($post['id']);
             $data['message'] = "success";
             $this->data_poster->log_action('Classlist','Dissolved a Classlist '.$post['id'],'green');
         }
         else
         {
+            $data['success'] = false;
             $data['message'] = "failed please check if classlist still has students enlisted or enrolled";
         }
         echo json_encode($data);
