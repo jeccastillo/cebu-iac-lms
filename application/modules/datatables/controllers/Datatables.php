@@ -578,7 +578,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0, $program = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -650,7 +650,7 @@ class Datatables extends CI_Controller {
          */
        
        $sWhere = "WHERE $sTable.strAcademicYear = ".$active_sem['intID']." ";
-       $sWhere .= "AND $sTable.isDissolved = 0 ";
+       $sWhere .= "AND $sTable.isDissolved = ".$dissolved." ";
        if($program != 0)
         $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
             

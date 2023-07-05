@@ -1680,7 +1680,7 @@ class Unity extends CI_Controller {
     
     }
     
-    public function view_classlist_archive_admin($sem = null, $program = null)
+    public function view_classlist_archive_admin($sem = null, $program = null, $dissolved = 0)
     {
         if($this->is_admin() || $this->is_registrar())
         {
@@ -1693,6 +1693,7 @@ class Unity extends CI_Controller {
                 $this->data['selected_ay'] = $active_sem['intID'];
             
             $this->data['program'] = $program;
+            $this->data['dissolved'] = $dissolved;
            
             //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";

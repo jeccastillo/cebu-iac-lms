@@ -19,7 +19,7 @@
                     $(row).addClass('highlight');
                 }
             },
-            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>/<?php echo $dissolved ?>",
             "aoColumnDefs":[
                 {
                     "aTargets":[12],
