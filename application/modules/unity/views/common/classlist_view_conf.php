@@ -110,7 +110,9 @@
                                     }, 3000);
                                 }
                                 else
-                                    parent.hide();
+                                    {
+                                        location.reload();
+                                    }
 
                                 $(".loading-img").hide();
                                 $(".overlay").hide();
