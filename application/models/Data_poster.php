@@ -429,7 +429,7 @@ class Data_poster extends CI_Model {
         $post = array('isDissolved'=>1);
         
         $this->db
-				 ->where('intClassListID',$id)
+				 ->where('intID',$id)
 				 ->update('tb_mas_classlist',$post);
 
     }
