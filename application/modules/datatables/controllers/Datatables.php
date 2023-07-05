@@ -650,6 +650,7 @@ class Datatables extends CI_Controller {
          */
        
        $sWhere = "WHERE $sTable.strAcademicYear = ".$active_sem['intID']." ";
+       $sWhere .= "AND $sTable.isDissolved = 0 ";
        if($program != 0)
         $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
             
