@@ -20,6 +20,10 @@
             <i class="fa fa-ban"></i>
             <b>Alert!</b> Classlist is already finalized and cannot be deleted.
         </div>
+        <div class="alert alert-danger alert-dissolved" style="display:none;">
+            <i class="fa fa-ban"></i>
+            <b>Failed to dissolve!</b> Please check if classlist still has students enlisted or enrolled.
+        </div>
         <div class="box box-solid box-danger">
             <div class="box-header with-border">
                 <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>

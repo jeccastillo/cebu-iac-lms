@@ -106,7 +106,7 @@
                                 if(!ret.success){
                                     $(".alert").show();
                                     setTimeout(function() {
-                                        $(".alert").hide('fade', {}, 500)
+                                        $(".alert-dissolved").hide('fade', {}, 500)
                                     }, 3000);
                                 }
                                 else
