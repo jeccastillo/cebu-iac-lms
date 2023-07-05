@@ -104,7 +104,7 @@
                             'dataType':'json',
                             'success':function(ret){
                                 if(!ret.success){
-                                    $(".alert").show();
+                                    $(".alert-dissolved").show();
                                     setTimeout(function() {
                                         $(".alert-dissolved").hide('fade', {}, 500)
                                     }, 3000);
