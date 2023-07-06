@@ -405,7 +405,7 @@
                         <hr>
                     </div>
                     <div>
-                        <strong><i class="fa fa-phone-square margin-r-5"></i> How did you find out about
+                        <strong><i class="fa fa-home margin-r-5"></i> How did you find out about
                             iACADEMY?</strong>
                         <input type="text" class="form-control" v-model="request.source"
                             @blur="updateField('source',$event)" />
