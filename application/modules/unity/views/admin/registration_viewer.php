@@ -213,9 +213,9 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
-                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL')  && cashier"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment')  && cashier"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
                                         </tr>                                                                           
                                         <tr>
