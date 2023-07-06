@@ -510,6 +510,25 @@ class Registrar extends CI_Controller {
         $this->load->view("common/enrollment_report_conf",$this->data); 
     }
 
+    public function enlistment_report($course = 0, $year=1,$gender = 0,$sem=0)    
+    {
+
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $this->data['course'] = $course;        
+        $this->data['postyear'] = $year;
+        $this->data['gender'] = $gender;               
+        $this->data['sem'] = $sem; 
+        $this->data['pdf_link'] = base_url()."pdf/print_enlisted_students/".$course."/".$year."/".$gender."/".$sem;
+        $this->data['excel_link'] = base_url()."excel/enlisted_students/".$course."/".$year."/".$gender."/".$sem;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/enlistment_report",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/enlistment_report_conf",$this->data); 
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        
