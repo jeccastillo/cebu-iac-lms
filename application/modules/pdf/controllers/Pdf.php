@@ -1085,7 +1085,7 @@ class Pdf extends CI_Controller {
         $pdf->AddPage();
         $ret = 0;
         $per_page = 40;       
-        print_r($students); 
+        $st = [];
         $this->data['nothing_follows'] = true;
         if(count($students) > $per_page)
         {            
