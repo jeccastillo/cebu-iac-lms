@@ -388,8 +388,7 @@
                              
                             
                 <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 ): ?> 
-                    <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin"><i class="ion ion-android-list"></i> <span>Subject Offering</span></a></li>                                                         
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 ): ?>                         
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                             <a href="#">
                                 <i class="fa fa-circle text-green"></i> <span>Scholarship</span>
