@@ -2560,8 +2560,8 @@ class Data_fetcher extends CI_Model {
         else{        
             if($sem != 0)
                 $where['tb_mas_registration.intAYID'] = $sem;
-            if($year != 0)
-                $where['tb_mas_registration.intYearLevel'] = $year;
+            // if($year != 0)
+            //     $where['tb_mas_registration.intYearLevel'] = $year;
             
             return  $this->db
                  ->select("tb_mas_classlist_student.intCSID,tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added,tb_mas_faculty.strUsername as fusername")
