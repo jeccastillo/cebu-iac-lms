@@ -121,8 +121,7 @@
                                             <td>{{ application_payment.total_amount_due }}</td>
                                             <td>{{ application_payment.status }}</td>                                            
                                             <td>{{ application_payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                            <td>                                                
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="prepUpdate(application_payment.id,application_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
@@ -133,6 +132,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
+                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>
                                         <tr v-if="reservation_payment">
@@ -144,8 +144,7 @@
                                             <td>{{ reservation_payment.total_amount_due }}</td>
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
-                                            <td>
-                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                            <td>                                                
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="prepUpdate(reservation_payment.id,reservation_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
@@ -156,6 +155,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
+                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>
                                         <tr>
