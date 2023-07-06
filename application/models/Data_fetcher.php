@@ -2558,7 +2558,8 @@ class Data_fetcher extends CI_Model {
                      ->result_array();
         }
         else{        
-            $where['tb_mas_registration.intAYID'] = $sem;
+            if($sem != 0)
+                $where['tb_mas_registration.intAYID'] = $sem;
             if($year != 0)
                 $where['tb_mas_registration.intYearLevel'] = $year;
             
