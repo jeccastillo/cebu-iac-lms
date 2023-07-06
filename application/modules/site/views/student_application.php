@@ -436,6 +436,17 @@
                     </div>
                 </div>
 
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="i">
+                            How did you find out about iACADEMY? <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" required v-model="request.source">
+                    </div>
+                </div>
+
 
                 <div class="form-group mb-6">
                     <label class="block t color-primary font-bold  mb-3  pr-4">
