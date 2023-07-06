@@ -1034,7 +1034,7 @@ class Pdf extends CI_Controller {
         $this->load->view("print_sched",$this->data);
     }
 
-    public function print_enlisted_students(){
+    public function print_enlisted_students($course,$year,$gender,$sem){
 
         //print_r($this->data['spouse']);
         tcpdf();
