@@ -122,6 +122,7 @@
                                             <td>{{ application_payment.status }}</td>                                            
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>
+                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="prepUpdate(application_payment.id,application_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
@@ -144,6 +145,7 @@
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
                                             <td>
+                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
                                                         @click="prepUpdate(reservation_payment.id,reservation_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
@@ -181,6 +183,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'MANUAL'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
@@ -210,6 +213,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'MANUAL'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="(payment.status == 'Pending' && payment.mode.name == 'MANUAL')  && cashier"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
                                             </td>
@@ -677,6 +681,56 @@ new Vue({
                                             title: "Success",
                                             text: data.data.message,
                                             icon: "error"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },
+        setToVoid: function(payment_id){    
+            let url = api_url + 'finance/set_void';
+
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with processing Payment',
+                text: "Are you sure you want to process payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        
+                        let payload = {'id':payment_id}
+
+                        return axios.post(url, payload, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    if(data.data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
                                         }).then(function() {
                                             location.reload();
                                         });
