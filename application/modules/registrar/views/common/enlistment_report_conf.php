@@ -25,7 +25,7 @@
             "bProcessing": true,
             "bServerSide": true,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/0/".$postyear."/".$gender."/0/0/2/".$sem; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/0/".$postyear."/".$gender."/0/0/1/".$sem; ?>",
             "aoColumnDefs":[               
                 {
                     "aTargets":[0],
