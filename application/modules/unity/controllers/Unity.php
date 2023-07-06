@@ -1680,7 +1680,7 @@ class Unity extends CI_Controller {
     
     }
     
-    public function view_classlist_archive_admin($sem = null, $program = null, $dissolved = 0)
+    public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0)
     {
         if($this->is_admin() || $this->is_registrar())
         {
