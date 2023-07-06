@@ -2533,7 +2533,7 @@ class Data_fetcher extends CI_Model {
     function getClassListStudentsEnlistedOnly($id,$sem = 0,$course=0,$year=0,$gender=0)
     {
         $faculty_id = $this->session->userdata("intID");
-        $where = array("intClassListID"=>$id);        
+        $where = [];        
         if($course != 0)
             $where['tb_mas_users.intProgramID'] = $course;
         if($gender != 0){
@@ -2547,8 +2547,7 @@ class Data_fetcher extends CI_Model {
         if($sem != 0)
             $where['tb_mas_registration.intAYID'] = $sem;
         // if($year != 0)
-        //     $where['tb_mas_registration.intYearLevel'] = $year;
-        print_r($where);
+        //     $where['tb_mas_registration.intYearLevel'] = $year;        
         return  $this->db
                 ->select("tb_mas_classlist_student.intCSID,tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added,tb_mas_faculty.strUsername as fusername")
                 ->from("tb_mas_classlist_student")
