@@ -57,7 +57,7 @@ input.app {
   width: 90%;
 }
 .highlight, .highlight:hover td{
-  background-color: #da5050;
+  background-color: #da5050 !important;
   color: #333;
 }
 
