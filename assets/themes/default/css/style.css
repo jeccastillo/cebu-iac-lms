@@ -56,7 +56,7 @@ input.app {
   border-bottom: 1px dashed #999;
   width: 90%;
 }
-.highlight, .highlight:hover{
+.highlight, .highlight:hover td{
   background-color: #da5050;
   color: #333;
 }
