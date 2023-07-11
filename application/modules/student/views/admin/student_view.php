@@ -24,13 +24,8 @@
                         <i class="fa fa-table"></i> Download
                         <span class="caret"></span>
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <?php if($registered >= 1): ?>
-                        <li><a href="<?php echo base_url(); ?>pdf/zipAndDownload/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>">Download Registration Forms</a></li>
-                        <?php endif; ?>
-                        <li><a href="<?php echo base_url() ?>excel/download_students_with_grades/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Download With Subjects</a></li>
-                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Student Data Report</a></li>
-                         
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
+                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Student Data Report</a></li>                         
                       </ul>
                     </div>
               </div>
