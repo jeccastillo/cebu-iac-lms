@@ -1,4 +1,13 @@
 <?php $d_open = '<div class="btn-group"><button type="button" class="btn btn-default">Actions</button><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu">';
+    if($dissolved > 0){
+        $d_text = "Recover";
+        $d_fn = 0;
+    }
+    else{
+        $d_text = "Dissolve";
+        $d_fn = 1;
+    }
+
 ?>
 <script type="text/javascript">
     
@@ -26,7 +35,7 @@
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/classlist_viewer/'+row[0]+'">View Offering</a></li><li><a href="<?php echo base_url(); ?>unity/edit_classlist/'+row[0]+'">Edit Offering</a></li><li><a href="<?php echo base_url(); ?>unity/reassign_classlist/'+row[0]+'">Re-assign</a></li><li><a href="<?php echo base_url(); ?>unity/duplicate_classlist/'+row[0]+'">Duplicate</a></li><li><a href="#" rel="'+row[0]+'" class="finalizedOption">Change Status</a></li>'
-                                         +'<li><a href="#" rel="'+row[0]+'" class="trash-classlist">Delete</a></li><li><a href="#" rel="'+row[0]+'" class="dissolve-classlist">Dissolve</a></li></ul></div>'; }
+                                         +'<li><a href="#" rel="'+row[0]+'" class="trash-classlist">Delete</a></li><li><a href="#" rel="'+row[0]+'" class="dissolve-classlist"><?php echo $d_text; ?></a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
@@ -95,7 +104,7 @@
                         var id = $(this).attr('rel');
                         var parent = $(this).parent().parent().parent().parent().parent();
                         //alert(parent.html());
-                        var data = {'id':id};
+                        var data = {'id':id, 'fn':<?php echo $d_fn; ?>};
 
                         $.ajax({
                             'url':'<?php echo base_url(); ?>unity/dissolve_classlist',

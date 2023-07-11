@@ -425,8 +425,8 @@ class Data_poster extends CI_Model {
 			->delete('tb_mas_classlist');
     }
 
-    function dissolveClassList($id){
-        $post = array('isDissolved'=>1);
+    function dissolveClassList($id,$fn){
+        $post = array('isDissolved'=>$fn);
         
         $this->db
 				 ->where('intID',$id)

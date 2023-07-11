@@ -2253,7 +2253,7 @@ class Unity extends CI_Controller {
         if($classlist['intFinalized'] != 1 && $slots_taken == 0 && ($classlist['intFacultyID']==$this->session->userdata("intID") || $this->is_super_admin() || $this->is_registrar()))
         {
             $data['success'] = true;
-            $this->data_poster->dissolveClassList($post['id']);
+            $this->data_poster->dissolveClassList($post['id'],$post['fn']);
             $data['message'] = "success";
             $this->data_poster->log_action('Classlist','Dissolved a Classlist '.$post['id'],'green');
         }
