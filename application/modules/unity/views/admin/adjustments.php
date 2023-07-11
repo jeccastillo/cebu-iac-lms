@@ -350,7 +350,16 @@ new Vue({
             let slug = this.slug;      
             this.loader_spinner = true;            
                
-
+            if(swap && (!this.subject_to_add || !this.section_to_add)){
+                Swal.fire({
+                    title: "Failed",
+                    text: "Please Select Subject and Section",
+                    icon: "error"
+                }).then(function() {
+                    //location.reload();
+                });   
+            }
+            else
             Swal.fire({
                 title: 'Continue deleting Subject',
                 text: "Are you sure you want drop this subject?",
