@@ -40,7 +40,7 @@ h6,
   font-family: "Ubuntu", "sans-serif";
 } */
 
-a {
+.highlight a {
   color:#3a3a3a;
 }
 div.dataTables_filter input {
@@ -56,10 +56,11 @@ input.app {
   border-bottom: 1px dashed #999;
   width: 90%;
 }
-.highlight{
+.highlight, .highlight:hover{
   background-color: #da5050;
   color: #333;
 }
+
 .has-error {
   border-color: #900 !important;
 }
