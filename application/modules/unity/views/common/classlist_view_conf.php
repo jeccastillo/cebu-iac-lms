@@ -96,7 +96,7 @@
                 });
 
                 $(".dissolve-classlist").click(function(e){
-                    conf = confirm("Are you sure you want to dissolve?");
+                    conf = confirm("Are you sure you want to <?php echo $d_text; ?> this section?");
                     if(conf)
                     {
                         $(".loading-img").show();
