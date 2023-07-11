@@ -40,6 +40,9 @@ h6,
   font-family: "Ubuntu", "sans-serif";
 } */
 
+a {
+  color:#3a3a3a;
+}
 div.dataTables_filter input {
   border-radius: 5px;
 }
