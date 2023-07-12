@@ -792,6 +792,7 @@ class Excel extends CI_Controller {
     {
         
         $students = $this->data_fetcher->getStudents($course,$regular,$year,$gender,$graduate,$scholarship,$registered,$sem);
+        $date = date("Y-m-d H:i:s");
         
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -834,9 +835,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('I1', 'Birthdate')
                     ->setCellValue('J1', 'Address')
                     //->setCellValue('K1', 'Password-unhashed')
-                    //->setCellValue('L1', 'Password')
-                    ->setCellValue('K1', 'GSuiteEmail')
-                    ->setCellValue('L1', 'intID');
+                    //->setCellValue('L1', 'Password')                    
+                    ->setCellValue('K1', 'intID');
         $i = 2;
         foreach($students as $student)
         {
@@ -857,9 +857,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('J'.$i, $student['strAddress'])
                     //->setCellValue('K'.$i, pw_unhash($student['strPass']))
                     //->setCellValue('L'.$i, password_hash($oldPass_unhash, PASSWORD_DEFAULT))
-                    //->setCellValue('K'.$i, pw_hash(date("mdY",strtotime($student['dteBirthDate']))))
-                    ->setCellValue('K'.$i, $student['strGSuiteEmail'])
-                    ->setCellValue('L'.$i, $student['intID']); 
+                    //->setCellValue('K'.$i, pw_hash(date("mdY",strtotime($student['dteBirthDate']))))                    
+                    ->setCellValue('K'.$i, $student['intID']); 
             
             
             $i++;
@@ -879,8 +878,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
        // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
         //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
         // Miscellaneous glyphs, UTF-8
         //$objPHPExcel->setActiveSheetIndex(0)
         //          ->setCellValue('A4', 'Miscellaneous glyphs')
@@ -897,25 +895,24 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0);
 
 
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        if($registered != 0)
-            header('Content-Disposition: attachment;filename="registered_students'.$active_sem['enumSem'].'sem'.$active_sem['strYearStart'].$active_sem['strYearEnd'].'.xlsx"');
-        else
-            header('Content-Disposition: attachment;filename="student_list.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-        exit;
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="student_data'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
     }
 
     public function download_faculty()
