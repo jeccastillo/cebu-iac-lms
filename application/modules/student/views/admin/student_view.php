@@ -25,14 +25,12 @@
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
-                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/1/'.$sem; ?>" class="text-muted">Enrolled Students Data Report</a></li>                         
-                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/0/'.$sem; ?>" class="text-muted">Enlisted Students Data Report</a></li>
+                         <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Students Data Report</a></li>                                                  
                       </ul>
                     </div>
               </div>
             </div>
-            <!-- /.box-header -->
-            <?php /*
+            <!-- /.box-header -->            
             <div class="box-body" style="display: block;">
                 <div class="row">
                     <div class="col-sm-4">
@@ -83,27 +81,14 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="registered">Registration Status:</label>
+                        <label for="registered">Enrollment Status:</label>
                         <select id="registered" class="form-control select2">
-                            <option <?php echo ($registered == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
-                            <option <?php echo ($registered == -1)?'selected':''; ?> value="-1">advised</option>
-                            <option <?php echo ($registered == 1)?'selected':''; ?> value="1">registered</option>
+                            <option <?php echo ($registered == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
+                            <option <?php echo ($registered == 1)?'selected':''; ?> value="1">enlisted</option>
                             <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>
                             <option <?php echo ($registered == 3)?'selected':''; ?> value="3">cleared</option>
                         </select>
-                    </div>
-                    <div class="form-group col-sm-4">
-                     <label for="">Scholarship Grant</label>
-                    <select id="scholarship" class="form-control select2">
-                        <option value="0">-----------------SELECT---------------</option>
-                        <option <?php echo ($scholarship == 1)?'selected':''; ?> value="1">Paying</option>
-                         <option <?php echo ($scholarship == 2)?'selected':''; ?> value="2">Resident Scholar</option>
-                        <option <?php echo ($scholarship == 3)?'selected':''; ?> value="3">7th District Scholar</option>
-                        <option <?php echo ($scholarship == 4)?'selected':''; ?> value="4">DILG Scholar</option>
-                          <option <?php echo ($scholarship == 5)?'selected':''; ?> value="5">Tagaytay Resident</option>
-                        <option <?php echo ($scholarship == 6)?'selected':''; ?> value="6">FREE H.E.</option>
-                    </select>         
-                </div>
+                    </div>                
                     <div class="col-sm-4">
                         <label for="sem">Sem For Grades Spreadsheet:</label>
                         <select id="sem" class="form-control select2" >
@@ -127,7 +112,7 @@
               <!-- /.row -->
             </div>
             <!-- /.box-footer -->
-            */ ?>
+            
           </div>
         <div class="box box-solid box-default">
             <div class="box-header">                  
