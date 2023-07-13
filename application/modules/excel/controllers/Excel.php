@@ -921,11 +921,7 @@ class Excel extends CI_Controller {
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
-
-        $objPHPExcel->getActiveSheet()->freezePane('A');
-        $objPHPExcel->getActiveSheet()->freezePane('B');
-        $objPHPExcel->getActiveSheet()->freezePane('C');
-        $objPHPExcel->getActiveSheet()->freezePane('D');
+        
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
