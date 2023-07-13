@@ -923,7 +923,7 @@ class Excel extends CI_Controller {
         // ->getAlignment()->setWrapText(true);
 
         
-        $objPHPExcel->getActiveSheet()->freezePane('D2');
+        $objPHPExcel->getActiveSheet()->freezePane('E2');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
