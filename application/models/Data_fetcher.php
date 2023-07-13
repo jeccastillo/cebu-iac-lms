@@ -863,16 +863,17 @@ class Data_fetcher extends CI_Model {
     {
         
         
-        $select = $registered!=0?"tb_mas_users.*,strProgramCode, strMajor, short_name, strProgramDescription,tb_mas_registration.intYearLevel":"tb_mas_users.*,strProgramCode, short_name, strProgramDescription";
+        $select = "tb_mas_users.*,strProgramCode, strMajor, short_name, name as blockName, strProgramDescription,tb_mas_registration.intYearLevel,dteRegistered, tb_mas_curriculum.strName as curriculumName, type_of_class";
 
         $this->db
             ->select($select)
             ->from('tb_mas_users')
             ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
+            ->join('tb_mas_block_sections','tb_mas_users.blockSection = tb_mas_block_sections.intID','left')
+            ->join('tb_mas_curriculum','tb_mas_users.intCurriculumID = tb_mas_curriculum.intID','left')
+            ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID','left')
             ->order_by('strLastname','asc');
-        if($registered!=0 && $sem!=0){
-            $this->db
-                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID');
+        if($registered!=0 && $sem!=0){            
             switch($registered)
             {
                 case 1:

@@ -828,15 +828,43 @@ class Excel extends CI_Controller {
                     ->setCellValue('B1', 'Last Name')
                     ->setCellValue('C1', 'First Name')
                     ->setCellValue('D1', 'Middle Name')
-                    ->setCellValue('E1', 'Gender')
-                    ->setCellValue('F1', 'Course')
+                    ->setCellValue('E1', 'Course')
+                    ->setCellValue('F1', 'Course Description')
                     ->setCellValue('G1', 'Year Level')
-                    ->setCellValue('H1', 'Scholarship')
+                    ->setCellValue('H1', 'Section')
                     ->setCellValue('I1', 'Birthdate')
-                    ->setCellValue('J1', 'Address')
-                    //->setCellValue('K1', 'Password-unhashed')
-                    //->setCellValue('L1', 'Password')                    
-                    ->setCellValue('K1', 'intID');
+                    ->setCellValue('J1', 'Gender')
+                    ->setCellValue('K1', 'Address')
+                    ->setCellValue('L1', 'Nationality')                    
+                    ->setCellValue('M1', 'Residential Address')
+                    ->setCellValue('N1', 'Cell #')
+                    ->setCellValue('O1', 'Email Address')
+                    ->setCellValue('P1', 'Father\'s Name')
+                    ->setCellValue('Q1', 'Father\'s Email')
+                    ->setCellValue('R1', 'Father\'s Mobile #')
+                    ->setCellValue('S1', 'Mother\'s Name')
+                    ->setCellValue('T1', 'Mother\'s Email')
+                    ->setCellValue('U1', 'Mother\'s Mobile #')
+                    ->setCellValue('V1', 'Guardian\'s Name')
+                    ->setCellValue('W1', 'Guardian\'s Email')
+                    ->setCellValue('X1', 'Guardian\'s Mobile #')
+                    ->setCellValue('Y1', 'High School')
+                    ->setCellValue('Z1', 'School Address')
+                    ->setCellValue('AA1', 'School Year')
+                    ->setCellValue('AB1', 'Senior High School')
+                    ->setCellValue('AC1', 'School Address')
+                    ->setCellValue('AD1', 'School Year')
+                    ->setCellValue('AE1', 'Strand')
+                    ->setCellValue('AF1', 'College')
+                    ->setCellValue('AG1', 'School Address')
+                    ->setCellValue('AH1', 'School Year From')
+                    ->setCellValue('AI1', 'School Year To')
+                    ->setCellValue('AJ1', 'Date Enrolled')
+                    ->setCellValue('AK1', 'Curriculum')
+                    ->setCellValue('AL1', 'Active GWA')
+                    ->setCellValue('AM1', 'Total Units Earned')
+                    ->setCellValue('AN1', 'Enrollment Status')
+                    ->setCellValue('AO1', 'Mode of Payment');
         $i = 2;
         foreach($students as $student)
         {
@@ -845,40 +873,68 @@ class Excel extends CI_Controller {
             //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $student['strStudentNumber'])
-                    ->setCellValue('B'.$i, $student['strLastname'])
-                    ->setCellValue('C'.$i, $student['strFirstname'])
-                    ->setCellValue('D'.$i, $student['strMiddlename'])
-                    ->setCellValue('E'.$i, $student['enumGender'])
-                    ->setCellValue('F'.$i, $student['strProgramCode'])
+                    ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('B'.$i, strtoupper($student['strLastname']))
+                    ->setCellValue('C'.$i, strtoupper($student['strFirstname']))
+                    ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
+                    ->setCellValue('E'.$i, $student['strProgramCode'])
+                    ->setCellValue('F'.$i, $student['strProgramDescription'])
                     ->setCellValue('G'.$i, $student['intStudentYear'])
-                    ->setCellValue('H'.$i, strtoupper($student['enumScholarship']))
-                    ->setCellValue('I'.$i, date("m-d-Y", strtotime($student['dteBirthDate'])))
-                    ->setCellValue('J'.$i, $student['strAddress'])
-                    //->setCellValue('K'.$i, pw_unhash($student['strPass']))
-                    //->setCellValue('L'.$i, password_hash($oldPass_unhash, PASSWORD_DEFAULT))
-                    //->setCellValue('K'.$i, pw_hash(date("mdY",strtotime($student['dteBirthDate']))))                    
-                    ->setCellValue('K'.$i, $student['intID']); 
+                    ->setCellValue('H'.$i, strtoupper($student['blockName']))
+                    ->setCellValue('I'.$i, date("M j, Y", strtotime($student['dteBirthDate'])))
+                    ->setCellValue('J'.$i, strtoupper($student['enumGender']))
+                    ->setCellValue('K'.$i, $student['strAddress'])                    
+                    ->setCellValue('L'.$i, strtoupper($student['strCitizenship']))
+                    ->setCellValue('M'.$i, strtoupper($student['strAddress']))
+                    ->setCellValue('N'.$i, strtoupper($student['strMobileNumber']))
+                    ->setCellValue('O'.$i, $student['strEmail'])
+                    ->setCellValue('P'.$i, strtoupper($student['father']))
+                    ->setCellValue('Q'.$i, strtoupper($student['father_email']))
+                    ->setCellValue('R'.$i, strtoupper($student['father_contact']))
+                    ->setCellValue('S'.$i, strtoupper($student['mother']))
+                    ->setCellValue('T'.$i, strtoupper($student['mother_email']))
+                    ->setCellValue('U'.$i, strtoupper($student['mother_contact']))
+                    ->setCellValue('V'.$i, strtoupper($student['guardian']))
+                    ->setCellValue('W'.$i, strtoupper($student['guardian_email']))
+                    ->setCellValue('X'.$i, strtoupper($student['guardian_contact']))
+                    ->setCellValue('Y'.$i, strtoupper($student['high_school']))
+                    ->setCellValue('Z'.$i, strtoupper($student['high_school_address']))
+                    ->setCellValue('AA'.$i, strtoupper($student['high_school_attended']))
+                    ->setCellValue('AB'.$i, strtoupper($student['senior_high']))
+                    ->setCellValue('AC'.$i, strtoupper($student['senior_high_address']))
+                    ->setCellValue('AD'.$i, strtoupper($student['senior_high_attended']))
+                    ->setCellValue('AE'.$i, strtoupper($student['strand']))
+                    ->setCellValue('AF'.$i, strtoupper($student['college']))
+                    ->setCellValue('AG'.$i, strtoupper($student['college_address']))
+                    ->setCellValue('AH'.$i, strtoupper($student['college_attended_from']))
+                    ->setCellValue('AI'.$i, strtoupper($student['college_attended_to']))
+                    ->setCellValue('AJ'.$i, strtoupper($student['dteRegistered']))
+                    ->setCellValue('AK'.$i, strtoupper($student['curriculumName']))
+                    ->setCellValue('AL'.$i, "")
+                    ->setCellValue('AM'.$i, "")
+                    ->setCellValue('AN'.$i, strtoupper($student['type_of_class']))
+                    ->setCellValue('AO'.$i, "");
+                    
             
             
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->getStyle('I2:I'.count($students))
-        ->getAlignment()->setWrapText(true);
+        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
+        // ->getAlignment()->setWrapText(true);
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
-       // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
+    //    // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+    //     //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
         // Miscellaneous glyphs, UTF-8
         //$objPHPExcel->setActiveSheetIndex(0)
         //          ->setCellValue('A4', 'Miscellaneous glyphs')
