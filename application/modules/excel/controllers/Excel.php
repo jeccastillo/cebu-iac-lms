@@ -790,7 +790,101 @@ class Excel extends CI_Controller {
 
     public function download_classlists($sem , $program, $dissolved, $has_faculty){
         $classlists = $this->data_fetcher->getClasslists($sem , $program, $dissolved, $has_faculty);
-        print_r($classlists);
+        $date = date("Y-m-d H:i:s");
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Faculty Loading")
+                                     ->setSubject("Faculty Loading Download")
+                                     ->setDescription("Faculty Loading Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Faculty Loading");
+
+        // Add some datat
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A8', 'Section')
+                    ->setCellValue('B8', 'Subject Code')
+                    ->setCellValue('C8', 'Subject Description')
+                    ->setCellValue('D8', 'Units')
+                    ->setCellValue('E8', 'Day')
+                    ->setCellValue('F8', 'Time')
+                    ->setCellValue('G8', 'Room')
+                    ->setCellValue('H8', 'Enrolled')
+                    ->setCellValue('I8', 'Instructor');
+
+        $i = 9;
+        foreach($classlists as $classlist)
+        {
+            $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue('A'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
+            ->setCellValue('B'.$i, $classlist['strCode'])
+            ->setCellValue('C'.$i, $classlist['subjectDescription'])
+            ->setCellValue('D'.$i, $classlist['strUnits'])
+            ->setCellValue('E'.$i, $classlist['sched_day'])
+            ->setCellValue('F'.$i, $classlist['sched_time'])
+            ->setCellValue('G'.$i, $classlist['sched_room'])
+            ->setCellValue('H'.$i, $classlist['slots_taken_enrolled'])
+            ->setCellValue('I'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']));
+
+            $i++;
+        }
+        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+    //    // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+    //     //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
+        // Miscellaneous glyphs, UTF-8
+        //$objPHPExcel->setActiveSheetIndex(0)
+        //          ->setCellValue('A4', 'Miscellaneous glyphs')
+        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Classlists');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="faculty_loading_data'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
+
+        
     }
     
     public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0)

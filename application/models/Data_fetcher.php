@@ -2693,7 +2693,7 @@ class Data_fetcher extends CI_Model {
             $where['isDissolved'] = 1;
 
         $classlists = $this->db
-        ->select('tb_mas_classlist.intID,strProgramCode,strCode,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,intFinalized')
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,strUnits')
         ->from('tb_mas_classlist')
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
         ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
@@ -2711,6 +2711,29 @@ class Data_fetcher extends CI_Model {
                 ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
                 ->get()
                 ->num_rows();
+
+            $schedule = $this->getScheduleByCode($classlist['intID']);        
+            $sched_day = '';
+            $sched_time = '';
+            $sched_room = '';                
+            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+        
+            $sched_text.= ' ';                                                            
+            foreach($schedule as $sched) {
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
+                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+            }
+            
+            $sched_text.= ' ';                                            
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
+
+            $classlist['sched_day'] = $sched_day;
+            $classlist['sched_time'] = $sched_time;
+            $classlist['sched_room'] = $sched_room;
 
             $ret[] = $classlist;
         }
