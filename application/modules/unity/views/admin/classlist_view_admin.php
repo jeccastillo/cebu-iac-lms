@@ -34,6 +34,15 @@
             <div class="box-header with-border">
                 <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>
                 <div class="box-tools pull-right">
+                    <div class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-table"></i> Download
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
+                         <li><a href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>" class="text-muted">Faculty Loading Report</a></li>                                                  
+                      </ul>
+                    </div>              
                     <select id="select-sem-admin" class="form-control input-sm" >
                         <?php foreach($sy as $s): ?>
                             <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>

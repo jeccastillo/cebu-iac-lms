@@ -787,6 +787,11 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+
+    public function download_classlists($sem , $program, $dissolved, $has_faculty){
+        $classlists = getClasslists($sem , $program, $dissolved, $has_faculty);
+        print_r($classlists);
+    }
     
     public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0)
     {

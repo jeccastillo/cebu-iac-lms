@@ -2682,6 +2682,41 @@ class Data_fetcher extends CI_Model {
         
         return $d;
     }
+
+    function getClasslists($sem , $program, $dissolved, $has_faculty)
+    {
+        $ret = [];
+        $where = array('tb_mas_classlist.strAcademicYear'=>$sem);
+        if($has_faculty != 0)
+            $where['intFacultyID !='] = 999;
+        if($dissolved != 0)
+            $where['isDissolved'] = 1;
+
+        $classlists = $this->db
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,intFinalized')
+        ->from('tb_mas_classlist')
+        ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
+        ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+        ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
+        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
+        ->where($where)
+        ->get()
+        ->result_array(); 
+
+        foreach($classlists as $classlist){
+            $classlist['slots_taken_enrolled'] = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->get()
+                ->num_rows();
+
+            $ret[] = $classlist;
+        }
+
+        return $ret;
+    }
     
     function getAllClasslist($sem,$dept = null,$admin=false)
     {
