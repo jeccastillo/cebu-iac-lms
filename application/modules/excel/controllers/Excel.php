@@ -813,6 +813,19 @@ class Excel extends CI_Controller {
                                      ->setCategory("Faculty Loading");
 
         // Add some datat
+        
+        //HEADER
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->applyFromArray($style);
+
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A8', 'Section')
                     ->setCellValue('B8', 'Subject Code')
