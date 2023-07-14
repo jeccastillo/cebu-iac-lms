@@ -10,6 +10,7 @@
                             <?php endif; ?>
                             <?php if($has_faculty == 0): ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ></i>Faculty Loading Summary</a>
+                                <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>">Faculty Loading Report</a>                                
                             <?php else: ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>"></i>Show All</a>
                             <?php endif; ?>
@@ -32,18 +33,7 @@
         </div>
         <div class="box box-solid box-danger">
             <div class="box-header with-border">
-                <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>
-                <div class="box-tools pull-right">
-                    <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fa fa-table"></i> Download
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
-                         <li><a href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>" class="text-muted">Faculty Loading Report</a></li>                                                  
-                      </ul>
-                    </div>              
-                </div>
+                <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>                
                 <div class="box-tools pull-right">
                     <select id="select-sem-admin" class="form-control input-sm" >
                         <?php foreach($sy as $s): ?>
