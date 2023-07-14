@@ -2719,15 +2719,13 @@ class Data_fetcher extends CI_Model {
             
             if(isset($schedule[0]['strDay']))                                                
                 $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
-        
-            $sched_text.= ' ';                                                            
+                    
             foreach($schedule as $sched) {
                 if(isset($sched['strDay']))
                     $sched_day.= $sched['strDayAbvr'];                    
                     //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
             }
-            
-            $sched_text.= ' ';                                            
+                                                                
             if(isset($schedule[0]['strDay']))
                 $sched_room = $schedule[0]['strRoomCode'];
 
