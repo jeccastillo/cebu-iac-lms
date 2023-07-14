@@ -8,6 +8,12 @@
                             <?php else: ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"></i>Show Non Dissolved</a>
                             <?php endif; ?>
+                            <?php if($has_faculty == 0): ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ></i>Faculty Loading Summary</a>
+                            <?php else: ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>"></i>Show All</a>
+                            <?php endif; ?>
+
                         </small>
                     </h1>
                     <ol class="breadcrumb">
