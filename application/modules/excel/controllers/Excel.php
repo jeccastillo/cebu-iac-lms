@@ -823,6 +823,15 @@ class Excel extends CI_Controller {
                     ->setCellValue('G8', 'Room')
                     ->setCellValue('H8', 'Enrolled')
                     ->setCellValue('I8', 'Instructor');
+          
+                    $objPHPExcel->getActiveSheet()->getStyle('A8:E8')->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'dd6666')
+                            )
+                        )
+                    );           
 
         $i = 9;
         foreach($classlists as $classlist)
