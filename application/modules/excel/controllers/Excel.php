@@ -813,18 +813,49 @@ class Excel extends CI_Controller {
                                      ->setCategory("Faculty Loading");
 
         // Add some datat
+        if($sem!=0){
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        }
+        else
+        {
+            $active_sem = $this->data_fetcher->get_active_sem();
+
+        }
         
         //HEADER
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', date("M j, Y h:i a"));
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "SCHEDULE OF CLASSES BY SUBJECT");
+
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:I3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:I4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:I5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:I6');
         $style = array(
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
             )
         );
+        $style_right = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            )
+        );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->getFont()->setBold( true );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:I3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:I4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:I6")->applyFromArray($style);
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A8', 'Section')
