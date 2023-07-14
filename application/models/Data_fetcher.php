@@ -2693,7 +2693,7 @@ class Data_fetcher extends CI_Model {
             $where['isDissolved'] = 1;
 
         $classlists = $this->db
-        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,strUnits')
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
         ->from('tb_mas_classlist')
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
         ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
