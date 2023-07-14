@@ -789,7 +789,7 @@ class Excel extends CI_Controller {
     }
 
     public function download_classlists($sem , $program, $dissolved, $has_faculty){
-        $classlists = getClasslists($sem , $program, $dissolved, $has_faculty);
+        $classlists = $this->data_fetcher->getClasslists($sem , $program, $dissolved, $has_faculty);
         print_r($classlists);
     }
     
