@@ -1011,10 +1011,19 @@ class Excel extends CI_Controller {
         
         // Add some datat
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A8', 'Student Number')
-                    ->setCellValue('B8', 'Student Name');
+                    ->setCellValue('A8', '#')
+                    ->setCellValue('B8', 'Student Number')
+                    ->setCellValue('C8', 'Student Name')
+                    ->setCellValue('D8', 'Section')
+                    ->setCellValue('E8', 'Subject')
+                    ->setCellValue('F8', 'Day')
+                    ->setCellValue('G8', 'Time')
+                    ->setCellValue('H8', 'Grade')
+                    ->setCellValue('I8', 'Professor')
+                    ->setCellValue('J8', 'Date Enrolled');
                     
         $i = 9;
+        $count = 1;
         foreach($students as $student)
         {
             // Add some datat
@@ -1022,65 +1031,36 @@ class Excel extends CI_Controller {
             //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
-                    ->setCellValue('B'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']));                                                                        
+                    ->setCellValue('A'.$i, $count.".")
+                    ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
+                    ->setCellValue('D'.$i, "")
+                    ->setCellValue('E'.$i, "")
+                    ->setCellValue('F'.$i, "")
+                    ->setCellValue('G'.$i, "")
+                    ->setCellValue('H'.$i, "")
+                    ->setCellValue('I'.$i, "")
+                    ->setCellValue('J'.$i, strtoupper($student['dteRegistered']));                                                                                                                                                
+                    
             
+            $count++;
             $i++;
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
-
         
-        $objPHPExcel->getActiveSheet()->freezePane('E2');
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(60);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(50);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);        
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(35);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(35);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(35);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(35);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(30);
-        // $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(30);
-    //    // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-    //     //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
-    //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
-        // Miscellaneous glyphs, UTF-8
-        //$objPHPExcel->setActiveSheetIndex(0)
-        //          ->setCellValue('A4', 'Miscellaneous glyphs')
-        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);        
+        
 
         // Rename worksheet
         if($course!=0 && $year!=0)
