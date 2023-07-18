@@ -974,13 +974,13 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A6', "SCHEDULE OF CLASSES BY SUBJECT");
+                    ->setCellValue('A6', "LIST OF STUDENT GRADES");
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:I3');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:I4');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:I5');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:I6');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:J2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:J3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:J4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:J5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:J6');
         $style = array(
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -991,13 +991,13 @@ class Excel extends CI_Controller {
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
             )
         );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:I3")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:I4")->applyFromArray($style_right);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:I6")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:J2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:J5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:J2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:J3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:J4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:J5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:J6")->applyFromArray($style);
 
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
@@ -1033,8 +1033,8 @@ class Excel extends CI_Controller {
         
         $objPHPExcel->getActiveSheet()->freezePane('E2');
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(60);
         // $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
         // $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
         // $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
