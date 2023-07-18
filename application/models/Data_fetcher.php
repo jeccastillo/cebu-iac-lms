@@ -2613,7 +2613,7 @@ class Data_fetcher extends CI_Model {
         $ret = [];
                
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,strCode,strSection,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2632,7 +2632,7 @@ class Data_fetcher extends CI_Model {
                                           ->get('tb_mas_classlist_student_adjustment_log')
                                           ->first_row('array');
 
-                $schedule = $this->getScheduleByCode($classlist);        
+                $schedule = $this->getScheduleByCode($c['intClassListID']);        
                 $sched_day = '';
                 $sched_time = '';
                 $sched_room = '';                
