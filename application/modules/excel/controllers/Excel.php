@@ -1171,7 +1171,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AL1', 'Active GWA')
                     ->setCellValue('AM1', 'Total Units Earned')
                     ->setCellValue('AN1', 'Enrollment Status')
-                    ->setCellValue('AO1', 'Mode of Payment');
+                    ->setCellValue('AO1', 'Mode of Payment')
+                    ->setCellValue('AP1', 'Student Type');
         $i = 2;
         foreach($students as $student)
         {
@@ -1220,7 +1221,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AL'.$i, "")
                     ->setCellValue('AM'.$i, "")
                     ->setCellValue('AN'.$i, strtoupper($student['type_of_class']))
-                    ->setCellValue('AO'.$i, "");
+                    ->setCellValue('AO'.$i, "")
+                    ->setCellValue('AP'.$i, strtoupper($student['student_type']));
                     
             
             
@@ -1273,6 +1275,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(30);
     //    // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
     //     //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
     //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
