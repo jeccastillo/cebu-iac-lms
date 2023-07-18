@@ -990,7 +990,7 @@ class Excel extends CI_Controller {
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
             )
-        );
+        );        
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:K2")->getFont()->setBold( true );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:K5")->getFont()->setBold( true );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:K2")->applyFromArray($style);
@@ -1049,6 +1049,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('K'.$i, date("M j, Y",strtotime($student['dteRegistered'])));                                                                                                                                                
                     
             
+                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style);
                     $count++;
                     $i++;
             }
