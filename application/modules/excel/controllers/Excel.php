@@ -1026,11 +1026,13 @@ class Excel extends CI_Controller {
         $count = 1;
         foreach($students as $student)
         {
-            $cl = $this->data_fetcher->getClassListStudentsSt($student['intStudentID'],$sem);
+            $classlists = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
 
             // Add some datat
             $oldPass_unhash = pw_unhash($student['strPass']);
             //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
+
+            foreach($classlists as $cl){
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count.".")
@@ -1045,8 +1047,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('J'.$i, strtoupper($student['dteRegistered']));                                                                                                                                                
                     
             
-            $count++;
-            $i++;
+                    $count++;
+                    $i++;
+            }
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
