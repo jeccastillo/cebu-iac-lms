@@ -1026,7 +1026,7 @@ class Excel extends CI_Controller {
         $count = 1;
         foreach($students as $student)
         {
-            $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+            $cl = $this->data_fetcher->getClassListStudentsSt($student['intStudentID'],$sem);
 
             // Add some datat
             $oldPass_unhash = pw_unhash($student['strPass']);
