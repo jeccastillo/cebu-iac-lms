@@ -1042,7 +1042,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('E'.$i, $cl['strCode'])
                     ->setCellValue('F'.$i, $cl['sched_day'])
                     ->setCellValue('G'.$i, $cl['sched_time'])
-                    ->setCellValue('H'.$i, $student['v3'])
+                    ->setCellValue('H'.$i, $cl['v3'])
                     ->setCellValue('I'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
                     ->setCellValue('J'.$i, strtoupper($student['dteRegistered']));                                                                                                                                                
                     
