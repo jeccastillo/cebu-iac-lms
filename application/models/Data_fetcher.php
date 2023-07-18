@@ -2632,7 +2632,7 @@ class Data_fetcher extends CI_Model {
                                           ->get('tb_mas_classlist_student_adjustment_log')
                                           ->first_row('array');
 
-                $schedule = $this->getScheduleByCode($c['intID']);        
+                $schedule = $this->getScheduleByCode($id);        
                 $sched_day = '';
                 $sched_time = '';
                 $sched_room = '';                
