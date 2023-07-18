@@ -1082,7 +1082,7 @@ class Excel extends CI_Controller {
  
          // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-         header('Content-Disposition: attachment;filename="student_data'.$date.'.xls"');
+         header('Content-Disposition: attachment;filename="student_grades'.$date.'.xls"');
          header('Cache-Control: max-age=0');
          // If you're serving to IE 9, then the following may be needed
          header('Cache-Control: max-age=1');
