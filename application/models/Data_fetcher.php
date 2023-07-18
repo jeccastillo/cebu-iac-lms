@@ -2613,18 +2613,17 @@ class Data_fetcher extends CI_Model {
         $ret = [];
                
         $cl =  $this->db
-                     ->select("tb_mas_classlist_student.intCSID,strCode,strSection,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")
-                     ->from("tb_mas_classlist_student")
-            
-                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))
-                        
-                        
-                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
-                     ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
-                     ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
-                     ->order_by('strCode','asc')   
-                     ->get()
-                     ->result_array();
+                    ->select("tb_mas_classlist_student.intCSID,strCode,strSection,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")                                        
+                    ->from("tb_mas_classlist_student")            
+                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))                                            
+                    ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
+                    ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
+                    ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+                    ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
+                    ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
+                    ->order_by('strCode','asc')   
+                    ->get()
+                    ->result_array();
 
         
         foreach($cl as $c){
@@ -2632,6 +2631,27 @@ class Data_fetcher extends CI_Model {
                                           ->order_by('date','desc')
                                           ->get('tb_mas_classlist_student_adjustment_log')
                                           ->first_row('array');
+
+                $schedule = $this->getScheduleByCode($classlist['intID']);        
+                $sched_day = '';
+                $sched_time = '';
+                $sched_room = '';                
+                
+                if(isset($schedule[0]['strDay']))                                                
+                    $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                        
+                foreach($schedule as $sched) {
+                    if(isset($sched['strDay']))
+                        $sched_day.= $sched['strDayAbvr'];                    
+                        //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+                }
+                                                                    
+                if(isset($schedule[0]['strDay']))
+                    $sched_room = $schedule[0]['strRoomCode'];
+    
+                $c['sched_day'] = $sched_day;
+                $c['sched_time'] = $sched_time;
+                $c['sched_room'] = $sched_room;                                                           
                     
                 $ret[] =  $c;
 
