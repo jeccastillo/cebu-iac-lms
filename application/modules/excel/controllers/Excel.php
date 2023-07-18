@@ -1044,7 +1044,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('G'.$i, $cl['sched_time'])
                     ->setCellValue('H'.$i, $cl['v3'])
                     ->setCellValue('I'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
-                    ->setCellValue('J'.$i, strtoupper($student['dteRegistered']));                                                                                                                                                
+                    ->setCellValue('J'.$i, date("M j, Y",strtotime($student['dteRegistered'])));                                                                                                                                                
                     
             
                     $count++;
