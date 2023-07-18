@@ -939,6 +939,181 @@ class Excel extends CI_Controller {
 
         
     }
+
+    public function download_student_grades($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0){
+        $students = $this->data_fetcher->getStudents($course,$regular,$year,$gender,$graduate,$scholarship,$registered,$sem);
+        $date = date("Y-m-d H:i:s");
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        // Add some data
+        if($sem!=0){
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        }
+        else
+        {
+            $active_sem = $this->data_fetcher->get_active_sem();
+
+        }
+        
+        //HEADER
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', date("M j, Y h:i a"));
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "SCHEDULE OF CLASSES BY SUBJECT");
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:I3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:I4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:I5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:I6');
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $style_right = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            )
+        );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:I2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:I3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:I4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:I5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:I6")->applyFromArray($style);
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Student List")
+                                     ->setSubject("Student List Download")
+                                     ->setDescription("Student List Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Student List");
+
+        
+        // Add some datat
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A8', 'Student Number')
+                    ->setCellValue('B8', 'Student Name');
+                    
+        $i = 9;
+        foreach($students as $student)
+        {
+            // Add some datat
+            $oldPass_unhash = pw_unhash($student['strPass']);
+            //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('B'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']));                                                                        
+            
+            $i++;
+        }
+        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
+        // ->getAlignment()->setWrapText(true);
+
+        
+        $objPHPExcel->getActiveSheet()->freezePane('E2');
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(50);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);        
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(35);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(35);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(35);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(35);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(30);
+        // $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(30);
+    //    // $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+    //     //$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);        
+        // Miscellaneous glyphs, UTF-8
+        //$objPHPExcel->setActiveSheetIndex(0)
+        //          ->setCellValue('A4', 'Miscellaneous glyphs')
+        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+
+        // Rename worksheet
+        if($course!=0 && $year!=0)
+            $objPHPExcel->getActiveSheet()->setTitle($student['strProgramCode'], "-", $student['intStudentYear']);
+        else
+            $objPHPExcel->getActiveSheet()->setTitle('Students');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="student_data'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
+        
+        
+    }
     
     public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0)
     {
