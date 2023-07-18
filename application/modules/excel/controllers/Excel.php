@@ -1027,7 +1027,7 @@ class Excel extends CI_Controller {
         foreach($students as $student)
         {
             $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
-            
+
             // Add some datat
             $oldPass_unhash = pw_unhash($student['strPass']);
             //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
@@ -1036,12 +1036,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('A'.$i, $count.".")
                     ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
-                    ->setCellValue('D'.$i, "")
-                    ->setCellValue('E'.$i, "")
-                    ->setCellValue('F'.$i, "")
-                    ->setCellValue('G'.$i, "")
-                    ->setCellValue('H'.$i, "")
-                    ->setCellValue('I'.$i, "")
+                    ->setCellValue('D'.$i, $cl['strClassName'].$cl['year'].$cl['strSection']." ".$cl['sub_section'])
+                    ->setCellValue('E'.$i, $cl['strCode'])
+                    ->setCellValue('F'.$i, $cl['sched_day'])
+                    ->setCellValue('G'.$i, $cl['sched_time'])
+                    ->setCellValue('H'.$i, $student['v3'])
+                    ->setCellValue('I'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
                     ->setCellValue('J'.$i, strtoupper($student['dteRegistered']));                                                                                                                                                
                     
             
