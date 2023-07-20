@@ -271,12 +271,22 @@ new Vue({
            
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
                 .then((data) => {  
-                    this.student = data.data.student;     
+                    this.student = data.data.student;
+                    this.request.father = this.student.father;     
+                    this.request.father_contact = this.student.father_contact;
+                    this.request.father_email = this.student.father_email;
+                    this.request.mother = this.student.mother;     
+                    this.request.mother_contact = this.student.mother_contact;
+                    this.request.mother_email = this.student.mother_email;
+                    this.request.guardian = this.student.father;     
+                    this.request.guardian_contact = this.student.guardian_contact;
+                    this.request.guardian_email = this.student.guardian_email;
                     this.request.intProgramID = this.student.intProgramID;    
                     this.program_text = data.data.selected;
-                    console.log(this.program_text);     
+                    //console.log(this.program_text);     
                     this.programs = data.data.programs;      
                     this.request.id = this.student.intID; 
+                    
                     
                     
                     if(data.data.sections.length > 0){ 
