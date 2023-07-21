@@ -282,6 +282,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
+                                                    {{ request.contact_number }}
                                                     <input type="hidden" required class="form-control" v-model="request.contact_number" />
                                                 </div>
                                                 <div class="form-group">
