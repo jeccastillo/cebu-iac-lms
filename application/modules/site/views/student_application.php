@@ -169,7 +169,6 @@
                             type="date" required v-model="request.date_of_birth">
                     </div>
                 </div>
-
                 <div class="form-group mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -435,7 +434,99 @@
                         </select>
                     </div>
                 </div>
-
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Father Name
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" v-model="request.father_name">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Father Contact No.
+                        </label>
+                        <the-mask
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" masked="true"
+                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Father Email Address
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email" v-model="request.father_email">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Mother Name
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" v-model="request.mother_name">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Mother Contact No.
+                        </label>
+                        <the-mask
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            :mask="['(+63) ###-###-####']" type="text" v-model="request.mother_contact" masked="true"
+                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Mother Email Address
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email" v-model="request.mother_email">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Guardian Name
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" v-model="request.guardian_name">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Guardian Contact No.
+                        </label>
+                        <the-mask
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" masked="true"
+                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Guardian Email Address
+                        </label>
+                        <input
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email" v-model="request.guardian_email">
+                    </div>
+                </div>
                 <div class="mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="i">

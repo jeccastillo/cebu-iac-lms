@@ -405,6 +405,60 @@
                         <hr>
                     </div>
                     <div>
+                        <strong><i class="fa fa-book margin-r-5"></i> Father Name</strong>
+                        <input type="text" class="form-control" v-model="request.father_name"
+                            @blur="updateField('father_name',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-phone-square margin-r-5"></i>Father Contact No.</strong>
+                        <input type="text" class="form-control" v-model="request.father_contact"
+                            @blur="updateField('father_contact',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-envelope margin-r-5"></i>Father Email</strong>
+                        <input type="email" class="form-control" v-model="request.father_email"
+                            @blur="updateField('father_email',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-book margin-r-5"></i> Mother Name</strong>
+                        <input type="text" class="form-control" v-model="request.mother_name"
+                            @blur="updateField('mother_name',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-phone-square margin-r-5"></i>Mother Contact No.</strong>
+                        <input type="text" class="form-control" v-model="request.mother_contact"
+                            @blur="updateField('mother_contact',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-envelope margin-r-5"></i>Mother Email</strong>
+                        <input type="email" class="form-control" v-model="request.mother_email"
+                            @blur="updateField('mother_email',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-book margin-r-5"></i> Guardian Name</strong>
+                        <input type="text" class="form-control" v-model="request.guardian_name"
+                            @blur="updateField('guardian_name',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-phone-square margin-r-5"></i>Guardian Contact No.</strong>
+                        <input type="text" class="form-control" v-model="request.guardian_contact"
+                            @blur="updateField('guardian_contact',$event)" />
+                        <hr>
+                    </div>
+                    <div>
+                        <strong><i class="fa fa-envelope margin-r-5"></i>Guardian Email</strong>
+                        <input type="email" class="form-control" v-model="request.guardian_email"
+                            @blur="updateField('guardian_email',$event)" />
+                        <hr>
+                    </div>
+                    <div>
                         <strong><i class="fa fa-home margin-r-5"></i> How did you find out about
                             iACADEMY?</strong>
                         <input type="text" class="form-control" v-model="request.source"
