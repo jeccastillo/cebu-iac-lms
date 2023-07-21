@@ -412,7 +412,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Father Contact No.</strong>
-                        <input type="text" class="form-control" v-model="request.father_contact"
+                        <input type="number" class="form-control" v-model="request.father_contact"
                             @blur="updateField('father_contact',$event)" />
                         <hr>
                     </div>
@@ -430,7 +430,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Mother Contact No.</strong>
-                        <input type="text" class="form-control" v-model="request.mother_contact"
+                        <input type="number" class="form-control" v-model="request.mother_contact"
                             @blur="updateField('mother_contact',$event)" />
                         <hr>
                     </div>
@@ -448,7 +448,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Guardian Contact No.</strong>
-                        <input type="text" class="form-control" v-model="request.guardian_contact"
+                        <input type="number" class="form-control" v-model="request.guardian_contact"
                             @blur="updateField('guardian_contact',$event)" />
                         <hr>
                     </div>
