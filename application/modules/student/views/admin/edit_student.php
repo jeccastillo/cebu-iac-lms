@@ -72,7 +72,7 @@
                         </div> 
                     <div class="form-group col-xs-6">
                             <label for="strMobileNumber">Contact Number</label>
-                            <input type="number" value="<?php echo $student['strMobileNumber']; ?>" name="strMobileNumber" class="form-control" id="strMobileNumber" placeholder="Enter Contact Number">
+                            <input type="text" value="<?php echo $student['strMobileNumber']; ?>" name="strMobileNumber" class="form-control" id="strMobileNumber" placeholder="Enter Contact Number">
                         </div>
                     <div class="form-group col-xs-6">
                             <label>Address</label>
