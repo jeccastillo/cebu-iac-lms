@@ -239,7 +239,7 @@ class Finance extends CI_Controller {
                 $this->db
                     ->where(array('name'=>'tuition','syid'=>$sem['intID']))
                     ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
-            }
+            }            
 
             if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
