@@ -276,8 +276,7 @@
                                                     <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>OR Number:</label>
-                                                    <div>{{ cashier.or_start }} {{ cashier.or_end }}</div>
+                                                    <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
                                                         <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_end))" :value="i">{{ i }}</option>
                                                     </select>                                                    
@@ -333,9 +332,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>OR Number <span class="text-danger">*</span> </label>
-                        <div>{{ or_update.or_number }}</div>                        
-                        <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea>
+                        <label>OR Number <span class="text-danger">*</span> </label>                        
+                        <select class="form-control" v-model="or_update.or_number" required>
+                            <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_end))" :value="i">{{ i }}</option>
+                        </select>                                     
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -681,14 +681,26 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                    
-                                    if(data.data.success)
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                    if(data.data.success){
+                                        var formdata= new FormData();
+                                        formdata.append('description',data.data.description);                                        
+                                        formdata.append('total_amount_due',data.data.total_amount_due);
+                                        formdata.append('sy_reference',data.data.sy_reference);
+                                        axios.post(base_url + 'finance/remove_from_ledger', formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(function(data){                                              
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            }); 
+                                        })
+                                    }
                                     else
                                         Swal.fire({
                                             title: "Failed",

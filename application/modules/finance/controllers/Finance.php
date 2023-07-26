@@ -263,6 +263,21 @@ class Finance extends CI_Controller {
 
         echo json_encode($ret);
     }
+
+    public function remove_from_ledger(){        
+        
+        $post = $this->input->post();
+        $sem = $this->data_fetcher->get_active_sem();
+        $amount =  -1 *  floatval($post['total_amount_due']);
+        
+        $this->db
+            ->where(array('name'=>$post['description'],'syid'=>$sem['sy_reference'],'amount' => $amount))
+            ->delete('tb_mas_student_ledger');
+
+        $ret['message'] = "Successfully updated";
+        $ret['success'] =  true;
+        echo json_encode($ret);
+    }
     public function update_cashier(){
         $post = $this->input->post();                     
         $valid = true; 
