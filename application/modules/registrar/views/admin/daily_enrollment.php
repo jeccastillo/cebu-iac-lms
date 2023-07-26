@@ -51,11 +51,11 @@
                 </tr>
                 <tr v-if="dates">
                     <td></td>
-                    <td></td>
-                    <td></td>                    
-                    <td>Total:</td>
+                    <td>{{ date.totals.freshman }}</td>
+                    <td>{{ date.totals.transferee }}</td>                    
+                    <td>{{ date.totals.second }}</td>
                     <td><strong>{{ full_total }}</strong></td>
-                </tr>                
+                </tr>                               
             </tbody>
         </table>
                          

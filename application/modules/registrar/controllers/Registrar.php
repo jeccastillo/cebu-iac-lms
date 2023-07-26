@@ -420,6 +420,11 @@ class Registrar extends CI_Controller {
         foreach ($period as $dt) {
             //echo $dt->format("l Y-m-d H:i:s\n");
             $date = $dt->format("Y-m-d");
+            $totals = [
+                'freshman' => 0,
+                'transferee' => 0,
+                'second' => 0,
+            ];
             $data[$date] = [
                 'freshman' => 0,
                 'transferee' => 0,
@@ -444,15 +449,19 @@ class Registrar extends CI_Controller {
             switch($d->student_type){
                 case 'freshman':
                     $data[$app->date_enrolled]['freshman'] += 1;
+                    $totals['freshman'] += 1;
                     break;
                 case 'transferee':
                     $data[$app->date_enrolled]['transferee'] += 1;
+                    $totals['transferee'] += 1;
                     break;
                 case 'second degree':
                     $data[$app->date_enrolled]['second'] += 1;
+                    $totals['second'] += 1;
                     break;               
                 default:
                     $data[$app->date_enrolled]['freshman'] += 1;
+                    $totals['freshman'] += 1;
                     
             }
         }
@@ -462,6 +471,7 @@ class Registrar extends CI_Controller {
         // $program['hybrid'] = count($this->data_fetcher->getStudentsByTypeOfClass('hybrid'));
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
+        $data['totals'] = $totals;
         $ret['data'] = $data;
 
         echo json_encode($ret);
