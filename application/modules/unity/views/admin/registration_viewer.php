@@ -697,6 +697,7 @@ new Vue({
                                         formdata.append('description',data.data.description);                                        
                                         formdata.append('total_amount_due',data.data.total_amount_due);
                                         formdata.append('sy_reference',data.data.sy_reference);
+                                        formdata.append('student_id',this.student.intID);
                                         axios.post(base_url + 'finance/remove_from_ledger', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
