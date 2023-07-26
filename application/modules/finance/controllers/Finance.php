@@ -192,7 +192,7 @@ class Finance extends CI_Controller {
         
 
         echo json_encode($ret);
-    }
+    }    
     
     public function next_or(){
         $post = $this->input->post();

@@ -185,7 +185,7 @@
                                                 </button>
                                                 <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment'"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                                <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>    
                                         <tr>
@@ -215,7 +215,7 @@
                                                 </button>
                                                 <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment')  && cashier"  class="btn btn-danger" @click="deletePayment(payment.id)">Delete</button>
+                                                <button v-if="(payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>                                                                           
                                         <tr>
@@ -409,7 +409,8 @@ new Vue({
             sy_reference: undefined,
         },
         amount_to_pay: 0,            
-        advanced_privilages: false,      
+        advanced_privilages: false,     
+        finance_manager_privilages: false, 
         description: 'Tuition Full', 
         description_other: '',
         registration: {},
@@ -462,7 +463,8 @@ new Vue({
                             this.request.contact_number = "000000";
 
                         this.request.email_address = this.student.strEmail;                  
-                        this.advanced_privilages = data.data.advanced_privilages;       
+                        this.advanced_privilages = data.data.advanced_privilages; 
+                        this.finance_manager_privilages = data.data.finance_manager_privilages;      
                         
                         this.cashier = data.data.cashier;
 
