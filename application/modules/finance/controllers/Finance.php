@@ -272,7 +272,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();        
         $amount =  -1 *  floatval($post['total_amount_due']);
         
-        echo $amount;
+        
         
         $this->db
             ->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount))
@@ -280,6 +280,7 @@ class Finance extends CI_Controller {
             ->delete('tb_mas_student_ledger');
 
         $ret['message'] = "Successfully updated";
+        $ret['amount'] =  $amount;
         $ret['success'] =  true;
         echo json_encode($ret);
     }
