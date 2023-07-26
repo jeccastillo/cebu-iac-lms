@@ -205,7 +205,7 @@ class Finance extends CI_Controller {
             unset($data['student_id']);
             unset($data['total_amount']);            
             unset($data['or_number']);
-            unser($data['or_used']);
+            unset($data['or_used']);
             unset($data['installment']);
         }
 
