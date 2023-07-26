@@ -31,24 +31,21 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Regular</th>
-                    <th>Online</th>
-                    <th>Hybrid</th>
-                    <th>Hyflex</th>
+                    <th>Freshman</th>
+                    <th>Transferee</th>
+                    <th>Second Degree</th>                    
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
             <tbody>
                 <tr v-if="dates" v-for="date in dates">
                     <td>{{ date.date }}</td>
-                    <td v-if="date.regular > 0"><b>{{ date.regular }}</b></td>
-                    <td v-else>{{ date.regular }}</td>
-                    <td v-if="date.online > 0"><b>{{ date.online }}</b></td>
-                    <td v-else>{{ date.online }}</td>
-                    <td v-if="date.hybrid > 0"><b>{{ date.hybrid }}</b></td>
-                    <td v-else>{{ date.hybrid }}</td>
-                    <td v-if="date.hyflex > 0"><b>{{ date.hyflex }}</b></td>
-                    <td v-else>{{ date.hyflex }}</td>
+                    <td v-if="date.freshman > 0"><b>{{ date.freshman }}</b></td>
+                    <td v-else>{{ date.freshman }}</td>
+                    <td v-if="date.transferee > 0"><b>{{ date.transferee }}</b></td>
+                    <td v-else>{{ date.transferee }}</td>
+                    <td v-if="date.second > 0"><b>{{ date.second }}</b></td>
+                    <td v-else>{{ date.second }}</td>                    
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
                     <td v-else>{{ date.total }}</td>                    
                 </tr>

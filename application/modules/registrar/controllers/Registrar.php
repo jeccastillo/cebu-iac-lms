@@ -421,10 +421,9 @@ class Registrar extends CI_Controller {
             //echo $dt->format("l Y-m-d H:i:s\n");
             $date = $dt->format("Y-m-d");
             $data[$date] = [
-                'online' => 0,
-                'regular' => 0,
-                'hybrid' => 0,
-                'hyflex' => 0,
+                'freshman' => 0,
+                'transferee' => 0,
+                'second' => 0,                
                 'total' => 0,
                 'date' => date("M j, Y", strtotime($date))
             ]; 
@@ -442,21 +441,18 @@ class Registrar extends CI_Controller {
 
             $data[$app->date_enrolled]['total'] += 1;
 
-            switch($d->type_of_class){
-                case 'regular':
-                    $data[$app->date_enrolled]['regular'] += 1;
+            switch($d->student_type){
+                case 'freshman':
+                    $data[$app->date_enrolled]['freshman'] += 1;
                     break;
-                case 'hybrid':
-                    $data[$app->date_enrolled]['hybrid'] += 1;
+                case 'transferee':
+                    $data[$app->date_enrolled]['transferee'] += 1;
                     break;
-                case 'hyflex':
-                    $data[$app->date_enrolled]['hyflex'] += 1;
-                    break;
-                case 'online':
-                    $data[$app->date_enrolled]['online'] += 1;
-                    break;
+                case 'second degree':
+                    $data[$app->date_enrolled]['second'] += 1;
+                    break;               
                 default:
-                    $data[$app->date_enrolled]['regular'] += 1;
+                    $data[$app->date_enrolled]['freshman'] += 1;
                     
             }
         }
