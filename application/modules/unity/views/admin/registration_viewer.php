@@ -693,7 +693,7 @@ new Vue({
                                         })
                                         Swal.showLoading();
 
-                                        var formdata= new FormData();
+                                        var formdata = new FormData();
                                         formdata.append('description',data.data.description);                                        
                                         formdata.append('total_amount_due',data.data.total_amount_due);
                                         formdata.append('sy_reference',data.data.sy_reference);

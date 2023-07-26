@@ -272,12 +272,14 @@ class Finance extends CI_Controller {
         $post = $this->input->post();        
         $amount =  -1 *  floatval($post['total_amount_due']);                
         
-        $this->db->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount, 'student_id'=> $post['student_id']))
-            ->limit(1)
-            ->delete('tb_mas_student_ledger');
+        $test = $this->db->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount, 'student_id'=> $post['student_id']))
+            ->limit(1)    
+            ->get('tb_mas_student_ledger')            
+            ->result_array();
+            //->('tb_mas_student_ledger');
 
         $ret['message'] = "Successfully updated";
-        $ret['amount'] =  $amount;
+        $ret['test'] =  $test;
         $ret['success'] =  true;
         echo json_encode($ret);
     }
