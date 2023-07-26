@@ -277,7 +277,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>OR Number:</label>
-                                                    <div>{{ request.or_number }}</div>
+                                                    <div>{{ cashier.or_start }} {{ cashier.or_end }}</div>
                                                     <select class="form-control" v-model="request.or_number" required>
                                                         <option v-for="i in (cashier.or_start, cashier.or_end)" :value="i">{{ i }}</option>
                                                     </select>                                                    
