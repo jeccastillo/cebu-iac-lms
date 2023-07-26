@@ -266,12 +266,11 @@ class Finance extends CI_Controller {
 
     public function remove_from_ledger(){        
         
-        $post = $this->input->post();
-        $sem = $this->data_fetcher->get_active_sem();
+        $post = $this->input->post();        
         $amount =  -1 *  floatval($post['total_amount_due']);
         
         $this->db
-            ->where(array('name'=>$post['description'],'syid'=>$sem['sy_reference'],'amount' => $amount))
+            ->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount))
             ->limit(1)
             ->delete('tb_mas_student_ledger');
 
