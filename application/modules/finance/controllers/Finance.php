@@ -272,6 +272,7 @@ class Finance extends CI_Controller {
         
         $this->db
             ->where(array('name'=>$post['description'],'syid'=>$sem['sy_reference'],'amount' => $amount))
+            ->limit(1)
             ->delete('tb_mas_student_ledger');
 
         $ret['message'] = "Successfully updated";
