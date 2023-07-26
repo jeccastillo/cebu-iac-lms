@@ -685,7 +685,7 @@ new Vue({
                                         Swal.fire({
                                             title: "Success",
                                             text: data.data.message,
-                                            icon: "error"
+                                            icon: "success"
                                         }).then(function() {
                                             location.reload();
                                         });
