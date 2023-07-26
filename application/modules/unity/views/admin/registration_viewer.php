@@ -333,7 +333,10 @@
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>
                         <div>{{ or_update.or_number }}</div>
-                        <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea>                                                
+                        <select class="form-control" v-model="or_update.or_number" required>
+                            <option v-for="i in (cashier.or_start, cashier.or_end)" :value="i">{{ i }}</option>
+                        </select>
+                        <!-- <input type="hidden" class="form-control" v-model="or_update.or_number" required></textarea> -->
                     </div>
                 </div>
                 <div class=" modal-footer">
