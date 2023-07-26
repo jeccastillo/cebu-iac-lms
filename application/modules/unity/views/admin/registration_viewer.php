@@ -853,7 +853,8 @@ new Vue({
                                     if(data.data.success){
                                         var formdata= new FormData();
                                         formdata.append('intID',this.cashier.intID);
-                                        formdata.append('or_current',this.cashier.or_current);                                        
+                                        formdata.append('or_current',this.cashier.or_current);  
+                                        formdata.append('or_used',this.request.or_number);                                      
                                         formdata.append('payments',this.payments.length);
                                         formdata.append('total_amount',this.request.total_amount_due);
                                         //formdata.append('tuition_total',this.tuition_data.total_before_deductions);

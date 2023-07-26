@@ -205,18 +205,21 @@ class Finance extends CI_Controller {
             unset($data['student_id']);
             unset($data['total_amount']);            
             unset($data['or_number']);
+            unser($data['or_used']);
             unset($data['installment']);
         }
 
         $sem = $this->data_fetcher->get_active_sem();  
         
         
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();        
         
-        if($data['or_current'] >= $cashier->or_end)
-            $data['or_current'] = null;
-        else
-            $data['or_current'] += 1;
+        if($post['or_used'] == $data['or_current']){
+            if($data['or_current'] >= $cashier->or_end)
+                $data['or_current'] = null;
+            else
+                $data['or_current'] += 1;
+        }
 
         $this->db
             ->where('intID',$data['intID'])
