@@ -273,8 +273,7 @@ class Finance extends CI_Controller {
         $amount =  -1 *  floatval($post['total_amount_due']);
         
         $this->db
-            ->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount))
-            ->limit(1)
+            ->where(array('name'=>$post['description'],'syid'=>$post['sy_reference'],'amount' => $amount))            
             ->delete('tb_mas_student_ledger');
 
         $ret['message'] = "Successfully updated";
