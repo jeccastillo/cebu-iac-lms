@@ -278,7 +278,7 @@
                                                 <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_end))" :value="i">{{ i }}</option>
+                                                        <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_current))" :value="i">{{ i }}</option>
                                                     </select>                                                    
                                                 </div>
                                                 <div class="form-group">
@@ -334,7 +334,7 @@
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>                        
                         <select class="form-control" v-model="or_update.or_number" required>
-                            <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_end))" :value="i">{{ i }}</option>
+                            <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_current))" :value="i">{{ i }}</option>
                         </select>                                     
                     </div>
                 </div>
@@ -682,6 +682,17 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){
+                                        
+                                        Swal.fire({
+                                            showCancelButton: false,
+                                            showCloseButton: false,
+                                            allowEscapeKey: false,
+                                            title: 'Loading',
+                                            text: 'Updating Data do not leave page',
+                                            icon: 'info',
+                                        })
+                                        Swal.showLoading();
+
                                         var formdata= new FormData();
                                         formdata.append('description',data.data.description);                                        
                                         formdata.append('total_amount_due',data.data.total_amount_due);
