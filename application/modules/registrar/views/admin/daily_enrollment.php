@@ -52,8 +52,7 @@
                 <tr v-if="dates">
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td></td>                    
                     <td>Total:</td>
                     <td><strong>{{ full_total }}</strong></td>
                 </tr>                
