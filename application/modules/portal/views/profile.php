@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-4 col-xs-12">
             
-              <p><strong><i class="fa fa-user"></i>&nbsp;Student Number: </strong><?php echo $student['strStudentNumber']; ?></p>
+              <p><strong><i class="fa fa-user"></i>&nbsp;Student Number: </strong><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']); ?></p>
               <p><strong><i class="fa fa-building-o"></i>&nbsp;School: </strong>
                     <?php 
                         if ($student['strProgramCode'] == 'BSBA-MM' || $student['strProgramCode'] == 'BSBA-HRDM' || $student['strProgramCode'] == 'BSOA') {
