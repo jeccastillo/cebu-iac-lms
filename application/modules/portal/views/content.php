@@ -156,6 +156,7 @@
                     $countBridg = 0;
                     foreach($records as $record): ?>
                     <tr>
+                        <td><?php print_r($record); ?></td>
                         <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
