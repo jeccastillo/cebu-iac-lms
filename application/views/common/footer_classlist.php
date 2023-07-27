@@ -111,7 +111,7 @@
             var csid = $(this).attr('rel');                    
             var points = $(this).val();
             var parent = $(this).parent();
-            var data = {'intCSID':csid,'floatFinalsGrade': points};
+            var data = {'intCSID':csid,'floatFinalGrade': points};
             $.ajax({
                 'url':'<?php echo base_url(); ?>unity/update_grade/3',
                 'method':'post',
@@ -162,8 +162,8 @@
         $(".midtermInput").blur(function(){
             $(".loading-img").show();
             $(".overlay").show();
-            var csid = $(this).attr('rel');                     
-            
+            var csid = $(this).attr('rel');                    
+            var points = $(this).val();
             var parent = $(this).parent();
             var data = {'intCSID':csid,'floatMidtermGrade':points};
             $.ajax({
