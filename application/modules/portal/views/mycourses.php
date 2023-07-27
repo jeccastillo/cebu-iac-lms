@@ -167,7 +167,7 @@
                     ?>
 
                     <tr>
-                        <td><?php echo $record['strSection']; ?></td>
+                        <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>
@@ -190,7 +190,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td><strong>Courses:</strong></td> <td><?php echo $noOfSubjs; ?></td>
+                            <td><strong># of Subjects:</strong></td> <td><?php echo $noOfSubjs; ?></td>
                             <td><strong>Lec. Units:</strong></td><td><?php echo $totalLec; ?></td>
                             <td><strong>Lab Units:</strong></td><td><?php echo $totalLab; ?></td>
                             <td><strong>Total Credits:</strong></td><td><?php echo $units; ?></td>
