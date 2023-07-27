@@ -142,12 +142,9 @@
                         <th width="13%">Section</th>
                         <th width="10%"> Course Code</th>
                         <th >Course Title</th>
-                        <th style="text-align: center;">Units</th>
-                        <th class="g-header">P</th>
-                        <th class="g-header">M</th>
-                        <th class="g-header">F</th>
-                        <th class="g-header">FG</th>
-                        <th style="text-align: center;">Num.Rating</th>
+                        <th style="text-align: center;">Units</th>                        
+                        <th class="g-header">M</th>                        
+                        <th class="g-header">FG</th>                        
                         <th></th>
 						<th>Remarks</th>
                         <th>Faculty</th>
@@ -162,17 +159,14 @@
                         <td><?php echo $record['strSection']; ?></td>
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
-                        <td style="text-align: center;"><?php echo $record['strUnits']?>
-                        <td class="g-content"><?php echo ($record['floatPrelimGrade'] == 0 || $record['intFinalized'] > 0)?$record['floatPrelimGrade']:'-'; ?></td>
-                        <td class="g-content"><?php echo ($record['floatMidtermGrade']==0 || $record['intFinalized'] > 1)?$record['floatMidtermGrade']:'-'; ?></td>
-                        <td class="g-content"><?php echo ($record['floatFinalsGrade']==0 || $record['intFinalized'] > 2)?$record['floatFinalsGrade']:'-'; ?></td>
+                        <td style="text-align: center;"><?php echo $record['strUnits']?>                        
+                        <td class="g-content"><?php echo ($record['floatMidtermGrade']==0 || $record['intFinalized'] > 1)?$record['floatMidtermGrade']:'-'; ?></td>                        
                         <?php if($record['intFinalized'] == 3): ?>
-                            <td class="g-content"></span><span><?php echo number_format(($record['floatPrelimGrade'] *.30)+ ($record['floatMidtermGrade'] *.30) + ($record['floatFinalsGrade'] *.40), 2, '.', '');
-  ?></span></td>     
-                            <?php if( $record['v3'] == 5.00): ?>
-                                <td style="text-align: center;"><span class="text-red"><?php echo number_format($record['v3'], 2, '.' ,','); ?></span></td>
+                            <td class="g-content"></span><span><?php echo $record['floatFinalGrade']; ?></span></td>     
+                            <?php if( $record['floatFinalGrade'] == 5.00): ?>
+                                <td style="text-align: center;"><span class="text-red"><?php echo $record['floatFinalGrade']; ?></span></td>
                             <?php else: ?>
-                                <td style="text-align:center;"></span><span style="font-weight:bold; "><?php echo ($record['v3']==3.50)?'inc':number_format($record['v3'], 2, '.' ,','); ?></span></td>
+                                <td style="text-align:center;"></span><span style="font-weight:bold; "><?php echo $record['floatFinalGrade']; ?></span></td>
                             <?php endif; ?>
                         <?php else: ?>
                             <td class="g-content"></td>
