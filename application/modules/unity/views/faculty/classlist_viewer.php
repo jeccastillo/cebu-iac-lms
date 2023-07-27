@@ -53,8 +53,9 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Program</th>                                
+                                <th>MIDTERM GRADE</th>
                                 <th>FINAL GRADE</th>                                                                
-                                <th>Status</th>
+                                <!-- <th>Status</th> -->
                                 <th>Remarks</th>
                                 <th>Enrolled</th>
                                 <?php if($classlist['intFinalized']<3 ): ?>
@@ -84,6 +85,20 @@
                                     <?php if($classlist['is_numerical']): ?>
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td id="eq2-<?php echo $student['intCSID'] ?>">
+                                            <select <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
+                                                <option <?php echo $student['floatMidtermGrade'] == '0'?'selected':''; ?> value="0">Not graded</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '1.0'?'selected':''; ?> value="1.0">1.0</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '1.25'?'selected':''; ?> value="1.25">1.25</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '1.5'?'selected':''; ?> value="1.5">1.5</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '1.75'?'selected':''; ?> value="1.75">1.75</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '2.0'?'selected':''; ?> value="2.0">2.0</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '2.25'?'selected':''; ?> value="2.25">2.25</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '2.5'?'selected':''; ?> value="2.5">2.5</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '2.75'?'selected':''; ?> value="2.75">2.75</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '3.0'?'selected':''; ?> value="3.0">3.0</option>                                                
+                                                <option <?php echo $student['floatMidtermGrade'] == '4.0'?'selected':''; ?> value="4.0">4.0</option>
+                                                <option <?php echo $student['floatMidtermGrade'] == '5.0'?'selected':''; ?> value="5.0">5.0</option>                                                      
+                                            </select>
                                             <select <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
                                                 <option <?php echo $student['floatFinalGrade'] == '0'?'selected':''; ?> value="0">Not graded</option>
                                                 <option <?php echo $student['floatFinalGrade'] == '1.0'?'selected':''; ?> value="1.0">1.0</option>
@@ -102,31 +117,12 @@
                                         </td>                                        
                                         <?php else: ?>                
                                             <td></td>
+                                            <td></td>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <td>
                                         <?php if(!empty($student['registered'])): ?>
-                                        <select  id="gradeStat-<?php echo $student['intCSID'] ?>" <?php echo (($classlist['intFinalized'] < 3 && ($student['enumStatus'] != "odrp" || $is_admin)) || $is_super_admin)?'':'disabled';  ?> 
-                                        <?php 
-                                        if($is_super_admin && $student['enumStatus'] =="drp")
-                                            echo "";
-                                        else if ($student['enumStatus'] =="drp") 
-                                            echo "disabled";                                                                        
-                                        ?>
-                                        
-                                        class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>">
-                                            <option <?php echo ($student['enumStatus'] == "act")?'selected':''; ?> value="act">Active</option>
-                                            <?php if($classlist['intFinalized'] == 2 || $is_super_admin || $student['enumStatus'] == "inc"): ?>
-                                            <option <?php echo ($student['enumStatus'] == "inc")?'selected':''; ?> value="inc">Incomplete</option>
-                                            <?php endif; ?>
-                                            
-                                            <option <?php echo ($student['enumStatus'] == "drp")?'selected':''; ?> value="drp">Unofficially Dropped</option>
-                                            <?php if($is_admin): ?>
-                                            <option <?php echo ($student['enumStatus'] == "odrp")?'selected':''; ?> value="odrp">Officially Dropped</option>                                            
-                                            <?php endif; ?>
-                                            <option <?php echo ($student['enumStatus'] == "passed")?'selected':''; ?> value="passed">Passed</option>
-                                            <option <?php echo ($student['enumStatus'] == "failed")?'selected':''; ?> value="failed">Failed</option>
-                                        </select>
+                                            <input type="hidden"  id="gradeStat-<?php echo $student['intCSID'] ?>" class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>" value="act" />                                           
                                         <?php endif; ?>
                                     </td>
                                     
