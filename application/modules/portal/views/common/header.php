@@ -109,7 +109,7 @@
                         <li class="<?php echo (isset($page) && $page=="profile")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/profile"><i class="fa fa-user"></i> <span>Profile</span></a></li>
                     </ul>
                     <ul class="sidebar-menu">
-                        <li class="<?php echo (isset($page) && $page=="mycourses")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/mycourses"><i class="fa fa-book"></i> <span>Courses</span></a></li>
+                        <li class="<?php echo (isset($page) && $page=="mycourses")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/mycourses"><i class="fa fa-book"></i> <span>My Subjects</span></a></li>
                     </ul>
                     <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="grades")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/grades"><i class="fa fa-pencil"></i> <span>Grades</span></a></li>
