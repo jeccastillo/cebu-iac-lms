@@ -50,10 +50,10 @@
                     <td v-else>{{ date.total }}</td>                    
                 </tr>
                 <tr v-if="totals">
-                    <td></td>
-                    <td>{{ totals.freshman }}</td>
-                    <td>{{ totals.transferee }}</td>                    
-                    <td>{{ totals.second }}</td>
+                    <td>Total:</td>
+                    <td><strong>{{ totals.freshman }}</strong></td>
+                    <td><strong>{{ totals.transferee }}</strong></td>                    
+                    <td><strong>{{ totals.second }}</strong></td>
                     <td><strong>{{ full_total }}</strong></td>
                 </tr>                               
             </tbody>
