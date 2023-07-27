@@ -259,7 +259,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('D3', 'Course')
                     ->setCellValue('E3', 'Enrollment Status')
                     ->setCellValue('F3', 'Date Enrolled')
-                    ->setCellValue('G3', 'Date Added');                    
+                    ->setCellValue('G3', 'Date Enlisted');                    
         
         $objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($styleArray);
             unset($styleArray);
