@@ -1973,9 +1973,9 @@ class Unity extends CI_Controller {
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
         if($this->is_super_admin() || $this->is_admin() || $active_sem['enumGradingPeriod'] == "active"){                
            
-            if($term == 1)
+            if($term == 3)
                 $data['eq'] = $post['floatFinalsGrade'];                                                            
-            else
+            elseif($term == 2)
                 $data['eq'] = $post['floatMidtermGrade'];                                
             
 
