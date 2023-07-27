@@ -28,7 +28,7 @@
             </button>
         </div>
         <table class="table table-bordered table-striped">
-            <thead>
+            <thead style="position: sticky;top: 0" class="thead-dark">
                 <tr>
                     <th>Date</th>
                     <th>Freshman</th>
