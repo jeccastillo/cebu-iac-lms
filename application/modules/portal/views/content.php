@@ -161,15 +161,13 @@
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>                        
                         <td class="g-content"><?php echo ($record['floatMidtermGrade']==0 || $record['intFinalized'] > 1)?$record['floatMidtermGrade']:'-'; ?></td>                        
-                        <?php if($record['intFinalized'] == 3): ?>
-                            <td class="g-content"></span><span><?php echo $record['floatFinalGrade']; ?></span></td>     
+                        <?php if($record['intFinalized'] == 3): ?>                                
                             <?php if( $record['floatFinalGrade'] == 5.00): ?>
                                 <td style="text-align: center;"><span class="text-red"><?php echo $record['floatFinalGrade']; ?></span></td>
                             <?php else: ?>
                                 <td style="text-align:center;"></span><span style="font-weight:bold; "><?php echo $record['floatFinalGrade']; ?></span></td>
                             <?php endif; ?>
-                        <?php else: ?>
-                            <td class="g-content"></td>
+                        <?php else: ?>                            
                             <td style="text-align: center;"><span class="text-green" >--</span></td>
                         <?php endif; ?>
                             <td>
