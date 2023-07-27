@@ -826,9 +826,11 @@ class Registrar extends CI_Controller {
     function registrar_reports(){
         $this->data['page'] = "reports";
         $this->data['opentree'] = "registrar";
+        $sem = $this->data_fetcher->get_active_sem();
+        $this->data['sem'] = $sem['intID'];
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/registrar_reports",$this->data);
-        $this->load->view("common/footer",$this->data);    
+        $this->load->view("common/footer",$this->data);            
     }
 
     function get_registration_info($slug){
