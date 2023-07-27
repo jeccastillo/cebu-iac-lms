@@ -22,6 +22,11 @@ body {
   font-size: 15px;
 }
 
+thead th {
+  background-color: #333;
+  color: white;
+} 
+
 h1,
 h2,
 h3,
