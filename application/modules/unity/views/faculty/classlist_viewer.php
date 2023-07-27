@@ -122,14 +122,13 @@
                                             <td></td>
                                         <?php endif; ?>
                                     <?php endif; ?>
-                                    <td>
-                                        <?php if(!empty($student['registered'])): ?>
+                                    <!-- <td>
+                                        <?php //if(!empty($student['registered'])): ?>
                                             <input type="hidden"  id="gradeStat-<?php echo $student['intCSID'] ?>" class="studentStatus form-control" rel="<?php echo $student['intCSID'] ?>" value="act" />                                           
-                                        <?php endif; ?>
-                                    </td>
-                                    
-                                    
-                                    <td><textarea rows="1" cols="10" style="resize: none;font-weight:bold;" disabled="disabled" <?php echo ($classlist['intFinalized'] < 3)?'':'disabled'; ?>  rel="<?php echo $student['intCSID'] ?>" class="remarks" id="rem-<?php echo $student['intCSID']; ?>"><?php echo ($student['strRemarks']!="")?$student['strRemarks']:getRemarks(getEquivalent($student['floatFinalGrade'])); ?></textarea>
+                                        <?php //endif; ?>
+                                    </td> -->
+                                                                        
+                                    <td><textarea rows="1" cols="10" style="resize: none;font-weight:bold;" disabled="disabled" <?php echo ($classlist['intFinalized'] < 3)?'':'disabled'; ?>  rel="<?php echo $student['intCSID'] ?>" class="remarks" id="rem-<?php echo $student['intCSID']; ?>"><?php echo ($student['strRemarks']!="")?$student['strRemarks']:getRemarks($student['floatFinalGrade']); ?></textarea>
                                    </td>
                                     <td style="text-align:center;">
                                         <?php echo (empty($student['registered']))?'<span style="color:#777;">no</span>':'<span style="color:#009000;">yes</span>'; ?>
