@@ -122,7 +122,7 @@
                      <div class="icon">
                          <i class="fa fa-list"></i>
                      </div>
-                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin<?php echo $sem; ?>/0/0/1" class="small-box-footer">
+                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin/<?php echo $sem; ?>/0/0/1" class="small-box-footer">
                          View <i class="fa fa-arrow-circle-right"></i>
                      </a>
                  </div>
