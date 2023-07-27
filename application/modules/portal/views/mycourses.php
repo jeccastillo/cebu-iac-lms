@@ -75,7 +75,7 @@
     <div class="box-tools pull-right">
         <div class="btn-group">
                     <!-- <button type="button" class="btn btn-box-tool dropdown-toogle" data-toggle="dropdown"> -->
-                        <a target="_blank" href="<?php echo base_url()."pdf/student_viewer_registration_print2/".$student['intID'] ."/". $active_sem['intID']; ?>"><i class ="fa fa-download"> </i> Download COR </a>
+                        <!-- <a target="_blank" href="<?php echo base_url()."pdf/student_viewer_registration_print2/".$student['intID'] ."/". $active_sem['intID']; ?>"><i class ="fa fa-download"> </i> Download COR </a> -->
                     <!-- </button> -->
     
         </div>
