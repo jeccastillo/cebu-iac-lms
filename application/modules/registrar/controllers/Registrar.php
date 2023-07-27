@@ -471,7 +471,7 @@ class Registrar extends CI_Controller {
         // $program['hybrid'] = count($this->data_fetcher->getStudentsByTypeOfClass('hybrid'));
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
-        $data['totals'] = $totals;
+        $ret['totals'] = $totals;
         $ret['data'] = $data;
 
         echo json_encode($ret);

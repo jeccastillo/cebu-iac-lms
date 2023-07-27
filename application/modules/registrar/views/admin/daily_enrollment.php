@@ -49,11 +49,11 @@
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
                     <td v-else>{{ date.total }}</td>                    
                 </tr>
-                <tr v-if="dates">
+                <tr v-if="totals">
                     <td></td>
-                    <td>{{ date.totals.freshman }}</td>
-                    <td>{{ date.totals.transferee }}</td>                    
-                    <td>{{ date.totals.second }}</td>
+                    <td>{{ totals.freshman }}</td>
+                    <td>{{ totals.transferee }}</td>                    
+                    <td>{{ totals.second }}</td>
                     <td><strong>{{ full_total }}</strong></td>
                 </tr>                               
             </tbody>
@@ -85,6 +85,7 @@ new Vue({
         current_sem: '<?php echo $active_sem['intID']; ?>',        
         dates: undefined,
         full_total: 0,
+        totals: undefined,
                       
     },
 
@@ -104,6 +105,7 @@ new Vue({
                     .then((data) => {  
 
                         this.dates = data.data.data;
+                        this.totals = data.data.totals;
                         for(i in this.dates){
                             this.full_total += this.dates[i].total;
                         }
