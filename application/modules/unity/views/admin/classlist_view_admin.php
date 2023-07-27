@@ -4,15 +4,15 @@
                         Subject Offering
                         <small>
                             <?php if($dissolved == 0): ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/1" ?>" >Show Dissolved</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/1" ?>" ><i class="fa fa-list"></i> Show Dissolved</a>
                             <?php else: ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>">Show Non Dissolved</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"><i class="fa fa-list"></i> Show Non Dissolved</a>
                             <?php endif; ?>
                             <?php if($has_faculty == 0): ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" >Faculty Loading Summary</a>                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ><i class="fa fa-list"></i> Faculty Loading Summary</a>                                
                             <?php else: ?>
                                 <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>"><i class="fa fa-download"></i> Download Report</a>                                
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>">Show All</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>"><i class="fa fa-list"></i> Show All</a>
                             <?php endif; ?>
 
                         </small>
