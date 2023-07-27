@@ -62,7 +62,7 @@
         <th style="font-size:9px;" width="10%"><b>Course</b></th>
         <th style="font-size:9px;" width="15%"><b>Enrollment Status</b></th>
         <th style="font-size:9px;" width="19%"><b>Date Enrolled</b></th>
-        <th style="font-size:9px;" width="19%"><b>Date Added</b></th>
+        <th style="font-size:9px;" width="19%"><b>Date Enlisted</b></th>
     
     </tr>
     <tr style="line-height:10px;">
