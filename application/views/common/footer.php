@@ -258,7 +258,7 @@ $(document).ready(function() {
             'floatMidtermGrade': points
         };
         $.ajax({
-            'url': '<?php echo base_url(); ?>unity/update_grade',
+            'url': '<?php echo base_url(); ?>unity/update_grade/2',
             'method': 'post',
             'data': data,
             'dataType': 'json',

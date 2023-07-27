@@ -162,14 +162,7 @@
         $(".midtermInput").blur(function(){
             $(".loading-img").show();
             $(".overlay").show();
-            var csid = $(this).attr('rel');
-            
-            if(parseInt($(this).val()) < 50 || $(this).val()==""){
-                var points = 50;
-                $(this).val('50');
-            }
-            else
-                var points = $(this).val();
+            var csid = $(this).attr('rel');                     
             
             var parent = $(this).parent();
             var data = {'intCSID':csid,'floatMidtermGrade':points};
