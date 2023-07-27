@@ -11,7 +11,7 @@
                             <?php if($has_faculty == 0): ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" >Faculty Loading Summary</a>                                
                             <?php else: ?>
-                                <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>"><i class="fa-solid fa-download"></i>Download Loading Report</a>                                
+                                <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>"><i class="fa fa-download"></i> Download Report</a>                                
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>">Show All</a>
                             <?php endif; ?>
 
