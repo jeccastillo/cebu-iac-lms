@@ -569,8 +569,13 @@ new Vue({
                                     if(data.data.success){
                                         const pay_length = this.payments.length - 1;
                                         var formdata= new FormData();
+                                        formdata.append('payments',this.payments.length);                                        
+                                        //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
+                                        formdata.append('student_id',this.student.intID);                                                                                
+                                        formdata.append('installment',this.tuition_data.total_installment);
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
+                                        formdata.append('or_used',this.or_update.or_number);
                                         formdata.append('payments',pay_length);
                                         formdata.append('description',this.or_update_description);
                                         formdata.append('registration_id',this.registration.intRegistrationID);
