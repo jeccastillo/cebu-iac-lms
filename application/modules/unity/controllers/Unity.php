@@ -1800,6 +1800,10 @@ class Unity extends CI_Controller {
         {
             $this->data['alert'] = $this->session->flashdata('message');
             $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
+            if(!$this->data['classlist']['grading_system'])
+                $this->data['classlist']['grading_system'] = 1;
+            $this->data['grading_items'] = $this->db->get_where('tb_mas_grading_item',array("grading_id"=>$this->data['classlist']['grading_system']))->result_array();
+            
             $this->data['is_admin'] = $this->is_super_admin();
             
             $cl_ay = $this->data['classlist']['strAcademicYear'];
