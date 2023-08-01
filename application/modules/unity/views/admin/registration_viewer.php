@@ -278,7 +278,7 @@
                                                 <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
-                                                        <!-- <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option> -->
+                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
                                                     </select>                                                    
                                                 </div>
                                                 <div class="form-group">
@@ -480,6 +480,8 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                         }                        
+
+                        console.log(this.cashier);
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
