@@ -140,7 +140,14 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <a href="#" id="transfer-classlist" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Transfer Selected To</a>
-                                     <a href="#" id="view-classlist" class="btn btn-primary"><i class="fa fa-arrow-right"></i> View Classlist</a>
+                                     <a href="#" id="view-classlist" class="btn btn-primary"
+                                     <?php
+                                        if($classlist['intFinalized'] > 0) {                                            
+                                            echo 'disabled';
+                                        }
+                                     ?>
+                                     
+                                     ><i class="fa fa-arrow-right"></i> View Classlist</a>
                                     <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php 
                                         
                                         if  ($classlist['intFinalized'] == 0) {
