@@ -8,7 +8,9 @@
         $("#remove-grade-line").click(function(e){
             e.preventDefault();
             var count = $("#item-container").children().length;
-            console.log(count);
+            //console.log(count);
+            if(count > 1)
+                $("#item-container").find("div:last").remove();
         });
     });
 </script>
