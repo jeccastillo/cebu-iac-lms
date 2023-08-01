@@ -30,7 +30,7 @@
                         </div>
                     <?php endforeach; ?>
                     <div id="item-container">
-                        <div class="row"><div class="col-sm-4"><input type="text" name="item[]" class="form-control" placeholder="Enter Value" /></div></div>
+                        <div class="row mt-5"><div class="col-sm-4"><input type="text" name="item[]" class="form-control" placeholder="Enter Value" /></div></div>
                     </div>
                     <hr />
                     <button class="btn btn-default" id="add-grade-line">+</button>
