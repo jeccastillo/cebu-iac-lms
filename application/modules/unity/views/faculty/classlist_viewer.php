@@ -1,7 +1,7 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Classlist
+                        Classlist <?php echo ($classlist['intFinalized'] == 2)?"Finalized":""; ?>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="<?php echo base_url(); ?>unity/view_classlist"><i class="ion ion-android-book"></i> Classlist</a></li>
