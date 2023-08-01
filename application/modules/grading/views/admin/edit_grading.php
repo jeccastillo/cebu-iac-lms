@@ -22,7 +22,7 @@
                     <?php foreach($grading_items as $item): ?>
                         <div class="row mt-5">
                             <div class="col-sm-4">
-                                <input type="text" disabled value="<?php echo $item['value']; ?>" />
+                                <input type="text" class="form-control" disabled value="<?php echo $item['value']; ?>" />
                             </div>
                             <div class="col-sm-6">
                                 <button class="btn btn-danger delete-grade-item"  data-val="<?php echo $item['id'] ?>">Remove</button>
