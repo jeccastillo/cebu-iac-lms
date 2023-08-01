@@ -34,7 +34,7 @@
                             <input type="text" name="item[]" class="form-control" />
                         </div>
                         <div class="col-sm-6">
-                            <button class="btn btn-default add-grade-line"  data-val="<?php echo $item['id'] ?>">+</button>
+                            <button class="btn btn-default add-grade-line">+</button>
                         </div>
                     </div>
                     <input type="submit" value="add-item" class="btn btn-default btn-flat">
