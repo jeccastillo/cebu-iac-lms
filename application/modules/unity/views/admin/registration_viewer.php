@@ -334,7 +334,7 @@
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>                        
                         <select class="form-control" v-model="or_update.or_number" required>
-                            <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_current))" :value="i">{{ i }}</option>
+                            <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
                         </select>                                     
                     </div>
                 </div>
@@ -480,8 +480,7 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                         }                        
-
-                        console.log(this.cashier);
+                        
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
