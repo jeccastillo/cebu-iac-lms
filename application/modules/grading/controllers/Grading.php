@@ -112,6 +112,7 @@ class Grading extends CI_Controller {
 
                 }
                 $this->data_poster->log_action('Grading System','Updated Grading System with id '.$post['id'],'yellow');
+                $insert_id = $post['id'];
             }
             else{
 
@@ -125,53 +126,6 @@ class Grading extends CI_Controller {
         }
     }
     
-    public function submit_room_subject()
-    {
-        $post = $this->input->post();
-        $subject = $post['intSubjectID'];
-        $this->data_poster->delete_room_subject($subject);
-        
-        if(isset($post['rooms']))
-        {
-            
-
-            foreach($post['rooms'] as $room)
-            {
-                $data['intRoomID'] = $room;
-                $data['intSubjectID'] = $subject;
-                $this->data_poster->post_data('tb_mas_room_subject',$data);
-            }
-         
-        }
-        
-        $data['message'] = "Success";
-        
-        echo json_encode($data);
-    }
-    
-    public function submit_prereq_subject()
-    {
-        $post = $this->input->post();
-        $subject = $post['intSubjectID'];
-        $this->data_poster->delete_prereq_subject($subject);
-        
-        if(isset($post['subj']))
-        {
-            
-
-            foreach($post['subj'] as $subj)
-            {
-                $data['intPrerequisiteID'] = $subj;
-                $data['intSubjectID'] = $subject;
-                $this->data_poster->post_data('tb_mas_prerequisites',$data);
-            }
-         
-        }
-        
-        $data['message'] = "Success";
-        
-        echo json_encode($data);
-    }
     
     public function view_all_grading()
     {
