@@ -72,6 +72,7 @@
                                 if($showall || !empty($student['registered'])):
                                 ?>
                                 <tr>
+                                    <?php print_r($active_midterm_grading); ?>
                                 <?php if($is_super_admin): ?> 
                                     <td><input type="checkbox" class="student-select minimal" value="<?php echo $student['intID']; ?>" /></td>
                                 <?else: ?>
@@ -85,7 +86,7 @@
                                     <?php if($classlist['is_numerical']): ?>
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td>
-                                            <select <?php echo (($classlist['intFinalized'] == 0 || $classlist['intFinalized'] > 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" || $active_midterm_grading['enumMGradingPeriod'] != 'active'|| empty($student['registered']))  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
+                                            <select <?php echo (($classlist['intFinalized'] != 1 || $active_midterm_grading['enumMGradingPeriod'] != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
                                                 <?php foreach($grading_items as $grading_item): ?>
                                                     <option <?php echo $student['floatMidtermGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value']; ?>"><?php echo $grading_item['value']; ?></option>
                                                 <?php endforeach; ?>                                                                                                
