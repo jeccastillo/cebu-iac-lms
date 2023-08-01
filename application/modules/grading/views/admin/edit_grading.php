@@ -19,6 +19,25 @@
             <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_edit_grading" method="post" role="form">
                 <input type="hidden" name="intID"  id="intID" value="<?php echo $grading['id']; ?>">
                 <div class="box-body">
+                    <?php foreach($grading_items as $item): ?>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?php echo $item['value']; ?>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-danger delete-grade-item"  data-val="<?php echo $item['id'] ?>">Remove</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="text" name="item[]" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-default add-grade-line"  data-val="<?php echo $item['id'] ?>">+</button>
+                        </div>
+                    </div>
+                    <input type="submit" value="add-item" class="btn btn-default btn-flat">
                 </div>
             </form>
        
