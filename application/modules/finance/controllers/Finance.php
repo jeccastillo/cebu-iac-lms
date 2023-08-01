@@ -278,7 +278,7 @@ class Finance extends CI_Controller {
             // ->result_array();
             ->delete('tb_mas_student_ledger');
 
-        $this->data_poster->log_action('Cashier','Retracted OR number'.$post['id'],'yellow');
+        $this->data_poster->log_action('Cashier','Retracted OR number'.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
 
         $ret['message'] = "Successfully updated";
         $ret['test'] =  $test;
