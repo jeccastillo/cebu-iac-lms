@@ -33,6 +33,7 @@
                         <div class="row mt-5"><div class="col-sm-4"><input type="text" required name="item[]" class="form-control" placeholder="Enter Value" /></div></div>
                     </div>
                     <hr />
+                    <button class="btn btn-default" id="remove-grade-line">-</button>
                     <button class="btn btn-default" id="add-grade-line">+</button>
                     <hr />
                     <input type="submit" value="update" class="btn btn-default btn-flat">
