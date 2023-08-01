@@ -158,9 +158,7 @@
 
                                         }
                                         else if($classlist['intFinalized'] == 2) {                                            
-                                                    echo '';
-                                                else
-                                                    echo 'disabled';
+                                                echo 'disabled';
 
                                         }
                                  
