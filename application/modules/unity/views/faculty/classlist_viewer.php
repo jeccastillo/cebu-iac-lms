@@ -157,6 +157,12 @@
                                                     echo 'disabled';
 
                                         }
+                                        else if($classlist['intFinalized'] == 2) {                                            
+                                                    echo '';
+                                                else
+                                                    echo 'disabled';
+
+                                        }
                                  
                                     ?>">
                                     <i class="fa fa-arrow-right"></i> Finalize Period</a>
