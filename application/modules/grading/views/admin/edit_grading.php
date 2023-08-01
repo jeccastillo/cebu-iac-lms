@@ -29,15 +29,11 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <input type="text" name="item[]" class="form-control" />
-                        </div>
-                        <div class="col-sm-6">                            
-                        </div>
+                    <div id="item-container">
+                        <div class="row"><div class="col-sm-4"><input type="text" name="item[]" class="form-control" placeholder="Enter Value" /></div></div>
                     </div>
                     <hr />
-                    <button class="btn btn-default add-grade-line">+</button>
+                    <button class="btn btn-default" id="add-grade-line">+</button>
                     <hr />
                     <input type="submit" value="update" class="btn btn-default btn-flat">
                 </div>
