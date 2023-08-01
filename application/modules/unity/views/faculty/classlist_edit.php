@@ -39,7 +39,7 @@
                 <div class=" form-group">                    
                     <select id="grading_system" class="form-control select2" name="grading_system" >
                         <?php foreach($grading_systems as $gs): ?>
-                            <option <?php echo ($classlist['grading_system'] == $s['grading_system'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
+                            <option <?php echo ($classlist['grading_system'] == $gs['grading_system'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
                         <?php endforeach; ?>
                     </select>                                        
                 </div>
