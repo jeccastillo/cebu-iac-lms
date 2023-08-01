@@ -164,7 +164,7 @@
                                         }
                                  
                                     ?>">
-                                    <i class="fa fa-arrow-right"></i> Finalize Term</a>
+                                    <i class="fa fa-arrow-right"></i> Finalize Period</a>
                                     
                                 </div>
                             </div>
