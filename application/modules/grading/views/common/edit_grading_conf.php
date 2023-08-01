@@ -3,7 +3,7 @@
         $("#add-grade-line").click(function(e){
             e.preventDefault();
             $("#item-container").append('<div class="row mt-5"><div class="col-sm-4"><input type="text" required name="item[]" class="form-control" placeholder="Enter Value" /></div></div>');
-        })
+        });
 
         $("#remove-grade-line").click(function(e){
             e.preventDefault();
@@ -11,6 +11,12 @@
             //console.log(count);
             if(count > 1)
                 $("#item-container").find(".row:last").remove();
+        });
+
+        $(".delete-grade-item").click(function(e){
+            e.preventDefault();
+            value = $(this).attr('data-val');
+            console.log(value);
         });
     });
 </script>
