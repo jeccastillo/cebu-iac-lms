@@ -120,7 +120,7 @@ class Grading extends CI_Controller {
                 $this->data_poster->post_data('tb_mas_grading',$post);
                 $insert_id = $this->db->insert_id();
             }
-            //redirect(base_url()."grading/edit_grading/".$insert_id);
+            redirect(base_url()."grading/edit_grading/".$insert_id);
             
         }
     }

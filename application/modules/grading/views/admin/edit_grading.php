@@ -20,7 +20,7 @@
                 <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
                 <div class="box-body">
                     <?php foreach($grading_items as $item): ?>
-                        <div class="row">
+                        <div class="row mt-5">
                             <div class="col-sm-6">
                                 <?php echo $item['value']; ?>
                             </div>
