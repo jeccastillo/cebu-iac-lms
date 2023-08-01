@@ -10,7 +10,7 @@
             var count = $("#item-container").children().length;
             //console.log(count);
             if(count > 1)
-                $("#item-container").find("div:last").remove();
+                $("#item-container").find(".row:last").remove();
         });
     });
 </script>
