@@ -33,10 +33,11 @@
                         <div class="col-sm-6">
                             <input type="text" name="item[]" class="form-control" />
                         </div>
-                        <div class="col-sm-6">
-                            <button class="btn btn-default add-grade-line">+</button>
+                        <div class="col-sm-6">                            
                         </div>
                     </div>
+                    <hr />
+                    <button class="btn btn-default add-grade-line">+</button>
                     <hr />
                     <input type="submit" value="update" class="btn btn-default btn-flat">
                 </div>
