@@ -6,13 +6,13 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Grading System</a></li>
-                        <li class="active">Edit Grading System <?php echo $grading['name']; ?></li>
+                        <li class="active"><?php echo $grading['name']; ?></li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Grading System <?php echo $grading['name']; ?></h3>
+                <h3 class="box-title">Edit Grading System - <?php echo $grading['name']; ?></h3>
         </div>
        
             

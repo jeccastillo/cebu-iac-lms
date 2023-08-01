@@ -104,7 +104,7 @@ class Grading extends CI_Controller {
             $this->data_poster->log_action('Grading System','Added a new Grading System '.$post['strCode'],'yellow');
             $this->data_poster->post_data('tb_mas_grading',$post);
             $insert_id = $this->db->insert_id();
-            redirect(base_url()."subject/edit_grading/".$insert_id);
+            redirect(base_url()."grading/edit_grading/".$insert_id);
             
         }
     }
