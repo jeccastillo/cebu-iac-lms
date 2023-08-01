@@ -2016,7 +2016,7 @@ class Data_fetcher extends CI_Model {
         $sem  = $this->get_active_sem();
         $scholarship_discount = 0;
         $discounted_price = 0;        
-
+        $scholar = null;
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array');        
 
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
@@ -2024,6 +2024,7 @@ class Data_fetcher extends CI_Model {
         
         if($scholarship != 0 && $scholarship != null)
             $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
+        
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
@@ -2244,7 +2245,7 @@ class Data_fetcher extends CI_Model {
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
         $data['tuition'] = $tuition - $tuition_scholarship;
         $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship;
-
+        $data['scholarship'] = $scholar;
         $data['total'] = $data['total_before_deductions'] - $total_scholarship;                        
         $data['scholarship_deductions'] = $total_scholarship;
         $data['scholarship_deductions_installment'] = $total_scholarship_installment;
