@@ -17,7 +17,7 @@
        
             
             <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_edit_grading" method="post" role="form">
-                <input type="hidden" name="intID"  id="intID" value="<?php echo $grading['id']; ?>">
+                <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
                 <div class="box-body">
                     <?php foreach($grading_items as $item): ?>
                         <div class="row">

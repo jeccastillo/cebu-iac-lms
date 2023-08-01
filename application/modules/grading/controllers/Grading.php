@@ -100,11 +100,18 @@ class Grading extends CI_Controller {
     {
         if($this->is_admin() || $this->is_registrar()){
             $post = $this->input->post();
-            //print_r($post);
-            $this->data_poster->log_action('Grading System','Added a new Grading System '.$post['strCode'],'yellow');
-            $this->data_poster->post_data('tb_mas_grading',$post);
-            $insert_id = $this->db->insert_id();
-            redirect(base_url()."grading/edit_grading/".$insert_id);
+            if(isset($post['id'])){
+                print_r($post);
+                //$this->data_poster->log_action('Grading System','Updated Grading System with id '.$post['id'],'yellow');
+            }
+            else{
+
+                //print_r($post);
+                $this->data_poster->log_action('Grading System','Added a new Grading System ','yellow');
+                $this->data_poster->post_data('tb_mas_grading',$post);
+                $insert_id = $this->db->insert_id();
+            }
+            //redirect(base_url()."grading/edit_grading/".$insert_id);
             
         }
     }
