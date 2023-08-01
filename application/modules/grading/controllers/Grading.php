@@ -84,7 +84,7 @@ class Grading extends CI_Controller {
     {
                         
         $this->data['userlevel'] = $this->session->userdata('intUserLevel');
-        $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id)->first_row('array');
+        $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id))->first_row('array');
         $this->data['grading_items'] = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$id)->result_array();
         
         $this->load->view("common/header",$this->data);
