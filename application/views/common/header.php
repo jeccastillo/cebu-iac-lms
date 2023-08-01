@@ -384,6 +384,18 @@
                                 
                             </ul>
                             
+                        </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="grading")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Grading Systems</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?php echo (isset($page) && $page=="view_grading_systems")?'active':''; ?>"><a href="<?php echo base_url(); ?>grading/view_all_grading" style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Grading Systems</a></li>                                
+                                <li class="<?php echo (isset($page) && $page=="add_grading_system")?'active':''; ?>"><a href="<?php echo base_url(); ?>grading/add_grading" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Grading</a></li>                                                                        
+                                
+                            </ul>
+                            
                         </li>                        
                              
                             
