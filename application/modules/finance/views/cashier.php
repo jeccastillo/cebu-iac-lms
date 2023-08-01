@@ -29,10 +29,10 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" :ref="'or_start_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" :value="cashier.or_start" />                                                                                        
+                                        <input type="number" :ref="'or_start'+cashier.intID" v-on:keyup.enter="$event.target.blur()" :value="cashier.or_start" />                                                                                        
                                     </td>
                                     <td>
-                                        <input type="number" :ref="'or_end_'+cashier.intID" v-on:keyup.enter="$event.target.blur()"  :value="cashier.or_end" />
+                                        <input type="number" :ref="'or_end'+cashier.intID" v-on:keyup.enter="$event.target.blur()"  :value="cashier.or_end" />
                                         
                                     </td>
                                     <td><a href="#" @click.prevent.stop="changeValue(cashier.intID)">change</a></td>
@@ -141,7 +141,7 @@ new Vue({
             document.getElementById(id).focus();
         },
         changeValue: function(id){
-            console.log(this.$refs);
+            console.log(this.$refs.or_start[id]);
             // var formdata = new FormData();
             // formdata.append('intID',id);
             // formdata.append(event.target.value); 
@@ -172,7 +172,7 @@ new Vue({
             //         });
             //     }
                 
-            //});
+            // });
         }
 
 
