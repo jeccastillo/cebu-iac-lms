@@ -1802,9 +1802,9 @@ class Unity extends CI_Controller {
             $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
             if(!$this->data['classlist']['grading_system'])
                 $this->data['classlist']['grading_system'] = 1;
-            $this->data['grading_items'] = $this->db->get('tb_mas_grading_item')
-                                                    ->where(array("grading_id"=>$this->data['classlist']['grading_system']))
+            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['classlist']['grading_system']))
                                                     ->order_by('value','ASC')
+                                                    ->get('tb_mas_grading_item')
                                                     ->result_array();
             
             $this->data['is_admin'] = $this->is_super_admin();
