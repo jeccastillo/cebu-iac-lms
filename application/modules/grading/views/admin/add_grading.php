@@ -16,7 +16,7 @@
         </div>
        
             
-            <form id="validate-subject" action="<?php echo base_url(); ?>subject/submit_grading" method="post" role="form">
+            <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_grading" method="post" role="form">
                 <div class="box-body">
                          <div class="form-group col-xs-6">
                             <label for="name">Name</label>
