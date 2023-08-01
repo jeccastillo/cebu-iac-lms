@@ -278,7 +278,7 @@
                                                 <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
+                                                        <!-- <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option> -->
                                                     </select>                                                    
                                                 </div>
                                                 <div class="form-group">
