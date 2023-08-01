@@ -141,7 +141,7 @@ new Vue({
             document.getElementById(id).focus();
         },
         changeValue: function(id){
-            console.log(this.$refs.or_start[id]);
+            console.log(this.$refs['or_start'+id]);
             // var formdata = new FormData();
             // formdata.append('intID',id);
             // formdata.append(event.target.value); 
