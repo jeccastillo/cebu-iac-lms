@@ -296,7 +296,8 @@ class Finance extends CI_Controller {
         
         $cashier_validation_start = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post['start'],'or_end >=' => $post['start']))->row();
         $cashier_validation_end = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post['end'],'or_end >=' => $post['end']))->row();        
-        if($cashier_validation_start || $cashier_validation_end){            
+        $cashier_validation_both = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['start'],'or_end <=' => $post['end']))->row();
+        if($cashier_validation_start || $cashier_validation_end || $cashier_validation_both){            
             $data['message'] = "Conflict with one of the cashiers";
             $data['success'] = false;                
         }        
