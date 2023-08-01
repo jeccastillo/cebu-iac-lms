@@ -22,19 +22,20 @@
                                     <th>Name</th>
                                     <th>OR Start</th>
                                     <th>OR End</th>
+                                    <th>Update</th>
                                     <th>Current OR</th>                                                                        
                                 </tr>    
                                 <tr v-for="cashier in cashiers">
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" disabled="true" :id="'or_start_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" @blur="changeValue(cashier.intID,'or_start', $event)" :value="cashier.or_start" />                                                
-                                        <a href="#" @click.prevent.stop="enableField('or_start_'+cashier.intID)">edit</a>
+                                        <input type="number" :ref="'or_start_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" :value="cashier.or_start" />                                                                                        
                                     </td>
                                     <td>
-                                        <input type="number" disabled="true" :id="'or_end_'+cashier.intID" v-on:keyup.enter="$event.target.blur()" @blur="changeValue(cashier.intID,'or_end', $event)" :value="cashier.or_end" />
-                                        <a href="#" @click.prevent.stop="enableField('or_end_'+cashier.intID)">edit</a>
+                                        <input type="number" :ref="'or_end_'+cashier.intID" v-on:keyup.enter="$event.target.blur()"  :value="cashier.or_end" />
+                                        
                                     </td>
+                                    <td><a href="#" @click.prevent.stop="changeValue(cashier.intID)">change</a></td>
                                     <td>
                                         {{ cashier.or_current }}
                                     </td>                                                                        
@@ -139,37 +140,38 @@ new Vue({
             document.getElementById(id).disabled = false;
             document.getElementById(id).focus();
         },
-        changeValue: function(id, type, event){
-            var formdata = new FormData();
-            formdata.append('intID',id);
-            formdata.append(type,event.target.value); 
-            formdata.append('type',type);                       
-            axios
-            .post(base_url + 'finance/update_cashier', formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {                
-                if (data.data.success) {
-                    Swal.fire(
-                        'Updated',
-                        data.data.message,
-                        'success'
-                    ).then(function(){
-                        if(data.data.reload)
-                            location.reload();
-                    });
-                } else {
-                    Swal.fire(
-                        'Failed!',
-                        data.data.message,
-                        'error'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-                document.getElementById(event.target.id).disabled = true;
+        changeValue: function(id){
+            console.log(this.$refs);
+            // var formdata = new FormData();
+            // formdata.append('intID',id);
+            // formdata.append(event.target.value); 
+            // formdata.append('type',type);                       
+            // axios
+            // .post(base_url + 'finance/update_cashier', formdata, {
+            //     headers: {
+            //         Authorization: `Bearer ${window.token}`
+            //     }
+            // })
+            // .then(data => {                
+            //     if (data.data.success) {
+            //         Swal.fire(
+            //             'Updated',
+            //             data.data.message,
+            //             'success'
+            //         ).then(function(){
+            //             if(data.data.reload)
+            //                 location.reload();
+            //         });
+            //     } else {
+            //         Swal.fire(
+            //             'Failed!',
+            //             data.data.message,
+            //             'error'
+            //         ).then(function() {
+            //             location.reload();
+            //         });
+            //     }
+                
             });
         }
 

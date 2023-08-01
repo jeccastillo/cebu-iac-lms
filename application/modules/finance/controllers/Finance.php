@@ -267,6 +267,7 @@ class Finance extends CI_Controller {
         echo json_encode($ret);
     }
 
+
     public function remove_from_ledger(){        
         
         $post = $this->input->post();        
@@ -293,6 +294,7 @@ class Finance extends CI_Controller {
         $type = $post['type'];
         unset($post['type']);
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+        
         
         $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();        
         if(!$cashier_validation){
@@ -392,6 +394,23 @@ class Finance extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("cashier",$this->data);
         $this->load->view("common/footer",$this->data);        
+    }
+
+    public function reset_cashier(){
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($role == 0 && $userlevel != 2){
+            $post = $this->input->post();
+            $data['or_start'] = null;
+            $data['or_end'] = null;
+            $data['or_current'] = null;
+        
+            $this->db
+                ->where('id',$post['id'])
+                ->update('tb_mas_cashier',$data);
+        }
+
     }
 
     public function other_payments(){                                     
