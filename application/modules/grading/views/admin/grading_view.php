@@ -1,12 +1,12 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Subject
+            Grading System
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Subject</a></li>
-            <li class="active">View All Subjects</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Grading System</a></li>
+            <li class="active">View All Grading System</li>
         </ol>
     </section>
     <div class="content">
@@ -16,7 +16,7 @@
         </div>
         <div class="box box-solid box-danger">
             <div class="box-header">
-                <h3 class="box-title">Subjects</h3>
+                <h3 class="box-title">Grading System</h3>
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -24,9 +24,7 @@
                     <thead>
                         <tr>
                             <th>id</th>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Units</th>
+                            <th>Name</th>
                             <th>Select Actions</th>
                         </tr>
                     </thead>

@@ -7,13 +7,13 @@
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_subjects",
+            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_grading_system",
             "aoColumnDefs":[
                 {
-                    "aTargets":[4],
+                    "aTargets":[2],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>subject/edit_subject/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>subject/subject_viewer/'+row[0]+'">View</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>grading/edit_grading/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
@@ -31,15 +31,15 @@
                         var id = $(this).attr('rel');
                         var parent = $(this).parent().parent().parent().parent().parent();
                         var code = parent.children(':first-child').html();
-                        var data = {'id':id,'code':code};
+                        var data = {'id':id};
                         $.ajax({
-                            'url':'<?php echo base_url(); ?>index.php/subject/delete_subject',
+                            'url':'<?php echo base_url(); ?>index.php/grading/delete_grading_system',
                             'method':'post',
                             'data':data,
                             'dataType':'json',
                             'success':function(ret){
                                 if(ret.message == "failed"){
-                                    $("#alert-text").html('<b>Alert! '+code+'</b> cannot be deleted it is connected to classlist.')
+                                    $("#alert-text").html('<b>Alert!</b> cannot be deleted it is connected to classlist.')
                                     $(".alert").show();
                                     setTimeout(function() {
                                         $(".alert").hide('fade', {}, 500)
