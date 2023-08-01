@@ -228,7 +228,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td style="font-weight:bold; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                                 </tr>
                                 <tr>
-                                    <td>'.$tuition['scholarship']['name'].'</td>
+                                    <td>'.$tuition['scholarship']->name.'</td>
                                     <td style="text-align:center;">'.number_format($tuition['scholarship_deductions'], 2, '.' ,',').'</td>
                                     <td style="text-align:center;">'.number_format($tuition['scholarship_deductions_installment'], 2, '.' ,',').'</td>
                                 </tr>';
