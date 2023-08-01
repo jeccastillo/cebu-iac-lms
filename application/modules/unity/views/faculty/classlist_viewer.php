@@ -142,20 +142,15 @@
                                     <a href="#" id="transfer-classlist" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Transfer Selected To</a>
                                      <a href="#" id="view-classlist" class="btn btn-primary"><i class="fa fa-arrow-right"></i> View Classlist</a>
                                     <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php 
-                                        if ($classlist['intFinalized'] == 0){
-                                                if ($active_prelim_grading['enumGradingPeriod'])
-                                                    echo '';
-                                                else
-                                                    echo 'disabled';
-                                            }
-                                        else if  ($classlist['intFinalized'] == 1) {
+                                        
+                                        if  ($classlist['intFinalized'] == 0) {
                                             if ($active_midterm_grading['enumMGradingPeriod'])
                                                     echo '';
                                                 else
                                                     echo 'disabled';
 
                                         }
-                                        else if  ($classlist['intFinalized'] == 2) {
+                                        else if  ($classlist['intFinalized'] == 1) {
                                             if ($active_finals_grading['enumFGradingPeriod'])
                                                     echo '';
                                                 else
