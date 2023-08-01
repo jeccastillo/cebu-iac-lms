@@ -300,6 +300,7 @@ class Unity extends CI_Controller {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
             $this->data['classlist'] = $clist;
             
             //print_r($this->data['classlist']);

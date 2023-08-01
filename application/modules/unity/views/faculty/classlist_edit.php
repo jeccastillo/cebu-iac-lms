@@ -28,15 +28,20 @@
                 <input type="hidden" value="<?php echo $classlist['strUnits']; ?>" name="strUnits">
             <div class="box-body">
                 <label for="intSubjectID">Subject <a rel="locked" href="#" id="subject-lock"><i class="ion ion-locked"></i></a></label>     
-                <div class=" form-group">
-                    
-                        <select disabled id="subjects" class="form-control select2" name="intSubjectID" >
+                <div class=" form-group">                    
+                    <select disabled id="subjects" class="form-control select2" name="intSubjectID" >
                         <?php foreach($subjects as $s): ?>
                             <option <?php echo ($classlist['intSubjectID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID'] ?>"><?php echo $s['strCode']." ".$s['strDescription']; ?></option> 
                         <?php endforeach; ?>
-                    </select>
-                    
-                    
+                    </select>                                        
+                </div>
+                <label for="grading_system">Grading System</a></label>     
+                <div class=" form-group">                    
+                    <select id="grading_system" class="form-control select2" name="grading_system" >
+                        <?php foreach($grading_systems as $gs): ?>
+                            <option <?php echo ($classlist['grading_system'] == $s['grading_system'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
+                        <?php endforeach; ?>
+                    </select>                                        
                 </div>
                 <div class="row">
                     <div class="form-group col-xs-6">
