@@ -93,19 +93,9 @@
                                         </td>
                                         <td>
                                             <select <?php echo (($classlist['intFinalized'] > 2 || $classlist['intFinalized'] <= 1 || $student['enumStatus'] == "drp" || $student['enumStatus'] == "odrp" ||  $student['enumStatus'] =="inc" || $active_finals_grading['enumFGradingPeriod'] != 'active'|| empty($student['registered']) )  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
-                                                <option <?php echo $student['floatFinalGrade'] == '0'?'selected':''; ?> value="0">Not graded</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '1.0'?'selected':''; ?> value="1.0">1.0</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '1.25'?'selected':''; ?> value="1.25">1.25</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '1.5'?'selected':''; ?> value="1.5">1.5</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '1.75'?'selected':''; ?> value="1.75">1.75</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '2.0'?'selected':''; ?> value="2.0">2.0</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '2.25'?'selected':''; ?> value="2.25">2.25</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '2.5'?'selected':''; ?> value="2.5">2.5</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '2.75'?'selected':''; ?> value="2.75">2.75</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '3.0'?'selected':''; ?> value="3.0">3.0</option>                                                
-                                                <option <?php echo $student['floatFinalGrade'] == '4.0'?'selected':''; ?> value="4.0">4.0</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '5.0'?'selected':''; ?> value="5.0">5.0</option>
-                                                <option <?php echo $student['floatFinalGrade'] == '3.5'?'selected':''; ?> value="3.5">incomplete</option>          
+                                                <?php foreach($grading_items as $grading_item): ?>
+                                                    <option <?php echo $student['floatFinalGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value']; ?>"><?php echo $grading_item['value']; ?></option>
+                                                <?php endforeach; ?>                                               
                                             </select>                                            
                                         </td>                                        
                                         <?php else: ?>                
