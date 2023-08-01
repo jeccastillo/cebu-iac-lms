@@ -37,7 +37,8 @@
                             <button class="btn btn-default add-grade-line">+</button>
                         </div>
                     </div>
-                    <input type="submit" value="add-item" class="btn btn-default btn-flat">
+                    <hr />
+                    <input type="submit" value="update" class="btn btn-default btn-flat">
                 </div>
             </form>
        
