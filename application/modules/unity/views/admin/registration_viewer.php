@@ -230,7 +230,7 @@
                                         </tr>
                                     </table>
                                     <hr />
-                                    <div v-if="cashier.or_current != NULL" class="row">
+                                    <div v-if="cashier.or_current" class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6" v-if="cashier">
                                             <h3>Cashier {{ cashier.intID }}</h3>
@@ -278,7 +278,7 @@
                                                 <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier.or_start), parseInt(cashier.or_current))" :value="i">{{ i }}</option>
+                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
                                                     </select>                                                    
                                                 </div>
                                                 <div class="form-group">
@@ -410,7 +410,9 @@ new Vue({
             cashier_id: undefined,
             sy_reference: undefined,
         },
-        amount_to_pay: 0,            
+        amount_to_pay: 0,       
+        cashier_start: 0,
+        cashier_end: 0,     
         advanced_privilages: false,     
         finance_manager_privilages: false, 
         description: 'Tuition Full', 
@@ -471,6 +473,8 @@ new Vue({
                         this.cashier = data.data.cashier;
 
                         if(this.cashier){
+                            this.cashier_start = this.cashier.or_start;
+                            this.cashier_end = this.cashier.or_current?this.cashier.or_current:this.cashier.or_end;
                             this.request.or_number = this.cashier.or_current;
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
