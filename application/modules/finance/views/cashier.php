@@ -29,10 +29,10 @@
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
-                                        <input type="number" :ref="'or_start'+cashier.intID" v-on:keyup.enter="$event.target.blur()" :value="cashier.or_start" />                                                                                        
+                                        <input type="number" :ref="'or_start'+cashier.intID" :value="cashier.or_start" />                                                                                        
                                     </td>
                                     <td>
-                                        <input type="number" :ref="'or_end'+cashier.intID" v-on:keyup.enter="$event.target.blur()"  :value="cashier.or_end" />
+                                        <input type="number" :ref="'or_end'+cashier.intID" :value="cashier.or_end" />
                                         
                                     </td>
                                     <td><a href="#" @click.prevent.stop="changeValue(cashier.intID)">change</a></td>
