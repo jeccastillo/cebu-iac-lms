@@ -173,41 +173,7 @@ class Grading extends CI_Controller {
         echo json_encode($data);
     }
     
-    public function submit_days_subject()
-    {
-        $post = $this->input->post();
-        $subject = $post['intSubjectID'];
-        $this->data_poster->delete_days_subject($subject);
-        
-        if(isset($post['subj']))
-        {
-            
-
-            foreach($post['subj'] as $subj)
-            {
-                $data['strDays'] = $subj;
-                $data['intSubjectID'] = $subject;
-                $this->data_poster->post_data('tb_mas_days',$data);
-            }
-         
-        }
-        
-        $data['message'] = "Success";
-        
-        echo json_encode($data);
-    }
-    
-    public function edit_submit_subject()
-    {
-        $post = $this->input->post();
-        //print_r($post);
-        $this->data_poster->log_action('Subjects','Updated a Subject '.$post['strCode'],'blue');
-        $this->data_poster->post_data('tb_mas_subjects',$post,$post['intID']);
-        redirect(base_url()."subject/edit_subject/".$post['intID']);
-            
-    }
-    
-    public function view_all_subjects()
+    public function view_all_grading()
     {
         
         $this->data['page'] = "view_subjects";
@@ -221,74 +187,19 @@ class Grading extends CI_Controller {
         
     }
     
-    public function subject_viewer($id,$sem = null)
-    {
-        
-        if($this->is_admin() || $this->is_registrar()){
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $active_sem = $this->data_fetcher->get_active_sem();
-			//$this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-            if($sem!=null)
-                $this->data['selected_ay'] = $sem;
-            else
-                $this->data['selected_ay'] = $active_sem['intID'];
-            
-            $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-			//$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-           
-            $this->data['subjects'] = $this->data_fetcher->getSubjectPlain($id);
-            
-            $records = $this->data_fetcher->fetch_classlist_by_sujects($id,$this->data['active_sem']['intID']);
-            
-            foreach($records as $record)
-            {
-                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['intID']);
-                //print_r($record['schedule']);
-                $this->data['classlist'][] = $record;
-            }
-            
-            $sem_temp = $this->data['active_sem'];
-            
-            $this->data['grades_charts'] = [];
-            
-            for($i=0;$i<4;$i++){
-                $chart = getGradeAveragesSubject($sem_temp['intID'],$id);
-               
-                if(!empty($chart)){
-                    $this->data['grades_charts'][$i] = $chart; 
-                    $this->data['grades_charts'][$i]['label'] = $sem_temp['enumSem']." ".$this->data['term_type']." ".$sem_temp['strYearStart']."-".$sem_temp['strYearEnd'];
-                }
-                $sem_temp = $this->data_fetcher->get_prev_sem($sem_temp['intID']);
-                if(empty($sem_temp))
-                    break;
-            }
-            
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/subject_viewer",$this->data);
-            $this->load->view("common//footer",$this->data); 
-            $this->load->view("common/subject_viewer_conf",$this->data);
-            $this->load->view("subject_data_js",$this->data);
-           // print_r($this->data['classlists']);
-            
-        }
-        else
-            redirect(base_url()."unity");    
-        
-        
-    }
     
-    public function delete_subject()
+    
+    public function delete_grading_item()
     {
         if($this->is_admin() || $this->is_registrar()){
             $post = $this->input->post();
-            $deleted = $this->data_poster->deleteSubject($post['id']);
-            if($deleted)
-            {
-                $data['message'] = "success";
-                $this->data_poster->log_action('Subject','Deleted a Subject '.$post['code'],'red');
-            }
-            else
-                $data['message'] = "failed";
+            
+            $this->db
+			->where('id',$post['id'])
+			->delete('tb_mas_grading_item');
+
+
+            $data['message'] = "deleted";
             echo json_encode($data);
         }
     }
