@@ -291,43 +291,27 @@ class Finance extends CI_Controller {
         $valid = true; 
         $data['reload'] = false;
         
-        $type = $post['type'];
-        unset($post['type']);
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
         
         
-        $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post[$type],'or_end >=' => $post[$type]))->row();        
-        if(!$cashier_validation){
-            if($type == "or_start" && $cashier->or_end)                
-                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$post['or_start'],'or_end <=' => $cashier->or_end))->row();
-            elseif($cashier->or_start)
-                    $cashier_validation = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start >='=>$cashier->or_start,'or_end <=' => $post['or_end']))->row();
-        }
-        
-
-        if($cashier_validation)
-        {
+        $cashier_validation_start = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post['start'],'or_end >=' => $post['start']))->row();
+        $cashier_validation_end = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'or_start <='=>$post['end'],'or_end >=' => $post['end']))->row();        
+        if($cashier_validation_start && $cashier_validation_end){            
             $data['message'] = "Conflict with one of the cashiers";
-            $data['success'] = false;
-        }
+            $data['success'] = false;                
+        }        
         else{            
-            if($type == "or_start"){
-
-                if($cashier->or_end && $cashier->or_end < $post["or_start"] && $cashier->or_end != null){
-                    $post['or_end'] = $post["or_start"];                    
-                }
-                $post['or_current'] = $post['or_start'];
-                $data['reload'] = true;
-                
-            }
-            if($type == "or_end")
-                if($cashier->or_start && $cashier->or_start > $post["or_end"] && $cashier->or_start != null)
-                        $valid = false;
             
-            if($valid){
+            
+            if($post['start'] <= $post['end']){
+                $update = array(
+                    "or_start" => $post['start'],
+                    "or_end" => $post['end'],
+                    "or_current" => $post['start']
+                );
                 $this->db
                         ->where('intID',$post['intID'])
-                        ->update('tb_mas_cashier',$post);
+                        ->update('tb_mas_cashier',$update);
 
                 $cashier_up = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
 

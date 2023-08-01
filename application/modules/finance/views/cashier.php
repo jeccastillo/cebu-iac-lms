@@ -141,39 +141,39 @@ new Vue({
             document.getElementById(id).focus();
         },
         changeValue: function(id){
-            console.log('or_start'+id);
-            console.log(this.$refs['or_start'+id][0].value);
-            // var formdata = new FormData();
-            // formdata.append('intID',id);
-            // formdata.append(event.target.value); 
-            // formdata.append('type',type);                       
-            // axios
-            // .post(base_url + 'finance/update_cashier', formdata, {
-            //     headers: {
-            //         Authorization: `Bearer ${window.token}`
-            //     }
-            // })
-            // .then(data => {                
-            //     if (data.data.success) {
-            //         Swal.fire(
-            //             'Updated',
-            //             data.data.message,
-            //             'success'
-            //         ).then(function(){
-            //             if(data.data.reload)
-            //                 location.reload();
-            //         });
-            //     } else {
-            //         Swal.fire(
-            //             'Failed!',
-            //             data.data.message,
-            //             'error'
-            //         ).then(function() {
-            //             location.reload();
-            //         });
-            //     }
+            
+            //console.log(this.$refs['or_start'+id][0].value);
+            var formdata = new FormData();
+            formdata.append('intID',id);            
+            formdata.append('start',this.$refs['or_start'+id][0].value);
+            formdata.append('end',this.$refs['or_end'+id][0].value);                       
+            axios
+            .post(base_url + 'finance/update_cashier', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {                
+                if (data.data.success) {
+                    Swal.fire(
+                        'Updated',
+                        data.data.message,
+                        'success'
+                    ).then(function(){
+                        if(data.data.reload)
+                            location.reload();
+                    });
+                } else {
+                    Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                    ).then(function() {
+                        location.reload();
+                    });
+                }
                 
-            // });
+            });
         }
 
 
