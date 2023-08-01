@@ -92,7 +92,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <?php print_r($active_finals_grading); ?>
+                                            <?php print_r($classlist); ?>
                                             <select <?php echo (($classlist['intFinalized'] >= 1 || $active_finals_grading['enumFGradingPeriod'] != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
                                                 <?php foreach($grading_items as $grading_item): ?>
                                                     <option <?php echo $student['floatFinalGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value']; ?>"><?php echo $grading_item['value']; ?></option>
