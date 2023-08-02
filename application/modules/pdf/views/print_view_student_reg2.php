@@ -233,7 +233,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td style="text-align:center;">'.number_format($tuition['scholarship_deductions_installment'], 2, '.' ,',').'</td>
                                 </tr>';
                     endif;
-                    if(count($discounts) > 0):
+                    if($discounts):
                         foreach($discounts as $discount):
                             $html .='
                                 <tr>
