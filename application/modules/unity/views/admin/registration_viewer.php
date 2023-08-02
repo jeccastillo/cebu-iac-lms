@@ -250,7 +250,7 @@
                                                     <tr>
                                                         <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
                                                         <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
-                                                        <td><button class="btn btn-primary" type="submit">Add Discount</button></td>       
+                                                        <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
                                                     </tr>
                                                 </form>
                                             </tbody>
