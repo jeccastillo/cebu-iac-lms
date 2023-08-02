@@ -451,7 +451,7 @@ class Finance extends CI_Controller {
 
             $ledger['student_id'] = $reg['intStudentID'];
             $ledger['name'] = "Removed Discount:".$discount['name'];
-            $ledger['amount'] = $post['discount'];
+            $ledger['amount'] = $discount['discount'];
             $ledger['date'] = date("Y-m-d H:i:s");
             $ledger['syid'] = $sem['intID'];
             $ledger['added_by'] =  $this->session->userdata('intID');
