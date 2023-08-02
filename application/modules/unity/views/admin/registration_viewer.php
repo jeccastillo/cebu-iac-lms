@@ -251,6 +251,11 @@
                                             </table>
                                             <form @submit.prevent="addDiscount" method="post">
                                                 <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan=3>Add Discount</th>                                                            
+                                                        </tr>
+                                                    </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
