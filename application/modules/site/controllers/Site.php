@@ -36,7 +36,7 @@ class Site extends CI_Controller {
 		
         $this->load->view('common/header_new',$this->data);    		     
 		$this->load->view('student_application',$this->data);
-		// $this->load->view('common/footer',$this->data);
+		$this->load->view('common/footer',$this->data);
     }
 
 	public function awesome($type = null) {
