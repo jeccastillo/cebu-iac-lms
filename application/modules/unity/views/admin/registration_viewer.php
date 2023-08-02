@@ -233,7 +233,7 @@
                                     <div v-if="discounts">
                                         <h4 class="box-title">Discounts</h4>
                                         
-                                            <table class="table table-striped table-bordered">
+                                            <table v-if="discounts.length > 0" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th></th>
