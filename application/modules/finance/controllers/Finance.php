@@ -414,10 +414,20 @@ class Finance extends CI_Controller {
         }
         else{
             $this->db->insert('tb_mas_registration_discount',$post);
+            $tuition = $this->data_fetcher->getTuition($id, $sem['intID'], $reg['enumScholarship']);
+            if($post['type'] == "fixed")
+                $amount = $post['discount'];
+            else{
+                $down = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$sem['intID']))->first_row();
+                if($down)
+                    $amount = $tuition['total_installment'] - ($tuition['total_installment'] * $post['discount']);
+                else
+                    $amount = $tuition['total'] - ($tuition['total'] * $post['discount']);
+            }
 
             $ledger['student_id'] = $reg['intStudentID'];
             $ledger['name'] = $post['name'];
-            $ledger['amount'] = -1 * $post['discount'];
+            $ledger['amount'] = -1 * $amount;
             $ledger['date'] = date("Y-m-d H:i:s");
             $ledger['syid'] = $sem['intID'];
             $ledger['added_by'] =  $this->session->userdata('intID');
@@ -448,10 +458,20 @@ class Finance extends CI_Controller {
         }
         else{
             
+            $tuition = $this->data_fetcher->getTuition($id, $sem['intID'], $reg['enumScholarship']);
+            if($discount['type'] == "fixed")
+                $amount = $discount['discount'];
+            else{
+                $down = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$sem['intID']))->first_row();
+                if($down)
+                    $amount = $tuition['total_installment'] - ($tuition['total_installment'] * $discount['discount']);
+                else
+                    $amount = $tuition['total'] - ($tuition['total'] * $discount['discount']);
+            }
 
             $ledger['student_id'] = $reg['intStudentID'];
             $ledger['name'] = "Removed Discount:".$discount['name'];
-            $ledger['amount'] = $discount['discount'];
+            $ledger['amount'] = $amount;
             $ledger['date'] = date("Y-m-d H:i:s");
             $ledger['syid'] = $sem['intID'];
             $ledger['added_by'] =  $this->session->userdata('intID');

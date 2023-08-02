@@ -238,6 +238,7 @@
                                                     <tr>
                                                         <th></th>
                                                         <th>Discount Amount</th>
+                                                        <th>type</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -245,6 +246,7 @@
                                                     <tr v-for="discount in discounts">
                                                         <td>{{ discount.name }}</td>
                                                         <td>{{ discount.discount }}</td>
+                                                        <td>{{ discount.type }}</td>
                                                         <td><button class="btn btn-danger" @click="deleteDiscount(discount.id)">Remove</button></td>       
                                                     </tr>   
                                                 </tbody>                                                 
@@ -260,6 +262,12 @@
                                                         <tr>
                                                             <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
                                                             <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
+                                                            <td>
+                                                                <select required v-model="add_discount.type" class="form-control">
+                                                                    <option value="fixed">Fixed</option>
+                                                                    <option value="percent">Percent</option>
+                                                                </select>
+                                                            </td>
                                                             <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
                                                         </tr>                                                
                                                     </tbody>
@@ -407,7 +415,8 @@ new Vue({
         discounts: undefined,
         add_discount:{
             name: undefined,
-            discount: undefined,            
+            discount: undefined,        
+            type: 'fixed',    
         },
         or_print: {
             or_number: undefined,
@@ -606,6 +615,7 @@ new Vue({
                         var formdata= new FormData();                                        
                         formdata.append('name',this.add_discount.name);
                         formdata.append('discount',this.add_discount.discount);
+                        formdata.append('type',this.add_discount.type);
                         formdata.append('registration_id',this.registration.intRegistrationID);                                        
                         return axios.post(base_url + 'finance/add_discount', formdata, {
                             headers: {
