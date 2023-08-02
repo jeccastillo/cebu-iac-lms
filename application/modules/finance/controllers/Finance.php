@@ -399,6 +399,39 @@ class Finance extends CI_Controller {
 
     }
 
+    public function add_discount(){
+
+        $post = $this->input->post();
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        $reg = $this->get_where('tb_mas_registration',array('intID'=>$post['registration_id']));
+        $sem = $this->data_fetcher->get_active_sem();        
+        
+
+        if($role == 0 && $userlevel != 2){
+            $data['message'] = "You don't have permission to add discount";
+            $data['success'] = false;
+        }
+        else{
+            $this->db->insert('tb_mas_registration_discount',$post);
+
+            $ledger['student_id'] = $reg['intStudentID'];
+            $ledger['name'] = $post['name'];
+            $ledger['amount'] = $post['discount'];
+            $ledger['date'] = date("Y-m-d H:i:s");
+            $ledger['syid'] = $sem['intID'];
+            $ledger['added_by'] =  $this->session->userdata('intID');
+            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+
+            $data['message'] = "Successfully Added Discount";
+            $data['success'] = true;
+        }
+            
+
+
+        echo json_encode($data);
+    }
+
     public function other_payments(){                                     
 
         $role = $this->session->userdata('special_role');

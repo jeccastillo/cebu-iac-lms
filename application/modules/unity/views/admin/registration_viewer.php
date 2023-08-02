@@ -230,6 +230,33 @@
                                         </tr>
                                     </table>
                                     <hr />
+                                    <div v-if="discounts">
+                                        <h4 class="box-title">Discounts</h4>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Discount Amount</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="discount in discounts">
+                                                    <td>{{ discount.name }}</td>
+                                                    <td>{{ discount.discount }}</td>
+                                                    <td><button class="btn btn-danger">Remove</button></td>       
+                                                </tr>
+                                                <form @submit.prevent="addDiscount" method="post">
+                                                    <tr>
+                                                        <td><input type="text" required v-model="add_discount.name" class="form-control"></td>
+                                                        <td><input type="number" required v-model="add_discount.discount" class="form-control"></td>
+                                                        <td><button class="btn btn-primary" type="submit">Add Discount</button></td>       
+                                                    </tr>
+                                                </form>
+                                            </tbody>
+                                        </table>
+                                        <hr />
+                                    </div>
                                     <div v-if="cashier.or_current" class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6" v-if="cashier">
@@ -367,6 +394,11 @@ new Vue({
         slug: undefined,
         student:{},    
         cashier: undefined,
+        discounts: undefined,
+        add_discount:{
+            name: undefined,
+            discount: undefined,            
+        }
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -446,13 +478,14 @@ new Vue({
                         this.registration = data.data.registration;   
                         
                         if(this.registration){         
-                            this.registration_status = data.data.registration.intROG;
+                            this.registration_status = data.data.registration.intROG;                            
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
                             this.remaining_amount = data.data.tuition_data.total;
+                            this.discounts = data.data.discounts;
                         }
 
-                        this.reg_status = data.data.reg_status;
+                        this.reg_status = data.data.reg_status;                        
                         this.student = data.data.student;         
                         this.or_print.student_name = this.request.strFirstname + ' ' + this.request.strLastname;
                         this.slug = this.student.slug;
@@ -546,6 +579,52 @@ new Vue({
         prepUpdate: function(id,desc){
             this.or_update.id = id;
             this.or_update_description = desc;
+        },
+        addDiscount: function(){
+
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to add Discount?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+                        var formdata= new FormData();                                        
+                        formdata.append('name',this.add_discount.name);
+                        formdata.append('description',this.add_discount.discount);
+                        formdata.append('registration_id',this.registration.intRegistrationID);                                        
+                        return axios.post(base_url + 'finance/add_discount', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(function(data){
+                            if(data.data.success){
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            }
+                            else{
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                            }
+                        });
+                    }
+            });
+
         },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
