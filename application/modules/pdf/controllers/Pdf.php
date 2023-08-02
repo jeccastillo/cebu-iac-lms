@@ -704,13 +704,17 @@ class Pdf extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
         $this->data['student'] = $this->data_fetcher->getStudent($id);
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+        $this->data['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$this->data['registration']['intRegistrationID']));
         
         $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
 
         $this->data['transactions'] = $this->data_fetcher->getTransactions($this->data['registration']['intRegistrationID'],$this->data['selected_ay']);
         //--------TUITION-------------------------------------------------------------------
         $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
-        
+        foreach($this->data['discounts'] as $discount){
+            $this->data['tuition']['total'] -= $discount['discount'];
+            $this->data['tuition']['total_installment'] -= $discount['discount'];
+        }
         $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);
         
         switch($this->data['student']['strProgramCode'])
