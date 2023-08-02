@@ -652,7 +652,7 @@ new Vue({
                         var formdata= new FormData();                                                                
                         formdata.append('id',id);
                         formdata.append('registration_id',this.registration.intRegistrationID);                                        
-                        return axios.post(base_url + 'finance/add_discount', formdata, {
+                        return axios.post(base_url + 'finance/delete_discount', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
