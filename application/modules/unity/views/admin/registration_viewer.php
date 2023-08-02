@@ -232,7 +232,7 @@
                                     <hr />
                                     <div v-if="discounts">
                                         <h4 class="box-title">Discounts</h4>
-                                        <table>
+                                        <table class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -248,8 +248,8 @@
                                                 </tr>
                                                 <form @submit.prevent="addDiscount" method="post">
                                                     <tr>
-                                                        <td><input type="text" required v-model="add_discount.name" class="form-control"></td>
-                                                        <td><input type="number" required v-model="add_discount.discount" class="form-control"></td>
+                                                        <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
+                                                        <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
                                                         <td><button class="btn btn-primary" type="submit">Add Discount</button></td>       
                                                     </tr>
                                                 </form>
