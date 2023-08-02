@@ -255,7 +255,7 @@
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan=3>Add Discount</th>                                                            
+                                                            <th colspan=4>Add Discount</th>                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>
