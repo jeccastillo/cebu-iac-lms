@@ -34,9 +34,9 @@ class Site extends CI_Controller {
 		$term = $this->data_fetcher->get_active_sem();
 		$this->data['current_term'] = $term['intID'];
 		
-        $this->load->view('common/header',$this->data);    		     
+        $this->load->view('common/header_new',$this->data);    		     
 		$this->load->view('student_application',$this->data);
-		$this->load->view('common/footer',$this->data);
+		$this->load->view('common/footer_new',$this->data);
     }
 
 	public function awesome($type = null) {
