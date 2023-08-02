@@ -404,7 +404,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
-        $reg = $this->db->get_where('tb_mas_registration',array('intID'=>$post['registration_id']));
+        $reg = $this->db->get_where('tb_mas_registration',array('intRegistrationID'=>$post['registration_id']));
         $sem = $this->data_fetcher->get_active_sem();        
         
 
