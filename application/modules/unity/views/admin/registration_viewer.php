@@ -398,7 +398,7 @@ new Vue({
         add_discount:{
             name: undefined,
             discount: undefined,            
-        }
+        },
         or_print: {
             or_number: undefined,
             description: undefined,
