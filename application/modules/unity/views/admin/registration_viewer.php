@@ -595,7 +595,7 @@ new Vue({
                     preConfirm: (login) => {                                                
                         var formdata= new FormData();                                        
                         formdata.append('name',this.add_discount.name);
-                        formdata.append('description',this.add_discount.discount);
+                        formdata.append('discount',this.add_discount.discount);
                         formdata.append('registration_id',this.registration.intRegistrationID);                                        
                         return axios.post(base_url + 'finance/add_discount', formdata, {
                             headers: {
