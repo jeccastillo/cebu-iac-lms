@@ -204,8 +204,7 @@ class Finance extends CI_Controller {
             unset($data['registration_id']);
             unset($data['student_id']);
             unset($data['total_amount']);            
-            unset($data['or_number']);
-            unset($data['or_used']);
+            unset($data['or_number']);            
             unset($data['installment']);
         }
 
@@ -221,6 +220,8 @@ class Finance extends CI_Controller {
                 $data['or_current'] += 1;
         }
 
+        unset($data['or_used']);
+        
         $this->db
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
