@@ -265,7 +265,7 @@
                                                             <td>
                                                                 <select required v-model="add_discount.type" class="form-control">
                                                                     <option value="fixed">Fixed</option>
-                                                                    <option value="percent">Percent</option>
+                                                                    <option value="percentage">Percent</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
