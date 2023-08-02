@@ -1,38 +1,18 @@
-<section id="hero" class="section section_port relative">
-    <div class="custom-container relative z-1" style="margin-top:100px">
-        <!-- parallax object? -->
-        <!-- <img src="<?php echo $img_dir; ?>home-poly/blue-poly.png" class="absolute top-0 md:right-[25%] hidden md:block"
-            alt="" data-scroll-speed="4" data-aos="zoom-in" />
+<div class="custom-container">
+    <a href="https://iacademy.edu.ph/" class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15" fill="none">
+            <path d="M7 1L1 7.5L7 14" stroke="#666666" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+        BACK
+    </a>
+</div>
 
-        <img src="<?php echo $img_dir; ?>home-poly/yellow-poly.png"
-            class="absolute top-[10%] md:left-[17%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-        <img src="<?php echo $img_dir; ?>home-poly/red-poly.png" class="absolute top-[30%] md:left-[0%] hidden md:block"
-            alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/peach-poly.png"
-            class="absolute top-[25%] md:left-[33%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/lyellow-poly.png"
-            class="absolute top-[50%] md:right-[0%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" />
-
-        <img src="<?php echo $img_dir; ?>home-poly/lblue-poly.png"
-            class="absolute top-[20%] md:right-[10%] hidden md:block" alt="" data-scroll-speed="4" data-aos="zoom-in" /> -->
-
-        <!-- parallax object end -->
-        <div class="custom-container relative h-full mb-[100px] md:mb-[10px]">
-            <div class="md:flex mt-[100px] md:mt-0 h-full items-center justify-center">
-                <div class="md:w-12/12 py-3">
-
-                    <div class=" block mx-auto mt-[60px]" data-aos="fade-up">
-                        <h1 class="text-4xl font-[900] text-center color-primary">
-                            iACADEMY Cebu
-                        </h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class=" block mx-auto mt-[60px]" data-aos="fade-up">
+    <h1 class="text-4xl font-[900] text-center color-primary">
+        iACADEMY Cebu
+    </h1>
+</div>
 
 <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
@@ -950,3 +930,12 @@ new Vue({
     },
 });
 </script>
+
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+* {
+    font-family: "Roboto", sans-serif;
+}
+</style>
