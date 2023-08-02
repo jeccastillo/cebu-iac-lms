@@ -414,7 +414,7 @@ class Finance extends CI_Controller {
         }
         else{
             $this->db->insert('tb_mas_registration_discount',$post);
-            $tuition = $this->data_fetcher->getTuition($id, $sem['intID'], $reg['enumScholarship']);
+            $tuition = $this->data_fetcher->getTuition($reg['intStudentID'], $sem['intID'], $reg['enumScholarship']);
             if($post['type'] == "fixed")
                 $amount = $post['discount'];
             else{
@@ -458,7 +458,7 @@ class Finance extends CI_Controller {
         }
         else{
             
-            $tuition = $this->data_fetcher->getTuition($id, $sem['intID'], $reg['enumScholarship']);
+            $tuition = $this->data_fetcher->getTuition($reg['intStudentID'], $sem['intID'], $reg['enumScholarship']);
             if($discount['type'] == "fixed")
                 $amount = $discount['discount'];
             else{
