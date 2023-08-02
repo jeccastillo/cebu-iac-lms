@@ -232,7 +232,7 @@
                                     <hr />
                                     <div v-if="discounts">
                                         <h4 class="box-title">Discounts</h4>
-                                        <form @submit.prevent="addDiscount" method="post">
+                                        
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -246,15 +246,20 @@
                                                         <td>{{ discount.name }}</td>
                                                         <td>{{ discount.discount }}</td>
                                                         <td><button class="btn btn-danger" @click="deleteDiscount(discount.id)">Remove</button></td>       
-                                                    </tr>                                                    
-                                                    <tr>
-                                                        <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
-                                                        <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
-                                                        <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
-                                                    </tr>                                                
-                                                </tbody>
+                                                    </tr>   
+                                                </tbody>                                                 
                                             </table>
-                                        </form>
+                                            <form @submit.prevent="addDiscount" method="post">
+                                                <table class="table table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
+                                                            <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
+                                                            <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
+                                                        </tr>                                                
+                                                    </tbody>
+                                                </table>
+                                            </form>
                                         <hr />
                                     </div>
                                     <div v-if="cashier.or_current" class="row">
