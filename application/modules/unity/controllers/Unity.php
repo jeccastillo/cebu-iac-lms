@@ -458,7 +458,7 @@ class Unity extends CI_Controller {
                 $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
                 $ret['tuition_data'] = $data['tuition'];
                 $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
-                $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intID']));
+                $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intRegistrationID']));
             }
             else
                 $data['tuition'] = "";
