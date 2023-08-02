@@ -67,7 +67,7 @@
 			else
 			{			
 				$sql = "SELECT * FROM ".$table." WHERE  REPLACE(strStudentNumber, '-', '') = ".$username;
-				$this->db->query($sql)->first_row();
+				$auth_data = $this->db->query($sql)->first_row();
 				//$auth_data = $this->db->get_where($table, array('strStudentNumber'=>$username), 1)->first_row();
 				//if($user['strCMSUserPassword'] == md5($password))
 				if(password_verify($password,$user['strPass']))
