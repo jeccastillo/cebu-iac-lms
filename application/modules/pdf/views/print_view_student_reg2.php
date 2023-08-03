@@ -221,7 +221,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:center;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
-                                <td colspan="3" style= "font-size:8; line-height:1.5; border-top:1px solid #333;"></td>                
+                                <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
                             </tr>';
 
                 if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
