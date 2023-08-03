@@ -2024,6 +2024,9 @@ class Data_fetcher extends CI_Model {
         
         if($scholarship != 0 && $scholarship != null)
             $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
+
+
+        $discount = $this->db->where('intID',$student['enumDiscount'])->get('tb_mas_scholarships')->row();
         
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
@@ -2207,19 +2210,121 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment += $other_scholarship;
             }
         }
+
+        $total_discount = 0;
+        $tuition_discount = 0;
+        $tuition_discount_installment = 0;
+        $total_discount_installment = 0;
+        $misc_discount = 0;        
+        $lab_discount = 0;
+        $lab_discount_installment = 0;
+        $other_discount = 0;
+        
+        if($discount){
+            if($discount->total_assessment_rate > 0 || $discount->total_assessment_fixed > 0){                
+                $total_assessment = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                $total_assessment_installment = ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
+                                              + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
+                                              + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+
+                if($discount->total_assessment_rate > 0){
+                    $total_discount = $total_assessment * ($discount->total_assessment_rate/100);
+                    $total_discount_installment = $total_assessment_installment * ($discount->total_assessment_rate/100);
+                }
+                elseif($discount->total_assessment_fixed > 0){
+                    if($discount->total_assessment_fixed > $total_assessment){
+                        $total_discount = $total_assessment;
+                        $total_discount_installment = $total_assessment_installment;
+                    }
+                    else{
+                        $total_discount = $discount->total_assessment_fixed;
+                        $total_discount_installment = $discount->total_assessment_fixed;
+                    }
+                }
+            }
+            else{
+                if($discount->tuition_fee_rate > 0){
+                    $tuition_discount_installment = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($discount->tuition_fee_rate/100);
+                    $tuition_discount = $tuition * ($discount->tuition_fee_rate/100);
+
+                }
+                elseif($discount->tuition_fee_fixed > 0){
+                    if($discount->tuition_fee_fixed > $tuition)
+                        $tuition_discount = $tuition;
+                    else
+                        $tuition_discount = $discount->tuition_fee_fixed;                                            
+
+                    $tuition_discount_installment = $tuition_discount;
+                }
+
+                $total_discount += $tuition_discount;
+                $total_discount_installment += $tuition_discount_installment;
+
+                if($discount->misc_fee_rate > 0){
+                    $misc_discount = $total_misc * ($discount->misc_fee_rate/100);
+                }
+                elseif($discount->misc_fee_fixed > 0){
+                    if($discount->misc_fee_fixed > $total_misc)
+                        $misc_discount = $total_misc;
+                    else
+                        $misc_discount = $discount->misc_fee_fixed;                    
+                }
+
+                $total_discount_installment += $misc_discount;
+                $total_discount += $misc_discount;
+
+                if($discount->lab_fee_rate > 0){
+                    $lab_discount_installment = ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($discount->lab_fee_rate/100);
+                    $lab_discount = $total_lab * ($discount->lab_fee_rate/100);
+                }
+                elseif($discount->lab_fee_fixed > 0){
+                    if($discount->lab_fee_fixed > $total_lab)
+                        $lab_discount = $total_lab;
+                    else
+                        $lab_discount = $discount->lab_fee_fixed;
+
+                    $lab_discount_installment = $lab_discount;
+                }
+
+                $total_discount_installment += $lab_discount_installment;
+                $total_discount += $lab_discount;
+
+                if($discount->other_fees_rate > 0){
+                    $total_other = $total_foreign + $total_new_student;
+                    $other_discount = $total_other * ($discount->other_fees_rate/100);
+                }
+                elseif($discount->other_fees_fixed > 0){
+                    if($discount->other_fees_fixed > $total_lab)
+                        $other_discount = $total_other;
+                    else
+                        $other_discount = $discount->other_fees_fixed;
+                }
+
+                $total_discount += $other_discount;
+                $total_discount_installment += $other_discount;
+            }
+        }
+
+        
+
+        
     
         $data['lab_discount'] = $lab_scholarship;
+        $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $total_scholarship;
+        $data['total_discount_dc'] = $total_discount;
         $data['lab_before_discount'] = $total_lab;
-        $data['lab'] = $total_lab - $lab_scholarship;
+        $data['lab'] = $total_lab - $lab_scholarship - $total_discount;
         $data['lab_installment_before_discount'] = $data['lab'] + $data['lab'] * ($tuition_year['installmentIncrease']/100);
-        $data['lab_installment'] = $data['lab_installment_before_discount'] - $lab_scholarship;
+        $data['lab_installment'] = $data['lab_installment_before_discount'] - $lab_scholarship - $lab_discount;
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
+        $data['tuition_discount_dc'] = $tuition_discount; 
         $data['tuition'] = $tuition;
         $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc_discount'] = $misc_scholarship;
+        $data['misc_discount_dc'] = $misc_discount;
         $data['misc'] = $total_misc;                
         $data['misc_list'] = $misc_list;
         $data['is_foreign'] = $is_foreign;
@@ -2233,18 +2338,19 @@ class Data_fetcher extends CI_Model {
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
         $data['other_discount'] = $other_scholarship;        
+        $data['other_discount_dc'] = $other_discount;
         $data['total_other_before_discount'] = $data['new_student'] + $data['total_foreign'];                
         $data['total_before_deductions'] = $data['tuition'] + $data['lab'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee;
         $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
-        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship;
+        $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship - $other_discount;
         $data['misc_before_discount'] = $total_misc;  
-        $data['misc'] = $total_misc - $misc_scholarship;  
+        $data['misc'] = $total_misc - $misc_scholarship - $misc_discount;  
         $data['tuition_before_discount'] =  $tuition; 
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
         $data['tuition'] = $tuition - $tuition_scholarship;
-        $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship;
+        $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship - $tuition_discount;
         $data['scholarship'] = $scholar;
         $data['total'] = $data['total_before_deductions'] - $total_scholarship;                        
         $data['scholarship_deductions'] = $total_scholarship;
@@ -2284,9 +2390,8 @@ class Data_fetcher extends CI_Model {
         
         
         
-        $data['discounted_price'] = $discounted_price;
-
-        $data['scholarship_discount'] = $scholarship_discount;
+        // $data['discounted_price'] = $discounted_price;
+        // $data['scholarship_discount'] = $scholarship_discount;
         
         return $data;
 
