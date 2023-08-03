@@ -42,6 +42,15 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="enumScholarship">Discount: </label>
+                            <select class="form-control" name="enumDiscount">
+                                <option value="0">None</option>
+                                <?php foreach($discounts as $discount): ?>                                
+                                <option <?php echo ($student['enumDiscount'] == $discount['intID'])?'selected':''; ?> value="<?php echo $discount['intID']; ?>"><?php echo $discount['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-12">
