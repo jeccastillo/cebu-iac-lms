@@ -389,8 +389,8 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
-                        this.scholarship = data.data.scholarship;
-                        this.discount = data.data.discount;
+                        this.scholarship = data.data.scholarship?data.data.scholarship:{name:'none'};
+                        this.discount = data.data.discount?data.data.discount:{name:'none'};
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
