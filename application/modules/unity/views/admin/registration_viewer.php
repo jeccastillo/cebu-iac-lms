@@ -445,7 +445,7 @@ new Vue({
                     if(data.data.success){      
                         this.or_update.sy_reference = this.sem;                                                                                      
                         this.registration = data.data.registration;   
-                        this.user_level = data.data.user_logged;
+                        this.user_level = data.data.user_level;
                         
                         if(this.registration){         
                             this.registration_status = data.data.registration.intROG;                            
