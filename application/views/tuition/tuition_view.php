@@ -38,14 +38,22 @@
         </div>
         <?php endforeach; ?>
         
-        <?php if($tuition['misc_discount'] > 0): ?>            
+        <?php if($tuition['misc_discount'] > 0 || $tuition['misc_discount_dc'] > 0): ?>            
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Total Miscellaneous before Discount:</div>
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['misc_before_discount'], 2, '.' ,','); ?></div>
             </div>
+        <?php endif; ?>
+        <?php if($tuition['misc_discount'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['misc_discount'], 2, '.' ,','); ?></div>
+            </div>
+        <?php endif; ?>
+        <?php if($tuition['misc_discount_dc'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Discount:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['misc_discount_dc'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
         <div class="row">
