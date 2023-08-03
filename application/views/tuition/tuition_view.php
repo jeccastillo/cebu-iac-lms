@@ -3,7 +3,7 @@
         <h4 class="box-title">ASSESSMENT OF FEES</h4>
     </div>
     <div class="box-body">
-        <?php if($tuition['tuition_discount'] > 0): ?>
+        <?php if($tuition['tuition_discount'] > 0 || $tuition['tuition_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Tuition Before Discount:</div>            
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,','); ?></div>        
