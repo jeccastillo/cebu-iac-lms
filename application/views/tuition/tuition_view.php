@@ -11,7 +11,7 @@
         <?php endif; ?>
         <?php if($tuition['tuition_discount'] > 0): ?>            
             <div class="row">
-                <div class="col-sm-6">Discount:</div>            
+                <div class="col-sm-6">Scholarship:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['tuition_discount'], 2, '.' ,','); ?></div>
             </div>                    
         <?php endif; ?>
@@ -46,7 +46,7 @@
         <?php endif; ?>
         <?php if($tuition['misc_discount'] > 0): ?>
             <div class="row">
-                <div class="col-sm-6" style="text-align:right;">Discount:</div>            
+                <div class="col-sm-6" style="text-align:right;">Scholarship:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['misc_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
@@ -80,14 +80,22 @@
                 <div class="col-sm-6"><?php echo number_format($val, 2, '.' ,','); ?></div>
             </div>
         <?php endforeach; ?>        
-        <?php if($tuition['lab_discount'] > 0): ?>
+        <?php if($tuition['lab_discount'] > 0 || $tuition['lab_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Lab Fee before discount:</div>
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['lab_before_discount'], 2, '.' ,','); ?></div>
             </div>
+        <?php endif; ?>
+        <?php if($tuition['lab_discount'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">Scholarship:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['lab_discount'], 2, '.' ,','); ?></div>
+            </div>
+        <?php endif; ?>
+        <?php if($tuition['lab_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6" style="text-align:right;">Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['lab_discount'], 2, '.' ,','); ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['lab_discount_dc'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
         <div class="row">
@@ -168,14 +176,22 @@
             </div>            
         <?php endif; ?>     
             <hr />            
-            <?php if($tuition['other_discount'] > 0): ?>
+            <?php if($tuition['other_discount'] > 0 || $tuition['other_discount_dc'] > 0): ?>
                 <div class="row">
                     <div class="col-sm-6">Total Other Fees before discount:</div>
                     <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_other_before_discount'], 2, '.' ,','); ?></div>
                 </div>
+            <?php endif; ?>
+            <?php if($tuition['other_discount'] > 0): ?>
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:right;">Scholarship:</div>            
+                    <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['other_discount'], 2, '.' ,','); ?></div>
+                </div>
+            <?php endif; ?>
+            <?php if($tuition['other_discount_dc'] > 0): ?>
                 <div class="row">
                     <div class="col-sm-6" style="text-align:right;">Discount:</div>            
-                    <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['other_discount'], 2, '.' ,','); ?></div>
+                    <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['other_discount_dc'], 2, '.' ,','); ?></div>
                 </div>
             <?php endif; ?>
             <div class="row">
