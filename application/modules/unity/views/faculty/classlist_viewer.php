@@ -85,6 +85,7 @@
                                     <?php if($classlist['is_numerical']): ?>
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td>
+                                            <?php print_r($active_midterm_grading); ?>
                                             <select <?php echo (($classlist['intFinalized'] >= 1 || ($active_midterm_grading['midterm_start'] <= date("Y-m-d") && $active_midterm_grading['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
                                                 <?php foreach($grading_items as $grading_item): ?>
                                                     <option <?php echo $student['floatMidtermGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value']; ?>"><?php echo $grading_item['value']; ?></option>
