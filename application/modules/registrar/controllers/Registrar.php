@@ -612,6 +612,15 @@ class Registrar extends CI_Controller {
                 $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
             }
 
+            if($post['discount_deductions'] > 0){
+                $ledger['student_id'] = $post['studentID'];
+                $ledger['name'] = "discount deduction";
+                $ledger['amount'] = -1 * $post['discount_deductions'];                
+                $ledger['date'] = date("Y-m-d H:i:s");
+                $ledger['syid'] = $data['ayid'];
+                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+            }
+
             if($post['discount'] > 0){
                 $ledger['student_id'] = $post['studentID'];
                 $ledger['name'] = "scholarship deduction";
