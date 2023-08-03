@@ -26,7 +26,7 @@
                         <i class="fa fa-book"></i>Student Fee Asssessment
                     </a>  
                     <a v-if="user_level == 2 || user_level == 7" class="btn btn-app" :href="base_url + 'student/edit_student_scholarship/' + student.intID">
-                        <i class="fa fa-book"></i>Scholarship
+                        <i class="fa fa-book"></i>Scholarship/Discount
                     </a>                                       
                 </small>
                 
