@@ -420,9 +420,9 @@ class Finance extends CI_Controller {
             else{
                 $down = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$sem['intID']))->first_row();
                 if($down)
-                    $amount =  -1 * ($tuition['total_installment'] * ($post['discount']/100));
+                    $amount =  ($tuition['total_installment'] * ($post['discount']/100));
                 else
-                    $amount = -1 * ($tuition['total'] * ($post['discount']/100));
+                    $amount = ($tuition['total'] * ($post['discount']/100));
             }
 
             $ledger['student_id'] = $reg['intStudentID'];
