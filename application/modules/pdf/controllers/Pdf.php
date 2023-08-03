@@ -432,22 +432,29 @@ class Pdf extends CI_Controller {
         $tuition = $this->data['tuition'];
         //$total = $data['total'];
         
-        $this->data['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$this->data['registration']['intRegistrationID']))->result_array();
+        $discounts = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$this->data['registration']['intRegistrationID']))->result_array();
         
         
         //--------TUITION-------------------------------------------------------------------
         $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
-        foreach($this->data['discounts'] as $discount){
+        $disc_ret = [];
+        foreach($discounts as $discount){
             if($discount['type'] == "fixed"){
                 $this->data['tuition']['total'] -= $discount['discount'];
-                $this->data['tuition']['total_installment'] -= $discount['discount'];
+                $this->data['tuition']['total_installment'] -= $discount['discount'];                
+                $discount['discount_full'] = $discount['discount'];
+                $discount['discount_inst'] = $discount['discount'];
             }
             else{
                 $this->data['tuition']['total'] = $this->data['tuition']['total'] - ($this->data['tuition']['total'] * ($discount['discount']/100));
                 $this->data['tuition']['total_installment'] = $this->data['tuition']['total_installment'] - ($this->data['tuition']['total_installment'] * ($discount['discount']/100));
+                $discount['discount_full'] =  $this->data['tuition']['total'] * ($discount['discount']/100);
+                $discount['discount_inst'] =  $this->data['tuition']['total_installment'] * ($discount['discount']/100);
             }
+            $disc_ret[] = $discount;
+            
         }
-
+        $this->data['discounts'] = $disc_ret;
 
         switch($this->data['student']['strProgramCode'])
         {

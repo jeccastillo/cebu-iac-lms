@@ -238,8 +238,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             $html .='
                                 <tr>
                                     <td>'.$discount['name'].'</td>
-                                    <td style="text-align:center;">'.number_format($discount['discount'], 2, '.' ,',').'</td>
-                                    <td style="text-align:center;">'.number_format($discount['discount'], 2, '.' ,',').'</td>
+                                    <td style="text-align:center;">'.number_format($discount['discount_full'], 2, '.' ,',').'</td>
+                                    <td style="text-align:center;">'.number_format($discount['discount_inst'], 2, '.' ,',').'</td>
                                 </tr>';
                         endforeach;
                     endif;
