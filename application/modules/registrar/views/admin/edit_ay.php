@@ -53,28 +53,20 @@
                             <option <?php echo $item['enumStatus']=='active'?'selected':''; ?> value="active">Active</option>
                          </select>
                     </div>                                                  
-                    <input type="hidden" name="enumGradingPeriod" value="inactive" class="form-control">                                                
+                    <input type="hidden" name="enumGradingPeriod" value="inactive" class="form-control">                                                                    
+                    <input type="hidden" name="enumMGradingPeriod" value="inactive" class="form-control">
+                    <input type="hidden" name="enumFGradingPeriod" value="inactive" class="form-control">
                     <div class="form-group col-xs-12 col-lg-4">
                         <label for="pay_student_visa">Pay Student Visa this term?</label>
                         <select name="pay_student_visa" class="form-control">
                             <option <?php echo $item['pay_student_visa']=='0'?'selected':''; ?>  value="0">No</option>
                             <option <?php echo $item['pay_student_visa']=='1'?'selected':''; ?> value="1">Yes</option>
                          </select>
-                    </div>
+                    </div>     
                     <div class="form-group col-xs-12 col-lg-4">
-                        <label for="enumFinalized">Midterm Grading Period</label>
-                        <select name="enumMGradingPeriod" class="form-control">
-                            <option <?php echo $item['enumMGradingPeriod']=='inactive'?'selected':''; ?>  value="inactive">Inactive</option>
-                            <option <?php echo $item['enumMGradingPeriod']=='active'?'selected':''; ?> value="active">Active</option>
-                         </select>
-                    </div>
-                    <div class="form-group col-xs-12 col-lg-4">
-                        <label for="enumFinalized">Final Term Grading Period</label>
-                        <select name="enumFGradingPeriod" class="form-control">
-                            <option <?php echo $item['enumFGradingPeriod']=='inactive'?'selected':''; ?>  value="inactive">Inactive</option>
-                            <option <?php echo $item['enumFGradingPeriod']=='active'?'selected':''; ?> value="active">Active</option>
-                         </select>
-                    </div>
+                        <label for="midterm_start">Start of Midterm Grading</label>
+                        <input type="date" name="midterm_start" class="form-control" />                         
+                    </div>                                        
                     <div class="form-group col-xs-12 col-lg-4">
                         <label for="enumFinalized">Finalized</label>
                         <select name="enumFinalized" class="form-control">
