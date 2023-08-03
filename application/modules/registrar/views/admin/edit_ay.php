@@ -65,7 +65,19 @@
                     </div>     
                     <div class="form-group col-xs-12 col-lg-4">
                         <label for="midterm_start">Start of Midterm Grading</label>
-                        <input type="date" name="midterm_start" class="form-control" />                         
+                        <input type="date" name="midterm_start" value="<?php echo $item['midterm_start']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="midterm_end">Start of Midterm Grading</label>
+                        <input type="date" name="midterm_end" value="<?php echo $item['midterm_end']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="final_start">Start of Midterm Grading</label>
+                        <input type="date" name="final_start" value="<?php echo $item['final_start']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="final_end">Start of Midterm Grading</label>
+                        <input type="date" name="final_end" value="<?php echo $item['final_end']; ?>" class="form-control" />                         
                     </div>                                        
                     <div class="form-group col-xs-12 col-lg-4">
                         <label for="enumFinalized">Finalized</label>
