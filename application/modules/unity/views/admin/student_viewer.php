@@ -4,6 +4,7 @@
         <section class="content-header">
             <h1>
                 <small>
+                    {{ user_level }}
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
