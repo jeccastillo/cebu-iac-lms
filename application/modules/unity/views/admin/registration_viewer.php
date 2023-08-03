@@ -229,52 +229,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <hr />
-                                    <div v-if="discounts">
-                                        <h4 class="box-title">Discounts</h4>
-                                        
-                                            <table v-if="discounts.length > 0" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Discount Amount</th>
-                                                        <th>type</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="discount in discounts">
-                                                        <td>{{ discount.name }}</td>
-                                                        <td>{{ discount.discount }}</td>
-                                                        <td>{{ discount.type }}</td>
-                                                        <td><button class="btn btn-danger" @click="deleteDiscount(discount.id)">Remove</button></td>       
-                                                    </tr>   
-                                                </tbody>                                                 
-                                            </table>
-                                            <form @submit.prevent="addDiscount" method="post">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan=4>Add Discount</th>                                                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><input type="text" placeholder="Enter title" required v-model="add_discount.name" class="form-control"></td>
-                                                            <td><input type="number" placeholder="Enter amount discounted" required v-model="add_discount.discount" class="form-control"></td>
-                                                            <td>
-                                                                <select required v-model="add_discount.type" class="form-control">
-                                                                    <option value="fixed">Fixed</option>
-                                                                    <option value="percentage">Percent</option>
-                                                                </select>
-                                                            </td>
-                                                            <td><input class="btn btn-primary" value="Add Discount" type="submit" /></td>       
-                                                        </tr>                                                
-                                                    </tbody>
-                                                </table>
-                                            </form>
-                                        <hr />
-                                    </div>
+                                    <hr />                                    
                                     <div v-if="cashier.or_current" class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6" v-if="cashier">
@@ -411,13 +366,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
         student:{},    
-        cashier: undefined,
-        discounts: undefined,
-        add_discount:{
-            name: undefined,
-            discount: undefined,        
-            type: 'fixed',    
-        },
+        cashier: undefined,       
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -500,8 +449,7 @@ new Vue({
                             this.registration_status = data.data.registration.intROG;                            
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
-                            this.remaining_amount = data.data.tuition_data.total;
-                            this.discounts = data.data.discounts;
+                            this.remaining_amount = data.data.tuition_data.total;                            
                         }
 
                         this.reg_status = data.data.reg_status;                        
@@ -598,99 +546,7 @@ new Vue({
         prepUpdate: function(id,desc){
             this.or_update.id = id;
             this.or_update_description = desc;
-        },
-        addDiscount: function(){
-
-            Swal.fire({
-                title: 'Continue with the update',
-                text: "Are you sure you want to add Discount?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
-                        var formdata= new FormData();                                        
-                        formdata.append('name',this.add_discount.name);
-                        formdata.append('discount',this.add_discount.discount);
-                        formdata.append('type',this.add_discount.type);
-                        formdata.append('registration_id',this.registration.intRegistrationID);                                        
-                        return axios.post(base_url + 'finance/add_discount', formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(function(data){
-                            if(data.data.success){
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
-                            }
-                        });
-                    }
-            });
-
-        },
-        deleteDiscount: function(id){
-
-            Swal.fire({
-                title: 'Continue with the update',
-                text: "Are you sure you want to delete Discount?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
-                        var formdata= new FormData();                                                                
-                        formdata.append('id',id);
-                        formdata.append('registration_id',this.registration.intRegistrationID);                                        
-                        return axios.post(base_url + 'finance/delete_discount', formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(function(data){
-                            if(data.data.success){
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
-                            }
-                        });
-                    }
-            });
-
-        },
+        },        
         updateOR: function(){
             let url = api_url + 'finance/update_or';
             let slug = this.slug;      
