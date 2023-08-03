@@ -231,14 +231,22 @@
         </div>
         <?php endfor; ?>
         <hr />
-        <?php if($tuition['total_discount'] > 0): ?>
+        <?php if($tuition['total_discount'] > 0 || $tuition['total_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Total Installment Matriculation before discount:</div>
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['ti_before_deductions'], 2, '.' ,','); ?></div>
-            </div>    
+            </div>   
+        <?php endif; ?> 
+        <?php if($tuition['total_discount'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6">Scholarship:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
+            </div>
+        <?php endif; ?>
+        <?php if($tuition['total_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Discount:</div>            
-                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount_dc'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
         <div class="row">
