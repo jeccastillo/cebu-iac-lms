@@ -455,6 +455,7 @@ class Pdf extends CI_Controller {
             $disc_ret[] = $discount;
             
         }
+        die();
         $this->data['discounts'] = $disc_ret;
 
         switch($this->data['student']['strProgramCode'])
