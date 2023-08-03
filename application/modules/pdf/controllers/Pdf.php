@@ -437,8 +437,7 @@ class Pdf extends CI_Controller {
         
         //--------TUITION-------------------------------------------------------------------
         $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
-        $disc_ret = [];
-        print_r($discounts);
+        $disc_ret = [];        
         foreach($discounts as $discount){        
             if($discount['type'] == "fixed"){
                 $this->data['tuition']['total'] -= $discount['discount'];
@@ -453,10 +452,10 @@ class Pdf extends CI_Controller {
                 $discount['discount_inst'] =  $this->data['tuition']['total_installment'] * ($discount['discount']/100);
             }
             $disc_ret[] = $discount;
-            
+            echo $this->data['tuition']['total_installment']."<br />".$this->data['tuition']['total']."<br />";    
         }
-        // echo $this->data['tuition']['total_installment']."<br />".$this->data['tuition']['total'];
-        die();
+        
+        //die();
         $this->data['discounts'] = $disc_ret;
 
         switch($this->data['student']['strProgramCode'])
