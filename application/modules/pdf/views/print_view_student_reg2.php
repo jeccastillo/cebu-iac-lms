@@ -227,7 +227,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td style="font-weight:bold; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
                                     <td style="font-weight:bold; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                                 </tr>';
-                    
+                endif;
                   if($tuition['scholarship_deductions'] > 0):              
                     $html .='   <tr>
                                     <td>'.$tuition['scholarship']->name.'</td>
