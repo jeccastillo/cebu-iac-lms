@@ -37,6 +37,13 @@
                                     <option v-for="status in status_options" :value="status">{{ status }}</option>                        
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label>Status:</label>
+                                <select required type="text" v-model="scholarship.deduction_type" class="form-control">    
+                                    <option value="scholarship">scholarship</option>                        
+                                    <option value="discount">discount</option>                        
+                                </select>
+                            </div>
                         </div>   
                         <hr />
                         <div>
@@ -211,6 +218,7 @@ new Vue({
             name: undefined,
             description: undefined,
             status: undefined,
+            deduction_type: undefined,
             type: undefined,
             created_by_id: undefined,
             tuition_fee_rate: undefined,

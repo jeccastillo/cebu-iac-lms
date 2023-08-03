@@ -29,6 +29,7 @@
                             <th>CODE</th>                       
                             <th>Description</th>
                             <th>Type</th>
+                            <th>Deduction Type</th>
                             <th>Status</th>
                             <th>Created By</th>                            
                             <th>Actions</th>
