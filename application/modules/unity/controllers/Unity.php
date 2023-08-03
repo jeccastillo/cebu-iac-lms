@@ -1789,18 +1789,12 @@ class Unity extends CI_Controller {
 
         $active_sem = $this->data_fetcher->get_active_sem();
         
-        $active_prelim_grading = $this->data_fetcher->get_active_PrelimPeriod($clist_sy_id);
-        $active_midterm_grading = $this->data_fetcher->get_active_MidtermPeriod($clist_sy_id);
-        $active_finals_grading = $this->data_fetcher->get_active_FinalsPeriod($clist_sy_id);
         
         if($this->is_super_admin())
                 $active_sem['enumGradingPeriod'] = "active";
             
         $this->data['active_sem'] = $active_sem;
-        $this->data['active_prelim_grading'] = $active_prelim_grading;
-        $this->data['active_midterm_grading'] = $active_midterm_grading;
-        $this->data['active_finals_grading'] = $active_finals_grading;
-
+        
         if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {
             $this->data['alert'] = $this->session->flashdata('message');
