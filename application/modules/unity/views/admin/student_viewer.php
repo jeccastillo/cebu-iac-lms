@@ -5,27 +5,27 @@
             <h1>
                 <small>
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
-                    <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
-                    <a class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
-                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
+                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
+                    <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
-                    <a target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
+                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
-                    <a v-if="reg_status != 'For Subject Enlistment'" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="reg_status != 'For Subject Enlistment' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>Print Subjects
                     </a> 
-                    <a v-else class="btn btn-app" :href="base_url + 'department/load_subjects/' + student.intID">
+                    <a v-else-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'department/load_subjects/' + student.intID">
                         <i class="fa fa-book"></i>Subject Enlistment</a> 
                     </a>
-                    <a v-if="reg_status == 'For Registration'"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         
-                    <a v-if="reg_status =='For Registration'" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
+                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Student Fee Asssessment
                     </a>  
-                    <a class="btn btn-app" :href="base_url + 'student/edit_student_scholarship/' + student.intID">
+                    <a v-if="user_level == 2 || user_level == 7" class="btn btn-app" :href="base_url + 'student/edit_student_scholarship/' + student.intID">
                         <i class="fa fa-book"></i>Scholarship
                     </a>                                       
                 </small>
@@ -338,6 +338,7 @@ new Vue({
         tab: '<?php echo $tab; ?>',                          
         sem: '<?php echo $sem; ?>',
         student: {},
+        user_level: undefined,
         registration: undefined,
         applicant_data:{},
         active_sem: {},
@@ -381,6 +382,7 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
+                        this.user_level = data.data.user_logged;
                         this.registration = data.data.registration;
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
                         this.active_sem = data.data.active_sem;

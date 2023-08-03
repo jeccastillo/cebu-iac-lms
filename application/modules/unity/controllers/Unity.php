@@ -947,6 +947,8 @@ class Unity extends CI_Controller {
             $ret['other_data']['academic_standing'] = $this->data_fetcher->getAcademicStanding($ret['student']['intID'],$ret['student']['intCurriculumID']);
             $ret['other_data']['academic_standing']['year'] = switch_num($ret['other_data']['academic_standing']['year']);
             $ret['schedule'] = $sc_ret;
+
+            $ret['user_logged'] = $this->data['user']['intID'];
                        
             $totalUnits = 0;
             $totalLab = 0;
