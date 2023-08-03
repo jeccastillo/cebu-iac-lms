@@ -133,7 +133,8 @@ class Student extends CI_Controller {
             $this->data['student'] = $this->data_fetcher->getStudent($id);            
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
             $this->data['curriculum'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
-            $this->data['scholarships'] = $this->data_fetcher->fetch_table('tb_mas_scholarships');
+            $this->data['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('deduction_type'=>'scholarship'));
+            $this->data['discounts'] = $this->db->get_where('tb_mas_scholarships',array('deduction_type'=>'discount'));
             $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
             
             $this->load->view("common/header",$this->data);
