@@ -306,6 +306,7 @@ new Vue({
                     
                     formdata.append("tuition",this.total_tuition);
                     formdata.append("scholarship_deductions",this.tuition_data.scholarship_deductions);
+                    formdata.append("discount_deductions",this.tuition_data.discount_deductions);
                     formdata.append("discount",this.tuition_data.scholarship_discount);
                     formdata.append("reservation_payment_amount", this.reservation_payment_amount);
                     formdata.append("reservation_or_number", this.reservation_or_number);
