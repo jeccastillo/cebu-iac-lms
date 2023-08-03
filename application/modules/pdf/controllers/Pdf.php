@@ -446,8 +446,8 @@ class Pdf extends CI_Controller {
                 $discount['discount_inst'] = $discount['discount'];
             }
             else{
-                $this->data['tuition']['total'] = $this->data['tuition']['total'] - ($this->data['tuition']['total'] * round(($discount['discount']/100),2));
-                $this->data['tuition']['total_installment'] = $this->data['tuition']['total_installment'] - ($this->data['tuition']['total_installment'] * round(($discount['discount']/100),2));
+                $this->data['tuition']['total'] = $this->data['tuition']['total'] - ($this->data['tuition']['total'] * ($discount['discount']/100));
+                $this->data['tuition']['total_installment'] = $this->data['tuition']['total_installment'] - ($this->data['tuition']['total_installment'] * ($discount['discount']/100));
                 $discount['discount_full'] =  $this->data['tuition']['total'] * ($discount['discount']/100);
                 $discount['discount_inst'] =  $this->data['tuition']['total_installment'] * ($discount['discount']/100);
             }
