@@ -8,9 +8,17 @@
                 <div class="col-sm-6">Tuition Before Discount:</div>            
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,','); ?></div>        
             </div>        
+        <?php endif; ?>
+        <?php if($tuition['tuition_discount'] > 0): ?>            
             <div class="row">
                 <div class="col-sm-6">Discount:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['tuition_discount'], 2, '.' ,','); ?></div>
+            </div>                    
+        <?php endif; ?>
+        <?php if($tuition['tuition_discount_dc'] > 0): ?>            
+            <div class="row">
+                <div class="col-sm-6">Discount:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['tuition_discount_dc'], 2, '.' ,','); ?></div>
             </div>                    
         <?php endif; ?>
         <div class="row">
