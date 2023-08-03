@@ -230,7 +230,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 endif;
                   if($tuition['scholarship_deductions'] > 0):              
                     $html .='   <tr>
-                                    <td style="font-size:8">'.$tuition['scholarship']->name.'</td>
+                                    <td style="font-size:7px">'.$tuition['scholarship']->name.'</td>
                                     <td style="text-align:center;">'.number_format($tuition['scholarship_deductions'], 2, '.' ,',').'</td>
                                     <td style="text-align:center;">'.number_format($tuition['scholarship_deductions_installment'], 2, '.' ,',').'</td>
                                 </tr>';
@@ -238,7 +238,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     if($tuition['discount_deductions'] > 0):              
                         $html .='
                                     <tr>
-                                        <td style="font-size:8">'.$tuition['discount']->name.'</td>
+                                        <td style="font-size:7px">'.$tuition['discount']->name.'</td>
                                         <td style="text-align:center;">'.number_format($tuition['discount_deductions'], 2, '.' ,',').'</td>
                                         <td style="text-align:center;">'.number_format($tuition['scholarship_deductions_installment_dc'], 2, '.' ,',').'</td>
                                     </tr>';
