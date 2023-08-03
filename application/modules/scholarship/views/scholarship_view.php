@@ -38,7 +38,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label>Status:</label>
+                                <label>Deduction Type:</label>
                                 <select required type="text" v-model="scholarship.deduction_type" class="form-control">    
                                     <option value="scholarship">scholarship</option>                        
                                     <option value="discount">discount</option>                        
