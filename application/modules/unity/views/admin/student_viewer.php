@@ -72,7 +72,8 @@
                                     <span style="color:#900000;" v-else>N/A</span>                                
                                 </a>
                             </li>                                                
-                            <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship Type <span class="pull-right">{{ registration.scholarshipName }}</span></a></li>
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship <span class="pull-right">{{ scholarship.name }}</span></a></li>
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Discount <span class="pull-right">{{ discount.name }}</span></a></li>
                                 
                             </ul>
                         </div>
@@ -338,6 +339,12 @@ new Vue({
         tab: '<?php echo $tab; ?>',                          
         sem: '<?php echo $sem; ?>',
         student: {},
+        scholarship:{
+            name:'none'
+        },
+        discount:{
+            name:'none'
+        },
         user_level: undefined,
         registration: undefined,
         applicant_data:{},
@@ -382,6 +389,8 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
+                        this.scholarship = data.data.scholarship;
+                        this.discount = data.data.discount;
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
