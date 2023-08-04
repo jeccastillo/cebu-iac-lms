@@ -157,7 +157,7 @@
                                         </button>
                                     </td>                                    
                                 </tr>
-                                <tr v-if="application_payment">
+                                <!-- <tr v-if="application_payment">
                                     <td>{{ application_payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ application_payment.cashier_id }}</a></td>
                                     <td>{{ application_payment.description }}</td>
@@ -204,24 +204,7 @@
                                                 Print OR
                                         </button>
                                     </td>
-                                </tr>                                                                                                    
-                            </table>
-                            <hr />     
-                            <h4>All Payments</h4>
-                            <table class="table table-bordered">                                
-                                <tr>
-                                    <th>OR Number</th>
-                                    <th>Cashier</th>
-                                    <th>Payment Type</th>
-                                    <th>Check/Credit/Debit #</th>
-                                    <th>Amount Paid</th>
-                                    <th>Online Payment Charge</th>
-                                    <th>Total Due</th>
-                                    <th>Status</th>
-                                    <th>Online Response Message</th>
-                                    <th>Date Updated</th>
-                                    <th>Actions</th>
-                                </tr>                                    
+                                </tr>                                                                                                     -->                                                               
                                 <tr v-for="payment in payments">
                                     <td>{{ payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
