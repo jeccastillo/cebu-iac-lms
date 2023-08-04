@@ -145,17 +145,17 @@
                                             <td>{{ reservation_payment.status }}</td>                                            
                                             <td>{{ reservation_payment.updated_at }}</td>
                                             <td>                                                
-                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid'" data-toggle="modal"                                                
+                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
                                                         @click="prepUpdate(reservation_payment.id,reservation_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="reservation_payment.or_number"                                             
+                                                <button v-if="reservation_payment.or_number && cashier"                                             
                                                         @click="printOR(reservation_payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>
                                         <tr>
@@ -173,18 +173,18 @@
                                             <td>{{ payment.status }}</td>                                            
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
-                                                <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
+                                                <button v-if="!payment.or_number && payment.status == 'Paid' && cashier" data-toggle="modal"                                                
                                                         @click="prepUpdate(payment.id,payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="payment.or_number"                                             
+                                                <button v-if="payment.or_number && cashier"                                             
                                                         @click="printOR(payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
-                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>    
@@ -208,12 +208,12 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="payment.or_number"                                             
+                                                <button v-if="payment.or_number && cashier"                                             
                                                         @click="printOR(payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="(payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
