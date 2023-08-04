@@ -222,7 +222,7 @@
                                     <th>Date Updated</th>
                                     <th>Actions</th>
                                 </tr>                                    
-                                <tr v-for="payments as payment">
+                                <tr v-for="payment in payments">
                                     <td>{{ payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
                                     <td>{{ payment.description }}</td>
