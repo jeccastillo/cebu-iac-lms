@@ -375,7 +375,8 @@ new Vue({
         .then((data) => {
             this.student = data.data.data;
             this.request.slug = this.slug;   
-            this.payments = this.student.payments;              
+            this.payments = this.student.payments;  
+            console.log(payments);          
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
