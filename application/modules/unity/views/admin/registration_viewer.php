@@ -122,17 +122,17 @@
                                             <td>{{ application_payment.status }}</td>                                            
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>                                                
-                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid'" data-toggle="modal"                                                
+                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
                                                         @click="prepUpdate(application_payment.id,application_payment.description)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="application_payment.or_number"                                             
+                                                <button v-if="application_payment.or_number && cashier"                                             
                                                         @click="printOR(application_payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment'"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>
                                         <tr v-if="reservation_payment">
