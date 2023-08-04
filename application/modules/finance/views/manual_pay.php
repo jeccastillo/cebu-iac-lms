@@ -204,10 +204,49 @@
                                                 Print OR
                                         </button>
                                     </td>
-                                </tr>
-                                <tr>                                            
+                                </tr>                                                                                                    
                             </table>
-                            <hr />                                    
+                            <hr />     
+                            <h4>All Payments</h4>
+                            <table class="table table-bordered">                                
+                                <tr>
+                                    <th>OR Number</th>
+                                    <th>Cashier</th>
+                                    <th>Payment Type</th>
+                                    <th>Check/Credit/Debit #</th>
+                                    <th>Amount Paid</th>
+                                    <th>Online Payment Charge</th>
+                                    <th>Total Due</th>
+                                    <th>Status</th>
+                                    <th>Online Response Message</th>
+                                    <th>Date Updated</th>
+                                    <th>Actions</th>
+                                </tr>                                    
+                                <tr v-for="payments as payment">
+                                    <td>{{ payment.or_number }}</td>
+                                    <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
+                                    <td>{{ payment.description }}</td>
+                                    <td>{{ payment.check_number }}</td>
+                                    <td>{{ payment.subtotal_order }}</td>
+                                    <td>{{ payment.charges }}</td>
+                                    <td>{{ payment.total_amount_due }}</td>
+                                    <td>{{ payment.status }}</td>                                            
+                                    <td>{{ payment.response_message }}</td>
+                                    <td>{{ payment.updated_at }}</td>            
+                                    <td>
+                                        <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                                @click="or_update.id = payment.id;" 
+                                                data-target="#myModal" class="btn btn-primary">
+                                                Update OR
+                                        </button>
+                                        <button v-if="payment.or_number"                                             
+                                                @click="printOR(payment)" 
+                                                class="btn btn-primary">
+                                                Print OR
+                                        </button>
+                                    </td>                                    
+                                </tr>                                                                                                                                    
+                            </table>                               
                         </div><!---box body--->
                     </div><!---box--->                      
                 </div><!---column--->
@@ -271,7 +310,8 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
         reservation_payment: undefined,
-        application_payment: undefined,   
+        application_payment: undefined, 
+        payments: undefined,  
         uploaded_requirements: false,
         refunded_payments: [],    
         amount_to_pay: 0,
@@ -334,7 +374,8 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
         .then((data) => {
             this.student = data.data.data;
-            this.request.slug = this.slug;                 
+            this.request.slug = this.slug;   
+            this.payments = this.student.payments;              
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
             this.request.last_name = this.student.last_name;    
