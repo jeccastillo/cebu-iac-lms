@@ -230,7 +230,7 @@
                                         </tr>
                                     </table>
                                     <hr />                                    
-                                    <div v-if="cashier.or_current" class="row">
+                                    <div v-if="cashier && cashier.or_current" class="row">
                                         <div v-html="tuition" class="col-sm-6"></div>   
                                         <div class="col-sm-6" v-if="cashier">
                                             <h3>Cashier {{ cashier.intID }}</h3>
