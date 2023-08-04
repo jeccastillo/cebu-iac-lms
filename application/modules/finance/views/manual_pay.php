@@ -311,7 +311,7 @@ new Vue({
         applicant_id: undefined,
         reservation_payment: undefined,
         application_payment: undefined, 
-        payments: {},  
+        payments: [],  
         uploaded_requirements: false,
         refunded_payments: [],    
         amount_to_pay: 0,
