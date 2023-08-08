@@ -70,9 +70,11 @@
                         <?php endforeach; ?>
                         </select>
                     </div>
-                </div>
-                <hr />
-                <input type="submit" value="add subjects" class="btn btn-default btn-flat">
+                    <div class="col-md-6">
+                        <input type="submit" value="add subjects >>" class="btn btn-default btn-flat btn-lg">
+                    </div>
+                </div>                
+                
             </div>
         </form>                   
     </div>
