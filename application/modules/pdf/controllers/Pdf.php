@@ -1448,7 +1448,7 @@ class Pdf extends CI_Controller {
             }
 
             $this->data['snum'] = 1;
-            $html = $this->load->view('classlist_view',$this->data,true);
+            $html = $this->load->view('classlist_view_grades',$this->data,true);
 
 
 
@@ -1467,11 +1467,7 @@ class Pdf extends CI_Controller {
             
         
         
-            $this->data['students'] = $st;            
-            
-            $pdf->AddPage();
-            $html = $this->load->view('classlist_view_back',$this->data,true);
-            $pdf->writeHTML($html, true, false, true, false, '');
+            $this->data['students'] = $st;                                    
 
         
         $pdf->Output("classlist.pdf", 'I');
