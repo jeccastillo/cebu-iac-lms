@@ -122,9 +122,9 @@
                 'success':function(ret){
                     $(".loading-img").hide();
                     $(".overlay").hide();
-                    // $("#eq-"+csid).html(''+ret.eq);
-                    // $("#eq2-"+csid).html(''+ret.eq_raw); 
-					//  $("#rem-"+csid).html(''+ret.remarks);
+                    $("#eq-"+csid).html(''+ret.eq);
+                    $("#eq2-"+csid).html(''+ret.eq_raw);
+					 $("#rem-"+csid).html(''+remarks);
                 }
             });
         
@@ -180,7 +180,7 @@
                     $(".overlay").hide();
                     $("#eq-"+csid).html(''+ret.eq);
                     $("#eq2-"+csid).html(''+ret.eq_raw);
-					 $("#rem-"+csid).html(''+ret.remarks);
+					 $("#rem-"+csid).html(''+remarks);
                 }
             });
         

@@ -2022,7 +2022,7 @@ class Unity extends CI_Controller {
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
-            $data['message'] = "success";
+            $data['message'] = "success";            
         }
         else{
             $data['message'] = "failed";
