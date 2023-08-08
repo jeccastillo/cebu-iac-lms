@@ -109,6 +109,7 @@
                     <input type="date" id="date" name="date" class="form-control" required />                        
                 </div>                                       
                 <div class="form-group col-md-4">
+                    <label for="submit">&nbsp;</label>
                     <input type="submit" value="add" class="btn btn-default  btn-flat">
                 </div>
             <div style="clear:both"></div>
