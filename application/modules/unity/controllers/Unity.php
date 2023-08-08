@@ -2016,10 +2016,7 @@ class Unity extends CI_Controller {
                 $data['eq'] = $post['floatFinalGrade'];                                                            
             elseif($term == 2)
                 $data['eq'] = $post['floatMidtermGrade'];                                
-            
-
-            $data['remarks'] = '--';            
-            $post['strRemarks'] = $data['remarks'];
+                                    
            
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);

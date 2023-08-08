@@ -109,9 +109,11 @@
              $(".loading-img").show();
             $(".overlay").show();
             var csid = $(this).attr('rel');                    
-            var points = $(this).val();
+            var values = $(this).val().split("-");                  
+            var remarks = values[1];
+            var points = values[0];
             var parent = $(this).parent();
-            var data = {'intCSID':csid,'floatFinalGrade': points};
+            var data = {'intCSID':csid,'floatFinalGrade': points,'strRemarks':remarks};
             $.ajax({
                 'url':'<?php echo base_url(); ?>unity/update_grade/3',
                 'method':'post',
@@ -162,10 +164,12 @@
         $(".midtermInput").blur(function(){
             $(".loading-img").show();
             $(".overlay").show();
-            var csid = $(this).attr('rel');                    
-            var points = $(this).val();
+            var csid = $(this).attr('rel');  
+            var values = $(this).val().split("-");                  
+            var remarks = values[1];
+            var points = values[0];
             var parent = $(this).parent();
-            var data = {'intCSID':csid,'floatMidtermGrade':points};
+            var data = {'intCSID':csid,'floatMidtermGrade':points, 'strRemarks':remarks};
             $.ajax({
                 'url':'<?php echo base_url(); ?>unity/update_grade/2',
                 'method':'post',
