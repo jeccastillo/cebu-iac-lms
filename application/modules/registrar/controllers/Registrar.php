@@ -146,6 +146,20 @@ class Registrar extends CI_Controller {
         $this->data_poster->post_data('tb_mas_sy_grading_extension',$data);
         redirect(base_url()."registrar/edit_ay/".$post['id']);  
     }
+
+    public function delete_extension(){
+        $post = $this->input->post();
+        $this->db->where('id'=>$post['id'])
+                 ->delete('tb_mas_sy_grading_extension');
+
+        $this->db->where('grading_extension_id'=>$post['id'])
+                 ->delete('tb_mas_sy_grading_extension_faculty');
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
     
     public function edit_ay($id)
     {
