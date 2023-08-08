@@ -1484,7 +1484,7 @@ class Pdf extends CI_Controller {
             $html = $this->load->view('classlist_view_back',$this->data,true);
             $pdf->writeHTML($html, true, false, true, false, '');
 
-        }
+        
         $pdf->Output("classlist.pdf", 'I');
     
     }
