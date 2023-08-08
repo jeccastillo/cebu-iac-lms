@@ -149,10 +149,10 @@ class Registrar extends CI_Controller {
 
     public function delete_extension(){
         $post = $this->input->post();
-        $this->db->where('id'=>$post['id'])
+        $this->db->where('id',$post['id'])
                  ->delete('tb_mas_sy_grading_extension');
 
-        $this->db->where('grading_extension_id'=>$post['id'])
+        $this->db->where('grading_extension_id',$post['id'])
                  ->delete('tb_mas_sy_grading_extension_faculty');
 
         $data['message'] = "Deleted";
