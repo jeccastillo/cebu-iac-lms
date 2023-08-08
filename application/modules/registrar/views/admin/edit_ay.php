@@ -94,10 +94,10 @@
     <div class="box box-primary">
         <div class="box-header">
                 <h3 class="box-title">Add Grading Extension</h3>
-        </div>                   
+        </div>                           
         <form action="<?php echo base_url(); ?>registrar/submit_extension" method="post" role="form">
             <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                
-            <div>
+            <div class="box-body">
                 <div class="form-group col-md-4">
                     <label for="type">Period</label>
                 </div>
@@ -106,9 +106,7 @@
                 </div>
                 <div class="form-group col-md-4">                        
                 </div>
-                <div style="clear:both"></div>
-            </div>   
-            <div>
+                <div style="clear:both"></div>            
                 <div class="form-group col-md-4">                    
                     <select required name="type" class="form-control">
                         <option value="midterm">Midterm</option>
@@ -123,8 +121,7 @@
                     <input type="submit" value="add" class="btn btn-default  btn-flat">
                 </div>
                 <div style="clear:both"></div>
-            </div>
-            
+            </div>            
         </form>    
     </div>
 </aside>
