@@ -53,10 +53,10 @@
         <td></td>
     </tr>  
 </table>
-<table>
+<table border='1'>
     <tr style="line-height:12px;text-align:center;">                        
         <th style="font-size:9px;" rowspan=2 width="15%"><b>Student No.</b></th>
-        <th style="font-size:9px;" rowspan=2 width="40%"><b>Student Name</b></th>
+        <th style="font-size:9px;" rowspan=2 width="40%"><b>Name</b></th>
         <th style="font-size:9px;" rowspan=2 width="15%"><b>Course</b></th>
         <th style="font-size:9px;" width="10%"><b>Grade</b></th>
         <th style="font-size:9px;" rowspan=2 width="20%"><b>Remarks</b></th>            
