@@ -61,12 +61,17 @@
                     </tbody>
                 </table>                                
                 <hr />
-                <label for="subjects">Select Subjects to Add</label>
-                <select name="subjects" multiple class="form-control">                    
-                <?php foreach($subjects_not_selected as $item): ?>
-                    <option value="<?php echo $item['intID']; ?>"><?php echo $item['strCode']; ?></option>
-                <?php endforeach; ?>
-                </select>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="subjects">Select Subjects to Add</label>
+                        <select name="subjects" multiple class="form-control" style="height: 300px;">                    
+                        <?php foreach($subjects_not_selected as $item): ?>
+                            <option value="<?php echo $item['intID']; ?>"><?php echo $item['strCode']; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <hr />
                 <input type="submit" value="add subjects" class="btn btn-default btn-flat">
             </div>
         </form>                   
