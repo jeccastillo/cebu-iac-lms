@@ -53,7 +53,7 @@
         <td></td>
     </tr>  
 </table>
-<table border='1'>
+<table>
     <tr style="line-height:12px;text-align:center;">                        
         <th style="font-size:9px;" rowspan=2 width="15%"><b>Student No.</b></th>
         <th style="font-size:9px;" rowspan=2 width="40%"><b>Name</b></th>
