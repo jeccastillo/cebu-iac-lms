@@ -2010,7 +2010,7 @@ class Unity extends CI_Controller {
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
-        if($this->is_super_admin() || $this->is_admin() || $active_sem['enumGradingPeriod'] == "active"){                
+        if($this->is_super_admin() || $this->is_admin()){                
            
             if($term == 3)
                 $data['eq'] = $post['floatFinalGrade'];                                                            
