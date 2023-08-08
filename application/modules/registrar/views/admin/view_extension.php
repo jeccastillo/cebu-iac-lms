@@ -12,10 +12,17 @@
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">View Grading Extension</h3>
+            <h3 class="box-title">View Grading Extension</h3>
         </div>
         <div class="box-body">
-                        
+            <div class="row">   
+                <div class="col-md-6">
+                    Period: <?php echo $item['type']; ?>
+                </div>
+                <div class="col-md-6">
+                    End of Extension: <?php echo date("M j, Y".strtotime($item['date'])); ?> ?>
+                </div>
+            </div>            
        
         </div>
 </aside>
