@@ -100,6 +100,21 @@ class Grading extends CI_Controller {
                 
         
     }
+
+    public function add_selected(){
+        $post = $this->input->post();
+
+        foreach($post['subject'] as $subject){
+            $data = array(
+                "grading_system_id"=>$post['id'],                
+            );
+
+            $this->data_poster->post_data('tb_mas_subjects',$data,$subject);
+
+        }
+
+        redirect(base_url()."grading/edit_grading/".$post['id']);
+    }
     
     public function submit_grading()
     {
