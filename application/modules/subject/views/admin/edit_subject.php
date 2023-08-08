@@ -67,10 +67,10 @@
                                 </select>
                             </div>
                             <div class="form-group col-xs-6">
-                                <label for="is_numerical">Numerical Rating?</label>
-                                <select class="form-control" name="is_numerical" id="is_numerical" >
-                                    <option <?php echo ($subject['is_numerical'] == 0)?'selected':''; ?> value="0">No</option>
-                                    <option <?php echo ($subject['is_numerical'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                <label for="grading_system_id">Numerical Rating?</label>
+                                <select class="form-control" name="grading_system_id" id="grading_system_id" >
+                                    <option <?php echo ($subject['grading_system_id'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['grading_system_id'] == 1)?'selected':''; ?> value="1">Yes</option>
                                 </select>
                             </div> 
                             <div class="form-group col-xs-6">
