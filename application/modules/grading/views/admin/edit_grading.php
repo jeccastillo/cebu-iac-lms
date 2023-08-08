@@ -22,7 +22,10 @@
                         <div class="col-sm-4">
                             <input type="text" class="form-control" disabled value="<?php echo $item['value']; ?>" />
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" disabled value="<?php echo $item['remarks']; ?>" />
+                        </div>
+                        <div class="col-sm-4">
                             <button class="btn btn-danger delete-grade-item"  data-val="<?php echo $item['id'] ?>">Remove</button>
                         </div>
                     </div>

@@ -122,10 +122,11 @@ class Grading extends CI_Controller {
             $post = $this->input->post();
             if(isset($post['id'])){
                 //print_r($post);
-                foreach($post['item'] as $i){
+                for($i == 0; $i < count($post['item']); $i++){
                     $data = array(
                         "grading_id"=>$post['id'],
-                        "value"=> $i
+                        "value"=> $post['item'][$i],
+                        "remarks"=> $post['remarks'][$i],
                     );
 
                     $this->data_poster->post_data('tb_mas_grading_item',$data);
