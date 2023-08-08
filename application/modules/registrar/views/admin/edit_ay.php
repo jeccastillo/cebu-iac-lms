@@ -134,7 +134,7 @@
                         <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
                         <td></td>
                     </tr>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </table> 
             </div>            
         </form>    
