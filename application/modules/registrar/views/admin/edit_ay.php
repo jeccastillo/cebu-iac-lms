@@ -90,9 +90,10 @@
             <div style="clear:both"></div>
         </form>    
     </div>
+    <hr />
     <div class="box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Academic Year</h3>
+                <h3 class="box-title">Add Grading Extension</h3>
         </div>                   
         <form action="<?php echo base_url(); ?>registrar/submit_extension" method="post" role="form">
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                
