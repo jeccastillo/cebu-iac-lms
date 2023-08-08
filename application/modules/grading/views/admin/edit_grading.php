@@ -65,7 +65,7 @@
                 <hr />
                 <div class="row">
                     <div class="col-md-6">                        
-                        <select name="subjects" multiple class="form-control" style="height: 300px;">                    
+                        <select name="subjects[]" multiple class="form-control" style="height: 300px;">                    
                         <?php foreach($subjects_not_selected as $item): ?>
                             <option value="<?php echo $item['intID']; ?>"><?php echo $item['strCode']; ?></option>
                         <?php endforeach; ?>

@@ -103,8 +103,7 @@ class Grading extends CI_Controller {
 
     public function add_selected(){
         $post = $this->input->post();
-
-        print_r($post['subjects']);
+        
         foreach($post['subjects'] as $subject){
             $data = array(
                 "grading_system_id"=>$post['id'],                
@@ -114,7 +113,7 @@ class Grading extends CI_Controller {
 
         }
 
-        //redirect(base_url()."grading/edit_grading/".$post['id']);
+        redirect(base_url()."grading/edit_grading/".$post['id']);
     }
     
     public function submit_grading()
