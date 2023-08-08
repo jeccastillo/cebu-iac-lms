@@ -142,7 +142,7 @@ class Registrar extends CI_Controller {
             $this->data['item'] = $this->db->get_where('tb_mas_sy_grading_extension',array('id'=>$id))
                                            ->first_row('array');
 
-            $faculty = $this->db->get_where('tb_mas_faculty',array('teaching'=>1))->result_aray();                                           
+            $faculty = $this->db->get_where('tb_mas_faculty',array('teaching'=>1))->result_array();                                           
             $ret_fac = [];
             $ret_fac_selected = [];
             foreach($faculty as $fac){
