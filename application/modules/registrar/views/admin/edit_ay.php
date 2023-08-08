@@ -102,7 +102,7 @@
                     <label for="type">Period</label>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="date">Date</label>
+                    <label for="date">End Extension</label>
                 </div>
                 <div class="form-group col-md-4">                        
                 </div>
@@ -121,6 +121,21 @@
                     <input type="submit" value="add" class="btn btn-default  btn-flat">
                 </div>
                 <div style="clear:both"></div>
+                <hr />
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Period</th>
+                        <th>End Extension</th>
+                        <th>Actions</th>
+                    </tr>
+                    <?php foreach($midterm_extensions as $item): ?>
+                    <tr>
+                        <td><?php echo $item['type']; ?></td>
+                        <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
+                        <td></td>
+                    </tr>
+                    <?php endif; ?>
+                </table> 
             </div>            
         </form>    
     </div>
