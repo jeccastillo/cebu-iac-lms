@@ -1467,18 +1467,7 @@ class Pdf extends CI_Controller {
             
         
         
-            $this->data['students'] = $st;
-            $this->data['passing'] = $passing;
-            $this->data['ud'] = $ud;
-            $this->data['od'] = $od;
-            $this->data['incomplete'] = $incomplete;
-            $this->data['failing'] = $failing;
-            $this->data['lineOfOne'] = $lineOfOne;
-            $this->data['lineOfTwo'] = $lifeOfTwo;
-            $this->data['lineOfThree'] = $lineOfThree;
-            $this->data['totalFailed'] = $totalFailed;
-            $this->data['totalUD'] = $totalUD;
-            $this->data['total'] = $incomplete + $lineOfOne + $lifeOfTwo + $lineOfThree + $totalFailed + $totalUD + $od;
+            $this->data['students'] = $st;            
             
             $pdf->AddPage();
             $html = $this->load->view('classlist_view_back',$this->data,true);
