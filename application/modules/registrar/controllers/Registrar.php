@@ -135,6 +135,36 @@ class Registrar extends CI_Controller {
         
        
     }
+
+    public function view_extension($id){
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $this->data['item'] = $this->db->get_where('tb_mas_sy_grading_extension',array('id'=>$id))
+                                           ->first_row('array');
+
+            $faculty = $this->db->get_where('tb_mas_faculty',array('teaching'=>1))->result_aray();                                           
+            $ret_fac = [];
+            $ret_fac_selected = [];
+            foreach($faculty as $fac){
+                $tmp = $this->db->get_where('tb_mas_sy_grading_extension',array('faculty_id'=>$fac['intID'],'grading_extension_id'=>$this->data['item']))
+                         ->first_row();
+                if($tmp)
+                    $ret_fac_selected[] = $fac;
+                else
+                    $ret_fac[] = $fac;
+            }
+
+            $this->data['selected_faculty'] = $ret_fac_selected;
+            $this->data['non_selected_faculty'] = $ret_fac;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_extension",$this->data);
+            $this->load->view("common/footer",$this->data);
+
+
+
+        }
+    }
     
     public function submit_extension(){
         $post = $this->input->post();
