@@ -104,7 +104,7 @@ class Grading extends CI_Controller {
     public function add_selected(){
         $post = $this->input->post();
 
-        foreach($post['subject'] as $subject){
+        foreach($post['subjects'] as $subject){
             $data = array(
                 "grading_system_id"=>$post['id'],                
             );
