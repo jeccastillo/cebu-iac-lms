@@ -1812,12 +1812,12 @@ class Unity extends CI_Controller {
             $cl_subj = $this->data['classlist']['intSubjectID'];
 
             //GET EXTENSIONS FOR MIDTERM AND FINAL
-            $mx = $this->db->where(array('syid'=>$id,'type'=>'midterm'))
+            $mx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'midterm'))
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
                                                  ->first_row();
             
-            $fx = $this->db->where(array('syid'=>$id,'type'=>'final'))
+            $fx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'final'))
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
                                                  ->first_row();
@@ -1829,8 +1829,7 @@ class Unity extends CI_Controller {
                 if($ext['date'] > $this->data['classlist']['midterm_end'])                                                        
                     $this->data['classlist']['midterm_end']  = $ext['date'];
             }
-
-            print_r($mx);
+            
                 
             if($fx){
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$fx['id']))
