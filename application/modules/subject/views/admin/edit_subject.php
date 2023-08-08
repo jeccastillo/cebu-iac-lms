@@ -68,9 +68,11 @@
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="grading_system_id">Select Grading System</label>
-                                <?php foreach($grading_systems as $gs): ?>
-                                    <option <?php echo ($subject['grading_system_id'] == $gs['id'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
-                                <?php endforeach; ?>
+                                <select class="form-control" name="grading_system_id" id="grading_system_id" >
+                                    <?php foreach($grading_systems as $gs): ?>
+                                        <option <?php echo ($subject['grading_system_id'] == $gs['id'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
+                                    <?php endforeach; ?>
+                                </select>
                             </div> 
                             <div class="form-group col-xs-6">
                                 <label for="include_gwa">Include in GWA?</label>
