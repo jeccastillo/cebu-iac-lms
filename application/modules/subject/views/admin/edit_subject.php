@@ -67,11 +67,10 @@
                                 </select>
                             </div>
                             <div class="form-group col-xs-6">
-                                <label for="grading_system_id">Numerical Rating?</label>
-                                <select class="form-control" name="grading_system_id" id="grading_system_id" >
-                                    <option <?php echo ($subject['grading_system_id'] == 0)?'selected':''; ?> value="0">No</option>
-                                    <option <?php echo ($subject['grading_system_id'] == 1)?'selected':''; ?> value="1">Yes</option>
-                                </select>
+                                <label for="grading_system_id">Select Grading System</label>
+                                <?php foreach($grading_systems as $gs): ?>
+                                    <option <?php echo ($subject['grading_system_id'] == $gs['id'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
+                                <?php endforeach; ?>
                             </div> 
                             <div class="form-group col-xs-6">
                                 <label for="include_gwa">Include in GWA?</label>

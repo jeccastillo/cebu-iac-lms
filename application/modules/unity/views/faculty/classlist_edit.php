@@ -34,15 +34,7 @@
                             <option <?php echo ($classlist['intSubjectID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID'] ?>"><?php echo $s['strCode']." ".$s['strDescription']; ?></option> 
                         <?php endforeach; ?>
                     </select>                                        
-                </div>
-                <label for="grading_system">Grading System</a></label>     
-                <div class=" form-group">                    
-                    <select id="grading_system" class="form-control select2" name="grading_system" >
-                        <?php foreach($grading_systems as $gs): ?>
-                            <option <?php echo ($classlist['grading_system'] == $gs['id'])?'selected':''; ?> value="<?php echo $gs['id'] ?>"><?php echo $gs['name']; ?></option> 
-                        <?php endforeach; ?>
-                    </select>                                        
-                </div>
+                </div>                
                 <div class="row">
                     <div class="form-group col-xs-6">
                         <label for="slots">Maximum Slots:</label>
