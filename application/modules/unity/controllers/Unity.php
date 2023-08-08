@@ -1826,16 +1826,16 @@ class Unity extends CI_Controller {
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$mx['id']))
                                                         ->first_row('array');            
                 
-                if($ext['date'] > $this->data['classlist']['midterm_end'])                                                        
-                    $this->data['classlist']['midterm_end']  = $ext['date'];
+                if($ext && $mx['date'] > $this->data['classlist']['midterm_end'])                                                        
+                    $this->data['classlist']['midterm_end']  = $mx['date'];
             }
             
                 
             if($fx){
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$fx['id']))
                                                         ->first_row('array');
-                if($ext['date'] > $this->data['classlist']['final_end'])                                                        
-                    $this->data['classlist']['final_end']  = $ext['date'];
+                if($ext && $fx['date'] > $this->data['classlist']['final_end'])                                                        
+                    $this->data['classlist']['final_end']  = $fx['date'];
             }
 
             
