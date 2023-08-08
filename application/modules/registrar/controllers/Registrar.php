@@ -144,7 +144,16 @@ class Registrar extends CI_Controller {
         {
           
             $this->data['item'] = $this->data_fetcher->getAy($id);
+            $this->data['midterm_extensions'] = $this->db->where(array('syid'=>$id,'type'=>'midterm'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->result_array();
             
+            $this->data['final_extensions'] = $this->db->where(array('syid'=>$id,'type'=>'final'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->result_array();
+                                                                                                  
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_ay",$this->data);
