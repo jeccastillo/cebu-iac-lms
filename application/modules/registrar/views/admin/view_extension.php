@@ -34,6 +34,7 @@
                                     <tr>
                                         <th>Last Name</th>
                                         <th>First Name</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,6 +42,7 @@
                                     <tr>
                                         <td><?php echo $item['strLastname']; ?></td>
                                         <td><?php echo $item['strFirstname']; ?></td>
+                                        <td><button rel="<?php echo $item['extnsion_faculty']; ?>" class="btn-danger btn delete-selected-faculty">Remove</btn>
                                     </tr>        
                                 <?php endforeach; ?>
                                 </tbody>

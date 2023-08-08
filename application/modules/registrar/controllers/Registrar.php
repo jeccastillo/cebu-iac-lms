@@ -148,8 +148,12 @@ class Registrar extends CI_Controller {
             foreach($faculty as $fac){
                 $tmp = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$fac['intID'],'grading_extension_id'=>$this->data['item']['id']))
                          ->first_row();
-                if($tmp)
+
+                                         
+                if($tmp){
+                    $fac['extnsion_faculty'] = $tmp['id'];
                     $ret_fac_selected[] = $fac;
+                }
                 else
                     $ret_fac[] = $fac;
             }
@@ -160,6 +164,7 @@ class Registrar extends CI_Controller {
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/view_extension",$this->data);
             $this->load->view("common/footer",$this->data);
+            $this->load->view("extension_conf",$this->data);
 
 
 
@@ -180,6 +185,17 @@ class Registrar extends CI_Controller {
         }
 
         redirect(base_url()."registrar/view_extension/".$post['id']);
+    }
+
+    public function delete_from_selected(){
+        $post = $this->input->post();
+
+        $this->db
+        ->where('id',$post['id'])
+        ->delete('tb_mas_sy_grading_extension_faculty');
+
+        $data['message'] = "deleted";
+        echo json_encode($data);
     }
     
     public function submit_extension(){

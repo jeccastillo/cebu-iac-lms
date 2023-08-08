@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    $(".delete-extension").click(function(e){
+    $(".delete-selected-faculty").click(function(e){
         e.preventDefault();        
         conf = confirm("Are you sure you want to delete?");        
         if(conf)
@@ -11,7 +11,7 @@ $(document).ready(function(){
             var id = $(this).attr('rel');                
             var data = {'id':id};
             $.ajax({
-                'url':'<?php echo base_url(); ?>index.php/registrar/delete_extension',
+                'url':'<?php echo base_url(); ?>index.php/registrar/delete_from_selected',
                 'method':'post',
                 'data':data,
                 'dataType':'json',
@@ -28,6 +28,7 @@ $(document).ready(function(){
         });
         }
         
-    });    
+    });
+    
 });
 </script>
