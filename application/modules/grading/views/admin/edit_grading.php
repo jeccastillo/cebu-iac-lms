@@ -44,34 +44,34 @@
         <form  action="<?php echo base_url(); ?>grading/add_selected" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
             <div class="box-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>CODE</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach($subjects_selected as $item): ?>
-                        <tr>
-                            <td><?php echo $item['strCode']; ?></td>
-                            <td><?php echo $item['strDescription']; ?></td>
-                        </tr>        
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>                                
-                <hr />
-                <label for="subjects">Select Subjects to Add</label>
-                <hr />
                 <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach($subjects_selected as $item): ?>
+                                <tr>
+                                    <td><?php echo $item['strCode']; ?></td>
+                                    <td><?php echo $item['strDescription']; ?></td>
+                                </tr>        
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>                                
+                    </div>
                     <div class="col-md-6">                        
+                        <label for="subjects">Select Subjects to Add</label>
+                        <hr />                                    
                         <select name="subjects[]" multiple class="form-control" style="height: 300px;">                    
                         <?php foreach($subjects_not_selected as $item): ?>
                             <option value="<?php echo $item['intID']; ?>"><?php echo $item['strCode']; ?></option>
                         <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
+                        </select>       
+                        <hr />             
                         <input type="submit" value="add subjects >>" class="btn btn-default btn-flat btn-lg">
                     </div>
                 </div>                
