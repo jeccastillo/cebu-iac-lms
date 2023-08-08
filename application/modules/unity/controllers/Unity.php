@@ -1815,12 +1815,12 @@ class Unity extends CI_Controller {
             $mx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'midterm'))
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
-                                                 ->first_row();
+                                                 ->first_row('array');
             
             $fx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'final'))
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
-                                                 ->first_row();
+                                                 ->first_row('array');
 
             if($mx){
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$mx['id']))
