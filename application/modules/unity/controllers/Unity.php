@@ -2008,9 +2008,10 @@ class Unity extends CI_Controller {
          $active_sem = $this->data_fetcher->get_active_sem();
          $post = $this->input->post();
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
+         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
-        if($this->is_super_admin() || $this->is_admin()){                
+        if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID'])){                
            
             if($term == 3)
                 $data['eq'] = $post['floatFinalGrade'];                                                            
