@@ -122,7 +122,7 @@ class Grading extends CI_Controller {
             $post = $this->input->post();
             if(isset($post['id'])){
                 //print_r($post);
-                for($i == 0; $i < count($post['item']); $i++){
+                for($i = 0; $i < count($post['item']); $i++){
                     $data = array(
                         "grading_id"=>$post['id'],
                         "value"=> $post['item'][$i],
