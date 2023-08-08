@@ -2,7 +2,7 @@
     $(document).ready(function(){
         $("#add-grade-line").click(function(e){
             e.preventDefault();
-            $("#item-container").append('<div class="row mt-5"><div class="col-sm-4"><input type="text" required name="item[]" class="form-control" placeholder="Enter Value" /></div><div class="row mt-5"><div class="col-sm-4"><input type="text" required name="item[]" class="form-control" placeholder="Enter Value" /><div class="col-sm-4"><input type="text" required name="remarks[]" class="form-control" placeholder="Enter Value" /></div></div></div>');
+            $("#item-container").append('<div class="row mt-5"><div class="col-sm-4"><input type="text" required name="item[]" class="form-control" placeholder="Enter Value" /></div><div class="col-sm-4"><input type="text" required name="remarks[]" class="form-control" placeholder="Enter Remarks" /></div></div>');
         });
 
         $("#remove-grade-line").click(function(e){
