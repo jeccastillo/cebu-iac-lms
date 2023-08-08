@@ -96,7 +96,7 @@
                 <h3 class="box-title">Add Grading Extension</h3>
         </div>                           
         <form action="<?php echo base_url(); ?>registrar/submit_extension" method="post" role="form">
-            <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                
+            <input type="hidden" name="id" value="<?php echo $item['intID'] ?>" />                
             <div class="box-body">
                 <div class="form-group col-md-4">
                     <label for="type">Period</label>
@@ -132,7 +132,9 @@
                     <tr>
                         <td><?php echo $item['type']; ?></td>
                         <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
-                        <td></td>
+                        <td>
+                            <button class="delete-extension btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </table> 

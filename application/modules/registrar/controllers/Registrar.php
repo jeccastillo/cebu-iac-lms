@@ -136,6 +136,16 @@ class Registrar extends CI_Controller {
        
     }
     
+    public function submit_extension(){
+        $post = $this->input->post();
+        $data = array(
+                "date" => $post['date'],
+                "type" => $post['type'],
+                "syid" => $post['id']
+        );
+        $this->data_poster->post_data('tb_mas_sy_grading_extension',$data);
+        redirect(base_url()."registrar/edit_ay/".$post['id']);  
+    }
     
     public function edit_ay($id)
     {
@@ -153,7 +163,7 @@ class Registrar extends CI_Controller {
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
                                                  ->result_array();
-                                                                                                  
+
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_ay",$this->data);
