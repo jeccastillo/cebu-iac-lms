@@ -1800,7 +1800,7 @@ class Unity extends CI_Controller {
         if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {
             $this->data['alert'] = $this->session->flashdata('message');
-            $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
+            $this->data['classlist'] = $clist;
             
             if(!$this->data['classlist']['grading_system'])
                 $this->data['classlist']['grading_system'] = 1;
@@ -1810,6 +1810,36 @@ class Unity extends CI_Controller {
             
             $cl_ay = $this->data['classlist']['strAcademicYear'];
             $cl_subj = $this->data['classlist']['intSubjectID'];
+
+            //GET EXTENSIONS FOR MIDTERM AND FINAL
+            $mx = $this->db->where(array('syid'=>$id,'type'=>'midterm'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->first_row();
+            
+            $fx = $this->db->where(array('syid'=>$id,'type'=>'final'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->first_row();
+
+            if($mx){
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$mx['id']))
+                                                        ->first_row('array');            
+                
+                if($ext['date'] > $this->data['classlist']['midterm_end'])                                                        
+                    $this->data['classlist']['midterm_end']  = $ext['date'];
+            }
+            else{
+                $this->data['midterm_extension'] = 
+            }
+                
+            if($fx){
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$fx['id']))
+                                                        ->first_row('array');
+                if($ext['date'] > $this->data['classlist']['final_end'])                                                        
+                    $this->data['classlist']['final_end']  = $ext['date'];
+            }
+
             
             $this->data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
             
