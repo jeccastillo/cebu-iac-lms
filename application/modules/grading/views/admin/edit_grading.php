@@ -44,7 +44,7 @@
         <form  action="<?php echo base_url(); ?>grading/add_selected" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
             <div class="box-body">
-                <table>
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>CODE</th>
