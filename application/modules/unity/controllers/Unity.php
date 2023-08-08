@@ -1801,12 +1801,10 @@ class Unity extends CI_Controller {
         {
             $this->data['alert'] = $this->session->flashdata('message');
             $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
+            
             if(!$this->data['classlist']['grading_system'])
                 $this->data['classlist']['grading_system'] = 1;
-            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['classlist']['grading_system']))
-                                                    ->order_by('value','ASC')
-                                                    ->get('tb_mas_grading_item')
-                                                    ->result_array();
+            
             
             $this->data['is_admin'] = $this->is_super_admin();
             
@@ -1829,6 +1827,10 @@ class Unity extends CI_Controller {
             
 
             $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
+            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['subject']['grading_system_id']))
+                                                    ->order_by('value','ASC')
+                                                    ->get('tb_mas_grading_item')
+                                                    ->result_array();
             $passing =0;
             $incomplete =0;
             $ud = 0;
