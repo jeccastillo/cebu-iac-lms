@@ -20,7 +20,7 @@
                     Period: <?php echo $item['type']; ?>
                 </div>
                 <div class="col-md-6">
-                    End of Extension: <?php echo date("M j,Y", strtotime($item['date'])); ?> ?>
+                    End of Extension: <?php echo date("M j,Y", strtotime($item['date'])); ?>
                 </div>
             </div>            
        
