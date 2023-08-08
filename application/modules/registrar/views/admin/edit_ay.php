@@ -97,20 +97,30 @@
         </div>                   
         <form action="<?php echo base_url(); ?>registrar/submit_extension" method="post" role="form">
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                
-                <div class="form-group col-md-4">
-                    <label for="type">Period</label>
-                    <select required name="type" class="form-control">
-                        <option value="midterm">Midterm</option>
-                        <option value="final">Final</option>                            
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" class="form-control" required />                        
-                </div>                                       
-                <div class="form-group col-md-4">
-                    <label for="submit">&nbsp;</label>
-                    <input type="submit" value="add" class="btn btn-default  btn-flat">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="type">Period</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="date">Date</label>
+                    </div>
+                    <div class="form-group col-md-4">                        
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="form-group col-md-4">                    
+                        <select required name="type" class="form-control">
+                            <option value="midterm">Midterm</option>
+                            <option value="final">Final</option>                            
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">                    
+                        <input type="date" id="date" name="date" class="form-control" required />                        
+                    </div>                                       
+                    <div class="form-group col-md-4">
+                        <label for="submit">&nbsp;</label>
+                        <input type="submit" value="add" class="btn btn-default  btn-flat">
+                    </div>
                 </div>
             <div style="clear:both"></div>
         </form>    
