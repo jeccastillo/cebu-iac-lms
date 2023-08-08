@@ -23,6 +23,42 @@
                     End of Extension: <?php echo date("M j,Y", strtotime($item['date'])); ?>
                 </div>
             </div>            
-       
+            <hr />
+            <form  action="<?php echo base_url(); ?>registrar/add_selected" method="post" role="form">
+                <input type="hidden" name="id"  id="id" value="<?php echo $item['id']; ?>">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <th>First Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($selected_faculty as $item): ?>
+                                    <tr>
+                                        <td><?php echo $item['strLastname']; ?></td>
+                                        <td><?php echo $item['strFirstname']; ?></td>
+                                    </tr>        
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>                                
+                        </div>
+                        <div class="col-md-6">                        
+                            <label for="faculty">Select Faculty to Add</label>                                           
+                            <select required name="faculty[]" multiple class="form-control" style="height: 300px;">                    
+                            <?php foreach($non_selected_faculty as $item): ?>
+                                <option value="<?php echo $item['intID']; ?>"><?php echo $item['strLastname']." ".$item['strFirstname']; ?></option>
+                            <?php endforeach; ?>
+                            </select>       
+                            <hr />             
+                            <input type="submit" value="add faculty >>" class="btn btn-default btn-flat btn-lg">
+                        </div>
+                    </div>                
+                    
+                </div>
+            </form>
         </div>
 </aside>

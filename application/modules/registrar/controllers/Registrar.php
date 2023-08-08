@@ -165,6 +165,22 @@ class Registrar extends CI_Controller {
 
         }
     }
+
+    public function add_selected(){
+        $post = $this->input->post();
+        
+        foreach($post['faculty'] as $faculty){
+            $data = array(
+                "grading_extension_id"=>$post['id'],             
+                "faculty_id"=>$faculty   
+            );
+
+            $this->data_poster->post_data('tb_mas_sy_grading_extension_faculty',$data);
+
+        }
+
+        redirect(base_url()."registrar/view_extension/".$post['id']);
+    }
     
     public function submit_extension(){
         $post = $this->input->post();
