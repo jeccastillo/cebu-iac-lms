@@ -2,7 +2,8 @@
     <section class="content-header">
         <h1>
             <small>
-                <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
+                <a v-if="cashier" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
+                <a v-else class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                 <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                
                 <a class="btn btn-app" :href="base_url + 'finance/student_ledger/' + student.intID"><i class="ion ion-edit"></i> Ledger</a>                
                 <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id">
@@ -249,14 +250,7 @@
                                                     <label>Enter type if other is selected:</label>
                                                     <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Payment Status</label>
-                                                    <select class="form-control" v-model="request.status">
-                                                        <option value="Paid">Paid</option>
-                                                        <option value="Pending">Pending</option>                                                        
-                                                        <option value="Pending">Refunded</option>
-                                                    </select>
-                                                </div>
+                                                <input type="hidden" v-model="request.status" value="Paid" />                                                
                                                 <div class="form-group">
                                                     <label>Payment Type</label>
                                                     <select class="form-control" v-model="request.is_cash">
