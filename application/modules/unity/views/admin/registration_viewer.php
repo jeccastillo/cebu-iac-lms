@@ -36,7 +36,7 @@
                     <div class="widget-user-header bg-red">
                         <!-- /.widget-user-image -->
                         <div class="pull-right">
-                            <button data-toggle="collapse" data-target="#student-info">&times;</button>
+                            <button data-toggle="collapse" data-target="#student-info">info</button>
                         </div>
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
