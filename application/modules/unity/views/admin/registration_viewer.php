@@ -24,8 +24,7 @@
                 <option value="2">Cleared</option>
             </select>
             
-        </div> -->
-        <hr />
+        </div> -->        
     </section>
         <hr />
     <div class="content">
