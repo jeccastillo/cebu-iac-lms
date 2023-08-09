@@ -303,7 +303,7 @@ class Finance extends CI_Controller {
             $this->data['sem'] = $sem;
             
             $this->load->view("common/header",$this->data);
-            $this->load->view("admin/payment_search",$this->data);
+            $this->load->view("payment_search",$this->data);
             $this->load->view("common/footer",$this->data);
             
             
