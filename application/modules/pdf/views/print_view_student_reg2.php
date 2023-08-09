@@ -108,8 +108,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
-            <td width="100px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
-            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
+            <td width="90px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
+            <td width="70px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
         </tr> ';        
                 
                         $totalUnits = 0;
