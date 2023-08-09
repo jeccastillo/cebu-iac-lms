@@ -35,10 +35,13 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
                         <!-- /.widget-user-image -->
+                        <div class="pull-right">
+                            <button data-toggle="collapse" data-target="#student-info">&times;</button>
+                        </div>
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
                     </div>
-                    <div class="box-footer no-padding">
+                    <div class="collapse" class="box-footer no-padding" id="student-info">
                         <ul class="nav nav-stacked">
                         <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
                         <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
