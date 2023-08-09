@@ -84,7 +84,7 @@ $html .= '
         <td width="200px" >' 
             . preg_replace("/[^a-zA-Z0-9]+/", "", $snum).'<br />'
             . strtoupper($student['strLastname']) . ", " . strtoupper($student['strFirstname']) . " " . strtoupper($student['strMiddlename']) .'<br />'
-            .$student['strProgramDescription'] .
+            .$student['strProgramDescription'] .' '.$major
         '</td>
         <td width="80px" >SY/TERM<br />ADDRESS</td>
         <td width="200px" style="text-transform:capitalize;">'
