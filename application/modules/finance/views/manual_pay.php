@@ -146,7 +146,7 @@
                                     <td>{{ refunded.updated_at }}</td>            
                                     <td>
                                         <button v-if="!refunded.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = application_payment.id;" 
+                                                @click="prepUpdate(refunded.id,refunded.description,refunded.subtotal_order)" 
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
@@ -218,7 +218,7 @@
                                     <td>{{ payment.updated_at }}</td>            
                                     <td>
                                         <button v-if="!payment.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = payment.id;" 
+                                                @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)" 
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
@@ -341,6 +341,7 @@ new Vue({
             or_number: undefined,
             cashier_id: undefined,
             sy_reference: undefined,
+            total_amount_due: undefined,
         },
              
     },
@@ -433,6 +434,11 @@ new Vue({
             })
 
         },  
+        prepUpdate: function(id,desc,amount){
+            this.or_update.id = id;
+            this.or_update_description = desc;
+            this.or_update.total_amount_due = amount;
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
@@ -458,10 +464,15 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;
                                     if(data.data.success){
-                                        var formdata= new FormData();
+                                        var formdata= new FormData();                                                                                                                      
+                                        //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
+                                        formdata.append('student_id',this.student.intID);                                                                                
+                                        formdata.append('installment',this.tuition_data.total_installment);
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
-                                        formdata.append('or_used',this.cashier.or_current);
+                                        formdata.append('or_used',this.or_update.or_number);                                        
+                                        formdata.append('description',this.or_update_description);
+                                        formdata.append('total_amount',this.or_update.total_amount_due);
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
