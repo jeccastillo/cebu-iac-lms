@@ -135,7 +135,93 @@ class Registrar extends CI_Controller {
         
        
     }
+
+    public function view_extension($id){
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $this->data['item'] = $this->db->get_where('tb_mas_sy_grading_extension',array('id'=>$id))
+                                           ->first_row('array');
+
+            $faculty = $this->db->get_where('tb_mas_faculty',array('teaching'=>1))->result_array();                                           
+            $ret_fac = [];
+            $ret_fac_selected = [];
+            foreach($faculty as $fac){
+                $tmp = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$fac['intID'],'grading_extension_id'=>$this->data['item']['id']))
+                         ->first_row('array');
+
+                                         
+                if($tmp){
+                    $fac['extnsion_faculty'] = $tmp['id'];
+                    $ret_fac_selected[] = $fac;
+                }
+                else
+                    $ret_fac[] = $fac;
+            }
+
+            $this->data['selected_faculty'] = $ret_fac_selected;
+            $this->data['non_selected_faculty'] = $ret_fac;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_extension",$this->data);
+            $this->load->view("common/footer",$this->data);
+            $this->load->view("extension_conf",$this->data);
+
+
+
+        }
+    }
+
+    public function add_selected(){
+        $post = $this->input->post();
+        
+        foreach($post['faculty'] as $faculty){
+            $data = array(
+                "grading_extension_id"=>$post['id'],             
+                "faculty_id"=>$faculty   
+            );
+
+            $this->data_poster->post_data('tb_mas_sy_grading_extension_faculty',$data);
+
+        }
+
+        redirect(base_url()."registrar/view_extension/".$post['id']);
+    }
+
+    public function delete_from_selected(){
+        $post = $this->input->post();
+
+        $this->db
+        ->where('id',$post['id'])
+        ->delete('tb_mas_sy_grading_extension_faculty');
+
+        $data['message'] = "deleted";
+        echo json_encode($data);
+    }
     
+    public function submit_extension(){
+        $post = $this->input->post();
+        $data = array(
+                "date" => $post['date'],
+                "type" => $post['type'],
+                "syid" => $post['id']
+        );
+        $this->data_poster->post_data('tb_mas_sy_grading_extension',$data);
+        redirect(base_url()."registrar/edit_ay/".$post['id']);  
+    }
+
+    public function delete_extension(){
+        $post = $this->input->post();
+        $this->db->where('id',$post['id'])
+                 ->delete('tb_mas_sy_grading_extension');
+
+        $this->db->where('grading_extension_id',$post['id'])
+                 ->delete('tb_mas_sy_grading_extension_faculty');
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
     
     public function edit_ay($id)
     {
@@ -144,7 +230,16 @@ class Registrar extends CI_Controller {
         {
           
             $this->data['item'] = $this->data_fetcher->getAy($id);
+            $this->data['midterm_extensions'] = $this->db->where(array('syid'=>$id,'type'=>'midterm'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->result_array();
             
+            $this->data['final_extensions'] = $this->db->where(array('syid'=>$id,'type'=>'final'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->result_array();
+
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_ay",$this->data);

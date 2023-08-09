@@ -1347,6 +1347,133 @@ class Pdf extends CI_Controller {
         $pdf->Output("classlist.pdf", 'I');
     
     }
+
+    public function print_classlist_grades($id)
+    {
+        
+        //print_r($this->data['spouse']);
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+       // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Classlist");
+        
+        $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
+        $this->data['sy'] = $this->data_fetcher->get_sem_by_id($this->data['classlist']['strAcademicYear']);
+        $all_students = $this->data_fetcher->getClassListStudents($id);
+        $students = [];
+        
+        foreach($all_students as $std){
+            $registered = $this->data_fetcher->checkRegistered($std['intID'],$this->data['classlist']['strAcademicYear']);
+            if(!empty($registered))
+                $students[] = $std;
+        }
+
+        $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
+        $schedule = $this->data_fetcher->fetch_table('tb_mas_room_schedule',null,null,array('strScheduleCode'=>$id));
+        $this->data['faculty'] =  current($this->data_fetcher->fetch_table('tb_mas_faculty',null,null,array('intID'=>$this->data['classlist']['intFacultyID'])));        
+        $days = "";
+        $added_days = array();
+        $times = "";
+        
+        $schedule = $this->data_fetcher->getScheduleByCode($id);        
+        $sched_text = '';
+
+        
+        
+        if(isset($schedule[0]['strDay']))                                                
+            $sched_text.= date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+    
+        $sched_text.= ' ';                                                            
+        foreach($schedule as $sched) {
+            if(isset($sched['strDay']))
+                $sched_text.= $sched['strDayAbvr'];                    
+                //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+        }
+        
+        $sched_text.= ' ';                                            
+        if(isset($schedule[0]['strDay']))
+            $sched_text.= $schedule[0]['strRoomCode'];
+
+        $this->data['schedule'] = $sched_text;
+
+        $this->data['program'] = current($this->data_fetcher->fetch_table('tb_mas_programs',null,null,array('intProgramID'=>$this->data['subject']['intProgramID'])));
+       
+        // set margins
+        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(5, .25, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+       //font setting
+        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
+        // set default font subsetting mode
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        
+        $pdf->SetAutoPageBreak(false, PDF_MARGIN_FOOTER);
+        
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+        
+        
+            $pdf->AddPage();
+            $ret = 0;
+            $this->data['nothing_follows'] = true;
+            if(count($students) > 40)
+            {
+                $ret = count($students) -40;
+                $this->data['students'] = array_slice($students, 0, 40);
+                $this->data['nothing_follows'] = false;
+            }
+            else
+            {
+                foreach($students as $student){
+                    
+                    $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$this->data['classlist']['strAcademicYear']);
+                    $st[] = $student;
+                
+                }
+                $this->data['students'] = $st;
+            }
+
+            $this->data['snum'] = 1;
+            $html = $this->load->view('classlist_view_grades',$this->data,true);
+
+
+
+            //$html = $pdf->unhtmlentities($html);
+
+            $pdf->writeHTML($html, true, false, true, false, '');
+            if($ret > 0)
+            {
+                $this->data['nothing_follows'] = true;
+                $pdf->AddPage();
+                $this->data['students'] = array_slice($students, -$ret);
+                $this->data['snum'] = 41;
+                $html = $this->load->view('classlist_view_grades',$this->data,true);
+                $pdf->writeHTML($html, true, false, true, false, '');
+            }
+            
+        
+        
+            $this->data['students'] = $st;                                    
+
+        
+        $pdf->Output("classlist.pdf", 'I');
+    
+    }
+
     function registration_viewer_account_data_print($orNumber,$studID)
     {
         if($this->is_admin() || $this->is_accounting()){

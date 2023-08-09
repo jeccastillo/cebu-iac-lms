@@ -86,6 +86,11 @@ class Grading extends CI_Controller {
         $this->data['userlevel'] = $this->session->userdata('intUserLevel');
         $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id))->first_row('array');
         $this->data['grading_items'] = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$id))->result_array();
+        $this->data['subjects_selected'] = $this->db->get_where('tb_mas_subjects',array('grading_system_id'=>$id))->result_array();
+        $this->data['subjects_not_selected'] = $this->db->where(array('grading_system_id !='=>$id))
+                                                        ->order_by('strCode','ASC')
+                                                        ->get('tb_mas_subjects')
+                                                        ->result_array();
         
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_grading",$this->data);
@@ -95,6 +100,21 @@ class Grading extends CI_Controller {
                 
         
     }
+
+    public function add_selected(){
+        $post = $this->input->post();
+        
+        foreach($post['subjects'] as $subject){
+            $data = array(
+                "grading_system_id"=>$post['id'],                
+            );
+
+            $this->data_poster->post_data('tb_mas_subjects',$data,$subject);
+
+        }
+
+        redirect(base_url()."grading/edit_grading/".$post['id']);
+    }
     
     public function submit_grading()
     {
@@ -102,10 +122,11 @@ class Grading extends CI_Controller {
             $post = $this->input->post();
             if(isset($post['id'])){
                 //print_r($post);
-                foreach($post['item'] as $i){
+                for($i = 0; $i < count($post['item']); $i++){
                     $data = array(
                         "grading_id"=>$post['id'],
-                        "value"=> $i
+                        "value"=> $post['item'][$i],
+                        "remarks"=> $post['remarks'][$i],
                     );
 
                     $this->data_poster->post_data('tb_mas_grading_item',$data);

@@ -299,8 +299,7 @@ class Unity extends CI_Controller {
         {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');            
             $this->data['classlist'] = $clist;
             
             //print_r($this->data['classlist']);
@@ -1801,18 +1800,44 @@ class Unity extends CI_Controller {
         if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {
             $this->data['alert'] = $this->session->flashdata('message');
-            $this->data['classlist'] = $this->data_fetcher->fetch_classlist_by_id(null,$id);
+            $this->data['classlist'] = $clist;
+            
             if(!$this->data['classlist']['grading_system'])
                 $this->data['classlist']['grading_system'] = 1;
-            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['classlist']['grading_system']))
-                                                    ->order_by('value','ASC')
-                                                    ->get('tb_mas_grading_item')
-                                                    ->result_array();
+            
             
             $this->data['is_admin'] = $this->is_super_admin();
             
             $cl_ay = $this->data['classlist']['strAcademicYear'];
             $cl_subj = $this->data['classlist']['intSubjectID'];
+
+            //GET EXTENSIONS FOR MIDTERM AND FINAL
+            $mx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'midterm'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->first_row('array');
+            
+            $fx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'final'))
+                                                 ->order_by('date','DESC')
+                                                 ->get('tb_mas_sy_grading_extension')
+                                                 ->first_row('array');
+
+            if($mx){
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$mx['id']))
+                                                        ->first_row('array');            
+                
+                if($ext && $mx['date'] > $this->data['classlist']['midterm_end'])                                                        
+                    $this->data['classlist']['midterm_end']  = $mx['date'];
+            }
+            
+                
+            if($fx){
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$fx['id']))
+                                                        ->first_row('array');
+                if($ext && $fx['date'] > $this->data['classlist']['final_end'])                                                        
+                    $this->data['classlist']['final_end']  = $fx['date'];
+            }
+
             
             $this->data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
             
@@ -1830,6 +1855,10 @@ class Unity extends CI_Controller {
             
 
             $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
+            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['subject']['grading_system_id']))
+                                                    ->order_by('value','ASC')
+                                                    ->get('tb_mas_grading_item')
+                                                    ->result_array();
             $passing =0;
             $incomplete =0;
             $ud = 0;
@@ -1979,23 +2008,21 @@ class Unity extends CI_Controller {
          $active_sem = $this->data_fetcher->get_active_sem();
          $post = $this->input->post();
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
+         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
-        if($this->is_super_admin() || $this->is_admin() || $active_sem['enumGradingPeriod'] == "active"){                
+        if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID'])){                
            
             if($term == 3)
                 $data['eq'] = $post['floatFinalGrade'];                                                            
             elseif($term == 2)
                 $data['eq'] = $post['floatMidtermGrade'];                                
-            
-
-            $data['remarks'] = '--';            
-            $post['strRemarks'] = $data['remarks'];
+                                    
            
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
-            $data['message'] = "success";
+            $data['message'] = "success";            
         }
         else{
             $data['message'] = "failed";
