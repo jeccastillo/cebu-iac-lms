@@ -14,7 +14,7 @@
                 </a>           
             </small>
         </h1>
-        <div v-if="registration" class="pull-right">
+        <!-- <div v-if="registration" class="pull-right">
             
             <label style="font-size:.6em;"> Registration Status</label>
                 
@@ -24,7 +24,7 @@
                 <option value="2">Cleared</option>
             </select>
             
-        </div>
+        </div> -->
         <hr />
     </section>
         <hr />
