@@ -89,7 +89,7 @@
                             </a>
                         </li>
                         <li v-if="cashier" :class="cashier?'active':''"><a href="#tab_1" data-toggle="tab">Payment</a></li>
-                        <li :class="cashier?'active':''"><a href="#tab_2" data-toggle="tab">Details</a></li>
+                        <li :class="!cashier?'active':''"><a href="#tab_2" data-toggle="tab">Details</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
                                 Accounting Summary
