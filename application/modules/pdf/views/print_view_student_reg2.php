@@ -65,7 +65,7 @@
            ';
     }
 
-    $major = ($student['strMajor'] != "" && $student['strMajor'] != null)?'Major in '.$student['strMajor']:'';
+    $major = ($student['strMajor'] != "" && $student['strMajor'] != null &&  $student['strMajor'] != "None")?'Major in '.$student['strMajor']:'';
 
 $html .= '   
     </table>
