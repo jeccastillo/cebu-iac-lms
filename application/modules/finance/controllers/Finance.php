@@ -272,8 +272,8 @@ class Finance extends CI_Controller {
     {
         if($this->faculty_logged_in())
         {
-            $this->data['page'] = "view_students";
-            $this->data['opentree'] = "students";
+            $this->data['page'] = "view_all_students";
+            $this->data['opentree'] = "cashier";
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
 
