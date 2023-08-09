@@ -123,7 +123,7 @@
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>                                                
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
-                                                        @click="prepUpdate(application_payment.id,application_payment.description)" 
+                                                        @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -146,7 +146,7 @@
                                             <td>{{ reservation_payment.updated_at }}</td>
                                             <td>                                                
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
-                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description)" 
+                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -174,7 +174,7 @@
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="!payment.or_number && payment.status == 'Paid' && cashier" data-toggle="modal"                                                
-                                                        @click="prepUpdate(payment.id,payment.description)" 
+                                                        @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -204,7 +204,7 @@
                                             <td>{{ payment.updated_at }}</td>
                                             <td>
                                                 <button v-if="(!payment.or_number && payment.status == 'Paid') && cashier" data-toggle="modal"                                                
-                                                        @click="prepUpdate(payment.id,payment.description)" 
+                                                        @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
@@ -410,6 +410,7 @@ new Vue({
             or_number: undefined,
             cashier_id: undefined,
             sy_reference: undefined,
+            total_amount_due: undefined,
         },
         amount_to_pay: 0,       
         cashier_start: 0,
@@ -545,9 +546,10 @@ new Vue({
     },
 
     methods: {      
-        prepUpdate: function(id,desc){
+        prepUpdate: function(id,desc,amount){
             this.or_update.id = id;
             this.or_update_description = desc;
+            this.or_update.total_amount_due = amount;
         },        
         updateOR: function(){
             let url = api_url + 'finance/update_or';
