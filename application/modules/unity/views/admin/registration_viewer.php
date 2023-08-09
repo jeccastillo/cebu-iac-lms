@@ -185,7 +185,7 @@
                                                 </button>
                                                 <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
+                                                <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages && payment.status == 'Paid'"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>    
                                         <tr>
@@ -585,6 +585,7 @@ new Vue({
                                         formdata.append('or_used',this.or_update.or_number);
                                         formdata.append('payments',pay_length);
                                         formdata.append('description',this.or_update_description);
+                                        formdata.append('total_amount',this.or_update.total_amount_due);
                                         formdata.append('registration_id',this.registration.intRegistrationID);
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
