@@ -88,7 +88,8 @@
                                 Adjustments
                             </a>
                         </li>
-                        <li class="active"><a href="#tab_1" data-toggle="tab">Finance</a></li>
+                        <li v-if="cashier" :class="cashier?'active':''"><a href="#tab_1" data-toggle="tab">Payment</a></li>
+                        <li :class="cashier?'active':''"><a href="#tab_2" data-toggle="tab">Details</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
                                 Accounting Summary
@@ -99,7 +100,78 @@
                         <div class="tab-pane active" id="tab_1">    
                             <div class="box box-solid">
                                 <div class="box-header">
-                                    <h4 class="box-title">ACCOUNTING</h4>                                    
+                                    <h4 class="box-title">Payments</h4>                                    
+                                </div>                                    
+                                <div class="box-body">
+                                <h4 class="box-title">Payments</h4>                                                                       
+                                    <div v-if="cashier && cashier.or_current" class="row">
+                                        <div v-html="tuition" class="col-sm-6"></div>   
+                                        <div class="col-sm-6" v-if="cashier">
+                                            <h3>Cashier {{ cashier.intID }}</h3>
+                                            <form @submit.prevent="submitManualPayment" method="post">                                                
+                                                <div class="form-group">
+                                                    <label>Payment Type</label>
+                                                    <select @change="selectDescription" class="form-control" v-model="description">
+                                                        <option value="Tuition Full">Tuition Full</option>
+                                                        <option value="Tuition Down Payment">Tuition Down Payment</option>
+                                                        <option value="Tuition Partial">Tuition Partial</option>
+                                                        <option value="Tuition Specific">Tuition Specific</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Enter type if other is selected:</label>
+                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                                </div>
+                                                <input type="hidden" v-model="request.status" value="Paid" />                                                
+                                                <div class="form-group">
+                                                    <label>Payment Type</label>
+                                                    <select class="form-control" v-model="request.is_cash">
+                                                        <option value="1">Cash</option>
+                                                        <option value="0">Check</option> 
+                                                        <option value="2">Credit Card</option>
+                                                        <option value="3">Debit Card</option>                                                       
+                                                        <option value="4">Online Payment</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Check/Credit/Debit Number:</label>
+                                                    <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
+                                                </div>
+                                                <div class="form-group">                                                                                                        
+                                                    <label>Enter amount to pay:</label>
+                                                    <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>OR Number:</label>                                                    
+                                                    <select class="form-control" v-model="request.or_number" required>
+                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
+                                                    </select>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Contact Number:</label>
+                                                    {{ request.contact_number }}
+                                                    <input type="hidden" required class="form-control" v-model="request.contact_number" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email: {{ request.email_address }}</label>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Remarks:</label>
+                                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
+                                                </div>
+                                                <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>
+                                            </form>
+                                            <hr />                                            
+                                        </div>                                 
+                                    </div>                                                                       
+                                </div>
+                            </div>              
+                        </div>   
+                        <div class="tab-pane active" id="tab_2">    
+                            <div class="box box-solid">
+                                <div class="box-header">
+                                    <h4 class="box-title">DETAILS</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
                                 <h4 class="box-title">Payments</h4>
@@ -231,72 +303,10 @@
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
-                                    </table>
-                                    <hr />                                    
-                                    <div v-if="cashier && cashier.or_current" class="row">
-                                        <div v-html="tuition" class="col-sm-6"></div>   
-                                        <div class="col-sm-6" v-if="cashier">
-                                            <h3>Cashier {{ cashier.intID }}</h3>
-                                            <form @submit.prevent="submitManualPayment" method="post">                                                
-                                                <div class="form-group">
-                                                    <label>Payment Type</label>
-                                                    <select @change="selectDescription" class="form-control" v-model="description">
-                                                        <option value="Tuition Full">Tuition Full</option>
-                                                        <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                        <option value="Tuition Partial">Tuition Partial</option>
-                                                        <option value="Tuition Specific">Tuition Specific</option>
-                                                        <option value="Other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Enter type if other is selected:</label>
-                                                    <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
-                                                </div>
-                                                <input type="hidden" v-model="request.status" value="Paid" />                                                
-                                                <div class="form-group">
-                                                    <label>Payment Type</label>
-                                                    <select class="form-control" v-model="request.is_cash">
-                                                        <option value="1">Cash</option>
-                                                        <option value="0">Check</option> 
-                                                        <option value="2">Credit Card</option>
-                                                        <option value="3">Debit Card</option>                                                       
-                                                        <option value="4">Online Payment</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Check/Credit/Debit Number:</label>
-                                                    <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
-                                                </div>
-                                                <div class="form-group">                                                                                                        
-                                                    <label>Enter amount to pay:</label>
-                                                    <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>OR Number:</label>                                                    
-                                                    <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                    
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Contact Number:</label>
-                                                    {{ request.contact_number }}
-                                                    <input type="hidden" required class="form-control" v-model="request.contact_number" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Email: {{ request.email_address }}</label>                                                    
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Remarks:</label>
-                                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                                </div>
-                                                <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>
-                                            </form>
-                                            <hr />                                            
-                                        </div>                                 
-                                    </div>                                                                       
+                                    </table>                                                                                                                                          
                                 </div>
                             </div>              
-                        </div>        
+                        </div>     
                     </div>
                 </div>
             </div>
