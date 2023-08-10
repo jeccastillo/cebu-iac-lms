@@ -659,7 +659,9 @@
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Program</h3>
                     </div>
-                    <div class="box-body" style="padding:2rem">
+
+                    <!-- for cebu applicant -->
+                    <div v-if="request.campus == 'Cebu'" class="box-body" style="padding:2rem">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
                             <p class="text-muted">
@@ -667,13 +669,13 @@
                             </p>
                             <hr>
                         </div>
-                        <form @submit.prevent="confirmProgram" method="post">
+                        <form @submit.prevent="confirmProgram(1)" method="post">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
                                         <th>Select Program to Change</th>
                                         <td>
-                                            <select v-model="program_update" @change="changeProgram($event)" required
+                                            <select v-model="program_update" @change="changeProgram($event, 1)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
                                                     {{ program.strProgramDescription }}</option>
@@ -688,6 +690,99 @@
                             </div>
                         </form>
                     </div>
+                    <!-- end -->
+
+                    <!-- for Makati applicant -->
+                    <div v-if="request.campus == 'Makati'" class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 1st Choice</strong>
+                            <p class="text-muted">
+                                {{request.program}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 2nd Choice</strong>
+                            <p class="text-muted">
+                                {{request.program2}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 3rd Choice</strong>
+                            <p class="text-muted">
+                                {{request.program3}}
+                            </p>
+                            <hr>
+                        </div>
+                        <form @submit.prevent="confirmProgram(1)" class="" method="post">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (1st Choice)</th>
+                                        <td>
+                                            <select v-model="program_update" @change="changeProgram($event,1)" required
+                                                class="form-control">
+                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
+
+                        <form @submit.prevent="confirmProgram(2)" method="post" class="mt-5">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (2nd Choice)</th>
+                                        <td>
+                                            <select v-model="program_update2" @change="changeProgram($event,2)" required
+                                                class="form-control">
+                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
+
+                        <form @submit.prevent="confirmProgram(3)" method="post" class="mt-5">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (3rd Choice)</th>
+                                        <td>
+                                            <select v-model="program_update3" @change="changeProgram($event,3)" required
+                                                class="form-control">
+                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- end -->
+
+
+
+
                 </div>
             </div>
         </div>
@@ -874,9 +969,14 @@ new Vue({
         show_edit_title: "Edit",
         date_selected: "",
         date_selected_formatted: "",
+        filtered_programs: [],
         programs: [],
         program_update: undefined,
+        program_update2: undefined,
+        program_update3: undefined,
         program_text: undefined,
+        program_text2: undefined,
+        program_text3: undefined,
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -906,6 +1006,13 @@ new Vue({
                 axios.get(base_url + 'admissionsV1/programs')
                     .then((data) => {
                         this.programs = data.data.programs;
+
+                        this.filtered_programs = this.programs.filter((prog) => {
+                            return prog.type == this.request.type
+                        })
+
+                        console.log(this.filtered_programs, this.request.type)
+
                     })
                     .catch((error) => {
                         console.log(error);
@@ -946,9 +1053,18 @@ new Vue({
             }
 
         },
-        changeProgram: function(event) {
+        changeProgram: function(event, type) {
             //console.log(event.target[event.target.selectedIndex].text);
-            this.program_text = event.target[event.target.selectedIndex].text;
+            if (type == '1') {
+                this.program_text = event.target[event.target.selectedIndex].text;
+            }
+
+            if (type == '2') {
+                this.program_text2 = event.target[event.target.selectedIndex].text;
+            }
+            if (type == '3') {
+                this.program_text3 = event.target[event.target.selectedIndex].text;
+            }
         },
         updateField: function(type, event) {
             //this.loading_spinner = true;
@@ -998,7 +1114,7 @@ new Vue({
 
 
         },
-        confirmProgram: function() {
+        confirmProgram: function(type) {
 
             this.loading_spinner = true;
             Swal.fire({
@@ -1012,9 +1128,11 @@ new Vue({
 
             Swal.showLoading();
             this.payload = {
-                field: 'type_id',
-                value: this.program_update,
-                program: this.program_text,
+                field: type == 1 ? 'type_id' : type == 2 ? 'type_id2' : 'type_id3',
+                value: type == 1 ? this.program_update : type == 2 ? this.program_update2 : this
+                    .program_update3,
+                program: type == 1 ? this.program_text : type == 2 ? this.program_text2 : this
+                    .program_text3,
                 admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
             };
 
@@ -1034,6 +1152,7 @@ new Vue({
 
 
         },
+
 
         deleteApplicant: function() {
             this.loading_spinner = true;

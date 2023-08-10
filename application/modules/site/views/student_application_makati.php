@@ -23,8 +23,7 @@
 
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu click
-            <a style="text-decoration: underline;"
-                href="#">here</a>.
+            <a style="text-decoration: underline;" href="#">here</a>.
         </p>
     </div>
 
@@ -651,38 +650,52 @@
                     </div>
                 </div>
 
+                <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                    Student Type <span class="text-red-500">*</span>
+                </label>
                 <div class="form-group mb-6">
                     <div
                         class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                        <label for="">Student Type
-                            <span class="text-danger">*</span>
-                        </label>
+
 
                         <div class="mt-2">
-                            <input type="radio" required name="student_type" v-model="request.student_type"
-                                value="freshman" />
-                            Freshman
+                            <input type="radio" required name="student_type" id="rb-ug-freshman" data-type="college"
+                                @change="filterCourses('college')" v-model="request.student_type"
+                                value="UG - Freshman" />
+                            <label for="rb-ug-freshman"> UG - Freshman</label>
                         </div>
 
-                        <div>
-                            <input type="radio" required name="student_type" value="transferee"
-                                v-model="request.student_type" />
-                            Transferee
+                        <div class="mt-2">
+                            <input type="radio" required name="student_type" id="rb-ug-transferee" data-type="college"
+                                @change="filterCourses('college')" v-model="request.student_type"
+                                value="UG- Transferee" />
+
+                            <label for="rb-ug-transferee"> UG- Transferee</label>
                         </div>
-                        <!-- <div>
-                                <input
-                                    type="radio"
-                                    required
-                                    name="student_type"
-                                    value="foreign"
-                                    v-model="request.student_type"
-                                />
-                                Foreign
-                            </div> -->
-                        <div>
-                            <input type="radio" required name="student_type" value="second degree"
-                                v-model="request.student_type" />
-                            Second Degree
+
+                        <div class="mt-2">
+                            <input type="radio" id="rb-shs-freshman" required name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- Freshman" />
+                            <label for="rb-shs-freshman">SHS- Freshman</label>
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required id="rb-shs-transferee" name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- Transferee" />
+
+                            <label for="rb-shs-transferee">SHS- Transferee</label>
+                        </div>
+                        <div class="mt-2">
+                            <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
+                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- DRIVE" />
+                            <label for="rb-shs-drive">SHS- DRIVE</label>
+                        </div>
+
+                        <div class="mt-2">
+                            <input type="radio" required id="rb-2nd-deg" name="student_type" data-type="second_degree"
+                                @change="filterCourses('other')" v-model="request.student_type" value="2ND- DEGREE" />
+                            <label for="rb-2nd-deg"> 2ND- DEGREE
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -691,17 +704,67 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Applying For <span class="text-red-500">*</span>
                         </label>
-                        <ul
-                            class="bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">
+                        <!-- <ul
+                            class="hidden bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200"
-                                v-for="t in programs.college" :key="t.id">
+                                v-for="t in filtered_programs" :key="t.id">
                                 <div class="flex items-center pl-3">
                                     <input type="checkbox" class="admissions_submission_cb" :id="'progId-' + t.id"
                                         @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
                                     <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }}</label>
-                                </div>
+                                </div>_
                             </li>
-                        </ul>
+                        </ul> -->
+
+                        <div
+                            class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
+
+                            <div class="my-3">
+                                <label class="block t color-primary font-bold  mb-3  pr-4">
+                                    First Choice
+                                </label>
+                                <select
+                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    v-model="request.type_id" id="course_first_choice">
+                                    <option value="" disabled selected> -- Select option -- </option>
+                                    <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title"
+                                        :key="t.id"
+                                        :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
+                                        {{t.title}}</option>
+                                </select>
+                            </div>
+                            <div class="my-3">
+                                <label class="block t color-primary font-bold  mb-3  pr-4">
+                                    Second Choice
+                                </label>
+                                <select
+                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    v-model="request.type_id2" id="course_second_choice">
+                                    <option value="" disabled selected> -- Select option -- </option>
+                                    <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title"
+                                        :key="t.id"
+                                        :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
+                                        {{t.title}}</option>
+                                </select>
+                            </div>
+                            <div class="my-3">
+                                <label class="block t color-primary font-bold  mb-3  pr-4">
+                                    Third Choice
+                                </label>
+                                <select
+                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    v-model="request.type_id3" id="course_third_choice">
+                                    <option value="" disabled selected> -- Select option -- </option>
+                                    <option :value="t.id" v-for="t in filtered_programs" :key="t.id"
+                                        :data-title="t.title"
+                                        :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
+                                        {{t.title}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -773,13 +836,16 @@ new Vue({
             date_of_birth: "",
             program: "",
             health_concerns: [],
-            campus:"Makati",
+            campus: "Makati",
             citizenship: 'Philippines',
             syid: "<?php echo $current_term; ?>",
-            student_type: 'freshman',
+            student_type: '',
+            type_id2: "",
+            type_id3: ""
         },
         loading_spinner: false,
         programs: [],
+        filtered_programs: [],
         programs_group: [],
         types: [],
         base_url: "<?php echo base_url(); ?>",
@@ -795,6 +861,7 @@ new Vue({
 
             .then((data) => {
                 this.programs = data.data.data;
+                console.log(this.programs)
             })
             .catch((e) => {
                 console.log("error");
@@ -830,6 +897,20 @@ new Vue({
             .catch((e) => {
                 console.log("error");
             });
+
+
+
+
+        document.querySelector('#course_first_choice').onchange = (e) => {
+            this.request.program = e.target.selectedOptions[0].getAttribute('data-title');
+        };
+        document.querySelector('#course_second_choice').onchange = (e) => {
+            this.request.program2 = e.target.selectedOptions[0].getAttribute('data-title');
+        };
+        document.querySelector('#course_third_choice').onchange = (e) => {
+            this.request.program3 = e.target.selectedOptions[0].getAttribute('data-title');
+        };
+
 
     },
 
@@ -868,7 +949,17 @@ new Vue({
             }, 500);
         },
 
+        filterCourses: function(type) {
+            if (type === 'shs')
+                this.filtered_programs = this.programs.shs;
+            else if (type === 'college')
+                this.filtered_programs = this.programs.college;
+            else this.filtered_programs = this.programs.sd;
+            this.request.type = type;
+        },
+
         customSubmit: function(type, title, text, data, url, redirect) {
+
 
             this.loading_spinner = true;
             if (this.request.mobile_number.length < 18) {
