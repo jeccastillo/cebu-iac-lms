@@ -47,7 +47,7 @@
                     <?php foreach($student_scholars as $scholar): ?>
                     <tr>
                         <th><?php echo $scholar['strLastname'].", ".$scholar['strFirstname']." ".$scholar['strMiddlename']; ?></th>
-                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>"><?php echo $scholar['name']; ?></a></th>
+                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>" target="_blank"><?php echo $scholar['name']; ?></a></th>
                         <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$scholar['intID']; ?>" target="_blank">Update</a></th>
                     </tr>
                     <?php endforeach; ?>
@@ -63,7 +63,7 @@
                     <?php foreach($discounted as $disc): ?>
                     <tr>
                         <th><?php echo $disc['strLastname'].", ".$disc['strFirstname']." ".$disc['strMiddlename']; ?></th>
-                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>"><?php echo $disc['name']; ?></a></th>
+                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>" target="_blank"><?php echo $disc['name']; ?></a></th>
                         <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$disc['intID']; ?>" target="_blank">Update</a></th>
                     </tr>
                     <?php endforeach; ?>
