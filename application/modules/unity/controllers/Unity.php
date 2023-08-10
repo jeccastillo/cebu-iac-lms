@@ -584,8 +584,13 @@ class Unity extends CI_Controller {
             }
             else
                 $data['tuition'] = "";
-
-            $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+            $ret['records'] = [];
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
+            foreach($records as $record)
+            {
+                $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
+                $ret['records'][] = $record;
+            }
             //tb_mas_classlist_student_adjustment_log
             $ret['adjustments'] = $this->db
                                        ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
