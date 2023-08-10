@@ -52,6 +52,22 @@
                     </tr>
                     <?php endforeach; ?>
                 </table>
+                <hr/>
+                <h3>Discounted</h3>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Scholarship</th>
+                        <th>Actions</th>
+                    </tr>
+                    <?php foreach($discounted as $disc): ?>
+                    <tr>
+                        <th><?php echo $disc['strLastname'].", ".$disc['strFirstname']." ".$disc['strMiddlename']; ?></th>
+                        <th><?php echo $disc['name']; ?></th>
+                        <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$disc['intID']; ?>" target="_blank">Update</a></th>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
         </div>
        
