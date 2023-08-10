@@ -35,9 +35,7 @@ class Site extends CI_Controller {
 	public function student_application() {		
 
 		$term = $this->data_fetcher->get_active_sem();
-		$this->data['current_term'] = $term['intID'];
-		
-		$this->data['campus'] = 'Makati';
+		$this->data['current_term'] = $term['intID'];		
         
 		$this->load->view('common/header_new',$this->data);  
 		
