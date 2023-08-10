@@ -100,12 +100,11 @@
                         <div class="tab-pane active" id="tab_1">    
                             <div class="box box-solid">
                                 <div class="box-header">
-                                    <h4 class="box-title">Payments</h4>                                    
+                                    <h4 class="box-title">Payment</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
                                 <h4 class="box-title">Payments</h4>                                                                       
-                                    <div v-if="cashier && cashier.or_current" class="row">
-                                        <div v-html="tuition" class="col-sm-6"></div>   
+                                    <div v-if="cashier && cashier.or_current" class="row">                                           
                                         <div class="col-sm-6" v-if="cashier">
                                             <h3>Cashier {{ cashier.intID }}</h3>
                                             <form @submit.prevent="submitManualPayment" method="post">                                                
@@ -173,8 +172,7 @@
                                 <div class="box-header">
                                     <h4 class="box-title">DETAILS</h4>                                    
                                 </div>                                    
-                                <div class="box-body">
-                                <h4 class="box-title">Payments</h4>
+                                <div class="box-body">                                    
                                     <table class="table table-bordered table-striped">
                                         <tr>
                                             <th>OR Number</th>
@@ -303,7 +301,8 @@
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
-                                    </table>                                                                                                                                          
+                                    </table>  
+                                    <div v-html="tuition" class="col-sm-6"></div>                                                                                                                                        
                                 </div>
                             </div>              
                         </div>     
