@@ -2024,6 +2024,8 @@ class Data_fetcher extends CI_Model {
         
         if($scholarship != 0 && $scholarship != null)
             $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
+        elseif($student['enumScholarship'] != null && $student['enumScholarship'] != 0 )
+            $scholar = $this->db->where('intID',$student['enumScholarship'])->get('tb_mas_scholarships')->row();
 
 
         $discount = $this->db->where('intID',$student['enumDiscount'])->get('tb_mas_scholarships')->row();
