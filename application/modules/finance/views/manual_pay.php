@@ -78,7 +78,7 @@
                                     </div> -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Check/Credit/Debit Number:</label>
+                                            <label>Reference No.:</label>
                                             <input type="text" :disabled="request.is_cash == 1" required class="form-control" v-model="request.check_number" />
                                         </div>
                                     </div>                                   
@@ -125,7 +125,7 @@
                                     <th>OR Number</th>
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
-                                    <th>Check/Credit/Debit #</th>
+                                    <th>Reference No.</th>
                                     <th>Amount Paid</th>
                                     <th>Online Payment Charge</th>
                                     <th>Total Due</th>
