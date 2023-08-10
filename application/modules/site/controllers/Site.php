@@ -36,7 +36,7 @@ class Site extends CI_Controller {
 
 		$term = $this->data_fetcher->get_active_sem();
 		$this->data['current_term'] = $term['intID'];
-		
+		$this->data['campus'] = 'Makati';
         $this->load->view('common/header_new',$this->data);  
 		if($this->data['campus'] == "Cebu")  		     
 			$this->load->view('student_application',$this->data);
