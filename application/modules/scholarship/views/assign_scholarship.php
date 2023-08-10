@@ -57,7 +57,7 @@
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th>Name</th>
-                        <th>Scholarship</th>
+                        <th>Discount Type</th>
                         <th>Actions</th>
                     </tr>
                     <?php foreach($discounted as $disc): ?>
