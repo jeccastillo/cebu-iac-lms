@@ -51,7 +51,7 @@ class Classroom extends CI_Controller {
     
     public function add_classroom()
     {
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {   
             $this->data['crType'] = $this->config->item('crType');
             $this->data['page'] = "add_classroom";
@@ -70,7 +70,7 @@ class Classroom extends CI_Controller {
     public function edit_classroom($id)
     {
         
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
           
             $this->data['item'] = $this->data_fetcher->getClassroom($id);
@@ -91,20 +91,26 @@ class Classroom extends CI_Controller {
     
     public function submit_classroom()
     {
-        $post = $this->input->post();
-        //print_r($post);
-        $this->data_poster->log_action('Classroom','Added a new Classroom '.$post['strRoomCode'],'green');
-        $this->data_poster->post_data('tb_mas_classrooms',$post);
+        if($this->is_registrar() || $this->is_super_admin())
+        {   
+            $post = $this->input->post();
+            //print_r($post);
+            $this->data_poster->log_action('Classroom','Added a new Classroom '.$post['strRoomCode'],'green');
+            $this->data_poster->post_data('tb_mas_classrooms',$post);
+        }
         redirect(base_url()."classroom/view_classrooms");
             
     }
     
     public function submit_edit_classroom()
     {
-        $post = $this->input->post();
-        //print_r($post);
-        $this->data_poster->post_data('tb_mas_classrooms',$post,$post['intID']);
-        $this->data_poster->log_action('Classroom','Updated Classroom Info: '.$post['strRoomCode']." ".$post['enumType'],'green');
+        if($this->is_registrar() || $this->is_super_admin())
+        {   
+            $post = $this->input->post();
+            //print_r($post);
+            $this->data_poster->post_data('tb_mas_classrooms',$post,$post['intID']);
+            $this->data_poster->log_action('Classroom','Updated Classroom Info: '.$post['strRoomCode']." ".$post['enumType'],'green');
+        }
         redirect(base_url()."classroom/view_classrooms");
             
     }
@@ -112,7 +118,7 @@ class Classroom extends CI_Controller {
     public function classroom_viewer($id)
     {
         
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
           
             $this->data['item'] = $this->data_fetcher->getClassroom($id);
@@ -140,7 +146,7 @@ class Classroom extends CI_Controller {
     
     public function view_classrooms()
     {
-        if($this->is_admin())
+        if($this->is_registrar() || $this->is_super_admin())
         {
             $this->data['classrooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
             $this->data['page'] = "view_classrooms";
