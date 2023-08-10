@@ -394,6 +394,38 @@ class Data_fetcher extends CI_Model {
 
     }
 
+    function getOfferedSubjects($studentID,$curriculumID,$sem=null,$year=null)
+    {
+        $bucket = "SELECT tb_mas_curriculum_subject.intID,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,
+                            tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours 
+                            FROM tb_mas_subjects 
+                            JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID 
+                            JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID 
+                            JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID 
+                            WHERE tb_mas_subjects.intID 
+                            NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') 
+                            AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
+ 
+        if($sem!=null && $year!=null)
+            $bucket .= "AND tb_mas_curriculum_subject.intYearLevel = ".$year." AND tb_mas_curriculum_subject.intSem = ".$sem." ";
+        elseif($sem!=null)
+            $bucket .= "AND tb_mas_classlist.strAcademicYear = ".$sem." ";
+
+        
+        
+        $bucket .= "GROUP BY tb_mas_classlist.intSubjectID ORDER BY tb_mas_curriculum_subject.intYearLevel ASC, tb_mas_curriculum_subject.intSem ASC"; 
+        
+        $subjects = $this->db
+             ->query($bucket)
+             ->result_array();
+        
+        //echo $this->db->last_query();
+        //print_r($subjects);
+       
+        return $subjects;
+
+    }
+
     function countStudentsInClasslist($id)
     {
         return $this->db

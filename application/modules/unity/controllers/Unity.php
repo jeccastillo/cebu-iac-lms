@@ -606,7 +606,7 @@ class Unity extends CI_Controller {
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
-            $ret['subjects_available'] = $this->data_fetcher->getSubjectsInCurriculum($ret['student']['intCurriculumID'],$sem,$id);           
+            $ret['subjects_available'] = $this->data_fetcher->getOfferedSubjects($ret['student']['intID'],$ret['student']['intCurriculumID'],$sem);           
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             //--------TUITION-------------------------------------------------------------------
             
