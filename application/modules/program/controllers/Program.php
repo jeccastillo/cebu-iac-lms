@@ -86,6 +86,7 @@ class Program extends CI_Controller {
     {
         
         $post = $this->input->post();
+        $post['school'] = "iacademy";
         //print_r($post);
         $this->data_poster->log_action('Program','Added a new Program '.$post['strProgramCode'],'yellow');
         $this->data_poster->post_data('tb_mas_programs',$post);        
