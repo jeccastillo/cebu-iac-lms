@@ -379,11 +379,18 @@
                                 <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/add_ay" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="view_academic_year")?'active':''; ?>"><a href="<?php echo base_url(); ?>registrar/view_all_ay" style="margin-left: 10px;"><i class="ion ion-university"></i> View Academic Year</a></li>
                                 <li class="<?php echo (isset($page) && $page=="add_blocksection")?'active':''; ?>"><a href="<?php echo base_url(); ?>blocksection/block_section" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Block Section</a></li>
-                                <li class="<?php echo (isset($page) && $page=="view_blocksection")?'active':''; ?>"><a href="<?php echo base_url(); ?>blocksection/view_block_sections" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block Sections</a></li>
+                                <li class="<?php echo (isset($page) && $page=="view_blocksection")?'active':''; ?>"><a href="<?php echo base_url(); ?>blocksection/view_block_sections" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block Sections</a></li>                                
+                            </ul>                            
+                        </li>
+                        <li class="treeview <?php echo (isset($opentree) && $opentree=="classroom")?'active':''; ?>">
+                            <a href="#">
+                                <i class="fa fa-circle text-green"></i> <span>Classrooms</span>
+                                <i class="fa pull-right fa-angle-left"></i>
+                            </a>
+                            <ul class="treeview-menu">
                                 <li class="<?php echo (isset($page) && $page=="add_classroom")?'active':''; ?>"><a href="<?php echo base_url(); ?>classroom/add_classroom" style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Classroom</a></li>
                                 <li class="<?php echo (isset($page) && $page=="view_classrooms")?'active':''; ?>"><a href="<?php echo base_url(); ?>classroom/view_classrooms" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Classrooms</a></li>
                             </ul>
-                            
                         </li>
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="grading")?'active':''; ?>">
                             <a href="#">

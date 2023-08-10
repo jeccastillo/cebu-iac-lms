@@ -55,7 +55,7 @@ class Classroom extends CI_Controller {
         {   
             $this->data['crType'] = $this->config->item('crType');
             $this->data['page'] = "add_classroom";
-            $this->data['opentree'] = "admin";
+            $this->data['opentree'] = "classroom";
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_classroom",$this->data);
             $this->load->view("common/footer",$this->data); 
@@ -150,7 +150,7 @@ class Classroom extends CI_Controller {
         {
             $this->data['classrooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
             $this->data['page'] = "view_classrooms";
-            $this->data['opentree'] = "admin";
+            $this->data['opentree'] = "classroom";
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/classroom_view",$this->data);
             $this->load->view("common/footer",$this->data); 
