@@ -98,6 +98,7 @@
                                     <th>Units</th>                                                
                                     <th>Faculty</th>
                                     <th>Status</th>
+                                    <th>Schedule</th>
                                     <th>Adjustments</th>
                                     <th>Actions</th>
                                 </tr>
@@ -109,6 +110,9 @@
                                     <td>{{ record.strUnits }}</td>                                                                                                
                                     <td>{{ record.facultyName }}</td>
                                     <td>{{ record.recStatus }}</td>
+                                    <td v-if="record.schedule.schedString != ''">                                                    
+                                        {{ record.schedule.schedString }}                                                       
+                                    </td>
                                     <td><span v-if="record.adjustments">{{ record.adjustments.adjustment_type }}</span></td>
                                     <td>    
                                     <button                                                
