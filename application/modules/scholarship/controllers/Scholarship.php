@@ -65,6 +65,14 @@ class Scholarship extends CI_Controller {
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
+
+        $this->data['student_scholars'] = $this->db->where(array('enumScholarship !=',null,'enumScholarship !=',0))
+                                                   ->order_by('strLastname')
+                                                   ->get('tb_mas_users')
+                                                   ->result_array();
+
+        print_r($this->data['student_scholars']);
+
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
         $this->load->view("common/footer",$this->data);
