@@ -72,7 +72,7 @@ class Scholarship extends CI_Controller {
                                                    ->get('tb_mas_users')
                                                    ->result_array();
         
-        $this->data['student_scholars'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name')                                                   
+        $this->data['discounted'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name')                                                   
                                                    ->join('tb_mas_scholarships', 'tb_mas_users.enumDiscount = tb_mas_scholarships.intID')
                                                    ->order_by('strLastname')
                                                    ->get('tb_mas_users')
