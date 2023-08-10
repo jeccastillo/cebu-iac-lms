@@ -66,7 +66,7 @@ class Scholarship extends CI_Controller {
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
 
-        $this->data['student_scholars'] = $this->db->where(array('enumScholarship !=',null,'enumScholarship !=',0))
+        $this->data['student_scholars'] = $this->db->where(array('enumScholarship !='=>null,'enumScholarship !='=>0))
                                                    ->order_by('strLastname')
                                                    ->get('tb_mas_users')
                                                    ->result_array();
