@@ -173,9 +173,11 @@ class Site extends CI_Controller {
 	public function view_active_programs_makati(){
         $programs_college = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
 		$programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));
+		$programs_sd = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'other'));
         $ret = array(
 			'college' => [],
 			'shs' => [],
+			'sd' =>[],
 		);
 		
         foreach($programs_college as $prog){
@@ -194,6 +196,15 @@ class Site extends CI_Controller {
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
             $ret['shs'][] = $temp;
+        }
+
+		foreach($programs_sd as $prog){
+            
+            $temp['id'] = $prog['intProgramID'];
+            $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
+            $temp['strMajor'] = $prog['strMajor'];
+            $ret['sd'][] = $temp;
         }
 
         $data['data'] = $ret;
