@@ -851,8 +851,7 @@ new Vue({
                 })
 
         },
-        submitManualPayment: function(){
-            console.log("submit");
+        submitManualPayment: function(){            
             let url = api_url + 'finance/manual_payment';  
             let slug = this.slug;          
             this.loader_spinner = true;
