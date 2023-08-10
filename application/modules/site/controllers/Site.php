@@ -12,11 +12,13 @@ class Site extends CI_Controller {
 		/*--------------THEMES-----------------------*/
 		$this->config->load('themes');
 		$theme = $this->config->item('users');
+		$this->config->load('courses');
 		$theme = 'site';
 			
 		$this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";
 		$this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
-		$this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";		
+		$this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";	
+		$this->data['campus'] = $this->config->item('campus');	
 		$this->theme = $theme;
 		$this->data['logged_in'] = $this->session->userdata('user_logged');
 		
@@ -30,14 +32,21 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function student_application() {
+	public function student_application() {		
+
 		$term = $this->data_fetcher->get_active_sem();
 		$this->data['current_term'] = $term['intID'];
 		
-        $this->load->view('common/header_new',$this->data);    		     
-		$this->load->view('student_application',$this->data);
+        $this->load->view('common/header_new',$this->data);  
+		if($this->data['campus'] == "Cebu")  		     
+			$this->load->view('student_application',$this->data);
+		else
+			$this->load->view('student_application_makati',$this->data);
+
 		$this->load->view('common/footer_new',$this->data);
     }
+
+	
 
 	public function awesome($type = null) {
 		$type = urldecode($type);
@@ -141,7 +150,7 @@ class Site extends CI_Controller {
     }
 
 	public function view_active_programs(){
-        $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1));
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
         $ret = [];
         foreach($programs as $prog){
             
@@ -150,6 +159,38 @@ class Site extends CI_Controller {
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
             $ret[] = $temp;
+        }
+
+        $data['data'] = $ret;
+
+        echo json_encode($data);
+
+    }
+
+	public function view_active_programs_makati(){
+        $programs_college = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
+		$programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));
+        $ret = array(
+			'college' => [],
+			'shs' => [],
+		);
+		
+        foreach($programs_college as $prog){
+            
+            $temp['id'] = $prog['intProgramID'];
+            $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
+            $temp['strMajor'] = $prog['strMajor'];
+            $ret['college'][] = $temp;
+        }
+
+		foreach($programs_shs as $prog){
+            
+            $temp['id'] = $prog['intProgramID'];
+            $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
+            $temp['strMajor'] = $prog['strMajor'];
+            $ret['shs'][] = $temp;
         }
 
         $data['data'] = $ret;
