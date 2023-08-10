@@ -97,7 +97,7 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">    
+                        <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
                             <div class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">Payment</h4>                                    
@@ -168,7 +168,7 @@
                                 </div>
                             </div>              
                         </div>   
-                        <div class="tab-pane active" id="tab_2">    
+                        <div :class="!cashier?'active tab-pane':'tab-pane'" id="tab_2">    
                             <div class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">DETAILS</h4>                                    
