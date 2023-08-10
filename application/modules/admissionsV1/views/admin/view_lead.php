@@ -619,8 +619,9 @@
                         <button type="button" v-if="request.status == 'New'" data-toggle="modal"
                             @click="update_status = 'Not Answering';" data-target="#myModal" class=" btn
                             btn-primary">Not Answering</button>
-                        <button type="button" v-if="request.status == 'Waiting For Interview'" data-toggle="modal"
-                            @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
+                        <button type="button"
+                            v-if="request.status == 'Waiting For Interview' && request.campus == 'Cebu'"
+                            data-toggle="modal" @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
                             Interview</button>
                         <button type="button" v-if="request.status == 'For Interview'"
