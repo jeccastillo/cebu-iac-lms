@@ -48,7 +48,7 @@
                     <tr>
                         <th><?php echo $scholar['strLastname'].", ".$scholar['strFirstname']." ".$scholar['strMiddlename']; ?></th>
                         <th><?php echo $scholar['name']; ?></th>
-                        <th></th>
+                        <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$scholar['intID']; ?>" target="_blank">Update</a></th>
                     </tr>
                     <?php endforeach; ?>
                 </table>
