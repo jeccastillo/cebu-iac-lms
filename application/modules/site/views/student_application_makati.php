@@ -10,21 +10,21 @@
 
 <div class=" block mx-auto mt-[60px]" data-aos="fade-up">
     <h1 class="text-4xl font-[900] text-center color-primary">
-        iACADEMY Cebu
+        iACADEMY
     </h1>
 </div>
 
 <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
-            Student Information Sheet <strong>(Cebu Campus)</strong></h4>
+            Student Information Sheet <strong>(Makati Campus)</strong></h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
 
         <p style="margin-top:15px;">
-            Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati (Main Campus) click
+            Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu click
             <a style="text-decoration: underline;"
-                href="https://portalv2.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a>.
+                href="#">here</a>.
         </p>
     </div>
 
@@ -773,6 +773,7 @@ new Vue({
             date_of_birth: "",
             program: "",
             health_concerns: [],
+            campus:"Makati",
             citizenship: 'Philippines',
             syid: "<?php echo $current_term; ?>",
             student_type: 'freshman',
