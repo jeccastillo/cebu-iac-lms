@@ -141,6 +141,8 @@
                                                     <label>Enter amount to pay:</label>
                                                     <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
                                                 </div>
+                                            </div>
+                                            <div class="col-sm-6" v-if="cashier">
                                                 <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <select class="form-control" v-model="request.or_number" required>
