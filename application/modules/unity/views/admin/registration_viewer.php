@@ -103,9 +103,8 @@
                                     <h4 class="box-title">Payment</h4>                                    
                                 </div>                                    
                                 <div class="box-body">
-                                <h4 class="box-title">Payments</h4>                                                                       
-                                    <div v-if="cashier && cashier.or_current" class="row">                                           
-                                        <h3>Cashier {{ cashier.intID }}</h3>
+                                <h4 class="box-title">Cashier {{ cashier.intID }}</h4>                                                                       
+                                    <div v-if="cashier && cashier.or_current" class="row">                                                                                   
                                         <div class="col-sm-6" v-if="cashier">                                            
                                             <form @submit.prevent="submitManualPayment" method="post">                                                
                                                 <div class="form-group">
