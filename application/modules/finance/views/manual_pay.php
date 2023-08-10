@@ -65,7 +65,8 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <input type="hidden" v-model="request.status" value="Paid" />
+                                    <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Payment Status</label>
                                             <select class="form-control" v-model="request.status">
@@ -74,7 +75,7 @@
                                                 <option value="Refunded">Refunded</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Check/Credit/Debit Number:</label>
