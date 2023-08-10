@@ -70,9 +70,7 @@ class Scholarship extends CI_Controller {
                                                    ->join('tb_mas_scholarships', 'tb_mas_users.enumScholarship = tb_mas_scholarships.intID')
                                                    ->order_by('strLastname')
                                                    ->get('tb_mas_users')
-                                                   ->result_array();
-
-        print_r($this->data['student_scholars']);
+                                                   ->result_array();        
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);

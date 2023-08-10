@@ -36,6 +36,22 @@
                  <input class="btn btn-info btn-flat" type="submit" />
                  
             </form>
+                <hr/>
+                <h3>Student Scholars</h3>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Scholarship</th>
+                        <th>Actions</th>
+                    </tr>
+                    <?php foreach($student_scholars as $scholar): ?>
+                    <tr>
+                        <th><?php echo $scholar['strLastname'].", ".$scholar['strFirstname']." ".$scholar['strMiddlename']; ?></th>
+                        <th><?php echo $scholar['name']; ?></th>
+                        <th></th>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
         </div>
        
