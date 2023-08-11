@@ -51,7 +51,7 @@
                                 <tbody>
                                     <tr v-for="item in student_scholarships">
                                         <td>{{ item.name }}</td>
-                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger"></button></td>
+                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -92,7 +92,7 @@
                                     <tr v-for="item in student_discounts">
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.referrer }}</td>
-                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger"></button></td>
+                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
                             </table>
