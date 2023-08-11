@@ -36,7 +36,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $sem; ?>',
-        student_id: '<?php echo $student; ?>'
+        student_id: '<?php echo $student; ?>',
         scholarships:[],
         discounts:[],
         terms:[],
