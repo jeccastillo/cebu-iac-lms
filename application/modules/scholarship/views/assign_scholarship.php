@@ -171,6 +171,7 @@ new Vue({
        submitDeduction: function(type){
             var req = {};
             var formdata= new FormData();
+            
             if(type == "scholarship")
                 req = this.request_scholarship;
             else
@@ -180,7 +181,7 @@ new Vue({
                 formdata.append(key,value);
             }
             
-            console.log(formdata);                
+            console.log(req);                
             this.loader_spinner = true;
             axios.post(base_url + 'scholarship/add_scholarship', formdata, {
                 headers: {
