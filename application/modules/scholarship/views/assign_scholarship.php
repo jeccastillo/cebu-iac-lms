@@ -133,13 +133,13 @@ new Vue({
         request_scholarship:{
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
-            syid: this.current_sem,
+            syid: undefined,
             referrer: 'none',
         },
         request_discount:{
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
-            syid: this.current_sem,
+            syid: undefined,
             referrer: undefined,
         }
                       
@@ -155,6 +155,8 @@ new Vue({
                     this.student_scholarships = data.data.student_scholarships;
                     this.student_discounts = data.data.student_discounts;
                     this.student = data.data.student;
+                    this.request_discount = this.current_sem;
+                    this.request_scholarship = this.current_sem;
                
             })
             .catch((error) => {
