@@ -581,12 +581,20 @@
                                 {{request.tos?request.tos:'freshman'}}
                             </p>
                             <hr />
-                            <select class="form-control" @change="updateField('student_type',$event)"
-                                v-model="request.tos">
+                            <select v-if="request.campus == 'Cebu'" class="form-control"
+                                @change="updateField('student_type',$event)" v-model="request.tos">
                                 <option value="freshman">freshman</option>
                                 <option value="foreign">foreign</option>
                                 <option value="transferee">transferee</option>
                                 <option value="second degree">second degree</option>
+                            </select>
+                            <select v-if="request.campus == 'Makati'" required class="form-control"
+                                v-model="request.student_type">
+                                <option value="UG - Freshman">UG - Freshman</option>
+                                <option value="UG- Transferee">UG- Transferee</option>
+                                <option value="SHS- Freshman">SHS- Freshman</option>
+                                <option value="SHS- Transferee">SHS- Transferee</option>
+                                <option value="SHS- DRIVE">SHS- DRIVE</option>
                             </select>
                             </p>
 
