@@ -133,6 +133,9 @@ new Vue({
     methods: {      
        changeTerm: function(event){
          document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
+       },
+       submitDeduction: function(){
+        
        }                                       
     }
 
