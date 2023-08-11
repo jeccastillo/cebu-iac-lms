@@ -29,7 +29,7 @@
                  <p>Search Student</p>
                  <div class="row">
                      <div class="col-sm-6">
-                        <input type="text" id="select-student-id" name="studentID" placeholder="Enter Student Name/Number" class="form-control" />
+                        <input type="text" id="select-student-id" name="student" placeholder="Enter Student Name/Number" class="form-control" />
                      </div>
                  </div>
                  <br />
