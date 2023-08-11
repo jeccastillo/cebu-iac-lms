@@ -169,17 +169,18 @@ new Vue({
          document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
        },
        submitDeduction: function(type){
-            console.log(type);
+            var req = {};
             var formdata= new FormData();
-            if(type == "scholarship")
-                for (const [key, value] of Object.entries(this.request_scholarship)) {
-                    formdata.append(key,value);
-                }
+            if(type == "scholarship"){
+                req = this.request_scholarship;
             else
-                for (const [key, value] of Object.entries(this.request_discount)) {
-                    formdata.append(key,value);
-                }                                                    
-
+                req = this.request_discount;
+            
+            for (const [key, value] of Object.entries(req)) {
+                formdata.append(key,value);
+            }
+            
+            console.log(formdata);                
             this.loader_spinner = true;
             axios.post(base_url + 'scholarship/add_scholarship', formdata, {
                 headers: {
