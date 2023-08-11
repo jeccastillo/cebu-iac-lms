@@ -177,7 +177,7 @@
                                     <option value="transferee">Transferee</option>
                                     <option value="foreign">Foreign</option>
                                 </select>
-
+                                {{request}}
                                 <select v-if="request.campus == 'Makati'" required class="form-control"
                                     v-model="request.student_type">
                                     <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
