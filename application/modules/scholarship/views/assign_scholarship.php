@@ -1,75 +1,75 @@
-<aside class="right-side">
-<section class="content-header">
-                    <h1>
-                    OSAS
-                        <small></small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i>OSAS</a></li>
-                        <li class="active">Assign Scholarship</li>
-                    </ol>
-                </section>
-<div class="content">
-    <div class="span10 box box-primary">
-        <div class="box-header">
-                <h3 class="box-title">Assign Scholarship</h3>
-                
+<aside class="right-side" id="registration-container">    
+    <section class="content-header">
+        <h1>
+            Assign Scholarship/Discount                                 
+        </h1>     
+    </section>
+        <hr />
+    <div class="content"> 
+        <div class="pull-right">
+            <select @change="changeTerm($event)" class="form-control" v-model="current_sem">
+                <option v-for="term in terms" value="term.intID">{{ term.enumSem }} Term SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
+            </select>
         </div>
-       
-        <div class="box box-solid">
-            <div class="box-body">
-                <?php if($error_message!=""): ?>
-                    <div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Error</strong> <?php echo $error_message; ?></div>
-                <?php endif; ?>
-                
-                <hr />
-            
-             <form id="advise-student" action="<?php echo base_url(); ?>student/edit_student_scholarship" method="post" role="form">
-                 <p>Search Student</p>
-                 <div class="row">
-                     <div class="col-sm-6">
-                        <input type="text" id="select-student-id" name="studentID" placeholder="Enter Student Name/Number" class="form-control" />
-                     </div>
-                 </div>
-                 <br />
-                 <input class="btn btn-info btn-flat" type="submit" />
-                 
-            </form>
-                <hr/>
-                <h3>Student Scholars</h3>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>Name</th>
-                        <th>Scholarship</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php foreach($student_scholars as $scholar): ?>
-                    <tr>
-                        <th><?php echo $scholar['strLastname'].", ".$scholar['strFirstname']." ".$scholar['strMiddlename']; ?></th>
-                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>" target="_blank"><?php echo $scholar['name']; ?></a></th>
-                        <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$scholar['intID']; ?>" target="_blank">Update</a></th>
-                    </tr>
-                    <?php endforeach; ?>
-                </table>
-                <hr/>
-                <h3>Discounted</h3>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>Name</th>
-                        <th>Discount Type</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php foreach($discounted as $disc): ?>
-                    <tr>
-                        <th><?php echo $disc['strLastname'].", ".$disc['strFirstname']." ".$disc['strMiddlename']; ?></th>
-                        <th><a href="<?php echo base_url().'scholarship/view/'.$scholar['scholarship_id']; ?>" target="_blank"><?php echo $disc['name']; ?></a></th>
-                        <th><a href="<?php echo base_url().'student/edit_student_scholarship/'.$disc['intID']; ?>" target="_blank">Update</a></th>
-                    </tr>
-                    <?php endforeach; ?>
-                </table>
-            </div>
-        </div>
-       
-        </div>
+    </div>
+        
+    </div>
+  
 </aside>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+<script>
+<?php if($start!=0): ?>
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
+<?php else: ?>
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>';
+<?php endif; ?>
+
+new Vue({
+    el: '#registration-container',
+    data: {                    
+        base_url: '<?php echo base_url(); ?>',
+        current_sem: '<?php echo $sem; ?>',
+        scholarships:[],
+        discounts:[],
+        terms:[],
+        student_deductions:[],        
+                      
+    },
+
+    mounted() {
+
+        axios.get(this.base_url + 'scholarship/assign_scholarship_data/'+this.current_sem)
+                .then((data) => {        
+                    this.scholarships = data.data.scholarships;
+                    this.discounts = data.data.discounts;
+                    this.terms = data.data.terms;
+                    this.student_deductions = data.data.student_deductions;
+               
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+                        
+
+    },
+
+    methods: {      
+       changeTerm: function(event){
+         document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
+       }                                       
+    }
+
+})
+
+$(document).ready(function(){     
+});
+</script>
+

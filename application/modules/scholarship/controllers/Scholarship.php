@@ -61,27 +61,38 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/scholarship_list_conf",$this->data);
     }
 
-    public function assign_scholarship(){
+    public function assign_scholarship($sem = 0){
+        
+        if($sem != 0)
+            $ret['sem'] = $sem;
+        else{
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
-
-        $this->data['student_scholars'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name,tb_mas_scholarships.intID as scholarship_id')                                                   
-                                                   ->join('tb_mas_scholarships', 'tb_mas_users.enumScholarship = tb_mas_scholarships.intID')
-                                                   ->order_by('strLastname')
-                                                   ->get('tb_mas_users')
-                                                   ->result_array();
-        
-        $this->data['discounted'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name')                                                   
-                                                   ->join('tb_mas_scholarships', 'tb_mas_users.enumDiscount = tb_mas_scholarships.intID')
-                                                   ->order_by('strLastname')
-                                                   ->get('tb_mas_users')
-                                                   ->result_array();                                                           
+                                                                
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
-        $this->load->view("common/footer",$this->data);
-        $this->load->view("common/assign_scholarship_conf",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
+    public function assign_scholarship_data($sem){
+
+        $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
+        $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discounts'))->result_array();
+        $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
+        
+        $ret['student_deductions'] = $this->db->select('tb_mas_student_discounts.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                    ->where(array('syid'=>$sem))
+                                    ->get('tb_mas_student_discounts')
+                                     ->result_array();
+
+        echo json_encode($ret);
+
     }
 
     public function view($id){
