@@ -51,7 +51,7 @@
                                 <tbody>
                                     <tr v-for="item in student_scholarships">
                                         <td>{{ item.name }}</td>
-                                        <td></td>
+                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger"></button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -92,7 +92,7 @@
                                     <tr v-for="item in student_discounts">
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.referrer }}</td>
-                                        <td></td>
+                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger"></button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -166,10 +166,10 @@ new Vue({
     },
 
     methods: {      
-       changeTerm: function(event){
-         document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
-       },
-       submitDeduction: function(type){
+        changeTerm: function(event){
+             document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
+        },
+        submitDeduction: function(type){
             var req = {};
             var formdata= new FormData();            
             if(type == "scholarship")
@@ -198,7 +198,29 @@ new Vue({
                     location.reload();
                 });
             });
-       }                                       
+        },
+        deleteScholarship: function(id){
+            
+            var formdata= new FormData();  
+            formdata.append('id',id);    
+
+            this.loader_spinner = true;
+            axios.post(base_url + 'scholarship/delete_scholarship', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: data.data.success,
+                    text: data.data.message,
+                    icon: data.data.success,
+                }).then(function() {
+                    location.reload();
+                });
+            });
+        },                                
     }
 
 })

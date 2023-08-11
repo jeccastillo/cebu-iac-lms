@@ -138,6 +138,17 @@ class Scholarship extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function delete_scholarship(){
+        $post = $this->input->post();
+
+        $this->db->where(array('id'=>$post['id']))
+                 ->delete('tb_mas_student_discount');
+
+        $data['success'] = "success";
+        $data['message'] = "Deleted Successfully";
+
+    }
+
     public function data($id){
         $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID'=>$id))->row();        
         $data['status_options'] = get_enum_values('tb_mas_scholarships','status');
