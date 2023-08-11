@@ -725,7 +725,7 @@
                                             <select v-model="program_update" @change="changeProgram($event,1)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ program.strProgramDescription }}</option>
+                                                    {{ program.strProgramDescription }} ({{ program.type }}) </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -746,7 +746,7 @@
                                             <select v-model="program_update2" @change="changeProgram($event,2)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ program.strProgramDescription }}</option>
+                                                    {{ program.strProgramDescription }} ({{ program.type }})</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -767,7 +767,7 @@
                                             <select v-model="program_update3" @change="changeProgram($event,3)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ program.strProgramDescription }}</option>
+                                                    {{ program.strProgramDescription }} ({{ program.type }})</option>
                                             </select>
                                         </td>
                                     </tr>
