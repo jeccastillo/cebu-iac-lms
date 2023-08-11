@@ -88,6 +88,7 @@ class Scholarship extends CI_Controller {
 
         $ret['student_deductions'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
                                     ->where(array('syid'=>$sem))
+                                    ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                     ->get('tb_mas_student_discount')
                                      ->result_array();
 
