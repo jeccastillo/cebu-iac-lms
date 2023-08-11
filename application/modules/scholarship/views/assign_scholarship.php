@@ -33,7 +33,7 @@
                         <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
                             <div class="form-group">
                                 <label>Select Scholarship</label>
-                                <select v-model="request_scholarship.discount_id">
+                                <select class="form-control" v-model="request_scholarship.discount_id">
                                     <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
                                 </select>                            
                             </div>
