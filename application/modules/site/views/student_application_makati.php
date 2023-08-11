@@ -954,7 +954,12 @@ new Vue({
                 this.filtered_programs = this.programs.shs;
             else if (type === 'college')
                 this.filtered_programs = this.programs.college;
-            else this.filtered_programs = this.programs.sd;
+            else if (type === 'drive')
+                this.filtered_programs = this.programs.drive;
+            else {
+                this.filtered_programs = this.programs.sd;
+            }
+
             this.request.type = type;
         },
 
