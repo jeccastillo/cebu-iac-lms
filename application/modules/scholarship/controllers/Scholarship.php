@@ -131,7 +131,7 @@ class Scholarship extends CI_Controller {
         $post = $this->input->post();
 
         $this->db->insert('tb_mas_student_discount',$post);
-        $scholarship = $this->db->get_where('tb_mas_scholarship',array('intID'=>$post['discount_id']))->first_row('array');
+        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
         $this->data_poster->log_action('Scholarships','Added a Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
 
@@ -145,7 +145,7 @@ class Scholarship extends CI_Controller {
         $post = $this->input->post();
 
         $disc = $this->db->get_where('tb_mas_student_discount',array('id'=>$post['id']))->first_row('array');
-        $scholarship = $this->db->get_where('tb_mas_scholarship',array('intID'=>$disc['discount_id']))->first_row('array');
+        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$disc['discount_id']))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('intID'=>$disc['student_id']))->first_row('array');
 
         $this->db->where(array('id'=>$post['id']))
