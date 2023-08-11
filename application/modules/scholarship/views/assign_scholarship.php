@@ -28,9 +28,9 @@
                 </div>
                 <hr />
                 <h4>Assign Scholarship</h4>
-                <div class="row">
-                    <div class="col-md-6">
-                        <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
+                <div class="row">                    
+                    <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Select Scholarship</label>
                                 <select required class="form-control" v-model="request_scholarship.discount_id">
@@ -39,11 +39,28 @@
                             </div>
                             <hr />
                             <button class="btn btn-primary" type="submit">Add</button>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Assigned Scholarships for this Term</h4>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Scholarship</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in student_scholarships">
+                                        <td>{{ item.name }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>                    
                 </div>
                 <hr />
-                <h4>My Scholarships</h4>
+                
                 <hr />
                 <h4>Assign Discount</h4>
                 <div class="row">                    
@@ -54,17 +71,32 @@
                                 <select required class="form-control" v-model="request_discount.discount_id">
                                     <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
                                 </select>                            
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                            </div>                        
                             <div class="form-group">
                                 <label>Referrer Name</label>
                                 <input type="text" class="form-control" v-model="request_discount.referrer" />                                
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                            </div>                                                
                             <hr />
                             <button class="btn btn-primary" type="submit">Add</button>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Assigned Discounts for this Term</h4>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Discount</th>
+                                        <th>Referrer</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in student_discounts">
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.referrer }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </form>                    
                 </div>
@@ -95,7 +127,8 @@ new Vue({
         scholarships:[],
         discounts:[],
         terms:[],
-        student_deductions:[],    
+        student_scholarships:[],    
+        student_discounts:[],    
         student: undefined,    
         request_scholarship:{
             discount_id: undefined,
@@ -119,7 +152,8 @@ new Vue({
                     this.scholarships = data.data.scholarships;
                     this.discounts = data.data.discounts;
                     this.terms = data.data.terms;
-                    this.student_deductions = data.data.student_deductions;
+                    this.student_scholarships = data.data.student_scholarships;
+                    this.student_discounts = data.data.student_discounts;
                     this.student = data.data.student;
                
             })
@@ -135,7 +169,7 @@ new Vue({
          document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
        },
        submitDeduction: function(){
-        
+
        }                                       
     }
 

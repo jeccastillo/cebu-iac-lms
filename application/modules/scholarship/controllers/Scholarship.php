@@ -102,11 +102,17 @@ class Scholarship extends CI_Controller {
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$student))->first_row('array');
 
-        $ret['student_deductions'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                    ->where(array('syid'=>$sem,'student_id'=>$student))
+        $ret['student_scholarships'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                    ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'scholarship'))
                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                     ->get('tb_mas_student_discount')
                                      ->result_array();
+
+        $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount'))
+                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                     ->get('tb_mas_student_discount')
+                                      ->result_array();                                     
 
         echo json_encode($ret);
 
