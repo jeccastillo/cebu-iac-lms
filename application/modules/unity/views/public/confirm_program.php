@@ -14,12 +14,11 @@
                                 <tr>
                                     <th>Select Program</th>
                                     <td>
-                                        <!-- <select id="program" disabled v-model="request.intProgramID"
+                                        <select id="program" disabled v-model="request.intProgramID"
                                             @change="changeProgram($event)" class="form-control">
                                             <option v-for="program in programs" :value="program.intProgramID">
                                                 {{ program.strProgramDescription }}</option>
-                                        </select> -->
-                                        {{program.strProgramDescription}}
+                                        </select>
                                     </td>
                                     <td></td>
                                 </tr>
