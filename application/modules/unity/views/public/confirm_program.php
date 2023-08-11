@@ -152,7 +152,7 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Senior High School</label>
-                                <input type="text" required class="form-control" v-model="request.senior_high">
+                                <input type="text" class="form-control" v-model="request.senior_high">
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>School Address</label>
