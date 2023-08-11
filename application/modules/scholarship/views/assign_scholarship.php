@@ -2,7 +2,11 @@
     <section class="content-header">
         <h1>
             Assign Scholarship/Discount                                 
-        </h1>     
+        </h1>
+        <ol class="breadcrumb">
+            <li><a :href="base_url + 'scholarship/select_student'"><i class="fa fa-dashboard"></i>Select Student</a></li>
+            <li class="active">Assign Scholarship</li>
+        </ol>     
     </section>
         <hr />
     <div class="content"> 
@@ -32,6 +36,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $sem; ?>',
+        student_id: '<?php echo $student; ?>'
         scholarships:[],
         discounts:[],
         terms:[],
@@ -41,7 +46,7 @@ new Vue({
 
     mounted() {
 
-        axios.get(this.base_url + 'scholarship/assign_scholarship_data/'+this.current_sem)
+        axios.get(this.base_url + 'scholarship/assign_scholarship_data/'+this.student_id+'/'+this.current_sem)
                 .then((data) => {        
                     this.scholarships = data.data.scholarships;
                     this.discounts = data.data.discounts;

@@ -61,7 +61,20 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/scholarship_list_conf",$this->data);
     }
 
-    public function assign_scholarship($sem = 0){
+    public function select_student(){
+
+        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['page'] = "assign_scholarship";
+        $this->data['opentree'] = "scholarship";
+                                                               
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("select_student",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/assign_scholarship_conf",$this->data);
+    }
+
+    public function assign_scholarship($student,$sem = 0){
         
         if($sem != 0)
             $this->data['sem'] = $sem;
@@ -70,7 +83,7 @@ class Scholarship extends CI_Controller {
             $this->data['sem'] = $active_sem['intID'];
         }
         
-        $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['student'] = $student;
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
                                                                 
@@ -80,14 +93,14 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/footer",$this->data);        
     }
 
-    public function assign_scholarship_data($sem){
+    public function assign_scholarship_data($student,$sem){
 
         $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
         $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discounts'))->result_array();
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
 
         $ret['student_deductions'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                    ->where(array('syid'=>$sem))
+                                    ->where(array('syid'=>$sem,'student_id'=>$student))
                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                     ->get('tb_mas_student_discount')
                                      ->result_array();
