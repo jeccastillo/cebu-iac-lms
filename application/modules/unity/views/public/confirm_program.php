@@ -14,7 +14,7 @@
                                 <tr>
                                     <th>Select Program</th>
                                     <td>
-                                        <select id="program" v-model="request.intProgramID"
+                                        <select id="program" disabled v-model="request.intProgramID"
                                             @change="changeProgram($event)" class="form-control">
                                             <option v-for="program in programs" :value="program.intProgramID">
                                                 {{ program.strProgramDescription }}</option>
@@ -152,41 +152,42 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Senior High School</label>
-                                <input type="text" required class="form-control" v-model="request.senior_high">
+                                <input type="text" class="form-control" v-model="request.senior_high">
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>School Address</label>
-                                <textarea required class="form-control"
-                                    v-model="request.senior_high_address"></textarea>
+                                <textarea class="form-control" v-model="request.senior_high_address"></textarea>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Years Attended From (month-day-year)</label>
                                 <the-mask class="form-control" :mask="['##-##-####']" type="text"
-                                    v-model="request.senior_high_attended" required masked="true"
-                                    placeholder="mm-dd-yyyy"></the-mask>
+                                    v-model="request.senior_high_attended" masked="true" placeholder="mm-dd-yyyy">
+                                </the-mask>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Strand</label>
-                                <input type="text" required class="form-control" v-model="request.strand">
+                                <input type="text" class="form-control" v-model="request.strand">
                             </div>
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
-                                <select v-if="request.campus == 'Cebu'" required class="form-control"
+                                <select v-if="api_data.campus == 'Cebu'" required class="form-control"
                                     v-model="request.student_type">
                                     <option value="freshman">Freshman</option>
                                     <option value="transferee">Transferee</option>
                                     <option value="foreign">Foreign</option>
                                 </select>
-                                <select v-if="request.campus == 'Makati'" required class="form-control"
+                                <select v-if="api_data.campus == 'Makati'" required class="form-control"
                                     v-model="request.student_type">
-                                    <option value="UG - Freshman">UG - Freshman</option>
-                                    <option value="UG- Transferee">UG- Transferee</option>
-                                    <option value="SHS- Freshman">SHS- Freshman</option>
-                                    <option value="SHS- Transferee">SHS- Transferee</option>
-                                    <option value="SHS- DRIVE">SHS- DRIVE</option>
+                                    <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
+                                    <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
+                                    <option value="SHS - Freshman">SHS - Freshman</option>
+                                    <option value="SHS-  Transferee">SHS - Transferee</option>
+                                    <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program
+                                    </option>
                                 </select>
+
                             </div>
                         </div>
                         <hr />

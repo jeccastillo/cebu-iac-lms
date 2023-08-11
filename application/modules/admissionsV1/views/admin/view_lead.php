@@ -581,12 +581,20 @@
                                 {{request.tos?request.tos:'freshman'}}
                             </p>
                             <hr />
-                            <select class="form-control" @change="updateField('student_type',$event)"
-                                v-model="request.tos">
+                            <select v-if="request.campus == 'Cebu'" class="form-control"
+                                @change="updateField('student_type',$event)" v-model="request.tos">
                                 <option value="freshman">freshman</option>
                                 <option value="foreign">foreign</option>
                                 <option value="transferee">transferee</option>
                                 <option value="second degree">second degree</option>
+                            </select>
+                            <select v-if="request.campus == 'Makati'" required class="form-control"
+                                @change="updateField('student_type',$event)" v-model="request.tos">
+                                <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
+                                <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
+                                <option value="SHS - Freshman">SHS - Freshman</option>
+                                <option value="SHS-  Transferee">SHS - Transferee</option>
+                                <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program</option>
                             </select>
                             </p>
 
@@ -724,8 +732,9 @@
                                         <td>
                                             <select v-model="program_update" @change="changeProgram($event,1)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ program.strProgramDescription }}</option>
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }} </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -745,7 +754,8 @@
                                         <td>
                                             <select v-model="program_update2" @change="changeProgram($event,2)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
                                                     {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
@@ -766,7 +776,8 @@
                                         <td>
                                             <select v-model="program_update3" @change="changeProgram($event,3)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
                                                     {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
@@ -1012,7 +1023,7 @@ new Vue({
                             return prog.type == this.request.type
                         })
 
-                        console.log(this.filtered_programs, this.request.type)
+
 
                     })
                     .catch((error) => {
