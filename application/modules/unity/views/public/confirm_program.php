@@ -156,20 +156,19 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>School Address</label>
-                                <textarea required class="form-control"
-                                    v-model="request.senior_high_address"></textarea>
+                                <textarea class="form-control" v-model="request.senior_high_address"></textarea>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Years Attended From (month-day-year)</label>
                                 <the-mask class="form-control" :mask="['##-##-####']" type="text"
-                                    v-model="request.senior_high_attended" required masked="true"
-                                    placeholder="mm-dd-yyyy"></the-mask>
+                                    v-model="request.senior_high_attended" masked="true" placeholder="mm-dd-yyyy">
+                                </the-mask>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Strand</label>
-                                <input type="text" required class="form-control" v-model="request.strand">
+                                <input type="text" class="form-control" v-model="request.strand">
                             </div>
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
@@ -179,6 +178,7 @@
                                     <option value="transferee">Transferee</option>
                                     <option value="foreign">Foreign</option>
                                 </select>
+                                {{ request.campus}}
                                 <select v-if="request.campus == 'Makati'" required class="form-control"
                                     v-model="request.student_type">
                                     <option value="UG - Freshman">UG - Freshman</option>
