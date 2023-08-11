@@ -589,7 +589,7 @@
                                 <option value="second degree">second degree</option>
                             </select>
                             <select v-if="request.campus == 'Makati'" required class="form-control"
-                                v-model="request.student_type">
+                                v-model="request.tos">
                                 <option value="UG - Freshman">UG - Freshman</option>
                                 <option value="UG- Transferee">UG- Transferee</option>
                                 <option value="SHS- Freshman">SHS- Freshman</option>
