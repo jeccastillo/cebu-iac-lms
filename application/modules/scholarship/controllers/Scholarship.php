@@ -127,6 +127,17 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/footer",$this->data);
     }
 
+    public function add_scholarship(){
+        $post = $this->input->post();
+
+        $this->db->insert('tb_mas_student_discount',$post);
+
+        $data['success'] = "success";
+        $data['message'] = "Added Successfully";
+
+        echo json_encode($data);
+    }
+
     public function data($id){
         $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID'=>$id))->row();        
         $data['status_options'] = get_enum_values('tb_mas_scholarships','status');

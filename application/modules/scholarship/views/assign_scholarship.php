@@ -168,8 +168,33 @@ new Vue({
        changeTerm: function(event){
          document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
        },
-       submitDeduction: function(){
+       submitDeduction: function(type){
+            var formdata= new FormData();
+            if(type == "scholarship")
+                for (const [key, value] of Object.entries(this.request_scholarship)) {
+                    formdata.append(key,value);
+                }
+            else
+                for (const [key, value] of Object.entries(this.request_discount)) {
+                    formdata.append(key,value);
+                }                                                    
 
+            this.loader_spinner = true;
+            axios.post(base_url + 'scholarship/add_scholarship', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: data.data.success,
+                    text: data.data.message,
+                    icon: data.data.success,
+                }).then(function() {
+                    location.reload();
+                });
+            });
        }                                       
     }
 
