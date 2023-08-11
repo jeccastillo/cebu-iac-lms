@@ -30,10 +30,9 @@
                 <h4>Assign Scholarship</h4>
                 <div class="row">                    
                     <form method="post" action="#" @click.prevent.stop="submitDeduction('scholarship')">
-                        <div class="col-md-6">
-                            
+                        <div class="col-md-6">                            
                             <label>Select Scholarship</label>
-                            <select required v-model="request_scholarship.discount_id">
+                            <select required class="form-control" @click.prevent.stop="" v-model="request_scholarship.discount_id">
                                 <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
                             </select>                            
                             
