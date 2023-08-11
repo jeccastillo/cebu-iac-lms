@@ -172,13 +172,14 @@
                             </div>
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
-                                <select required class="form-control" v-model="request.student_type">
+                                <select v-if="api_data.campus == 'Cebu'" required class="form-control"
+                                    v-model="request.student_type">
                                     <option value="freshman">Freshman</option>
                                     <option value="transferee">Transferee</option>
                                     <option value="foreign">Foreign</option>
                                 </select>
-                                {{api_data}}
-                                <select required class="form-control" v-model="request.student_type">
+                                <select v-if="api_data.campus == 'Makati'" required class="form-control"
+                                    v-model="request.student_type">
                                     <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
                                     <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
                                     <option value="SHS - Freshman">SHS - Freshman</option>
