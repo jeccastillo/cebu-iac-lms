@@ -33,7 +33,7 @@
                         <div class="col-md-6">
                             
                             <label>Select Scholarship</label>
-                            <select required class="form-control" v-model="request_scholarship.discount_id">
+                            <select required v-model="request_scholarship.discount_id">
                                 <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
                             </select>                            
                             
@@ -155,8 +155,8 @@ new Vue({
                     this.student_scholarships = data.data.student_scholarships;
                     this.student_discounts = data.data.student_discounts;
                     this.student = data.data.student;
-                    this.request_discount = this.current_sem;
-                    this.request_scholarship = this.current_sem;
+                    this.request_discount.syid = this.current_sem;
+                    this.request_scholarship.syid = this.current_sem;
                
             })
             .catch((error) => {
