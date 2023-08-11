@@ -172,8 +172,7 @@ new Vue({
        },
        submitDeduction: function(type){
             var req = {};
-            var formdata= new FormData();
-            
+            var formdata= new FormData();            
             if(type == "scholarship")
                 req = this.request_scholarship;
             else
