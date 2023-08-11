@@ -51,16 +51,14 @@
                                 <tbody>
                                     <tr v-for="item in student_scholarships">
                                         <td>{{ item.name }}</td>
-                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
+                                        <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </form>                    
                 </div>
-                <hr />
-                
-                <hr />
+                <hr />                                
                 <h4>Assign Discount</h4>
                 <div class="row">                    
                     <form method="post" action="#" @submit.prevent.stop="submitDeduction('discount')">
@@ -92,7 +90,7 @@
                                     <tr v-for="item in student_discounts">
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.referrer }}</td>
-                                        <td><button @click="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
+                                        <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
                             </table>
