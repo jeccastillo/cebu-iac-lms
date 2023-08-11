@@ -147,6 +147,8 @@ class Scholarship extends CI_Controller {
         $data['success'] = "success";
         $data['message'] = "Deleted Successfully";
 
+        echo json_encode($data);
+
     }
 
     public function data($id){
