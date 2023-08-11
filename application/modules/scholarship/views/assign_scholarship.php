@@ -33,7 +33,7 @@
                         <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
                             <div class="form-group">
                                 <label>Select Scholarship</label>
-                                <select class="form-control" v-model="request_scholarship.discount_id">
+                                <select required class="form-control" v-model="request_scholarship.discount_id">
                                     <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
                                 </select>                            
                             </div>
@@ -42,7 +42,28 @@
                         </form>
                     </div>
                 </div>
+                <hr />
                 <h4>My Scholarships</h4>
+                <hr />
+                <h4>Assign Discount</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <form method="post" @click.prevent.stop="submitDeduction('discount')">
+                            <div class="form-group">
+                                <label>Select Discount</label>
+                                <select required class="form-control" v-model="request_discount.discount_id">
+                                    <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
+                                </select>                            
+                            </div>
+                            <div class="form-group">
+                                <label>Referrer Name</label>
+                                <input type="text" class="form-control" v-model="request_discount.referrer" />                                
+                            </div>
+                            <hr />
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
