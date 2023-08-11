@@ -66,6 +66,7 @@ new Vue({
                     this.discounts = data.data.discounts;
                     this.terms = data.data.terms;
                     this.student_deductions = data.data.student_deductions;
+                    this.student = data.data.student;
                
             })
             .catch((error) => {
