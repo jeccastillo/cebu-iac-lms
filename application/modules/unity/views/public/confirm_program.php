@@ -172,21 +172,12 @@
                             </div>
                             <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
-                                <select v-if="request.campus == 'Cebu'" required class="form-control"
-                                    v-model="request.student_type">
+                                <select required class="form-control" v-model="request.student_type">
                                     <option value="freshman">Freshman</option>
                                     <option value="transferee">Transferee</option>
                                     <option value="foreign">Foreign</option>
                                 </select>
-                                {{ request.campus}}
-                                <select v-if="request.campus == 'Makati'" required class="form-control"
-                                    v-model="request.student_type">
-                                    <option value="UG - Freshman">UG - Freshman</option>
-                                    <option value="UG- Transferee">UG- Transferee</option>
-                                    <option value="SHS- Freshman">SHS- Freshman</option>
-                                    <option value="SHS- Transferee">SHS- Transferee</option>
-                                    <option value="SHS- DRIVE">SHS- DRIVE</option>
-                                </select>
+
                             </div>
                         </div>
                         <hr />
