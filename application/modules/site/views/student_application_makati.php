@@ -687,7 +687,7 @@
                         </div>
                         <div class="mt-2">
                             <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
-                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- DRIVE" />
+                                @change="filterCourses('drive')" v-model="request.student_type" value="SHS- DRIVE" />
                             <label for="rb-shs-drive">SHS- DRIVE</label>
                         </div>
 
