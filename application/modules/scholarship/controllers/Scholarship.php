@@ -74,8 +74,10 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/assign_scholarship_conf",$this->data);
     }
 
-    public function assign_scholarship($student,$sem = 0){
+    public function assign_scholarship($sem = 0){
         
+        $post =  $this->input->post();
+
         if($sem != 0)
             $this->data['sem'] = $sem;
         else{
@@ -83,7 +85,7 @@ class Scholarship extends CI_Controller {
             $this->data['sem'] = $active_sem['intID'];
         }
         
-        $this->data['student'] = $student;
+        $this->data['student'] = $post['student'];
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
                                                                 

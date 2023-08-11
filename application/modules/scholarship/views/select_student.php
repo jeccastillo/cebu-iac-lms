@@ -25,7 +25,7 @@
                 
                 <hr />
             
-                <form id="advise-student" action="<?php echo base_url(); ?>student/edit_student_scholarship" method="post" role="form">
+                <form id="advise-student" action="<?php echo base_url(); ?>scholarship/assign_scholarship" method="post" role="form">
                  <p>Search Student</p>
                  <div class="row">
                      <div class="col-sm-6">
