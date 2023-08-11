@@ -724,7 +724,8 @@
                                         <td>
                                             <select v-model="program_update" @change="changeProgram($event,1)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
                                                     {{ program.strProgramDescription }} </option>
                                             </select>
                                         </td>
@@ -745,7 +746,8 @@
                                         <td>
                                             <select v-model="program_update2" @change="changeProgram($event,2)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
                                                     {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
@@ -766,8 +768,9 @@
                                         <td>
                                             <select v-model="program_update3" @change="changeProgram($event,3)" required
                                                 class="form-control">
-                                                <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ filtered_programs.strProgramDescription }}</option>
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -1011,6 +1014,7 @@ new Vue({
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
+
 
 
                     })
