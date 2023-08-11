@@ -19,11 +19,11 @@
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet <strong>(Makati Campus)</strong></h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
-            to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
+            to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
 
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu click
-            <a style="text-decoration: underline;" href="#">here</a>.
+            <a style="text-decoration: underline;" href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
         </p>
     </div>
 
@@ -687,7 +687,7 @@
                         </div>
                         <div class="mt-2">
                             <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
-                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS- DRIVE" />
+                                @change="filterCourses('drive')" v-model="request.student_type" value="SHS- DRIVE" />
                             <label for="rb-shs-drive">SHS- DRIVE</label>
                         </div>
 
@@ -723,7 +723,7 @@
                                 <label class="block t color-primary font-bold  mb-3  pr-4">
                                     First Choice
                                 </label>
-                                <select
+                                <select :disabled="!request.student_type ? true : false"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     v-model="request.type_id" id="course_first_choice">
                                     <option value="" disabled selected> -- Select option -- </option>
@@ -737,7 +737,7 @@
                                 <label class="block t color-primary font-bold  mb-3  pr-4">
                                     Second Choice
                                 </label>
-                                <select
+                                <select :disabled="!request.student_type ? true : false"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     v-model="request.type_id2" id="course_second_choice">
                                     <option value="" disabled selected> -- Select option -- </option>
@@ -751,7 +751,7 @@
                                 <label class="block t color-primary font-bold  mb-3  pr-4">
                                     Third Choice
                                 </label>
-                                <select
+                                <select :disabled="!request.student_type ? true : false"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     v-model="request.type_id3" id="course_third_choice">
                                     <option value="" disabled selected> -- Select option -- </option>
