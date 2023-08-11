@@ -725,7 +725,7 @@
                                             <select v-model="program_update" @change="changeProgram($event,1)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ filtered_programs.strProgramDescription }} </option>
+                                                    {{ program.strProgramDescription }} </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -746,7 +746,7 @@
                                             <select v-model="program_update2" @change="changeProgram($event,2)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ filtered_programs.strProgramDescription }}</option>
+                                                    {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -767,7 +767,7 @@
                                             <select v-model="program_update3" @change="changeProgram($event,3)" required
                                                 class="form-control">
                                                 <option v-for="program in programs" :value="program.intProgramID">
-                                                    {{ filtered_programs.strProgramDescription }}</option>
+                                                    {{ program.strProgramDescription }}</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -1012,7 +1012,7 @@ new Vue({
                             return prog.type == this.request.type
                         })
 
-                        // console.log(this.filtered_programs, this.request.type)
+                        console.log(this.filtered_programs, this.request.type)
 
                     })
                     .catch((error) => {
