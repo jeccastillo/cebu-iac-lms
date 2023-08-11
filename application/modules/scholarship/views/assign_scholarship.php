@@ -32,12 +32,12 @@
                     <form method="post" action="#" @click.prevent.stop="submitDeduction('scholarship')">
                         <div class="col-md-6">                            
                             <label>Select Scholarship</label>
-                            <select required class="form-control" @click.prevent.stop="" v-model="request_scholarship.discount_id">
+                            <select required class="form-control" v-model="request_scholarship.discount_id">
                                 <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
                             </select>                            
                             
                             <hr />
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <input class="btn btn-primary" type="submit" value="Add">
                         </div>
                         <div class="col-md-6">
                             <h4>Assigned Scholarships for this Term</h4>
@@ -67,16 +67,16 @@
                         <div class="col-md-6">
                             
                             <label>Select Discount</label>
-                            <select required class="form-control" v-model="request_discount.discount_id">
+                            <select required @click.prevent.stop="" class="form-control" v-model="request_discount.discount_id">
                                 <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
                             </select>                            
                             <hr />    
                         
                             <label>Referrer Name</label>
-                            <input type="text" class="form-control" v-model="request_discount.referrer" />                                
+                            <input type="text" @click.prevent.stop="" class="form-control" v-model="request_discount.referrer" />                                
                             
                             <hr />
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <input class="btn btn-primary" type="submit" value="Add">
                         </div>
                         <div class="col-md-6">
                             <h4>Assigned Discounts for this Term</h4>
