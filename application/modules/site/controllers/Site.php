@@ -172,10 +172,12 @@ class Site extends CI_Controller {
         $programs_college = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
 		$programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));
 		$programs_sd = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'other'));
+		$programs_drive = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'drive'));
         $ret = array(
 			'college' => [],
 			'shs' => [],
 			'sd' =>[],
+			'drive'=>[],
 		);
 		
         foreach($programs_college as $prog){
@@ -204,6 +206,16 @@ class Site extends CI_Controller {
             $temp['strMajor'] = $prog['strMajor'];
             $ret['sd'][] = $temp;
         }
+
+		foreach($programs_drive as $prog){
+            
+            $temp['id'] = $prog['intProgramID'];
+            $temp['title'] = $prog['strProgramDescription'];
+            $temp['type'] = $prog['type'];
+            $temp['strMajor'] = $prog['strMajor'];
+            $ret['drive'][] = $temp;
+        }
+		
 
         $data['data'] = $ret;
 
