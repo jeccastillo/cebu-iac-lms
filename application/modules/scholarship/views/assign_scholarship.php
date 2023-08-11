@@ -26,6 +26,23 @@
                         Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
                     </div>
                 </div>
+                <hr />
+                <h4>Assign Scholarship</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
+                            <div class="form-group">
+                                <label>Select Scholarship</label>
+                                <select v-model="request_scholarship.discount_id">
+                                    <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
+                                </select>                            
+                            </div>
+                            <hr />
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </form>
+                    </div>
+                </div>
+                <h4>My Scholarships</h4>
             </div>
         </div>
     </div>
@@ -49,12 +66,24 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $sem; ?>',
-        student_id: '<?php echo $student; ?>',
+        student_id: <?php echo $student; ?>,
         scholarships:[],
         discounts:[],
         terms:[],
         student_deductions:[],    
         student: undefined,    
+        request_scholarship:{
+            discount_id: undefined,
+            student_id: <?php echo $student; ?>,
+            syid: this.current_sem,
+            referrer: 'none',
+        },
+        request_discount:{
+            discount_id: undefined,
+            student_id: <?php echo $student; ?>,
+            syid: this.current_sem,
+            referrer: undefined,
+        }
                       
     },
 
