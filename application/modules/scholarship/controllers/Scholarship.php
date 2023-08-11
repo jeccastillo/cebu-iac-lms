@@ -85,10 +85,10 @@ class Scholarship extends CI_Controller {
         $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
         $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discounts'))->result_array();
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
-        
-        $ret['student_deductions'] = $this->db->select('tb_mas_student_discounts.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+
+        $ret['student_deductions'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
                                     ->where(array('syid'=>$sem))
-                                    ->get('tb_mas_student_discounts')
+                                    ->get('tb_mas_student_discount')
                                      ->result_array();
 
         echo json_encode($ret);
