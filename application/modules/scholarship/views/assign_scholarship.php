@@ -169,6 +169,7 @@ new Vue({
          document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
        },
        submitDeduction: function(type){
+            console.log(type);
             var formdata= new FormData();
             if(type == "scholarship")
                 for (const [key, value] of Object.entries(this.request_scholarship)) {
