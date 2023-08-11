@@ -29,7 +29,7 @@
                 <hr />
                 <h4>Assign Scholarship</h4>
                 <div class="row">                    
-                    <form method="post" @click.prevent.stop="submitDeduction('scholarship')">
+                    <form method="post" action="#" @click.prevent.stop="submitDeduction('scholarship')">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Select Scholarship</label>
@@ -64,7 +64,7 @@
                 <hr />
                 <h4>Assign Discount</h4>
                 <div class="row">                    
-                    <form method="post" @click.prevent.stop="submitDeduction('discount')">
+                    <form method="post" action="#" @click.prevent.stop="submitDeduction('discount')">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Select Discount</label>
