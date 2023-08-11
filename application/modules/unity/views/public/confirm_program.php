@@ -178,6 +178,16 @@
                                     <option value="foreign">Foreign</option>
                                 </select>
 
+                                <select v-if="request.campus == 'Makati'" required class="form-control"
+                                    v-model="request.student_type">
+                                    <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
+                                    <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
+                                    <option value="SHS - Freshman">SHS - Freshman</option>
+                                    <option value="SHS-  Transferee">SHS - Transferee</option>
+                                    <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program
+                                    </option>
+                                </select>
+
                             </div>
                         </div>
                         <hr />
