@@ -64,7 +64,7 @@ class Scholarship extends CI_Controller {
     public function assign_scholarship($sem = 0){
         
         if($sem != 0)
-            $ret['sem'] = $sem;
+            $this->data['sem'] = $sem;
         else{
             $active_sem = $this->data_fetcher->get_active_sem();
             $this->data['sem'] = $active_sem['intID'];
