@@ -15,6 +15,18 @@
                 <option v-for="term in terms" :value="term.intID">{{ term.enumSem }} Term SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
             </select>
         </div>
+        <div class="box box-default">
+            <div class="box-header">
+                <h3>Scholarship</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div v-if="student" class="col-md-6">
+                        Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
         
     </div>
@@ -40,7 +52,8 @@ new Vue({
         scholarships:[],
         discounts:[],
         terms:[],
-        student_deductions:[],        
+        student_deductions:[],    
+        student: undefined,    
                       
     },
 
