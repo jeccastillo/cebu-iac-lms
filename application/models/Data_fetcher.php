@@ -2475,7 +2475,7 @@ class Data_fetcher extends CI_Model {
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
         $data['tuition'] = $tuition - $tuition_scholarship - $tuition_discount;
         $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship - $tuition_discount;
-        $data['scholarship'] = $scholar;
+        $data['scholarship'] = $scholarships;
         $data['discount'] = $discount;
         $data['total'] = $data['total_before_deductions'] - $scholarship_grand_total - $total_discount;                        
         $data['scholarship_deductions_array'] = $total_scholarship;
