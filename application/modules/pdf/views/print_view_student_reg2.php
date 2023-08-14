@@ -248,8 +248,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         foreach($tuition['discount'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
                         $ctr++;
                         endforeach;
