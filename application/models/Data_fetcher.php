@@ -2210,7 +2210,7 @@ class Data_fetcher extends CI_Model {
         $lab_scholarship = 0;
         $lab_scholarship_installment = 0;
         $other_scholarship = 0;
-        $ctr = 0;
+        $ctr = 0;        
         if(!empty($scholarhips)){
             foreach($scholarships as $scholar){
                 
@@ -2342,6 +2342,7 @@ class Data_fetcher extends CI_Model {
         $lab_discount = 0;
         $lab_discount_installment = 0;
         $other_discount = 0;
+        $discount = null;
         
         // if($discount){
         //     if($discount->total_assessment_rate > 0 || $discount->total_assessment_fixed > 0){                
