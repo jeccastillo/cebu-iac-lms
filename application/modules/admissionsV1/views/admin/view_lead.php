@@ -593,13 +593,38 @@
                                 <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
                                 <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
                                 <option value="SHS - Freshman">SHS - Freshman</option>
-                                <option value="SHS-  Transferee">SHS - Transferee</option>
+                                <option value="SHS -  Transferee">SHS - Transferee</option>
                                 <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program</option>
+                                <option value="2ND - DEGREE">2ND - DEGREE</option>
                             </select>
                             </p>
 
                             <hr>
                         </div>
+                        <!-- if second degree  -->
+
+                        <div v-if="request.type == 'other'">
+                            <div>
+                                <strong><i class="fa fa-home margin-r-5"></i> Company </strong>
+                                <input type="text" class="form-control" v-model="request.sd_company"
+                                    @blur="updateField('school',$event)" />
+                                <hr>
+                            </div>
+                            <div>
+                                <strong><i class="fa fa-user margin-r-5"></i> Position </strong>
+                                <input type="text" class="form-control" v-model="request.sd_position"
+                                    @blur="updateField('school',$event)" />
+                                <hr>
+                            </div>
+                            <div>
+                                <strong><i class="fa fa-book margin-r-5"></i> Previous Degree </strong>
+                                <input type="text" class="form-control" v-model="request.sd_degree"
+                                    @blur="updateField('school',$event)" />
+                                <hr>
+                            </div>
+                        </div>
+
+                        <!-- end -->
                     </div>
                     <!-- <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Update Status</strong>

@@ -106,7 +106,7 @@
 
                         <div class="row">
                             <div class="col-md-4 form-group">
-                                <label>High School</label>
+                                <label>Junior High School</label>
                                 <input type="text" required class="form-control" v-model="request.high_school">
                             </div>
                             <div class="col-md-4 form-group">
@@ -121,6 +121,8 @@
                                     placeholder="mm-dd-yyyy"></the-mask>
                             </div>
                         </div>
+
+                        <!-- college  -->
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>College</label>
@@ -149,6 +151,12 @@
                                 </the-mask>
                             </div>
                         </div>
+                        <!-- end -->
+
+
+
+                        <!-- SHS -->
+
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Senior High School</label>
@@ -165,6 +173,13 @@
                                 </the-mask>
                             </div>
                         </div>
+
+                        <!-- END -->
+
+
+
+
+
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Strand</label>
