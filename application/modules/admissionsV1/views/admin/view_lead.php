@@ -1086,6 +1086,7 @@ new Vue({
                     .then((data) => {
                         this.programs = data.data.programs;
                         this.status_update = this.request.status;
+                        console.log(this.status_update);
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
