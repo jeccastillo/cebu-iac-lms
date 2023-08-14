@@ -156,7 +156,7 @@ class Scholarship extends CI_Controller {
             $this->data_poster->log_action('Scholarships','Updated Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
         }
         else{
-            $data['success'] = "failed";
+            $data['success'] = "error";
             $data['message'] = "Failed to update";
         }
         
