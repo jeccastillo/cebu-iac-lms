@@ -2211,7 +2211,7 @@ class Data_fetcher extends CI_Model {
         $lab_scholarship_installment = 0;
         $other_scholarship = 0;
         $ctr = 0;        
-        if(!empty($scholarhips)){
+        if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
                 $total_scholarship_temp = 0;
