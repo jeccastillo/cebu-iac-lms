@@ -2017,7 +2017,7 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
 
-        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id,$registration['type_of_class'],$sem['intID']);
+        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id,$registration['type_of_class'],$sem);
         
     }
 
@@ -2060,7 +2060,7 @@ class Data_fetcher extends CI_Model {
         
     }
 
-    function getTuitionSubjects($stype,$scholarship,$subjects,$id,$class_type="regular",$sem)
+    function getTuitionSubjects($stype,$scholarship,$subjects,$id,$class_type="regular",$syid)
     {
 
         $tuition = 0;
@@ -2090,13 +2090,13 @@ class Data_fetcher extends CI_Model {
         $unit_fee = getUnitPrice($tuition_year,$class_type);
 
         $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$sem,'student_id'=>$student['intID'],'deduction_type'=>'scholarship'))
+                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result_array();
 
         $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$sem,'student_id'=>$student['intID'],'deduction_type'=>'discount'))
+                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'discount'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result_array(); 
