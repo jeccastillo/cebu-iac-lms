@@ -2561,11 +2561,11 @@ class Data_fetcher extends CI_Model {
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
         }
         else{
-            if($data['total'] > $tuition_year['installmentFixed']){
+            if($data['total_installment'] > $tuition_year['installmentFixed']){
                 $data['down_payment'] = $tuition_year['installmentFixed'];
             }
             else{
-                $data['down_payment'] = $data['total'];
+                $data['down_payment'] = $data['total_installment'];
             }
             
             $data['down_payment'] = round($data['down_payment'],2);
