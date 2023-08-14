@@ -207,7 +207,7 @@
         <?php endif; ?>
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
-                <div class="col-sm-6">Discount:</div>            
+                <div class="col-sm-6">Scholarship:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>
@@ -245,7 +245,12 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['ti_before_deductions'], 2, '.' ,','); ?></div>
             </div>   
         <?php endif; ?> 
-        
+        <?php if($tuition['scholarship_deductions_installment'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-6">Scholarship:</div>            
+                <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['scholarship_deductions_installment'], 2, '.' ,','); ?></div>
+            </div>
+        <?php endif; ?>
         <?php if($tuition['scholarship_deductions_installment_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Discount:</div>            
