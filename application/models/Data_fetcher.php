@@ -2211,9 +2211,16 @@ class Data_fetcher extends CI_Model {
         $lab_scholarship_installment = 0;
         $other_scholarship = 0;
         $ctr = 0;        
+        
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
+                $tuition_scholarship_installment_current = 0;
+                $tuition_scholarship_current = 0;
+                $lab_scholarship_installment_current = 0;
+                $lab_scholarship_current = 0;
+                $misc_scholarship_current = 0;
+                $other_scholarship_current = 0;
                 $total_scholarship_temp = 0;
                 $total_scholarship_installment_temp = 0;
 
@@ -2349,6 +2356,12 @@ class Data_fetcher extends CI_Model {
         if(!empty($discounts)){
             foreach($discounts as $scholar){
                 
+                $tuition_scholarship_installment_current = 0;
+                $tuition_scholarship_current = 0;
+                $lab_scholarship_installment_current = 0;
+                $lab_scholarship_current = 0;
+                $misc_scholarship_current = 0;
+                $other_scholarship_current = 0;
                 $total_scholarship_temp = 0;
                 $total_scholarship_installment_temp = 0;
 
@@ -2462,8 +2475,8 @@ class Data_fetcher extends CI_Model {
                 $total_discount[] = $total_scholarship_temp;
                 $total_discount_installment[] = $total_scholarship_installment_temp;
 
-                $discount_installment_grand_total = $total_scholarship_installment_temp;
-                $discount_grand_total = $total_scholarship_temp;
+                $discount_installment_grand_total += $total_scholarship_installment_temp;
+                $discount_grand_total += $total_scholarship_temp;
 
                 $ctr++;
             }
