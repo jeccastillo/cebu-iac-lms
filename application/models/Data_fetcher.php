@@ -2476,9 +2476,9 @@ class Data_fetcher extends CI_Model {
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
-        $data['total_discount_dc'] = $total_discount;
+        $data['total_discount_dc'] = $discount_grand_total;
         $data['lab_before_discount'] = $total_lab;
-        $data['lab'] = $total_lab - $lab_scholarship - $total_discount;
+        $data['lab'] = $total_lab - $lab_scholarship - $lab_discount;
         $data['lab_installment_before_discount'] = $total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100));
         $data['lab_installment'] = $data['lab_installment_before_discount'] - $lab_scholarship - $lab_discount;
         $data['lab_list'] = $lab_list;
