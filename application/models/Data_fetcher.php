@@ -2543,8 +2543,12 @@ class Data_fetcher extends CI_Model {
 
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
         
+        if($data['total'] < 0)
+            $data['total'] = 0;
+
         if($data['total'] == 0)
             $data['total_installment'] = 0;
+
         
         $data['total_installment'] = round($data['total_installment'],2);   
         $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
