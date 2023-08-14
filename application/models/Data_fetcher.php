@@ -2462,8 +2462,8 @@ class Data_fetcher extends CI_Model {
                 $total_discount[] = $total_scholarship_temp;
                 $total_discount_installment[] = $total_scholarship_installment_temp;
 
-                // $discount_installment_grand_total += $total_scholarship_installment_temp;
-                // $discount_grand_total += $total_scholarship_temp;
+                $discount_installment_grand_total = $total_scholarship_installment_temp;
+                $discount_grand_total = $total_scholarship_temp;
 
                 $ctr++;
             }
