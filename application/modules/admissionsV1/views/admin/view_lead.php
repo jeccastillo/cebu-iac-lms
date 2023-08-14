@@ -37,14 +37,19 @@
                             <span class="label label-info" v-if="request.status ==  'For Reservation'">For
                                 Reservation</span>
                             <span class="label label-success" v-if="request.status ==  'Reserved'">Reserved</span>
-                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>
-                            <span class="label label-success" v-if="request.status ==  'Game Changer'">Game
-                                Changer</span>
+                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>                            
                             <span class="label label-success" v-if="request.status ==  'For Enrollment'">For
                                 Enrollment</span>
                             <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
-                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Cancelled
-                                Application/Rejected</span>
+                            <span class="label label-danger" v-if="request.status ==  'Cancelled'">Cancelled
+                                Application</span>
+                            <span class="label label-danger" v-if="request.status ==  'Did Not Reserve'">Did Not Reserve</span>
+                            <span class="label label-danger" v-if="request.status ==  'Floating'">Floating Application</span>
+                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn Before'">Withdrawn Enrollment Before Opening of SY</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn After'">Withdrawn Enrollment After Opening of SY</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn End'">Withdrawn Enrollment at the End of the Term</span>
+                            
                         </p>
                         <hr>
                     </div>
@@ -685,7 +690,43 @@
 
         </div>
     </div>
-
+    
+    <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title text-left text-primary">Manual Status Update</h3>
+                        <p>Use this tool to manually update statuses for reverting be careful of changing the status of the student if he/she is already enlisted or enrolled</p>
+                    </div>
+                    <div class="box-body">
+                        <label>Select Status</label>
+                        <select @change="updateStatusManual($event)" v-model="status_update" class="form-control">
+                            <option value="New">New</option>
+                            <option value="Waiting For Interview">Waiting For Interview</option>
+                            <option value="For Interview">For Interview</option>
+                            <option value="For Reservation">For Reservation</option>
+                            <option value="Reserved">Reserved</option>
+                            <option value="For Enrollment">For Enrollment</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Enlisted">Enlisted</option>
+                            <option value="Enrolled">Enrolled</option>
+                            <option value="Cancelled">Cancelled Application</option>
+                            <option value="Floating">Floating Application</option>
+                            <option value="Did Not Reserve">Did Not Reserve</option>
+                            <option value="Rejected ">Rejected</option>
+                            <option value="Withdraw Before ">Withdrawn Enrollment Before Opening of SY</option>
+                            <option value="Withdraw After ">Withdrawn Enrollment After Opening of SY</option>
+                            <option value="Withdraw End ">Withdrawn Enrollment at the End of the Term</option>
+                        </select>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -1001,6 +1042,7 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
+        status_update: "",
         sched: "",
         show_edit_name: false,
         show_edit_title: "Edit",
@@ -1360,7 +1402,69 @@ new Vue({
                 //     });
                 // }
             })
-        }
+        },
+        updateStatusManual: function(event) {
+
+            Swal.fire({
+                title: 'Update Status',
+                text: "Are you sure you want to update?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+
+                    return axios
+                        .post(api_url + 'admissions/student-info/' + this.slug +
+                            '/update-status', {
+                                status: event.target.value,
+                                remarks: this.status_remarks,
+                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                            }, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                // if (result.isConfirmed) {
+                //     Swal.fire({
+                //         icon: result?.value.data.success ? "success" : "error",
+                //         html: result?.value.data.message,
+                //         allowOutsideClick: false,
+                //     }).then(() => {
+                //         if (reload && result?.value.data.success) {
+                //             if (reload == "reload") {
+                //                 location.reload();
+                //             } else {
+                //                 window.location.href = reload;
+                //             }
+                //         }
+                //     });
+                // }
+            })
+            }
 
 
     }
