@@ -927,8 +927,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div>    
 
     <div class="modal fade" id="setFISchedule" role="dialog">
         <form @submit.prevent="submitSchedule" class="modal-dialog modal-lg">
