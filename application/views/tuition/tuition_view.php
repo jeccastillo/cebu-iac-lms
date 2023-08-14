@@ -207,7 +207,7 @@
         <?php endif; ?>
         <?php if($tuition['total_discount'] > 0): ?>
             <div class="row">
-                <div class="col-sm-6">Discount:</div>            
+                <div class="col-sm-6">Scholarship:</div>            
                 <div class="col-sm-6 text-blue">-<?php echo number_format($tuition['total_discount'], 2, '.' ,','); ?></div>
             </div>
         <?php endif; ?>

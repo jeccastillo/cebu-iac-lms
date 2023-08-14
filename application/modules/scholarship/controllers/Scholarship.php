@@ -61,27 +61,61 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/scholarship_list_conf",$this->data);
     }
 
-    public function assign_scholarship(){
+    public function select_student(){
+
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
+                                                               
 
-        $this->data['student_scholars'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name,tb_mas_scholarships.intID as scholarship_id')                                                   
-                                                   ->join('tb_mas_scholarships', 'tb_mas_users.enumScholarship = tb_mas_scholarships.intID')
-                                                   ->order_by('strLastname')
-                                                   ->get('tb_mas_users')
-                                                   ->result_array();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("select_student",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/assign_scholarship_conf",$this->data);
+    }
+
+    public function assign_scholarship($sem = 0){
         
-        $this->data['discounted'] = $this->db->select('tb_mas_users.intID,tb_mas_users.strFirstname,tb_mas_users.strLastname,tb_mas_users.strMiddlename,tb_mas_scholarships.name')                                                   
-                                                   ->join('tb_mas_scholarships', 'tb_mas_users.enumDiscount = tb_mas_scholarships.intID')
-                                                   ->order_by('strLastname')
-                                                   ->get('tb_mas_users')
-                                                   ->result_array();                                                           
+        $post =  $this->input->post();
+
+        if($sem != 0)
+            $this->data['sem'] = $sem;
+        else{
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        
+        $this->data['student'] = $post['student'];
+        $this->data['page'] = "assign_scholarship";
+        $this->data['opentree'] = "scholarship";
+                                                                
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
-        $this->load->view("common/footer",$this->data);
-        $this->load->view("common/assign_scholarship_conf",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
+    public function assign_scholarship_data($student,$sem){
+
+        $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
+        $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();
+        $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
+        $ret['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$student))->first_row('array');
+
+        $ret['student_scholarships'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                    ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'scholarship'))
+                                    ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                    ->get('tb_mas_student_discount')
+                                     ->result_array();
+
+        $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount'))
+                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                     ->get('tb_mas_student_discount')
+                                      ->result_array();                                     
+
+        echo json_encode($ret);
+
     }
 
     public function view($id){
@@ -91,6 +125,39 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("scholarship_view",$this->data);
         $this->load->view("common/footer",$this->data);
+    }
+
+    public function add_scholarship(){
+        $post = $this->input->post();
+
+        $this->db->insert('tb_mas_student_discount',$post);
+        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
+        $this->data_poster->log_action('Scholarships','Added a Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
+
+        $data['success'] = "success";
+        $data['message'] = "Added Successfully";
+
+        echo json_encode($data);
+    }
+
+    public function delete_scholarship(){
+        $post = $this->input->post();
+
+        $disc = $this->db->get_where('tb_mas_student_discount',array('id'=>$post['id']))->first_row('array');
+        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$disc['discount_id']))->first_row('array');
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$disc['student_id']))->first_row('array');
+
+        $this->db->where(array('id'=>$post['id']))
+                 ->delete('tb_mas_student_discount');
+
+        $this->data_poster->log_action('Scholarships','Removed a Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
+
+        $data['success'] = "success";
+        $data['message'] = "Deleted Successfully";
+
+        echo json_encode($data);
+
     }
 
     public function data($id){

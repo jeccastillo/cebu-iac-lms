@@ -232,21 +232,28 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
                                 </tr>';
                 endif;
-                  if($tuition['scholarship_deductions'] > 0):              
-                    $html .='   <tr>
-                                    <td style="font-size:7px">'.$tuition['scholarship']->name.'</td>
-                                    <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions'], 2, '.' ,',').'</td>
-                                    <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment'], 2, '.' ,',').'</td>
-                                </tr>';
-                    endif;
-                    if($tuition['discount_deductions'] > 0):              
-                        $html .='
-                                    <tr>
-                                        <td style="font-size:7px">'.$tuition['discount']->name.'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['discount_deductions'], 2, '.' ,',').'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_dc'], 2, '.' ,',').'</td>
+                    if(!empty($tuition['scholarship'])):
+                        $ctr = 0;
+                        foreach($tuition['scholarship'] as $sch):                                      
+                        $html .='   <tr>
+                                        <td style="font-size:7px">'.$sch->name.'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
-                        endif;
+                        $ctr++;
+                        endforeach;
+                    endif;
+                    if(!empty($tuition['discount'])):
+                        $ctr = 0;
+                        foreach($tuition['discount'] as $sch):                                      
+                        $html .='   <tr>
+                                        <td style="font-size:7px">'.$sch->name.'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                    </tr>';
+                        $ctr++;
+                        endforeach;
+                    endif;                                        
                     $html .='
                             <tr>
                                 <td style="font-weight:bold;">Total</td>
