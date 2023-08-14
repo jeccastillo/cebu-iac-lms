@@ -650,13 +650,10 @@
 
                     <div class="text-right">
                         <?php if($userlevel == "2" || $userlevel == "5"): ?>
-                        <button type="button" data-toggle="modal" data-target="#setFISchedule"
+                        <button v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'" type="button" data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
                         <button type="button" v-if="request.status == 'New'" @click="deleteApplicant"
-                            class=" btn btn-danger">Delete applicant</button>
-                        <button type="button" v-if="request.status == 'New'" data-toggle="modal"
-                            @click="update_status = 'Not Answering';" data-target="#myModal" class=" btn
-                            btn-primary">Not Answering</button>
+                            class=" btn btn-danger">Delete applicant</button>                        
                         <button type="button"
                             v-if="request.status == 'Waiting For Interview' && request.campus == 'Cebu'"
                             data-toggle="modal" @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
@@ -669,14 +666,7 @@
                         <button type="button" v-if="request.status == 'Reserved'"
                             @click="update_status = 'For Enrollment'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
-                            Enrollment</button>
-                        <button type="button"
-                            v-if="request.status != 'Reserved' && request.status != 'For Enrollment' && request.status != 'Enrolled'"
-                            data-toggle="modal" @click="update_status = 'Rejected'" data-target="#myModal" class=" btn
-                            btn-danger">Cancel Application</button>
-                        <button type="button" v-if="request.status == 'New' || request.status == 'Rejected'"
-                            data-toggle="modal" @click="update_status = 'Disqualified'" data-target="#myModal" class=" btn
-                            btn-warning">Disqualify</button>
+                            Enrollment</button>                                                
                         <?php endif; ?>
                         <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
                         <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update
