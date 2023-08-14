@@ -2017,7 +2017,7 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
 
-        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id,$registration['type_of_class'],$sem);
+        return $this->getTuitionSubjects($registration['enumStudentType'],$registration['enumScholarship'],$subjects,$id,$registration['type_of_class'],$sem['intID']);
         
     }
 
