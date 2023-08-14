@@ -1422,7 +1422,7 @@ new Vue({
                         .post(api_url + 'admissions/student-info/' + this.slug +
                             '/update-status', {
                                 status: event.target.value,
-                                remarks: this.status_remarks,
+                                remarks: "Manually updated status to " + event.target.value,
                                 admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
                             }, {
                                 headers: {
