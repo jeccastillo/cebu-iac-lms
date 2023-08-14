@@ -2278,8 +2278,8 @@ class Data_fetcher extends CI_Model {
                         }
                     }
 
-                    $total_scholarship_installment += $misc_scholarship_current;
-                    $total_scholarship += $misc_scholarship_current;
+                    $total_scholarship_installment_temp += $misc_scholarship_current;
+                    $total_scholarship_temp += $misc_scholarship_current;
 
                     if($scholar->lab_fee_rate > 0){
                         $lab_scholarship_installment_current =  ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
@@ -2301,8 +2301,8 @@ class Data_fetcher extends CI_Model {
                         $lab_scholarship_installment += $lab_scholarship;
                     }
 
-                    $total_scholarship_installment += $lab_scholarship_installment_current;
-                    $total_scholarship += $lab_scholarship_current;
+                    $total_scholarship_installment_temp += $lab_scholarship_installment_current;
+                    $total_scholarship_temp += $lab_scholarship_current;
 
                     if($scholar->other_fees_rate > 0){
                         $total_other = $total_foreign + $total_new_student;
@@ -2320,8 +2320,8 @@ class Data_fetcher extends CI_Model {
                         }
                     }
 
-                    $total_scholarship += $other_scholarship_current;
-                    $total_scholarship_installment += $other_scholarship_current;
+                    $total_scholarship_temp += $other_scholarship_current;
+                    $total_scholarship_installment_temp += $other_scholarship_current;
                 }
 
                 $total_scholarship[] = $total_scholarship_temp;
