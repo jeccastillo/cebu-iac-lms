@@ -326,11 +326,11 @@ new Vue({
 
 
 
-                // if (data.data.sections.length > 0) {
-                //     this.sections = data.data.sections;
-                //     this.section = data.data.sections[0];
-                //     this.request.preferedSection = data.data.sections[0].intID;
-                // }
+                if (data.data.sections.length > 0) {
+                    this.sections = data.data.sections;
+                    this.section = data.data.sections[0];
+                    this.request.preferedSection = data.data.sections[0].intID;
+                }
                 axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;
