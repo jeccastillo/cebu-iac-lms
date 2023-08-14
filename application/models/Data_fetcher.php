@@ -2334,100 +2334,140 @@ class Data_fetcher extends CI_Model {
             }
         }
 
-        $total_discount = 0;
+        $discount_grand_total = 0;
+        $discount_installment_grand_total = 0;
+        $total_discount = [];
         $tuition_discount = 0;
         $tuition_discount_installment = 0;
-        $total_discount_installment = 0;
+        $total_discount_installment = [];
         $misc_discount = 0;        
         $lab_discount = 0;
         $lab_discount_installment = 0;
         $other_discount = 0;
         $discount = null;
         
-        // if($discount){
-        //     if($discount->total_assessment_rate > 0 || $discount->total_assessment_fixed > 0){                
-        //         $total_assessment = $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-        //         $total_assessment_installment = ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
-        //                                       + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
-        //                                       + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+        if(!empty($discounts)){
+            foreach($discounts as $scholar){
+                
+                $total_scholarship_temp = 0;
+                $total_scholarship_installment_temp = 0;
 
-        //         if($discount->total_assessment_rate > 0){
-        //             $total_discount = $total_assessment * ($discount->total_assessment_rate/100);
-        //             $total_discount_installment = $total_assessment_installment * ($discount->total_assessment_rate/100);
-        //         }
-        //         elseif($discount->total_assessment_fixed > 0){
-        //             if($discount->total_assessment_fixed > $total_assessment){
-        //                 $total_discount = $total_assessment;
-        //                 $total_discount_installment = $total_assessment_installment;
-        //             }
-        //             else{
-        //                 $total_discount = $discount->total_assessment_fixed;
-        //                 $total_discount_installment = $discount->total_assessment_fixed;
-        //             }
-        //         }
-        //     }
-        //     else{
-        //         if($discount->tuition_fee_rate > 0){
-        //             $tuition_discount_installment = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($discount->tuition_fee_rate/100);
-        //             $tuition_discount = $tuition * ($discount->tuition_fee_rate/100);
+                if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
+                    $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                    $total_assessment_installment_temp += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
+                                                + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
+                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
 
-        //         }
-        //         elseif($discount->tuition_fee_fixed > 0){
-        //             if($discount->tuition_fee_fixed > $tuition)
-        //                 $tuition_discount = $tuition;
-        //             else
-        //                 $tuition_discount = $discount->tuition_fee_fixed;                                            
+                    if($scholar->total_assessment_rate > 0){
+                        $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                    }
+                    elseif($scholar->total_assessment_fixed > 0){
+                        if($scholar->total_assessment_fixed > $total_assessment){
+                            $total_scholarship_temp += $total_assessment;
+                            $total_scholarship_installment_temp += $total_assessment_installment;
+                        }
+                        else{
+                            $total_scholarship_temp += $scholar->total_assessment_fixed;
+                            $total_scholarship_installment_temp += $scholar->total_assessment_fixed;
+                        }
+                    }
+                }
+                else{
+                    if($scholar->tuition_fee_rate > 0){
+                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
+                        $tuition_discount += $tuition * ($scholar->tuition_fee_rate/100);
 
-        //             $tuition_discount_installment = $tuition_discount;
-        //         }
+                    }
+                    elseif($scholar->tuition_fee_fixed > 0){
+                        if($scholar->tuition_fee_fixed > $tuition){
+                            $tuition_scholarship_current = $tuition;
+                            $tuition_discount += $tuition;
+                        }
+                        else{
+                            $tuition_scholarship_current = $scholar->tuition_fee_fixed;
+                            $tuition_discount += $scholar->tuition_fee_fixed;                                            
+                        }
 
-        //         $total_discount += $tuition_discount;
-        //         $total_discount_installment += $tuition_discount_installment;
+                        $tuition_scholarship_installment_current = $tuition_scholarship;
+                        $tuition_discount_installment += $tuition_scholarship;
+                    }
 
-        //         if($discount->misc_fee_rate > 0){
-        //             $misc_discount = $total_misc * ($discount->misc_fee_rate/100);
-        //         }
-        //         elseif($discount->misc_fee_fixed > 0){
-        //             if($discount->misc_fee_fixed > $total_misc)
-        //                 $misc_discount = $total_misc;
-        //             else
-        //                 $misc_discount = $discount->misc_fee_fixed;                    
-        //         }
+                    $total_scholarship_temp += $tuition_scholarship_current;
+                    $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
 
-        //         $total_discount_installment += $misc_discount;
-        //         $total_discount += $misc_discount;
+                    if($scholar->misc_fee_rate > 0){
+                        $misc_scholarship_current = $total_misc * ($scholar->misc_fee_rate/100);
+                        $misc_discount += $total_misc * ($scholar->misc_fee_rate/100);
+                    }
+                    elseif($scholar->misc_fee_fixed > 0){
+                        if($scholar->misc_fee_fixed > $total_misc){
+                            $misc_scholarship_current = $total_misc;
+                            $misc_discount += $total_misc;
+                        }
+                        else{
+                            $misc_scholarship_current = $scholar->misc_fee_fixed;
+                            $misc_discount += $scholar->misc_fee_fixed;                    
+                        }
+                    }
 
-        //         if($discount->lab_fee_rate > 0){
-        //             $lab_discount_installment = ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($discount->lab_fee_rate/100);
-        //             $lab_discount = $total_lab * ($discount->lab_fee_rate/100);
-        //         }
-        //         elseif($discount->lab_fee_fixed > 0){
-        //             if($discount->lab_fee_fixed > $total_lab)
-        //                 $lab_discount = $total_lab;
-        //             else
-        //                 $lab_discount = $discount->lab_fee_fixed;
+                    $total_scholarship_installment_temp += $misc_scholarship_current;
+                    $total_scholarship_temp += $misc_scholarship_current;
 
-        //             $lab_discount_installment = $lab_discount;
-        //         }
+                    if($scholar->lab_fee_rate > 0){
+                        $lab_scholarship_installment_current =  ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
+                        $lab_discount_installment += ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship_current = $total_lab * ($scholar->lab_fee_rate/100);
+                        $lab_discount += $total_lab * ($scholar->lab_fee_rate/100);
+                    }
+                    elseif($scholar->lab_fee_fixed > 0){
+                        if($scholar->lab_fee_fixed > $total_lab){
+                            $lab_scholarship_current = $total_lab;
+                            $lab_discount += $total_lab;
+                        }
+                        else{
+                            $lab_scholarship_current = $scholar->lab_fee_fixed;
+                            $lab_discount += $scholar->lab_fee_fixed;
+                        }
 
-        //         $total_discount_installment += $lab_discount_installment;
-        //         $total_discount += $lab_discount;
+                        $lab_scholarship_installment_current = $lab_scholarship;
+                        $lab_discount_installment += $lab_discount;
+                    }
 
-        //         if($discount->other_fees_rate > 0){
-        //             $total_other = $total_foreign + $total_new_student;
-        //             $other_discount = $total_other * ($discount->other_fees_rate/100);
-        //         }
-        //         elseif($discount->other_fees_fixed > 0){
-        //             if($discount->other_fees_fixed > $total_lab)
-        //                 $other_discount = $total_other;
-        //             else
-        //                 $other_discount = $discount->other_fees_fixed;
-        //         }
+                    $total_scholarship_installment_temp += $lab_scholarship_installment_current;
+                    $total_scholarship_temp += $lab_scholarship_current;
 
-        //         $total_discount += $other_discount;
-        //         $total_discount_installment += $other_discount;
-        //     }
-        // }
+                    if($scholar->other_fees_rate > 0){
+                        $total_other = $total_foreign + $total_new_student;
+                        $other_scholarship_current = $total_other * ($scholar->other_fees_rate/100);
+                        $other_discount += $total_other * ($scholar->other_fees_rate/100);
+                    }
+                    elseif($scholar->other_fees_fixed > 0){
+                        if($scholar->other_fees_fixed > $total_lab){
+                            $other_scholarship_current = $total_other;
+                            $other_discount += $total_other;
+                        }
+                        else{
+                            $other_scholarship_current = $scholar->other_fees_fixed;
+                            $other_discount += $scholar->other_fees_fixed;
+                        }
+                    }
+
+                    $total_scholarship_temp += $other_scholarship_current;
+                    $total_scholarship_installment_temp += $other_scholarship_current;
+                }
+
+                $total_discount[] = $total_scholarship_temp;
+                $total_discount_installment[] = $total_scholarship_installment_temp;
+
+                $discount_installment_grand_total += $total_scholarship_installment_temp;
+                $discount_grand_total += $total_scholarship_temp;
+
+                $ctr++;
+            }
+        }
 
         
 
@@ -2476,17 +2516,19 @@ class Data_fetcher extends CI_Model {
         $data['tuition'] = $tuition - $tuition_scholarship - $tuition_discount;
         $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship - $tuition_discount;
         $data['scholarship'] = $scholarships;
-        $data['discount'] = $discount;
-        $data['total'] = $data['total_before_deductions'] - $scholarship_grand_total - $total_discount;                        
-        $data['scholarship_deductions_array'] = $total_scholarship;
-        $data['scholarship_deductions'] = $scholarship_grand_total;
-        $data['discount_deductions'] = $total_discount;
+        $data['discount'] = $discounts;
+        $data['total'] = $data['total_before_deductions'] - $scholarship_grand_total - $discount_grand_total;                        
+        $data['scholarship_deductions_array'] = $total_scholarship;        
+        $data['scholarship_deductions'] = $scholarship_grand_total;        
+        $data['discount_deductions'] = $discount_grand_total;
         $data['scholarship_deductions_installment_array'] = $total_scholarship_installment;
         $data['scholarship_deductions_installment'] = $scholarship_installment_grand_total;
-        $data['scholarship_deductions_dc'] = $total_discount;
-        $data['scholarship_deductions_installment_dc'] = $total_discount_installment;
+        $data['scholarship_deductions_dc_array'] = $total_discount;
+        $data['scholarship_deductions_dc'] = $discount_grand_total;
+        $data['scholarship_deductions_installment_dc_array'] = $total_discount_installment; 
+        $data['scholarship_deductions_installment_dc'] = $discount_installment_grand_total;
 
-        $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $total_discount_installment;
+        $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
         
         if($data['total'] == 0)
             $data['total_installment'] = 0;
