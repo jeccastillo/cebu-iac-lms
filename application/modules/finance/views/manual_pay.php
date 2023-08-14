@@ -651,7 +651,10 @@ new Vue({
                 this.amount_to_pay = 10000;                
             }
             else if(this.request.description == "Application Payment"){
-                this.amount_to_pay = 500;            
+                if(this.student.campus == "Cebu")
+                    this.amount_to_pay = 500;            
+                else
+                    this.amount_to_pay = 700;            
             }
             else{
                 this.amount_to_pay = 0;
