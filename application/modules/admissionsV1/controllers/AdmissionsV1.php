@@ -99,7 +99,7 @@ class AdmissionsV1 extends CI_Controller {
     {
         
         $this->data['start'] = $start;
-        $this->data['end'] = $end;
+        $this->data['end'] = $end;        
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/admissions_report",$this->data);
