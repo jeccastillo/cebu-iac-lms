@@ -716,9 +716,9 @@
                             <option value="Floating">Floating Application</option>
                             <option value="Did Not Reserve">Did Not Reserve</option>
                             <option value="Rejected">Rejected</option>
-                            <option value="Withdraw Before">Withdrawn Enrollment Before Opening of SY</option>
-                            <option value="Withdraw After">Withdrawn Enrollment After Opening of SY</option>
-                            <option value="Withdraw End">Withdrawn Enrollment at the End of the Term</option>
+                            <option value="Withdrawn Before">Withdrawn Enrollment Before Opening of SY</option>
+                            <option value="Withdrawn After">Withdrawn Enrollment After Opening of SY</option>
+                            <option value="Withdrawn End">Withdrawn Enrollment at the End of the Term</option>
                         </select>
                     
                     </div>
