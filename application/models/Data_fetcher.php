@@ -2574,6 +2574,12 @@ class Data_fetcher extends CI_Model {
         $data['if_before_deductions'] = ($data['ti_before_deductions'] - $data['dp_before_deductions'])/5;
         $data['if_before_deductions'] = round($data['if_before_deductions'],2);
 
+        if($data['total'] == 0)
+        {
+            $data['down_payment'] = 0;
+            $data['installment_fee'] = 0;
+        }
+
         $data['class_type'] = $sem['classType'];
         
         
