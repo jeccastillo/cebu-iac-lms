@@ -129,7 +129,7 @@ class Scholarship extends CI_Controller {
 
     public function add_scholarship(){
         $post = $this->input->post();
-
+        $post['status'] = "pending";
         $this->db->insert('tb_mas_student_discount',$post);
         $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
