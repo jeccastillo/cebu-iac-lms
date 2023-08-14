@@ -322,15 +322,15 @@ new Vue({
                 this.program_text = data.data.selected;
                 //console.log(this.program_text);     
                 this.programs = data.data.programs;
-                this.request.id = this.student.intID;
+                // this.request.id = this.student.intID;
 
 
 
-                if (data.data.sections.length > 0) {
-                    this.sections = data.data.sections;
-                    this.section = data.data.sections[0];
-                    this.request.preferedSection = data.data.sections[0].intID;
-                }
+                // if (data.data.sections.length > 0) {
+                //     this.sections = data.data.sections;
+                //     this.section = data.data.sections[0];
+                //     this.request.preferedSection = data.data.sections[0].intID;
+                // }
                 axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;
