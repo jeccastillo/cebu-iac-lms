@@ -1085,7 +1085,7 @@ new Vue({
                 axios.get(base_url + 'admissionsV1/programs')
                     .then((data) => {
                         this.programs = data.data.programs;
-
+                        this.status_update = this.request.status;
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
