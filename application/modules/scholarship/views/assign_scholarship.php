@@ -45,12 +45,20 @@
                                 <thead>
                                     <tr>
                                         <th>Scholarship</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="item in student_scholarships">
                                         <td>{{ item.name }}</td>
+                                        <td>
+                                            <select class="form-control" @change="updateScStatus($event,item.id)">
+                                                <option :selected="item.status == 'applied'" value="applied">applied</option>
+                                                <option :selected="item.status == 'pending'" value="pending">pending</option>
+                                                <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
+                                            </select>
+                                        </td>
                                         <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
@@ -83,6 +91,7 @@
                                     <tr>
                                         <th>Discount</th>
                                         <th>Referrer</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -90,6 +99,13 @@
                                     <tr v-for="item in student_discounts">
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.referrer }}</td>
+                                        <td>
+                                            <select class="form-control" @change="updateScStatus($event,item.id)">
+                                                <option :selected="item.status == 'applied'" value="applied">applied</option>
+                                                <option :selected="item.status == 'pending'" value="pending">pending</option>
+                                                <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
+                                            </select>
+                                        </td>
                                         <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 </tbody>
@@ -166,6 +182,30 @@ new Vue({
     methods: {      
         changeTerm: function(event){
              document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
+        },
+        updateScStatus: function(event,id){
+
+            this.loader_spinner = true;
+            var formdata= new FormData(); 
+            formdata.append('id',id); 
+            formdata.append('status',event.target.value); 
+
+            axios.post(base_url + 'scholarship/update_scholarship_status', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: data.data.success,
+                    text: data.data.message,
+                    icon: data.data.success,
+                }).then(function() {
+                    this.loader_spinner = false;
+                });
+            });
+
         },
         submitDeduction: function(type){
             var req = {};

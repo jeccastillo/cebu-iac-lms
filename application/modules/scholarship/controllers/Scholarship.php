@@ -141,6 +141,30 @@ class Scholarship extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function update_scholarship_status(){
+        $post = $this->input->post();
+
+        $this->db
+            ->where(array('id'=>$post['id']))
+            ->update('tb_mas_student_discount',$post);
+
+        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
+        if($this->db
+        ->where(array('id'=>$post['id']))
+        ->update('tb_mas_student_discount',$post)){
+            $data['success'] = "success";
+            $data['message'] = "Updated Successfully";
+            $this->data_poster->log_action('Scholarships','Updated Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
+        }
+        else{
+            $data['success'] = "failed";
+            $data['message'] = "Failed to update";
+        }
+        
+        echo json_encode($data);
+    }
+
     public function delete_scholarship(){
         $post = $this->input->post();
 
