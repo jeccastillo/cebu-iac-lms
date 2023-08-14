@@ -2570,7 +2570,7 @@ class Data_fetcher extends CI_Model {
             
             $data['down_payment'] = round($data['down_payment'],2);
 
-            $data['dp_before_deductions'] = $tuition_year['installmentFixed'];
+            $data['dp_before_deductions'] = $data['down_payment'];
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
         }
 
