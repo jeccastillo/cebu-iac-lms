@@ -297,7 +297,6 @@
                                 <option <?php echo ($student['student_type'] == "foreign")?'selected':''; ?>
                                     value="foreign">Foreign</option>
                             </select>
-                            <?php echo ($student['student_type']) ?>
                         </div>
                     </div>
                     <div class="row">
