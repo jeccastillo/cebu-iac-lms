@@ -22,7 +22,7 @@
                                     </td>
                                     <td></td>
                                 </tr>
-                                <tr>
+                                <tr v-if="section.intID">
                                     <th>Select Section/Schedule</th>
                                     <td>
                                         <select v-model="request.preferedSection" @change="changeSection"
