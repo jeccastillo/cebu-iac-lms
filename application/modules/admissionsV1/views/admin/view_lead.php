@@ -713,6 +713,8 @@
                             </select>
                             <hr />
                             <textarea required class="form-control" v-model="remarks_manual"></textarea>
+                            <hr />
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                     </div>
                 </div>
