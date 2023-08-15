@@ -1787,7 +1787,7 @@ class Datatables extends CI_Controller {
             
             
         ";
-        $output['query'] = $sQuery;
+        
         $rResult = $this->db->query($sQuery);
 
         /* Data set length after filtering */
@@ -1818,7 +1818,7 @@ class Datatables extends CI_Controller {
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-        
+        $output['query'] = $sWhere;
         foreach ($rResult->result() as $aRow)
         {
             $row = array();
