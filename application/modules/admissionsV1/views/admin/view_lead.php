@@ -1396,7 +1396,7 @@ new Vue({
         updateStatusManual: function(event) {
             this.update_status = event.target.value;
             console.log(this.update_status);
-            this.$refs.myModal.show;
+            this.$refs.myModal.show();
         }
 
 
