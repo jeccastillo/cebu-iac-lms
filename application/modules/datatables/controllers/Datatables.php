@@ -1598,7 +1598,7 @@ class Datatables extends CI_Controller {
                     
                 }
             }
-            if($level != 0  && $level != 'none' && $table =='tb_mas_users')
+            if($level != 0  && $level != 'none' && $table =='tb_mas_users'){
                 if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
                 {
                     $sWhere .= "AND ".$table.".level = '".$level."' ";
@@ -1607,6 +1607,8 @@ class Datatables extends CI_Controller {
                 {
                     $sWhere .= "WHERE ".$table.".level = '".$level."' ";
                 }
+                echo $sWhere;
+            }
         
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
