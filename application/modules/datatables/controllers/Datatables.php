@@ -1418,7 +1418,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );        
     }
     
-    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0)
+    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -1547,6 +1547,7 @@ class Datatables extends CI_Controller {
                     $sWhere .= "WHERE $table.isGraduate = 0 ";
             
         }
+        
         if($yearlevel!=0 && $table =='tb_mas_users')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
                 $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
@@ -1597,6 +1598,15 @@ class Datatables extends CI_Controller {
                     
                 }
             }
+            if($level != 0 && $table =='tb_mas_users')
+                if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
+                {
+                    $sWhere .= "AND $table.level = '".$level."' ";
+                }
+                else
+                {
+                    $sWhere .= "WHERE $table.level = '".$level."' ";
+                }
         
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
