@@ -154,6 +154,7 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
+                            <td>Status</td>
                             <th>Student Type</th>
                             <th>Actions</th>
                         </tr>                        
@@ -164,6 +165,7 @@
                             <td>Last Name</td>
                             <td>Program</td>
                             <td>Year Level</td>
+                            <td>Status</td>
                             <td>Student Type</td>
                             <td>Actions</td>
                         </tr>
