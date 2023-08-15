@@ -325,7 +325,7 @@ new Vue({
                 this.program_text = data.data.selected;
                 //console.log(this.program_text);     
                 this.programs = data.data.programs;
-                // this.request.id = this.student.intID;
+                this.request.id = this.student.intID;
 
 
 
