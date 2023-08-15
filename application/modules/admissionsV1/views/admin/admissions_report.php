@@ -74,17 +74,17 @@
                     <tr>
                         <th>Withdrawn Enrollment Before Opening of SY</th>
                         <td>{{ stats.withdrawn_before }}</td>
-                        <td>{{ ((stats.withdrawn_before/stats.enrolled)*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.withdrawn_before/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Withdrawn Enrollment After Opening of SY</th>
                         <td>{{ stats.withdrawn_after }}</td>
-                        <td>{{ ((stats.withdrawn_after/stats.enrolled)*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.withdrawn_after/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Withdrawn Enrollment at the End of the Term</th>
                         <td>{{ stats.withdrawn_end }}</td>
-                        <td>{{ ((stats.withdrawn_end/stats.enrolled)*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.withdrawn_end/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>
                 </table>
             </div>
