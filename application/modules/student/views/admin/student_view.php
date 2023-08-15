@@ -93,11 +93,11 @@
                     <div class="col-sm-4">
                         <label for="level">Student Type:</label>
                         <select id="level" class="form-control select2">
-                            <option <?php echo ($level == 'none')?'selected':''; ?> value="none">-----------------SELECT---------------</option>                            
-                            <option <?php echo ($level == 'shs')?'selected':''; ?> value="shs">shs</option>
-                            <option <?php echo ($level == 'college')?'selected':''; ?> value="college">college</option>
-                            <option <?php echo ($level == 'other')?'selected':''; ?> value="other">other</option>
-                            <option <?php echo ($level == 'drive')?'selected':''; ?> value="drive">drive</option>
+                            <option <?php echo ($level == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
+                            <option <?php echo ($level == 1)?'selected':''; ?> value="1">shs</option>
+                            <option <?php echo ($level == 2)?'selected':''; ?> value="2">college</option>
+                            <option <?php echo ($level == 3)?'selected':''; ?> value="3">other</option>
+                            <option <?php echo ($level == 4)?'selected':''; ?> value="4">drive</option>
                         </select>
                     </div>                
                     <div class="col-sm-4">

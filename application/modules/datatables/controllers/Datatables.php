@@ -1599,18 +1599,46 @@ class Datatables extends CI_Controller {
                 }
             }
             
-        if($level != 0  && $level != 'none' && $table =='tb_mas_users'){
+        if($level != 0 && $table =='tb_mas_users'){
             if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
             {
-                $sWhere .= "AND ".$table.".level = '".$level."' ";
+                switch($level){
+                    case 1:
+                        $sWhere .= "AND ".$table.".level = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "AND ".$table.".level = 'college' ";
+                    break;
+                    case 3:
+                        $sWhere .= "AND ".$table.".level = 'other' ";
+                    break;
+                    case 4:
+                        $sWhere .= "AND ".$table.".level = 'drive' ";
+                    break;
+                }
             }
             else
             {
-                $sWhere .= "WHERE ".$table.".level = '".$level."' ";
+                switch($level){
+                    case 1:
+                        $sWhere .= "WHERE ".$table.".level = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "WHERE ".$table.".level = 'college' ";
+                    break;
+                    case 3:
+                        $sWhere .= "WHERE ".$table.".level = 'other' ";
+                    break;
+                    case 4:
+                        $sWhere .= "WHERE ".$table.".level = 'drive' ";
+                    break;
+                }
             }
             
         }
-            
+        
+        
+
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
                 $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
@@ -1861,7 +1889,7 @@ class Datatables extends CI_Controller {
             }
             $output['aaData'][] = $row;
         }
-        $output['swhere'] = $sWhere;
+        
 	   echo json_encode( $output );
     }
     
