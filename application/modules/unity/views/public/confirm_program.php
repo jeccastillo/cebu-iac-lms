@@ -187,7 +187,7 @@
                                 <label>Strand</label>
                                 <input type="text" class="form-control" v-model="request.strand">
                             </div>
-                            <div class="col-md-8 form-group">
+                            <!-- <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
                                 <select v-if="api_data.campus == 'Cebu'" required class="form-control"
                                     v-model="request.student_type">
@@ -206,7 +206,7 @@
                                     <option value="2ND - DEGREE">2ND - DEGREE</option>
                                 </select>
 
-                            </div>
+                            </div> -->
                         </div>
                         <hr />
                         <div class="text-center">
@@ -312,7 +312,6 @@ new Vue({
         axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
             .then((data) => {
                 this.student = data.data.student;
-                this.request.id = this.student.intID;
                 this.request.father = this.student.father;
                 this.request.father_contact = this.student.father_contact;
                 this.request.father_email = this.student.father_email;
