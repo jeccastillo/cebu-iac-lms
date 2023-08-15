@@ -296,7 +296,6 @@ new Vue({
             senior_high_address: undefined,
             senior_high_attended: undefined,
             strand: undefined,
-            student_type: undefined,
             enumGender: undefined,
         },
         payload: {
