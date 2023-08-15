@@ -203,6 +203,7 @@
                                     <option value="SHS-  Transferee">SHS - Transferee</option>
                                     <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program
                                     </option>
+                                    <option value="2ND - DEGREE">2ND - DEGREE</option>
                                 </select>
 
                             </div>
