@@ -691,26 +691,31 @@
                         <p>Use this tool to manually update statuses for reverting be careful of changing the status of the student if he/she is already enlisted or enrolled</p>
                     </div>
                     <div class="box-body">
-                        <label>Select Status</label>
-                        <select @change="updateStatusManual($event)" v-model="status_update" class="form-control">
-                            <option value="New">New</option>
-                            <option value="Waiting For Interview">Waiting For Interview</option>
-                            <option value="For Interview">For Interview</option>
-                            <option value="For Reservation">For Reservation</option>
-                            <option value="Reserved">Reserved</option>
-                            <option value="For Enrollment">For Enrollment</option>
-                            <option value="Confirmed">Confirmed</option>
-                            <option value="Enlisted">Enlisted</option>
-                            <option value="Enrolled">Enrolled</option>
-                            <option value="Cancelled">Cancelled Application</option>
-                            <option value="Floating">Floating Application</option>
-                            <option value="Did Not Reserve">Did Not Reserve</option>
-                            <option value="Rejected">Rejected</option>
-                            <option value="Withdrawn Before">Withdrawn Enrollment Before Opening of SY</option>
-                            <option value="Withdrawn After">Withdrawn Enrollment After Opening of SY</option>
-                            <option value="Withdrawn End">Withdrawn Enrollment at the End of the Term</option>
-                        </select>
-                    
+                        <form method="post" @submit.prevent="updateStatusManual">
+                            <label>Select Status</label>
+                            <select required v-model="status_update_manual" class="form-control">
+                                <option value="New">New</option>
+                                <option value="Waiting For Interview">Waiting For Interview</option>
+                                <option value="For Interview">For Interview</option>
+                                <option value="For Reservation">For Reservation</option>
+                                <option value="Reserved">Reserved</option>
+                                <option value="For Enrollment">For Enrollment</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Enlisted">Enlisted</option>
+                                <option value="Enrolled">Enrolled</option>
+                                <option value="Cancelled">Cancelled Application</option>
+                                <option value="Floating">Floating Application</option>
+                                <option value="Did Not Reserve">Did Not Reserve</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Withdrawn Before">Withdrawn Enrollment Before Opening of SY</option>
+                                <option value="Withdrawn After">Withdrawn Enrollment After Opening of SY</option>
+                                <option value="Withdrawn End">Withdrawn Enrollment at the End of the Term</option>
+                            </select>
+                            <hr />
+                            <textarea required class="form-control" v-model="remarks_manual"></textarea>
+                            <hr />
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1031,6 +1036,8 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
+        status_update_manual:"",
+        remarks_manual:"",
         status_update: "",
         sched: "",
         show_edit_name: false,
@@ -1074,7 +1081,7 @@ new Vue({
                 axios.get(base_url + 'admissionsV1/programs')
                     .then((data) => {
                         this.programs = data.data.programs;
-                        this.status_update = this.request.status;
+                        this.status_update_manual = this.request.status;
                         console.log(this.status_update);
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
@@ -1393,7 +1400,7 @@ new Vue({
                 // }
             })
         },
-        updateStatusManual: function(event) {
+        updateStatusManual: function() {
 
             Swal.fire({
                 title: 'Update Status',
@@ -1410,8 +1417,8 @@ new Vue({
                     return axios
                         .post(api_url + 'admissions/student-info/' + this.slug +
                             '/update-status', {
-                                status: event.target.value,
-                                remarks: "Manually updated status to " + event.target.value,
+                                status: this.status_update_manual,
+                                remarks: this.remarks_manual,
                                 admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
                             }, {
                                 headers: {
