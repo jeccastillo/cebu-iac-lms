@@ -91,9 +91,9 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="level">Enrollment Status:</label>
+                        <label for="level">Student Type:</label>
                         <select id="level" class="form-control select2">
-                            <option <?php echo ($level == '0')?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
+                            <option <?php echo ($level == 'none')?'selected':''; ?> value="none">-----------------SELECT---------------</option>                            
                             <option <?php echo ($level == 'shs')?'selected':''; ?> value="shs">shs</option>
                             <option <?php echo ($level == 'college')?'selected':''; ?> value="college">college</option>
                             <option <?php echo ($level == 'other')?'selected':''; ?> value="other">other</option>
