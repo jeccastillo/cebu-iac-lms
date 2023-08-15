@@ -1604,7 +1604,7 @@ class Datatables extends CI_Controller {
             {
                 switch($level){
                     case 1:
-                        $sWhere .= "AND ".$table.".ba = 'shs' ";
+                        $sWhere .= "AND ".$table.".level = 'shs' ";
                     break;
                     case 2:
                         $sWhere .= "AND ".$table.".level = 'college' ";
@@ -1621,7 +1621,7 @@ class Datatables extends CI_Controller {
             {
                 switch($level){
                     case 1:
-                        $sWhere .= "WHERE ".$table.".ba = 'shs' ";
+                        $sWhere .= "WHERE ".$table.".level = 'shs' ";
                     break;
                     case 2:
                         $sWhere .= "WHERE ".$table.".level = 'college' ";
