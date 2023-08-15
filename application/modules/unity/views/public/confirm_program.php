@@ -23,7 +23,6 @@
                                     <td></td>
                                 </tr>
 
-                                {{request.preferedSection}}
                                 <tr>
                                     <th>Select Section/Schedule</th>
                                     <td>
@@ -125,7 +124,7 @@
                         </div>
 
                         <!-- college  -->
-                        <div class="row">
+                        <div class="row" v-if="api_data.type == 'college' || api_data.type == 'other'">
                             <div class="col-md-4 form-group">
                                 <label>College</label>
                                 <input type="text" class="form-control" v-model="request.college">
