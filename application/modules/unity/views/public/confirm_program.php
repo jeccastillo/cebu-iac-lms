@@ -22,6 +22,8 @@
                                     </td>
                                     <td></td>
                                 </tr>
+
+                                {{request.preferedSection}}
                                 <tr>
                                     <th>Select Section/Schedule</th>
                                     <td>
