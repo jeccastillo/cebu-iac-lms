@@ -1650,7 +1650,7 @@ class Datatables extends CI_Controller {
             $sWhere .= ')';
             
         }
-        echo $sWhere
+        
         /* Individual column filtering */
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
