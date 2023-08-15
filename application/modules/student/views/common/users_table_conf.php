@@ -13,8 +13,9 @@
         var sem = $("#sem").val();
         var scholarship = $("#scholarship").val();
         var registered = $("#registered").val();
+        var level = $("#level").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered;
+        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level;
         
     });
 
@@ -41,7 +42,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
             "aoColumnDefs":[
                 {
-                    "aTargets":[6],
+                    "aTargets":[7],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>student/edit_student/'+row[0]+'">Edit</a></li>'

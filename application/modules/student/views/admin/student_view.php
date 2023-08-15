@@ -89,6 +89,16 @@
                             <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>
                             <option <?php echo ($registered == 3)?'selected':''; ?> value="3">cleared</option>
                         </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="level">Enrollment Status:</label>
+                        <select id="level" class="form-control select2">
+                            <option <?php echo ($level == '0')?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
+                            <option <?php echo ($level == 'shs')?'selected':''; ?> value="shs">shs</option>
+                            <option <?php echo ($level == 'college')?'selected':''; ?> value="college">college</option>
+                            <option <?php echo ($level == 'other')?'selected':''; ?> value="other">other</option>
+                            <option <?php echo ($level == 'drive')?'selected':''; ?> value="drive">drive</option>
+                        </select>
                     </div>                
                     <div class="col-sm-4">
                         <label for="sem">Sem For Grades Spreadsheet:</label>
@@ -144,6 +154,7 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
+                            <th>Student Type</th>
                             <th>Actions</th>
                         </tr>                        
                         <tr class="search">
@@ -153,6 +164,7 @@
                             <td>Last Name</td>
                             <td>Program</td>
                             <td>Year Level</td>
+                            <td>Student Type</td>
                             <td>Actions</td>
                         </tr>
                     </thead>                    
