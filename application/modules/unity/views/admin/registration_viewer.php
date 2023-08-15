@@ -408,7 +408,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,
             check_number: '',
-            campus: '<?php echo $campus; ?>',
+            student_campus: '<?php echo $campus; ?>',
         },
         or_update_description: undefined,
         or_update:{
