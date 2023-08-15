@@ -49,8 +49,8 @@
                             </div>
                             <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.mother_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.mother_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
@@ -62,35 +62,34 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Father's Name</label>
-                                <input type="text" required class="form-control" v-model="request.father">
+                                <input type="text" class="form-control" v-model="request.father">
                             </div>
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.father_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.father_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
-                                <input type="email" required class="form-control" v-model="request.father_email">
+                                <input type="email" class="form-control" v-model="request.father_email">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Name of Guardian</label>
-                                <input type="text" required class="form-control" v-model="request.guardian">
+                                <input type="text" class="form-control" v-model="request.guardian">
                             </div>
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.guardian_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.guardian_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
-                                <input type="email" required class="form-control" v-model="request.guardian_email">
                             </div>
                         </div>
                         <div class="row">
