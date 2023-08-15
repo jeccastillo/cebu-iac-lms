@@ -24,13 +24,13 @@
                                 </tr>
                                 <tr>
                                     <th>Select Section/Schedule</th>
-                                    <!-- <td>
+                                    <td>
                                         <select v-model="request.preferedSection" @change="changeSection"
                                             class="form-control">
                                             <option v-for="section in sections" :value="section.intID">
                                                 {{ section.name }}</option>
                                         </select>
-                                    </td> -->
+                                    </td>
                                     <td>
                                         <a class="btn btn-primary"
                                             :href="base_url + 'unity/schedule_viewer/' + section.intID"
