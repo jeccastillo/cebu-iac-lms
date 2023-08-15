@@ -691,6 +691,7 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         $id = $post['id'];
         unset($post['id']);
+        
         $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
         
         if($this->db
