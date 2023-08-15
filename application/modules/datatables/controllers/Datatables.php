@@ -1610,7 +1610,7 @@ class Datatables extends CI_Controller {
                         $sWhere .= "AND ".$table.".level = 'college' ";
                     break;
                     case 3:
-                        $sWhere .= "AND ".$table.".level = 'other' ";
+                        $sWhere .= "AND ".$table.".level = 'sd' ";
                     break;
                     case 4:
                         $sWhere .= "AND ".$table.".level = 'drive' ";
@@ -1627,7 +1627,7 @@ class Datatables extends CI_Controller {
                         $sWhere .= "WHERE ".$table.".level = 'college' ";
                     break;
                     case 3:
-                        $sWhere .= "WHERE ".$table.".level = 'other' ";
+                        $sWhere .= "WHERE ".$table.".level = 'sd' ";
                     break;
                     case 4:
                         $sWhere .= "WHERE ".$table.".level = 'drive' ";
