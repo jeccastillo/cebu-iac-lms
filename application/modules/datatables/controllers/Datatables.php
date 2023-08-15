@@ -1607,9 +1607,9 @@ class Datatables extends CI_Controller {
                 {
                     $sWhere .= "WHERE ".$table.".level = '".$level."' ";
                 }
-                echo $sWhere;
+                
             }
-        
+            echo $sWhere;
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
                 $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
