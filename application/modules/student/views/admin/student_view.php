@@ -73,7 +73,7 @@
                             <option <?php echo ($gender == 2)?'selected':''; ?> value="2">female</option>
                         </select>
                     </div>
-                    <div class="col-sm-4">
+                    <!-- <div class="col-sm-4">
                         <label for="graduate">Graduated:</label>
                         <select id="graduate" class="form-control select2">
                             <option <?php echo ($graduate == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
@@ -89,7 +89,7 @@
                             <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>
                             <option <?php echo ($registered == 3)?'selected':''; ?> value="3">cleared</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col-sm-4">
                         <label for="level">Student Type:</label>
                         <select id="level" class="form-control select2">
