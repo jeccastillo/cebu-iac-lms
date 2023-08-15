@@ -39,12 +39,12 @@
                     <tr>
                         <th>Floating Application</th>
                         <td>{{ stats.floating }}</td>
-                        <td>{{ ((stats.floating/total)*100).toFixed(2) }}</td>
+                        <td>{{ ((stats.floating/total)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Cancelled Applications</th>
                         <td>{{ stats.cancelled }}</td>
-                        <td>{{ ((stats.cancelled/stats.paid)*100).toFixed(2) }}</td>
+                        <td>{{ ((stats.cancelled/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Interviewed</th>
@@ -54,7 +54,7 @@
                     <tr>
                         <th>Did not Reserve</th>
                         <td>{{ stats.did_not_reserve }}</td>
-                        <td>{{ ((stats.did_not_reserve/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}</td>
+                        <td>{{ ((stats.did_not_reserve/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Rejected</th>
