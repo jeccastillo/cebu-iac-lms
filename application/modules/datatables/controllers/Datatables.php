@@ -1621,7 +1621,7 @@ class Datatables extends CI_Controller {
             {
                 switch($level){
                     case 1:
-                        $sWhere .= "WHERE ".$table.".level = 'shs' ";
+                        $sWhere .= "WHERE ".$table.".ba = 'shs' ";
                     break;
                     case 2:
                         $sWhere .= "WHERE ".$table.".level = 'college' ";
@@ -1789,6 +1789,7 @@ class Datatables extends CI_Controller {
         ";
         
         $rResult = $this->db->query($sQuery);
+        
 
         /* Data set length after filtering */
         $sQuery = "
