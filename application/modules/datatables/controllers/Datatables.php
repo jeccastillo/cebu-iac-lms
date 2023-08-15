@@ -1861,6 +1861,7 @@ class Datatables extends CI_Controller {
             }
             $output['aaData'][] = $row;
         }
+        $output['swhere'] = $sWhere;
 	   echo json_encode( $output );
     }
     
