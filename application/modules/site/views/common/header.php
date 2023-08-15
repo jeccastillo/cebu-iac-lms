@@ -24,7 +24,7 @@
 
 
 
-    <title>iACADEMY Cebu</title>
+    <title>iACADEMY </title>
 </head>
 
 <body>
