@@ -321,7 +321,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
-            campus: '<?php echo $campus; ?>',
+            student_campus: '<?php echo $campus; ?>',
         },
         or_print: {
             or_number: undefined,
@@ -335,7 +335,7 @@ new Vue({
             remarks: undefined,
             is_cash: undefined,
             cashier_id: undefined,
-            check_number: undefined,
+            check_number: undefined,            
         },
         or_update:{
             id: undefined,
@@ -565,8 +565,7 @@ new Vue({
                             }
 
                             this.request.subtotal_order = this.amount_to_pay;
-                            this.request.total_amount_due = this.amount_to_pay;
-
+                            this.request.total_amount_due = this.amount_to_pay;                            
                             
                             return axios.post(url, this.request, {
                                         headers: {
