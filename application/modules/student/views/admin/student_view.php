@@ -154,7 +154,7 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
-                            <td>Status</td>
+                            <th>Status</th>
                             <th>Student Type</th>
                             <th>Actions</th>
                         </tr>                        
