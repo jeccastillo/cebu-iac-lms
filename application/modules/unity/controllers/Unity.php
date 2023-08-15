@@ -692,10 +692,19 @@ class Unity extends CI_Controller {
         $id = $post['id'];
         unset($post['id']);
         $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']);
-        $this->data_poster->post_data('tb_mas_users',$post,$id);
-        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
-        $ret['success'] = true;
-        $ret['message'] = "Updated Successfully";
+        
+        if($this->db
+             ->where('intID',$id)
+             ->update('tb_mas_users',$post)){
+        
+                $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
+                $ret['success'] = true;
+                $ret['message'] = "Updated Successfully";
+        }
+        else{
+            $ret['success'] = false;
+            $ret['message'] = "Failed to update";
+        }
         
         echo json_encode($ret);
     }
