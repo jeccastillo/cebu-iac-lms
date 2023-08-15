@@ -204,20 +204,20 @@
                                     <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program
                                     </option>
                                     <option value="2ND - DEGREE">2ND - DEGREE</option>
-                                </select> -->
+                                </select>
 
+                            </div> -->
                         </div>
+                        <hr />
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" v-if="loaded">Confirm Selected Program and
+                                Section</button>
+                        </div>
+                    </form>
                 </div>
-                <hr />
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary" v-if="loaded">Confirm Selected Program and
-                        Section</button>
-                </div>
-                </form>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
