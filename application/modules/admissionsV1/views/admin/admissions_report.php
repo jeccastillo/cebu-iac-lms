@@ -142,8 +142,9 @@ new Vue({
                 this.stats = data.data;  
                 this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
                             this.stats.for_enrollment + this.stats.reserved + this.stats.floating +
-                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled + this.stats.unpaid
-                            + this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + 
+                            this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled +
+                            this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
             })
             .catch((error) => {
                 console.log(error);
