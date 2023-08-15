@@ -23,7 +23,6 @@
                                     <td></td>
                                 </tr>
 
-                                {{request.preferedSection}}
                                 <tr>
                                     <th>Select Section/Schedule</th>
                                     <td>
@@ -308,48 +307,48 @@ new Vue({
         let url_string = window.location.href;
         const select = document.getElementById('program');
 
-        axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
-            .then((data) => {
-                this.student = data.data.student;
-                this.request.father = this.student.father;
-                this.request.father_contact = this.student.father_contact;
-                this.request.father_email = this.student.father_email;
-                this.request.mother = this.student.mother;
-                this.request.mother_contact = this.student.mother_contact;
-                this.request.mother_email = this.student.mother_email;
-                this.request.guardian = this.student.father;
-                this.request.guardian_contact = this.student.guardian_contact;
-                this.request.guardian_email = this.student.guardian_email;
-                this.request.intProgramID = this.student.intProgramID;
-                this.program_text = data.data.selected;
-                //console.log(this.program_text);     
-                this.programs = data.data.programs;
-                // this.request.id = this.student.intID;
+        // axios.get(this.base_url + 'unity/program_confirmation_data/' + this.id + '/')
+        //     .then((data) => {
+        //         this.student = data.data.student;
+        //         this.request.father = this.student.father;
+        //         this.request.father_contact = this.student.father_contact;
+        //         this.request.father_email = this.student.father_email;
+        //         this.request.mother = this.student.mother;
+        //         this.request.mother_contact = this.student.mother_contact;
+        //         this.request.mother_email = this.student.mother_email;
+        //         this.request.guardian = this.student.father;
+        //         this.request.guardian_contact = this.student.guardian_contact;
+        //         this.request.guardian_email = this.student.guardian_email;
+        //         this.request.intProgramID = this.student.intProgramID;
+        //         this.program_text = data.data.selected;
+        //         //console.log(this.program_text);     
+        //         this.programs = data.data.programs;
+        //         // this.request.id = this.student.intID;
 
 
 
-                if (data.data.sections.length > 0) {
-                    this.sections = data.data.sections;
-                    this.section = data.data.sections[0];
-                    this.request.preferedSection = data.data.sections[0].intID;
-                }
-                axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
-                    .then((data) => {
-                        this.api_data = data.data.data;
-                        this.request.student_type = this.api_data.tos;
-                        if (this.api_data.status == "Confirmed")
-                            document.location = this.base_url;
-                        else
-                            this.loaded = true;
+        //         if (data.data.sections.length > 0) {
+        //             this.sections = data.data.sections;
+        //             this.section = data.data.sections[0];
+        //             this.request.preferedSection = data.data.sections[0].intID;
+        //         }
+        //         axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
+        //             .then((data) => {
+        //                 this.api_data = data.data.data;
+        //                 this.request.student_type = this.api_data.tos;
+        //                 if (this.api_data.status == "Confirmed")
+        //                     document.location = this.base_url;
+        //                 else
+        //                     this.loaded = true;
 
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error);
+        //             })
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     })
 
 
 
