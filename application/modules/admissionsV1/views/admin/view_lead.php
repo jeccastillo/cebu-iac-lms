@@ -974,7 +974,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" ref="myModal" id="myModal" role="dialog">
         <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
@@ -1394,67 +1394,8 @@ new Vue({
             })
         },
         updateStatusManual: function(event) {
-
-            Swal.fire({
-                title: 'Update Status',
-                text: "Are you sure you want to update?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-
-                    return axios
-                        .post(api_url + 'admissions/student-info/' + this.slug +
-                            '/update-status', {
-                                status: event.target.value,
-                                remarks: "Manually updated status to " + event.target.value,
-                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
-                            }, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                        .then(data => {
-                            if (data.data.success) {
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                // if (result.isConfirmed) {
-                //     Swal.fire({
-                //         icon: result?.value.data.success ? "success" : "error",
-                //         html: result?.value.data.message,
-                //         allowOutsideClick: false,
-                //     }).then(() => {
-                //         if (reload && result?.value.data.success) {
-                //             if (reload == "reload") {
-                //                 location.reload();
-                //             } else {
-                //                 window.location.href = reload;
-                //             }
-                //         }
-                //     });
-                // }
-            })
-            }
+            this.$refs.myModal.show;
+        }
 
 
     }
