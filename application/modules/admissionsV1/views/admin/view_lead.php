@@ -663,7 +663,7 @@
                         </div>
 
                         <div>
-                            <strong>lrn</strong>
+                            <strong>LRN</strong>
                             <p class="text-muted">
                                 {{request.lrn}}
                             </p>
