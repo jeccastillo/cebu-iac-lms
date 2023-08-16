@@ -90,6 +90,8 @@
                         <div class="row">
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
+                                <input type="text" class="form-control" v-model="request.guardian_email" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
@@ -207,6 +209,21 @@
 
                             </div> -->
                         </div>
+
+                        <!--  -->
+                        <hr>
+                        <h3>LRN & Voucher</h3>
+
+                        <div class="row">
+                            <div class="col-md-4 form-group"> <label>LRN</label>
+                                <input type="text" class="form-control" v-model="request.lrn" />
+                            </div>
+                            <div class="col-md-4 form-group"> <label>Voucher</label>
+                                <input type="file" accept="image/*" ref="voucher_file" class="form-control"
+                                    @change="changeVoucher" />
+                            </div>
+                        </div>
+
                         <hr />
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" v-if="loaded">Confirm Selected Program and
@@ -296,6 +313,7 @@ new Vue({
             senior_high_attended: undefined,
             strand: undefined,
             enumGender: undefined,
+            lrn: undefined
         },
         payload: {
 
@@ -360,6 +378,12 @@ new Vue({
                     this.section = data.data.section;
                 });
         },
+
+        changeVoucher: function() {
+            var file = this.$refs.voucher_file.files[0];
+            this.request.voucher = file;
+        },
+
         unmaskedValue: function() {
             var val = this.$refs.input.clean
             console.log(val);
@@ -403,9 +427,16 @@ new Vue({
                     program: this.program_text,
                 };
 
+                let formPayload = new FormData();
+                formPayload.append("type_id", this.request.intProgramID);
+                formPayload.append("program", this.program_text);
+                formPayload.append("lrn", this.request.lrn);
+                formPayload.append("voucher", this.request.voucher);
+
+
                 axios
-                    .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug, this
-                        .payload, {
+                    .post(api_url + 'registrar/confirm_selected_programs/' + this.student.slug,
+                        formPayload, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
