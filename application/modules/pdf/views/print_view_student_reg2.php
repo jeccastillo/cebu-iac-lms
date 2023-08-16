@@ -202,31 +202,31 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>
                             <tr>
                                 <td style="text-align:left;">Tuition Fee</td>
-                                <td style="text-align:center;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:center;">'.number_format($tuition['tuition_installment_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['tuition_installment_before_discount'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
                                 <td>Laboratory</td>
-                                <td style="text-align:center;">'.number_format($tuition['lab_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:center;">'.number_format($tuition['lab_installment_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['lab_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['lab_installment_before_discount'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
                                 <td>Miscellaneous</td>
-                                <td style="text-align:center;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:center;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
                             </tr>
                             <tr>
                                 <td>Other Fees</td>
-                                <td style="text-align:center;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
-                                <td style="text-align:center;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>';
                             
 
                 if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
                     $html .='   <tr>
                                     <td style="font-weight:bold;"></td>
-                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:center;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
-                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:center;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
@@ -237,8 +237,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         foreach($tuition['scholarship'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
                         $ctr++;
                         endforeach;
@@ -248,8 +248,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         foreach($tuition['discount'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:center;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
                         $ctr++;
                         endforeach;
@@ -257,8 +257,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     $html .='
                             <tr>
                                 <td style="font-weight:bold;">Total</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:center;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:center;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                             </tr>                        
                             <tr>
                                 <td style="font-size:8; line-height:1; color:#fff;">Space</td>
@@ -268,14 +268,14 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td>DOWN PAYMENT</td>
                                 <td></td>
-                                <td style="text-align:center;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
+                                <td style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
                             </tr>';
                             for($i=0;$i<5;$i++){
                                 $html .= '
                                 <tr>
                                     <td>'.switch_num($i + 1).' INSTALLMENT</td>
                                     <td></td>
-                                    <td style="text-align:center;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
                                 </tr>';                    
                             }
 
@@ -283,7 +283,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         '<tr>
                             <td style="font-weight:bold;">Total</td>
                             <td></td>
-                            <td style="text-align:center; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
                     </td>
