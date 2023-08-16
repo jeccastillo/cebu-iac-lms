@@ -695,7 +695,7 @@
 
                         <div class="mt-2">
                             <input type="radio" required id="rb-2nd-deg" name="student_type" data-type="second_degree"
-                                @change="filterCourses('other')" v-model="request.student_type" value="2ND- DEGREE" />
+                                @change="filterCourses('other')" v-model="request.student_type" value="2ND - DEGREE" />
                             <label for="rb-2nd-deg"> 2ND - DEGREE
                             </label>
                         </div>
@@ -790,7 +790,8 @@
                                 </label>
                                 <select :disabled="!request.student_type ? true : false"
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    v-model="request.type_id3" id="course_third_choice" required>
+                                    v-model="request.type_id3" id="course_third_choice"
+                                    :required="filtered_programs.length > 2 ? true : false">
                                     <option value="" disabled selected> -- Select option -- </option>
                                     <option :value="t.id" v-for="t in filtered_programs" :key="t.id"
                                         :data-title="t.title"

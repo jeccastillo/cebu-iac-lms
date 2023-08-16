@@ -49,8 +49,8 @@
                             </div>
                             <div v-if="request.mother!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.mother_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.mother_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
@@ -62,35 +62,34 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Father's Name</label>
-                                <input type="text" required class="form-control" v-model="request.father">
+                                <input type="text" class="form-control" v-model="request.father">
                             </div>
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.father_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.father_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
                             <div v-if="request.father!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
-                                <input type="email" required class="form-control" v-model="request.father_email">
+                                <input type="email" class="form-control" v-model="request.father_email">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Name of Guardian</label>
-                                <input type="text" required class="form-control" v-model="request.guardian">
+                                <input type="text" class="form-control" v-model="request.guardian">
                             </div>
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Contact Number (please specify country code)</label>
-                                <input type="text" class="form-control" v-model="request.guardian_contact" required
-                                    masked="true" placeholder="Enter contact number" />
+                                <input type="text" class="form-control" v-model="request.guardian_contact" masked="true"
+                                    placeholder="Enter contact number" />
                             </div>
                         </div>
                         <div class="row">
                             <div v-if="request.guardian!='n/a'" class="col-md-6 form-group">
                                 <label>Email Address</label>
-                                <input type="email" required class="form-control" v-model="request.guardian_email">
                             </div>
                         </div>
                         <div class="row">
@@ -158,7 +157,7 @@
 
                         <!-- SHS -->
 
-                        <div class="row">
+                        <div class="row" v-if="api_data.type == 'college' || api_data.type == 'other'">
                             <div class="col-md-4 form-group">
                                 <label>Senior High School</label>
                                 <input type="text" class="form-control" v-model="request.senior_high">
@@ -182,11 +181,12 @@
 
 
                         <div class="row">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-4 form-group"
+                                v-if="api_data.type == 'college' || api_data.type == 'other'">
                                 <label>Strand</label>
                                 <input type="text" class="form-control" v-model="request.strand">
                             </div>
-                            <div class="col-md-8 form-group">
+                            <!-- <div class="col-md-8 form-group">
                                 <label>Type of Student</label>
                                 <select v-if="api_data.campus == 'Cebu'" required class="form-control"
                                     v-model="request.student_type">
@@ -202,9 +202,10 @@
                                     <option value="SHS-  Transferee">SHS - Transferee</option>
                                     <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE HomeSchool Program
                                     </option>
+                                    <option value="2ND - DEGREE">2ND - DEGREE</option>
                                 </select>
 
-                            </div>
+                            </div> -->
                         </div>
                         <hr />
                         <div class="text-center">
@@ -294,7 +295,6 @@ new Vue({
             senior_high_address: undefined,
             senior_high_attended: undefined,
             strand: undefined,
-            student_type: undefined,
             enumGender: undefined,
         },
         payload: {
@@ -323,7 +323,7 @@ new Vue({
                 this.program_text = data.data.selected;
                 //console.log(this.program_text);     
                 this.programs = data.data.programs;
-                // this.request.id = this.student.intID;
+                this.request.id = this.student.intID;
 
 
 
@@ -335,7 +335,6 @@ new Vue({
                 axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;
-                        this.request.student_type = this.api_data.tos;
                         if (this.api_data.status == "Confirmed")
                             document.location = this.base_url;
                         else

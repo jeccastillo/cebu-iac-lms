@@ -1418,7 +1418,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );        
     }
     
-    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0)
+    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -1547,6 +1547,7 @@ class Datatables extends CI_Controller {
                     $sWhere .= "WHERE $table.isGraduate = 0 ";
             
         }
+        
         if($yearlevel!=0 && $table =='tb_mas_users')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
                 $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
@@ -1597,7 +1598,47 @@ class Datatables extends CI_Controller {
                     
                 }
             }
+            
+        if($level != 0 && $table =='tb_mas_users'){
+            if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
+            {
+                switch($level){
+                    case 1:
+                        $sWhere .= "AND ".$table.".level = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "AND ".$table.".level = 'college' ";
+                    break;
+                    case 3:
+                        $sWhere .= "AND ".$table.".level = 'sd' ";
+                    break;
+                    case 4:
+                        $sWhere .= "AND ".$table.".level = 'drive' ";
+                    break;
+                }
+            }
+            else
+            {
+                switch($level){
+                    case 1:
+                        $sWhere .= "WHERE ".$table.".level = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "WHERE ".$table.".level = 'college' ";
+                    break;
+                    case 3:
+                        $sWhere .= "WHERE ".$table.".level = 'sd' ";
+                    break;
+                    case 4:
+                        $sWhere .= "WHERE ".$table.".level = 'drive' ";
+                    break;
+                }
+            }
+            
+        }
         
+        
+
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
                 $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
@@ -1748,6 +1789,7 @@ class Datatables extends CI_Controller {
         ";
         
         $rResult = $this->db->query($sQuery);
+        
 
         /* Data set length after filtering */
         $sQuery = "
@@ -1777,7 +1819,7 @@ class Datatables extends CI_Controller {
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-
+        $output['query'] = $sWhere;
         foreach ($rResult->result() as $aRow)
         {
             $row = array();
@@ -1848,6 +1890,7 @@ class Datatables extends CI_Controller {
             }
             $output['aaData'][] = $row;
         }
+        
 	   echo json_encode( $output );
     }
     

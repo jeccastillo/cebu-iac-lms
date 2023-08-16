@@ -35,37 +35,57 @@
                         <th>Sign Ups</th>
                         <td>{{ total }}</td>
                         <td>Paid: {{ stats.paid }} Unpaid: {{ stats.unpaid }}</td>
+                    </tr>
+                    <tr>
+                        <th>Floating Application</th>
+                        <td>{{ stats.floating }}</td>
+                        <td>{{ ((stats.floating/total)*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Cancelled Applications</th>
+                        <td>{{ stats.cancelled }}</td>
+                        <td>{{ ((stats.cancelled/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Interviewed</th>
-                        <td>{{ stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled }}</td>
-                        <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled)/stats.paid)*100).toFixed(2) }}%</td>
+                        <td>{{ stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
+                        <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end)/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
-                        <th>Cancelled Application/Rejected</th>
+                        <th>Rejected</th>
                         <td>{{ stats.rejected }}</td>
-                        <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Did not Reserve</th>
+                        <td>{{ stats.did_not_reserve }}</td>
+                        <td>{{ ((stats.did_not_reserve/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Reserved</th>
-                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled }}</td>
-                        <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled))*100).toFixed(2) }}%</td>
+                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
+                        <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Enrolled</th>
-                        <td>{{ stats.enrolled }}</td>
-                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
-                    </tr>                    
-                    <tr>
-                        <th>Disqualified</th>
-                        <td>{{ stats.disqualified }}</td>
-                        <td>{{ ((stats.disqualified/total)*100).toFixed(2) }}%</td>
+                        <td>{{ stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
+                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
-                        <th>Not Answering</th>
-                        <td>{{ stats.not_answering }}</td>
-                        <td>{{ ((stats.not_answering/total)*100).toFixed(2) }}%</td>
+                        <th>Withdrawn Enrollment Before Opening of SY</th>
+                        <td>{{ stats.withdrawn_before }}</td>
+                        <td>{{ ((stats.withdrawn_before/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>                    
+                    <tr>
+                        <th>Withdrawn Enrollment After Opening of SY</th>
+                        <td>{{ stats.withdrawn_after }}</td>
+                        <td>{{ ((stats.withdrawn_after/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Withdrawn Enrollment at the End of the Term</th>
+                        <td>{{ stats.withdrawn_end }}</td>
+                        <td>{{ ((stats.withdrawn_end/(stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -121,9 +141,10 @@ new Vue({
                 // console.log(data);           
                 this.stats = data.data;  
                 this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
-                            this.stats.for_enrollment + this.stats.reserved + 
-                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled + this.stats.unpaid
-                            + this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
+                            this.stats.for_enrollment + this.stats.reserved + this.stats.floating +
+                            this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + 
+                            this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled +
+                            this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
             })
             .catch((error) => {
                 console.log(error);

@@ -11,10 +11,11 @@
         var gender = $("#gender").val();
         var graduate = $("#graduate").val();
         var sem = $("#sem").val();
-        var scholarship = $("#scholarship").val();
+        var scholarship = 0;
         var registered = $("#registered").val();
+        var level = $("#level").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered;
+        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level;
         
     });
 
@@ -38,10 +39,10 @@
             "bServerSide": true,
             "ordering": false,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/0/0/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem."/0/".$level; ?>",
             "aoColumnDefs":[
                 {
-                    "aTargets":[6],
+                    "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>student/edit_student/'+row[0]+'">Edit</a></li>'

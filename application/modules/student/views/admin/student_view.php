@@ -73,7 +73,7 @@
                             <option <?php echo ($gender == 2)?'selected':''; ?> value="2">female</option>
                         </select>
                     </div>
-                    <div class="col-sm-4">
+                    <!-- <div class="col-sm-4">
                         <label for="graduate">Graduated:</label>
                         <select id="graduate" class="form-control select2">
                             <option <?php echo ($graduate == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
@@ -88,6 +88,16 @@
                             <option <?php echo ($registered == 1)?'selected':''; ?> value="1">enlisted</option>
                             <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>
                             <option <?php echo ($registered == 3)?'selected':''; ?> value="3">cleared</option>
+                        </select>
+                    </div> -->
+                    <div class="col-sm-4">
+                        <label for="level">Student Type:</label>
+                        <select id="level" class="form-control select2">
+                            <option <?php echo ($level == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
+                            <option <?php echo ($level == 1)?'selected':''; ?> value="1">shs</option>
+                            <option <?php echo ($level == 2)?'selected':''; ?> value="2">college</option>
+                            <option <?php echo ($level == 3)?'selected':''; ?> value="3">other</option>
+                            <option <?php echo ($level == 4)?'selected':''; ?> value="4">drive</option>
                         </select>
                     </div>                
                     <div class="col-sm-4">
@@ -144,6 +154,8 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
+                            <th>Status</th>
+                            <th>Student Type</th>
                             <th>Actions</th>
                         </tr>                        
                         <tr class="search">
@@ -153,6 +165,8 @@
                             <td>Last Name</td>
                             <td>Program</td>
                             <td>Year Level</td>
+                            <td>Status</td>
+                            <td>Student Type</td>
                             <td>Actions</td>
                         </tr>
                     </thead>                    
