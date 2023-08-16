@@ -431,7 +431,7 @@ new Vue({
                 let formPayload = new FormData();
                 formPayload.append("type_id", this.request.intProgramID);
                 formPayload.append("program", this.program_text);
-                formPayload.append("lrn", this.request.lrn);
+                formPayload.append("lrn", this.request.strLRN);
                 formPayload.append("voucher", this.request.voucher);
 
 
