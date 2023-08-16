@@ -270,7 +270,7 @@ new Vue({
     },
     mounted() {
 
-        this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 500;
+        
 
         axios
             .get(api_url + 'payments/modes?count_content=100', {
@@ -297,6 +297,10 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;
+                if(this.student.campus == "Cebu")
+                    this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 500;
+                else
+                    this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 700;
             })
             .catch((error) => {
                 console.log(error);
