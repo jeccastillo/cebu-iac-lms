@@ -659,9 +659,25 @@
                                     class=" text-primary">LRN and Voucher
                                 </span>
                             </strong>
-
                             <hr>
                         </div>
+
+                        <div>
+                            <strong>lrn</strong>
+                            <p class="text-muted">
+                                {{request.lrn}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong>Voucher</strong>
+                            <p class="text-muted">
+                                <a :href="request.voucher_path" target="_blank">{{request.voucher}}</a>
+                            </p>
+                            <hr>
+                        </div>
+
+
                     </div>
 
                     <div class="text-right">
