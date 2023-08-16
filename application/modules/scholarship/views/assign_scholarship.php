@@ -26,11 +26,11 @@
                         Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
                     </div>
                 </div>
-                <hr />
-                <h4>Assign Scholarship</h4>
-                <div class="row">                    
-                    <form method="post" action="#" @submit.prevent.stop="submitDeduction('scholarship')">
-                        <div class="col-md-6">                            
+                <hr />                
+                <div class="row">                                        
+                    <div class="col-md-6">                            
+                        <h4>Assign Scholarship</h4>
+                        <form method="post" action="#" @submit.prevent.stop="submitDeduction('scholarship')">
                             <label>Select Scholarship</label>
                             <select required class="form-control" v-model="request_scholarship.discount_id">
                                 <option v-for="scholarship in scholarships" :value="scholarship.intID">{{ scholarship.name }}</option>
@@ -38,40 +38,11 @@
                             
                             <hr />
                             <input class="btn btn-primary" type="submit" value="Add">
-                        </div>
-                        <div class="col-md-6">
-                            <h4>Assigned Scholarships for this Term</h4>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Scholarship</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="item in student_scholarships">
-                                        <td>{{ item.name }}</td>
-                                        <td>
-                                            <select class="form-control" @change="updateScStatus($event,item.id)">
-                                                <option :selected="item.status == 'applied'" value="applied">applied</option>
-                                                <option :selected="item.status == 'pending'" value="pending">pending</option>
-                                                <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
-                                            </select>
-                                        </td>
-                                        <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>                    
-                </div>
-                <hr />                                
-                <h4>Assign Discount</h4>
-                <div class="row">                    
-                    <form method="post" action="#" @submit.prevent.stop="submitDeduction('discount')">
-                        <div class="col-md-6">
-                            
+                        </form> 
+                    </div>                                                                               
+                    <div class="col-md-6">
+                        <h4>Assign Discount</h4>
+                        <form method="post" action="#" @submit.prevent.stop="submitDeduction('discount')">        
                             <label>Select Discount</label>
                             <select required class="form-control" v-model="request_discount.discount_id">
                                 <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
@@ -83,36 +54,62 @@
                             
                             <hr />
                             <input class="btn btn-primary" type="submit" value="Add">
-                        </div>
-                        <div class="col-md-6">
-                            <h4>Assigned Discounts for this Term</h4>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Discount</th>
-                                        <th>Referree</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="item in student_discounts">
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.referrer }}</td>
-                                        <td>
-                                            <select class="form-control" @change="updateScStatus($event,item.id)">
-                                                <option :selected="item.status == 'applied'" value="applied">applied</option>
-                                                <option :selected="item.status == 'pending'" value="pending">pending</option>
-                                                <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
-                                            </select>
-                                        </td>
-                                        <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>                    
+                        </form>
+                    </div>                                                                
                 </div>
+                <div>
+                    <h4>Assigned Scholarships for this Term</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Scholarship</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in student_scholarships">
+                                <td>{{ item.name }}</td>
+                                <td>
+                                    <select class="form-control" @change="updateScStatus($event,item.id)">
+                                        <option :selected="item.status == 'applied'" value="applied">applied</option>
+                                        <option :selected="item.status == 'pending'" value="pending">pending</option>
+                                        <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
+                                    </select>
+                                </td>
+                                <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h4>Assigned Discounts for this Term</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Discount</th>
+                                <th>Referree</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in student_discounts">
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.referrer }}</td>
+                                <td>
+                                    <select class="form-control" @change="updateScStatus($event,item.id)">
+                                        <option :selected="item.status == 'applied'" value="applied">applied</option>
+                                        <option :selected="item.status == 'pending'" value="pending">pending</option>
+                                        <option :selected="item.status == 'withdraw'" value="withdraw">withdraw</option>
+                                    </select>
+                                </td>
+                                <td><button @click.prevent.stop="deleteScholarship(item.id)" class="btn btn-danger">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
     </div>
