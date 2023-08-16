@@ -216,7 +216,7 @@
 
                         <div class="row">
                             <div class="col-md-4 form-group"> <label>LRN</label>
-                                <input type="text" class="form-control" v-model="request.lrn" />
+                                <input type="text" class="form-control" v-model="request.strLRN" />
                             </div>
                             <div class="col-md-4 form-group"> <label>Voucher</label>
                                 <input type="file" accept="image/*" ref="voucher_file" class="form-control"
@@ -342,6 +342,7 @@ new Vue({
                 //console.log(this.program_text);     
                 this.programs = data.data.programs;
                 this.request.id = this.student.intID;
+
 
 
 
