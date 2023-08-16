@@ -37,19 +37,24 @@
                             <span class="label label-info" v-if="request.status ==  'For Reservation'">For
                                 Reservation</span>
                             <span class="label label-success" v-if="request.status ==  'Reserved'">Reserved</span>
-                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>                            
+                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>
                             <span class="label label-success" v-if="request.status ==  'For Enrollment'">For
                                 Enrollment</span>
                             <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
                             <span class="label label-danger" v-if="request.status ==  'Cancelled'">Cancelled
                                 Application</span>
-                            <span class="label label-danger" v-if="request.status ==  'Did Not Reserve'">Did Not Reserve</span>
-                            <span class="label label-danger" v-if="request.status ==  'Floating'">Floating Application</span>
+                            <span class="label label-danger" v-if="request.status ==  'Did Not Reserve'">Did Not
+                                Reserve</span>
+                            <span class="label label-danger" v-if="request.status ==  'Floating'">Floating
+                                Application</span>
                             <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
-                            <span class="label label-danger" v-if="request.status ==  'Withdrawn Before'">Withdrawn Enrollment Before Opening of SY</span>
-                            <span class="label label-danger" v-if="request.status ==  'Withdrawn After'">Withdrawn Enrollment After Opening of SY</span>
-                            <span class="label label-danger" v-if="request.status ==  'Withdrawn End'">Withdrawn Enrollment at the End of the Term</span>
-                            
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn Before'">Withdrawn
+                                Enrollment Before Opening of SY</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn After'">Withdrawn
+                                Enrollment After Opening of SY</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn End'">Withdrawn
+                                Enrollment at the End of the Term</span>
+
                         </p>
                         <hr>
                     </div>
@@ -648,12 +653,40 @@
                         <hr>
                     </div> -->
 
+                    <div>
+                        <div class="">
+                            <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
+                                    class=" text-primary">LRN and Voucher
+                                </span>
+                            </strong>
+                            <hr>
+                        </div>
+
+                        <div>
+                            <strong>LRN</strong>
+                            <p class="text-muted">
+                                {{request.lrn}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong>Voucher</strong>
+                            <p class="text-muted">
+                                <a :href="request.voucher_path" target="_blank">{{request.voucher}}</a>
+                            </p>
+                            <hr>
+                        </div>
+
+
+                    </div>
+
                     <div class="text-right">
                         <?php if($userlevel == "2" || $userlevel == "5"): ?>
-                        <button v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'" type="button" data-toggle="modal" data-target="#setFISchedule"
+                        <button v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'"
+                            type="button" data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
                         <button type="button" v-if="request.status == 'New'" @click="deleteApplicant"
-                            class=" btn btn-danger">Delete applicant</button>                        
+                            class=" btn btn-danger">Delete applicant</button>
                         <button type="button"
                             v-if="request.status == 'Waiting For Interview' && request.campus == 'Cebu'"
                             data-toggle="modal" @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
@@ -666,7 +699,7 @@
                         <button type="button" v-if="request.status == 'Reserved'"
                             @click="update_status = 'For Enrollment'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
-                            Enrollment</button>                                                
+                            Enrollment</button>
                         <?php endif; ?>
                         <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
                         <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update
@@ -680,7 +713,7 @@
 
         </div>
     </div>
-    
+
     <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
     <div class="container">
         <div class="row">
@@ -688,7 +721,8 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Manual Status Update</h3>
-                        <p>Use this tool to manually update statuses for reverting be careful of changing the status of the student if he/she is already enlisted or enrolled</p>
+                        <p>Use this tool to manually update statuses for reverting be careful of changing the status of
+                            the student if he/she is already enlisted or enrolled</p>
                     </div>
                     <div class="box-body">
                         <form method="post" @submit.prevent="updateStatusManual">
@@ -932,7 +966,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 
     <div class="modal fade" id="setFISchedule" role="dialog">
         <form @submit.prevent="submitSchedule" class="modal-dialog modal-lg">
@@ -1036,8 +1070,8 @@ new Vue({
         slug: "<?php echo $this->uri->segment('3'); ?>",
         update_status: "",
         status_remarks: "",
-        status_update_manual:"",
-        remarks_manual:"",
+        status_update_manual: "",
+        remarks_manual: "",
         status_update: "",
         sched: "",
         show_edit_name: false,
@@ -1461,7 +1495,7 @@ new Vue({
                 //     });
                 // }
             })
-            }
+        }
 
 
     }

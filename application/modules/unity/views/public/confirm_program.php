@@ -216,7 +216,7 @@
 
                         <div class="row">
                             <div class="col-md-4 form-group"> <label>LRN</label>
-                                <input type="text" class="form-control" v-model="request.lrn" />
+                                <input type="text" maxlength="13" class="form-control" v-model="request.strLRN" />
                             </div>
                             <div class="col-md-4 form-group"> <label>Voucher</label>
                                 <input type="file" accept="image/*" ref="voucher_file" class="form-control"
@@ -288,6 +288,7 @@ new Vue({
         section: undefined,
         api_data: {},
         program_text: undefined,
+        lrn: "",
         request: {
             intProgramID: undefined,
             preferedSection: undefined,
@@ -313,7 +314,6 @@ new Vue({
             senior_high_attended: undefined,
             strand: undefined,
             enumGender: undefined,
-            lrn: undefined
         },
         payload: {
 
@@ -342,6 +342,7 @@ new Vue({
                 //console.log(this.program_text);     
                 this.programs = data.data.programs;
                 this.request.id = this.student.intID;
+
 
 
 
@@ -430,12 +431,12 @@ new Vue({
                 let formPayload = new FormData();
                 formPayload.append("type_id", this.request.intProgramID);
                 formPayload.append("program", this.program_text);
-                formPayload.append("lrn", this.request.lrn);
+                formPayload.append("lrn", this.request.strLRN);
                 formPayload.append("voucher", this.request.voucher);
 
 
                 axios
-                    .post(api_url + 'registrar/confirm_selected_programs/' + this.student.slug,
+                    .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug,
                         formPayload, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
