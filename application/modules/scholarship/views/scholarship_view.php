@@ -104,8 +104,7 @@
                                     </div>           
                                 </div>           
                             </div>
-                        </div>
-                        <hr />
+                        </div>                        
                         <div>
                             <div class="col-md-4">
                                 <div class="box box-solid box-primary">

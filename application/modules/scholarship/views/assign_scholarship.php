@@ -78,7 +78,7 @@
                             </select>                            
                             <hr />    
                         
-                            <label>Referrer Name</label>
+                            <label>Referree Name</label>
                             <input type="text" class="form-control" v-model="request_discount.referrer" />                                
                             
                             <hr />
@@ -90,7 +90,7 @@
                                 <thead>
                                     <tr>
                                         <th>Discount</th>
-                                        <th>Referrer</th>
+                                        <th>Referree</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
