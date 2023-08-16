@@ -313,7 +313,6 @@ new Vue({
             senior_high_attended: undefined,
             strand: undefined,
             enumGender: undefined,
-            lrn: undefined
         },
         payload: {
 
