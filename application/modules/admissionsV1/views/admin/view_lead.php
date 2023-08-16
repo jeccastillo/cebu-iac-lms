@@ -741,9 +741,11 @@
                                 <option value="Floating">Floating Application</option>
                                 <option value="Did Not Reserve">Did Not Reserve</option>
                                 <option value="Rejected">Rejected</option>
+                                <?php if($userlevel == "2" || $userlevel == "3"): ?>
                                 <option value="Withdrawn Before">Withdrawn Enrollment Before Opening of SY</option>
                                 <option value="Withdrawn After">Withdrawn Enrollment After Opening of SY</option>
                                 <option value="Withdrawn End">Withdrawn Enrollment at the End of the Term</option>
+                                <?php endif; ?>
                             </select>
                             <hr />
                             <textarea required class="form-control" v-model="remarks_manual"></textarea>
