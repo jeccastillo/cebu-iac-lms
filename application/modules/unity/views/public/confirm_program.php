@@ -435,7 +435,7 @@ new Vue({
 
 
                 axios
-                    .post(api_url + 'registrar/confirm_selected_programs/' + this.student.slug,
+                    .post(api_url + 'registrar/confirm_selected_program/' + this.student.slug,
                         formPayload, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
