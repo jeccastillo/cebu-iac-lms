@@ -78,6 +78,7 @@ class Finance extends CI_Controller {
 
         $this->data['id'] = $id;        
         $this->data['sem'] = $sem;
+        
 
         $this->load->view("common/header",$this->data);
         $this->load->view("student_ledger",$this->data);
