@@ -170,7 +170,7 @@
                                             </div>
                                             <div class="col-sm-4" v-if="cashier">
                                                 <label>Select Type:</label> 
-                                                <select v-model="payment_type" class="form-control">
+                                                <select v-if="!registration.downpayment && !registration.fullpayment" v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
