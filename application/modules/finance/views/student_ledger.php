@@ -92,7 +92,7 @@
                         </tr>                           
                         <tr v-for="item in other">
                             <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }}</td>
+                            <td :class="item.muted">{{ item.type }} <button @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
@@ -285,6 +285,56 @@ new Vue({
             
             })
             
+        },
+        switchType: function(id,type){
+            let url = this.base_url + 'finance/update_ledger_item';                        
+            
+            Swal.fire({
+                title: 'Switch Type Item?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                                        
+                    formdata.append('type',type);
+                    formdata.append('id',id);
+                    
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
         },
         changeLedgerItemStatus: function(type,id){
 
