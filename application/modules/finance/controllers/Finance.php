@@ -242,8 +242,7 @@ class Finance extends CI_Controller {
             $this->data_poster->post_data('tb_mas_student_ledger',$ledger);            
             
 
-            if($post['description_other'] == "full"){                
-                
+            if($post['description_other'] == "full"){                                
                 $update['fullpayment'] = 1;
             }
             if($post['description_other'] == "down"){                
@@ -269,6 +268,7 @@ class Finance extends CI_Controller {
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d H:i:s"),
                     "intROG" => 1,
+                    "paymentType" => $post['payment_type'],
                 ];
                 $this->db
                     ->where('intRegistrationID',$post['registration_id'])
