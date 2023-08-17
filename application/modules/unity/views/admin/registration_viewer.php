@@ -192,9 +192,9 @@
                                                         <td>Down Payment</td>
                                                         <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down')">{{ tuition_data.down_payment }}</a></td>                                                        
                                                     </tr> 
-                                                    <tr v-for="inst in installments">
+                                                    <tr v-for="(inst,ctr) in installments">
                                                         <td>Installment</td>
-                                                        <td><a href="#" @click="setValue(inst,'installment')">{{ inst }}</a></td>
+                                                        <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
                                                     </tr>
                                                 </table>                                                
                                             </div>                                                                             
@@ -637,9 +637,16 @@ new Vue({
             this.or_update_description = desc;
             this.or_update.total_amount_due = amount;
         },        
-        setValue: function(value,type){
-            this.amount_to_pay = value;
-            this.description_other = type;
+        setValue: function(value,type,ctr){
+            
+            if(ctr == 0){
+                this.amount_to_pay = value;
+                this.description_other = type;
+            }
+            else if(this.installments[ctr - 1] == 0){
+                this.amount_to_pay = value;
+                this.description_other = type;
+            }
         },
         selectTerm: function(event){
             document.location = base_url + "unity/registration_viewer/" + this.id + "/" + event.target.value;
