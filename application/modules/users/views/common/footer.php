@@ -111,10 +111,16 @@
 			         },
                 type:'post',
                 success: function(response){
-				if(response.message=="1")
+				if(response.success)
                     document.location="<?php echo base_url()?>portal";
                 else
-                    alert("Invalid Login");
+					Swal.fire({
+						title: "error",
+						text: response.message,
+						icon: "error"
+					}).then(function() {
+						
+					});
                 
 			}
                   
