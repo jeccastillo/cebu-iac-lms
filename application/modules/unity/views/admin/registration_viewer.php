@@ -579,7 +579,7 @@ new Vue({
                                 for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
                                         val = this.tuition_data.installment_fee - temp;
-                                        val = val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                        val = val.toFixed(2);
                                         this.installments.push(val);
                                         temp = 0;
                                     }
