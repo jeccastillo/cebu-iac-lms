@@ -387,7 +387,7 @@
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
                     <a href="#">
-                        <i class="fa fa-circle text-green"></i> <span>Cashier</span>
+                        <i class="fa fa-circle text-green"></i> <span>Cashiers</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -412,6 +412,57 @@
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     </ul>
                 </li>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-circle text-green"></i> <span>Student Account </span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Student Ledger</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Student Account</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Order Detailed Report</span> </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Tuition Fee Set-up</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Payee Set-up</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Cashier Set-up</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Delete & Cancel Receipt</span> </a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                                href="#"><i class="ion"></i>
+                                <span>Overwrite Payment</span> </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
