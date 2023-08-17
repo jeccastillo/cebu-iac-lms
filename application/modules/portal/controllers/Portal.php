@@ -26,6 +26,7 @@ class Portal extends CI_Controller {
         $this->data['student_pics'] = base_url()."assets/photos/";
 		$this->theme = $theme;
 		$this->data['logged_in'] = $this->session->userdata('student_logged');
+        $this->data['first_login'] = $this->session->userdata('firstLogin');
         $this->config->load('courses');
         $this->data['department_config'] = $this->config->item('department');
         $this->data['terms'] = $this->config->item('terms');

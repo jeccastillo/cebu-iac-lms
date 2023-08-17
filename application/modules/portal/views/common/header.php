@@ -105,6 +105,7 @@
                     <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="dashboard")?'active':''; ?>"><a href="<?php echo base_url() ?>portal"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
                     </ul>
+                    <?php if(!$first_login): ?>
                     <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="profile")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/profile"><i class="fa fa-user"></i> <span>Profile</span></a></li>
                     </ul>
@@ -120,9 +121,10 @@
                     <!-- <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="accounting_summary")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/accounting_summary"><i class="ion ion-calculator"></i> <span>Accounting</span></a></li>
                     </ul> -->
-                <ul class="sidebar-menu">
+                    <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="change_password")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/change_password"><i class="ion ion-locked"></i> <span>Change Password</span></a></li>
                     </ul>
+                    <?php endif; ?>
                     
                    
                 </section>
