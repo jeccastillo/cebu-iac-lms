@@ -92,12 +92,12 @@ class Users extends CI_Controller {
 
         // This can be simplified a LOOOT!
         if ($authentication) {
-            $data['message'] =  "1";
+            $data['message'] =  "Success";
             $as = $this->data_fetcher->get_active_sem();
             $this->session->set_userdata('active_sem',$as['intID']);
         } else {
 
-            $data['message'] = "0";
+            $data['message'] = "Invalid Login";
         }
         
         echo json_encode($data);
