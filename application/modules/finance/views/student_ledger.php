@@ -43,7 +43,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>                    
+                    <tbody>                             
                         <tr>
                             
                             <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
@@ -62,7 +62,10 @@
                             <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
                             <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
                             <td></td>             
-                        </tr>            
+                        </tr>
+                        <tr>
+                            <th colspan="9">Tuition</th>
+                        </tr>                           
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
                             <td :class="item.muted">{{ item.type }}</td>
@@ -82,6 +85,30 @@
                             <td></td>
                             <td>Running Balance</td>
                             <td>{{ running_balance }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th colspan="9">Other</th>
+                        </tr>                           
+                        <tr v-for="item in other">
+                            <td :class="item.muted">{{ item.date }}</td>
+                            <td :class="item.muted">{{ item.type }}</td>
+                            <td :class="item.muted">{{ item.name }}</td>
+                            <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
+                            <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
+                            <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
+                            <td :class="item.muted">{{ item.balance }}</td>
+                            <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                            <td>
+                                <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
+                                <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Running Balance</td>
+                            <td>{{ running_balance_other }}</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -112,6 +139,7 @@ new Vue({
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
         ledger: [],        
+        other: [], 
         student: {
             strFirstname:'',
             strLastname:'',
@@ -121,6 +149,7 @@ new Vue({
 
         },
         running_balance: 0,
+        running_balance_other: 0,
         sy: undefined,               
         request:{
             student_id: '<?php echo $id; ?>',
@@ -159,6 +188,7 @@ new Vue({
 
             .then((data) => {
                 ledger_temp = data.data.ledger;
+                other_temp = data.data.other;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
@@ -178,6 +208,21 @@ new Vue({
                     this.ledger.push(ledger_temp[i]);
                 }
                 this.running_balance = this.running_balance.toFixed(2);
+
+                for(i in other_temp){
+                    if(other_temp[i].is_disabled == 0){
+                        this.running_balance_other += Number(other_temp[i].amount);                         
+                        other_temp[i].muted = "";
+                    }
+                    else{
+                        other_temp[i].muted = "text-muted";                        
+                    }                    
+                                                                                     
+                    other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    
+                    this.other.push(other_temp[i]);
+                }
+                this.running_balance_other = this.running_balance_other.toFixed(2);
                 // console.log(data);
             })
             .catch((e) => {
