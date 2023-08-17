@@ -1,7 +1,6 @@
 <aside class="right-side" id="vue-container">
     <section class="content-header">
-        <h1>
-            Student Ledger
+        <h1>            
             <small>
                 <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
                 <div class="pull-right">
@@ -26,7 +25,7 @@
                 <div class="widget-user-header bg-red">
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
-                    <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>                   
+                    <h4 class="widget-user-desc" style="margin-left:0;">Student Ledger</h4>                   
                 </div>                
             </div>                            
             <form @submit.prevent="submitLedgerItem" method="post">
