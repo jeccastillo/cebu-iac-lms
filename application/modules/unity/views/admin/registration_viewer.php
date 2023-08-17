@@ -461,7 +461,6 @@ new Vue({
         description_other: '',
         registration: {
             downpayment:0,
-            fullpayment:0,
         },
         other_payments:[],
         tuition:'',
@@ -487,12 +486,12 @@ new Vue({
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
-                        this.or_update.sy_reference = this.sem;                                                                                      
-                        this.registration = data.data.registration;   
+                        this.or_update.sy_reference = this.sem;                                                                                                                 
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
                         
-                        if(this.registration){         
+                        if(data.data.registration){         
+                            this.registration = data.data.registration;
                             this.registration_status = data.data.registration.intROG;                            
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
