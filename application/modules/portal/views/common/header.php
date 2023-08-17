@@ -121,7 +121,7 @@
                         <li class="<?php echo (isset($page) && $page=="accounting_summary")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/accounting_summary"><i class="ion ion-calculator"></i> <span>Accounting</span></a></li>
                     </ul> -->
                 <ul class="sidebar-menu">
-                        <!-- <li class="<?php echo (isset($page) && $page=="change_password")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/change_password"><i class="ion ion-locked"></i> <span>Change Password</span></a></li> -->
+                        <li class="<?php echo (isset($page) && $page=="change_password")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/change_password"><i class="ion ion-locked"></i> <span>Change Password</span></a></li>
                     </ul>
                     
                    
