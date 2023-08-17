@@ -62,8 +62,7 @@ class Portal extends CI_Controller {
     public function index()
 	{	
         if($this->logged_in()){            
-            if($this->session->userdata('firstLogin')){                
-                $this->session->set_flashdata('firstlog','Please update password before you can proceed');
+            if($this->session->userdata('firstLogin')){                                
                 redirect(base_url()."portal/change_password");            
             }
             else{
@@ -284,7 +283,10 @@ class Portal extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
        
         $this->data['error_message'] = $this->session->flashdata('error_message');
-        $this->data['firstlog'] = $this->session->flashdata('firstlog');
+        if($this->session->userdata('firstLogin'))
+            $this->data['firstlog'] = "Please update password before you can proceed";
+
+
 
        
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
