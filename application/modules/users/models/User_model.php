@@ -59,7 +59,7 @@
 			
 			$user = $this->db->query($sql)->result_array();
 			
-			$user = current($user);
+			
             
 			if(empty($user))
 			{
@@ -68,7 +68,8 @@
 				if(empty($user))
 					return false;
 			}
-			print_r($user);
+			
+			$user = current($user);
 
 			//$sql = "SELECT * FROM ".$table." WHERE  REPLACE(strStudentNumber, '-', '') = '".$username."'";
 			$auth_data = $this->db->query($sql)->first_row();				
