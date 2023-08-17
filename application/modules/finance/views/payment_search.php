@@ -43,8 +43,10 @@
                             <th>Student Number</th>
                             <th>Name</th>
                             <th>Program</th>
-                            <th>Year Level</th>  
-                            <th>Ledger</th>                          
+                            <th>Year Level</th>
+                            <?php if($user['special_role'] >= 1): ?>  
+                            <th>Ledger</th>                         
+                            <?php endif; ?> 
                         </tr>                        
                         <tr class="search">
                             <td>id</td>
@@ -53,7 +55,9 @@
                             <td>Last Name</td>
                             <td>Program</td>
                             <td>Year Level</td>                       
-                            <td>Ledger</td>                               
+                            <?php if($user['special_role'] >= 1): ?>  
+                            <td>Ledger</td>                           
+                            <?php endif; ?>    
                         </tr>
                     </thead>                    
                     <tbody></tbody>
