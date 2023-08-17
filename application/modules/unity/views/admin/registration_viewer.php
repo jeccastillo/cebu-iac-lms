@@ -101,6 +101,7 @@
                             <option v-for="s in sy" value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                         </select>
                     </div>
+                    <hr />
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
                             <div class="box box-solid">
