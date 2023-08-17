@@ -11,12 +11,7 @@
                 </a>                     
                 <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
                     <i class="ion ion-printer"></i>RF No Header
-                </a>   
-                <div class="pull-right">
-                    <select class="form-control" @change="selectTerm($event)" v-model="sem">
-                        <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
-                    </select>
-                </div>        
+                </a>                           
             </small>
         </h1>
         <!-- <div v-if="registration" class="pull-right">
@@ -38,6 +33,11 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
+                        <div class="pull-right">
+                            <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                                <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                            </select>
+                        </div>
                         <!-- /.widget-user-image -->
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
