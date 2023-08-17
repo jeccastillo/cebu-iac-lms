@@ -90,7 +90,13 @@
 				if(response.message=="1")
                     document.location="<?php echo base_url()?>unity";
                 else
-                    alert("Invalid Login: "+response.message);
+                    Swal.fire({
+						title: "error",
+						text: 'Invalid Login',
+						icon: "error"
+					}).then(function() {
+						
+					});
                 
 			}
                   
