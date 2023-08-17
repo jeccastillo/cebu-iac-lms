@@ -412,7 +412,7 @@
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     </ul>
                 </li>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Student Account </span>
                         <i class="fa pull-right fa-angle-left"></i>
@@ -433,7 +433,7 @@
 
                     </ul>
                 </li>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
                         <i class="fa pull-right fa-angle-left"></i>
