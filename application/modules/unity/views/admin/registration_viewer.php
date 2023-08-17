@@ -11,7 +11,12 @@
                 </a>                     
                 <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
                     <i class="ion ion-printer"></i>RF No Header
-                </a>           
+                </a>   
+                <div class="pull-right">
+                    <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                        <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                    </select>
+                </div>        
             </small>
         </h1>
         <!-- <div v-if="registration" class="pull-right">
@@ -95,13 +100,7 @@
                                 Accounting Summary
                             </a>
                         </li> -->
-                    </ul>
-                    <div class="pull-right">
-                        <select class="form-control" @change="selectTerm($event)" v-model="sem">
-                            <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
-                        </select>
-                    </div>
-                    <hr />
+                    </ul>                                        
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
                             <div class="box box-solid">
