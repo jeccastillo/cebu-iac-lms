@@ -33,7 +33,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div class="pull-right" style="margin-right:1rem;">
+                        <div class="pull-right" style="margin-left:1rem;">
                             <select class="form-control" @change="selectTerm($event)" v-model="sem">
                                 <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
