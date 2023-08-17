@@ -125,13 +125,13 @@ class Site extends CI_Controller {
 	public function admissions_student_payment() {
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/payment',$this->data);
-		$this->load->view('common/footer',$this->data);
+		$this->load->view('common/footer_new',$this->data);
     }
 
 	public function admissions_student_payment_reservation() {
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/payment',$this->data);
-		$this->load->view('common/footer',$this->data);
+		$this->load->view('common/footer_new',$this->data);
     }
 
 	public function student_tuition_payment($slug) {                
