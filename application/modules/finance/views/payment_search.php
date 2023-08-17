@@ -53,7 +53,7 @@
                             <td>Last Name</td>
                             <td>Program</td>
                             <td>Year Level</td>                       
-                            <th>Ledger</th>                               
+                            <td>Ledger</td>                               
                         </tr>
                     </thead>                    
                     <tbody></tbody>
