@@ -87,18 +87,29 @@ class Finance extends CI_Controller {
 
     public function student_ledger_data($id,$sem){
                 
-        $where = array('student_id'=>$id);
-        
-        if($sem != 0)
-            $where['syid'] = $sem;
+        $where_tuition = array('student_id'=>$id,'type'=>'tuition');
+        $where_other = array('student_id'=>$id,'type'=>'other');
+
+        if($sem != 0){
+            $where_tuition['syid'] = $sem;
+            $where_other['syid'] = $sem;
+        }
 
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
                     ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-                    ->where($where)        
+                    ->where($where_tuition)        
                     ->get()
                     ->result_array();
+
+        $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+            ->where($where_tuition)        
+            ->get()
+            ->result_array();
 
         $data['student'] = $this->data_fetcher->getStudent($id);
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
