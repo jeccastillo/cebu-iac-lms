@@ -30,7 +30,7 @@
                     "aTargets":[6],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/student_ledger/'+row[1]+'">View Ledger</a>'; }
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/student_ledger/'+row[0]+'">View Ledger</a>'; }
                 },          
                 {
                     "aTargets":[0],
