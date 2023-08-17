@@ -165,12 +165,16 @@
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
-                                                <ul v-if="payment_type == 'full'">
-                                                   <li><a href="#" @click="setValue(tuition_data.total)">{{ tuition_data.total }}</a></li> 
-                                                </ul>
-                                                <ul v-else>
-                                                   <li><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></li>                                                    
-                                                </ul>
+                                                <table class="table table-striped" v-if="payment_type == 'full'">
+                                                    <tr>
+                                                        <td><a href="#" @click="setValue(tuition_data.total)">{{ tuition_data.total }}</a></td>
+                                                    </tr> 
+                                                </table>
+                                                <table class="table table-striped" v-else>
+                                                    <tr>
+                                                        <li><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></li>
+                                                    </tr> 
+                                                </table>                                                
                                             </div>  
                                                                            
                                         </div>                                                                       
