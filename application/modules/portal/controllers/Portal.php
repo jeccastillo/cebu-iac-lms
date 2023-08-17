@@ -284,6 +284,7 @@ class Portal extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
        
         $this->data['error_message'] = $this->session->flashdata('error_message');
+        $this->data['firstlog'] = $this->session->flashdata('firstlog');
 
        
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
