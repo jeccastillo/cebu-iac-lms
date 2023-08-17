@@ -178,7 +178,7 @@
                                                     <option value="partial">Installment</option>
                                                 </select>
                                                 <div v-else>
-                                                    {{ registration.paymentType }}
+                                                    {{ payment_type }}
                                                 </div>
                                                 <hr />
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
