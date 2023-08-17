@@ -172,11 +172,10 @@
                                                 </table>
                                                 <table class="table table-striped" v-else>
                                                     <tr>
-                                                        <li><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></li>
+                                                        <td><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></td>
                                                     </tr> 
                                                 </table>                                                
-                                            </div>  
-                                                                           
+                                            </div>                                                                             
                                         </div>                                                                       
                                     </form>
                                 </div>
