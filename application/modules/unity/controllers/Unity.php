@@ -446,6 +446,7 @@ class Unity extends CI_Controller {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             $active_sem = $this->data_fetcher->get_active_sem();
+            $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
 
             if($sem!=null)
                 $ret['selected_ay'] = $sem;
@@ -534,7 +535,8 @@ class Unity extends CI_Controller {
     public function registration_viewer($id,$sem = null)
     {
         
-        $active_sem = $this->data_fetcher->get_active_sem();
+        $active_sem = $this->data_fetcher->get_active_sem();        
+
         $data['campus'] =  $this->data['campus'];
 
         if($sem!=null)

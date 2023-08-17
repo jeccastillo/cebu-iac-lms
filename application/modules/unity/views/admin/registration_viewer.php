@@ -96,6 +96,11 @@
                             </a>
                         </li> -->
                     </ul>
+                    <div class="pull-right">
+                        <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                            <option v-for="s in sy" value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                        </select>
+                    </div>
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
                             <div class="box box-solid">
@@ -449,6 +454,7 @@ new Vue({
         amount_to_pay: 0,       
         cashier_start: 0,
         cashier_end: 0,     
+        sy: [],
         advanced_privilages: false,     
         finance_manager_privilages: false, 
         description: 'Tuition Fee', 
@@ -481,6 +487,7 @@ new Vue({
                         this.or_update.sy_reference = this.sem;                                                                                      
                         this.registration = data.data.registration;   
                         this.user_level = data.data.user_level;
+                        this.sy = data.data.sy;
                         
                         if(this.registration){         
                             this.registration_status = data.data.registration.intROG;                            
@@ -589,6 +596,9 @@ new Vue({
         setValue: function(value){
             this.amount_to_pay = value;
         },
+        selectTerm: function(event){
+            document.location = base_url + "/unity/registration_viewer/" + this.id + "/" + event.target.value;
+        }
         updateOR: function(){
             let url = api_url + 'finance/update_or';
             let slug = this.slug;      
