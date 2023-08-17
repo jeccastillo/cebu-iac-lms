@@ -183,16 +183,19 @@
                                                 <hr />
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
                                                     <tr>
+                                                        <td>Full Tuition</td>
                                                         <td><a href="#" @click="setValue(tuition_data.total,'full')">{{ tuition_data.total }}</a></td>
                                                     </tr> 
                                                 </table>
                                                 <table class="table table-striped" v-else>
                                                     <tr>
-                                                        <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down')">{{ tuition_data.down_payment }}</a></td>
-                                                        <td v-for="inst in installments">
-                                                        <a href="#" @click="setValue(inst,'installment')">{{ inst }}</a>
-                                                        </td>
+                                                        <td>Down Payment</td>
+                                                        <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down')">{{ tuition_data.down_payment }}</a></td>                                                        
                                                     </tr> 
+                                                    <tr v-for="inst in installments">
+                                                        <td>Installment</td>
+                                                        <td><a href="#" @click="setValue(inst,'installment')">{{ inst }}</a></td>
+                                                    </tr>
                                                 </table>                                                
                                             </div>                                                                             
                                         </div> 
