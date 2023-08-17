@@ -33,6 +33,7 @@
                     <thead>
                         <tr>
                             <th>Date/Time</th>
+                            <th>type</th>
                             <th>Detail</th>
                             <th>Sem/Term</th>
                             <th>Assessment</th>
@@ -46,6 +47,12 @@
                         <tr>
                             
                             <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
+                            <td>
+                                <select class="form-control" required v-model="request.type">
+                                    <option value="tuition">tuition</option>
+                                    <option value="other">other</option>
+                                </select>
+                            </td>
                             <td><input type="text" class="form-control" required v-model="request.name"></td>
                             <td>
                                 <select class="form-control" required v-model="request.syid">
@@ -58,6 +65,7 @@
                         </tr>            
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
+                            <td :class="item.muted">{{ item.type }}</td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
@@ -119,7 +127,8 @@ new Vue({
             date: undefined,
             name: undefined,
             syid: 0,
-            amount: undefined,            
+            amount: undefined, 
+            type: 'tuition',           
         }
     },
     mounted() {        

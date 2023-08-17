@@ -120,6 +120,25 @@ class Finance extends CI_Controller {
 
     }
 
+    public function update_ledger_item(){
+        $post =  $this->input->post();        
+        
+        if($this->db
+            ->where('id',$post['id'])
+            ->update('tb_mas_student_ledger',$post)){
+
+            $data['success'] =  true;
+            $data['message'] = "Successfully added to ledger";
+        }
+        else{
+            $data['success'] =  false;
+            $data['message'] = "Something went wrong";
+        }
+
+        echo json_encode($data);
+
+    }
+
     public function update_ledger_item_status(){
         $post = $this->input->post();
 
