@@ -573,10 +573,12 @@ new Vue({
                                     if(this.tuition_data.installment_fee > temp){
                                         this.installments.push(this.tuition_data.installment_fee - temp);
                                         temp = 0;
+                                        console.log(this.tuition_data.installment_fee+" "+temp);
                                     }
                                     else{
                                         this.installments.push(0);
                                         temp = temp - this.tuition_data.installment_fee;
+                                        console.log(this.tuition_data.installment_fee+" "+temp);
                                     }
                                     
                                 }
