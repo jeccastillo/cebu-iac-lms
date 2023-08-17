@@ -107,7 +107,7 @@ class Finance extends CI_Controller {
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
             ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-            ->where($where_tuition)        
+            ->where($where_other)        
             ->get()
             ->result_array();
 
