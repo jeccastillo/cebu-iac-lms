@@ -264,6 +264,13 @@ class Finance extends CI_Controller {
             
             $ledger['student_id'] = $post['student_id'];
             $ledger['name'] = $post['description'];
+
+            if($post['description'] == "Other" || $post['description'] == "Tuition Fee")
+            {
+                $desc = explode(" ",$post['description']);
+                $ledger['type'] = strtolower($desc[0]);
+            }
+            
             $ledger['amount'] = -1 * $post['total_amount'];
             $ledger['date'] = date("Y-m-d H:i:s");
             $update = [];
