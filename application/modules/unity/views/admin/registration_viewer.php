@@ -170,7 +170,7 @@
                                             </div>
                                             <div class="col-sm-4" v-if="cashier">
                                                 <label>Select Type:</label> 
-                                                <select v-if="!registration.downpayment && !registration.fullpayment" v-model="payment_type" class="form-control">
+                                                <select v-if="registration.downpayment != 0 && registration.fullpayment != 0" v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
@@ -185,7 +185,7 @@
                                                 </table>
                                                 <table class="table table-striped" v-else>
                                                     <tr>
-                                                        <td v-if="!registration.downpayment"><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></td>
+                                                        <td v-if="registration.downpayment != 0"><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></td>
                                                     </tr> 
                                                 </table>                                                
                                             </div>                                                                             
