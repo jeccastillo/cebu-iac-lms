@@ -598,7 +598,7 @@ new Vue({
         },
         selectTerm: function(event){
             document.location = base_url + "/unity/registration_viewer/" + this.id + "/" + event.target.value;
-        }
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
             let slug = this.slug;      
