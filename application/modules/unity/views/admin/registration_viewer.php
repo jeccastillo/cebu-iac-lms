@@ -565,8 +565,9 @@ new Vue({
                                 this.application_payment = data.data.application;
                                 
                                 if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
-                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
+                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
+                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
+                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
                                 }
 
                                 
@@ -574,7 +575,7 @@ new Vue({
                                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 //installment amounts                                
-                                var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                var temp = (this.tuition_data.installment_fee * 5);
                                 var val = 0;                                
                                 for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
