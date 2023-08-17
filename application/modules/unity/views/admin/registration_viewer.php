@@ -194,7 +194,8 @@
                                             </div>                                                                             
                                         </div> 
                                         <hr />
-                                        <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
+                                        
+                                        <button class="btn btn-primary btn-lg pull-right" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
                                                                                                                       
                                     </form>
                                 </div>
