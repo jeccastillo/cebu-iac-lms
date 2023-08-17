@@ -537,13 +537,10 @@ new Vue({
                         .then((data) => {
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
-                            
-                            for(i in this.payments){
-                                if(this.payments[i].status == "Paid"){
-                                    if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
-                                        this.has_partial = true;
-                                }
-                            }
+                                                                
+                            if(this.registration && this.registration.paymentType == 'partial')
+                                this.has_partial = true;
+                                                                                    
 
                             if(this.has_partial)
                                 this.remaining_amount = this.tuition_data.total_installment;                            
