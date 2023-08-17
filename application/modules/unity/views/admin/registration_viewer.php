@@ -98,7 +98,7 @@
                     </ul>
                     <div class="pull-right">
                         <select class="form-control" @change="selectTerm($event)" v-model="sem">
-                            <option v-for="s in sy" value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                            <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                         </select>
                     </div>
                     <hr />
