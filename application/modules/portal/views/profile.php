@@ -40,25 +40,8 @@
             </div>
             <div class="col-md-4 col-xs-12">
             
-              <p><strong><i class="fa fa-user"></i>&nbsp;Student Number: </strong><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']); ?></p>
-              <p><strong><i class="fa fa-building-o"></i>&nbsp;School: </strong>
-                    <?php 
-                        if ($student['strProgramCode'] == 'BSBA-MM' || $student['strProgramCode'] == 'BSBA-HRDM' || $student['strProgramCode'] == 'BSOA') {
-                            echo 'School of Business & Management';
-                        }
-                        else if ($student['strProgramCode'] == 'BSCS' || $student['strProgramCode'] == 'BSIT' ) {
-                            echo 'School of Computer Studies';
-                        }
-                        else if ($student['strProgramCode'] == 'BSE-E' || $student['strProgramCode'] == 'BSE-F' || $student['strProgramCode'] == 'BSE-M' || $student['strProgramCode'] == 'BSE-SS' ) {
-                            echo 'School of Education';
-                        }
-                        else if ($student['strProgramCode'] == 'BSHM' || $student['strProgramCode'] == 'BSTM') {
-                            echo 'School of Hospitality & Tourism Management';
-                        }  
-                    ?>
-                </p>
-              
-              <p><strong><i class="fa fa-envelope"></i>&nbsp;Institutional Email: </strong><?php echo $student['strGSuiteEmail']; ?></p>
+              <p><strong><i class="fa fa-user"></i>&nbsp;Student Number: </strong><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']); ?></p>                            
+              <p><strong><i class="fa fa-envelope"></i>&nbsp;Email: </strong><?php echo $student['strEmail']; ?></p>
              
             </div>
         </div>
