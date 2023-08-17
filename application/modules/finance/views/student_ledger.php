@@ -68,7 +68,7 @@
                         </tr>                           
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }}</td>
+                            <td :class="item.muted">{{ item.type }} <button @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
