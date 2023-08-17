@@ -497,6 +497,7 @@ new Vue({
                             this.registration_status = data.data.registration.intROG;                            
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
+                            this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total;                            
                         }
 
@@ -508,6 +509,7 @@ new Vue({
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
+                        
                         
                         if(this.student.strMobileNumber || this.student.strMobileNumber != "")
                             this.request.contact_number = this.student.strMobileNumber;  
