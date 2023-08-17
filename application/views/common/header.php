@@ -419,7 +419,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
+                                href="<?php echo base_url() ?>finance/view_all_students"><i class="fa fa-file"></i>
                                 <span>Student Ledger</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a
