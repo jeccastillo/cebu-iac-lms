@@ -106,14 +106,11 @@
                                 <h4 class="box-title">Cashier {{ cashier.intID }}</h4>                                   
                                     <form @submit.prevent="submitManualPayment" method="post">                                    
                                         <div v-if="cashier && cashier.or_current" class="row">                                                                                   
-                                            <div class="col-sm-6" v-if="cashier">                                                                                                                                        
+                                            <div class="col-sm-4" v-if="cashier">                                                                                                                                        
                                                     <div class="form-group">
                                                         <label>Payment Type</label>
-                                                        <select @change="selectDescription" class="form-control" v-model="description">
-                                                            <option value="Tuition Full">Tuition Full</option>
-                                                            <option value="Tuition Down Payment">Tuition Down Payment</option>
-                                                            <option value="Tuition Partial">Tuition Partial</option>
-                                                            <option value="Tuition Specific">Tuition Specific</option>
+                                                        <select class="form-control" v-model="description">
+                                                            <option value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
@@ -138,31 +135,44 @@
                                                     </div>
                                                     <div class="form-group">                                                                                                        
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="text" :disabled="description != 'Other' && description != 'Tuition Specific' && description != 'Tuition Down Payment'" required class="form-control" v-model="amount_to_pay" />
+                                                        <input type="text" required class="form-control" v-model="amount_to_pay" />
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6" v-if="cashier">
-                                                    <div class="form-group">
-                                                        <label>OR Number:</label>                                                    
-                                                        <select class="form-control" v-model="request.or_number" required>
-                                                            <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                        </select>                                                    
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Contact Number:</label>
-                                                        {{ request.contact_number }}
-                                                        <input type="hidden" required class="form-control" v-model="request.contact_number" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Email: {{ request.email_address }}</label>                                                    
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Remarks:</label>
-                                                        <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                                    </div>
-                                                    <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
+                                            <div class="col-sm-4" v-if="cashier">
+                                                <div class="form-group">
+                                                    <label>OR Number:</label>                                                    
+                                                    <select class="form-control" v-model="request.or_number" required>
+                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
+                                                    </select>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Contact Number:</label>
+                                                    {{ request.contact_number }}
+                                                    <input type="hidden" required class="form-control" v-model="request.contact_number" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email: {{ request.email_address }}</label>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Remarks:</label>
+                                                    <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
+                                                </div>
+                                                <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
                                                 <hr />                                            
-                                            </div>                                 
+                                            </div>
+                                            <div class="col-sm-4" v-if="cashier">
+                                                <select v-model="payment_type" class="form-control">
+                                                    <option value="full">Full Payment</option>
+                                                    <option value="partial">Installment</option>
+                                                </select>
+                                                <ul v-if="payment_type == 'full'">
+                                                   <li><a href="#" @click="setValue(tuition_data.total)">{{ tuition_data.total }}</a></li> 
+                                                </ul>
+                                                <ul v-else>
+                                                   <li><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></li>                                                    
+                                                </ul>
+                                            </div>  
+                                                                           
                                         </div>                                                                       
                                     </form>
                                 </div>
@@ -373,7 +383,8 @@ new Vue({
         slug: undefined,
         student:{},    
         cashier: undefined,     
-        user_level: undefined,  
+        user_level: undefined, 
+        payment_type: 'full', 
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -559,6 +570,9 @@ new Vue({
             this.or_update_description = desc;
             this.or_update.total_amount_due = amount;
         },        
+        setValue: function(value){
+            this.amount_to_pay = value;
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
             let slug = this.slug;      
@@ -961,26 +975,7 @@ new Vue({
                 
                 })
             
-        },
-        selectDescription: function(){
-            if(this.description != 'Other'){                
-                this.request.description = this.description;
-                switch(this.description){
-                    case 'Tuition Full':
-                        this.amount_to_pay = this.remaining_amount;
-                    break;
-                    case 'Tuition Partial':
-                        this.amount_to_pay = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
-                    break;
-                    case 'Tuition Down Payment':                        
-                        this.amount_to_pay = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                    break;                    
-                }
-            }
-            else{                                
-                this.amount_to_pay = 0;
-            }
-        },
+        },       
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();
