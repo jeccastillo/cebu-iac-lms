@@ -168,8 +168,8 @@
                                                 <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
                                                 <hr />                                            
                                             </div>
-                                            <div class="col-sm-4" v-if="cashier">
-                                                <label>Select Type:</label> 
+                                            <div v-if="description == 'Tuition Fee'" class="col-sm-4" v-if="cashier">
+                                                <label>Select Type:</label>  
                                                 <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
