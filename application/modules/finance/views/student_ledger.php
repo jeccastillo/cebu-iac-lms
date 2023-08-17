@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>Date/Time</th>
-                            <th>type</th>
+                            <th colspan="2">type</th>
                             <th>Detail</th>
                             <th>Sem/Term</th>
                             <th>Assessment</th>
@@ -64,11 +64,12 @@
                             <td></td>             
                         </tr>
                         <tr>
-                            <th colspan="9">Tuition</th>
+                            <th colspan="10">Tuition</th>
                         </tr>                           
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }} <button @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
+                            <td :class="item.muted">{{ item.type }} </td>
+                            <td><button @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
@@ -88,11 +89,12 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <th colspan="9">Other</th>
+                            <th colspan="10">Other</th>
                         </tr>                           
                         <tr v-for="item in other">
                             <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }} <button @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
+                            <td :class="item.muted">{{ item.type }}</td>
+                            <td><button @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
