@@ -640,8 +640,10 @@ new Vue({
         setValue: function(value,type,ctr){
             
             if(ctr == 0){
-                this.amount_to_pay = value;
-                this.description_other = type;
+                if(this.installments[ctr] != 0){
+                    this.amount_to_pay = value;
+                    this.description_other = type;
+                }
             }
             else if(this.installments[ctr - 1] == 0){
                 this.amount_to_pay = value;
