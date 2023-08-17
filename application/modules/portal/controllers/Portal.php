@@ -12,13 +12,7 @@ class Portal extends CI_Controller {
 
         parent::__construct();
         $this->clear_cache();
-        if($this->logged_in()){
-            if($this->session->userdata('firstLogin')){                
-                $this->session->set_flashdata('first_login','Please update password before you can proceed');
-                redirect(base_url()."portal/change_password");            
-            }
-        }        
-        else
+        if(!$this->logged_in())         
             redirect(base_url()."users/student_login");
 		/*--------------THEMES-----------------------*/
 		$this->config->load('themes');
@@ -66,8 +60,14 @@ class Portal extends CI_Controller {
     
     public function index()
 	{	
-        if($this->logged_in()){
-            redirect(base_url()."portal/dashboard");
+        if($this->logged_in()){            
+            if($this->session->userdata('firstLogin')){                
+                $this->session->set_flashdata('first_login','Please update password before you can proceed');
+                redirect(base_url()."portal/change_password");            
+            }
+            else{
+                redirect(base_url()."portal/dashboard");
+            }
         }
         
         else
