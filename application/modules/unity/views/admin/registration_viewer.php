@@ -477,7 +477,8 @@ new Vue({
         remaining_amount_formatted: 0,
         has_partial: false,
         reg_status: undefined,        
-        loader_spinner: true,                        
+        loader_spinner: true, 
+        installments: [0,0,0,0,0],                       
     },
 
     mounted() {
@@ -561,9 +562,27 @@ new Vue({
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
                                         this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                                 }
+
+                                
                                 
                                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                //installment amounts                                
+                                var temp = (this.tuition_data.installment_fee * 5) - this.remaining_amount_formatted;
+                                for(i=0; i < this.installments.length; i++){
+                                    if(this.tuition_data.installment_fee > temp){
+                                        this.installments[i] = this.tuition_data.installment_fee - temp;
+                                        temp = 0;
+                                    }
+                                    else{
+                                        this.installments[i] = 0;
+                                        temp = temp - this.tuition_data.installment_fee;
+                                    }
+                                    
+                                }
+
+                                console.log(this.installments);
+
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
