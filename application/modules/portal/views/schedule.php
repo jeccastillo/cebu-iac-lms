@@ -112,19 +112,10 @@
                             <td><?php echo $record['strCode']; ?></td>
                             <td><?php echo $record['strDescription'] ?></td>
                             <td style="text-align: center;"><?php echo $record['strUnits']; ?></td>     
-                            <?php if(!empty($record['schedule'])): ?>
+                            <?php if(!empty($record['schedString'])): ?>
                             
                             <td>
-                                <?php foreach($record['schedule'] as $sched): ?>
-                                
-                                <?php echo date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])); ?> <?php echo $sched['strDay']; ?> <?php echo $sched['strRoomCode']; ?>
-                                <br />
-                                <?php
-                                                    $hourdiff = round((strtotime($sched['dteEnd']) - strtotime($sched['dteStart']))/3600, 1);
-                                                    
-                                                ?>
-                                <input type="hidden" class="<?php echo $sched['strDay']; ?>" value="<?php echo date('gia',strtotime($sched['dteStart'])); ?>" href="<?php echo $hourdiff*2; ?>" rel="<?php echo $record['strCode']; ?> <?php echo $record['strRoomCode']; ?>">
-                                <?php endforeach; ?>
+                                <?php echo $record['schedString']; ?>
                             </td>
                             <?php else: ?>
                             <td></td>
