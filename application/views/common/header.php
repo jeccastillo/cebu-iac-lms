@@ -442,10 +442,14 @@
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
-                                <span>Tuition Fee Set-up</span> </a>
+                        <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition Config</a>
                         </li>
+                        <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Tuition Config</a></li>
+                                
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Payee Set-up</span> </a>
@@ -465,22 +469,7 @@
 
                     </ul>
                 </li>
-                <?php endif; ?>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
-                    <a href="#">
-                        <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
-                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Year</a>
-                        </li>
-                        <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Years</a></li>
-                    </ul>
-                </li>
+                <?php endif; ?>                
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>
                 <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a

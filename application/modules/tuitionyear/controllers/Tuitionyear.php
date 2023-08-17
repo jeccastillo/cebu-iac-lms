@@ -90,8 +90,12 @@ class Tuitionyear extends CI_Controller {
 
     public function add_tuition_year()
     {        
+        $special_role = $this->session->userdata('special_role');        
+        if($special_role < 2)
+            redirect(base_url()."unity/faculty_dashboard");
+
         $this->data['page'] = "tuitionyear";
-        $this->data['opentree'] = "tuitionyear";
+        $this->data['opentree'] = "finance_admin";
         $this->data['defaultYear'] = $this->data_fetcher->getDefaultTuitionYearID();
         $this->data['formAction'] = base_url()."tuitionyear/submit_form";
         $this->load->view("common/header",$this->data);
@@ -174,8 +178,12 @@ class Tuitionyear extends CI_Controller {
 
     public function view_tuition_years(){
 
+        $special_role = $this->session->userdata('special_role');        
+        if($special_role < 2)
+            redirect(base_url()."unity/faculty_dashboard");
+        
         $this->data['page'] = "tuitionyear_view";
-        $this->data['opentree'] = "tuitionyear";
+        $this->data['opentree'] = "finance_admin";
         $this->load->view("common/header",$this->data);
         $this->load->view("tuitionyearview",$this->data);
         $this->load->view("common/footer",$this->data);
