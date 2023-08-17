@@ -78,8 +78,8 @@ class Finance extends CI_Controller {
 
         $this->data['id'] = $id;        
         $this->data['sem'] = $sem;
-        $this->data['page'] = "finance_student_account";
-        $this->data['opentree'] = "view_all_students";
+        $this->data['page'] = "view_all_students";
+        $this->data['opentree'] = "finance_student_account";
 
         $this->load->view("common/header",$this->data);
         $this->load->view("student_ledger",$this->data);
