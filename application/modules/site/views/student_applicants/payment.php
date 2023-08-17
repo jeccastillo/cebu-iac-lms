@@ -171,11 +171,16 @@
                     </table>
 
                     <div class="text-right mt-3">
-                        <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                        <div v-if="loading_spinner" class="lds-ring">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                         <div v-else>
                             <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
                                 class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                                name="button">Submit 
+                                name="button">Submit
                             </button>
                             <button type="button" disabled v-else
                                 class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
@@ -189,7 +194,8 @@
                     </div>
                 </div>
                 <hr />
-                <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable and non-transferrable</i></p>
+                <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable
+                        and non-transferrable</i></p>
 
         </form>
     </div>
@@ -270,7 +276,7 @@ new Vue({
     },
     mounted() {
 
-        
+
 
         axios
             .get(api_url + 'payments/modes?count_content=100', {
@@ -297,10 +303,17 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;
-                if(this.student.campus == "Cebu")
-                    this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 500;
+
+                if (this.student.status != 'New' && this.student.status != "For Reservation") {
+                    window.location.href = "/"
+                }
+
+                if (this.student.campus == "Cebu")
+                    this.item_details.price = this.payment_type ==
+                    'admissions_student_payment_reservation' ? 10000 : 500;
                 else
-                    this.item_details.price = this.payment_type == 'admissions_student_payment_reservation' ? 10000 : 700;
+                    this.item_details.price = this.payment_type ==
+                    'admissions_student_payment_reservation' ? 10000 : 700;
             })
             .catch((error) => {
                 console.log(error);
@@ -341,8 +354,9 @@ new Vue({
             console.log("total_single_format", this.total_single_format);
             console.log("new_charge", this.new_charge);
 
-            let title = (this.payment_type == 'admissions_student_payment_reservation') ? 'Reservation Payment' :
-                                    'Application Payment';
+            let title = (this.payment_type == 'admissions_student_payment_reservation') ?
+                'Reservation Payment' :
+                'Application Payment';
 
             this.payload = {
                 "description": title,
@@ -420,13 +434,13 @@ new Vue({
 
                         } else {
                             Swal.fire({
-                            title: "Payment is Pending",
-                            text: data.data.message,
-                            icon: "success"
+                                title: "Payment is Pending",
+                                text: data.data.message,
+                                icon: "success"
                             }).then(function() {
                                 window.location = base_url;
                             });
-                            
+
                         }
                     } else {
                         Swal.fire(
