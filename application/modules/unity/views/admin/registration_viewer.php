@@ -183,12 +183,12 @@
                                                 <hr />
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
                                                     <tr>
-                                                        <td><a href="#" @click="setValue(tuition_data.total,full)">{{ tuition_data.total }}</a></td>
+                                                        <td><a href="#" @click="setValue(tuition_data.total,'full')">{{ tuition_data.total }}</a></td>
                                                     </tr> 
                                                 </table>
                                                 <table class="table table-striped" v-else>
                                                     <tr>
-                                                        <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,down)">{{ tuition_data.down_payment }}</a></td>
+                                                        <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down')">{{ tuition_data.down_payment }}</a></td>
                                                     </tr> 
                                                 </table>                                                
                                             </div>                                                                             
