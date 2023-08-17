@@ -103,7 +103,7 @@
                     </ul>                                        
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
-                            <div class="box box-solid">
+                            <div v-if="registration_status" class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">Payment</h4>                                    
                                 </div>                                    
