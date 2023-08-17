@@ -47,7 +47,7 @@
                         <tr>
                             
                             <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
-                            <td>
+                            <td colspan="2">
                                 <select class="form-control" required v-model="request.type">
                                     <option value="tuition">tuition</option>
                                     <option value="other">other</option>
