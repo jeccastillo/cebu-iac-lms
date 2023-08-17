@@ -43,7 +43,8 @@
                             <th>Student Number</th>
                             <th>Name</th>
                             <th>Program</th>
-                            <th>Year Level</th>                            
+                            <th>Year Level</th>  
+                            <th>Ledger</th>                          
                         </tr>                        
                         <tr class="search">
                             <td>id</td>
@@ -51,7 +52,8 @@
                             <td>Student Number</td>
                             <td>Last Name</td>
                             <td>Program</td>
-                            <td>Year Level</td>                            
+                            <td>Year Level</td>                       
+                            <th>Ledger</th>                               
                         </tr>
                     </thead>                    
                     <tbody></tbody>

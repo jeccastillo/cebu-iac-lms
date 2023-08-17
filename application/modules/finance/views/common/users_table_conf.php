@@ -25,7 +25,13 @@
             "ordering": false,
             "autoWidth": false,
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
-            "aoColumnDefs":[                
+            "aoColumnDefs":[      
+                {
+                    "aTargets":[6],
+                    "mData": null,
+                    "bSortable":false,
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/student_ledger/'+row[1]+'">View Ledger</a>'; }
+                },          
                 {
                     "aTargets":[0],
                     "bVisible": false 

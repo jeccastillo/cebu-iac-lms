@@ -422,11 +422,11 @@
                                 href="#"><i class="ion"></i>
                                 <span>Student Ledger</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Student Account</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Order Detailed Report</span> </a>
                         </li>
