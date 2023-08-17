@@ -592,8 +592,7 @@ new Vue({
 
                                 console.log(this.installments);
 
-                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                this.amount_to_pay = this.remaining_amount;
+                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
                                 this.loader_spinner = false;
                                 if(this.remaining_amount <= 0)
                                     this.description = "Other";
