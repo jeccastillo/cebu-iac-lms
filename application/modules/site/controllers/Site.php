@@ -83,7 +83,7 @@ class Site extends CI_Controller {
 
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/awesome',$this->data);
-		$this->load->view('common/footer',$this->data);
+		$this->load->view('common/footer_new',$this->data);
     }
 	
 	public function applicant_first_step() {
