@@ -9,7 +9,7 @@
         <p class="login-box-msg">Sign in to start your session</p>
         <form id="student-login-form" action="#" onsubmit="return false;" method="post">
                 <div class="form-group has-feedback">
-                    <input type="text" id="strUsername" name="strUsername" class="form-control" placeholder="Student Number" required autofocus>
+                    <input type="text" id="strUsername" name="strUsername" class="form-control" placeholder="Student Number or Email Address" required autofocus>
                     <!-- <span class="glyphicon glyphicon-envelope form-control-feedback"></span> -->
                 </div>
                 <div class="form-group has-feedback">
