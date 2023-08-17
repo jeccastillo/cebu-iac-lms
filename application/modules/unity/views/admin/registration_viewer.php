@@ -169,9 +169,7 @@
                                                 <div class="form-group">
                                                     <label>Remarks:</label>
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
-                                                </div>
-                                                <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
-                                                <hr />                                            
+                                                </div>                                                                                           
                                             </div>
                                             <div v-if="description == 'Tuition Fee'" class="col-sm-4" v-if="cashier">
                                                 <label>Select Type:</label>  
@@ -194,7 +192,10 @@
                                                     </tr> 
                                                 </table>                                                
                                             </div>                                                                             
-                                        </div>                                                                       
+                                        </div> 
+                                        <hr />
+                                        <button class="btn btn-primary btn-lg" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
+                                                                                                                      
                                     </form>
                                 </div>
                             </div>              
