@@ -115,7 +115,7 @@
                                                     <div class="form-group">
                                                         <label>Payment For</label>
                                                         <select class="form-control" v-model="description">
-                                                            <option value="Tuition Fee">Tuition Fee</option>                                                            
+                                                            <option v-if="remaining_amount > 0" value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
@@ -595,6 +595,8 @@ new Vue({
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.amount_to_pay = this.remaining_amount;
                                 this.loader_spinner = false;
+                                if(this.remaining_amount <= 0)
+                                    this.description = "Other";
 
                                 
                             })
