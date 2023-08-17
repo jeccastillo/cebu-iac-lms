@@ -597,7 +597,7 @@ new Vue({
             this.amount_to_pay = value;
         },
         selectTerm: function(event){
-            document.location = base_url + "/unity/registration_viewer/" + this.id + "/" + event.target.value;
+            document.location = base_url + "unity/registration_viewer/" + this.id + "/" + event.target.value;
         },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
