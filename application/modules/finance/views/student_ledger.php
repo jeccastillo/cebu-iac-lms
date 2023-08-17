@@ -3,7 +3,7 @@
         <h1>
             Student Ledger
             <small>
-                <a class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
+                <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
                 <div class="pull-right">
                     <p>Select Term Filter</p>
                     <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
