@@ -941,7 +941,7 @@ new Vue({
                                         //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
                                         formdata.append('student_id',this.student.intID);
                                         formdata.append('description',this.request.description);
-                                        formdata.append('description_other',this.request.description_other);
+                                        formdata.append('description_other',this.description_other);
                                         formdata.append('registration_id',this.registration.intRegistrationID);
                                         formdata.append('installment',this.tuition_data.total_installment);
                                         formdata.append('payment_type',this.payment_type);
