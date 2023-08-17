@@ -417,6 +417,7 @@ new Vue({
             cashier_id: undefined,
             sy_reference: undefined,
             total_amount_due: undefined,
+            student_campus: undefined,
         },
         amount_to_pay: 0,       
         cashier_start: 0,
@@ -488,6 +489,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
+                            this.or_update.student_campus = this.student_campus;
                         }                        
                         
 

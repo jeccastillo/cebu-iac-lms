@@ -342,6 +342,7 @@ new Vue({
             or_number: undefined,
             cashier_id: undefined,
             sy_reference: undefined,
+            student_campus: undefined,
         },
              
     },
@@ -373,7 +374,8 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;
-                this.or_update.sy_reference = data.data.current_sem;                
+                this.or_update.sy_reference = data.data.current_sem;     
+                this.or_update.student_campus = this.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
@@ -462,7 +464,7 @@ new Vue({
                                         var formdata= new FormData();
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
-                                        formdata.append('or_used',this.cashier.or_current);
+                                        formdata.append('or_used',this.cashier.or_current);                                        
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
@@ -578,7 +580,7 @@ new Vue({
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
                                             formdata.append('or_current',this.cashier.or_current);
-                                            formdata.append('or_used',this.cashier.or_current);
+                                            formdata.append('or_used',this.cashier.or_current);                                            
                                             axios.post(base_url + 'finance/next_or', formdata, {
                                             headers: {
                                                 Authorization: `Bearer ${window.token}`
