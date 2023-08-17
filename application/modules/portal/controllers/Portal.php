@@ -313,7 +313,7 @@ class Portal extends CI_Controller {
                 $this->session->set_flashdata('error_message','Password Updated');
                 $d['strPass'] = password_hash($post['password'], PASSWORD_DEFAULT);
                 $this->data_poster->post_data('tb_mas_users',$d,$st['intID']);
-                $this->data_poster->log_action2('Changed Password',$st['strLastname'].' '.$st['strFirstname'].'  Student Number: '.$st['strStudentNumber']." Updated their password to ".$post['password'],'green');
+                $this->data_poster->log_action('Changed Password',$st['strLastname'].' '.$st['strFirstname'].'  Student Number: '.$st['strStudentNumber']." Updated their password to ".$post['password'],'green');
                  
             }
             else
