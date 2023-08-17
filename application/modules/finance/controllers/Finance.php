@@ -244,11 +244,13 @@ class Finance extends CI_Controller {
 
             if($post['description_other'] == "full"){                                
                 $update['fullpayment'] = 1;
+                $update['paymentType'] = $post['payment_type'];
             }
             if($post['description_other'] == "down"){                
                 
                 $update['downpayment'] = 1;
-
+                $update['paymentType'] = $post['payment_type'];
+                
                 $this->db
                      ->where(array('name'=>'tuition','syid'=>$sem['intID']))
                      ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
@@ -267,8 +269,7 @@ class Finance extends CI_Controller {
                 $ret['send_notif'] = true;
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d H:i:s"),
-                    "intROG" => 1,
-                    "paymentType" => $post['payment_type'],
+                    "intROG" => 1,                    
                 ];
                 $this->db
                     ->where('intRegistrationID',$post['registration_id'])
