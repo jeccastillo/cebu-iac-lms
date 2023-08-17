@@ -27,7 +27,7 @@
     <?php if(isset($first_login)): ?>
         <div class="alert alert-info">
             <i class="fa fa-info"></i>
-            <span id="alert-text"><?php echo $first_login; ?></span>
+            <span id="alert-text"><?php echo $firstlog; ?></span>
         </div>
     <?php endif; ?>
     <?php if(isset($error_message) && $error_message=="Password Updated"): ?>    

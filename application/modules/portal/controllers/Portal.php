@@ -63,7 +63,7 @@ class Portal extends CI_Controller {
 	{	
         if($this->logged_in()){            
             if($this->session->userdata('firstLogin')){                
-                $this->session->set_flashdata('first_login','Please update password before you can proceed');
+                $this->session->set_flashdata('firstlog','Please update password before you can proceed');
                 redirect(base_url()."portal/change_password");            
             }
             else{
