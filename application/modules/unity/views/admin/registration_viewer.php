@@ -174,7 +174,7 @@
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
-                                                <div else>
+                                                <div v-else>
                                                     {{ registration.paymentType }}
                                                 </div>
                                                 <hr />
