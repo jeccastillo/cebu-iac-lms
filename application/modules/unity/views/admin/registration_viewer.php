@@ -478,7 +478,7 @@ new Vue({
         has_partial: false,
         reg_status: undefined,        
         loader_spinner: true, 
-        installments: [0,0,0,0,0],                       
+        installments: [],                       
     },
 
     mounted() {
@@ -569,13 +569,13 @@ new Vue({
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 //installment amounts                                
                                 var temp = (this.tuition_data.installment_fee * 5) - this.remaining_amount_formatted;
-                                for(i=0; i < this.installments.length; i++){
+                                for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
-                                        this.installments[i] = this.tuition_data.installment_fee - temp;
+                                        this.installments.push(this.tuition_data.installment_fee - temp);
                                         temp = 0;
                                     }
                                     else{
-                                        this.installments[i] = 0;
+                                        this.installments.push(0);
                                         temp = temp - this.tuition_data.installment_fee;
                                     }
                                     
