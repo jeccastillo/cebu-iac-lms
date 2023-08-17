@@ -645,7 +645,7 @@ new Vue({
                     this.description_other = type;
                 }
             }
-            else if(this.installments[ctr - 1] == 0){
+            else if(this.installments[ctr - 1] == 0 && this.installments[ctr] != 0){
                 this.amount_to_pay = value;
                 this.description_other = type;
             }
