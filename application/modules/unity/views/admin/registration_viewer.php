@@ -108,15 +108,23 @@
                                         <div v-if="cashier && cashier.or_current" class="row">                                                                                   
                                             <div class="col-sm-4" v-if="cashier">                                                                                                                                        
                                                     <div class="form-group">
-                                                        <label>Payment Type</label>
+                                                        <label>Payment For</label>
                                                         <select class="form-control" v-model="description">
                                                             <option value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label>Enter type if other is selected:</label>
-                                                        <input type="text" :disabled="description != 'Other'" required class="form-control" v-model="description_other" />
+                                                    <div v-if="description == 'Tuition Fee'" class="form-group">
+                                                        <label>Particulars:</label>
+                                                        <select required class="form-control" v-model="description_other">
+                                                            <option value="full">Full Tuition</option>                                                            
+                                                            <option value="down">Down Payment</option>
+                                                            <option value="installment">Installment</option>                                                            
+                                                        </select>
+                                                    </div>
+                                                    <div v-else class="form-group">
+                                                        <label>Particulars:</label>
+                                                        <input type="text" required class="form-control" v-model="description_other" />
                                                     </div>
                                                     <input type="hidden" v-model="request.status" value="Paid" />                                                
                                                     <div class="form-group">
@@ -161,10 +169,14 @@
                                                 <hr />                                            
                                             </div>
                                             <div class="col-sm-4" v-if="cashier">
+                                                <label>Select Type:</label> 
                                                 <select v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
+                                                <div else>
+                                                    {{ registration.paymentType }}
+                                                </div>
                                                 <hr />
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
                                                     <tr>
@@ -173,7 +185,7 @@
                                                 </table>
                                                 <table class="table table-striped" v-else>
                                                     <tr>
-                                                        <td><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></td>
+                                                        <td v-if="!registration.downpayment"><a href="#" @click="setValue(tuition_data.down_payment)">{{ tuition_data.down_payment }}</a></td>
                                                     </tr> 
                                                 </table>                                                
                                             </div>                                                                             
