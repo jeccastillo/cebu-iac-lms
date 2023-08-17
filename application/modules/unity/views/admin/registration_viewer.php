@@ -165,6 +165,7 @@
                                                     <option value="full">Full Payment</option>
                                                     <option value="partial">Installment</option>
                                                 </select>
+                                                <hr />
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
                                                     <tr>
                                                         <td><a href="#" @click="setValue(tuition_data.total)">{{ tuition_data.total }}</a></td>
