@@ -112,10 +112,10 @@
                             <td><?php echo $record['strCode']; ?></td>
                             <td><?php echo $record['strDescription'] ?></td>
                             <td style="text-align: center;"><?php echo $record['strUnits']; ?></td>     
-                            <?php if(!empty($record['schedString'])): ?>
+                            <?php if(!empty($record['schedule']['schedString'])): ?>
                             
                             <td>
-                                <?php echo $record['schedString']; ?>
+                                <?php echo $record['schedule']['schedString']; ?>
                             </td>
                             <?php else: ?>
                             <td></td>
