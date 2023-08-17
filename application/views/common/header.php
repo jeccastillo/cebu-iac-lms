@@ -412,6 +412,7 @@
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     </ul>
                 </li>
+                <?php if($user['special_role'] >= 1): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Student Account </span>
@@ -433,6 +434,8 @@
 
                     </ul>
                 </li>
+                <?php endif; ?>
+                <?php if($user['special_role'] >= 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
@@ -462,7 +465,7 @@
 
                     </ul>
                 </li>
-
+                <?php endif; ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Tuition Year</span>
