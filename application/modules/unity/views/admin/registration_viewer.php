@@ -451,7 +451,7 @@ new Vue({
         cashier_end: 0,     
         advanced_privilages: false,     
         finance_manager_privilages: false, 
-        description: 'Tuition Full', 
+        description: 'Tuition Fee', 
         description_other: '',
         registration: {},
         other_payments:[],
