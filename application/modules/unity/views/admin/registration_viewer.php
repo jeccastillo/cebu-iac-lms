@@ -122,9 +122,9 @@
                                                     <div v-if="description == 'Tuition Fee'" class="form-group">
                                                         <label>Particulars:</label>
                                                         <select required class="form-control" v-model="description_other">
-                                                            <option value="full">Full Tuition</option>                                                            
-                                                            <option value="down">Down Payment</option>
-                                                            <option value="installment">Installment</option>                                                            
+                                                            <option v-if="!registration.downpayment && !registration.fullpayment" value="full">Full Tuition</option>                                                            
+                                                            <option v-if="!registration.downpayment && !registration.fullpayment" value="down">Down Payment</option>
+                                                            <option v-if="!registration.fullpayment" value="installment">Installment</option>                                                            
                                                         </select>
                                                     </div>
                                                     <div v-else class="form-group">
