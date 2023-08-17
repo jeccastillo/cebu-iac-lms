@@ -52,7 +52,7 @@
                                     <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                                 </select>
                             </td>
-                            <td><input type="number" required v-model="request.amount" class="form-control"></td>
+                            <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
                             <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
                             <td></td>             
                         </tr>            
