@@ -226,6 +226,7 @@ class Portal extends CI_Controller {
                 $this->data['records'][] = $record;
             }
             
+            print_r($this->data['records']);
             $this->data['home'] = true;
             $this->data['body_class'] = "homepage";
             $this->load->view('common/header',$this->data);
