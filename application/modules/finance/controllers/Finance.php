@@ -206,6 +206,8 @@ class Finance extends CI_Controller {
             unset($data['total_amount']);            
             unset($data['or_number']);            
             unset($data['installment']);
+            unset($data['payment_type']);
+            unset($data['description_other']);            
         }
 
         $sem = $this->data_fetcher->get_active_sem();  
@@ -234,18 +236,34 @@ class Finance extends CI_Controller {
             $ledger['name'] = $post['description'];
             $ledger['amount'] = -1 * $post['total_amount'];
             $ledger['date'] = date("Y-m-d H:i:s");
+            $update = [];
             $ledger['syid'] = $sem['intID'];
             $ledger['or_number'] = $current_or;
             $this->data_poster->post_data('tb_mas_student_ledger',$ledger);            
             
 
-            if($post['description'] == "Tuition Down Payment"){                
-                $this->db
-                    ->where(array('name'=>'tuition','syid'=>$sem['intID']))
-                    ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
-            }            
+            if($post['description_other'] == "full"){                
+                
+                $update['fullpayment'] = 1;
+            }
+            if($post['description_other'] == "down"){                
+                
+                $update['downpayment'] = 1;
 
-            if(substr( $post['description'], 0, 7 ) === "Tuition" && $post['payments'] == 0){
+                $this->db
+                     ->where(array('name'=>'tuition','syid'=>$sem['intID']))
+                     ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
+            }
+
+            if(!empty($update))
+                $this->db
+                        ->where(array('intID'=>$post['registration_id']))
+                        ->update('tb_mas_registration',$update);
+
+
+                   
+
+            if($post['description'] == "Tuition Fee" && $post['payments'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $ret['send_notif'] = true;
                 $reg_update = [
