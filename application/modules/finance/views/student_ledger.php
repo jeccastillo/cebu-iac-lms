@@ -25,12 +25,7 @@
                 <div class="widget-user-header bg-red">
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
-                    <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
-                    <div class="pull-right">
-                        <select class="form-control" @change="switchTerm($event)">
-                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                        </select>
-                    </div>
+                    <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>                   
                 </div>                
             </div>                            
             <form @submit.prevent="submitLedgerItem" method="post">
