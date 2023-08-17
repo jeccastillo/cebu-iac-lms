@@ -24,7 +24,7 @@
     <form method="post" id="cp-form" action="<?php echo base_url().'portal/change_password_submit'; ?>">
     <input type="hidden" value="<?php echo $student['intID'] ?>" id="student-id" />
     <input type="hidden" value="<?php echo $active_sem['intID']; ?>" id="active-sem-id" />
-    <?php if(isset($first_login)): ?>
+    <?php if(isset($firstlog)): ?>
         <div class="alert alert-info">
             <i class="fa fa-info"></i>
             <span id="alert-text"><?php echo $firstlog; ?></span>
