@@ -12,6 +12,14 @@ class Portal extends CI_Controller {
 
         parent::__construct();
         $this->clear_cache();
+        if($this->logged_in()){
+            if($this->session->userdata('firstLogin')){                
+                $this->session->set_flashdata('first_login','Please update password before you can proceed');
+                redirect(base_url()."portal/change_password");            
+            }
+        }        
+        else
+            redirect(base_url()."users/student_login");
 		/*--------------THEMES-----------------------*/
 		$this->config->load('themes');
 		$theme = $this->config->item('website');
@@ -58,8 +66,9 @@ class Portal extends CI_Controller {
     
     public function index()
 	{	
-        if($this->logged_in())
+        if($this->logged_in()){
             redirect(base_url()."portal/dashboard");
+        }
         
         else
             redirect(base_url()."users/student_login");
@@ -312,6 +321,7 @@ class Portal extends CI_Controller {
             {
                 $this->session->set_flashdata('error_message','Password Updated');
                 $d['strPass'] = password_hash($post['password'], PASSWORD_DEFAULT);
+                $d['firstLogin'] = 0;
                 $this->data_poster->post_data('tb_mas_users',$d,$st['intID']);
                 $this->data_poster->log_action('Changed Password',$st['strLastname'].' '.$st['strFirstname'].'  Student Number: '.$st['strStudentNumber']." Updated their password to ".$post['password'],'green');
                  
