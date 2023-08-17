@@ -569,7 +569,7 @@ new Vue({
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 //installment amounts                                
                                 var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount_formatted);
-                                console.log("TEMP",temp);
+                                console.log("TEMP",temp+" = "+(this.tuition_data.installment_fee * 5)+" - "+parseFloat(this.remaining_amount_formatted));
                                 for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
                                         this.installments.push(this.tuition_data.installment_fee - temp);
