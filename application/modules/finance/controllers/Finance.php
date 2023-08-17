@@ -256,7 +256,7 @@ class Finance extends CI_Controller {
 
             if(!empty($update))
                 $this->db
-                        ->where(array('intID'=>$post['registration_id']))
+                        ->where(array('intRegistrationID'=>$post['registration_id']))
                         ->update('tb_mas_registration',$update);
 
 
