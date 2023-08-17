@@ -569,17 +569,17 @@ new Vue({
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 //installment amounts                                
                                 var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                console.log("TEMP",temp+" = "+(this.tuition_data.installment_fee * 5)+" - "+parseFloat(this.remaining_amount));
+                                var val = 0;                                
                                 for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
-                                        this.installments.push(this.tuition_data.installment_fee - temp);
+                                        val = this.tuition_data.installment_fee - temp;
+                                        val = val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                        this.installments.push(val);
                                         temp = 0;
-                                        console.log(this.tuition_data.installment_fee+" "+temp);
                                     }
                                     else{
                                         this.installments.push(0);
                                         temp = temp - this.tuition_data.installment_fee;
-                                        console.log(this.tuition_data.installment_fee+" "+temp);
                                     }
                                     
                                 }
