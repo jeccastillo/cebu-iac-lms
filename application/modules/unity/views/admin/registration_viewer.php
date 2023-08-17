@@ -568,8 +568,8 @@ new Vue({
                                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
                                 this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 //installment amounts                                
-                                var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount_formatted);
-                                console.log("TEMP",temp+" = "+(this.tuition_data.installment_fee * 5)+" - "+parseFloat(this.remaining_amount_formatted));
+                                var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                console.log("TEMP",temp+" = "+(this.tuition_data.installment_fee * 5)+" - "+parseFloat(this.remaining_amount));
                                 for(i=0; i < 5; i++){
                                     if(this.tuition_data.installment_fee > temp){
                                         this.installments.push(this.tuition_data.installment_fee - temp);
