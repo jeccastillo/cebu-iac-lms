@@ -459,7 +459,10 @@ new Vue({
         finance_manager_privilages: false, 
         description: 'Tuition Fee', 
         description_other: '',
-        registration: {},
+        registration: {
+            downpayment:0,
+            fullpayment:0,
+        },
         other_payments:[],
         tuition:'',
         tuition_data: {},
