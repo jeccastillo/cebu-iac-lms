@@ -421,7 +421,7 @@ class Pdf extends CI_Controller {
         $data['programs'] = $programs;        
         $ret = [];        
 
-        $this->data['enrollment'] = $post['reservation']?$post['enrollment']:$ret;
+        $this->data['enrollment'] = $post['reservation']?$post['reservation']:$ret;
         print_r($this->data['enrollment']);
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
