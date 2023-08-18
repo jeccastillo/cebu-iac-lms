@@ -601,8 +601,17 @@ class Registrar extends CI_Controller {
         
     }
 
-    public function reservation_summary()    
+    public function reservation_summary($sem = 0)    
     {
+
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $this->data['sem'] = $active_sem['intID'];
+        }
 
         $this->data['pdf_link'] = base_url()."pdf/reservation_summary/".$this->data['sem'];
         $this->data['excel_link'] = base_url()."excel/reservation_summary/".$this->data['sem'];
