@@ -78,7 +78,11 @@ $html .= '
                 <td style="font-size:8px;">
                     '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']).'
                 </td>
-            </tr>';
+            </tr>
+            <tr style="line-height:5px;">
+                <th colspan="6"></th>
+            </tr>
+            ';
     }
 $html .= ' 
      <tr>
