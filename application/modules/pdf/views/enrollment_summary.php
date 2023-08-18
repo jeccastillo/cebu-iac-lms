@@ -45,11 +45,11 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="font-size:8px;width:30%">Program</th>
-         <th font-size:8px;width:15%>Freshman</th>
-         <th font-size:8px;width:15%>Transferee</th>
-         <th font-size:8px;width:15%>Foreign</th>
-         <th font-size:8px;width:15%>Second Degree</th>
+         <th style="width:50%">Program</th>
+         <th font-size:8px;width:10%>Freshman</th>
+         <th font-size:8px;width:10%>Transferee</th>
+         <th font-size:8px;width:10%>Foreign</th>
+         <th font-size:8px;width:10%>Second Degree</th>
          <th font-size:8px;width:10%>Total</th>
      </tr>';
      
@@ -57,7 +57,7 @@ $html .= '
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
         $html .= '            
             <tr>
-                <td>
+                <td style="font-size:8px;">
                     '.$item['strProgramDescription'].' '.$major.'
                 </td>
                 <td>
