@@ -147,13 +147,7 @@ new Vue({
                         }
 
                         this.reservation = {
-                            'reserved': this.reserved,
-                            'r_fresh':this.r_fresh,
-                            'r_trans':this.r_trans,
-                            'r_foreign':this.r_foreign,
-                            'r_sd':this.r_sd,
-                            'totals': this.totals,
-                            'all_reserved': this.all_reserved,
+                            'reserved': this.reserved,                            
                         }
 
                         this.reservation = JSON.stringify(this.reservation);
