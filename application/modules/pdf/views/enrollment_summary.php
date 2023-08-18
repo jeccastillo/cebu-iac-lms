@@ -59,6 +59,7 @@ $html .= '
      
      $all_enrolled = 0;
     foreach($enrollment as $item){
+        print_r($item);
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
         $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'];
         $html .= '            
