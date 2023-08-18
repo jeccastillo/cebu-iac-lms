@@ -444,13 +444,13 @@ class Pdf extends CI_Controller {
             $r_sd[$i] = false;
             $totals[$res[0]->type_id] = 0;                                         
             for($j = 0; $j < count($res); $j++){     
-                if($res[$j]['student_type'] == "freshman")
+                if($res[$j]->student_type == "freshman")
                     $r_fresh[$i] = true;
-                if($res[$j]['student_type'] == "transferee")
+                if($res[$j]->student_type == "transferee")
                     $r_trans[$i] = true;
-                if($res[$j]['student_type'] == "foreign")
+                if($res[$j]->student_type == "foreign")
                     $r_foreign[$i] = true;
-                if($res[$j]['student_type'] == "second degree")
+                if($res[$j]->student_type == "second degree")
                     $r_sd[$i] = true;
 
                 $totals[$res[$j]->type_id] += (int)$res[$j]->reserved_count;
