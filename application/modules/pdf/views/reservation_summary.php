@@ -1,80 +1,54 @@
 <aside class="right-side" id="registration-container">    
-    <section class="content-header">
-        <h1>
-            Reservation Summary
-            <small>
-                <a class="btn btn-app" href="<?php echo base_url(); ?>registrar/registrar_reports" >
-                    <i class="ion ion-arrow-left-a"></i>
-                    All Reports
-                </a> 
-            </small>
-        </h1>     
-    </section>
-        <hr />
-    <div class="content">        
-        <h4>Reserved</h4>
-        <div>
-            <table v-if="reserved" class="table table-bordered table-striped">
-                <tr>
-                    <th>Program</th>
-                    <th>Freshman</th>
-                    <th>Transferee</th>
-                    <th>Foreign</th>
-                    <th>Second Degree</th>
-                    <th>Total</th>
-                </tr>
-                <tr v-for="prog in reserved">
-                    <td>{{ prog[0].program }}</td>
-                    <td v-for="type in prog" v-if="type.student_type == 'freshman'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-if="r_fresh[prog[0].type_id] == false">
-                        0
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'transferee'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-if="r_trans[prog[0].type_id] == false">
-                        0
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'foreign'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-if="r_foreign[prog[0].type_id] == false">
-                        0
-                    </td>
-                    <td v-for="type in prog" v-if="type.student_type == 'second degree'">
-                        {{ type.reserved_count }}
-                    </td>
-                    <td v-if="r_sd[prog[0].type_id] == false">
-                        0
-                    </td>
-                    <td>
-                        {{ totals[prog[0].type_id] }}
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><strong>{{ all_reserved }}</strong></td>
-                </tr>
-            </table>            
-        </div>
-        
-        <!-- <h4>Enrolled</h4>
-        <div v-for="prog in reserved" class="row">
-            <div class="col-md-6">
-                {{ prog.program }}
-            </div>
-            <div class="col-md-6">
-                {{ prog.reserved_count }}
-            </div>
-        </div> -->
-    </div>
-  
+    
+    <table ref="ret" v-if="reserved" class="table table-bordered table-striped">
+        <tr>
+            <th>Program</th>
+            <th>Freshman</th>
+            <th>Transferee</th>
+            <th>Foreign</th>
+            <th>Second Degree</th>
+            <th>Total</th>
+        </tr>
+        <tr v-for="prog in reserved">
+            <td>{{ prog[0].program }}</td>
+            <td v-for="type in prog" v-if="type.student_type == 'freshman'">
+                {{ type.reserved_count }}
+            </td>
+            <td v-if="r_fresh[prog[0].type_id] == false">
+                0
+            </td>
+            <td v-for="type in prog" v-if="type.student_type == 'transferee'">
+                {{ type.reserved_count }}
+            </td>
+            <td v-if="r_trans[prog[0].type_id] == false">
+                0
+            </td>
+            <td v-for="type in prog" v-if="type.student_type == 'foreign'">
+                {{ type.reserved_count }}
+            </td>
+            <td v-if="r_foreign[prog[0].type_id] == false">
+                0
+            </td>
+            <td v-for="type in prog" v-if="type.student_type == 'second degree'">
+                {{ type.reserved_count }}
+            </td>
+            <td v-if="r_sd[prog[0].type_id] == false">
+                0
+            </td>
+            <td>
+                {{ totals[prog[0].type_id] }}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>{{ all_reserved }}</strong></td>
+        </tr>
+    </table>            
+
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
