@@ -115,6 +115,11 @@ $html .= '
                                 0
                             </td>';
                     }
+
+                    $html .= '                                
+                    <td style="font-size:8px;">
+                        '.$reserved['totals'][$item[0]->type_id].'
+                    </td>';
                     
                 }
         $html .= '                
