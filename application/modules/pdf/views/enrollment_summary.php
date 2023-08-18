@@ -35,24 +35,58 @@
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>        
-
+            </table>
            ';
     
 
 
 
-$html .= '   
-    </table>
+$html .= '       
      <br />
-    <table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">     
+     <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-      <td width="80px" >&nbsp;</td>
-      <td width="250px">&nbsp;</td>
-      <td width="113px"></td>
-      <td width="85px" ></td>
-      
+         <th>Program</th>
+         <th>Freshman</th>
+         <th>Transferee</th>
+         <th>Foreign</th>
+         <th>Second Degree</th>
+         <th>Total</th>
+     </tr>';
+     
+    foreach($enrollment as $item){
+        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
+        $html .= '            
+            <tr>
+                <td>
+                    '.$item['strProgramDescription'].' '.$major.'
+                </td>
+                <td>
+                    '.$item['enrolled_freshman'].'
+                </td>
+                <td>
+                    '.$item['enrolled_transferee'].'
+                </td>
+                <td>
+                    '.$item['enrolled_foreign'].'
+                </td>
+                <td>
+                    '.$item['enrolled_second'].'
+                </td>
+                <td>
+                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']).'
+                </td>
+            </tr>';
+    }
+$html .= ' 
+     <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td><strong>{{ all_enrolled }}</strong></td>
      </tr>
-    </table> '; 
+ </table>'; 
   
             
 $pdf->writeHTML($html, true, false, true, false, '');
