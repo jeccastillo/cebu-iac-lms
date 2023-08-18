@@ -57,7 +57,7 @@ $html .= '
      </tr>
      ';
      
-     $all_enrolled = 0;
+     
     foreach($reserved['reserved'] as $item){                    
         $html .= '            
             <tr>
@@ -70,7 +70,7 @@ $html .= '
                             '.$type->reserved_count.'
                         </td>';                                                                                
                     }
-                    if(!$reserved['r_fresh']){
+                    if(!$reserved['r_fresh'][$item[0]->type_id]){
                         $html .= '                                
                             <td style="font-size:8px;">
                                 0
@@ -83,7 +83,7 @@ $html .= '
                             '.$type->reserved_count.'
                         </td>';                                                                                
                     }
-                    if(!$reserved['r_trans']){
+                    if(!$reserved['r_trans'][$item[0]->type_id]){
                         $html .= '                                
                             <td style="font-size:8px;">
                                 0
