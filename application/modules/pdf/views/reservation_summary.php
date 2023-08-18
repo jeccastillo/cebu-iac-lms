@@ -89,6 +89,33 @@ $html .= '
                                 0
                             </td>';
                     }
+                    if($type->student_type == "foreign"){            
+                        
+                        $html .= '                                
+                        <td style="font-size:8px;">
+                            '.$type->reserved_count.'
+                        </td>';                                                                                
+                    }
+                    if(!$reserved['r_foreign'][$item[0]->type_id]){
+                        $html .= '                                
+                            <td style="font-size:8px;">
+                                0
+                            </td>';
+                    }
+                    if($type->student_type == "second degree"){            
+                        
+                        $html .= '                                
+                        <td style="font-size:8px;">
+                            '.$type->reserved_count.'
+                        </td>';                                                                                
+                    }
+                    if(!$reserved['r_sd'][$item[0]->type_id]){
+                        $html .= '                                
+                            <td style="font-size:8px;">
+                                0
+                            </td>';
+                    }
+                    
                 }
         $html .= '                
             </tr>
