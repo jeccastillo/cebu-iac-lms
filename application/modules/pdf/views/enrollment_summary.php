@@ -11,7 +11,7 @@
     $pdf->SetTitle("Enrollment Summary");
     
     // set margins
-    $pdf->SetMargins(10, 15 , 10);
+    $pdf->SetMargins(10, 20 , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->SetFont('helvetica','',10);
@@ -29,17 +29,7 @@
     
     
     // Set some content to print
-    $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
-            <tr>
-                <td width="20%" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="100" height="95"/></td>
-                <td width="80%" style="text-align: center;line-height:1;vertical-align: middle">  
-                    <br /><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines</font>
-                </td>  
-            </tr>
-            </table>
-            <table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
             <tr>                            
                 <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
