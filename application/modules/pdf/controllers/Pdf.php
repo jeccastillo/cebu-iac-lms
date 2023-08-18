@@ -465,7 +465,7 @@ class Pdf extends CI_Controller {
             'r_sd'=>$r_sd,            
             'all_reserved'=>$all_reserved,
             'all_reserved'=>$all_enrolled,
-            'reserved'=>$res->reserved,
+            'reserved'=>$reserved,
         ];
 
         $this->data['reserved'] = $data;
