@@ -61,22 +61,14 @@ $html .= '
     foreach($reserved['reserved'] as $item){                    
         $html .= '            
             <tr>
-                <td style="font-size:8px;">'.trim($item[0]->program).'</td>
+                <td style="font-size:8px;">'.trim($item[0]->program).'</td>';
+                foreach($item as $type){                    
+                    $html .= '                                
                 <td style="font-size:8px;">
-                    
-                </td>
-                <td style="font-size:8px;">
-                    
-                </td>
-                <td style="font-size:8px;">
-                    
-                </td>
-                <td style="font-size:8px;">
-                    
-                </td>
-                <td style="font-size:8px;">
-                    
-                </td>
+                    '.$type->student_type.'
+                </td>';
+                }
+        $html .= '                
             </tr>
             <tr style="line-height:5px;">
                 <th colspan="6"></th>
