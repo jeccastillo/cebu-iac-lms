@@ -65,7 +65,7 @@ $html .= '
                 foreach($item as $type){                    
                     $html .= '                                
                 <td style="font-size:8px;">
-                    '.$type->student_type.'
+                    '.$type->reserved_count.'
                 </td>';
                 }
         $html .= '                
