@@ -7,7 +7,9 @@
                     <i class="ion ion-arrow-left-a"></i>
                     All Reports
                 </a> 
-                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a> 
+                <form ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
+                    <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a> 
+                </form>
                 <form ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
                     <input type="hidden" name="reservation" v-model="reservation" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm" ><i class="fa fa-book"></i>Generate PDF</a> 
