@@ -433,6 +433,8 @@ class Pdf extends CI_Controller {
         $all_reserved = 0;
         $all_enrolled = 0;
 
+        $reserved = $res->reserved;
+        
         for($i = 0; $i < count($res->reserved); $i++){       
             $r_fresh[$i] = false;
             $r_trans[$i] = false;
