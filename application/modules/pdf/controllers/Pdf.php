@@ -418,6 +418,7 @@ class Pdf extends CI_Controller {
         
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
         $data['programs'] = $programs;
+        $this->data['sem'] = $sem;
         $ret = [];        
 
         $this->data['enrollment'] = $ret;
