@@ -225,6 +225,24 @@
 
                     </ul>
                 </li>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-book"></i> <span>Student Examination</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="view_exams")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>examination/" style="margin-left: 10px;"><i
+                                    class="fa fa-book"> </i> View Examination</a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>examination/question_list" style="margin-left: 10px;"><i
+                                    class="fa fa-book"> </i> View Questions</a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>examination/add_question" style="margin-left: 10px;"><i
+                                    class="fa fa-book"> </i> Add Question</a></li>
+
+                    </ul>
+                </li>
                 <?php endif; ?>
                 <li class="header">Admin Menu</li>
                 <?php if(in_array($user['intUserLevel'],array(0,1,2,4)) ): ?>
@@ -413,7 +431,8 @@
                     </ul>
                 </li>
                 <?php if($user['special_role'] >= 1): ?>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
+                <li
+                    class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Student Account </span>
                         <i class="fa pull-right fa-angle-left"></i>
@@ -423,8 +442,8 @@
                                 href="<?php echo base_url() ?>finance/view_all_students"><i class="fa fa-file"></i>
                                 <span>Student Ledger</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
+                        <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a href="#"><i
+                                    class="ion"></i>
                                 <span>Student Account</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>"><a
@@ -444,12 +463,14 @@
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
-                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition Config</a>
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition
+                                Config</a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Tuition Config</a></li>
-                                
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Tuition Config</a>
+                        </li>
+
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Payee Set-up</span> </a>
@@ -469,7 +490,7 @@
 
                     </ul>
                 </li>
-                <?php endif; ?>                
+                <?php endif; ?>
                 <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>
                 <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a
