@@ -435,25 +435,26 @@ class Pdf extends CI_Controller {
 
         $reserved = (array)$res->reserved;
 
-        print_r($reserved);
-        for($i = 0; $i < count($res->reserved); $i++){       
+        print_r($reserved);        
+        foreach($reserved as $res){   
+            $i =  $res[0]['type_id'];
             $r_fresh[$i] = false;
             $r_trans[$i] = false;
             $r_foreign[$i] = false;
             $r_sd[$i] = false;
-            $totals[$reserved[$i][0]['type_id']] = 0;                                         
-            for($j = 0; $j < count($reserved[$i]); $j++){     
-                if($reserved[$i][$j]['student_type'] == "freshman")
+            $totals[$res[0]['type_id']] = 0;                                         
+            for($j = 0; $j < count($res); $j++){     
+                if($res[$j]['student_type'] == "freshman")
                     $r_fresh[$i] = true;
-                if($reserved[$i][$j]['student_type'] == "transferee")
+                if($res[$j]['student_type'] == "transferee")
                     $r_trans[$i] = true;
-                if($reserved[$i][$j]['student_type'] == "foreign")
+                if($res[$j]['student_type'] == "foreign")
                     $r_foreign[$i] = true;
-                if($reserved[$i][$j]['student_type'] == "second degree")
+                if($res[$j]['student_type'] == "second degree")
                     $r_sd[$i] = true;
 
-                $totals[$reserved[$i][$j]->type_id] += (int)$reserved[$i][$j]['reserved_count'];
-                $all_reserved += (int)$reserved[$i][$j]['reserved_count'];
+                $totals[$res[$j]->type_id] += (int)$res[$j]['reserved_count'];
+                $all_reserved += (int)$res[$j]['reserved_count'];
             }                           
         }
         $data = [
