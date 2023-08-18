@@ -45,12 +45,12 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="width:50%;font-size:8px;">Program</th>
-         <th style="width:10%;font-size:8px;">Freshman</th>
-         <th style="width:10%;font-size:8px;">Transferee</th>
-         <th style="width:10%;font-size:8px;">Foreign</th>
-         <th style="width:10%;font-size:8px;">Second Degree</th>
-         <th style="width:10%;font-size:8px;">Total</th>
+         <th style="width:50%;font-size:9px;">Program</th>
+         <th style="width:10%;font-size:9px;">Freshman</th>
+         <th style="width:10%;font-size:9px;">Transferee</th>
+         <th style="width:10%;font-size:9px;">Foreign</th>
+         <th style="width:10%;font-size:9px;">SD</th>
+         <th style="width:10%;font-size:9px;">Total</th>
      </tr>';
      
     foreach($enrollment as $item){
