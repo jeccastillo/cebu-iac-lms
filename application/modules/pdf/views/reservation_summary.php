@@ -130,8 +130,8 @@ $html .= '
             ';
     }
 $html .= ' 
-    <tr style="line-height:10px;border-top:1px solid #333;">
-        <th colspan="6"></th>
+    <tr style="line-height:10px;">
+        <th style="border-top:1px solid #333;" colspan="6"></th>
      </tr>
      <tr>
          <td></td>
