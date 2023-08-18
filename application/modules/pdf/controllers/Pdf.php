@@ -437,12 +437,12 @@ class Pdf extends CI_Controller {
 
         print_r($reserved);        
         foreach($reserved as $res){   
-            $i =  $res[0]['type_id'];
+            $i =  $res[0]->type_id;
             $r_fresh[$i] = false;
             $r_trans[$i] = false;
             $r_foreign[$i] = false;
             $r_sd[$i] = false;
-            $totals[$res[0]['type_id']] = 0;                                         
+            $totals[$res[0]->type_id] = 0;                                         
             for($j = 0; $j < count($res); $j++){     
                 if($res[$j]['student_type'] == "freshman")
                     $r_fresh[$i] = true;
@@ -453,8 +453,8 @@ class Pdf extends CI_Controller {
                 if($res[$j]['student_type'] == "second degree")
                     $r_sd[$i] = true;
 
-                $totals[$res[$j]->type_id] += (int)$res[$j]['reserved_count'];
-                $all_reserved += (int)$res[$j]['reserved_count'];
+                $totals[$res[$j]->type_id] += (int)$res[$j]->reserved_count;
+                $all_reserved += (int)$res[$j]->reserved_count;
             }                           
         }
         $data = [
