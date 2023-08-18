@@ -92,7 +92,7 @@ $html .= '
          <td></td>
          <td></td>
          <td></td>
-         <td><strong>'.$all_enrolled.'</strong></td>
+         <td style="text-align:center;"><strong>'.$all_enrolled.'</strong></td>
      </tr>
  </table>'; 
   
