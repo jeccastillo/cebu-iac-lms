@@ -460,7 +460,7 @@ class Pdf extends CI_Controller {
         $data = [
             'totals'=>$totals,
             'r_fresh'=>$r_fresh,
-            'r_fresh'=>$r_fresh,
+            'r_trans'=>$r_trans,
             'r_foreign'=>$r_foreign,
             'r_sd'=>$r_sd,            
             'all_reserved'=>$all_reserved,
