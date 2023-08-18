@@ -24,8 +24,7 @@
     $pdf->setPrintFooter(false);
     // Add a page
     // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage('P', 'LEGAL');    
-    $payment_division = $tuition['total'] / 4;    
+    $pdf->AddPage('P', 'LEGAL');            
 
     
     
