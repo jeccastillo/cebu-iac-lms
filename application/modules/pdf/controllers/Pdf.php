@@ -425,7 +425,6 @@ class Pdf extends CI_Controller {
 
         $html = $this->load->view("reservation_summary",$this->data);
         
-
     }
     
     function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)

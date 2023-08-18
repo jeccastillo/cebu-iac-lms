@@ -603,6 +603,9 @@ class Registrar extends CI_Controller {
 
     public function reservation_summary()    
     {
+
+        $this->data['pdf_link'] = base_url()."pdf/reservation_summary/".$this->data['sem'];
+        $this->data['excel_link'] = base_url()."excel/reservation_summary/".$this->data['sem'];
         
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);

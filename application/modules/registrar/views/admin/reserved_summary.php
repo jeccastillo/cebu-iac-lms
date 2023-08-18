@@ -7,6 +7,11 @@
                     <i class="ion ion-arrow-left-a"></i>
                     All Reports
                 </a> 
+                <form ref="pdf-form" method="post" target="<?php echo $pdf_link; ?>">
+                    <input type="hidden" v-model="reservation" />
+                    <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm" ><i class="fa fa-book"></i>Generate PDF</a> 
+                </form>
+                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a> 
             </small>
         </h1>     
     </section>
@@ -92,7 +97,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
         reserved: undefined,
-        enrolled: undefined,
+        enrolled: undefined, 
+        reservation: undefined,       
         totals: [],
         r_fresh: [],
         r_trans: [],
@@ -137,7 +143,17 @@ new Vue({
 
                                 this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                                 this.all_reserved += parseInt(this.reserved[i][j].reserved_count);
-                            }
+                            }                           
+                        }
+
+                        this.reservation = {
+                            'reserved': this.reserved,
+                            'r_fresh':this.r_fresh,
+                            'r_trans':this.r_trans,
+                            'r_foreign':this.r_foreign,
+                            'r_sd':this.r_sd,
+                            'totals': this.totals,
+                            'all_reserved': this.all_reserved,
                         }
 
                         console.log(this.totals);                   
@@ -155,7 +171,9 @@ new Vue({
     },
 
     methods: {      
-       
+        submitForm: function(){
+            this.$refs.pdf-form.submit();
+        }
                                        
     }
 
