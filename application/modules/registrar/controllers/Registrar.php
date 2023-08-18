@@ -590,8 +590,8 @@ class Registrar extends CI_Controller {
             $this->data['sem'] = $active_sem['intID'];
         }
 
-        $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$sem;
-        $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$sem;
+        $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$this->data['sem'];
+        $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$this->data['sem'];
 
         
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
