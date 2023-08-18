@@ -16,7 +16,8 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit" method="post" role="form">
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_exam_type" method="post"
+                role="form">
                 <div class="box-body">
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Name</label>
