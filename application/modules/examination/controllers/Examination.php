@@ -65,7 +65,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_exam_list",$this->data);
         $this->load->view("common/footer",$this->data); 
-           $this->load->view("common/student_exam_conf",$this->data); 
+        $this->load->view("common/student_exam_conf",$this->data); 
     }
 
     public function question_list() {
@@ -82,5 +82,45 @@ class Examination extends CI_Controller {
         $this->load->view("common/question_conf",$this->data); 
     }
 
+    public function save_exam(){        
+        
+        if($this->is_admissions() || $this->is_super_admin())
+        {   
+            $post = $this->input->post();
+            $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
+            $this->data_poster->post_data('tb_mas_exam',$post);
+            redirect(base_url()."examination/");
+        }else
+            redirect(base_url()."unity");
+    }
+
+    public function is_super_admin()
+    {
+         $admin = $this->session->userdata('intUserLevel');
+        if($admin == 2)
+            return true;
+        else
+            return false;
+    }
+    
+    public function is_registrar()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 3)
+            return true;
+        else
+            return false;
+        
+    }
+    
+    public function is_admissions()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 5)
+            return true;
+        else
+            return false;
+        
+    }
 
 }
