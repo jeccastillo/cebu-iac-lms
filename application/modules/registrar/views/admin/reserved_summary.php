@@ -122,7 +122,7 @@ new Vue({
                         this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
                    }                   
                    this.programs = data.data.programs;
-                   axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem+'&campus='<?php echo $campus; ?>)
+                   axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem+'&campus=<?php echo $campus; ?>')
                     .then((data) => {  
                         this.reserved = data.data;                         
                         for(i in this.reserved){       
