@@ -57,9 +57,10 @@ $html .= '
      </tr>
      ';
      
-     
+     $all_enrolled = 0;
     foreach($enrollment as $item){
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
+        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'];
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
@@ -91,7 +92,7 @@ $html .= '
          <td></td>
          <td></td>
          <td></td>
-         <td><strong>{{ all_enrolled }}</strong></td>
+         <td><strong>'.$all_enrolled.'</strong></td>
      </tr>
  </table>'; 
   
