@@ -62,11 +62,20 @@ $html .= '
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item[0]->program).'</td>';
-                foreach($item as $type){                    
-                    $html .= '                                
-                <td style="font-size:8px;">
-                    '.$type->reserved_count.'
-                </td>';
+                foreach($item as $type){     
+                    if($type->student_type == "freshman"){            
+                        if($reserved['r_fresh'])
+                            $html .= '                                
+                            <td style="font-size:8px;">
+                                '.$type->reserved_count.'
+                            </td>';
+                        else
+                            $html .= '                                
+                            <td style="font-size:8px;">
+                                0
+                            </td>';
+                            
+                    }
                 }
         $html .= '                
             </tr>
