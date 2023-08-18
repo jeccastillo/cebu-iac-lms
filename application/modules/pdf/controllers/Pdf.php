@@ -423,7 +423,7 @@ class Pdf extends CI_Controller {
         $this->data['enrollment'] = $ret;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        $html = $this->load->view("enrollment_summary",$this->data);
+        $html = $this->load->view("reservation_summary",$this->data);
 
     // //     tcpdf();
     // //     // create new PDF document
