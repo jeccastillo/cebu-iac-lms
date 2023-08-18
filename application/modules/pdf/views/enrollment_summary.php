@@ -46,11 +46,11 @@ $html .= '
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
          <th style="width:40%">Program</th>
-         <th font-size:8px;width:10%>Freshman</th>
-         <th font-size:8px;width:10%>Transferee</th>
-         <th font-size:8px;width:10%>Foreign</th>
-         <th font-size:8px;width:10%>Second Degree</th>
-         <th font-size:8px;width:10%>Total</th>
+         <th font-size:8px;width:6%>Freshman</th>
+         <th font-size:8px;width:6%>Transferee</th>
+         <th font-size:8px;width:6%>Foreign</th>
+         <th font-size:8px;width:6%>Second Degree</th>
+         <th font-size:8px;width:6%>Total</th>
      </tr>';
      
     foreach($enrollment as $item){
@@ -58,19 +58,19 @@ $html .= '
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
-                <td>
+                <td style="font-size:8px;">
                     '.$item['enrolled_freshman'].'
                 </td>
-                <td>
+                <td style="font-size:8px;">
                     '.$item['enrolled_transferee'].'
                 </td>
-                <td>
+                <td style="font-size:8px;">
                     '.$item['enrolled_foreign'].'
                 </td>
-                <td>
+                <td style="font-size:8px;">
                     '.$item['enrolled_second'].'
                 </td>
-                <td>
+                <td style="font-size:8px;">
                     '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']).'
                 </td>
             </tr>';
