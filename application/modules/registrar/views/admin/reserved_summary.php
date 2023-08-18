@@ -7,7 +7,7 @@
                     <i class="ion ion-arrow-left-a"></i>
                     All Reports
                 </a> 
-                <form ref="pdf-form" method="post" target="<?php echo $pdf_link; ?>">
+                <form ref="pdfform" method="post" target="<?php echo $pdf_link; ?>">
                     <input type="hidden" v-model="reservation" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm" ><i class="fa fa-book"></i>Generate PDF</a> 
                 </form>
@@ -172,7 +172,7 @@ new Vue({
 
     methods: {      
         submitForm: function(){
-            this.$refs.pdf-form.submit();
+            this.$refs.pdfform.submit();
         }
                                        
     }
