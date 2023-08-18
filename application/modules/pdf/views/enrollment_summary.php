@@ -51,7 +51,12 @@ $html .= '
          <th style="width:10%;font-size:9px;">Foreign</th>
          <th style="width:10%;font-size:9px;">SD</th>
          <th style="width:10%;font-size:9px;">Total</th>
-     </tr>';
+     </tr>
+     <tr style="line-height:10px;">
+        <th colspan="6"></th>
+     </tr>
+     ';
+     
      
     foreach($enrollment as $item){
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
