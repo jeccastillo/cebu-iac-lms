@@ -156,6 +156,8 @@ new Vue({
                             'all_reserved': this.all_reserved,
                         }
 
+                        this.reservation = JSON.stringify(this.reservation);
+
                         console.log(this.totals);                   
                     })
                     .catch((error) => {
