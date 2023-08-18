@@ -136,7 +136,7 @@ $html .= '
          <td></td>
          <td></td>
          <td></td>
-         <td><strong></strong></td>
+         <td><strong>&nbsp;'.$reserved['all_reserved'].'</strong></td>
      </tr>
  </table>'; 
   

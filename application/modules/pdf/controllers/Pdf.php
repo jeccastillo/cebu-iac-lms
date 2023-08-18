@@ -430,8 +430,7 @@ class Pdf extends CI_Controller {
         $r_foreign = [];
         $r_sd = [];
         
-        $all_reserved = 0;
-        $all_enrolled = 0;
+        $all_reserved = 0;        
 
         $reserved = (array)$res->reserved;
 
@@ -463,8 +462,7 @@ class Pdf extends CI_Controller {
             'r_trans'=>$r_trans,
             'r_foreign'=>$r_foreign,
             'r_sd'=>$r_sd,            
-            'all_reserved'=>$all_reserved,
-            'all_reserved'=>$all_enrolled,
+            'all_reserved'=>$all_reserved,            
             'reserved'=>$reserved,
         ];
 
