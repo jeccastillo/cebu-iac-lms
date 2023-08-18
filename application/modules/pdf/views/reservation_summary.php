@@ -64,17 +64,30 @@ $html .= '
                 <td style="font-size:8px;">'.trim($item[0]->program).'</td>';
                 foreach($item as $type){     
                     if($type->student_type == "freshman"){            
-                        if($reserved['r_fresh'])
-                            $html .= '                                
-                            <td style="font-size:8px;">
-                                '.$type->reserved_count.'
-                            </td>';
-                        else
-                            $html .= '                                
+                        
+                        $html .= '                                
+                        <td style="font-size:8px;">
+                            '.$type->reserved_count.'
+                        </td>';                                                                                
+                    }
+                    if(!$reserved['r_fresh']){
+                        $html .= '                                
                             <td style="font-size:8px;">
                                 0
                             </td>';
-                            
+                    }
+                    if($type->student_type == "transferee"){            
+                        
+                        $html .= '                                
+                        <td style="font-size:8px;">
+                            '.$type->reserved_count.'
+                        </td>';                                                                                
+                    }
+                    if(!$reserved['r_trans']){
+                        $html .= '                                
+                            <td style="font-size:8px;">
+                                0
+                            </td>';
                     }
                 }
         $html .= '                
