@@ -58,7 +58,7 @@ $html .= '
      ';
      
      $all_enrolled = 0;
-    foreach($enrollment as $item){
+    foreach($reserved as $item){
         print_r($item);
             
         $html .= '            
