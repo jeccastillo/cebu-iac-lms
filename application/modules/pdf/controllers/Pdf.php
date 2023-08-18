@@ -423,6 +423,7 @@ class Pdf extends CI_Controller {
 
         $res = $post['reservation']?$post['reservation']:$ret;
         $res = json_decode($res);
+        print_r($res->reserved);
         $this->data['reserved'] = $res->reserved;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
