@@ -420,57 +420,47 @@ class Pdf extends CI_Controller {
         $data['programs'] = $programs;
         $ret = [];        
 
-        foreach($programs as $program){
-            $st = [];
-            $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,2));
-            $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,1));
-            $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,3));
-            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,4));
-             
-            $ret[] = $program; 
-        }
-
         $this->data['enrollment'] = $ret;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        $html = $this->load->view("enrollment_summary",$this->data,true);
+        $html = $this->load->view("enrollment_summary",$this->data);
 
-        tcpdf();
-        // create new PDF document
-        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    // //     tcpdf();
+    // //     // create new PDF document
+    // //     //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    // //     //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    // //     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     
-        // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Enrollment Summary");
+    // //     // set document information
+    // //     $pdf->SetCreator(PDF_CREATOR);
+    // //     $pdf->SetTitle("Enrollment Summary");
         
-        // set margins
-        $pdf->SetMargins(10, 20 , 10);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetFont('helvetica','',10);
-        //$pdf->SetAutoPageBreak(TRUE, 6);
+    // //     // set margins
+    // //     $pdf->SetMargins(10, 20 , 10);
+    // //     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    // //     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    // //     $pdf->SetFont('helvetica','',10);
+    // //     //$pdf->SetAutoPageBreak(TRUE, 6);
         
-       //font setting
-        //$pdf->SetFont('calibril_0', '', 10, '', 'false');
+    // //    //font setting
+    // //     //$pdf->SetFont('calibril_0', '', 10, '', 'false');
         
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-        // Add a page
-        // This method has several options, check the source code documentation for more information.
-        $pdf->AddPage('P', 'LEGAL');            
+    // //     $pdf->setPrintHeader(false);
+    // //     $pdf->setPrintFooter(false);
+    // //     // Add a page
+    // //     // This method has several options, check the source code documentation for more information.
+    // //     $pdf->AddPage('P', 'LEGAL');            
       
                 
-        $pdf->writeHTML($html, true, false, true, false, '');
+    // //     $pdf->writeHTML($html, true, false, true, false, '');
     
-        //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+    //     //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
     
-        // ---------------------------------------------------------
+    //     // ---------------------------------------------------------
     
-        // Close and output PDF document
-        // This method has several options, check the source code documentation for more information.
-        $pdf->Output("enrollmentSummary".date("Ymdhis").".pdf", 'I');
+    //     // Close and output PDF document
+    //     // This method has several options, check the source code documentation for more information.
+    //     $pdf->Output("reservationSummary".date("Ymdhis").".pdf", 'I');
 
     }
     
