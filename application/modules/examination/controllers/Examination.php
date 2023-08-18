@@ -91,6 +91,13 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+     public function add_exam_type() {
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/add_exam_type",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/student_exam_conf",$this->data); 
+    }
+
     public function tb_mas_questions(){        
         
         if($this->is_admissions() || $this->is_super_admin())
