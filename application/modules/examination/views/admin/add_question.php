@@ -16,16 +16,13 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>program/submit_program" method="post"
-                role="form">
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit" method="post" role="form">
                 <div class="box-body">
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Question</label>
                         <input type="text" name="strTitle" class="form-control" id="strTitle"
                             placeholder="Enter Question Title">
                     </div>
-
-
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>

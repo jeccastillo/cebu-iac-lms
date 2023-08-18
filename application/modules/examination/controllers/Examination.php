@@ -82,5 +82,13 @@ class Examination extends CI_Controller {
         $this->load->view("common/question_conf",$this->data); 
     }
 
+     public function edit_question($id) {
+        $this->data['item']= $this->data_fetcher->getProgram($id);
+        $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_question",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
 
 }
