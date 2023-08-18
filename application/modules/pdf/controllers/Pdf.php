@@ -423,8 +423,48 @@ class Pdf extends CI_Controller {
 
         $res = $post['reservation']?$post['reservation']:$ret;
         $res = json_decode($res);
-        print_r($res->reserved);
-        $this->data['reserved'] = $res->reserved;
+
+        $totals = [];
+        $r_fresh = [];
+        $r_trans = [];
+        $r_foreign = [];
+        $r_sd = [];
+        
+        $all_reserved = 0;
+        $all_enrolled = 0;
+
+        for($i = 0; $i < count($res->reserved); $i++){       
+            $r_fresh[$i] = false;
+            $r_trans[$i] = false;
+            $r_foreign[$i] = false;
+            $r_sd[$i] = false;
+            $totals[$reserved[$i][0]->type_id] = 0;                                         
+            for($j = 0; $j < count($reserved[$i]); $j++){     
+                if($reserved[$i][$j]->student_type == "freshman")
+                    $r_fresh[$i] = true;
+                if($reserved[$i][$j]->student_type == "transferee")
+                    $r_trans[$i] = true;
+                if($reserved[$i][$j]->student_type == "foreign")
+                    $r_foreign[$i] = true;
+                if($reserved[$i][$j]->student_type == "second degree")
+                    $r_sd[$i] = true;
+
+                $totals[$reserved[$i][$j]->type_id] += (int)$reserved[$i][$j]->reserved_count;
+                $all_reserved += (int)$reserved[$i][$j]->reserved_count;
+            }                           
+        }
+        $data = [
+            'totals'=>$totals,
+            'r_fresh'=>$r_fresh,
+            'r_fresh'=>$r_fresh,
+            'r_foreign'=>$r_foreign,
+            'r_sd'=>$r_sd,            
+            'all_reserved'=>$all_reserved,
+            'all_reserved'=>$all_enrolled,
+            'reserved'=>$res->reserved,
+        ];
+
+        $this->data['reserved'] = $data;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
         $html = $this->load->view("reservation_summary",$this->data);

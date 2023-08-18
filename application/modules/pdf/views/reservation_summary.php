@@ -58,12 +58,12 @@ $html .= '
      ';
      
      $all_enrolled = 0;
-    foreach($reserved as $item){
+    foreach($reserved['reserved'] as $item){
         print_r($item);
             
         $html .= '            
             <tr>
-                <td style="font-size:8px;">'.trim($item->program).'</td>
+                <td style="font-size:8px;">'.trim($item[0]->program).'</td>
                 <td style="font-size:8px;">
                     
                 </td>
