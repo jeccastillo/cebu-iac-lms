@@ -390,6 +390,29 @@ class Pdf extends CI_Controller {
         $this->load->view("print_view_student_data_rog",$this->data);
     
     }
+
+    function enrollment_summary($sem){
+        
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $data['programs'] = $programs;
+        $ret = [];        
+
+        foreach($programs as $program){
+            $st = [];
+            $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,2));
+            $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,1));
+            $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,3));
+            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,4));
+             
+            $ret[] = $program; 
+        }
+
+        $this->data['enrollment'] = $ret;
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        $this->load->view("enrollment_summary",$this->data);
+
+    }
     
     function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {

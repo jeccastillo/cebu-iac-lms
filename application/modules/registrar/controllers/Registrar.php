@@ -464,10 +464,16 @@ class Registrar extends CI_Controller {
         $this->load->view("common/completions_conf",$this->data); 
     }
 
-    public function enrollment_summary_data(){
+    public function enrollment_summary_data($sem = 0){
 
-        $active_sem = $this->data_fetcher->get_active_sem();
-        $sem = $active_sem['intID'];
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $sem = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $sem = $active_sem['intID'];
+        }
 
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
         $data['programs'] = $programs;
@@ -573,8 +579,20 @@ class Registrar extends CI_Controller {
 
     }
 
-    public function enrollment_summary()    
+    public function enrollment_summary($sem = 0)    
     {
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $this->data['sem'] = $active_sem['intID'];
+        }
+
+        $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$sem;
+        $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$sem;
+
         
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);
