@@ -82,7 +82,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/question_conf",$this->data); 
     }
 
-<<<<<<< HEAD
+
      public function edit_question($id) {
         $this->data['item']= $this->data_fetcher->getProgram($id);
         $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
@@ -91,7 +91,6 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-=======
     public function tb_mas_questions(){        
         
         if($this->is_admissions() || $this->is_super_admin())
@@ -156,6 +155,5 @@ class Examination extends CI_Controller {
             return false;
         
     }
->>>>>>> 609a5cab7eac428edfd9e4b38600cd29fd59b091
 
 }
