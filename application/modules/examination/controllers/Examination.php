@@ -65,7 +65,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_exam_list",$this->data);
         $this->load->view("common/footer",$this->data); 
-           $this->load->view("common/student_exam_conf",$this->data); 
+        $this->load->view("common/student_exam_conf",$this->data); 
     }
 
     public function question_list() {
@@ -82,6 +82,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/question_conf",$this->data); 
     }
 
+<<<<<<< HEAD
      public function edit_question($id) {
         $this->data['item']= $this->data_fetcher->getProgram($id);
         $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
@@ -90,5 +91,71 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+=======
+    public function tb_mas_questions(){        
+        
+        if($this->is_admissions() || $this->is_super_admin())
+        {   
+            $post = $this->input->post();
+            $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
+            $this->data_poster->post_data('tb_mas_exam',$post);
+            redirect(base_url()."examination/");
+        }else
+            redirect(base_url()."unity");
+    }
+
+    // public function tb_mas_choices(){        
+        
+    //     if($this->is_admissions() || $this->is_super_admin())
+    //     {   
+    //         $post = $this->input->post();
+    //         $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
+    //         $this->data_poster->post_data('tb_mas_exam',$post);
+    //         redirect(base_url()."examination/");
+    //     }else
+    //         redirect(base_url()."unity");
+    // }
+
+    public function save_exam(){        
+        
+        if($this->is_admissions() || $this->is_super_admin())
+        {   
+            $post = $this->input->post();
+            $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
+            $this->data_poster->post_data('tb_mas_exam',$post);
+            redirect(base_url()."examination/");
+        }else
+            redirect(base_url()."unity");
+    }
+
+    public function is_super_admin()
+    {
+         $admin = $this->session->userdata('intUserLevel');
+        if($admin == 2)
+            return true;
+        else
+            return false;
+    }
+    
+    public function is_registrar()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 3)
+            return true;
+        else
+            return false;
+        
+    }
+    
+    public function is_admissions()
+    {
+        $admin = $this->session->userdata('intUserLevel');
+        if($admin == 5)
+            return true;
+        else
+            return false;
+        
+    }
+>>>>>>> 609a5cab7eac428edfd9e4b38600cd29fd59b091
 
 }

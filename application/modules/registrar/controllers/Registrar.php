@@ -34,6 +34,7 @@ class Registrar extends CI_Controller {
         
         $this->data['department_config'] = $this->config->item('department');
         $this->data['terms'] = $this->config->item('terms');
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
         $this->data['misc_fee'] = $this->config->item('misc_fee');
@@ -601,8 +602,20 @@ class Registrar extends CI_Controller {
         
     }
 
-    public function reservation_summary()    
+    public function reservation_summary($sem = 0)    
     {
+
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $this->data['sem'] = $active_sem['intID'];
+        }
+
+        $this->data['pdf_link'] = base_url()."pdf/reservation_summary/".$this->data['sem'];
+        $this->data['excel_link'] = base_url()."excel/reservation_summary/".$this->data['sem'];
         
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);

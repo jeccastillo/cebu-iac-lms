@@ -6,7 +6,13 @@
                 <a class="btn btn-app" href="<?php echo base_url(); ?>registrar/registrar_reports" >
                     <i class="ion ion-arrow-left-a"></i>
                     All Reports
-                </a> 
+                </a>                 
+                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a> 
+                <form style="display: inline;" ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
+                    <input type="hidden" name="reservation" v-model="reservation" />
+                    <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm" ><i class="fa fa-book"></i>Generate PDF</a> 
+                </form>
+                
             </small>
         </h1>     
     </section>
@@ -92,7 +98,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',
         reserved: undefined,
-        enrolled: undefined,
+        enrolled: undefined, 
+        reservation: undefined,       
         totals: [],
         r_fresh: [],
         r_trans: [],
@@ -114,10 +121,9 @@ new Vue({
                    this.enrolled = data.data.data;
                    for(i in this.enrolled){
                         this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
-                   }
-                   console.log(this.enrolled);
+                   }                   
                    this.programs = data.data.programs;
-                   axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem)
+                   axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem+'&campus=<?php echo $campus; ?>')
                     .then((data) => {  
                         this.reserved = data.data;                         
                         for(i in this.reserved){       
@@ -138,8 +144,14 @@ new Vue({
 
                                 this.totals[this.reserved[i][j].type_id] += parseInt(this.reserved[i][j].reserved_count);
                                 this.all_reserved += parseInt(this.reserved[i][j].reserved_count);
-                            }
+                            }                           
                         }
+
+                        this.reservation = {
+                            'reserved': this.reserved,                            
+                        }
+
+                        this.reservation = JSON.stringify(this.reservation);
 
                         console.log(this.totals);                   
                     })
@@ -156,7 +168,9 @@ new Vue({
     },
 
     methods: {      
-       
+        submitForm: function(){
+            this.$refs.pdfform.submit();
+        }
                                        
     }
 

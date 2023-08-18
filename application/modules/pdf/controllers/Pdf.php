@@ -413,6 +413,65 @@ class Pdf extends CI_Controller {
         $this->load->view("enrollment_summary",$this->data);
 
     }
+
+    function reservation_summary($sem){
+        
+        $post = $this->input->post();
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $data['programs'] = $programs;        
+        $ret = [];        
+
+        $res = $post['reservation']?$post['reservation']:$ret;
+        $res = json_decode($res);
+
+        $totals = [];
+        $r_fresh = [];
+        $r_trans = [];
+        $r_foreign = [];
+        $r_sd = [];
+        
+        $all_reserved = 0;        
+
+        $reserved = (array)$res->reserved;
+
+        print_r($reserved);        
+        foreach($reserved as $res){   
+            $i =  $res[0]->type_id;
+            $r_fresh[$i] = false;
+            $r_trans[$i] = false;
+            $r_foreign[$i] = false;
+            $r_sd[$i] = false;
+            $totals[$res[0]->type_id] = 0;                                         
+            for($j = 0; $j < count($res); $j++){     
+                if($res[$j]->student_type == "freshman")
+                    $r_fresh[$i] = true;
+                if($res[$j]->student_type == "transferee")
+                    $r_trans[$i] = true;
+                if($res[$j]->student_type == "foreign")
+                    $r_foreign[$i] = true;
+                if($res[$j]->student_type == "second degree")
+                    $r_sd[$i] = true;
+
+                $totals[$res[$j]->type_id] += (int)$res[$j]->reserved_count;
+                $all_reserved += (int)$res[$j]->reserved_count;
+            }                           
+        }
+        $data = [
+            'totals'=>$totals,
+            'r_fresh'=>$r_fresh,
+            'r_trans'=>$r_trans,
+            'r_foreign'=>$r_foreign,
+            'r_sd'=>$r_sd,            
+            'all_reserved'=>$all_reserved,            
+            'reserved'=>$reserved,
+        ];
+
+        $this->data['reserved'] = $data;
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        $html = $this->load->view("reservation_summary",$this->data);
+        
+    }
     
     function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {
