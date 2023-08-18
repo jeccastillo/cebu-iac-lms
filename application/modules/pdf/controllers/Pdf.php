@@ -417,8 +417,7 @@ class Pdf extends CI_Controller {
     function reservation_summary($sem){
         
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
-        $data['programs'] = $programs;
-        $this->data['sem'] = $sem;
+        $data['programs'] = $programs;        
         $ret = [];        
 
         $this->data['enrollment'] = $ret;
