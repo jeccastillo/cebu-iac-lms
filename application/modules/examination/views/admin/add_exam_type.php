@@ -1,12 +1,12 @@
 <aside class="right-side">
     <section class="content-header">
         <h1>
-            Exam Question
+            Exam Type
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Program</a></li>
-            <li class="active">New Exam Question</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Exam Type</a></li>
+            <li class="active">New Exam Type</li>
         </ol>
     </section>
     <div class="content">
@@ -16,25 +16,24 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit" method="post" role="form">
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_exam_type" method="post"
+                role="form">
                 <div class="box-body">
                     <div class="form-group col-xs-6">
-                        <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" class="form-control" id="strTitle"
-                            placeholder="Enter Question Title">
+                        <label for="strProgramCode">Name</label>
+                        <input type="text" name="strName" class="form-control" id="strName" placeholder="Enter Name">
                     </div>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
-                        <select class="form-control" name="type" id="type">
+                        <select class="form-control" name="type" id="type" required>
+                            <option value="" disabled selected>--select type--</option>
+                            <option>shs</option>
+                            <option>college</option>
+                            <option>other</option>
                         </select>
                     </div>
 
-                    <div class="form-group col-xs-6">
-                        <label for="type">Section</label>
-                        <select class="form-control" name="srtSection" id="type">
-                        </select>
-                    </div>
 
                     <div class="form-group col-xs-12">
                         <input type="submit" value="add" class="btn btn-default  btn-flat">
