@@ -2446,8 +2446,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('B1', 'First Name')
                     ->setCellValue('C1', 'Middle Name')
                     ->setCellValue('D1', 'Mobile Number')
-                    ->setCellValue('E1', 'Email')
-                    ->setCellValue('F1', 'Status');
+                    ->setCellValue('E1', 'Address')
+                    ->setCellValue('F1', '1st Choice')
+                    ->setCellValue('G1', '2nd Choice')
+                    ->setCellValue('H1', '3rd Choice')
+                    ->setCellValue('I1', 'Email')
+                    ->setCellValue('J1', 'Status');
                     
         
         $i = 2;
@@ -2459,8 +2463,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('B'.$i, strtoupper($d->first_name))
                     ->setCellValue('C'.$i, strtoupper($d->middle_name))
                     ->setCellValue('D'.$i, $d->mobile_number)
-                    ->setCellValue('E'.$i, $d->email)
-                    ->setCellValue('F'.$i, $d->status);
+                    ->setCellValue('E'.$i, $d->address)
+                    ->setCellValue('F'.$i, $d->program)
+                    ->setCellValue('G'.$i, $d->program2)
+                    ->setCellValue('H'.$i, $d->program3)
+                    ->setCellValue('I'.$i, $d->email)
+                    ->setCellValue('J'.$i, $d->status);
                                                        
             $i++;
         }
