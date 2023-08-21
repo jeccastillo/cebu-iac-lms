@@ -123,7 +123,7 @@ new Vue({
                             this.full_total += this.dates[i].total;
                             this.data_post.push(dates[i]);
                         }
-                        console.log(this.dates);
+                        console.log(this.data_post);
                     
                     })
                 .catch((error) => {
