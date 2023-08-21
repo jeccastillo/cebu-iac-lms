@@ -2492,6 +2492,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')');                    
         
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:F3')->getFont()->setBold( true );
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
