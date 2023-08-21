@@ -80,16 +80,15 @@
                             <option <?php echo ($graduate == 1)?'selected':''; ?> value="1">yes</option>
                             <option <?php echo ($graduate == 2)?'selected':''; ?> value="2">no</option>
                         </select>
-                    </div>
-                    <div class="col-sm-4">
+                    </div>-->
+                   <div class="col-sm-4">
                         <label for="registered">Enrollment Status:</label>
                         <select id="registered" class="form-control select2">
                             <option <?php echo ($registered == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
                             <option <?php echo ($registered == 1)?'selected':''; ?> value="1">enlisted</option>
-                            <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>
-                            <option <?php echo ($registered == 3)?'selected':''; ?> value="3">cleared</option>
+                            <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>                            
                         </select>
-                    </div> -->
+                    </div> 
                     <div class="col-sm-4">
                         <label for="level">Student Type:</label>
                         <select id="level" class="form-control select2">
