@@ -2540,7 +2540,7 @@ class Excel extends CI_Controller {
         $totals = json_decode($post['totals']);
         $full_total = json_decode($post['full_total']);
         
-        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
