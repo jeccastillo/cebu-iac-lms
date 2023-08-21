@@ -2503,7 +2503,7 @@ class Excel extends CI_Controller {
         
                 
          
-        $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
+        $objPHPExcel->getActiveSheet()->setTitle('Enrollment Summary');
 
         $date = date("ymdhis");
 
@@ -2532,6 +2532,116 @@ class Excel extends CI_Controller {
         exit;
 
 
+    }
+
+    function daily_enrollment_report($sem){
+        $post = $this->input->post();
+        $dates = json_decode($post['dates']);
+        $totals = json_decode($post['totals']);
+        $full_total = json_decode($post['full_total']);
+        
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Total Daily Enrollment Summary Report")
+                                     ->setSubject("Total Daily Enrollment Summary Report Download")
+                                     ->setDescription("Total Daily Enrollment Summary Report Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Total Daily Enrollment Summary Report");
+
+        
+      
+        $title = 'Total Daily Enrollment for '.$active_sem['enumSem'].' Term SY'.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'];
+        
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A1', $title);
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1');
+
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A3', 'Program')
+                    ->setCellValue('B3', 'Freshman')
+                    ->setCellValue('C3', 'Transferee')
+                    ->setCellValue('D3', 'Second Degree')                    
+                    ->setCellValue('E3', 'Total Enrollment');
+                            
+        $i = 4;
+        
+        
+        foreach($dates as $item){  
+            
+                    
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $item->date)
+                    ->setCellValue('B'.$i, $item->freshman)
+                    ->setCellValue('C'.$i, $item->transferee)                    
+                    ->setCellValue('D'.$i, $item->second)
+                    ->setCellValue('E'.$i, '=SUM(B'.$i.':D'.$i.')');                                                
+                             
+        
+            $i++;
+         
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, '=SUM(A4:E'.($i-1).')')
+                    ->setCellValue('B'.$i, '=SUM(B4:E'.($i-1).')')
+                    ->setCellValue('C'.$i, '=SUM(C4:E'.($i-1).')')                    
+                    ->setCellValue('D'.$i, '=SUM(D4:E'.($i-1).')')
+                    ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')');                    
+        
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:E3')->getFont()->setBold( true );
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        
+                
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Total Daily Enrollment Students');
+
+        $date = date("ymdhis");
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="daily_enrollment'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        $objWriter->save('php://output');
+        exit;
+            
     }
 
     public function reservation_summary($sem){
@@ -2697,7 +2807,7 @@ class Excel extends CI_Controller {
         
                 
          
-        $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
+        $objPHPExcel->getActiveSheet()->setTitle('Reservation Summary');
 
         $date = date("ymdhis");
 
