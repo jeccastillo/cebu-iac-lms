@@ -496,11 +496,24 @@ class Registrar extends CI_Controller {
 
     }
 
-    public function daily_enrollment_report($start=0, $end=0){
+    public function daily_enrollment_report($start=0, $end=0, $sem = 0){
 
         $this->data['start'] = $start;
         $this->data['end'] = $end;
-        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $sem = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $sem = $active_sem['intID'];
+        }
+
+        $this->data['pdf_link'] = base_url()."pdf/daily_enrollment_report/".$sem;
+        $this->data['excel_link'] = base_url()."excel/daily_enrollment_report/".$sem;
+
+        $this->data['active_sem'] = $active_sem;
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/daily_enrollment",$this->data);
         $this->load->view("common/footer",$this->data); 

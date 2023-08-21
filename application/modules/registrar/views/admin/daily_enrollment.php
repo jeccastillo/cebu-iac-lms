@@ -7,6 +7,18 @@
                     <i class="ion ion-arrow-left-a"></i>
                     Enrollment
                 </a> 
+                <form style="display: inline;" ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
+                    <input type="hidden" name="dates" v-model="dates" />
+                    <input type="hidden" name="totals" v-model="totals" />
+                    <input type="hidden" name="full_total" v-model="full_total" />
+                    <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('pdf')" ><i class="fa fa-book"></i>Generate PDF</a> 
+                </form>
+                <form style="display: inline;" ref="excelform" target="_blank" method="post" action="<?php echo $excel_link; ?>">                     
+                    <input type="hidden" name="dates" v-model="dates" />
+                    <input type="hidden" name="totals" v-model="totals" />
+                    <input type="hidden" name="full_total" v-model="full_total" />
+                    <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('excel')" ><i class="fa fa-book"></i>Generate Excel</a> 
+                </form>
             </small>
             <br />
             <?php if($start != 0): ?>
@@ -125,7 +137,12 @@ new Vue({
     },
 
     methods: {      
-       
+        submitForm: function(type){
+            if(type == 'pdf')
+                this.$refs.pdfform.submit();
+            else
+                this.$refs.excelform.submit();
+        }
                                        
     }
 
