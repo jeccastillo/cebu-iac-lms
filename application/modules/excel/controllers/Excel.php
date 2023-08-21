@@ -2537,6 +2537,8 @@ class Excel extends CI_Controller {
     public function reservation_summary($sem){
         
         $post = $this->input->post();
+        print_r($post);
+        
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
         $data['programs'] = $programs;        
         $ret = [];        
