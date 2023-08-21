@@ -96,7 +96,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $active_sem['intID']; ?>',        
         dates: undefined,
-        data_post: [];
+        data_post: [],
         full_total: 0,
         totals: undefined,
                       
