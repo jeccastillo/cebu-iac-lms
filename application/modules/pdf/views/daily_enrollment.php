@@ -1,0 +1,109 @@
+<?php
+
+    tcpdf();
+    // create new PDF document
+    //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetTitle("Enrollment Summary");
+    
+    // set margins
+    $pdf->SetMargins(10, 20 , 10);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    $pdf->SetFont('helvetica','',10);
+    //$pdf->SetAutoPageBreak(TRUE, 6);
+    
+   //font setting
+    //$pdf->SetFont('calibril_0', '', 10, '', 'false');
+    
+    $pdf->setPrintHeader(false);
+    $pdf->setPrintFooter(false);
+    // Add a page
+    // This method has several options, check the source code documentation for more information.
+    $pdf->AddPage('P', 'LEGAL');            
+
+    
+    
+    // Set some content to print
+    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+            <tr>                            
+                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                </td>
+            </tr>        
+            </table>
+           ';
+    
+
+
+
+$html .= '       
+     <br />
+     <table v-if="enrolled" class="table table-bordered table-striped">
+     <tr>
+         <th style="width:50%;font-size:9px;">Date</th>
+         <th style="width:10%;font-size:9px;">Freshman</th>
+         <th style="width:10%;font-size:9px;">Transferee</th>
+         <th style="width:10%;font-size:9px;">Foreign</th>
+         <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Total Enrollment</th>
+     </tr>
+     <tr style="line-height:10px;">
+        <th colspan="6"></th>
+     </tr>
+     ';
+     
+     $all_enrolled = 0;
+    foreach($daily_enrollment['dates'] as $item){                
+        
+        $html .= '            
+            <tr>
+                <td style="font-size:8px;">'.$item['date'].'</td>
+                <td style="font-size:8px;">
+                    '.$item['freshman'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item['transferee'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item['second'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item['total'].'
+                </td>
+            </tr>
+            <tr style="line-height:5px;">
+                <th colspan="6"></th>
+            </tr>
+            ';
+    }
+$html .= ' 
+    <tr style="line-height:10px;">
+        <th style="border-top:1px solid #333;" colspan="6"></th>
+    </tr>
+     <tr>
+         <td>Total</td>
+         <td>'.$daily_enrollment['totals']['freshman'].'</td>
+         <td>'.$daily_enrollment['totals']['transferee'].'</td>
+         <td>'.$daily_enrollment['totals']['second'].'</td>
+         <td><strong>'.$daily_enrollment['full_total'].'</strong></td>
+     </tr>
+ </table>'; 
+  
+            
+$pdf->writeHTML($html, true, false, true, false, '');
+
+//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+// ---------------------------------------------------------
+
+// Close and output PDF document
+// This method has several options, check the source code documentation for more information.
+$pdf->Output("enrollmentSummary".date("Ymdhis").".pdf", 'I');
+
+
+?>

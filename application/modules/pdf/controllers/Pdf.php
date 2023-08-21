@@ -414,6 +414,18 @@ class Pdf extends CI_Controller {
 
     }
 
+    function daily_enrollment_report($sem){
+        $post = $this->input->post();
+        $this->data['daily_enrollment'] = $post;
+
+
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        $html = $this->load->view("daily_enrollment",$this->data);
+
+        
+        
+    }
+
     function reservation_summary($sem){
         
         $post = $this->input->post();
