@@ -2476,6 +2476,7 @@ class Excel extends CI_Controller {
         }
 
         $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('E'.$i, "TOTAL");
                     ->setCellValue('F'.$i, $all_enrolled);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
