@@ -2413,6 +2413,11 @@ class Excel extends CI_Controller {
         $data['programs'] = $programs;
         $enrollment = [];        
 
+        if($sem == 0)      
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+
         foreach($programs as $program){
             $st = [];
             $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,2));
@@ -2446,17 +2451,20 @@ class Excel extends CI_Controller {
 
         
       
+        $title = 'Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'];
         
-            
         $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('A1', 'Program')
-                    ->setCellValue('B1', 'Freshman')
-                    ->setCellValue('C1', 'Transferee')
-                    ->setCellValue('D1', 'Foreign')
-                    ->setCellValue('E1', 'Second Degree')
-                    ->setCellValue('F1', 'Total');
+                    ->setCellValue('A1:F1', $title);
+
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A3', 'Program')
+                    ->setCellValue('B3', 'Freshman')
+                    ->setCellValue('C3', 'Transferee')
+                    ->setCellValue('D3', 'Foreign')
+                    ->setCellValue('E3', 'Second Degree')
+                    ->setCellValue('F3', 'Total');
                             
-        $i = 2;
+        $i = 4;
 
         $all_enrolled = 0;
         
