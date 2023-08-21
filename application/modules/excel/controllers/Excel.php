@@ -2596,11 +2596,10 @@ class Excel extends CI_Controller {
          
         }
 
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, '=SUM(A4:E'.($i-1).')')
-                    ->setCellValue('B'.$i, '=SUM(B4:E'.($i-1).')')
-                    ->setCellValue('C'.$i, '=SUM(C4:E'.($i-1).')')                    
-                    ->setCellValue('D'.$i, '=SUM(D4:E'.($i-1).')')
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')
+                    ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
+                    ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
                     ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')');                    
         
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
