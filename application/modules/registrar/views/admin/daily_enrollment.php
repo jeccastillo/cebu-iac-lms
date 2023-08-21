@@ -121,7 +121,7 @@ new Vue({
                         this.totals = data.data.totals;
                         for(i in this.dates){
                             this.full_total += this.dates[i].total;
-                            this.data_post.push(dates[i]);
+                            this.data_post.push(this.dates[i]);
                         }
                         console.log(this.data_post);
                     
