@@ -416,11 +416,10 @@ class Pdf extends CI_Controller {
 
     function daily_enrollment_report($sem){
         $post = $this->input->post();
-        $post = json_decode($post);
-        $this->data['dates'] = $post['dates'];
-        $this->data['totals'] = $post['totals'];
-        $this->data['full_total'] = $post['full_total'];
-        print_r($this->data['dates']);
+        $this->data['dates'] = json_decode($post['dates']);
+        $this->data['totals'] = json_decode($post['totals']);
+        $this->data['full_total'] = json_decode($post['full_total']);
+        print_r($this->data['totals']);
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
         //$html = $this->load->view("daily_enrollment",$this->data);        
     }
