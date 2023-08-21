@@ -2457,6 +2457,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('F1', 'Total');
                             
         $i = 2;
+
+        $all_enrolled = 0;
         
         foreach($enrollment as $item){
             $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
