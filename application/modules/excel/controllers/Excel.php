@@ -2480,8 +2480,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, $item['enrolled_transferee'])
                     ->setCellValue('D'.$i, $item['enrolled_foreign'])
                     ->setCellValue('E'.$i, $item['enrolled_second'])
-                    ->setCellValue('F'.$i, $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']);
-         
+                    ->setCellValue('F'.$i, '=SUM(B'.$i.':E'.$i.')');                                                
+                             
         
             $i++;
          
@@ -2517,6 +2517,200 @@ class Excel extends CI_Controller {
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
         header('Content-Disposition: attachment;filename="enrollment_summary'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        $objWriter->save('php://output');
+        exit;
+
+
+    }
+
+    public function reservation_summary($sem){
+        
+        $post = $this->input->post();
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $data['programs'] = $programs;        
+        $ret = [];        
+
+        $res = $post['reservation']?$post['reservation']:$ret;
+        $res = json_decode($res);
+
+        $totals = [];
+        $r_fresh = [];
+        $r_trans = [];
+        $r_foreign = [];
+        $r_sd = [];
+        
+        $all_reserved = 0;        
+
+        $reserved = (array)$res->reserved;
+
+        print_r($reserved);        
+        foreach($reserved as $res){   
+            $i =  $res[0]->type_id;
+            $r_fresh[$i] = false;
+            $r_trans[$i] = false;
+            $r_foreign[$i] = false;
+            $r_sd[$i] = false;
+            $totals[$res[0]->type_id] = 0;                                         
+            for($j = 0; $j < count($res); $j++){     
+                if($res[$j]->student_type == "freshman")
+                    $r_fresh[$i] = true;
+                if($res[$j]->student_type == "transferee")
+                    $r_trans[$i] = true;
+                if($res[$j]->student_type == "foreign")
+                    $r_foreign[$i] = true;
+                if($res[$j]->student_type == "second degree")
+                    $r_sd[$i] = true;
+
+                $totals[$res[$j]->type_id] += (int)$res[$j]->reserved_count;
+                $all_reserved += (int)$res[$j]->reserved_count;
+            }                           
+        }
+        $data = [
+            'totals'=>$totals,
+            'r_fresh'=>$r_fresh,
+            'r_trans'=>$r_trans,
+            'r_foreign'=>$r_foreign,
+            'r_sd'=>$r_sd,            
+            'all_reserved'=>$all_reserved,            
+            'reserved'=>$reserved,
+        ];
+
+        $reserved = $data;
+        $sem = $this->data_fetcher->get_sem_by_id($sem);
+
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Reservation Summary Report")
+                                     ->setSubject("Reservation Summary Report Download")
+                                     ->setDescription("Reservation Summary Report Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Reservation Summary Report");
+
+        
+      
+        $title = 'Reservation Summary for '.$active_sem['enumSem'].' Term SY'.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'];
+        
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A1', $title);
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1');
+
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A3', 'Program')
+                    ->setCellValue('B3', 'Freshman')
+                    ->setCellValue('C3', 'Transferee')
+                    ->setCellValue('D3', 'Foreign')
+                    ->setCellValue('E3', 'Second Degree')
+                    ->setCellValue('F3', 'Total');
+                            
+        $i = 4;
+
+        $all_enrolled = 0;
+        
+        foreach($reserved['reserved'] as $item){  
+            
+                    
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, trim($item[0]->program));
+
+            foreach($item as $type){      
+                if($type->student_type == "freshman"){                                    
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$i, $type->reserved_count);                                                               
+                }
+                if(!$reserved['r_fresh'][$item[0]->type_id]){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('B'.$i, 0);                                                               
+                }
+                if($type->student_type == "transferee"){            
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('C'.$i, $type->reserved_count);                                                                             
+                }
+                if(!$reserved['r_trans'][$item[0]->type_id]){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('C'.$i, 0); 
+                }
+                if($type->student_type == "foreign"){            
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('D'.$i, $type->reserved_count);                                                                       
+                }
+                if(!$reserved['r_foreign'][$item[0]->type_id]){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('D'.$i, 0); 
+                }
+                if($type->student_type == "second degree"){            
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('E'.$i, $type->reserved_count);                                                                             
+                }
+                if(!$reserved['r_sd'][$item[0]->type_id]){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('E'.$i, 0); 
+                }
+                
+                $objPHPExcel->setActiveSheetIndex(0)                                        
+                    ->setCellValue('F'.$i, '=SUM(B'.$i.':E'.$i.')');                                                
+            
+            }
+                                               
+        
+            $i++;
+         
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('E'.$i, "TOTAL")
+                    ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')');                    
+        
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:F3')->getFont()->setBold( true );
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        
+                
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
+
+        $date = date("ymdhis");
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="reservation_summary'.$date.'.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
