@@ -2451,7 +2451,7 @@ class Excel extends CI_Controller {
 
         
       
-        $title = 'Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'];
+        $title = 'Enrollment Summary for '.$active_sem['enumSem'].' Term SY'.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'];
         
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1:F1', $title);
