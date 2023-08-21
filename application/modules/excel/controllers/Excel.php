@@ -2332,11 +2332,11 @@ class Excel extends CI_Controller {
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
                                      ->setLastModifiedBy("Jec Castillo")
-                                     ->setTitle("Daily Collection Report")
-                                     ->setSubject("Daily Collection Report Download")
-                                     ->setDescription("Daily Collection Report Download.")
+                                     ->setTitle("Enlisted Students Report")
+                                     ->setSubject("Enlisted Students Download")
+                                     ->setDescription("Enlisted Students Download.")
                                      ->setKeywords("office 2007 openxml php")
-                                     ->setCategory("Daily Collection Report");
+                                     ->setCategory("Enlisted Students Report");
 
         
       
@@ -2406,6 +2406,116 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
         
+    }
+
+    public function enrollment_summary($sem){
+        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $data['programs'] = $programs;
+        $enrollment = [];        
+
+        foreach($programs as $program){
+            $st = [];
+            $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,2));
+            $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,1));
+            $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,3));
+            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,4));
+             
+            $enrollment[] = $program; 
+        }
+
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Enrollment Summary Report")
+                                     ->setSubject("Enrollment Summary Report Download")
+                                     ->setDescription("Enrollment Summary Report Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Enrollment Summary Report");
+
+        
+      
+        
+            
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A1', 'Program')
+                    ->setCellValue('B1', 'Freshman')
+                    ->setCellValue('C1', 'Transferee')
+                    ->setCellValue('D1', 'Foreign')
+                    ->setCellValue('E1', 'Second Degree')
+                    ->setCellValue('F1', 'Total');
+                            
+        $i = 2;
+        
+        foreach($enrollment as $item){
+            $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
+            $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'];
+                    
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, trim($item['strProgramDescription']))
+                    ->setCellValue('B'.$i, $item['enrolled_freshman'])
+                    ->setCellValue('C'.$i, $item['enrolled_transferee'])
+                    ->setCellValue('D'.$i, $item['enrolled_foreign'])
+                    ->setCellValue('E'.$i, $item['enrolled_second'])
+                    ->setCellValue('F'.$i, $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']);
+         
+        
+            $i++;
+         
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('F'.$i, $all_enrolled);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        
+                
+         
+        $objPHPExcel->getActiveSheet()->setTitle('Enlisted Students');
+
+        $date = date("ymdhis");
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="enrollment_summary'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        $objWriter->save('php://output');
+        exit;
+
+
     }
 
     public function export_leads()
