@@ -47,8 +47,7 @@ $html .= '
      <tr>
          <th style="width:50%;font-size:9px;">Date</th>
          <th style="width:10%;font-size:9px;">Freshman</th>
-         <th style="width:10%;font-size:9px;">Transferee</th>
-         <th style="width:10%;font-size:9px;">Foreign</th>
+         <th style="width:10%;font-size:9px;">Transferee</th>         
          <th style="width:10%;font-size:9px;">Second Degree</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
