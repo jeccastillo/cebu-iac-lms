@@ -62,18 +62,18 @@ $html .= '
         
         $html .= '            
             <tr>
-                <td style="font-size:8px;">'.$item['date'].'</td>
+                <td style="font-size:8px;">'.$item->date.'</td>
                 <td style="font-size:8px;">
-                    '.$item['freshman'].'
+                    '.$item->freshman.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item['transferee'].'
+                    '.$item->transferee.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item['second'].'
+                    '.$item->second.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item['total'].'
+                    '.$item->total.'
                 </td>
             </tr>
             <tr style="line-height:5px;">
@@ -87,9 +87,9 @@ $html .= '
     </tr>
      <tr>
          <td>Total</td>
-         <td>'.$totals['freshman'].'</td>
-         <td>'.$totals['transferee'].'</td>
-         <td>'.$totals['second'].'</td>
+         <td>'.$totals->freshman.'</td>
+         <td>'.$totals->transferee.'</td>
+         <td>'.$totals->second.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
  </table>'; 
