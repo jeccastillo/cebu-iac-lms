@@ -433,8 +433,7 @@ class Pdf extends CI_Controller {
         $all_reserved = 0;        
 
         $reserved = (array)$res->reserved;
-
-        print_r($reserved);        
+            
         foreach($reserved as $res){   
             $i =  $res[0]->type_id;
             $r_fresh[$i] = false;

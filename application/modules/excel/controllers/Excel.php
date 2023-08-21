@@ -2554,8 +2554,7 @@ class Excel extends CI_Controller {
         $all_reserved = 0;        
 
         $reserved = (array)$res->reserved;
-
-        print_r($reserved);        
+               
         foreach($reserved as $res){   
             $i =  $res[0]->type_id;
             $r_fresh[$i] = false;
@@ -2588,7 +2587,7 @@ class Excel extends CI_Controller {
         ];
 
         $reserved = $data;
-        $sem = $this->data_fetcher->get_sem_by_id($sem);
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
 
         error_reporting(E_ALL);
