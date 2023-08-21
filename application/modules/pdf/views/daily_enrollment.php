@@ -58,7 +58,7 @@ $html .= '
      ';
      
      $all_enrolled = 0;
-    foreach($daily_enrollment['dates'] as $item){                
+    foreach($dates as $item){                
         
         $html .= '            
             <tr>
@@ -87,10 +87,10 @@ $html .= '
     </tr>
      <tr>
          <td>Total</td>
-         <td>'.$daily_enrollment['totals']['freshman'].'</td>
-         <td>'.$daily_enrollment['totals']['transferee'].'</td>
-         <td>'.$daily_enrollment['totals']['second'].'</td>
-         <td><strong>'.$daily_enrollment['full_total'].'</strong></td>
+         <td>'.$totals['freshman'].'</td>
+         <td>'.$totals['transferee'].'</td>
+         <td>'.$totals['second'].'</td>
+         <td><strong>'.$full_total.'</strong></td>
      </tr>
  </table>'; 
   
