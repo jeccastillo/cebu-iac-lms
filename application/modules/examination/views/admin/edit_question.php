@@ -59,7 +59,6 @@
                 <h3 class="box-title">Question Choices</h3>
             </div>
 
-            <?php  echo print_r($choices); ?>
 
 
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
@@ -68,6 +67,7 @@
                 <div class="box-body">
 
                     <div class="form-group col-xs-6" id="choices_container">
+                        <?php if(count($choices) == 0): ?>
                         <div>
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
@@ -75,9 +75,31 @@
                             Correct?
                             <hr>
                         </div>
+
+                        <?php else:
+                            foreach ($choices as $choice):
+                            
+                        ?>
+
+                        <div>
+                            <label for="strProgramCode">Enter Choice Value</label>
+                            <input type="text" name="strChoice[]" value="<?php echo $choice['strChoice'];?>"
+                                class="form-control" placeholder="Enter choice name">
+                            <input type="radio" name="is_correct[]"
+                                <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
+                                value="<?php echo $choice['is_correct'];?>"> is
+                            Correct?
+                            <hr>
+                        </div>
+
+
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+
+
                     </div>
 
-                    <div class="col-sm-12" style="margin-bottom:1rem;">
+                    <div class=" col-sm-12" style="margin-bottom:1rem;">
                         <button type="button" class="btn btn-default" id="add_new">Add New</button>
                         <hr>
                     </div>
