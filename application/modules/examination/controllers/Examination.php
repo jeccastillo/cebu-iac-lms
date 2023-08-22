@@ -71,6 +71,7 @@ class Examination extends CI_Controller {
 
     public function question_list() {
         $this->data['opentree'] = "examination";
+        $this->data['page'] = "view_questions";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/question_list",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -78,6 +79,7 @@ class Examination extends CI_Controller {
     }
 
      public function add_question() {
+        $this->data['page'] = "add_question";
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->getExam($id);
         $this->load->view("common/header",$this->data);
@@ -98,6 +100,7 @@ class Examination extends CI_Controller {
     }
 
     public function exam_type_list() {
+         $this->data['page'] = "exam_type_list";
         $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/exam_type_list",$this->data);
@@ -107,6 +110,7 @@ class Examination extends CI_Controller {
 
      public function add_exam_type() {
         $this->data['opentree'] = "examination";
+        $this->data['page'] = "add_exam_type";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
