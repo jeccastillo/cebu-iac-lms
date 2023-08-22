@@ -115,7 +115,7 @@
                                     </td>
                                     <td><span v-if="record.adjustments">{{ record.adjustments.adjustment_type }}</span></td>
                                     <td>    
-                                    <button                                                
+                                    <button v-if="reg_status == 'Enrolled'"                                                
                                             @click="dropSubject(record.classlistID,false)"  class="btn btn-danger">
                                             Drop
                                     </button>                                                                                                    
@@ -124,18 +124,20 @@
                             </tbody>
                         </table>
                         <hr />
-                        <button data-toggle="modal"            
-                                value = 0                                    
-                                @click="loadAvailableSubjects($event,'add-subject')" 
-                                data-target="#addSubjectModal" class="btn btn-primary">
-                                Add/Replace Subject
-                        </button>
-                        <button data-toggle="modal"            
-                                value = 0                                    
-                                @click="loadAvailableSubjects($event,'change-section')" 
-                                data-target="#addSubjectModal" class="btn btn-primary">
-                                Change Section
-                        </button>
+                        <div v-if="reg_status == 'Enrolled'">
+                            <button data-toggle="modal"            
+                                    value = 0                                    
+                                    @click="loadAvailableSubjects($event,'add-subject')" 
+                                    data-target="#addSubjectModal" class="btn btn-primary">
+                                    Add/Replace Subject
+                            </button>
+                            <button data-toggle="modal"            
+                                    value = 0                                    
+                                    @click="loadAvailableSubjects($event,'change-section')" 
+                                    data-target="#addSubjectModal" class="btn btn-primary">
+                                    Change Section
+                            </button>
+                        </div>
                         <hr />
                         <h4>Adjustments</h4>
                         <table class="table table-condensed table-bordered">
