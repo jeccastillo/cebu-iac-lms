@@ -139,29 +139,39 @@ class Examination extends CI_Controller {
             
     }
 
-    public function submit_question(){        
-        
-        if($this->is_admissions() || $this->is_super_admin())
-        {
-            $post = $this->input->post();
-            $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
-            $this->data_poster->post_data('tb_mas_questions',$post);
-            redirect(base_url()."examination/");
-        }else
-            redirect(base_url()."unity");
+    public function view_exam_types()
+    {
+        $this->data['examp_type'] = $this->data_fetcher->fetch_table('tb_mas_exam');
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/add_exam_type",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/student_exam_conf",$this->data); 
     }
 
-    public function submit_edit_question()
-    {
-        if($this->is_registrar() || $this->is_super_admin())
-        {   
-            $post = $this->input->post();
-            $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
-            $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
-        }
-        redirect(base_url()."examination");
+    // public function submit_question(){        
+        
+    //     if($this->is_admissions() || $this->is_super_admin())
+    //     {
+    //         $post = $this->input->post();
+    //         $this->data_poster->log_action('Exam','Added a new exam '.$post['strRoomCode'],'green');
+    //         $this->data_poster->post_data('tb_mas_questions',$post);
+    //         redirect(base_url()."examination/");
+    //     }else
+    //         redirect(base_url()."unity");
+    // }
+
+    // public function submit_edit_question()
+    // {
+    //     if($this->is_registrar() || $this->is_super_admin())
+    //     {   
+    //         $post = $this->input->post();
+    //         $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
+    //         $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
+    //     }
+    //     redirect(base_url()."examination");
             
-    }
+    // }
 
     public function is_super_admin()
     {
