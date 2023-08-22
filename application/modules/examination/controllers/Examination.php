@@ -76,6 +76,7 @@ class Examination extends CI_Controller {
     }
 
      public function add_question() {
+        $this->data['exam_type'] = $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_question",$this->data);
         $this->load->view("common/footer",$this->data); 

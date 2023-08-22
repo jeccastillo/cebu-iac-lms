@@ -16,7 +16,8 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit" method="post" role="form">
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_question" method="post"
+                role="form">
                 <div class="box-body">
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Question</label>
@@ -26,14 +27,17 @@
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
-                        <select class="form-control" name="type" id="type">
+                        <select class="form-control" name="exam_id" id="exam_id">
+                            <?php foreach ($exam_type as $cur): ?>
+                            <option value="<?php echo $cur['intID']; ?>"><?php echo $cur['strName']; ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Section</label>
-                        <select class="form-control" name="srtSection" id="type">
-                        </select>
+                        <input type="text" name="strSection" class="form-control" id="strSection"
+                            placeholder="Enter Section">
                     </div>
 
                     <div class="form-group col-xs-12">

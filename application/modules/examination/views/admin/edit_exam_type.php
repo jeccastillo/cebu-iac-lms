@@ -16,21 +16,23 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_exam_type" method="post"
-                role="form">
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_exam_type"
+                method="post" role="form">
                 <div class="box-body">
+                    <input type="hidden" name="intID" value="<?php echo $item['intID']; ?>" />
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Name</label>
-                        <input type="text" name="strName" class="form-control" id="strName" placeholder="Enter Name">
+                        <input type="text" name="strName" value="<?php echo $item['strName']; ?>" class="form-control"
+                            id="strName" placeholder="Enter Name">
                     </div>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
                         <select class="form-control" name="type" id="type" required>
                             <option value="" disabled selected>--select type--</option>
-                            <option>shs</option>
-                            <option>college</option>
-                            <option>other</option>
+                            <option <?php echo ($item['type'] == "shs")?'selected':''; ?>>shs</option>
+                            <option <?php echo ($item['type'] == "college")?'selected':''; ?>>college</option>
+                            <option <?php echo ($item['type'] == "other")?'selected':''; ?>>other</option>
                         </select>
                     </div>
 
