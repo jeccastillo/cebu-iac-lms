@@ -189,7 +189,7 @@
                         </div>      
                     </div>        
                     <hr /> 
-                    <label>Subject To</label>
+                    <label>{{ subject_to_label }}</label>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" v-if="!hide_subjects || !inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
@@ -252,6 +252,7 @@ new Vue({
         registration: undefined,     
         registration_status: 0,     
         hide_subjects: false,   
+        subject_to_label: 'Subject To',
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
@@ -298,6 +299,7 @@ new Vue({
             this.subject_to_add = undefined;                                                         
             this.section_to_add = undefined;
             if(type == 'change-section'){
+                this.subject_to_label = "Select From Enlisted Subjects";
                 this.replace = false;
                 this.subjects_available = this.records;
                 this.modal_title = "Change Section";
@@ -306,11 +308,8 @@ new Vue({
             else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {      
-                    all = event.target.value;                        
-                    if(all != 0)
-                        this.hide_subjects = true;
-                    else
-                        this.hide_subjects = false;
+                    this.subject_to_label = "Subject To";
+                    this.hide_subjects = true;                    
                     this.replace = true;                                       
                     this.modal_title = "Add/Replace Subject";                    
 
