@@ -346,9 +346,7 @@ new Vue({
                     this.hide_subjects = true;                    
                     this.replace = true;                                       
                     this.modal_title = "Add/Replace Subject";                    
-
                     this.subjects_available = data.data.data;
-
                     //this.subject_to_replace = all;
                 })
                 .catch((error) => {
@@ -446,14 +444,45 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
-                                        
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data.data.message,
-                                                icon: "success"
-                                            }).then(function() {
-                                                location.reload();
-                                            });                                                                                                                              
+                                        var update_status = 'Withdrawn Before';
+                                        switch(this.withdrawal.period){
+                                            case 'before':
+                                                update_status = 'Withdrawn Before';
+                                            break;
+                                            case 'after':
+                                                update_status = 'Withdrawn After';
+                                            break;
+                                            case 'end':
+                                                update_status = 'Withdrawn End';
+                                            break;
+                                        }
+                                        axios.post(api_url + 'admissions/student-info/' + this.slug +
+                                            '/update-status', {
+                                                status: update_status,
+                                                remarks: "Student Withdrawn",
+                                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                                            }, {
+                                                headers: {
+                                                    Authorization: `Bearer ${window.token}`
+                                                }
+                                            })
+                                            .then(data => {
+                                                if (data.data.success) {
+                                                    Swal.fire({
+                                                        title: "Success",
+                                                        text: data.data.message,
+                                                        icon: "success"
+                                                    }).then(function() {
+                                                        location.reload();
+                                                    });
+                                                } else {
+                                                    Swal.fire(
+                                                        'Failed!',
+                                                        data.data.message,
+                                                        'error'
+                                                    )
+                                                }
+                                            });                                                                                                    
 
                                     }                                        
                                     else
