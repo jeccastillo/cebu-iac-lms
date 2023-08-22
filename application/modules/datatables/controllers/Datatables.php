@@ -1768,6 +1768,10 @@ class Datatables extends CI_Controller {
             else
             $sWhere .= "AND intID != 999 ";
         }
+        if($table == 'tb_mas_questions')
+        {
+            $join = "JOIN tb_mas_choices ON tb_mas_choices.question_id = tb_mas_questions.intID";
+        }
 
         if($registered == -1)
             $sGroup = "GROUP BY tb_mas_advised.intStudentID ";

@@ -1748,6 +1748,11 @@ class Data_fetcher extends CI_Model {
         return current($this->db->get_where('tb_mas_exam',array('intID'=>$id))->result_array());
     }
 
+    public function getQuestion($id)
+    {
+        return current($this->db->get_where('tb_mas_questions',array('intID'=>$id))->result_array());
+    }
+
     function checkSubjectTaken($studentID,$subjectID)
     {
         
