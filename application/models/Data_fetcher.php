@@ -496,7 +496,7 @@ class Data_fetcher extends CI_Model {
                          ->group_by('tb_mas_curriculum_subject.intSubjectID')
                          ->order_by('strCode asc')
                          ->get()
-                         ->result_array();
+                         ->result_array();                     
         
         return $subjects;
     }
@@ -887,7 +887,8 @@ class Data_fetcher extends CI_Model {
     
     function fetch_classlist_by_subject($subject_id,$sem)
     {
-        return $this->db
+        $ret = [];
+        $classlists = $this->db
                     ->select('tb_mas_classlist.*')
                     ->from('tb_mas_classlist')
                     
@@ -895,6 +896,21 @@ class Data_fetcher extends CI_Model {
                    
                     ->get()
                     ->result_array();
+
+        foreach($classlists as $classlist){
+            $slots = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist['intID']))
+                ->get()
+                ->num_rows();
+
+            $classlist['slots_available'] = $classlist['slots'] - $slots;
+            $ret[] = $classlist;
+        }
+
+        return $ret;
     }
     
     function fetch_classlist_by_subject_no_count($subject_id,$sem)
