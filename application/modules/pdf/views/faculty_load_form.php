@@ -75,10 +75,10 @@ foreach($classlists as $classlist): ?>
 </table>
 <table border="0" cellpadding="2px">
     <tr>
-        <td width="25%">ENDORSED BY:</td>
-        <td width="25%">APPROVED BY:</td>
-        <td width="25%"></td>
-        <td width="25%">Conforme:</td>        
+        <td width="24%">ENDORSED BY:</td>
+        <td width="24%">APPROVED BY:</td>
+        <td width="24%"></td>
+        <td width="24%">Conforme:</td>        
     </tr>
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333"><strong>PROGRAM CHAIR</strong></td>
