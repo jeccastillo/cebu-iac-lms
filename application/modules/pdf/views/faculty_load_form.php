@@ -53,8 +53,11 @@
         <th style="font-size:8px;" width="20%"><b>No. of Students</b></th>
     </tr>
 <?php 
-foreach($classlists as $classlist): ?>
-
+$hgt = 295; 
+foreach($classlists as $classlist): 
+    $hgt -= 15;
+?>
+    
     <tr style="line-height:12px;">        
         <td  style="font-size:8px;"><?php echo $classlist['subjectDescription']; ?></td>
         <td  style="font-size:8px;"> <?php echo $classlist['strCode']; ?></td>        
@@ -66,10 +69,10 @@ foreach($classlists as $classlist): ?>
         <td  style="font-size:8px;text-align:center;"><?php echo $classlist['slots_taken_enrolled']; ?></td>
     </tr>
    <?php        
-    endforeach; ?>
+    endforeach; ?>    
 </table>
 <table>    
-    <tr style="line-height:250px;">
+    <tr style="line-height:<?php echo $hgt; ?>px">
         <td colspan="7"></td>        
     </tr>  
 </table>
