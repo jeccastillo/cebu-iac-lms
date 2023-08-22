@@ -176,13 +176,13 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add Subject/Change Section</h4>
+                    <h4 class="modal-title">{{ modal_title }}</h4>
                 </div>
                 <div class="modal-body">     
                     <div v-if="replace">
                         <h4>Subject To Replace (set to none if you want to add a new subject)</h4>
                         <div v-if="records" class="input-group">
-                            <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
+                            <select required @change="loadAvailableSubjects($event,'add-subject')" class="form-control" v-model="subject_to_replace">
                                 <option selected value="0">None</option>
                                 <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                             </select>                        
@@ -242,6 +242,7 @@ new Vue({
         slug: undefined,
         student:{},            
         reg_status: undefined, 
+        modal_title: "Add/Replace Subject"
         records:[],  
         replace: false,
         registration: undefined,     
@@ -292,6 +293,7 @@ new Vue({
             if(type == 'change-section'){
                 replace = false;
                 this.subjects_available = this.records;
+                this.modal_title = "Change Section";
             }
             else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
@@ -300,6 +302,7 @@ new Vue({
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
+                    this.modal_title = "Add/Replace Subject";
                     if(all != 0)
                         this.hide_subjects = true;
                     else
