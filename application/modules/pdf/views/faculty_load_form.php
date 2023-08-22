@@ -68,3 +68,28 @@ foreach($classlists as $classlist): ?>
    <?php        
     endforeach; ?>
 </table>
+<table>    
+    <tr style="line-height:200px;">
+        <td colspan="7"></td>        
+    </tr>  
+</table>
+<table border="0" cellpadding="2px">
+    <tr>
+        <td width="25%">ENDORSED BY:</td>
+        <td width="25%">APPROVED BY:</td>
+        <td width="25%"></td>
+        <td width="25%">Conforme:</td>        
+    </tr>
+    <tr style="text-align:center;">
+        <td style="border-top:1px solid #333"><strong>PROGRAM CHAIR</strong></td>
+        <td style="border-top:1px solid #333"><strong>DEAN</strong></td>
+        <td style="border-top:1px solid #333"><strong>VP ACADEMIC AFFAIRS</strong></td>
+        <td style="border-top:1px solid #333"><strong>FACULTY MEMBER</strong></td>
+    </tr>
+    <tr style="text-align:center;">
+        <td style="border-top:1px solid #333">Date</td>
+        <td style="border-top:1px solid #333">Date</td>
+        <td style="border-top:1px solid #333">Date</td>
+        <td style="border-top:1px solid #333">Date</td>
+    </tr>
+</table>
