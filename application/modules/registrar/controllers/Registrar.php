@@ -1336,8 +1336,8 @@ class Registrar extends CI_Controller {
         $auth_data = $this->db->get_where('tb_mas_faculty', array('strUsername'=>$this->session->userdata('strUsername')))->first_row();         
         if(password_verify($post['password'],$auth_data->strPass))
         {
-        //post->type before opening, after opening, end of term
-            switch($post['type']){
+        //post->period before opening, after opening, end of term
+            switch($post['period']){
                 case "before":                                
                     //remove student from all classlist set status to withdrawn
                 break;
