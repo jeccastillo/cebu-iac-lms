@@ -920,7 +920,7 @@ class Datatables extends CI_Controller {
             }
         }
         
-                   
+        $sJoin = "";           
         //$sJoin .= "LEFT JOIN tb_mas_classlist_student ON tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID ";
         
         
