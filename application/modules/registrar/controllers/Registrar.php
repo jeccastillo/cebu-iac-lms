@@ -1147,7 +1147,7 @@ class Registrar extends CI_Controller {
                     foreach($conflict as $c){
                         if($c){
                             $data['success'] = false;
-                            $data['message'] = "There was a conflict with one of the schedules ".$c->conflict->strCode." ".$c->conflict->strClassName.$c->year.$c->conflict->strSection." ".$c->conflict->sub_section;   
+                            $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
                             echo json_encode($data);                             
                             return;
                         }
