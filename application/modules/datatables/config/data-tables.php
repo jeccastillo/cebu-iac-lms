@@ -47,6 +47,6 @@ $config['tb_mas_block_sections_index'] = "intID";
 $config['tb_mas_exam_columns'] = array("intID","strName","type");
 $config['tb_mas_exam_index'] = "intID";
 
-$config['tb_mas_questions_columns'] = array("tb_mas_questions.intID","strTitle","type","exam_id","strSection");
+$config['tb_mas_questions_columns'] = array("tb_mas_questions.intID","strTitle","strName","exam_id","strSection");
 $config['tb_mas_questions_index'] = "intID";
 ?>
