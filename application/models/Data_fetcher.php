@@ -3616,7 +3616,7 @@ class Data_fetcher extends CI_Model {
 
     function student_conflict($csid,$record,$sem)
     {
-        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record))->result_array();
+        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intClassListID']))->result_array();
         $results = [];
         if(!empty($classlist_sched)){
             foreach($classlist_sched as $sched){
@@ -3637,7 +3637,12 @@ class Data_fetcher extends CI_Model {
                 // echo $query."<br />";
                 //print_r($this->db->query($query)->result_array());
                 //die();
-                $results[] = $this->db->query($query)->first_row();
+                 $ret = $this->db->query($query)->first_row();
+                 
+                 if($ret)
+                    $ret->conflict = $record;
+                
+                $results[] = $ret;
             }
 
             
