@@ -76,7 +76,7 @@ class Registrar extends CI_Controller {
     public function available_subjects($id,$sem){
 
         $student = $this->data_fetcher->getStudent($id);
-        $ret['data'] = $this->data_fetcher->getSubjectsInCurriculum($student['intCurriculumID'],$sem,$id);
+        $ret['data'] = $this->data_fetcher->getSubjectsInCurriculumAvailable($student['intCurriculumID'],$sem);
 
         echo json_encode($ret);
 
