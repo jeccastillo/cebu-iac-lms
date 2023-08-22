@@ -1946,6 +1946,7 @@ class Datatables extends CI_Controller {
         if($table == 'tb_mas_questions')
         {
             $join = "JOIN tb_mas_exam ON tb_mas_questions.exam_id = tb_mas_exam.intID ";
+            $join .= "JOIN tb_mas_choices ON tb_mas_choices.question_id = tb_mas_questions.intID WHERE tb_mas_choices.is_correct = '1'";
         }
 
         if($registered == -1)
