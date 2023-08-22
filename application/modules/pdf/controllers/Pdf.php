@@ -418,6 +418,7 @@ class Pdf extends CI_Controller {
         $sem = $this->data_fetcher->get_active_sem();
         $this->data['classlists'] = $this->data_fetcher->getClasslistsByFaculty($sem['intID'],$id);
         $this->data['faculty'] = $this->db->get_where('tb_mas_faculty',array('intID'=>$id))->first_row('array');
+        $this->data['user'] =  $this->session->all_userdata();
         $this->data['sem'] = $sem;
         
         tcpdf();
