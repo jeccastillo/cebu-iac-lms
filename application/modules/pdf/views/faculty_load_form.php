@@ -53,7 +53,6 @@ foreach($classlists as $classlist): ?>
         <td style="font-size:8px;"><?php echo $classlist['strUnits']; ?></td>            
         <td style="font-size:8px;"><?php echo $classlist['slots_taken_enrolled']; ?></td>
     </tr>
-   <?php 
-    $i++;    
+   <?php        
     endforeach; ?>
 </table>
