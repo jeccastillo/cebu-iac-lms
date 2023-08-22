@@ -110,25 +110,7 @@
                  </div>
 
                  <!-- small box -->
-             </div>
-             <div class="col-md-4 col-sm-8 col-xs-12">
-                 <!-- small box -->
-                 <div class="small-box bg-green">
-                     <div class="inner">
-                         <h3>Faculty</h3>
-
-                         <p>Faculty Loading</p>
-                     </div>
-                     <div class="icon">
-                         <i class="fa fa-list"></i>
-                     </div>
-                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin/<?php echo $sem; ?>/0/0/1" class="small-box-footer">
-                         View <i class="fa fa-arrow-circle-right"></i>
-                     </a>
-                 </div>
-
-                 <!-- small box -->
-             </div>
+             </div>             
              <div class="col-md-4 col-sm-8 col-xs-12">
                  <!-- small box -->
                  <div class="small-box bg-green">
@@ -147,6 +129,43 @@
 
                  <!-- small box -->
              </div>
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <!-- small box -->
+                 <div class="small-box bg-yellow">
+                     <div class="inner">
+                         <h3>Faculty</h3>
+
+                         <p>Faculty Loading</p>
+                     </div>
+                     <div class="icon">
+                         <i class="fa fa-list"></i>
+                     </div>
+                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin/<?php echo $sem; ?>/0/0/1" class="small-box-footer">
+                         View <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                 </div>
+
+                 <!-- small box -->
+             </div>
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <!-- small box -->
+                 <div class="small-box bg-yellow">
+                     <div class="inner">
+                         <h3>Faculty</h3>
+
+                         <p>Faculty Load Form</p>
+                     </div>
+                     <div class="icon">
+                         <i class="fa fa-users"></i>
+                     </div>
+                     <a href="<?php echo base_url(); ?>faculty/view_all_teachers" class="small-box-footer">
+                         View <i class="fa fa-arrow-circle-right"></i>
+                     </a>
+                 </div>
+
+                 <!-- small box -->
+             </div>
+
              
         </div>
     </div>

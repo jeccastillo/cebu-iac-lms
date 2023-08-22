@@ -139,8 +139,8 @@ class Faculty extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_registrar())
         {
-            $this->data['page'] = "view_all_faculty";
-            $this->data['opentree'] = "admin";
+            $this->data['page'] = "faculty_loading";
+            $this->data['opentree'] = "registrar";
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/teacher_view",$this->data);
             $this->load->view("common/footer_datatables",$this->data); 
