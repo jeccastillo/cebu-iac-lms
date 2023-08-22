@@ -93,7 +93,7 @@ class Examination extends CI_Controller {
      public function edit_question($id) {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
-        $this->data['choice']= $this->data_fetcher->getChoice($id);
+        $this->data['choices']= $this->data_fetcher->getChoice($id);
         $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
