@@ -180,7 +180,7 @@
                 </div>
                 <div class="modal-body">     
                     <div v-if="replace">
-                        <h4>Subject To Replace (set to none if you want to add a new subject)</h4>
+                        <label>Subject From (set to none if you want to add a new subject)</label>
                         <div v-if="records" class="input-group">
                             <select required @change="loadAvailableSubjects($event,'add-subject')" class="form-control" v-model="subject_to_replace">
                                 <option selected value="0">None</option>
@@ -188,13 +188,13 @@
                             </select>                        
                         </div>      
                     </div>         
-                    <h4>Select Subject</h4>
+                    <label>Subject To</label>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" v-if="!hide_subjects || !inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
-                    <h4>Select Section</h4>
+                    <label>Select Section</label>
                     <div v-if="sections" class="input-group">
                         <select required class="form-control" v-model="section_to_add">
                             <option v-for="sec in sections" :value="sec.intID">
