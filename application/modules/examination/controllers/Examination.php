@@ -147,7 +147,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/exam_type_conf",$this->data); 
     }
 
-    // public function submit_question(){        
+    // public function submit_question(){
         
     //     if($this->is_admissions() || $this->is_super_admin())
     //     {
