@@ -1148,7 +1148,8 @@ class Registrar extends CI_Controller {
                         if($c){
                             $data['success'] = false;
                             $data['message'] = "There was a conflict with one of the schedules ".$c->strCode." ".$c->strClassName.$c->year.$c->strSection." ".$c->sub_section;   
-                            return json_encode($data);                             
+                            echo json_encode($data);                             
+                            return;
                         }
                     }
                 }
