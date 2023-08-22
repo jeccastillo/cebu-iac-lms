@@ -1745,7 +1745,7 @@ class Datatables extends CI_Controller {
         if($table == 'tb_mas_scholarships')
         {
             $join = "JOIN tb_mas_faculty ON tb_mas_faculty.intID = tb_mas_scholarships.created_by_id ";            
-        }        
+        }
         if($table == 'tb_mas_room_schedule')
         {
             $join = "JOIN tb_mas_classrooms ON tb_mas_classrooms.intID = tb_mas_room_schedule.intRoomID ";
@@ -1770,9 +1770,8 @@ class Datatables extends CI_Controller {
         }
         if($table == 'tb_mas_questions')
         {
-            $join = "JOIN tb_mas_exam ON tb_mas_exam.intID = tb_mas_questions.exam_id ";
+            $join = "JOIN tb_mas_exam ON tb_mas_questions.exam_id = tb_mas_exam.intID ";
         }
-        
 
         if($registered == -1)
             $sGroup = "GROUP BY tb_mas_advised.intStudentID ";
