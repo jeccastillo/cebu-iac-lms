@@ -151,17 +151,17 @@ class Examination extends CI_Controller {
             redirect(base_url()."unity");
     }
 
-    public function submit_edit_question()
-    {
-        if($this->is_registrar() || $this->is_super_admin())
-        {   
-            $post = $this->input->post();
-            $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
-            $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
-        }
-        redirect(base_url()."examination");
+    // public function submit_edit_question()
+    // {
+    //     if($this->is_registrar() || $this->is_super_admin())
+    //     {   
+    //         $post = $this->input->post();
+    //         $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
+    //         $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
+    //     }
+    //     redirect(base_url()."examination");
             
-    }
+    // }
 
     public function is_super_admin()
     {
