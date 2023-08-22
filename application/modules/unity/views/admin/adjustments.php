@@ -425,7 +425,7 @@ new Vue({
                             title: 'Continue deleting Subject',
                             text: "Are you absolutely sure you want withdraw this student's enrollment? Enter your password.",                            
                             showCancelButton: true,
-                            input:"text",
+                            input:"password",
                             confirmButtonText: "Yes",
                             imageWidth: 100,
                             icon: "question",
@@ -445,10 +445,7 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
-                                        if(swap){
-                                            this.addSubject(1);
-                                        }
-                                        else                                         
+                                        
                                             Swal.fire({
                                                 title: "Success",
                                                 text: data.data.message,
