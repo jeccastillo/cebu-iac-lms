@@ -86,7 +86,7 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        <button data-toggle="modal" data-target="#withdrawStudentModal" class="btn btn-danger btn-lg">
+                        <button v-if="reg_status == 'Enrolled'" data-toggle="modal" data-target="#withdrawStudentModal" class="btn btn-danger btn-lg">
                                 Withdraw
                         </button>
                         <hr />
