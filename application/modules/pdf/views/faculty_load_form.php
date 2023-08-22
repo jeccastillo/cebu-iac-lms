@@ -3,7 +3,10 @@
                 <td colspan = "3" width="100%" style="text-align: center;">             
                     
                 </td>
-            </tr>        
+            </tr>            
+            <tr>
+                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="200" /></td>        
+            </tr>
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">iACADEMY CEBU</font><br />
