@@ -189,7 +189,7 @@ class Examination extends CI_Controller {
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_choices',$post);
             $this->data_poster->log_action('Choice','Added choices '.$post['choice'],'green');
-            redirect(base_url()."examination/");
+            redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
             redirect(base_url()."unity");
     }

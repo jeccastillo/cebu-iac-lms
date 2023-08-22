@@ -60,16 +60,16 @@
             </div>
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>program/submit_edit_program" method="post"
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
                 role="form">
-                <!-- <input type="hidden" name="intQuestionID" value="<?php echo $item['intQuestionID']; ?>" /> -->
+                <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
 
                     <div class="form-group col-xs-6" id="choices_container">
                         <div>
                             <label for="strProgramCode">Enter Choice Value</label>
-                            <input type="text" name="choice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct"> is
+                            <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
+                            <input type="radio" name="is_correct[]" value="1"> is
                             Correct?
                             <hr>
                         </div>
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="col-sm-12" style="margin-bottom:1rem;">
-                        <button type="button" class="btn btn-primary" id="add_new">Submit Choices</button>
+                        <button type="submit" class="btn btn-primary" id="add_new">Submit Choices</button>
                     </div>
                     <div style="clear:both"></div>
             </form>
@@ -97,7 +97,7 @@ const addNewBtn = $("#add_new");
 const toAppend = `<div>
                     <label for="strProgramCode">Enter Choice Value</label>
                     <input type="text" name="choice[]" class="form-control" placeholder="Enter choice name">
-                    <input type="radio" name="is_correct"> is Correct
+                    <input type="radio" name="is_correct[]"> is Correct
                     <hr>
                  </div>`
 
