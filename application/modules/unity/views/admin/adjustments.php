@@ -126,9 +126,15 @@
                         <hr />
                         <button data-toggle="modal"            
                                 value = 0                                    
-                                @click="loadAvailableSubjects($event)" 
+                                @click="loadAvailableSubjects($event,'add-subject')" 
                                 data-target="#addSubjectModal" class="btn btn-primary">
-                                Add Subject/Change Section
+                                Add/Replace Subject
+                        </button>
+                        <button data-toggle="modal"            
+                                value = 0                                    
+                                @click="loadAvailableSubjects($event,'section-change')" 
+                                data-target="#addSubjectModal" class="btn btn-primary">
+                                Change Section/Replace Subject
                         </button>
                         <hr />
                         <h4>Adjustments</h4>
@@ -175,7 +181,7 @@
                 <div class="modal-body">     
                     <h4>Subject To Replace (optional)</h4>
                     <div v-if="records" class="input-group">
-                        <select required @change="loadAvailableSubjects($event)" class="form-control" v-model="subject_to_replace">
+                        <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
                             <option selected value="0">None</option>
                             <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                         </select>                        
@@ -277,9 +283,13 @@ new Vue({
     },
 
     methods: {      
-        loadAvailableSubjects(event){
+        loadAvailableSubjects(event,type){
             all = event.target.value;
             console.log(all);
+            if(type == 'change-section'){
+                this.subjects_available = this.records;
+            }
+            else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {                                             
                     this.sections = undefined;
@@ -297,6 +307,7 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
+            }
         },        
         getSections(event){            
             axios.get(this.base_url + 'registrar/get_sections/' + event.target.value + '/' + this.sem)
