@@ -1715,8 +1715,7 @@ class Datatables extends CI_Controller {
                 $sWhere .= $aColumns[$col]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
                     
         
-                
-                
+                    
             }
         }
 
@@ -1768,11 +1767,6 @@ class Datatables extends CI_Controller {
             $sWhere = "WHERE intID != 999 ";
             else
             $sWhere .= "AND intID != 999 ";
-        }
-        if($table == 'tb_mas_exam')
-        {
-            $join = "JOIN tb_mas_advised ON tb_mas_student_exam.intSYID = tb_mas_advised.intSYID";
-            $join = "JOIN tb_mas_exam ON tb_mas_student_exam.intID = tb_mas_advised.examID";
         }
 
         if($registered == -1)

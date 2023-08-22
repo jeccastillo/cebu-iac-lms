@@ -6,15 +6,15 @@ $(document).ready(function() {
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "<?php echo base_url(); ?>examination/view_exam_types",
+        "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_exam",
         "aoColumnDefs": [{
-                "aTargets": [6],
+                "aTargets": [3],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>program/edit_program/' +
+                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>examination/edit_exam_type/' +
                         row[0] + '">Edit</a></li><li><a href="#" rel="' + row[0] +
-                        '" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>program/program_viewer/' +
+                        '" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>examination/submit_delete_examination/' +
                         row[0] + '">View</a></li></ul></div>';
                 }
             },

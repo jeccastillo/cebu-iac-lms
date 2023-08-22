@@ -1740,11 +1740,14 @@ class Data_fetcher extends CI_Model {
    
     function getProgram($id)
     {
-        return  current($this->db->get_where('tb_mas_programs',array('intProgramID'=>$id))->result_array());
-                     
+        return current($this->db->get_where('tb_mas_programs',array('intProgramID'=>$id))->result_array());
     }
-         
     
+    public function getExam($id)
+    {
+        return current($this->db->get_where('tb_mas_exam',array('intID'=>$id))->result_array());
+    }
+
     function checkSubjectTaken($studentID,$subjectID)
     {
         

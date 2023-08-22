@@ -646,6 +646,17 @@ class Unity extends CI_Controller {
 		$this->load->view('public/footer',$this->data);
     }
 
+     public function student_exam($slug) {                
+        
+        $student = $this->data_fetcher->getStudent($slug, 'slug');                    
+        $data['id'] = $student['intID'];
+        
+           
+        $this->load->view('public/header',$this->data);        
+		$this->load->view('public/student_exam',$data);
+		$this->load->view('public/footer',$this->data);
+    }
+
     public function schedule_viewer($id) {                
         
         $data['id'] = $id;        
