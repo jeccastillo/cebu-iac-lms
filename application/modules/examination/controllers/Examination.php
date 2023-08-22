@@ -119,7 +119,7 @@ class Examination extends CI_Controller {
     }
 
      public function edit_exam_type($id) {
-        $this->data['item']= $this->data_fetcher->getProgram($id);
+        $this->data['item']= $this->data_fetcher->getExam($id);
         $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
@@ -140,15 +140,14 @@ class Examination extends CI_Controller {
     }
 
     public function submit_edit_exam_type()
-    {
+{
         if($this->is_registrar() || $this->is_super_admin())
         {   
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_exam',$post,$post['intID']);
             $this->data_poster->log_action('Exam','Updated Exam Info: '.$post['name'],'green');
         }
-        redirect(base_url()."examination");
-            
+        redirect(base_url()."examination/edit_exam_type/".$post['intID']);
     }
 
     // public function view_exam_types()

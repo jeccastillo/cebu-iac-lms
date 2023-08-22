@@ -15,7 +15,6 @@
                 <h3 class="box-title">Exam Type</h3>
             </div>
 
-
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_exam_type"
                 method="post" role="form">
                 <div class="box-body">
