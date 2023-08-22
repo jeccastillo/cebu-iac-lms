@@ -1976,6 +1976,8 @@ class Data_fetcher extends CI_Model {
                 return "Enrolled";
             if($r->intROG == 2)
                 return "Cleared";
+            if($r->intROG == 3)
+                return "Officially Withdrawn";
         }
         elseif($this->db
              ->select('intID')

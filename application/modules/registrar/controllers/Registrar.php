@@ -1338,34 +1338,41 @@ class Registrar extends CI_Controller {
         {
             $records = $this->data_fetcher->getClassListStudentsSt($post['id'],$post['sem']);
             //post->period before opening, after opening, end of term
-            switch($post['period']){
-                case "before":                                
-                    foreach($records as $record){
-                        
-                        $adj['classlist_student_id'] = $record['subjectID'];
-                        $adj['from_subject'] = "";
-                        $adj['to_subject'] =  "";
-                        $adj['syid'] = $post['sem'];
-                        $adj['date'] = date("Y-m-d H:i:s");  
-                        $adj['student_id'] =  $post['id'];
-                        $adj['remarks'] =  "Withdrawn";
-                        $adj['adjustment_type'] =  "Withdrawn";
-                        $adj['adjusted_by'] =  $this->session->userdata('intID');
+            if($post['period'] == "before"){                
+                foreach($records as $record){
+                    
+                    $adj['classlist_student_id'] = $record['subjectID'];
+                    $adj['from_subject'] = "";
+                    $adj['to_subject'] =  "";
+                    $adj['syid'] = $post['sem'];
+                    $adj['date'] = date("Y-m-d H:i:s");  
+                    $adj['student_id'] =  $post['id'];
+                    $adj['remarks'] =  "Withdrawn";
+                    $adj['adjustment_type'] =  "Withdrawn";
+                    $adj['adjusted_by'] =  $this->session->userdata('intID');
 
-                        $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
-                        
-                        $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
-                    }
-                    $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
-                break;
-                case "after":
-                    //Still in the classlist set grade for midterm and final to OW                    
-                break;
-                case "end":
-                    //same as end except for status
-                break;             
-
+                    $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
+                    
+                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
+                }
+                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
             }
+            else{
+                foreach($records as $record){
+                    $data =[
+                        'floatMidtermGrade' => "OW",
+                        'floatFinalGrade' => "OW"
+                    ];
+                    
+                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
+                }     
+                $data =[
+                    'intROG' => 3,                    
+                ];         
+                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',$data);
+            }
+
+                                
             $data['success'] = true;
             $data['message'] = "Student has been withdrawn";
         
