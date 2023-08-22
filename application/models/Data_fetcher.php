@@ -1753,6 +1753,11 @@ class Data_fetcher extends CI_Model {
         return current($this->db->get_where('tb_mas_questions',array('intID'=>$id))->result_array());
     }
 
+    public function getChoice($id)
+    {
+        return current($this->db->get_where('tb_mas_choices',array('question_id'=>$id))->result_array());
+    }
+
     function checkSubjectTaken($studentID,$subjectID)
     {
         

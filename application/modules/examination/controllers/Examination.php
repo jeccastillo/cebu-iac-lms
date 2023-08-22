@@ -93,6 +93,7 @@ class Examination extends CI_Controller {
      public function edit_question($id) {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
+        $this->data['choice']= $this->data_fetcher->getChoice($id);
         $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
@@ -187,8 +188,16 @@ class Examination extends CI_Controller {
         if($this->is_admissions() || $this->is_super_admin())
         {
             $post = $this->input->post();
-            $this->data_poster->post_data('tb_mas_choices',$post);
-            $this->data_poster->log_action('Choice','Added choices '.$post['choice'],'green');
+            for($index = 0; $index < count($post['strChoice']); $index++){
+                $questionChoice = [];
+                $questionChoice['question_id'] = $post['question_id'];
+                $questionChoice['choice'] = $post['strChoice'][$index];
+                $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
+
+                $this->data_poster->post_data('tb_mas_choices',$questionChoice);
+                $this->data_poster->log_action('Choice','Added choices '.$post['choice'],'green');
+            }
+            // redirect(base_url()."examination/edit_question/".count($post['strChoice']));
             redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
             redirect(base_url()."unity");

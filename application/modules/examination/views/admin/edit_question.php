@@ -96,8 +96,8 @@ const addNewBtn = $("#add_new");
 
 const toAppend = `<div>
                     <label for="strProgramCode">Enter Choice Value</label>
-                    <input type="text" name="choice[]" class="form-control" placeholder="Enter choice name">
-                    <input type="radio" name="is_correct[]"> is Correct
+                    <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
+                    <input type="radio" name="is_correct[]" value="1"> is Correct
                     <hr>
                  </div>`
 
