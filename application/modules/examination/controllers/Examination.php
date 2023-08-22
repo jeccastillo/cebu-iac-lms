@@ -113,9 +113,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-  
-     
-    public function submit_exam(){        
+    public function submit_exam_type(){        
         
         if($this->is_admissions() || $this->is_super_admin())
         {   
@@ -127,7 +125,7 @@ class Examination extends CI_Controller {
             redirect(base_url()."unity");
     }
 
-    public function submit_edit_exam()
+    public function submit_edit_exam_type()
     {
         if($this->is_registrar() || $this->is_super_admin())
         {   
