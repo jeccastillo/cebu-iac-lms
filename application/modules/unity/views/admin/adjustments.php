@@ -179,8 +179,8 @@
                     <h4 class="modal-title">Add Subject/Change Section</h4>
                 </div>
                 <div class="modal-body">     
-                    <h4>Subject To Replace (optional)</h4>
-                    <div v-if="records" class="input-group">
+                    <h4>Subject To Replace</h4>
+                    <div v-if="replace" v-if="records" class="input-group">
                         <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
                             <option selected value="0">None</option>
                             <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
@@ -241,6 +241,7 @@ new Vue({
         student:{},            
         reg_status: undefined, 
         records:[],  
+        replace: false,
         registration: undefined,     
         registration_status: 0,     
         hide_subjects: false,   
@@ -287,11 +288,13 @@ new Vue({
             all = event.target.value;
             console.log(all);
             if(type == 'change-section'){
+                replace = false;
                 this.subjects_available = this.records;
             }
             else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
-                .then((data) => {                                             
+                .then((data) => {                      
+                    this.replace = true;                       
                     this.sections = undefined;
                     this.subject_to_add = undefined;                                                         
                     this.section_to_add = undefined;
