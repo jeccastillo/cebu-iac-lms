@@ -73,14 +73,14 @@ foreach($classlists as $classlist): ?>
         <td colspan="7"></td>        
     </tr>  
 </table>
-<table border="0" cellpadding="2px" cellspacing="15px" style="font-size:9px;">
+<table border="0" cellpadding="2px" style="font-size:9px;border-spacing: 15px 0;">
     <tr>
         <td width="22%">ENDORSED BY:</td>
         <td width="22%">APPROVED BY:</td>
         <td width="22%"></td>
         <td width="22%">Conforme:</td>        
     </tr>
-    <tr style="line-height:30px;">
+    <tr style="line-height:20px;">
         <td colspan="4"></td>        
     </tr>  
     <tr style="text-align:center;">
@@ -89,7 +89,7 @@ foreach($classlists as $classlist): ?>
         <td style="border-top:1px solid #333"><strong>VP ACADEMIC AFFAIRS</strong></td>
         <td style="border-top:1px solid #333"><strong>FACULTY MEMBER</strong></td>
     </tr>
-    <tr style="line-height:30px;">
+    <tr style="line-height:20px;">
         <td colspan="4"></td>        
     </tr>  
     <tr style="text-align:center;">
