@@ -84,7 +84,7 @@ class Examination extends CI_Controller {
 
 
      public function edit_question($id) {
-        $this->data['item']= $this->data_fetcher->getExam($id);
+        $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_question",$this->data);
         $this->load->view("common/footer",$this->data); 
