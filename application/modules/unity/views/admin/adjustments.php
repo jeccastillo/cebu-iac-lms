@@ -179,13 +179,15 @@
                     <h4 class="modal-title">Add Subject/Change Section</h4>
                 </div>
                 <div class="modal-body">     
-                    <h4>Subject To Replace</h4>
-                    <div v-if="replace" v-if="records" class="input-group">
-                        <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
-                            <option selected value="0">None</option>
-                            <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
-                        </select>                        
-                    </div>               
+                    <div v-if="replace">
+                        <h4>Subject To Replace</h4>
+                        <div v-if="records" class="input-group">
+                            <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
+                                <option selected value="0">None</option>
+                                <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
+                            </select>                        
+                        </div>      
+                    </div>         
                     <h4>Select Subject</h4>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
