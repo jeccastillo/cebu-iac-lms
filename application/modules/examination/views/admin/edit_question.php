@@ -59,6 +59,8 @@
                 <h3 class="box-title">Question Choices</h3>
             </div>
 
+            <?php  echo print_r($choices); ?>
+
 
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
                 role="form">
