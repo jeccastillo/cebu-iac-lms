@@ -416,8 +416,45 @@ class Pdf extends CI_Controller {
 
     function faculty_load_form($id){
         $sem = $this->data_fetcher->get_active_sem();
-        $classlists = $this->data_fetcher->getClasslistsByFaculty($sem['intID'],$id);
-        print_r($classlists);
+        $this->data['classlists'] = $this->data_fetcher->getClasslistsByFaculty($sem['intID'],$id);
+        $this->data['sem'] = $sem;
+        
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Faculty Load Form");
+        
+
+        // set margins
+        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(5, .25, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);        
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+    //font setting
+        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
+        // set default font subsetting mode
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+                
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);         
+         
+        $html = $this->load->view("faculty_load_form",$this->data,true); 
+        $pdf->AddPage();
+        $pdf->writeHTML($html, true, false, true, false, '');            
+        $pdf->Output("faculty_load_form.pdf", 'I');
+        
     }
     
     function daily_enrollment_report($sem){
