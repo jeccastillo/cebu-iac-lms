@@ -187,21 +187,25 @@
                                 <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                             </select>                        
                         </div>      
-                    </div>         
+                    </div>        
+                    <hr /> 
                     <label>Subject To</label>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" v-if="!hide_subjects || !inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
                         </select>                        
                     </div>    
+                    <div v-if="sections">
+                    <hr />
                     <label>Select Section</label>
-                    <div v-if="sections" class="input-group">
-                        <select required class="form-control" v-model="section_to_add">
-                            <option v-for="sec in sections" :value="sec.intID">
-                                {{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }} {{ schedules[sec.intID]?schedules[sec.intID]:"" }} ({{ sec.slots_available }})
-                            </option>                                                                          
-                        </select>                        
-                    </div>                                                                         
+                        <div class="input-group">
+                            <select required class="form-control" v-model="section_to_add">
+                                <option v-for="sec in sections" :value="sec.intID">
+                                    {{ sec.strClassName + ' ' + sec.year + ' ' + sec.strSection }} {{ sec.sub_section?sec.sub_section:'' }} {{ schedules[sec.intID]?schedules[sec.intID]:"" }} ({{ sec.slots_available }})
+                                </option>                                                                          
+                            </select>                        
+                        </div>               
+                    </div>                                                          
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
