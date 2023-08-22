@@ -451,8 +451,8 @@ class Pdf extends CI_Controller {
         $pdf->setPrintFooter(false);         
          
         $html = $this->load->view("faculty_load_form",$this->data); 
-        //$pdf->writeHTML($html, true, false, true, false, '');            
-        //$pdf->Output("faculty_load_form.pdf", 'I');
+        $pdf->writeHTML($html, true, false, true, false, '');            
+        $pdf->Output("faculty_load_form.pdf", 'I');
         
     }
     
