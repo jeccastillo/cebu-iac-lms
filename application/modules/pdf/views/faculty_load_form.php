@@ -19,8 +19,7 @@
         <td style="font-size:9px;text-align:center"></td>
     </tr>
 </table>
-<table>
-    
+<table>    
     <tr style="line-height:10px;">
         <td colspan="7"></td>        
     </tr>  
@@ -34,6 +33,11 @@
         <td width="20%"><strong>EMPLOYEE NUMBER</strong></td>
         <td width="60%" style="border-bottom:1px solid #333;">:</td>
     </tr>
+</table>
+<table>    
+    <tr style="line-height:10px;">
+        <td colspan="7"></td>        
+    </tr>  
 </table>
 <table border="1" cellpadding="2px">    
     <tr style="line-height:16px;text-align:center;">                        
