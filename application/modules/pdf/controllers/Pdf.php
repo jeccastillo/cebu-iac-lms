@@ -427,7 +427,7 @@ class Pdf extends CI_Controller {
         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Ched Enrollment");
+        $pdf->SetTitle("Faculty Load Form");
         
 
         // set margins

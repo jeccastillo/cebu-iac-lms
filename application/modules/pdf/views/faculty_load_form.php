@@ -25,7 +25,7 @@
         <td colspan="7"></td>        
     </tr>  
 </table>
-<table>    
+<table border="1">    
     <tr style="line-height:16px;text-align:center;">                        
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b>Subject(s)</b></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Subject Code</b></th>
