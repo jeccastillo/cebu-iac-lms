@@ -15,8 +15,7 @@
                 <h3 class="box-title">Edit Exam Question</h3>
             </div>
 
-
-            <form id="validate-program" action="<?php echo base_url(); ?>program/submit_edit_program" method="post"
+            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_question" method="post"
                 role="form">
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
@@ -32,8 +31,8 @@
                         <select class="form-control" name="exam_id" id="exam_id">
                             <?php foreach ($exam_type as $cur): ?>
                             <option value="<?php echo $cur['intID']; ?>"
-                                <?php echo ($question['exam_id'] == $cur['intID'])?'selected':''; ?>>
-                                ><?php echo $cur['strName']; ?></option>
+                                <?php echo ($question['exam_id'] == 1)?'selected':''; ?>><?php echo $cur['strName']; ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
