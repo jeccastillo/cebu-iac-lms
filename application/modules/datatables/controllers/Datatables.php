@@ -1770,7 +1770,7 @@ class Datatables extends CI_Controller {
         }
         if($table == 'tb_mas_questions')
         {
-            $join = "LEFT JOIN tb_mas_choices ON tb_mas_choices.question_id = tb_mas_questions.intID";
+            $join = "RIGHT JOIN tb_mas_choices ON tb_mas_choices.question_id = tb_mas_questions.intID";
         }
 
         if($registered == -1)
