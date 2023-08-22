@@ -1355,8 +1355,9 @@ class Registrar extends CI_Controller {
                         $adj['remarks'] =  "Withdrawn";
                         $adj['adjusted_by'] =  $this->session->userdata('intID');
                         
-                        $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');
+                        $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
                     }
+                    $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
                 break;
                 case "end":
                     //same as end except for status
