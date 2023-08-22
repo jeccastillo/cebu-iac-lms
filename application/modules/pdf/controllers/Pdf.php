@@ -414,6 +414,12 @@ class Pdf extends CI_Controller {
 
     }
 
+    function faculty_load_form($id){
+        $sem = $this->data_fetcher->get_active_sem();
+        $classlists = $this->data_fetcher->getClasslistsByFaculty($sem['intID'],$id);
+        print_r($classlists);
+    }
+    
     function daily_enrollment_report($sem){
         $post = $this->input->post();
         $this->data['dates'] = json_decode($post['dates']);
