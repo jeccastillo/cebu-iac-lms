@@ -142,12 +142,12 @@ class Examination extends CI_Controller {
         $this->data['examp_type'] = $this->data_fetcher->fetch_table('tb_mas_exam');
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/add_exam_type",$this->data);
+        $this->load->view("admin/exam_type_list",$this->data);
         $this->load->view("common/footer",$this->data); 
-        $this->load->view("common/student_exam_conf",$this->data); 
+        $this->load->view("common/exam_type_conf",$this->data); 
     }
 
-    // public function submit_question(){        
+    // public function submit_question(){
         
     //     if($this->is_admissions() || $this->is_super_admin())
     //     {
