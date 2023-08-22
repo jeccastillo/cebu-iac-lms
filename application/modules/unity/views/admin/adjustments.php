@@ -132,9 +132,9 @@
                         </button>
                         <button data-toggle="modal"            
                                 value = 0                                    
-                                @click="loadAvailableSubjects($event,'section-change')" 
+                                @click="loadAvailableSubjects($event,'change-section')" 
                                 data-target="#addSubjectModal" class="btn btn-primary">
-                                Change Section/Replace Subject
+                                Change Section
                         </button>
                         <hr />
                         <h4>Adjustments</h4>
