@@ -135,7 +135,7 @@
                      <div class="inner">
                          <h3>Faculty</h3>
 
-                         <p>Faculty Loading</p>
+                         <p>All Faculty Load Report</p>
                      </div>
                      <div class="icon">
                          <i class="fa fa-list"></i>
