@@ -1144,10 +1144,14 @@ class Registrar extends CI_Controller {
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
                 foreach($records as $record){                    
                     $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record['intClassListID'],$post['sem']);
-                    print_r($conflict);
+                    if(!empty($conflict)){
+                        $data['success'] = false;
+                        $data['message'] = "There was a conflict with one of the schedules";   
+                        echo json_encode($data); 
+                    }
                 }
 
-                die();
+                
             }
             else
                 $remarks = "Deleted";
