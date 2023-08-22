@@ -1349,6 +1349,7 @@ class Registrar extends CI_Controller {
                         $adj['date'] = date("Y-m-d H:i:s");  
                         $adj['student_id'] =  $post['id'];
                         $adj['remarks'] =  "Withdrawn";
+                        $adj['adjustment_type'] =  "Withdrawn";
                         $adj['adjusted_by'] =  $this->session->userdata('intID');
 
                         $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
