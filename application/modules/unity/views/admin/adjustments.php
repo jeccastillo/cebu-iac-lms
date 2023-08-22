@@ -242,7 +242,7 @@ new Vue({
         slug: undefined,
         student:{},            
         reg_status: undefined, 
-        modal_title: "Add/Replace Subject"
+        modal_title: "Add/Replace Subject",
         records:[],  
         replace: false,
         registration: undefined,     
