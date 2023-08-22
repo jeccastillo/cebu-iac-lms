@@ -5,15 +5,8 @@
                 </td>
             </tr>            
             <tr>
-                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="200" /></td>        
-            </tr>
-            <tr>            
-                <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">iACADEMY CEBU</font><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
-                    <font style="font-family:Calibri Light; font-size: 10;">+63 32 520 4888</font><br />                                 
-                </td>           
-            </tr>
+                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="150" /></td>        
+            </tr>            
 <table border="0">    
     <tr style="line-height:12px;">
         <td style="font-size:9px;text-align:center;letter-spacing:5px;"><b>FACULTY LOAD <FORM:post></FORM:post></b></td>
