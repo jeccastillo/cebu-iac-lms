@@ -81,11 +81,13 @@ class Examination extends CI_Controller {
         $this->load->view("admin/add_question",$this->data);
         $this->load->view("common/footer",$this->data); 
         $this->load->view("common/question_conf",$this->data); 
+        
     }
 
 
      public function edit_question($id) {
-        $this->data['exam']= $this->data_fetcher->getExam($id);
+          $this->data['exam_type'] = $this->data_fetcher->fetch_table('tb_mas_exam');
+        // $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_question",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -154,7 +156,7 @@ class Examination extends CI_Controller {
             $post = $this->input->post();
             $this->data_poster->log_action('Exam Question','Added a new question '.$post['strTitle'],'green');
             $this->data_poster->post_data('tb_mas_questions',$post);
-            redirect(base_url()."examination/");
+           redirect(base_url()."examination/edit_question/".$this->db->insert_id());
         }else
             redirect(base_url()."unity");
     }
