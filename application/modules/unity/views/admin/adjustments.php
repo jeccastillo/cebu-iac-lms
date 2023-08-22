@@ -180,7 +180,7 @@
                 </div>
                 <div class="modal-body">     
                     <div v-if="replace">
-                        <h4>Subject To Replace</h4>
+                        <h4>Subject To Replace (set to none if you want to add a new subject)</h4>
                         <div v-if="records" class="input-group">
                             <select required @change="loadAvailableSubjects($event,'replace-subject')" class="form-control" v-model="subject_to_replace">
                                 <option selected value="0">None</option>
