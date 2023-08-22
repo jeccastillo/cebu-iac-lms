@@ -46,12 +46,12 @@ foreach($classlists as $classlist): ?>
     <tr style="line-height:12px;">        
         <td style="font-size:8px;"><?php echo $classlist['subjectDescription']; ?></td>
         <td style="font-size:8px;"> <?php echo $classlist['strCode']; ?></td>        
-        <td style="font-size:8px;"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
-        <td style="font-size:8px;"><?php echo $classlist['sched_day']; ?></td>
-        <td style="font-size:8px;"><?php echo $classlist['sched_time']; ?></td>
-        <td style="font-size:8px;"><?php echo $classlist['sched_room']; ?></td>        
-        <td style="font-size:8px;"><?php echo $classlist['strUnits']; ?></td>            
-        <td style="font-size:8px;"><?php echo $classlist['slots_taken_enrolled']; ?></td>
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['sched_day']; ?></td>
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['sched_time']; ?></td>
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['sched_room']; ?></td>        
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['strUnits']; ?></td>            
+        <td style="font-size:8px;text-align:center;"><?php echo $classlist['slots_taken_enrolled']; ?></td>
     </tr>
    <?php        
     endforeach; ?>
