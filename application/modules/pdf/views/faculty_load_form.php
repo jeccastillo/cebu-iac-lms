@@ -86,6 +86,9 @@ foreach($classlists as $classlist): ?>
         <td style="border-top:1px solid #333"><strong>VP ACADEMIC AFFAIRS</strong></td>
         <td style="border-top:1px solid #333"><strong>FACULTY MEMBER</strong></td>
     </tr>
+    <tr style="line-height:30px;">
+        <td colspan="4"></td>        
+    </tr>  
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333">Date</td>
         <td style="border-top:1px solid #333">Date</td>
