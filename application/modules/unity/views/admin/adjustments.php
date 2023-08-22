@@ -437,6 +437,7 @@ new Vue({
                                 formdata.append('period',this.withdrawal.period);     
                                 formdata.append('id',this.student.intID);
                                 formdata.append('password',inputValue);                           
+                                formdata.append('sem',this.sem);
                                 return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`

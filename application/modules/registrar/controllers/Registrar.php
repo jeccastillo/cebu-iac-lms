@@ -1336,13 +1336,27 @@ class Registrar extends CI_Controller {
         $auth_data = $this->db->get_where('tb_mas_faculty', array('strUsername'=>$this->session->userdata('strUsername')))->first_row();         
         if(password_verify($post['password'],$auth_data->strPass))
         {
-        //post->period before opening, after opening, end of term
+            $records = $this->data_fetcher->getClassListStudentsSt($post['id'],$post['sem']);
+            //post->period before opening, after opening, end of term
             switch($post['period']){
                 case "before":                                
-                    //remove student from all classlist set status to withdrawn
+                    
                 break;
                 case "after":
                     //Still in the classlist set grade for midterm and final to OW
+                    foreach($records as $record){
+                        
+                        $adj['classlist_student_id'] = $record['subjectID'];
+                        $adj['from_subject'] = "";
+                        $adj['to_subject'] =  "";
+                        $adj['syid'] = $post['sem'];
+                        $adj['date'] = date("Y-m-d H:i:s");  
+                        $adj['student_id'] =  $post['id'];
+                        $adj['remarks'] =  "Withdrawn";
+                        $adj['adjusted_by'] =  $this->session->userdata('intID');
+                        
+                        $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');
+                    }
                 break;
                 case "end":
                     //same as end except for status
