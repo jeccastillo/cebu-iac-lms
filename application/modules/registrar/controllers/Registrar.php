@@ -1219,6 +1219,7 @@ class Registrar extends CI_Controller {
         $data['message'] = "Done";            
         $remarks = "Added";
         $data['success'] =  true;
+        
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
@@ -1227,6 +1228,12 @@ class Registrar extends CI_Controller {
         if(!$registration || $registration['intROG'] != 1){
             $data['message'] = "Student has to be enrolled to make adjustments";            
             $data['success'] =  false;
+        }
+        if($this->data_fetcher->get_classlist_remaining_slots($post['section_to_add']) <= 0){
+            $data['success'] = false;
+            $data['message'] = "There are no more slots available for this section";
+            echo json_encode($data);                             
+            return;
         }
         foreach($records as $record){            
             if($subject == $record['subjectID']){

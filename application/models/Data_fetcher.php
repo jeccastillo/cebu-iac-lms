@@ -884,6 +884,20 @@ class Data_fetcher extends CI_Model {
                         ->get()
                         ->result_array());
     }
+
+    function get_classlist_remaining_slots($classlist_id){
+
+        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$classlist_id))->first_row('array');
+        $slots = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist_id))
+                ->get()
+                ->num_rows();
+
+        return  $classlist['slots'] - $slots;
+    }
     
     function fetch_classlist_by_subject($subject_id,$sem)
     {
