@@ -1333,7 +1333,8 @@ class Registrar extends CI_Controller {
 
     public function withdraw_student(){
         $post = $this->input->post();
-        $auth_data = $this->db->get_where('tb_mas_users', array('strUsername'=>$this->session->userdata('strUsername')), 1)->first_row();        
+        $auth_data = $this->db->get_where('tb_mas_users', array('strUsername'=>$this->session->userdata('strUsername')), 1)->first_row(); 
+        print_r($auth_data);       
         if(password_verify($post['password'],$auth_data->strPass))
         {
         //post->type before opening, after opening, end of term
