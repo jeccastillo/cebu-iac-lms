@@ -291,13 +291,7 @@ new Vue({
     },
 
     methods: {      
-        loadAvailableSubjects(event,type){
-            all = event.target.value;                        
-            if(all != 0)
-                this.hide_subjects = true;
-            else
-                this.hide_subjects = false;
-                                
+        loadAvailableSubjects(event,type){           
             this.sections = undefined;
             this.subject_to_add = undefined;                                                         
             this.section_to_add = undefined;
