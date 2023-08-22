@@ -27,13 +27,13 @@
 <table border="0" cellpadding="2px">
     <tr>
         <td width="20%"><strong>NAME OF INSTRUCTOR</strong></td>
-        <td width="1%">:</td>
-        <td width="60%" style="border-bottom:1px solid #333;"><?php echo $faculty['strLastname'].", ".$faculty['strFirstname']." ".$faculty['strMiddlename']; ?></td>
+        <td width="1%" style="text-align:right">:</td>
+        <td width="40%" style="border-bottom:1px solid #333;"><?php echo $faculty['strLastname'].", ".$faculty['strFirstname']." ".$faculty['strMiddlename']; ?></td>
     </tr>
     <tr>
         <td width="20%"><strong>EMPLOYEE NUMBER</strong></td>
-        <td width="1%">:</td>
-        <td width="60%" style="border-bottom:1px solid #333;"><?php echo $faculty['strFacultyNumber']; ?></td>
+        <td width="1%;" style="text-align:right">:</td>
+        <td width="40%" style="border-bottom:1px solid #333;"><?php echo $faculty['strFacultyNumber']; ?></td>
     </tr>
 </table>
 <table>    
