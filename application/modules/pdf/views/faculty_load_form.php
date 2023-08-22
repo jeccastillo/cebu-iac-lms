@@ -41,7 +41,6 @@
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="20%"><b>No. of Students</b></th>
     </tr>
 <?php 
-$num = $count_start;
 foreach($classlists as $classlist): ?>
 
     <tr style="line-height:12px;">        
