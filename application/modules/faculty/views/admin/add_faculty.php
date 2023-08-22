@@ -30,8 +30,11 @@
                         <label for="strMiddlename">Middle Name</label>
                         <input type="text" name="strMiddlename" class="form-control" id="strMiddlename" placeholder="Enter Middle Name">
                     </div>
-                 
-                <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-6">
+                        <label for="strMiddlename">Employee Number</label>
+                        <input type="text" name="strFacultyNumber" class="form-control" id="strFacultyNumber" placeholder="Enter Employee Number">
+                    </div>
+                    <div class="form-group col-xs-6">
                         <label for="strEmail">Email</label>
                         <input type="email" name="strEmail" class="form-control" id="strEmail" placeholder="Enter Email Address">
                     </div>
