@@ -187,8 +187,9 @@
                                 <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                             </select>                        
                         </div>      
+                        <hr /> 
                     </div>        
-                    <hr /> 
+                    
                     <label>{{ subject_to_label }}</label>
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
