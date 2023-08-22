@@ -1074,12 +1074,9 @@ class Unity extends CI_Controller {
                             </tr>
                             <tr>
                                 <th>Course Code</th>
-                                <th>Course Description</th>
-                                <th>P</th>
-                                <th>M</th>
-                                <th>F</th>
-                                <th>FG</th>
-                                <th>Num. Rating</th>
+                                <th>Course Description</th>                                
+                                <th>M</th>                                
+                                <th>F</th>                                
                                 <th>Units</th>
                                 <th>Remarks</th>
                                 <th>Faculty</th>
@@ -1095,11 +1092,8 @@ class Unity extends CI_Controller {
                 $student_grade_table .='    
                     <tr class="'.$remarks.'">
                         <td><a href="'.base_url().'unity/classlist_viewer/'.$grades[$i]['classListID'].'">'.$grades[$i]['strCode'].'</a></td>
-                        <td>'.$grades[$i]['strDescription'].'</td>
-                        <td>'.$grades[$i]['floatPrelimGrade'].'</td>
-                        <td>'.$grades[$i]['floatMidtermGrade'].'</td>
-                        <td>'.$grades[$i]['floatFinalsGrade'].'</td>                        
-                        <td>'.$ave.'</td>
+                        <td>'.$grades[$i]['strDescription'].'</td>                        
+                        <td>'.$grades[$i]['floatMidtermGrade'].'</td>                                                                        
                         <td>'.$grades[$i]['floatFinalGrade'].'</td>
                         <td>'.$grades[$i]['strUnits'].'</td>
                         <td>'.$grades[$i]['strRemarks'].'</td>'; 
