@@ -27,14 +27,14 @@
 </table>
 <table border="1" cellpadding="2px">    
     <tr style="line-height:16px;text-align:center;">                        
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b>Subject(s)</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Subject Code</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Section</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Days</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Time</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Room</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="5%"><b>Units</b></th>
-        <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="20%"><b>No. of Students</b></th>
+        <th style="font-size:8px;" width="30%"><b>Subject(s)</b></th>
+        <th style="font-size:8px;" width="10%"><b>Subject Code</b></th>
+        <th style="font-size:8px;" width="10%"><b>Section</b></th>
+        <th style="font-size:8px;" width="5%"><b>Days</b></th>
+        <th style="font-size:8px;" width="10%"><b>Time</b></th>
+        <th style="font-size:8px;" width="10%"><b>Room</b></th>
+        <th style="font-size:8px;" width="5%"><b>Units</b></th>
+        <th style="font-size:8px;" width="20%"><b>No. of Students</b></th>
     </tr>
 <?php 
 foreach($classlists as $classlist): ?>
