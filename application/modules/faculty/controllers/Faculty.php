@@ -134,6 +134,23 @@ class Faculty extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    public function view_all_teachers()
+    {
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $this->data['page'] = "view_all_faculty";
+            $this->data['opentree'] = "admin";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/teacher_view",$this->data);
+            $this->load->view("common/footer_datatables",$this->data); 
+            $this->load->view("common/teacher_conf",$this->data); 
+            //print_r($this->data['classlist']);
+            
+        }
+        else
+            redirect(base_url()."unity");  
+    }
     
     
     public function get_online_users()
