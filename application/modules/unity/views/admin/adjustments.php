@@ -465,6 +465,7 @@ new Vue({
             let slug = this.slug;      
             this.loader_spinner = true;
             
+            
             if(cf){
                 Swal.fire({
                     showCancelButton: false,
