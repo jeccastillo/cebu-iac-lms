@@ -205,7 +205,7 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button v-if="subject_to_replace == 0" type="submit" class="btn btn-primary">Add/Change</button>
+                    <button v-if="subject_to_replace == 0" type="submit" class="btn btn-primary">Submit</button>
                     <button v-else type="button" @click="dropSubject(subject_to_replace,true)" class="btn btn-primary">Replace</button>
                     
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
