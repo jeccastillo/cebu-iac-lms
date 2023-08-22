@@ -3626,13 +3626,13 @@ class Data_fetcher extends CI_Model {
                         JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID                
                         WHERE
                         (
-                        (dteStart >= '".$classlist_sched['dteStart']."' AND dteEnd <= '".$classlist_sched['dteEnd']."') OR
-                        (dteStart < '".$classlist_sched['dteEnd']."' AND dteEnd >= '".$classlist_sched['dteEnd']."') OR 
-                        (dteStart <= '".$classlist_sched['dteStart']."' AND dteEnd > '".$classlist_sched['dteStart']."')
+                        (dteStart >= '".$sched['dteStart']."' AND dteEnd <= '".$sched['dteEnd']."') OR
+                        (dteStart < '".$sched['dteEnd']."' AND dteEnd >= '".$sched['dteEnd']."') OR 
+                        (dteStart <= '".$sched['dteStart']."' AND dteEnd > '".$sched['dteStart']."')
                         )";
             
                 
-                $query .=" AND strDay = '".$classlist_sched['strDay']."' AND `tb_mas_classlist.intID` = ".$csid." AND tb_mas_room_schedule.intSem = ".$sem." ";
+                $query .=" AND strDay = '".$sched['strDay']."' AND `tb_mas_classlist.intID` = ".$csid." AND tb_mas_room_schedule.intSem = ".$sem." ";
             
                 // echo $query."<br />";
                 //print_r($this->db->query($query)->result_array());
