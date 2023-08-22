@@ -241,6 +241,9 @@
                                 href="<?php echo base_url(); ?>examination/add_question" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> Add Question</a></li>
                         <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>examination/exam_type_list" style="margin-left: 10px;"><i
+                                    class="fa fa-book"> </i> View Exam Types</a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/add_exam_type" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> Add Exam Type</a></li>
 

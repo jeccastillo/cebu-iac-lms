@@ -1,18 +1,18 @@
 <aside class="right-side">
     <section class="content-header">
         <h1>
-            Exam Type
+            Edit Type
             <small></small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Exam Type</a></li>
-            <li class="active">New Exam Type</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Edit Type</a></li>
+            <li class="active">Edit Exam Type</li>
         </ol>
     </section>
     <div class="content">
         <div class="span10 box box-primary">
             <div class="box-header">
-                <h3 class="box-title">New Exam Type</h3>
+                <h3 class="box-title">Exam Type</h3>
             </div>
 
 
@@ -36,7 +36,7 @@
 
 
                     <div class="form-group col-xs-12">
-                        <input type="submit" value="add" class="btn btn-default  btn-flat">
+                        <input type="submit" value="Update" class="btn btn-default  btn-flat">
                     </div>
                     <div style="clear:both"></div>
                 </div>

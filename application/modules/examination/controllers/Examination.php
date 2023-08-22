@@ -91,12 +91,29 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+    public function exam_type_list() {
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/exam_type_list",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/exam_type_conf",$this->data); 
+    }
+
      public function add_exam_type() {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
         $this->load->view("common/student_exam_conf",$this->data); 
     }
+
+     public function edit_exam_type($id) {
+        $this->data['item']= $this->data_fetcher->getProgram($id);
+        $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_exam_type",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
+  
      
     public function submit_exam(){        
         
