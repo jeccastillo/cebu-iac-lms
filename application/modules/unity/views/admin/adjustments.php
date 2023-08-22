@@ -291,7 +291,9 @@ new Vue({
     },
 
     methods: {      
-        loadAvailableSubjects(event,type){           
+        loadAvailableSubjects(event,type){
+            
+                                
             this.sections = undefined;
             this.subject_to_add = undefined;                                                         
             this.section_to_add = undefined;
@@ -299,10 +301,16 @@ new Vue({
                 this.replace = false;
                 this.subjects_available = this.records;
                 this.modal_title = "Change Section";
+                this.hide_subjects = false;
             }
             else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
                 .then((data) => {      
+                    all = event.target.value;                        
+                    if(all != 0)
+                        this.hide_subjects = true;
+                    else
+                        this.hide_subjects = false;
                     this.replace = true;                                       
                     this.modal_title = "Add/Replace Subject";                    
 
