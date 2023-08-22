@@ -1350,6 +1350,8 @@ class Registrar extends CI_Controller {
                         $adj['student_id'] =  $post['id'];
                         $adj['remarks'] =  "Withdrawn";
                         $adj['adjusted_by'] =  $this->session->userdata('intID');
+
+                        $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
                         
                         $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
                     }

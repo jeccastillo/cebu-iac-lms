@@ -182,7 +182,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Withdrawal Period</label>
-                            <select required  v-model="withdrawal.period">
+                            <select class="form-control" required  v-model="withdrawal.period">
                                 <option selected value="before">Before Start of Term</option>
                                 <option value="after">After Start of Term</option>
                                 <option value="end">End of Term</option>
