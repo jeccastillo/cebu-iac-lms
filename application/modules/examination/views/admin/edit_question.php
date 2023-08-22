@@ -31,7 +31,8 @@
                         <select class="form-control" name="exam_id" id="exam_id">
                             <?php foreach ($exam_type as $cur): ?>
                             <option value="<?php echo $cur['intID']; ?>"
-                                <?php echo ($question['exam_id'] == 1)?'selected':''; ?>><?php echo $cur['strName']; ?>
+                                <?php echo ($question['exam_id'] == $cur['intID'])?'selected':''; ?>>
+                                <?php echo $cur['strName']; ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
