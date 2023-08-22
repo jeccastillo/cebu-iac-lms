@@ -3620,7 +3620,7 @@ class Data_fetcher extends CI_Model {
         $results = [];
         if(!empty($classlist_sched)){
             foreach($classlist_sched as $sched){
-                $query ="SELECT intRoomSchedID,strCode,strSection
+                $query ="SELECT intRoomSchedID,strCode,strSection,strClassName,year,sub_section
                         FROM tb_mas_room_schedule
                         JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode                
                         JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID                
@@ -3637,7 +3637,7 @@ class Data_fetcher extends CI_Model {
                 // echo $query."<br />";
                 //print_r($this->db->query($query)->result_array());
                 //die();
-                $results[] = $this->db->query($query)->result_array();
+                $results[] = $this->db->query($query)->first_row();
             }
 
             

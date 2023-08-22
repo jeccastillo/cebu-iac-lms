@@ -1144,10 +1144,12 @@ class Registrar extends CI_Controller {
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
                 foreach($records as $record){                    
                     $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record['intClassListID'],$post['sem']);
-                    if(!empty($conflict)){
-                        $data['success'] = false;
-                        $data['message'] = "There was a conflict with one of the schedules";   
-                        echo json_encode($data); 
+                    foreach($conflict as $c){
+                        if($c){
+                            $data['success'] = false;
+                            $data['message'] = "There was a conflict with one of the schedules ".$c->strCode." ".$c->strClassName.$c->year.$c->strSection." ".$c->sub_section;   
+                            return json_encode($data);                             
+                        }
                     }
                 }
 
