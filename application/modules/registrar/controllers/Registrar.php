@@ -1340,10 +1340,6 @@ class Registrar extends CI_Controller {
             //post->period before opening, after opening, end of term
             switch($post['period']){
                 case "before":                                
-                    
-                break;
-                case "after":
-                    //Still in the classlist set grade for midterm and final to OW
                     foreach($records as $record){
                         
                         $adj['classlist_student_id'] = $record['subjectID'];
@@ -1358,6 +1354,9 @@ class Registrar extends CI_Controller {
                         $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
                     }
                     $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
+                break;
+                case "after":
+                    //Still in the classlist set grade for midterm and final to OW                    
                 break;
                 case "end":
                     //same as end except for status
