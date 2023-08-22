@@ -191,7 +191,7 @@ class Examination extends CI_Controller {
             for($index = 0; $index < count($post['strChoice']); $index++){
                 $questionChoice = [];
                 $questionChoice['question_id'] = $post['question_id'];
-                $questionChoice['choice'] = $post['strChoice'][$index];
+                $questionChoice['strChoice'] = $post['strChoice'][$index];
                 $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
 
                 $this->data_poster->post_data('tb_mas_choices',$questionChoice);
