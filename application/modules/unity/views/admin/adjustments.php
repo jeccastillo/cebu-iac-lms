@@ -86,7 +86,7 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        <button class="btn btn-danger btn-lg">
+                        <button data-target="#addSubjectModal" class="btn btn-danger btn-lg">
                                 Withdraw
                         </button>
                         <hr />
