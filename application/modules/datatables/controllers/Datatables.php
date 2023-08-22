@@ -2134,11 +2134,9 @@ class Datatables extends CI_Controller {
 
         $join = "";
         
-        if($table == 'tb_mas_users')
+        if($table == 'tb_mas_questions')
         {
-            $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";
-            
-           
+            $join = " JOIN tb_mas_exam ON tb_mas_exam.intID = tb_mas_questions.exam_id ";
         }
         
         if($registered!=0  && $table =='tb_mas_users'){
