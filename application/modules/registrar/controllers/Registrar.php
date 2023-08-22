@@ -1143,13 +1143,15 @@ class Registrar extends CI_Controller {
                 $remarks = "Changed to ".$section_to_swap['strCode'];
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
                 foreach($records as $record){                    
-                    $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
-                    foreach($conflict as $c){
-                        if($c){
-                            $data['success'] = false;
-                            $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
-                            echo json_encode($data);                             
-                            return;
+                    if($record['intID'] != $post['section_to_delete']){
+                        $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+                        foreach($conflict as $c){
+                            if($c){
+                                $data['success'] = false;
+                                $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                                echo json_encode($data);                             
+                                return;
+                            }
                         }
                     }
                 }
@@ -1226,16 +1228,7 @@ class Registrar extends CI_Controller {
             $data['message'] = "Student has to be enrolled to make adjustments";            
             $data['success'] =  false;
         }
-        foreach($records as $record){
-            $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
-            foreach($conflict as $c){
-                if($c){
-                    $data['success'] = false;
-                    $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
-                    echo json_encode($data);                             
-                    return;
-                }
-            }
+        foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
                 {
@@ -1247,6 +1240,17 @@ class Registrar extends CI_Controller {
                 $classlist_data = $this->db->where(array('intID'=>$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
                 $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
                 $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
+            }
+            else{
+                $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+                foreach($conflict as $c){
+                    if($c){
+                        $data['success'] = false;
+                        $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                        echo json_encode($data);                             
+                        return;
+                    }
+                }
             }
         }
 
