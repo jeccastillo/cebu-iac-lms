@@ -225,7 +225,7 @@
 
                     </ul>
                 </li>
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="examination")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Student Examination</span>
                         <i class="fa pull-right fa-angle-left"></i>
@@ -237,13 +237,13 @@
                         <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/question_list" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> View Questions</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="add_question")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/add_question" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> Add Question</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="exam_type_list")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/exam_type_list" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> View Exam Types</a></li>
-                        <li class="<?php echo (isset($page) && $page=="view_questions")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="add_exam_type")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/add_exam_type" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> Add Exam Type</a></li>
 

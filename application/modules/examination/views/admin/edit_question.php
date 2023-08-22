@@ -18,28 +18,30 @@
 
             <form id="validate-program" action="<?php echo base_url(); ?>program/submit_edit_program" method="post"
                 role="form">
-                <input type="" name="intID" value="<?php echo $question['intID']; ?>" />
+                <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
 
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" class="form-control" id="strTitle"
-                            placeholder="Enter Question Title">
+                        <input type="text" name="strTitle" value="<?php echo $question['strTitle']; ?>"
+                            class="form-control" id="strTitle" placeholder="Enter Question Title">
                     </div>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
                         <select class="form-control" name="exam_id" id="exam_id">
                             <?php foreach ($exam_type as $cur): ?>
-                            <option value="<?php echo $cur['intID']; ?>"><?php echo $cur['strName']; ?></option>
+                            <option value="<?php echo $cur['intID']; ?>"
+                                <?php echo ($question['exam_id'] == $cur['intID'])?'selected':''; ?>>
+                                ><?php echo $cur['strName']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Section</label>
-                        <select class="form-control" name="srtSection" id="type">
-                        </select>
+                        <input type="text" name="strSection" value="<?php echo $question['strSection']; ?>"
+                            class="form-control" id="strSection" placeholder="Enter Section">
                     </div>
 
                     <div class="form-group col-xs-12">
@@ -67,7 +69,8 @@
                         <div>
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="choice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct"> is Correct
+                            <input type="radio" name="is_correct"> is
+                            Correct?
                             <hr>
                         </div>
                     </div>
