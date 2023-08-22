@@ -101,11 +101,6 @@ class Examination extends CI_Controller {
     }
 
      public function add_exam_type() {
-<<<<<<< HEAD
-        $this->data['opentree'] = "examination";
-        $this->data['page'] = "add_exam_type";
-=======
->>>>>>> 2550e0e2 (Examination)
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
