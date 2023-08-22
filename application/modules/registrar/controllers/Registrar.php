@@ -1143,7 +1143,7 @@ class Registrar extends CI_Controller {
                 $remarks = "Changed to ".$section_to_swap['strCode'];
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
                 foreach($records as $record){                    
-                    if($record['intID'] != $post['section_to_delete']){
+                    if($record['intClassListID'] != $post['section_to_delete']){
                         $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
                         foreach($conflict as $c){
                             if($c){
