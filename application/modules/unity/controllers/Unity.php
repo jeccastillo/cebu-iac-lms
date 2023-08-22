@@ -1100,7 +1100,7 @@ class Unity extends CI_Controller {
                         <td>'.$grades[$i]['floatMidtermGrade'].'</td>
                         <td>'.$grades[$i]['floatFinalsGrade'].'</td>                        
                         <td>'.$ave.'</td>
-                        <td>'.number_format($grades[$i]['floatFinalGrade'], 2, '.' ,',').'</td>
+                        <td>'.$grades[$i]['floatFinalGrade'].'</td>
                         <td>'.$grades[$i]['strUnits'].'</td>
                         <td>'.$grades[$i]['strRemarks'].'</td>'; 
                 
