@@ -1770,8 +1770,9 @@ class Datatables extends CI_Controller {
         }
         if($table == 'tb_mas_questions')
         {
-            $join = "JOIN tb_mas_choices ON tb_mas_choices.question_id = tb_mas_questions.intID";
+            $join = " JOIN tb_mas_exam ON tb_mas_exam.intID = tb_mas_questions.exam_id ";
         }
+        
 
         if($registered == -1)
             $sGroup = "GROUP BY tb_mas_advised.intStudentID ";
@@ -2134,9 +2135,11 @@ class Datatables extends CI_Controller {
 
         $join = "";
         
-        if($table == 'tb_mas_questions')
+        if($table == 'tb_mas_users')
         {
-            $join = " JOIN tb_mas_exam ON tb_mas_exam.intID = tb_mas_questions.exam_id ";
+            $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";
+            
+           
         }
         
         if($registered!=0  && $table =='tb_mas_users'){
