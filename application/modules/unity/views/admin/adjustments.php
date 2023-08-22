@@ -288,8 +288,7 @@ new Vue({
 
     methods: {      
         loadAvailableSubjects(event,type){
-            all = event.target.value;            
-            this.replace = true;                       
+            all = event.target.value;                                            
             this.sections = undefined;
             this.subject_to_add = undefined;                                                         
             this.section_to_add = undefined;
@@ -300,7 +299,8 @@ new Vue({
             }
             else{
             axios.get(this.base_url + 'registrar/available_subjects/' + this.id + '/' + this.sem)
-                .then((data) => {                                          
+                .then((data) => {      
+                    this.replace = true;                                       
                     this.modal_title = "Add/Replace Subject";
                     if(all != 0)
                         this.hide_subjects = true;
