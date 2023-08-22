@@ -73,7 +73,7 @@ foreach($classlists as $classlist): ?>
         <td colspan="7"></td>        
     </tr>  
 </table>
-<table border="0" cellpadding="2px" cellspacing="10px">
+<table border="0" cellpadding="2px" cellspacing="15px" style="font-size:9px;">
     <tr>
         <td width="22%">ENDORSED BY:</td>
         <td width="22%">APPROVED BY:</td>
