@@ -62,7 +62,6 @@ class Examination extends CI_Controller {
     
     
     public function index() {
-        $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_exam_list",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -70,8 +69,6 @@ class Examination extends CI_Controller {
     }
 
     public function question_list() {
-        $this->data['opentree'] = "examination";
-        $this->data['page'] = "view_questions";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/question_list",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -93,6 +90,7 @@ class Examination extends CI_Controller {
      public function edit_question($id) {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
+        $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_question",$this->data);
@@ -100,8 +98,6 @@ class Examination extends CI_Controller {
     }
 
     public function exam_type_list() {
-         $this->data['page'] = "exam_type_list";
-        $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/exam_type_list",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -109,8 +105,6 @@ class Examination extends CI_Controller {
     }
 
      public function add_exam_type() {
-        $this->data['opentree'] = "examination";
-        $this->data['page'] = "add_exam_type";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -118,7 +112,6 @@ class Examination extends CI_Controller {
     }
 
      public function edit_exam_type($id) {
-        $this->data['opentree'] = "examination";
         $this->data['item']= $this->data_fetcher->getProgram($id);
         $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
         $this->load->view("common/header",$this->data);
