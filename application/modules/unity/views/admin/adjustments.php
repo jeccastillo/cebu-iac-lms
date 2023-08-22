@@ -293,7 +293,7 @@ new Vue({
             this.subject_to_add = undefined;                                                         
             this.section_to_add = undefined;
             if(type == 'change-section'){
-                replace = false;
+                this.replace = false;
                 this.subjects_available = this.records;
                 this.modal_title = "Change Section";
             }
