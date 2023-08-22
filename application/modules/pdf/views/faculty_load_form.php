@@ -25,6 +25,16 @@
         <td colspan="7"></td>        
     </tr>  
 </table>
+<table border="0" cellpadding="2px">
+    <tr>
+        <td width="20%"><strong>NAME OF INSTRUCTOR</strong></td>
+        <td width="60%" style="border-bottom:1px solid #333;">:</td>
+    </tr>
+    <tr>
+        <td width="20%"><strong>EMPLOYEE NUMBER</strong></td>
+        <td width="60%" style="border-bottom:1px solid #333;">:</td>
+    </tr>
+</table>
 <table border="1" cellpadding="2px">    
     <tr style="line-height:16px;text-align:center;">                        
         <th style="font-size:8px;" width="30%"><b>Subject(s)</b></th>
