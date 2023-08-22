@@ -168,6 +168,36 @@
             </div>  
         </div>
     </div>
+    <div class="modal fade" id="withdrawStudentModal" role="dialog">
+        <form @submit.prevent="withdrawStudent()" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Withdraw Student Enrollment</h4>
+                </div>
+                <div class="modal-body">     
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Withdrawal Period</label>
+                            <select required  v-model="withdrawal.period">
+                                <option selected value="before">Before Start of Term</option>
+                                <option value="after">After Start of Term</option>
+                                <option value="end">End of Term</option>
+                            </select> 
+                        </div>    
+                    </div>                                                  
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>                    
+                </div>
+            </div>
+
+        </form>
+    </div>
     <div class="modal fade" id="addSubjectModal" role="dialog">
         <form @submit.prevent="addSubject(0)" class="modal-dialog modal-lg">
 
@@ -251,6 +281,9 @@ new Vue({
         records:[],  
         replace: false,
         registration: undefined,     
+        withdrawal:{
+            period:'before',
+        },
         registration_status: 0,     
         hide_subjects: false,   
         subject_to_label: 'Subject To',
@@ -373,6 +406,79 @@ new Vue({
             
             
         },        
+        withdrawStudent: function(){
+            let url = base_url + 'registrar/withdraw_student';            
+            this.loader_spinner = true;            
+                          
+            Swal.fire({
+                title: 'Continue deleting Subject',
+                text: "Are you sure you want withdraw this student's enrollment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {       
+                        Swal.fire({
+                            title: 'Continue deleting Subject',
+                            text: "Are you absolutely sure you want withdraw this student's enrollment? Enter your password.",                            
+                            showCancelButton: true,
+                            input:"text",
+                            confirmButtonText: "Yes",
+                            imageWidth: 100,
+                            icon: "question",
+                            cancelButtonText: "No, cancel!",
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: (inputValue) => {                                                                       
+                                var formdata= new FormData();
+                                formdata.append('period',this.withdrawal.period);     
+                                formdata.append('id',this.student.intID);
+                                formdata.append('password',inputValue);                           
+                                return axios.post(url, formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;                                    
+                                    if(data.data.success){   
+                                        if(swap){
+                                            this.addSubject(1);
+                                        }
+                                        else                                         
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });                                                                                                                              
+
+                                    }                                        
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });                                        
+                                    });                                        
+                                                                        
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then((result) => {
+                        
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        
+                    })
+        },
         dropSubject: function(section,swap){
             let url = base_url + 'registrar/drop_subject';
             let slug = this.slug;      

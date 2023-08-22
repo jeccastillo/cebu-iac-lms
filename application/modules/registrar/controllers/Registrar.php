@@ -1330,6 +1330,41 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
     }
 
+
+    public function withdraw_student(){
+        $post = $this->input->post();
+        $auth_data = $this->db->get_where('tb_mas_users', array('strUsername'=>$this->session->userdata('strUsername')), 1)->first_row();        
+        if(password_verify($post['password'],$auth_data->strPass))
+        {
+        //post->type before opening, after opening, end of term
+            switch($post['type']){
+                case "before":                                
+                    //remove student from all classlist set status to withdrawn
+                break;
+                case "after":
+                    //Still in the classlist set grade for midterm and final to OW
+                break;
+                case "end":
+                    //same as end except for status
+                break;             
+
+            }
+            $data['success'] = true;
+            $data['message'] = "Student has been withdrawn";
+        
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Invalid Password";
+        }
+        
+
+        echo json_encode($data);
+        
+        
+
+    }
+
     public function register_old_student($studNum=null)
     {
         
