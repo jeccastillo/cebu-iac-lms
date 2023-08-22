@@ -3620,9 +3620,9 @@ class Data_fetcher extends CI_Model {
         $results = [];
         if(!empty($classlist_sched)){
             foreach($classlist_sched as $sched){
-                $query ="SELECT intRoomSchedID,strCode,strSection,tb_mas_classlist.intID
-                        FROM tb_mas_room_schedule
-                        JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode                
+                $query ="SELECT intRoomSchedID,strCode,strSection
+                        FROM tb_mas_classlist
+                        JOIN tb_mas_room_schedule ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode                
                         JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID                
                         WHERE
                         (
