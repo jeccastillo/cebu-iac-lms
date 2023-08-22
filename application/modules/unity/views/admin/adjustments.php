@@ -316,7 +316,7 @@ new Vue({
 
                     this.subjects_available = data.data.data;
 
-                    this.subject_to_replace = all;
+                    //this.subject_to_replace = all;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -412,10 +412,12 @@ new Vue({
                             showLoaderOnConfirm: true,
                             preConfirm: (inputValue) => {                                                                       
                                 var formdata= new FormData();
+                                formdata.append('swap',swap);
                                 formdata.append('section_to_delete',section);                                
-                                formdata.append('student',this.id);
+                                formdata.append('student',this.id);                                
                                 formdata.append('sem',this.sem);
                                 formdata.append('date',inputValue);
+                                formdata.append('section_to_add',this.section_to_add);
                                 formdata.append('subject_to_add',this.subject_to_add);
                                 return axios.post(url, formdata, {
                                     headers: {

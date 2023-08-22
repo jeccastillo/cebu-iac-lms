@@ -1135,11 +1135,19 @@ class Registrar extends CI_Controller {
             $data['message'] = "Student has to be enrolled to make adjustments";            
             $data['success'] =  false;
         }    
-        elseif($post['date'] == date("Y-m-d")){            
+        elseif($post['date'] == date("Y-m-d")){               
             $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
             if($section_to_swap){
+                
                 $remarks = "Changed to ".$section_to_swap['strCode'];
+                $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
+                foreach($records as $record){
+                    $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record['intID'],$post['sem']);
+                    print_r($conflict);
+                }
+
+                die();
             }
             else
                 $remarks = "Deleted";
