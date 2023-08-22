@@ -25,7 +25,7 @@
         <td colspan="7"></td>        
     </tr>  
 </table>
-<table border="1">    
+<table border="1" cellpadding="2px">    
     <tr style="line-height:16px;text-align:center;">                        
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="30%"><b>Subject(s)</b></th>
         <th style="font-size:8px;border-top:1px dashed #333;border-bottom:1px dashed #333;" width="10%"><b>Subject Code</b></th>
@@ -39,7 +39,7 @@
 <?php 
 foreach($classlists as $classlist): ?>
 
-    <tr style="line-height:12px;" cellpadding="2px">        
+    <tr style="line-height:12px;">        
         <td  style="font-size:8px;"><?php echo $classlist['subjectDescription']; ?></td>
         <td  style="font-size:8px;"> <?php echo $classlist['strCode']; ?></td>        
         <td  style="font-size:8px;text-align:center;"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
