@@ -70,6 +70,7 @@ class Examination extends CI_Controller {
     }
 
     public function question_list() {
+        $this->data['page'] = "view_questions";
         $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/question_list",$this->data);
