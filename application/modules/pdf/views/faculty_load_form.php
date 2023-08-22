@@ -69,7 +69,7 @@ foreach($classlists as $classlist): ?>
     endforeach; ?>
 </table>
 <table>    
-    <tr style="line-height:20px;">
+    <tr style="line-height:250px;">
         <td colspan="7"></td>        
     </tr>  
 </table>
