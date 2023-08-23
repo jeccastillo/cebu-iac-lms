@@ -184,15 +184,15 @@ class Examination extends CI_Controller {
         redirect(base_url()."examination/edit_question/".$post['intID']);
     }
 
-    public function delete_question()
+    public function delete_question($id)
     {
         $data['message'] = "failed";
         $data['success'] = false;
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();            
             $info = $this->data_fetcher->fetch_single_entry('tb_mas_questions',$post['id']);            
-            $this->data_poster->deleteItem('tb_mas_questions',$post['id'],'intID');
-            $this->data_poster->deleteItem('tb_mas_choices',$post['id'],'question_id');
+            $this->data_poster->deleteItem('tb_mas_questions',$id,'intID');
+            $this->data_poster->deleteItem('tb_mas_choices',$id,'question_id');
             $this->data_poster->log_action('Question','Deleted a question: '.$info['strTitle'],'red');
             $data['message'] = "success";
             $data['success'] = true;
