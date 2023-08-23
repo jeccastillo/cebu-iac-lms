@@ -284,6 +284,34 @@ class Examination extends CI_Controller {
         }else
             redirect(base_url()."unity");
     }
+    
+    public function submit_exam()
+    {
+        $post = $this->input->post();
+        $examQuestions = $post['questions'];
+        $score = 0;
+        
+        $question_array = [];                
+        foreach($examQuestions as $examQuestion){
+            // $question = $this->db->get_where('tb_mas_questions',array('exam_id'=>$examQuestion['id']))->result_array();
+
+            foreach($examQuestion['choices'] as $choice){
+                if($choice['is_selected'] == '1'){
+                    $checkChoice = $this->db->get_where('tb_mas_choices',array('question_id'=>$choice['id']))->result_array();
+                    if($checkChoice['is_correct'] == '1')
+                        $score++;
+                }
+            }
+        }
+        
+            $examArray = array(
+                'date_taken'=> date("Y-m-d"),
+                'score' => $score,
+                'token'=>'',
+            );
+            $this->data_poster->post_data('tb_mas_student_exam',$examArray,'intID');
+            $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
+    }
 
     function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
