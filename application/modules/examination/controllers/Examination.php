@@ -288,6 +288,11 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
+        $decoded_traces=json_decode($post['data'], true);
+
+        echo json_encode($decoded_traces);
+
+        die();
         $examQuestions = $post['question'];
         $score = 0;
         
