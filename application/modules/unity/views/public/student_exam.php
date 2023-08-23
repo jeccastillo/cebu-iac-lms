@@ -1,6 +1,7 @@
 <div id="student-exam">
     <div class="container">
-        <form @submit.prevent="submitExam()" class="content">
+        <form @submit.prevent="submitExam()" class="content" method="post">
+
 
             <div style="margin-top:5rem">
                 <h3>Student Exam</h3>
@@ -80,9 +81,9 @@ new Vue({
             }
 
 
-
-            console.log(request_data)
-            axios.post("<?php echo base_url();?>" + "examination/submit_exam", JSON.stringify(request_data))
+            let formData = new FormData();
+            formData.append("data", JSON.stringify(this.request))
+            axios.post("<?php echo base_url();?>" + "examination/submit_exam", formData)
                 .then(function(response) {
                     if (data.data.success) {
                         alert(data.data.message)
