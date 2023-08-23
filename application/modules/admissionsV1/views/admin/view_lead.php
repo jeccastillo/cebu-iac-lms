@@ -761,7 +761,8 @@
                     </div>
                     <div class="box-body">
                         Exam Link: <br />
-                        {{ base_url + '/unity/student_exam/'+ slug +'/1' }}
+                        <input type="hidden" :value="base_url + '/unity/student_exam/'+ slug +'/1'" id="toCopy">
+                        {{ base_url + '/unity/student_exam/'+ slug +'/1' }} <a href="#" @click.prevent="copyToClipboard">Copy</a>
                         <hr />                        
                         <div class="row" v-if="entrance_exam">
                             <div class="col-sm-6">
@@ -1162,6 +1163,27 @@ new Vue({
     },
 
     methods: {
+        copyToClipboard: function(){
+            /* Get the text field */
+            let copyText = document.getElementById("toCopy");
+            
+            /* Select the text field */
+            copyText.select();
+            //copyText.setSelectionRange(0, 99999); // For mobile devices
+            
+            /* Copy the text inside the text field */
+            document.execCommand('copy');
+
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: true,
+                allowEscapeKey: true,
+                title: 'Copied',
+                text: 'You have copied the exam link to your clipboard',
+                icon: 'success',
+            });
+            
+        },
         showEdit: function() {
             if (this.show_edit_name) {
                 this.show_edit_name = false;
