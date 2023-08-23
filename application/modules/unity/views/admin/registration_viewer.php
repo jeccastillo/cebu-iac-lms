@@ -757,21 +757,34 @@ new Vue({
                 })
 
         },  
-        printOR: function(payment){            
-            this.or_print.or_number = payment.or_number;
-            this.or_print.description = payment.description;
-            this.or_print.total_amount_due = payment.subtotal_order;
-            this.or_print.transaction_date = payment.updated_at;
-            this.or_print.remarks = payment.remarks;
-            this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
-            this.or_print.student_address = this.student.strAddress;
-            this.or_print.student_id = this.student.strStudentNumber;
-            this.or_print.is_cash = payment.is_cash;
-            this.or_print.check_number = payment.check_number;
-            this.or_print.cashier_id = payment.cashier_id;
-            this.$nextTick(() => {
-                this.$refs.print_or.submit();
-            });             
+        printOR: function(payment){        
+            Swal.fire({
+                title: 'Continue with Printing OR',
+                text: "Are you sure you want to continue you can only print the OR once?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (data) => {    
+                        this.or_print.or_number = payment.or_number;
+                        this.or_print.description = payment.description;
+                        this.or_print.total_amount_due = payment.subtotal_order;
+                        this.or_print.transaction_date = payment.updated_at;
+                        this.or_print.remarks = payment.remarks;
+                        this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
+                        this.or_print.student_address = this.student.strAddress;
+                        this.or_print.student_id = this.student.strStudentNumber;
+                        this.or_print.is_cash = payment.is_cash;
+                        this.or_print.check_number = payment.check_number;
+                        this.or_print.cashier_id = payment.cashier_id;
+                        this.$nextTick(() => {
+                            this.$refs.print_or.submit();
+                        });             
+                    }
+            });  
         },
         deletePayment: function(payment_id){
             let url = api_url + 'finance/delete_payment';
