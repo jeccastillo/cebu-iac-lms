@@ -116,7 +116,7 @@
                                 <td><?php echo $q['strSection']; ?></td>
                                 <td>
                                     <a href="<?php echo base_url(); ?>examination/edit_question/<?php echo $q['intID']; ?>" class="btn btn-primary">Edit</a>
-                                    <a class="delete-question" rel="<?php echo $q['intID']; ?>" href="#" class="btn btn-primary" class="btn btn-danger">Edit</a>
+                                    <a class="delete-question btn btn-danger" rel="<?php echo $q['intID']; ?>" href="#" class="btn btn-primary">Delete</a>
                                     
                                 </td>
                             </tr>
