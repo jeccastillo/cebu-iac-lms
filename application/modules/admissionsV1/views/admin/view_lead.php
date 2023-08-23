@@ -761,10 +761,8 @@
                     </div>
                     <div class="box-body">
                         Exam Link: <br />
-                        <div id="toCopy">
-                            {{ base_url + '/unity/student_exam/'+ slug +'/1' }} 
-                        </div>
-                        <a href="#" @click.prevent="copyToClipboard">Copy</a>
+                        <input :type="base_url + '/unity/student_exam/'+ slug +'/1'" value id="toCopy">
+                        {{ base_url + '/unity/student_exam/'+ slug +'/1' }} <a href="#" @click.prevent="copyToClipboard">Copy</a>
                         <hr />                        
                         <div class="row" v-if="entrance_exam">
                             <div class="col-sm-6">
@@ -1167,13 +1165,14 @@ new Vue({
     methods: {
         copyToClipboard: function(){
             /* Get the text field */
-            let copyGfGText = document.getElementById("toCopy");
+            let copyText = document.getElementById("toCopy");
             
             /* Select the text field */
-            copyGfGText.select();
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
             
             /* Copy the text inside the text field */
-            document.execCommand("copy");
+            navigator.clipboard.writeText(copyText.value);
 
             Swal.fire({
                 showCancelButton: false,
