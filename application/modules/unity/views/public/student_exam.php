@@ -7,9 +7,6 @@
             </div>
 
 
-            Section I:
-
-
             <div v-for="(q,q_index) in request.question" class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">{{q.title}}</div>
@@ -128,7 +125,6 @@ new Vue({
 .in_choice {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
 }
 
