@@ -91,9 +91,9 @@ class Examination extends CI_Controller {
      public function edit_question($id) {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
-        $this->data['choices']= $this->data_fetcher->getChoice($id);
-        $this->data['exam']= $this->data_fetcher->getExam($id);
-        $this->data['question']= $this->data_fetcher->getQuestion($id);
+        // $this->data['choices']= $this->data_fetcher->getChoice($id);
+        // $this->data['exam']= $this->data_fetcher->getExam($id);
+        // $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_question",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -118,10 +118,9 @@ class Examination extends CI_Controller {
     }
 
      public function edit_exam_type($id) {
-        $this->data['item']= $this->data_fetcher->getExam($id);
-        $this->data['choices']= $this->data_fetcher->getChoice($id);
-        $this->data['exam']= $this->data_fetcher->getExam($id);
-        $this->data['question']= $this->data_fetcher->getQuestion($id);
+         $this->data['exam']= $this->data_fetcher->getExam($id);
+         $this->data['question']= $this->data_fetcher->getQuestion($id);
+         $this->data['choices']= $this->data_fetcher->getChoice($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -217,15 +216,19 @@ class Examination extends CI_Controller {
         if($this->is_admissions() || $this->is_super_admin())
         {
             $post = $this->input->post();
-            for($index = 0; $index < count($post['strChoice']); $index++){
-                $questionChoice = [];
-                $questionChoice['question_id'] = $post['question_id'];
-                $questionChoice['strChoice'] = $post['strChoice'][$index];
-                $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
 
-                $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
-                $this->data_poster->post_data('tb_mas_choices',$questionChoice);
-                $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
+            $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
+            for($index = 0; $index < count($post['strChoice']); $index++){
+                if($post['strChoice'][$index]){
+                    
+                    $questionChoice = [];
+                    $questionChoice['question_id'] = $post['question_id'];
+                    $questionChoice['strChoice'] = $post['strChoice'][$index1];
+                    $questionChoice['is_correct'] = $post['selected_index'] == $index ? 1 : 0;
+                    $this->data_poster->post_data('tb_mas_choices',$questionChoice);
+                    $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
+                }
+
             }
             redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
@@ -280,7 +283,7 @@ class Examination extends CI_Controller {
 
     public function generate_exam()
     {
-        
+
     }
 
     public function is_super_admin()
