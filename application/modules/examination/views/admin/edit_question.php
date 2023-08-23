@@ -71,25 +71,31 @@
                         <div>
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct[]" value="1"> is
+                            <input type="radio" name="is_correct[]" value="1" required> is
                             Correct?
                             <hr>
                         </div>
 
                         <?php else:
                             foreach ($choices as $choice):
-                            
                         ?>
 
-                        <div>
+                        <div class="choice_box">
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="strChoice[]" value="<?php echo $choice['strChoice'];?>"
                                 class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct[]"
-                                <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
-                                value="<?php echo $choice['is_correct'];?>"> is
-                            Correct?
+                            <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
+                                class="form-control" placeholder="">
+                            <div>
+                                <input type="radio" name="is_correct[]" required
+                                    <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
+                                    value="<?php echo $choice['is_correct'];?>"> is
+                                Correct?
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
                             <hr>
+
                         </div>
 
 
@@ -117,15 +123,26 @@
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
+const btnRemove = $(".btn_remove");
 
-const toAppend = `<div>
-                    <label for="strProgramCode">Enter Choice Value</label>
-                    <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                    <input type="radio" name="is_correct[]" value="1"> is Correct
+const toAppend = `<div class="choice_box">
+                    <div>
+                        <label for="strProgramCode">Enter Choice Value</label>
+                        <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
+                        <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
+                        <input type="radio" name="is_correct[]" value="1" required> is Correct
+                    </div>
+                     <br>
+                    <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
                     <hr>
                  </div>`
 
 addNewBtn.on("click", () => {
     choicesBox.append(toAppend)
+})
+
+
+$("#choices_container").on("click", "button", function() {
+    $(this).parent('div').remove();
 })
 </script>
