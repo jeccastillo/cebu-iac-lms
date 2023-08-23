@@ -23,11 +23,9 @@
                  <div class="info-box">
                      <span class="info-box-icon bg-red"><i class="fa fa-star"></i></span>
 
-                     <div class="info-box-content">
-                         <span class="info-box-text">ACADEMIC YEAR</span>
-                         <span class="info-box-number">2022-2023</span>
-                         <!-- <span
-                             class="info-box-number"><?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd']; ?></span> -->
+                     <div class="info-box-content">                         
+                         <span
+                             class="info-box-number"><?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd']; ?></span>
 
 
                      </div>
