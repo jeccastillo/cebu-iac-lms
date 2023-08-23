@@ -755,14 +755,14 @@
                     </div>
                 </div>
 
-                <div v-if="entrance_exam" class="box box-primary">
+                <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Entrance Exam</h3>                        
                     </div>
                     <div class="box-body">
                         Exam Link: {{ base_url + '/unity/student_exam/'+ slug +'/1' }}
                         <hr />                        
-                        <div class="row">
+                        <div class="row" v-if="entrance_exam">
                             <div class="col-sm-6">
                                 Date Submitted: {{ entrance_exam.date_taken }}
                             </div>
