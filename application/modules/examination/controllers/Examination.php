@@ -212,7 +212,7 @@ class Examination extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function submit_choice()
+    public function submit_choice1()
     {    
         if($this->is_admissions() || $this->is_super_admin())
         {
@@ -231,6 +231,37 @@ class Examination extends CI_Controller {
         }else
             redirect(base_url()."unity");
     }
+
+    public function submit_choice()
+    {    
+
+       
+        if($this->is_admissions() || $this->is_super_admin())
+        {
+            $post = $this->input->post();
+             print_r($post['is_correct']);
+            echo 'Choice Count = ' . count($post['strChoice']) . ', ';
+            echo 'IS_CORRECT Count = ' . count($post['is_correct']) . ' @@ <br>';
+            for($index = 0; $index < count($post['strChoice']); $index++){
+                echo 'Choice= ' . $post['strChoice'][$index] . ' @@@ is_correct= ' . $post['is_correct'][$index];
+            }
+            // $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
+            for($index = 0; $index < count($post['strChoice']); $index++){
+                if($post['strChoice'][$index]){
+                    $questionChoice = [];
+                    $questionChoice['question_id'] = $post['question_id'];
+                    $questionChoice['strChoice'] = $post['strChoice'][$index1];
+                    $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
+                    $this->data_poster->post_data('tb_mas_choices',$questionChoice);
+                    $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
+                }
+
+            }
+            redirect(base_url()."examination/edit_question/".$post['question_id']);
+        }else
+            redirect(base_url()."unity");
+    }
+
 
     public function delete_choice()
     {

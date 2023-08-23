@@ -61,9 +61,10 @@
 
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
+            <form id="choices-form" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
                 role="form">
                 <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
+                <input type="hidden" id="selected_index" name="selected_index" value="" />
                 <div class="box-body">
 
                     <div class="form-group col-xs-6" id="choices_container">
@@ -130,10 +131,10 @@ const toAppend = `<div class="choice_box">
                         <label for="strProgramCode">Enter Choice Value</label>
                         <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
                         <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                        <input type="radio" name="is_correct[]" value="1" required> is Correct
+                        <input type="radio"  name="is_correct[]" value="1" class="radioBtn" required> is Correct
                     </div>
                      <br>
-                    <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
+                    <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove</button>
                     <hr>
                  </div>`
 
@@ -144,5 +145,16 @@ addNewBtn.on("click", () => {
 
 $("#choices_container").on("click", "button", function() {
     $(this).parent('div').remove();
+})
+
+
+
+
+$("#choices_container").on("click", ".radioBtn", function() {
+    var radioButtons = $("#choices-form input:radio[name='is_correct[]']");
+    var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
+
+    $("#selected_index").val(selectedIndex);
+
 })
 </script>

@@ -125,9 +125,6 @@
                                     value="<?php echo $choice['is_correct'];?>"> is
                                 Correct?
                             </div>
-
-
-                            <br>
                             <hr>
 
                         </div>
@@ -160,16 +157,24 @@ const addNewBtn = $("#add_new");
 const btnRemove = $(".btn_remove");
 
 const toAppend = `<div class="choice_box">
-                    <div>
-                        <label for="strProgramCode">Enter Choice Value</label>
-                        <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
-                        <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                        <input type="radio" name="is_correct[]" value="1" required> is Correct
-                    </div>
-                     <br>
-                    <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
-                    <hr>
-                 </div>`
+                            <label for="strProgramCode">Enter Choice Value</label>
+                            <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
+
+                            <div style="display:flex">
+                                <input type="text" name="strChoice[]"
+                                    class="form-control" placeholder="Enter choice name">
+                                <button type="button" class="btn btn-sm btn-danger btn_remove"
+                                    style="margin-left:1rem">Remove</button>
+
+                            </div>
+
+                            <div>
+                                <input type="radio" name="is_correct[]" required value="1"> is
+                                Correct?
+                            </div>
+                            <hr>
+
+                        </div>`
 
 addNewBtn.on("click", () => {
     choicesBox.append(toAppend)
