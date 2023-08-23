@@ -2,68 +2,15 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#questions-table').dataTable({
-        "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
-        "bProcessing": true,
-        "bServerSide": true,
-        "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_questions",
-        "aoColumnDefs": [{
-                "aTargets": [3],
-                "mData": null,
-                "bSortable": false,
-                "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>examination/edit_question/' +
-                        row[0] + '">Edit</a></li><li><a href="#" rel="' + row[0] +
-                        '" class="trash-item">Delete</a></li></ul></div>';
-                }
-            },
-            {
-                "aTargets": [0],
-                "bVisible": false
-            }
-        ],
-        "aaSorting": [
-            [1, 'asc']
-        ],
-        "fnDrawCallback": function() {
-            $(".trash-item").click(function(e) {
-                conf = confirm("Are you sure you want to delete?");
-                if (conf) {
-                    $(".loading-img").show();
-                    $(".overlay").show();
-                    var id = $(this).attr('rel');
-                    var parent = $(this).parent().parent().parent().parent().parent();
-                    var code = parent.children(':first-child').html();
-                    var data = {
-                        'id': id,
-                        'code': code
-                    };
-                    $.ajax({
-                        'url': '<?php echo base_url(); ?>index.php/examination/delete_question',
-                        'method': 'post',
-                        'data': data,
-                        'dataType': 'json',
-                        'success': function(ret) {
-                            if (ret.message == "failed") {
-                                $("#alert-text").html('<b>Alert! ' + code +
-                                    '</b> cannot be deleted it is connected.'
-                                )
-                                $(".alert").show();
-                                setTimeout(function() {
-                                    $(".alert").hide('fade', {}, 500)
-                                }, 3000);
-                            } else
-                                parent.hide();
 
-                            $(".loading-img").hide();
-                            $(".overlay").hide();
-                        }
-                    });
-                }
-            });
-
-        },
-    });
+    $(".delete-question").on('click',function(e){
+        e.preventDefault();
+        var id = $(this).attr('rel');
+        var conf = confirm("Are you sure you want to delete this question?");
+        if(conf){
+            document.location = "<?php echo base_url(); ?>examination/delete_question/"+id+"/<?php echo $exam_id; ?>";
+        }
+    })
 
 });
 </script>
