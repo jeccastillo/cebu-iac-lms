@@ -119,7 +119,9 @@ class Examination extends CI_Controller {
 
      public function edit_exam_type($id) {
         $this->data['item']= $this->data_fetcher->getExam($id);
-        $this->data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$id))->result_array();
+        $this->data['choices']= $this->data_fetcher->getChoice($id);
+        $this->data['exam']= $this->data_fetcher->getExam($id);
+        $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
