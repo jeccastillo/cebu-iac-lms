@@ -100,37 +100,37 @@ class Examination extends CI_Controller {
     }
 
     public function get_questions_per_section($id, $token){
-                
-        $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
-        
         $student_exam = $this->db->get_where('tb_mas_student_exam',array('token'=>$token))->result_array('array');
         if($student_exam){
-            $question_array = [];                
-            foreach($questions as $question){          
-                  
-                $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
-    
-                $choice_array = [];
-                foreach($choices as $choice){
-                    $choice_array[] = array(
-                        'id' => $choice['intID'],
-                        'choice' => $choice['strChoice'],
-                        'is_selected'=>0,
-                    );
-                }
-                $question_array[] = array(
-                    'id' => $question['intID'],
-                    'title'=> $question['strTitle'],
-                    'choices'=> $choice_array
-                );
-                
-            }
-            
-            $section = array(
-                'section' => 'I',
-                'question' => $question_array,            
-            );
+            if($student_exam['exam_id'] == $id){
 
+                $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
+                $question_array = [];                
+                foreach($questions as $question){          
+                      
+                    $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
+        
+                    $choice_array = [];
+                    foreach($choices as $choice){
+                        $choice_array[] = array(
+                            'id' => $choice['intID'],
+                            'choice' => $choice['strChoice'],
+                            'is_selected'=>0,
+                        );
+                    }
+                    $question_array[] = array(
+                        'id' => $question['intID'],
+                        'title'=> $question['strTitle'],
+                        'choices'=> $choice_array
+                    );
+                    
+                }
+                
+                $section = array(
+                    'section' => 'I',
+                    'question' => $question_array,            
+                );
+            }
         }else{
             $section = array(
                 'section' => [],
