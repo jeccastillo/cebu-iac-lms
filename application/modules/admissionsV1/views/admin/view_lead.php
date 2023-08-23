@@ -761,7 +761,7 @@
                     </div>
                     <div class="box-body">
                         Exam Link: <br />
-                        <input :type="base_url + '/unity/student_exam/'+ slug +'/1'" value id="toCopy">
+                        <input type="hidden" :value="base_url + '/unity/student_exam/'+ slug +'/1'" id="toCopy">
                         {{ base_url + '/unity/student_exam/'+ slug +'/1' }} <a href="#" @click.prevent="copyToClipboard">Copy</a>
                         <hr />                        
                         <div class="row" v-if="entrance_exam">
