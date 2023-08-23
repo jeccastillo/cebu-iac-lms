@@ -288,7 +288,7 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
-        $examQuestions = $post['questions'];
+        $examQuestions = $post['question'];
         $score = 0;
         
         $question_array = [];                
