@@ -8,7 +8,7 @@ $(document).ready(function() {
         "bServerSide": true,
         "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_questions",
         "aoColumnDefs": [{
-                "aTargets": [5],
+                "aTargets": [3],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
