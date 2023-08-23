@@ -128,8 +128,7 @@ class Examination extends CI_Controller {
 
     public function submit_exam_type()
     {        
-        if($this->is_admissions() || $this->is_super_admin())
-        {   
+        if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
             $this->data_poster->log_action('Exam','Added a new exam '.$post['name'],'green');
             $this->data_poster->post_data('tb_mas_exam',$post);
@@ -140,8 +139,7 @@ class Examination extends CI_Controller {
 
     public function submit_edit_exam_type()
     {
-        if($this->is_admissions() || $this->is_super_admin())
-        {   
+        if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_exam',$post,$post['intID']);
             $this->data_poster->log_action('Exam','Updated Exam Info: '.$post['name'],'green');
@@ -164,20 +162,9 @@ class Examination extends CI_Controller {
         echo json_encode($data);
     }
 
-    // public function view_exam_types()
-    // {
-    //     $this->data['examp_type'] = $this->data_fetcher->fetch_table('tb_mas_exam');
-
-    //     $this->load->view("common/header",$this->data);
-    //     $this->load->view("admin/exam_type_list",$this->data);
-    //     $this->load->view("common/footer",$this->data); 
-    //     $this->load->view("common/exam_type_conf",$this->data); 
-    // }
-
-    public function submit_question(){
-        
-        if($this->is_admissions() || $this->is_super_admin())
-        {
+    public function submit_question()
+    {    
+        if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
             $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
             $this->data_poster->post_data('tb_mas_questions',$post);
@@ -186,9 +173,9 @@ class Examination extends CI_Controller {
             redirect(base_url()."unity");
     }
 
-    public function submit_edit_question(){
-        if($this->is_admissions() || $this->is_super_admin())
-        {   
+    public function submit_edit_question()
+    {
+        if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
             $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
@@ -211,60 +198,25 @@ class Examination extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function submit_choice1()
+    public function submit_choice()
     {    
-        if($this->is_admissions() || $this->is_super_admin())
-        {
+        if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-
             $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
             for($index = 0; $index < count($post['strChoice']); $index++){
                 if($post['strChoice'][$index]){
-                    
                     $questionChoice = [];
                     $questionChoice['question_id'] = $post['question_id'];
                     $questionChoice['strChoice'] = $post['strChoice'][$index1];
-                    $questionChoice['is_correct'] = $post['selected_index'] == $index ? 1 : 0;
+                    $questionChoice['is_correct'] = $post['is_correct'] == $index ? 1 : 0;
                     $this->data_poster->post_data('tb_mas_choices',$questionChoice);
                     $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
                 }
-
             }
             redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
             redirect(base_url()."unity");
     }
-
-    public function submit_choice()
-    {    
-
-       
-        if($this->is_admissions() || $this->is_super_admin())
-        {
-            $post = $this->input->post();
-             print_r($post['is_correct']);
-            echo 'Choice Count = ' . count($post['strChoice']) . ', ';
-            echo 'IS_CORRECT Count = ' . count($post['is_correct']) . ' @@ <br>';
-            for($index = 0; $index < count($post['strChoice']); $index++){
-                echo 'Choice= ' . $post['strChoice'][$index] . ' @@@ is_correct= ' . $post['is_correct'][$index];
-            }
-            // $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
-            for($index = 0; $index < count($post['strChoice']); $index++){
-                if($post['strChoice'][$index]){
-                    $questionChoice = [];
-                    $questionChoice['question_id'] = $post['question_id'];
-                    $questionChoice['strChoice'] = $post['strChoice'][$index1];
-                    $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
-                    $this->data_poster->post_data('tb_mas_choices',$questionChoice);
-                    $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
-                }
-
-            }
-            redirect(base_url()."examination/edit_question/".$post['question_id']);
-        }else
-            redirect(base_url()."unity");
-    }
-
 
     public function delete_choice()
     {
@@ -283,7 +235,24 @@ class Examination extends CI_Controller {
 
     public function generate_exam()
     {
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();
+            $post['token'] = generateRandomString(10);
+            $this->data_poster->post_data('tb_mas_student_exam',$post);
+            $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
+            redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
+        }else
+            redirect(base_url()."unity");
+    }
 
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function is_super_admin()
