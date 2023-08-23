@@ -87,9 +87,8 @@
         </div>
     </div>
     <hr />
-    <?php foreach($question as $q): ?>
-        <p><?php echo $q['strTitle']; ?></p>
-    <?php endforeach; ?>
+    
+        
     <div class="content">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
@@ -103,15 +102,22 @@
             <div class="box-body table-responsive">
                 <table id="questions-table" class="table table-hover table-bordered">
                     <thead>
-                        <tr>
-                            <th>slug</th>
-                            <th>Title</th>
+                        <tr>                            
+                            <th>Question</th>
                             <th>Section</th>
                             <th>Actions</th>
 
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach($question as $q): ?>
+                            <tr>
+                                <td><?php echo $q['strTitle']; ?></td>
+                                <td><?php echo $q['strSection']; ?></td>
+                                <td></td>
+                            </tr>
+                            
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div><!-- /.box-body -->
