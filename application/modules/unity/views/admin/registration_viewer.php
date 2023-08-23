@@ -353,6 +353,7 @@
     </div>
     <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="campus" :value="request.student_campus">
         <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
         <input type="hidden" name="student_id" v-model="or_print.student_id">
         <input type="hidden" name="student_address" v-model="or_print.student_address">

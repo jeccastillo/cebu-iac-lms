@@ -1701,7 +1701,10 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['transaction_date'] =  $request['transaction_date'];        
         
-        $html = $this->load->view("print_or",$this->data,true);
+        if($request['campus'] == "Cebu")
+            $html = $this->load->view("print_or",$this->data,true);
+        else
+            $html = $this->load->view("print_or_makati",$this->data,true);
         //$html = $pdf->unhtmlentities($html);
 
         $pdf->writeHTML($html, true, false, true, false, '');
