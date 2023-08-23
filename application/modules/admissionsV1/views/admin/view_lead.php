@@ -717,8 +717,7 @@
     <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-            entrance_exam
+            <div class="col-lg-12">            
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Manual Status Update</h3>
