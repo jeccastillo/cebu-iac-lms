@@ -204,6 +204,8 @@ class Examination extends CI_Controller {
     {    
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
+            print_r($post);
+            die();
             $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
             for($index = 0; $index < count($post['strChoice']); $index++){
                 if($post['strChoice'][$index]){
