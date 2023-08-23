@@ -102,10 +102,11 @@
                             <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
                                 class="form-control" placeholder="">
                             <div>
-                                <input type="radio" name="is_correct[]" required
-                                    <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
-                                    value="<?php echo $choice['is_correct'];?>"> is
-                                Correct?
+                            <label>Correct Answer</label>
+                                <select class="form-control" name="is_correct[]">
+                                    <option <?php echo $choice['is_correct'] == 0?'selected':''; ?> value=0>No</option>
+                                    <option <?php echo $choice['is_correct'] == 1?'selected':''; ?> value=1>Yes</option>
+                                </select>                                
                             </div>
                             <br>
                             <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
@@ -145,7 +146,10 @@ const toAppend = `<div class="choice_box">
                         <label for="strProgramCode">Enter Choice Value</label>
                         <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
                         <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                        <input type="radio"  name="is_correct[]" value="1" class="radioBtn" required> is Correct
+                        <select class="form-control" name="is_correct[]">
+                            <option value=0>No</option>
+                            <option value=1>Yes</option>
+                        </select>   
                     </div>
                      <br>
                     <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove</button>
