@@ -124,6 +124,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/question_conf",$this->data); 
     }
 
     public function submit_exam_type()
