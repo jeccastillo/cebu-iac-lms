@@ -180,7 +180,7 @@ class Examination extends CI_Controller {
             $post = $this->input->post();
             $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
             $this->data_poster->post_data('tb_mas_questions',$post);
-           redirect(base_url()."examination/edit_question/".$this->db->insert_id());
+           redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
         }else
             redirect(base_url()."unity");
     }
