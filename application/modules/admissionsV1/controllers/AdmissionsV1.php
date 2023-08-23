@@ -135,8 +135,9 @@ class AdmissionsV1 extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function programs(){
+    public function programs($slug){
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $ret['entrance_exam'] = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$slug))->first_row('array'); 
         echo json_encode($ret);
     }
 

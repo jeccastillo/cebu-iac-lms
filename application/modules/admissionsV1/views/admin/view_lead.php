@@ -718,6 +718,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+            entrance_exam
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Manual Status Update</h3>
@@ -752,6 +753,21 @@
                             <hr />
                             <button type="submit" class="btn btn-primary">Update</button>
                         </form>
+                    </div>
+                </div>
+                <div v-if="entrance_exam" class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title text-left text-primary">Entrance Exam</h3>                        
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                Date Submitted: {{ entrance_exam.date_taken }}
+                            </div>
+                            <div class="col-sm-6">
+                                Score: {{ entrance_exam.score }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1081,6 +1097,7 @@ new Vue({
         date_selected: "",
         date_selected_formatted: "",
         filtered_programs: [],
+        entrance_exam: undefined,
         programs: [],
         program_update: undefined,
         program_update2: undefined,
@@ -1114,9 +1131,10 @@ new Vue({
                 this.request = data.data.data;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
-                axios.get(base_url + 'admissionsV1/programs')
+                axios.get(base_url + 'admissionsV1/programs/'+this.slug)
                     .then((data) => {
                         this.programs = data.data.programs;
+                        this.entrance_exam = data.data.entrance_exam;
                         this.status_update_manual = this.request.status;
                         console.log(this.status_update);
                         this.filtered_programs = this.programs.filter((prog) => {
