@@ -204,17 +204,19 @@ class Examination extends CI_Controller {
     {    
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-            print_r($post);
-            die();
+            
             $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
-            for($index = 0; $index < count($post['strChoice']); $index++){
-                if($post['strChoice'][$index]){
-                    $questionChoice = [];
-                    $questionChoice['question_id'] = $post['question_id'];
-                    $questionChoice['strChoice'] = $post['strChoice'][$index1];
-                    $questionChoice['is_correct'] = $post['is_correct'] == $index ? 1 : 0;
+            $i = 0;
+            foreach($post['strChoice'] as $choice){
+                if($choice){
+                    $questionChoice = array(
+                        'question_id'=>$post['question_id'],
+                        'strChoice'=>$choice,
+                        'is_correct'=>$post['selected_index'] == $i ? 1 : 0,
+                    );                   
                     $this->data_poster->post_data('tb_mas_choices',$questionChoice);
-                    $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
+                    $i++;
+                    //$this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
                 }
             }
             redirect(base_url()."examination/edit_question/".$post['question_id']);
