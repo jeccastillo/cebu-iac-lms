@@ -48,8 +48,8 @@ class Data_poster extends CI_Model {
         $this->db->insert('tb_mas_printed_or',$data);
     }
 
-    function delete_or_print($id){
-        $this->db->where('id',$id)
+    function delete_or_print($id,$campus){
+        $this->db->where(array('or_number'=>$id,'campus'=>$campus))
             ->delete('tb_mas_printed_or');
     }
     
