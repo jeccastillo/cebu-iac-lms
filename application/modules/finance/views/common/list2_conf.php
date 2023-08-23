@@ -143,7 +143,7 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'">Finance Viewer</a></li>
+                        +'">Finance Viewer</a></li>'
                         +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
                         + row.or_number
                         +'">Delete OR Print</a></li>'
