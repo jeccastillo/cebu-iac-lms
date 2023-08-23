@@ -45,7 +45,7 @@ $(document).ready(function() {
                         + row.slug
                         +'">Finance Viewer</a></li>'
                         +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
-                        + row.or_number +'/'+row.sy_reference
+                        + row.or_number
                         +'">Finance Viewer</a></li>'
                         +'</ul></div>';
                 }
