@@ -26,7 +26,7 @@
 
 
             </div>
-            <div>
+            <div v-if="student.id && request.question.length > 0 ">
                 <button type="submit" class="btn btn-default">SUBMIT EXAM</button>
             </div>
 
@@ -40,29 +40,35 @@ new Vue({
     el: "#student-exam",
     data: {
         request: {
-
+            question: []
+        },
+        student: {
+            id: ""
         },
         student_name: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
         exam_id: "<?php echo $this->uri->segment('4'); ?>",
+        token: "<?php echo $this->uri->segment('5'); ?>",
     },
     mounted() {
         axios.get("http://cebuapi.iacademy.edu.ph/api/v1/sms/" + 'admissions/student-info/' + this.slug)
             .then((data) => {
-                this.request = data.data.data;
+                this.student = data.data.data;
                 this.student_name = this.request.first_name + ' ' + this.request.last_name;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
 
-                axios.get("<?php echo base_url();?>" + "examination/get_questions_per_section/" + this
-                        .exam_id)
-                    .then(
-                        (data) => {
-                            this.request = data.data
+                if (this.student.id) {
+                    axios.get("<?php echo base_url();?>" + "examination/get_questions_per_section/" + this
+                            .exam_id + '/' + this.token)
+                        .then(
+                            (data) => {
+                                this.request = data.data
 
-                        }).catch((e) => {
-                        console.log(e)
-                    })
+                            }).catch((e) => {
+                            console.log(e)
+                        })
+                }
 
 
             })
@@ -89,10 +95,10 @@ new Vue({
             formData.append("student_name", this.student_name)
 
             axios.post("<?php echo base_url();?>" + "examination/submit_exam", formData)
-                .then(function(response) {
+                .then(function(data) {
                     if (data.data.success) {
                         alert(data.data.message);
-
+                        // document.location = "<?php echo base_url(); ?>";
                     }
                 })
                 .catch(function(error) {
