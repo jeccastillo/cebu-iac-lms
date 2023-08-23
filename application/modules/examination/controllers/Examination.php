@@ -88,7 +88,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/question_conf",$this->data);         
     }
 
-     public function edit_question($id) {
+    public function edit_question($id) {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->data['choices']= $this->data_fetcher->getChoice($id);
@@ -97,6 +97,39 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_question",$this->data);
         $this->load->view("common/footer",$this->data); 
+    }
+
+    public function get_questions_per_section($id){
+                
+        $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id));
+        
+        $question_array = [];        
+        foreach($questions as $question){            
+            $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
+
+            $choice_array = [];
+            foreach($choices as $choice){
+                $choice_array[] = array(
+                    'id' => $choice['intID'],
+                    'choice' => $choice['strChoice'],
+                    'is_selected'=>0,
+                );
+            }
+            $question_array[] = array(
+                'id' => $question['intID'],
+                'title'=> $question['strTitle'],
+                'choices'=> $choice_array
+            );
+            
+        }
+        
+        $section = array(
+            'section' => 'I',
+            'question' => $question_array,            
+        );
+
+        echo json_encode($section);
+        
     }
 
     public function exam_type_list() {
