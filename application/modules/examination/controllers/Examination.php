@@ -85,10 +85,8 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/add_question",$this->data);
         $this->load->view("common/footer",$this->data); 
-        $this->load->view("common/question_conf",$this->data); 
-        
+        $this->load->view("common/question_conf",$this->data);         
     }
-
 
      public function edit_question($id) {
         $this->data['opentree'] = "examination";
@@ -127,9 +125,8 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function submit_exam_type(){        
-        
-        echo 'test';
+    public function submit_exam_type()
+    {        
         if($this->is_admissions() || $this->is_super_admin())
         {   
             $post = $this->input->post();
@@ -141,14 +138,29 @@ class Examination extends CI_Controller {
     }
 
     public function submit_edit_exam_type()
-{
-        if($this->is_registrar() || $this->is_super_admin())
+    {
+        if($this->is_admissions() || $this->is_super_admin())
         {   
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_exam',$post,$post['intID']);
             $this->data_poster->log_action('Exam','Updated Exam Info: '.$post['name'],'green');
         }
         redirect(base_url()."examination/edit_exam_type/".$post['intID']);
+    }
+
+    public function delete_exam_type()
+    {
+        $data['message'] = "failed";
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_exam',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_exam',$post['id'],'intID');
+            $this->data_poster->log_action('Exam','Deleted an exam: '.$info['strName'],'red');
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
 
     // public function view_exam_types()
@@ -166,7 +178,7 @@ class Examination extends CI_Controller {
         if($this->is_admissions() || $this->is_super_admin())
         {
             $post = $this->input->post();
-            $this->data_poster->log_action('Exam Question','Added a new question '.$post['strTitle'],'green');
+            $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
             $this->data_poster->post_data('tb_mas_questions',$post);
            redirect(base_url()."examination/edit_question/".$this->db->insert_id());
         }else
@@ -174,13 +186,28 @@ class Examination extends CI_Controller {
     }
 
     public function submit_edit_question(){
-        if($this->is_registrar() || $this->is_super_admin())
+        if($this->is_admissions() || $this->is_super_admin())
         {   
             $post = $this->input->post();
             $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
             $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
         }
         redirect(base_url()."examination/edit_question/".$post['intID']);
+    }
+
+    public function delete_question()
+    {
+        $data['message'] = "failed";
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_questions',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_questions',$post['id'],'intID');
+            $this->data_poster->log_action('Question','Deleted a question: '.$info['strTitle'],'red');
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
 
     public function submit_choice()
@@ -195,12 +222,27 @@ class Examination extends CI_Controller {
                 $questionChoice['is_correct'] = $post['is_correct'][$index] ? 1 : 0;
 
                 $this->data_poster->post_data('tb_mas_choices',$questionChoice);
-                $this->data_poster->log_action('Choice','Added choices '.$post['choice'],'green');
+                $this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
             }
             // redirect(base_url()."examination/edit_question/".count($post['strChoice']));
             redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
             redirect(base_url()."unity");
+    }
+
+    public function delete_choice()
+    {
+        $data['message'] = "failed";
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_choices',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_choices',$post['id'],'intID');
+            $this->data_poster->log_action('Choice','Deleted a choice: '.$info['choice'],'red');
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
 
     public function is_super_admin()
