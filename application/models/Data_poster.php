@@ -28,6 +28,12 @@ class Data_poster extends CI_Model {
 				 ->update($table,$post);
                 
             }
+            elseif($table == 'tb_mas_student_exam')
+            {
+                $this->db
+                     ->where('student_id',$update)
+                     ->update($table,$post);
+            }
             else
             {
             $this->db

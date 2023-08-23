@@ -288,34 +288,34 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
-        $decoded_traces=json_decode($post['data'], true);
-
-        echo json_encode($decoded_traces);
-
-        die();
-        $examQuestions = $post['question'];
-        $score = 0;
         
+        $examQuestions = json_decode($post['question'], true);
+        $score = 0;
+
         $question_array = [];                
         foreach($examQuestions as $examQuestion){
-            // $question = $this->db->get_where('tb_mas_questions',array('exam_id'=>$examQuestion['id']))->result_array();
 
             foreach($examQuestion['choices'] as $choice){
                 if($choice['is_selected'] == '1'){
-                    $checkChoice = $this->db->get_where('tb_mas_choices',array('question_id'=>$choice['id']))->result_array();
-                    if($checkChoice['is_correct'] == '1')
+                    $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->result_array();
+                    if($checkChoice[0]['is_correct'] == '1')
                         $score++;
                 }
             }
         }
         
-            $examArray = array(
-                'date_taken'=> date("Y-m-d"),
-                'score' => $score,
-                'token'=>'',
-            );
-            $this->data_poster->post_data('tb_mas_student_exam',$examArray,'intID');
-            $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
+        $examArray = array(
+            'date_taken'=> date("Y-m-d h:i:s"),
+            'score' => $score,
+            'token'=>'',
+        );
+        $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
+        $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
+
+        $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
+        $data['success'] = true;
+
+        echo json_encode($data);
     }
 
     function generateRandomString($length = 10) {
