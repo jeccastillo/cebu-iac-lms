@@ -412,7 +412,7 @@ new Vue({
         printOR: function(payment){        
             Swal.fire({
                 title: 'Continue with Printing OR',
-                text: "Are you sure you want to continue you can only print the OR once?",
+                text: "Are you sure you want to continue? You can only print the OR once",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
