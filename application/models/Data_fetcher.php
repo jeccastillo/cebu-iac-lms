@@ -718,13 +718,15 @@ class Data_fetcher extends CI_Model {
     
     function get_active_sem()
     {
-        return current($this->db->get_where('tb_mas_sy',array('enumStatus'=>'active'))->result_array());
+        $current_term = $this->db->get_where('tb_mas_system_settings',array('setting_name'=>'current_term'))->first_row();
+        return current($this->db->get_where('tb_mas_sy',array('intID'=>$current_term->value))->result_array());
         
     }
     
     function get_processing_sem()
     {
-        return current($this->db->get_where('tb_mas_sy',array('intProcessing'=>1))->result_array());
+        $current_term = $this->db->get_where('tb_mas_system_settings',array('setting_name'=>'application_term'))->first_row();
+        return current($this->db->get_where('tb_mas_sy',array('intID'=>$current_term->value))->result_array());
         
     }
 
