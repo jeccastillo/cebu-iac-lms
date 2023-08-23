@@ -1750,7 +1750,7 @@ class Data_fetcher extends CI_Model {
 
     public function getQuestion($id)
     {
-        return current($this->db->get_where('tb_mas_questions',array('intID'=>$id))->result_array());
+        return current($this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array());
     }
 
     public function getChoice($id)
@@ -1758,7 +1758,7 @@ class Data_fetcher extends CI_Model {
         return $this->db
              ->select('*')
              ->from('tb_mas_choices')
-             ->where('question_id',$id)
+             ->where('question_id',('SELECT intID FROM tb_mas_questions WHERE exam_id = '. $id))
              ->get()->result_array();
     }
 
