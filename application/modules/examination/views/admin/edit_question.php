@@ -83,13 +83,13 @@
 
                     <div class="form-group col-xs-6" id="choices_container">
                         <?php if(count($choices) == 0): ?>
-                        <div>
+                        <!-- <div>
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
                             <input type="radio" name="is_correct[]" value="1" required> is
                             Correct?
                             <hr>
-                        </div>
+                        </div> -->
 
                         <?php else:
                             foreach ($choices as $choice):
@@ -102,11 +102,11 @@
                             <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
                                 class="form-control" placeholder="">
                             <div>
-                            <label>Correct Answer</label>
+                                <label>Correct Answer</label>
                                 <select class="form-control" name="is_correct[]">
                                     <option <?php echo $choice['is_correct'] == 0?'selected':''; ?> value=0>No</option>
                                     <option <?php echo $choice['is_correct'] == 1?'selected':''; ?> value=1>Yes</option>
-                                </select>                                
+                                </select>
                             </div>
                             <br>
                             <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
