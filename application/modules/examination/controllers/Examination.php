@@ -124,7 +124,7 @@ class Examination extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
-        $this->load->view("common/question_conf",$this->data); 
+        $this->load->view("common/exam_type_conf",$this->data); 
     }
 
     public function submit_exam_type()
@@ -192,6 +192,7 @@ class Examination extends CI_Controller {
             $post = $this->input->post();            
             $info = $this->data_fetcher->fetch_single_entry('tb_mas_questions',$post['id']);            
             $this->data_poster->deleteItem('tb_mas_questions',$post['id'],'intID');
+            $this->data_poster->deleteItem('tb_mas_choices',$post['id'],'question_id');
             $this->data_poster->log_action('Question','Deleted a question: '.$info['strTitle'],'red');
             $data['message'] = "success";
             $data['success'] = true;

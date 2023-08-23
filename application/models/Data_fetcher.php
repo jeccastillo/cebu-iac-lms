@@ -1769,11 +1769,7 @@ class Data_fetcher extends CI_Model {
 
     public function getExamQuestionChoice($id)
     {
-        return $this->db
-             ->select('*')
-             ->from('tb_mas_choices')
-             ->where('question_id',('SELECT intID FROM tb_mas_questions WHERE exam_id = '. $id))
-             ->get()->result_array();
+        return $this->db->get_where('tb_mas_choices',array('question_id'=>$id))->result_array();        
     }
 
     function checkSubjectTaken($studentID,$subjectID)
