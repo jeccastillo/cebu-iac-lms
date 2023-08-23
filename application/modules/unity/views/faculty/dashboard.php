@@ -36,7 +36,7 @@
              </div>
              <div class="col-md-4 col-sm-8 col-xs-12">
                  <div class="info-box">
-                     <span class="info-box-icon bg-red"><i class="fa fa-star"></i></span>
+                     <span class="info-box-icon bg-red"><i class="fa fa-file"></i></span>
 
                      <div class="info-box-content">
                          <span class="info-box-text">APPLICATION TERM</span>                         
