@@ -381,6 +381,14 @@ class Finance extends CI_Controller {
     }
     
 
+    public function remove_or_print($or){
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        if($userlevel == 2 || ($userlevel == 6 && $role == 2)){
+            $this->data_poster->delete_or_print($or,$this->data['campus']);
+        }
+        redirect(base_url()."makati-dev/finance/payments");
+    }
 
     public function remove_from_ledger(){        
         
