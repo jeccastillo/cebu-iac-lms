@@ -646,7 +646,7 @@ class Unity extends CI_Controller {
 		$this->load->view('public/footer',$this->data);
     }
 
-     public function student_exam($slug) {                
+     public function student_exam($slug,$exam_id) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');                    
         $data['id'] = $student['intID'];

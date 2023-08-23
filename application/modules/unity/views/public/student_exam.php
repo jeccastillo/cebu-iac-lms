@@ -1,53 +1,33 @@
-<div id="registration-container">
+<div id="student-exam">
     <div class="container">
-        <form class="content">
+        <form @submit.prevent="submitExam()" class="content">
 
             <div style="margin-top:5rem">
                 <h3>Student Exam</h3>
             </div>
 
-            <?php for($i = 1; $i<=10; $i++) { ?>
 
-            <div class="panel panel-default">
+            Section I:
+
+
+            <div v-for="(q,q_index) in request.question" class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">1. What lorem ipsum donr oex 1289 ?</div>
+                <div class="panel-heading">{{q.title}}</div>
                 <div class="panel-body">
                     <div class="choices_box">
-                        <div class="in_choice">
-                            <input type="radio" name="question1" required id="choice1">
-                            <label for="choice1" class="choices_label"> a. The CSS Grid Layout
-                                Module offers a
-                                grid-based layout
-                                system</label>
+                        <div v-for="(c,index) in q.choices" class="in_choice">
+                            <input type="radio" v-model="c.is_selected" value="1"
+                                @click="updateChoices(q.choices, index, q_index)" :name="'question-' + q_index" required
+                                id="choice1">
+                            <label for="choice1" class="choices_label"> {{c.choice}} </label>
                         </div>
-                        <div class="in_choice">
-                            <input type="radio" name="question1" required id="choice2">
-                            <label for="choice2" class="choices_label"> b. The CSS Grid Layout
-                                Module offers a
-                                grid-based layout
-                                system</label>
-                        </div>
-                        <div class="in_choice">
-                            <input type="radio" name="question1" required id="choice3">
-                            <label for="choice3" class="choices_label"> c. The CSS Grid Layout
-                                Module offers a
-                                grid-based layout
-                                system</label>
-                        </div>
-                        <div class="in_choice">
-                            <input type="radio" name="question1" required id="choice4">
-                            <label for="choice4" class="choices_label"> d. The CSS Grid Layout
-                                Module offers a
-                                grid-based layout
-                                system</label>
-                        </div>
+
                     </div>
                 </div>
 
+
+
             </div>
-
-            <?php } ?>
-
             <div>
                 <button type="submit" class="btn btn-default">SUBMIT EXAM</button>
             </div>
@@ -55,6 +35,83 @@
         </form>
     </div>
 </div>
+
+
+<script>
+new Vue({
+    el: "#student-exam",
+    data: {
+        request: {
+
+        },
+        slug: "<?php echo $this->uri->segment('3'); ?>",
+        exam_id: "<?php echo $this->uri->segment('4'); ?>",
+    },
+    mounted() {
+        axios.get("http://cebuapi.iacademy.edu.ph/api/v1/sms/" + 'admissions/student-info/' + this.slug)
+            .then((data) => {
+                this.request = data.data.data;
+                this.loader_spinner = false;
+                //this.program_update = this.request.type_id;
+
+                axios.get("<?php echo base_url();?>" + "examination/get_questions_per_section/" + this
+                        .exam_id)
+                    .then(
+                        (data) => {
+                            this.request = data.data
+
+                        }).catch((e) => {
+                        console.log(e)
+                    })
+
+
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    },
+
+    methods: {
+        submitExam: function() {
+            if (!confirm('Are you sure you want to submit?')) {
+                return false;
+            }
+
+            this.request.student_id = this.slug;
+            axios.post("<?php echo base_url();?>" + "examination/submit_exam", this.request)
+                .then(function(response) {
+                    console.log(response);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+
+
+        },
+
+        updateChoices: function(choices, c_index, q_index) {
+
+            console.log(q_index)
+
+            var updated_choices = choices.map((c, i) => {
+                if (i != c_index) {
+                    return {
+                        ...c,
+                        is_selected: 0
+                    }
+                } else {
+                    return {
+                        ...c,
+                        is_selected: 1
+                    }
+                }
+            })
+            this.request.question[q_index].choices = updated_choices
+        }
+    }
+
+})
+</script>
 
 <style>
 .choices_box {
