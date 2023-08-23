@@ -75,9 +75,11 @@ new Vue({
             }
 
             this.request.student_id = this.slug;
-            axios.post("<?php echo base_url();?>" + "examination/submit_exam", this.request)
+            axios.post("<?php echo base_url();?>" + "examination/submit_exam", JSON.stringify(this.request))
                 .then(function(response) {
-                    console.log(response);
+                    if (data.data.success) {
+                        alert(data.data.message)
+                    }
                 })
                 .catch(function(error) {
                     console.log(error);
