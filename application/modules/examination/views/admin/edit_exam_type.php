@@ -78,7 +78,9 @@
             </form>
         </div>
     </div>
-
+    <?php foreach($question as $q): ?>
+        
+    <?php endforeach; ?>
     <div class="content">
         <div class="span10 box box-primary">
             <div class="box-header">
