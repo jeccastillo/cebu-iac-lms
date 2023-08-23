@@ -42,6 +42,7 @@ new Vue({
         request: {
 
         },
+        student_name: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
         exam_id: "<?php echo $this->uri->segment('4'); ?>",
     },
@@ -49,6 +50,7 @@ new Vue({
         axios.get("http://cebuapi.iacademy.edu.ph/api/v1/sms/" + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
+                this.student_name = this.request.first_name + ' ' + this.request.last_name;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
 
@@ -84,11 +86,13 @@ new Vue({
             let formData = new FormData();
             formData.append("question", JSON.stringify(this.request.question))
             formData.append("student_id", this.slug)
+            formData.append("student_name", this.student_name)
 
             axios.post("<?php echo base_url();?>" + "examination/submit_exam", formData)
                 .then(function(response) {
                     if (data.data.success) {
-                        alert(data.data.message)
+                        alert(data.data.message);
+
                     }
                 })
                 .catch(function(error) {
