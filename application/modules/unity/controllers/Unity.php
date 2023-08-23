@@ -482,7 +482,7 @@ class Unity extends CI_Controller {
             // $ret['payment'] = $pay;
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             $role = $this->session->userdata('special_role');
-            $ret['finance_manager_privilages'] = ($role == 2)?true:false;
+            $ret['finance_manager_privilages'] = ($role == 3)?true:false;            
             
             //--------TUITION-------------------------------------------------------------------
             
