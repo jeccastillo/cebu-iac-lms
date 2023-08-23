@@ -213,7 +213,7 @@ class Examination extends CI_Controller {
                     $questionChoice = array(
                         'question_id'=>$post['question_id'],
                         'strChoice'=>$choice,
-                        'is_correct'=>$post['selected_index'] == $i ? 1 : 0,
+                        'is_correct'=>$post['is_correct'][$i] == $i ? 1 : 0,
                     );                   
                     $this->data_poster->post_data('tb_mas_choices',$questionChoice);
                     $i++;
