@@ -75,6 +75,7 @@ class Unity extends CI_Controller {
             $this->data['page'] = "dashboard";
             $this->data['title'] ="Dashboard";
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+            $this->data['app_sem'] = $this->data_fetcher->get_processing_sem();
             $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
             $this->data['pwd'] = $this->session->userdata('strPass');
             $this->data["faculty_data"] = $this->session->all_userdata();

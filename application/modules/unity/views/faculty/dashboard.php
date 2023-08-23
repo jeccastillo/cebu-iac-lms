@@ -23,7 +23,8 @@
                  <div class="info-box">
                      <span class="info-box-icon bg-red"><i class="fa fa-star"></i></span>
 
-                     <div class="info-box-content">                         
+                     <div class="info-box-content">
+                         <span class="info-box-text">ACTIVE TERM</span>                         
                          <span
                              class="info-box-number"><?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd']; ?></span>
 
@@ -32,11 +33,21 @@
                      <!-- /.info-box-content -->
                  </div>
                  <!-- /.info-box -->
+             </div>
+             <div class="col-md-4 col-sm-8 col-xs-12">
+                 <div class="info-box">
+                     <span class="info-box-icon bg-red"><i class="fa fa-star"></i></span>
+
+                     <div class="info-box-content">
+                         <span class="info-box-text">APPLICATION TERM</span>                         
+                         <span
+                             class="info-box-number"><?php echo $app_sem['enumSem']." ".$term_type." ".$app_sem['strYearStart']."-".$app_sem['strYearEnd']; ?></span>
 
 
-
-
-
+                     </div>
+                     <!-- /.info-box-content -->
+                 </div>
+                 <!-- /.info-box -->
              </div>
              <div class="col-md-4 col-sm-8 col-xs-12" style="display:none">
                  <!-- small box -->
@@ -53,15 +64,14 @@
                          View Classes <i class="fa fa-arrow-circle-right"></i>
                      </a>
                  </div>
-
                  <!-- small box -->
              </div>
              <div class="col-md-4 col-sm-8 col-xs-12" style="display:none">
 
                  <div class="small-box bg-yellow">
                      <div class="inner">
-                         <h3>My Profile</h3>
-                         <p>view your personal information including schedules</p>
+                         <h3>My Account</h3>
+                         <p>User Account</p>
                      </div>
                      <div class="icon">
                          <i class="fa fa-user"></i>
