@@ -86,8 +86,9 @@
             </form>
         </div>
     </div>
+    <hr />
     <?php foreach($question as $q): ?>
-        
+        <p><?php echo $q['strTitle']; ?></p>
     <?php endforeach; ?>
     <div class="content">
         <div class="alert alert-danger" style="display:none;">
