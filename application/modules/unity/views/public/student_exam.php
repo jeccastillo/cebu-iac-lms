@@ -82,7 +82,8 @@ new Vue({
 
 
             let formData = new FormData();
-            formData.append("data", JSON.stringify(this.request))
+            formData.append("question", JSON.stringify(this.request.question))
+            formData.append("student_id", this.slug)
 
             axios.post("<?php echo base_url();?>" + "examination/submit_exam", formData)
                 .then(function(response) {
