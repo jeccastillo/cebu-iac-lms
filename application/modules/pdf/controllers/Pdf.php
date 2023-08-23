@@ -1724,6 +1724,7 @@ class Pdf extends CI_Controller {
                 "or_number"=>(string)$request['or_number'],
                 "date_printed"=>date("Y-m-d"),
                 "campus"=>$this->data['campus'],
+                "printed_by"=>$this->session->userdata('strFirstname')." ".$this->session->userdata('strLastname'),
             )
         );
 
