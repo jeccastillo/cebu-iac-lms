@@ -99,35 +99,45 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function get_questions_per_section($id){
+    public function get_questions_per_section($id, $token){
                 
         $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
         
-        $question_array = [];                
-        foreach($questions as $question){          
-              
-            $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
-
-            $choice_array = [];
-            foreach($choices as $choice){
-                $choice_array[] = array(
-                    'id' => $choice['intID'],
-                    'choice' => $choice['strChoice'],
-                    'is_selected'=>0,
+        $student_exam = $this->db->get_where('tb_mas_student_exam',array('token'=>$token))->result_array('array');
+        if($student_exam){
+            $question_array = [];                
+            foreach($questions as $question){          
+                  
+                $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
+    
+                $choice_array = [];
+                foreach($choices as $choice){
+                    $choice_array[] = array(
+                        'id' => $choice['intID'],
+                        'choice' => $choice['strChoice'],
+                        'is_selected'=>0,
+                    );
+                }
+                $question_array[] = array(
+                    'id' => $question['intID'],
+                    'title'=> $question['strTitle'],
+                    'choices'=> $choice_array
                 );
+                
             }
-            $question_array[] = array(
-                'id' => $question['intID'],
-                'title'=> $question['strTitle'],
-                'choices'=> $choice_array
-            );
             
+            $section = array(
+                'section' => 'I',
+                'question' => $question_array,            
+            );
+
+        }else{
+            $section = array(
+                'section' => [],
+                'question' => [],            
+            );
         }
-        
-        $section = array(
-            'section' => 'I',
-            'question' => $question_array,            
-        );
+
 
         echo json_encode($section);
         
@@ -277,7 +287,7 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-            $post['token'] = generateRandomString(10);
+            $post['token'] = $this->generateRandomString();
             $this->data_poster->post_data('tb_mas_student_exam',$post);
             $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
             redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
@@ -323,7 +333,7 @@ class Examination extends CI_Controller {
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
         }
         return $randomString;
     }
