@@ -20,15 +20,9 @@
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
 
-                    <div class="form-group col-xs-6">
-                        <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" value="<?php echo $question['strTitle']; ?>"
-                            class="form-control" id="strTitle" placeholder="Enter Question Title">
-                    </div>
-
-                    <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-12">
                         <label for="type">Exam Type</label>
-                        <select class="form-control" name="exam_id" id="exam_id">
+                        <select class="form-control" name="exam_id" id="exam_id" disabled>
                             <?php foreach ($exam_type as $cur): ?>
                             <option value="<?php echo $cur['intID']; ?>"
                                 <?php echo ($question['exam_id'] == $cur['intID'])?'selected':''; ?>>
@@ -38,10 +32,30 @@
                         </select>
                     </div>
 
+
+                    <div class="form-group col-xs-6">
+                        <label for="strProgramCode">Question</label>
+                        <input type="text" name="strTitle" value="<?php echo $question['strTitle']; ?>"
+                            class="form-control" id="strTitle" placeholder="Enter Question Title">
+                    </div>
+
+
+
                     <div class="form-group col-xs-6">
                         <label for="type">Section</label>
-                        <input type="text" name="strSection" value="<?php echo $question['strSection']; ?>"
-                            class="form-control" id="strSection" placeholder="Enter Section">
+                        <!-- <input type="text" name="strSection" value="<?php echo $question['strSection']; ?>"
+                            class="form-control" id="strSection" placeholder="Enter Section"> -->
+
+                        <select name="strSection" required class="form-control" id="strSection">
+                            <option value="" selected disabled>--select section--</option>
+                            <option <?php echo $question['strSection'] == "I" ? "selected": "" ?>>I</option>
+                            <option <?php echo $question['strSection'] == "II" ? "selected": "" ?>>II</option>
+                            <option <?php echo $question['strSection'] == "III" ? "selected": "" ?>>III</option>
+                            <option <?php echo $question['strSection'] == "IV" ? "selected": "" ?>>IV</option>
+                            <option <?php echo $question['strSection'] == "V" ? "selected": "" ?>>V</option>
+                            <option <?php echo $question['strSection'] == "VI" ? "selected": "" ?>>V</option>
+                            <option <?php echo $question['strSection'] == "VII" ? "selected": "" ?>>V</option>
+                        </select>
                     </div>
 
                     <div class="form-group col-xs-12">

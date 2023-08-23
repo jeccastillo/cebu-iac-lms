@@ -51,13 +51,12 @@
                 <h3 class="box-title">Add Exam Question</h3>
             </div>
 
-
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_question" method="post"
                 role="form">
                 <div class="box-body">
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" class="form-control" id="strTitle"
+                        <input type="text" name="strTitle" class="form-control" id="strTitle" required
                             placeholder="Enter Question Title">
                     </div>
 
@@ -66,8 +65,17 @@
 
                     <div class="form-group col-xs-6">
                         <label for="type">Section</label>
-                        <input type="text" name="strSection" class="form-control" id="strSection"
-                            placeholder="Enter Section">
+
+                        <select name="strSection" required class="form-control" id="strSection">
+                            <option value="" selected disabled>--select section--</option>
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                            <option>VII</option>
+                        </select>
                     </div>
 
                     <div class="form-group col-xs-12">
@@ -82,24 +90,50 @@
         
     <?php endforeach; ?>
     <div class="content">
-        <div class="span10 box box-primary">
+        <div class="alert alert-danger" style="display:none;">
+            <i class="fa fa-ban"></i>
+            <span id="alert-text"></span>
+        </div>
+        <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">Question Choices</h3>
-            </div>
+                <h3 class="box-title">Questions List</h3>
+
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive">
+                <table id="questions-table" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>slug</th>
+                            <th>Title</th>
+                            <th>Section</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
 
 
 
-            <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
+    <!-- <form id="choices-form" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
                 role="form">
+
                 <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
+                <input type="hidden" id="selected_index" name="selected_index" value="" />
                 <div class="box-body">
+
+
 
                     <div class="form-group col-xs-5" id="choices_container">
                         <?php if(count($choices) == 0): ?>
                         <div>
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct[]" value="1" required> is
+                            <input type="radio" name="is_correct[]" value="1" required class="radioBtn"> is
                             Correct?
                             <hr>
                         </div>
@@ -122,7 +156,7 @@
                             </div>
 
                             <div>
-                                <input type="radio" name="is_correct[]" required
+                                <input type="radio" name="is_correct[]" required class="radioBtn"
                                     <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
                                     value="<?php echo $choice['is_correct'];?>"> is
                                 Correct?
@@ -147,8 +181,7 @@
                         <button type="submit" class="btn btn-primary" id="add_new">Submit Choices</button>
                     </div>
                     <div style="clear:both"></div>
-            </form>
-        </div>
+            </form> -->
     </div>
 </aside>
 
@@ -171,7 +204,7 @@ const toAppend = `<div class="choice_box">
                             </div>
 
                             <div>
-                                <input type="radio" name="is_correct[]" required value="1"> is
+                                <input type="radio" name="is_correct[]" class="radioBtn" required value="1"> is
                                 Correct?
                             </div>
                             <hr>
@@ -184,6 +217,13 @@ addNewBtn.on("click", () => {
 
 
 $("#choices_container").on("click", "button", function() {
-    $(this).parent('div').closest(".choice_box").remove();;
+    $(this).parent('div').closest(".choice_box").remove();
+})
+
+$("#choices_container").on("click", ".radioBtn", function() {
+    var radioButtons = $("#choices-form input:radio[name='is_correct[]']");
+    var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
+
+    $("#selected_index").val(selectedIndex);
 })
 </script>
