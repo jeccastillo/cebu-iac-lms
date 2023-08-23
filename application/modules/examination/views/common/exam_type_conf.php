@@ -8,7 +8,7 @@ $(document).ready(function() {
         var id = $(this).attr('rel');
         var conf = confirm("Are you sure you want to delete this question?");
         if(conf){
-            document.location = "<?php echo base_url(); ?>examination/delete_question/"+id;
+            document.location = "<?php echo base_url(); ?>examination/delete_question/"+id+"/<?php echo $exam_id; ?>";
         }
     })
 

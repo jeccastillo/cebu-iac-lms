@@ -118,9 +118,10 @@ class Examination extends CI_Controller {
     }
 
      public function edit_exam_type($id) {
-         $this->data['item']= $this->data_fetcher->getExam($id);
-         $this->data['question']= $this->data_fetcher->getExamQuestion($id);
-         $this->data['choices']= $this->data_fetcher->getExamQuestionChoice($id);
+        $this->data['exam_id'] = $id;
+        $this->data['item']= $this->data_fetcher->getExam($id);
+        $this->data['question']= $this->data_fetcher->getExamQuestion($id);
+        $this->data['choices']= $this->data_fetcher->getExamQuestionChoice($id);
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -184,7 +185,7 @@ class Examination extends CI_Controller {
         redirect(base_url()."examination/edit_question/".$post['intID']);
     }
 
-    public function delete_question($id)
+    public function delete_question($id,$exam_id)
     {
         $data['message'] = "failed";
         $data['success'] = false;
@@ -194,8 +195,7 @@ class Examination extends CI_Controller {
             $this->data_poster->deleteItem('tb_mas_questions',$id,'intID');
             $this->data_poster->deleteItem('tb_mas_choices',$id,'question_id');
             $this->data_poster->log_action('Question','Deleted a question: '.$info['strTitle'],'red');
-            $data['message'] = "success";
-            $data['success'] = true;
+            redirect(base_url()."examination/edit_exam_type/".$exam_id);
         }
         echo json_encode($data);
     }
