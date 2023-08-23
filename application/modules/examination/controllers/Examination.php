@@ -104,8 +104,9 @@ class Examination extends CI_Controller {
         $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->first_row('array');
         
         $question_array = [];        
+        print_r($questions);
         foreach($questions as $question){          
-            print_r($question);  
+              
             $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
 
             $choice_array = [];
