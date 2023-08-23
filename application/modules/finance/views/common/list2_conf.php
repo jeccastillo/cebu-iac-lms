@@ -114,10 +114,15 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'">Finance Viewer</a><a href="#" class="print-or" data-student-name="'
+                        +'">Finance Viewer</a></li>'
+                        +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
+                        + row.or_number
+                        +'">Delete OR Print</a></li>'
+                        +'<li></li><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
                         +'data-slug = " " '
                         +'data-cashier-id = "'+ row.cashier_id +'" '
+                        +'data-campus ="' + row.campus +'" '
                         +'data-or-number = "'+ row.or_number +'" '
                         +'data-description = "'+ row.description +'" '
                         +'data-total-amount-due = "'+ row.total_amount_due +'" '
