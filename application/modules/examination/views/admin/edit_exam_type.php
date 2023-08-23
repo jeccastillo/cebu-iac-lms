@@ -100,7 +100,7 @@
 
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
-                <table id="questions-table" class="table table-hover table-bordered">
+                <table class="table table-hover table-bordered">
                     <thead>
                         <tr>                            
                             <th>Question</th>
