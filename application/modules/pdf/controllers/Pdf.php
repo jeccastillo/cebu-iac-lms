@@ -25,6 +25,8 @@ class Pdf extends CI_Controller {
         $this->load->helper('pdf');
         $this->load->helper('text');
         $this->config->load('courses');
+        
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
@@ -1658,6 +1660,16 @@ class Pdf extends CI_Controller {
     function print_or()
     {
         $request = $this->input->post();
+
+        $printed = $this->db->where('or_number',(string)$request['or_number'])
+                        ->get('tb_mas_printed_or')
+                        ->first_row();
+
+        if($printed){
+            echo "This OR has already been printed";
+            return;
+        }
+        
                 
         tcpdf();
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -1706,6 +1718,14 @@ class Pdf extends CI_Controller {
         else
             $html = $this->load->view("print_or_makati",$this->data,true);
         //$html = $pdf->unhtmlentities($html);
+
+        $this->data_poster->insert_or_print(
+            array(
+                "or_number"=>(string)$request['or_number'],
+                "date_printed"=>date("Y-m-d"),
+                "campus"=>$this->data['campus'],
+            )
+        );
 
         $pdf->writeHTML($html, true, false, true, false, '');
 

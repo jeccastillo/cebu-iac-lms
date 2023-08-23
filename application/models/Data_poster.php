@@ -43,6 +43,15 @@ class Data_poster extends CI_Model {
              ->where('intApplicationID',$id)
              ->update('tb_mas_applications',array('strConfirmationCode'=>0));
     }
+
+    function insert_or_print($data){
+        $this->db->insert('tb_mas_printed_or',$data);
+    }
+
+    function delete_or_print($id){
+        $this->db->where('id',$id)
+            ->delete('tb_mas_printed_or');
+    }
     
     function reset_tuition_year(){
         $this->db             
