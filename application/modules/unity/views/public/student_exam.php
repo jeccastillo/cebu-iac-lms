@@ -42,7 +42,7 @@
     </div>
 </div>
 
-
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script>
 new Vue({
     el: "#student-exam",
@@ -60,7 +60,7 @@ new Vue({
         token: "<?php echo $this->uri->segment('5'); ?>",
     },
     mounted() {
-        axios.get("http://cebuapi.iacademy.edu.ph/api/v1/sms/" + 'admissions/student-info/' + this.slug)
+        axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;
                 this.student_name = this.request.first_name + ' ' + this.request.last_name;
