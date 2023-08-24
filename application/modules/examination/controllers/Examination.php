@@ -127,7 +127,8 @@ class Examination extends CI_Controller {
                 
                 $section = array(
                     'section' => 'I',
-                    'question' => $question_array,            
+                    'question' => $question_array,  
+                    'success' => true,          
                 );
             }else{
                 $section = array(
