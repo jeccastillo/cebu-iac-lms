@@ -717,7 +717,7 @@
     <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">            
+            <div class="col-lg-12">
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Manual Status Update</h3>
@@ -757,12 +757,37 @@
 
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title text-left text-primary">Entrance Exam</h3>                        
+                        <h3 class="box-title text-left text-primary">Entrance Exam</h3>
                     </div>
+
+
+
                     <div class="box-body">
-                        Exam Link: <br />                        
-                        {{ base_url + '/unity/student_exam/'+ slug +'/1' }}
-                        <hr />                        
+
+                        <!-- if no existing exam link: To Generate-->
+
+                        <form @submit.prevent="generateExam"
+                            style="text-align:center; display:flex; justify-content:center; margin-bottom:2rem;">
+                            <div class="col-xs-5">
+                                <select name="examID" v-model="exam_type_id" id="selectExamID" class="form-control"
+                                    required id="">
+                                    <option value="" disabled selected>--select exam type--</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                Generate Exam Link
+                            </button>
+                        </form>
+                        <!-- end  -->
+
+                        Exam Link: <br />
+                        <div class="copy-text">
+                            <input type="hidden" class="text" :value="base_url + '/unity/student_exam/'+ slug +'/1'"
+                                id="toCopy">
+                            {{ base_url + '/unity/student_exam/'+ slug +'/1' }}
+                            <a href="#" class="btn btn-primary btn-sm" @click.prevent="copyToClipboard">Copy</a>
+                        </div>
+                        <hr />
                         <div class="row" v-if="entrance_exam">
                             <div class="col-sm-6">
                                 Date Submitted: {{ entrance_exam.date_taken }}
@@ -1096,6 +1121,7 @@ new Vue({
         remarks_manual: "",
         status_update: "",
         sched: "",
+        exam_type_id: "",
         show_edit_name: false,
         show_edit_title: "Edit",
         date_selected: "",
@@ -1135,7 +1161,7 @@ new Vue({
                 this.request = data.data.data;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
-                axios.get(base_url + 'admissionsV1/programs/'+this.slug)
+                axios.get(base_url + 'admissionsV1/programs/' + this.slug)
                     .then((data) => {
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
@@ -1161,7 +1187,73 @@ new Vue({
 
     },
 
-    methods: {        
+    methods: {
+        copyToClipboard: function() {
+            let copyText = document.querySelector(".copy-text");
+            let input = copyText.querySelector("input.text");
+            document.execCommand("copy");
+            copyText.classList.add("active");
+            window.getSelection().removeAllRanges();
+
+            navigator.clipboard.writeText(input.value);
+
+
+            setTimeout(function() {
+                copyText.classList.remove("active");
+            }, 2500);
+
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: true,
+                allowEscapeKey: true,
+                title: 'Copied',
+                text: 'You have copied the exam link to your clipboard',
+                icon: 'success',
+            });
+
+        },
+
+        generateExam: function() {
+            Swal.fire({
+                title: 'Generate Exam Link',
+                text: "Are you sure you want to generate?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    let formData = new FormData();
+                    formData.append("exam_id", this.entrance_exam.exam_id)
+                    formData.append("student_id", this.slug)
+                    formData.append("student_name", this.request.first_name + ' ' + this.request
+                        .last_name)
+
+                    axios.post("<?php echo base_url();?>" + "examination/generate_exam", formData)
+                        .then(function(data) {
+                            if (data.data.success) {
+                                Swal.fire(
+                                    'SUCCESS!',
+                                    'Exam link has been generated.',
+                                    'success'
+                                )
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
+                            }
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+
+
+                }
+            })
+        },
+
         showEdit: function() {
             if (this.show_edit_name) {
                 this.show_edit_name = false;

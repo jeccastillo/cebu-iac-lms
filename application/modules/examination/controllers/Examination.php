@@ -286,12 +286,29 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-            $post['token'] = $this->generateRandomString();
-            $this->data_poster->post_data('tb_mas_student_exam',$post);
+            $sem = $this->data_fetcher->get_active_sem();
+            $applicant = array(
+                'student_name' => $post['student_name'],
+                'student_id' => $post['student_id'],
+                'exam_id' => $post['exam_id'],
+                'syid' => $sem['intID'],
+                'token' => $this->generateRandomString(),
+            );       
+            $this->data_poster->post_data('tb_mas_student_exam',$applicant);
             $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
-            redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
+            redirect(base_url()."examination/edit_exam_type/".$post['exam_idxx']);
         }else
             redirect(base_url()."unity");
+    }
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
     
     public function submit_exam()
@@ -300,14 +317,13 @@ class Examination extends CI_Controller {
         
         $examQuestions = json_decode($post['question'], true);
         $score = 0;
-
-        $question_array = [];                
         foreach($examQuestions as $examQuestion){
-
             foreach($examQuestion['choices'] as $choice){
                 if($choice['is_selected'] == '1'){
-                    $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->result_array();
-                    if($checkChoice[0]['is_correct'] == '1')
+                    // $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->result_array();
+                    // if($checkChoice[0]['is_correct'] == '1')
+                    $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
+                    if($checkChoice['is_correct'] == '1')
                         $score++;
                 }
             }
@@ -325,16 +341,6 @@ class Examination extends CI_Controller {
         $data['success'] = true;
 
         echo json_encode($data);
-    }
-
-    function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function is_super_admin()
