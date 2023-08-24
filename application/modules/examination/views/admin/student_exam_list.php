@@ -2,9 +2,9 @@
     <section class="content-header container ">
         <h1>
             Examination Questions
-            <small>
+            <!-- <small>
                 <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> Export to Excel</a>
-            </small>
+            </small> -->
         </h1>
         <hr />
 

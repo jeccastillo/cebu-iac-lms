@@ -45,6 +45,7 @@ new Vue({
         student: {
             id: ""
         },
+        is_submitted_exam: false,
         student_name: "",
         slug: "<?php echo $this->uri->segment('3'); ?>",
         exam_id: "<?php echo $this->uri->segment('4'); ?>",
@@ -64,6 +65,7 @@ new Vue({
                         .then(
                             (data) => {
                                 this.request = data.data
+                                console.log(this.request)
 
                             }).catch((e) => {
                             console.log(e)
