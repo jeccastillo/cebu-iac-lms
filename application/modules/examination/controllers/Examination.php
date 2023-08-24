@@ -101,7 +101,7 @@ class Examination extends CI_Controller {
 
     public function get_questions_per_section($id, $token, $student_id){
 
-        $student_exam = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$student_id,))->first_row('array');
+        $student_exam = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$student_id))->first_row('array');
         if($student_exam){
             $student_exam_token = $this->db->get_where('tb_mas_student_exam',array('token'=>$token,))->first_row('array');
             if($student_exam_token){
