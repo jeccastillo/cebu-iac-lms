@@ -783,12 +783,9 @@
 
                         Exam Link: <br />
                         <div class="copy-text" v-if="entrance_exam">
-                            <input type="hidden" class="text"
-                                :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
-                                id="toCopy">
-                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token }}
+                            {{student_exam_link}}
                             <a href="#" class="btn btn-primary btn-sm"
-                                @click.prevent="copyClipBoard(base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token)">Copy</a>
+                                @click.prevent="copyClipBoard(student_exam_link)">Copy</a>
                         </div>
                         <hr />
                         <div class="row" v-if="entrance_exam">
@@ -1114,7 +1111,9 @@ new Vue({
             from: "",
             to: "",
         },
+
         exam_types: [],
+        student_exam_link: "",
         loader_spinner: true,
         base_url: "<?php echo base_url(); ?>",
         type: "",
@@ -1174,6 +1173,14 @@ new Vue({
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
+
+                        if (this.entrance_exam && this.entrance_exam.token) {
+                            this.student_exam_link = this.base_url + 'unity/student_exam/' + this.slug +
+                                '/' + this.entrance_exam.exam_id + '/' + this.entrance_exam.token
+                        } else {
+                            this.student_exam_link = this.base_url + 'unity/student_exam/' + this.slug +
+                                '/' + this.entrance_exam.exam_id
+                        }
 
 
 
