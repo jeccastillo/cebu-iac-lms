@@ -205,7 +205,7 @@
                                                 <td>{{ record.facultyName }}</td>
                                                 <td>{{ record.recStatus }}</td>
                                                 <td>                                                    
-                                                    <a v-if="record.intFinalized < 2" href="#"  @click.prevent.stop="removeFromClasslist(record.intCSID)">Remove</a><br />
+                                                    <a v-if="record.intFinalized < 2 || registration.intROG < 2" href="#"  @click.prevent.stop="removeFromClasslist(record.intCSID)">Remove</a><br />
                                                     <a v-if="record.intFinalized < 2" :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                                                    
                                                     <a v-else :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                               
                                                 </td>

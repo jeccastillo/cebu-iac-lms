@@ -366,7 +366,7 @@ class Data_poster extends CI_Model {
     
     function deleteStudentCS($table,$id)
 	{
-		$this->db
+		return $this->db
 			->where('intCSID',$id)
 			->delete($table);
 	}
