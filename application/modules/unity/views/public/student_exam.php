@@ -4,7 +4,9 @@
 
 
             <div style="margin-top:5rem">
-                <h3>Student Exam</h3>
+                <h1 style="text-align:center;"><strong>iACADEMY</strong></h1>
+                <h3 style="text-align:center;"><strong>STUDENT ENTRANCE EXAM</strong></h3>
+                <br><br>
             </div>
 
             <div v-if="!request.success" style="margin-top:3rem">
@@ -76,6 +78,9 @@ new Vue({
                             }).catch((e) => {
                             console.log(e)
                         })
+                } else {
+                    this.request.success = false;
+                    this.request.message = "Invalid exam link."
                 }
 
 
