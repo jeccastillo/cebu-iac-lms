@@ -787,7 +787,8 @@
                                 :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
                                 id="toCopy">
                             {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token }}
-                            <a href="#" class="btn btn-primary btn-sm" @click.prevent="copyToClipboard">Copy</a>
+                            <a href="#" class="btn btn-primary btn-sm"
+                                @click.prevent="copyClipBoard(base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token)">Copy</a>
                         </div>
                         <hr />
                         <div class="row" v-if="entrance_exam">
@@ -1200,29 +1201,28 @@ new Vue({
     },
 
     methods: {
-        copyToClipboard: async function() {
-            let copyText = document.querySelector(".copy-text");
-            let input = copyText.querySelector("input.text");
 
+        copyClipBoard: function(str) {
+            var el = document.createElement('textarea');
+            el.value = str;
+            el.setAttribute('readonly', '');
+            el.style = {
+                position: 'absolute',
+                left: '-9999px'
+            };
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
 
-            try {
-                await navigator.clipboard.writeText(input.value);
-
-                Swal.fire({
-                    showCancelButton: false,
-                    showCloseButton: true,
-                    allowEscapeKey: true,
-                    title: 'Copied',
-                    text: 'You have copied the exam link to your clipboard',
-                    icon: 'success',
-                });
-            } catch (e) {
-                console.log(e);
-            }
-
-
-
-
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: true,
+                allowEscapeKey: true,
+                title: 'Copied',
+                text: 'You have copied the exam link to your clipboard',
+                icon: 'success',
+            });
         },
 
         generateExam: function() {

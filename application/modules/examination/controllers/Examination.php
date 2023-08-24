@@ -286,10 +286,10 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
 
+            $post = $this->input->post();
             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
 
             if(!$isGenerated){
-                $post = $this->input->post();
                 $sem = $this->data_fetcher->get_active_sem();
                 $applicant = array(
                     'student_name' => $post['student_name'],
@@ -319,6 +319,21 @@ class Examination extends CI_Controller {
             $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function delete_exam()
+    {
+        $data['message'] = "failed";
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_student_exam',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_student_exam',$post['id'],'intID');
+            $this->data_poster->log_action('Exam','Deleted an exam: '.$info['student_name'],'red');
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
     
     public function submit_exam()
