@@ -24,10 +24,10 @@
                     <thead>
                         <tr>
                             <th>slug</th>
-                            <th>Title</th>
+                            <th>Student</th>
+                            <th>Date Submitted</th>
                             <th>Exam Type</th>
-                            <th>Answer</th>
-                            <th>Section</th>
+                            <th>Score</th>
                             <th>Actions</th>
 
                         </tr>
