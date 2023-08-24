@@ -290,6 +290,7 @@ class Examination extends CI_Controller {
             $applicant = array(
                 'student_name' => $post['student_name'],
                 'student_id' => $post['student_id'],
+                'score' => 0,
                 'exam_id' => $post['exam_id'],
                 'syid' => $sem['intID'],
                 'token' => $this->generateRandomString(),
