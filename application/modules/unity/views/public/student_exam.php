@@ -7,6 +7,12 @@
                 <h3>Student Exam</h3>
             </div>
 
+            <div v-if="!request.success" style="margin-top:3rem">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>{{request.message}}</strong>
+                </div>
+            </div>
+
 
             <div v-for="(q,q_index) in request.question" class="panel panel-default">
                 <!-- Default panel contents -->
@@ -65,7 +71,7 @@ new Vue({
                         .then(
                             (data) => {
                                 this.request = data.data
-                                console.log(this.request)
+
 
                             }).catch((e) => {
                             console.log(e)
