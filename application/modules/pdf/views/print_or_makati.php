@@ -18,13 +18,15 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%;height:195px;font-size:9px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%;height:195px;font-size:9px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%"></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%"></td>
                     <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                 </tr>
             </table>
@@ -35,7 +37,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%"></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%"></td>
                     <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                 </tr>
             </table>
@@ -46,7 +49,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%"></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%"></td>
                     <td style="width:50%"><?php echo ($is_cash == 2 || $is_cash == 3)?"yes":""; ?></td>
                 </tr>
             </table>
@@ -57,7 +61,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%"></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%"></td>
                     <td style="width:50%"></td>
                 </tr>
             </table>
@@ -68,7 +73,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;color:#666;">
-                    <td style="width:50%"></td>
+                    <td style="width:1%"></td>
+                    <td style="width:49%"></td>
                     <td style="width:50%"><?php 
                         if($remarks == "Paynamics")
                             echo "Paynamics";
@@ -93,7 +99,7 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:27px;">
+                <tr style="line-height:23px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
@@ -162,7 +168,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:8px;">
+                <tr style="line-height:12px;">
                     <td style=""></td>
                 </tr>
             </table>
