@@ -224,7 +224,9 @@
                                     class="fa fa-book"> </i> View FI Calendar</a></li>
 
                     </ul>
-                </li>
+                </li>                
+                <?php endif; ?>
+                <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="examination")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-book"></i> <span>Student Examination</span>
