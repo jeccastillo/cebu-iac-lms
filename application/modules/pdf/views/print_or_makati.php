@@ -99,7 +99,7 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:15px;">
+                <tr style="line-height:18px;">
                     <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
