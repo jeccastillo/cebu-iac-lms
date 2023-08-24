@@ -1179,7 +1179,7 @@ new Vue({
                                 '/' + this.entrance_exam.exam_id + '/' + this.entrance_exam.token
                         } else {
                             this.student_exam_link = this.base_url + 'unity/student_exam/' + this.slug +
-                                '/' + this.entrance_exam.exam_id
+                                '/' + this.entrance_exam.exam_id + '/submitted'
                         }
 
 
