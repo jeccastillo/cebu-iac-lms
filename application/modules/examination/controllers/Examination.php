@@ -293,12 +293,14 @@ class Examination extends CI_Controller {
                 'exam_id' => $post['exam_id'],
                 'syid' => $sem['intID'],
                 'token' => $this->generateRandomString(),
+                'score' => '0',
             );       
             $this->data_poster->post_data('tb_mas_student_exam',$applicant);
             $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
-            redirect(base_url()."examination/edit_exam_type/".$post['exam_idxx']);
-        }else
-            redirect(base_url()."unity");
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
     }
 
     function generateRandomString($length = 10) {
