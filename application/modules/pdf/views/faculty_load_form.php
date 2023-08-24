@@ -53,7 +53,7 @@
         <th style="font-size:8px;" width="20%"><b>No. of Students</b></th>
     </tr>
 <?php 
-$hgt = 285; 
+$hgt = 265; 
 foreach($classlists as $classlist): 
     $hgt -= 15;
 ?>
