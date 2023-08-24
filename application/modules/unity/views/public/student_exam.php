@@ -67,7 +67,7 @@ new Vue({
 
                 if (this.student.id) {
                     axios.get("<?php echo base_url();?>" + "examination/get_questions_per_section/" + this
-                            .exam_id + '/' + this.token)
+                            .exam_id + '/' + this.token + '/' + this.slug)
                         .then(
                             (data) => {
                                 this.request = data.data
