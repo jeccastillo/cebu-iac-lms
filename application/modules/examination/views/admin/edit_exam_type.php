@@ -60,6 +60,11 @@
                             placeholder="Enter Question Title">
                     </div>
 
+                    <div class="form-group col-xs-6">
+                        <label for="strProgramCode">Image (optional)</label>
+                        <input type="file" name="questionImage" required class="form-control" accept="image/*">
+                    </div>
+
                     <input type="hidden" value="<?php echo $item['intID']; ?>" name="exam_id" id="exam_id">
 
 
@@ -87,8 +92,8 @@
         </div>
     </div>
     <hr />
-    
-        
+
+
     <div class="content">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
@@ -102,7 +107,7 @@
             <div class="box-body table-responsive">
                 <table class="table table-hover table-bordered">
                     <thead>
-                        <tr>                            
+                        <tr>
                             <th>Question</th>
                             <th>Section</th>
                             <th>Actions</th>
@@ -111,88 +116,23 @@
                     </thead>
                     <tbody>
                         <?php foreach($question as $q): ?>
-                            <tr>
-                                <td><?php echo $q['strTitle']; ?></td>
-                                <td><?php echo $q['strSection']; ?></td>
-                                <td>
-                                    <a href="<?php echo base_url(); ?>examination/edit_question/<?php echo $q['intID']; ?>" class="btn btn-primary">Edit</a>
-                                    <a class="delete-question btn btn-danger" rel="<?php echo $q['intID']; ?>" href="#">Delete</a>
-                                    
-                                </td>
-                            </tr>
-                            
+                        <tr>
+                            <td><?php echo $q['strTitle']; ?></td>
+                            <td><?php echo $q['strSection']; ?></td>
+                            <td>
+                                <a href="<?php echo base_url(); ?>examination/edit_question/<?php echo $q['intID']; ?>"
+                                    class="btn btn-primary">Edit</a>
+                                <a class="delete-question btn btn-danger" rel="<?php echo $q['intID']; ?>"
+                                    href="#">Delete</a>
+
+                            </td>
+                        </tr>
+
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
-    </div>
-
-
-
-    <!-- <form id="choices-form" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
-                role="form">
-
-                <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
-                <input type="hidden" id="selected_index" name="selected_index" value="" />
-                <div class="box-body">
-
-
-
-                    <div class="form-group col-xs-5" id="choices_container">
-                        <?php if(count($choices) == 0): ?>
-                        <div>
-                            <label for="strProgramCode">Enter Choice Value</label>
-                            <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct[]" value="1" required class="radioBtn"> is
-                            Correct?
-                            <hr>
-                        </div>
-
-                        <?php else:
-                            foreach ($choices as $choice):
-                        ?>
-
-                        <div class="choice_box">
-                            <label for="strProgramCode">Enter Choice Value</label>
-                            <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
-                                class="form-control" placeholder="">
-
-                            <div style="display:flex">
-                                <input type="text" name="strChoice[]" value="<?php echo $choice['strChoice'];?>"
-                                    class="form-control" placeholder="Enter choice name">
-                                <button type="button" class="btn btn-sm btn-danger btn_remove"
-                                    style="margin-left:1rem">Remove</button>
-
-                            </div>
-
-                            <div>
-                                <input type="radio" name="is_correct[]" required class="radioBtn"
-                                    <?php echo $choice['is_correct'] == 1 ? 'checked' : '' ?>
-                                    value="<?php echo $choice['is_correct'];?>"> is
-                                Correct?
-                            </div>
-                            <hr>
-
-                        </div>
-
-
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-
-
-                    </div>
-
-                    <div class=" col-sm-12" style="margin-bottom:1rem;">
-                        <button type="button" class="btn btn-default" id="add_new">Add New</button>
-                        <hr>
-                    </div>
-
-                    <div class="col-sm-12" style="margin-bottom:1rem;">
-                        <button type="submit" class="btn btn-primary" id="add_new">Submit Choices</button>
-                    </div>
-                    <div style="clear:both"></div>
-            </form> -->
     </div>
 </aside>
 
