@@ -98,7 +98,7 @@ new Vue({
                 .then(function(data) {
                     if (data.data.success) {
                         alert(data.data.message);
-                        // document.location = "<?php echo base_url(); ?>";
+                        document.location = "<?php echo base_url(); ?>";
                     }
                 })
                 .catch(function(error) {
