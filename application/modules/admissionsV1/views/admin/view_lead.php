@@ -784,8 +784,9 @@
                         Exam Link: <br />
                         <div class="copy-text">
                             <input type="hidden" class="text"
-                                :value="base_url + 'unity/student_exam/'+ slug +'/' + entrance_exam.token" id="toCopy">
-                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.token }}
+                                :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
+                                id="toCopy">
+                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token }}
                             <a href="#" class="btn btn-primary btn-sm" @click.prevent="copyToClipboard">Copy</a>
                         </div>
                         <hr />
