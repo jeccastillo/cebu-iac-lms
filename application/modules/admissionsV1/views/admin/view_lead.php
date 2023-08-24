@@ -766,7 +766,7 @@
 
                         <!-- if no existing exam link: To Generate-->
 
-                        <form @submit.prevent="generateExam"
+                        <form v-if="!entrance_exam" @submit.prevent="generateExam"
                             style="text-align:center; display:flex; justify-content:center; margin-bottom:2rem;">
                             <div class="col-xs-5">
                                 <select name="examID" v-model="exam_type_id" id="selectExamID" class="form-control"
