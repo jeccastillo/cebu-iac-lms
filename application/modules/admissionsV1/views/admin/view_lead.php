@@ -782,7 +782,7 @@
                         <!-- end  -->
 
                         Exam Link: <br />
-                        <div class="copy-text">
+                        <div class="copy-text" v-if="entrance_exam">
                             <input type="hidden" class="text"
                                 :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
                                 id="toCopy">
