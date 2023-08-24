@@ -1251,9 +1251,9 @@ new Vue({
                                     'Exam link has been generated.',
                                     'success'
                                 )
-                                // setTimeout(() => {
-                                //     location.reload();
-                                // }, 1500);
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
                             }
                         })
                         .catch(function(error) {
