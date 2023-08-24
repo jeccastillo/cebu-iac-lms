@@ -133,7 +133,9 @@ class Examination extends CI_Controller {
         }else{
             $section = array(
                 'section' => [],
-                'question' => [],            
+                'question' => [],
+                'message' => 'You have already taken the exam.',
+                'success' => false,  
             );
         }
 
@@ -259,7 +261,7 @@ class Examination extends CI_Controller {
                     );                   
                     $this->data_poster->post_data('tb_mas_choices',$questionChoice);
                     $i++;
-                    //$this->data_poster->log_action('Choice','Added choices: '.$post['choice'],'green');
+                    $this->data_poster->log_action('Choice','Added choices: '.$post['strChoice'],'green');
                 }
             }
             redirect(base_url()."examination/edit_question/".$post['question_id']);
