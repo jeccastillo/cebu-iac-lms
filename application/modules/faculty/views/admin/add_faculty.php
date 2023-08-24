@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="strMiddlename">Employee Number</label>
-                        <input type="text" name="strFacultyNumber" class="form-control" id="strFacultyNumber" placeholder="Enter Employee Number">
+                        <input required type="text" name="strFacultyNumber" class="form-control" id="strFacultyNumber" placeholder="Enter Employee Number">
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="strEmail">Email</label>
