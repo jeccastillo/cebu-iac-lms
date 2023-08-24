@@ -772,6 +772,7 @@
                                 <select name="examID" v-model="exam_type_id" id="selectExamID" class="form-control"
                                     required id="">
                                     <option value="" disabled selected>--select exam type--</option>
+                                    <option v-for="ex in exam_types" :value="ex.intID">{{ex.strName}}</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-success">
@@ -1111,6 +1112,7 @@ new Vue({
             from: "",
             to: "",
         },
+        exam_types: [],
         loader_spinner: true,
         base_url: "<?php echo base_url(); ?>",
         type: "",
@@ -1183,33 +1185,42 @@ new Vue({
                 console.log(error);
             })
 
+        axios.get(this.base_url + 'admissionsV1/get_exam_types')
+            .then((data) => {
+                this.exam_types = data.data.exam_types
+
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
 
 
     },
 
     methods: {
-        copyToClipboard: function() {
+        copyToClipboard: async function() {
             let copyText = document.querySelector(".copy-text");
             let input = copyText.querySelector("input.text");
-            document.execCommand("copy");
-            copyText.classList.add("active");
-            window.getSelection().removeAllRanges();
-
-            navigator.clipboard.writeText(input.value);
 
 
-            setTimeout(function() {
-                copyText.classList.remove("active");
-            }, 2500);
+            try {
+                await navigator.clipboard.writeText(input.value);
 
-            Swal.fire({
-                showCancelButton: false,
-                showCloseButton: true,
-                allowEscapeKey: true,
-                title: 'Copied',
-                text: 'You have copied the exam link to your clipboard',
-                icon: 'success',
-            });
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    allowEscapeKey: true,
+                    title: 'Copied',
+                    text: 'You have copied the exam link to your clipboard',
+                    icon: 'success',
+                });
+            } catch (e) {
+                console.log(e);
+            }
+
+
+
 
         },
 
@@ -1227,7 +1238,7 @@ new Vue({
 
 
                     let formData = new FormData();
-                    formData.append("exam_id", this.entrance_exam.exam_id)
+                    formData.append("exam_id", this.exam_type_id)
                     formData.append("student_id", this.slug)
                     formData.append("student_name", this.request.first_name + ' ' + this.request
                         .last_name)
@@ -1240,9 +1251,9 @@ new Vue({
                                     'Exam link has been generated.',
                                     'success'
                                 )
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
+                                // setTimeout(() => {
+                                //     location.reload();
+                                // }, 1500);
                             }
                         })
                         .catch(function(error) {
