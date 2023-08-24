@@ -12,8 +12,8 @@ $(document).ready(function() {
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>examination/submit_delete_examination/' +
-                        row[0] + '">View</a></li></ul></div>';
+                    return '<?php echo $d_open; ?><li><a href="#" rel="' + row[0] +
+                        '" class="trash-item">Delete</a></li></ul></div>';
                 }
             },
             {
@@ -38,7 +38,7 @@ $(document).ready(function() {
                         'code': code
                     };
                     $.ajax({
-                        'url': '<?php echo base_url(); ?>index.php/program/delete_program',
+                        'url': '<?php echo base_url(); ?>index.php/examination/delete_exam',
                         'method': 'post',
                         'data': data,
                         'dataType': 'json',
