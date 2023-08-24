@@ -1948,6 +1948,10 @@ class Datatables extends CI_Controller {
             $join = "JOIN tb_mas_exam ON tb_mas_questions.exam_id = tb_mas_exam.intID ";
             $join .= "LEFT JOIN tb_mas_choices ON (SELECT question_id WHERE is_correct = '1') = tb_mas_questions.intID";
         }
+        if($table == 'tb_mas_student_exam')
+        {
+            $join = "JOIN tb_mas_sy ON tb_mas_sy.intID = tb_mas_exam.syid ";
+        }
 
         if($registered == -1)
             $sGroup = "GROUP BY tb_mas_advised.intStudentID ";
