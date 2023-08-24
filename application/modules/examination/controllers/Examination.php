@@ -286,10 +286,10 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
 
+            $post = $this->input->post();
             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
 
             if(!$isGenerated){
-                $post = $this->input->post();
                 $sem = $this->data_fetcher->get_active_sem();
                 $applicant = array(
                     'student_name' => $post['student_name'],
