@@ -766,7 +766,7 @@
 
                         <!-- if no existing exam link: To Generate-->
 
-                        <form @submit.prevent="generateExam"
+                        <form v-if="!entrance_exam" @submit.prevent="generateExam"
                             style="text-align:center; display:flex; justify-content:center; margin-bottom:2rem;">
                             <div class="col-xs-5">
                                 <select name="examID" v-model="exam_type_id" id="selectExamID" class="form-control"
@@ -782,10 +782,11 @@
                         <!-- end  -->
 
                         Exam Link: <br />
-                        <div class="copy-text">
-                            <input type="hidden" class="text" :value="base_url + '/unity/student_exam/'+ slug +'/1'"
+                        <div class="copy-text" v-if="entrance_exam">
+                            <input type="hidden" class="text"
+                                :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
                                 id="toCopy">
-                            {{ base_url + '/unity/student_exam/'+ slug +'/1' }}
+                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token }}
                             <a href="#" class="btn btn-primary btn-sm" @click.prevent="copyToClipboard">Copy</a>
                         </div>
                         <hr />
@@ -1251,9 +1252,9 @@ new Vue({
                                     'Exam link has been generated.',
                                     'success'
                                 )
-                                // setTimeout(() => {
-                                //     location.reload();
-                                // }, 1500);
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
                             }
                         })
                         .catch(function(error) {
