@@ -127,14 +127,22 @@ class Examination extends CI_Controller {
                 
                 $section = array(
                     'section' => 'I',
-                    'question' => $question_array,            
+                    'question' => $question_array,  
+                    'success' => true,          
+                );
+            }else{
+                $section = array(
+                    'section' => [],
+                    'question' => [],
+                    'message' => 'Invalid exam link.',
+                    'success' => false,  
                 );
             }
         }else{
             $section = array(
                 'section' => [],
                 'question' => [],
-                'message' => 'You have already taken the exam.',
+                'message' => 'Invalid exam link.',
                 'success' => false,  
             );
         }
