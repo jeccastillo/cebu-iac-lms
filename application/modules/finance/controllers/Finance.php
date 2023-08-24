@@ -380,6 +380,17 @@ class Finance extends CI_Controller {
             redirect(base_url()."unity");  
     }
     
+    public function check_or_printed($or){
+        
+        $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
+                        ->get('tb_mas_printed_or')
+                        ->first_row();
+
+        if($printed)
+            return true;
+        else
+            return false;
+    }
 
     public function remove_or_print($or){
         $role = $this->session->userdata('special_role');

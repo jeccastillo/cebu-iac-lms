@@ -182,7 +182,7 @@
                                         </div>
                                     </div>
                                     <hr />                                    
-                                    <table class="table table-condensed table-bordered">
+                                    <table v-if="registration" class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Section Code</th>
