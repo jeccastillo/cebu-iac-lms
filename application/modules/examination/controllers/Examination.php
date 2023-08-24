@@ -285,20 +285,28 @@ class Examination extends CI_Controller {
     public function generate_exam()
     {
         if($this->is_super_admin() || $this->is_admissions()){
-            $post = $this->input->post();
-            $sem = $this->data_fetcher->get_active_sem();
-            $applicant = array(
-                'student_name' => $post['student_name'],
-                'student_id' => $post['student_id'],                
-                'exam_id' => $post['exam_id'],
-                'syid' => $sem['intID'],
-                'token' => $this->generateRandomString(),
-                'score' => '0',
-            );       
-            $this->data_poster->post_data('tb_mas_student_exam',$applicant);
-            $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
-            $data['message'] = "success";
-            $data['success'] = true;
+
+            $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
+
+            if(!$isGenerated){
+                $post = $this->input->post();
+                $sem = $this->data_fetcher->get_active_sem();
+                $applicant = array(
+                    'student_name' => $post['student_name'],
+                    'student_id' => $post['student_id'],
+                    'exam_id' => $post['exam_id'],
+                    'syid' => $sem['intID'],
+                    'token' => $this->generateRandomString(),
+                    'score' => '0',
+                );       
+                $this->data_poster->post_data('tb_mas_student_exam',$applicant);
+                $this->data_poster->log_action('Student Exam','Added a new student exam: '.$post['student_name'],'green');
+                $data['message'] = "Successfully generated.";
+                $data['success'] = true;
+            }else{
+                $data['message'] = "Exam already generated.";
+                $data['success'] = false;
+            }
         }
         echo json_encode($data);
     }
