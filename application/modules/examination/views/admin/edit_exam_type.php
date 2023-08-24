@@ -62,7 +62,7 @@
 
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Image (optional)</label>
-                        <input type="file" name="questionImage" required class="form-control" accept="image/*">
+                        <input type="file" name="questionImage" class="form-control" accept="image/*">
                     </div>
 
                     <input type="hidden" value="<?php echo $item['intID']; ?>" name="exam_id" id="exam_id">

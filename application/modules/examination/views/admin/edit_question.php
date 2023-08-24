@@ -107,7 +107,7 @@
 
                             <div class="form-group">
                                 <label>Image (optional)</label>
-                                <input type="file" name="choiceImage[]" required class="form-control" accept="image/*">
+                                <input type="file" name="choiceImage[]" class="form-control" accept="image/*">
                             </div>
 
 
@@ -161,7 +161,7 @@ const toAppend = `<div class="choice_box">
 
                         <div class="form-group">
                                 <label>Image (optional)</label>
-                                <input type="file" name="choiceImage[]" required class="form-control" accept="image/*">
+                                <input type="file" name="choiceImage[]"  class="form-control" accept="image/*">
                             </div>
                        
                         <div class="form-group">
