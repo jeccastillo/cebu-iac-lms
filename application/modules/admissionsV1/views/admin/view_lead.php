@@ -1201,28 +1201,6 @@ new Vue({
     },
 
     methods: {
-        copyToClipboard: async function() {
-            let copyText = document.querySelector(".copy-text");
-            let input = copyText.querySelector("input.text");
-
-
-            try {
-                await navigator.clipboard.writeText(input.value);
-
-                Swal.fire({
-                    showCancelButton: false,
-                    showCloseButton: true,
-                    allowEscapeKey: true,
-                    title: 'Copied',
-                    text: 'You have copied the exam link to your clipboard',
-                    icon: 'success',
-                });
-            } catch (e) {
-                console.log(e);
-            }
-
-
-        },
 
         copyClipBoard: function(str) {
             var el = document.createElement('textarea');
@@ -1236,6 +1214,15 @@ new Vue({
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
+
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: true,
+                allowEscapeKey: true,
+                title: 'Copied',
+                text: 'You have copied the exam link to your clipboard',
+                icon: 'success',
+            });
         },
 
         generateExam: function() {
