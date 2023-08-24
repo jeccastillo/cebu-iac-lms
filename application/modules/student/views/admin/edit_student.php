@@ -296,6 +296,8 @@
                                     value="transferee">Transferee</option>
                                 <option <?php echo ($student['student_type'] == "foreign")?'selected':''; ?>
                                     value="foreign">Foreign</option>
+                                <option <?php echo ($student['student_type'] == "second degree")?'selected':''; ?>
+                                    value="second degree">Second Degree</option>
                             </select>
                         </div>
                     </div>
