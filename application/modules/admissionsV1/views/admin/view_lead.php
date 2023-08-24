@@ -786,7 +786,7 @@
                             <input type="hidden" class="text"
                                 :value="base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token"
                                 id="toCopy">
-                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token }}
+                            {{ base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + (entrance_exam.token ? entrance_exam.token : 'already-submitted)' }}
                             <a href="#" class="btn btn-primary btn-sm"
                                 @click.prevent="copyClipBoard(base_url + 'unity/student_exam/'+ slug + '/' + entrance_exam.exam_id  + '/' + entrance_exam.token)">Copy</a>
                         </div>
