@@ -99,42 +99,53 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function get_questions_per_section($id, $token){
-        $student_exam = $this->db->get_where('tb_mas_student_exam',array('token'=>$token))->first_row('array');
+    public function get_questions_per_section($id, $token, $student_id){
+
+        $student_exam = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$student_id,))->first_row('array');
         if($student_exam){
-            if($student_exam['exam_id'] == $id){
-                $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
-                $question_array = [];                
-                foreach($questions as $question){          
-                      
-                    $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
-        
-                    $choice_array = [];
-                    foreach($choices as $choice){
-                        $choice_array[] = array(
-                            'id' => $choice['intID'],
-                            'choice' => $choice['strChoice'],
-                            'is_selected'=>0,
+            $student_exam_token = $this->db->get_where('tb_mas_student_exam',array('token'=>$token,))->first_row('array');
+            if($student_exam_token){
+                if($student_exam['exam_id'] == $id){
+                    $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
+                    $question_array = [];                
+                    foreach($questions as $question){          
+                          
+                        $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
+            
+                        $choice_array = [];
+                        foreach($choices as $choice){
+                            $choice_array[] = array(
+                                'id' => $choice['intID'],
+                                'choice' => $choice['strChoice'],
+                                'is_selected'=>0,
+                            );
+                        }
+                        $question_array[] = array(
+                            'id' => $question['intID'],
+                            'title'=> $question['strTitle'],
+                            'choices'=> $choice_array
                         );
+                        
                     }
-                    $question_array[] = array(
-                        'id' => $question['intID'],
-                        'title'=> $question['strTitle'],
-                        'choices'=> $choice_array
-                    );
                     
+                    $section = array(
+                        'section' => 'I',
+                        'question' => $question_array,  
+                        'success' => true,          
+                    );
+                }else{
+                    $section = array(
+                        'section' => [],
+                        'question' => [],
+                        'message' => 'Invalid exam link.',
+                        'success' => false,  
+                    );
                 }
-                
-                $section = array(
-                    'section' => 'I',
-                    'question' => $question_array,  
-                    'success' => true,          
-                );
             }else{
                 $section = array(
                     'section' => [],
                     'question' => [],
-                    'message' => 'Invalid exam link.',
+                    'message' => 'Exam already taken.',
                     'success' => false,  
                 );
             }
