@@ -103,9 +103,9 @@ class Examination extends CI_Controller {
     {
         $student_exam = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$student_id))->first_row('array');
         if($student_exam){
-            $student_exam_token = $this->db->get_where('tb_mas_student_exam',array('token'=>$token,))->first_row('array');
-            if($student_exam_token){
-                if($student_exam['exam_id'] == $id){
+            if($student_exam['exam_id'] == $id){
+                $student_exam_token = $this->db->get_where('tb_mas_student_exam',array('token'=>$token,))->first_row('array');
+                if($student_exam_token){
                     $questions = $this->db->get_where('tb_mas_questions',array('exam_id'=>$id))->result_array('array');
                     $question_array = [];                
                     foreach($questions as $question){          
@@ -137,7 +137,7 @@ class Examination extends CI_Controller {
                     $section = array(
                         'section' => [],
                         'question' => [],
-                        'message' => 'Invalid exam link.',
+                        'message' => 'Exam already taken.',
                         'success' => false,  
                     );
                 }
@@ -145,7 +145,7 @@ class Examination extends CI_Controller {
                 $section = array(
                     'section' => [],
                     'question' => [],
-                    'message' => 'Exam already taken.',
+                    'message' => 'Invalid exam link.',
                     'success' => false,  
                 );
             }
