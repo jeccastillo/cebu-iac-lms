@@ -2880,7 +2880,15 @@ class Excel extends CI_Controller {
                     ->setCellValue('G1', '2nd Choice')
                     ->setCellValue('H1', '3rd Choice')
                     ->setCellValue('I1', 'Email')
-                    ->setCellValue('J1', 'Status');
+                    ->setCellValue('J1', 'Status')
+                    ->setCellValue('K1', 'School')
+                    ->setCellValue('L1', 'Father')
+                    ->setCellValue('M1', 'Contact #')
+                    ->setCellValue('N1', 'Mother')
+                    ->setCellValue('O1', 'Contact #')
+                    ->setCellValue('P1', 'Guardian')
+                    ->setCellValue('Q1', 'Contact #')
+                    ->setCellValue('R1', 'Date');
                     
         
         $i = 2;
@@ -2895,9 +2903,17 @@ class Excel extends CI_Controller {
                     ->setCellValue('E'.$i, $d->address)
                     ->setCellValue('F'.$i, $d->program)
                     ->setCellValue('G'.$i, $d->program2)
-                    ->setCellValue('H'.$i, $d->program3)
+                    ->setCellValue('H'.$i, $d->program3)                    
                     ->setCellValue('I'.$i, $d->email)
-                    ->setCellValue('J'.$i, $d->status);
+                    ->setCellValue('J'.$i, $d->status)
+                    ->setCellValue('K'.$i, $d->school)
+                    ->setCellValue('L'.$i, $d->father_name)
+                    ->setCellValue('M'.$i, $d->father_contact)
+                    ->setCellValue('N'.$i, $d->mother_name)
+                    ->setCellValue('O'.$i, $d->mother_contact)
+                    ->setCellValue('P'.$i, $d->guardian_name)
+                    ->setCellValue('Q'.$i, $d->guardian_contact)
+                    ->setCellValue('R'.$i, $d->date);
                                                        
             $i++;
         }
