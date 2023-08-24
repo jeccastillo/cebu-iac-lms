@@ -2913,7 +2913,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('O'.$i, $d->mother_contact)
                     ->setCellValue('P'.$i, $d->guardian_name)
                     ->setCellValue('Q'.$i, $d->guardian_contact)
-                    ->setCellValue('R'.$i, $d->date);
+                    ->setCellValue('R'.$i, $d->datestamp);
                                                        
             $i++;
         }
