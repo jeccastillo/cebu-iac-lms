@@ -134,7 +134,7 @@ class Examination extends CI_Controller {
             $section = array(
                 'section' => [],
                 'question' => [],
-                'message' => 'You have already taken the exam.'
+                'message' => 'You have already taken the exam.',
                 'success' => false,  
             );
         }
