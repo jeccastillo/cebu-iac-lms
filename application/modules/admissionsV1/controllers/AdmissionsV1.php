@@ -141,6 +141,11 @@ class AdmissionsV1 extends CI_Controller {
         echo json_encode($ret);
     }
 
+    public function get_exam_types(){
+        $data['exam_types'] = $this->db->get('tb_mas_exam')->result_array();
+        echo json_encode($data);
+    }
+
     public function update_requirements(){
         $this->load->view('common/header',$this->data);        
 		$this->load->view('admin/update_requirements',$this->data);
