@@ -289,8 +289,7 @@ class Examination extends CI_Controller {
             $sem = $this->data_fetcher->get_active_sem();
             $applicant = array(
                 'student_name' => $post['student_name'],
-                'student_id' => $post['student_id'],
-                'score' => 0,
+                'student_id' => $post['student_id'],                
                 'exam_id' => $post['exam_id'],
                 'syid' => $sem['intID'],
                 'token' => $this->generateRandomString(),
