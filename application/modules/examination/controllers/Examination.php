@@ -320,6 +320,21 @@ class Examination extends CI_Controller {
         }
         return $randomString;
     }
+
+    public function delete_exam()
+    {
+        $data['message'] = "failed";
+        $data['success'] = false;
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();            
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_student_exam',$post['id']);            
+            $this->data_poster->deleteItem('tb_mas_student_exam',$post['id'],'intID');
+            $this->data_poster->log_action('Exam','Deleted an exam: '.$info['student_name'],'red');
+            $data['message'] = "success";
+            $data['success'] = true;
+        }
+        echo json_encode($data);
+    }
     
     public function submit_exam()
     {
