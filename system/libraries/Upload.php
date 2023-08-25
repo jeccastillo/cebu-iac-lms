@@ -373,6 +373,10 @@ class CI_Upload {
 	 */
 	public function do_upload($field = 'userfile')
 	{
+		print_r($field);
+		print_r($_FILES[$field]);
+		print_r(isset($_FILES[$field]));
+		die();
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
 		{
@@ -583,12 +587,11 @@ class CI_Upload {
 		return TRUE;
 	}
 
-	public function do_upload_multiple($field = 'userfile', $count = 0)
+	public function do_upload_original_name($field = 'userfile', $questionID)
 	{
-		for($index = 0; $index < $count; $index++){
-			if (isset($_FILES[$field]))
+			if (isset($field))
 			{
-				$_file = $_FILES[$field][$index];
+				$_file = $field;
 			}
 			// Does the field name contain array notation?
 			elseif (($c = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $field, $matches)) > 1)
@@ -687,7 +690,8 @@ class CI_Upload {
 				// If no extension was provided in the file_name config item, use the uploaded one
 				if (strpos($this->_file_name_override, '.') === FALSE)
 				{
-					$this->file_name .= $this->file_ext;
+					// $this->file_name .= $this->file_ext;
+					$this->file_name = $questionID . '' . $file['name'];
 				}
 				else
 				{
@@ -793,7 +797,7 @@ class CI_Upload {
 			$this->set_image_properties($this->upload_path.$this->file_name);
 		
 			return TRUE;
-		}
+		// }
 	}
 
 	// --------------------------------------------------------------------
