@@ -234,10 +234,10 @@ class Examination extends CI_Controller {
         if($this->is_super_admin() || $this->is_admissions()){
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']	= '400';
+            // $config['max_size']	= '400';
             $config['file_name'] = rand(1000,9999);
-            $config['max_width']  = '1024';
-            $config['max_height']  = '768';
+            // $config['max_width']  = '1024';
+            // $config['max_height']  = '768';
             $this->load->library('upload', $config);
             if ( ! $this->upload->do_upload("questionImage"))
             {
@@ -266,10 +266,10 @@ class Examination extends CI_Controller {
         if($this->is_super_admin() || $this->is_admissions()){
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']	= '400';
+            // $config['max_size']	= '400';
             $config['file_name'] = rand(1000,9999);
-            $config['max_width']  = '1024';
-            $config['max_height']  = '768';
+            // $config['max_width']  = '1024';
+            // $config['max_height']  = '768';
             $this->load->library('upload', $config);
             if ( ! $this->upload->do_upload("questionImage"))
             {
