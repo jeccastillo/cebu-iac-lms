@@ -481,6 +481,7 @@ new Vue({
         amount_paid: 0,
         amount_paid_formatted: 0,
         payments: [],
+        payments_paid: [],
         remaining_amount_formatted: 0,
         has_partial: false,
         reg_status: undefined,        
@@ -554,10 +555,12 @@ new Vue({
                                 this.remaining_amount = this.tuition_data.total_installment;                            
 
                             for(i in this.payments){
-                                if(this.payments[i].status == "Paid"){                              
+                                if(this.payments[i].status == "Paid"){     
+                                    this.payments_paid.push(this.payments[i]);                         
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }
+                                console.log(this.payments_paid);
                             }                        
 
                             axios.get(api_url + 'finance/reservation/' + this.slug)
@@ -679,7 +682,7 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){
-                                        const pay_length = this.payments.length - 1;
+                                        const pay_length = this.payments_paid.length - 1;
                                         var formdata= new FormData();
                                         formdata.append('payments',this.payments.length);                                        
                                         //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
