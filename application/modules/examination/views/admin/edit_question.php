@@ -15,6 +15,10 @@
                 <h3 class="box-title">Edit Exam Question</h3>
             </div>
 
+
+            <?php print_r($question) ?>
+
+
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_question" method="post"
                 enctype="multipart/form-data" role="form">
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
@@ -35,14 +39,20 @@
 
                     <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
-                        <!-- <textarea type="text" name="strTitle" rows="10" class="form-control" id="strTitle"
-                            placeholder="Enter Question Title"><?php echo $question['strTitle']; ?></textarea> -->
                         <textarea id="editorQuestion" name="strTitle"
                             required><?php echo $question['strTitle']; ?></textarea>
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Image (optional)</label>
-                        <!-- <input type="file" name="questionImage" class="form-control" accept="image/*"> -->
+                        <input type="file" name="questionImage" class="form-control" accept="image/*">
+
+                        <!-- question image -->
+                        <?php if($question && $question['image']): ?>
+                        <img src="<?php echo $question['image']?>" style="max-width:100%; height:auto" alt="">
+                        <?php endif; ?>
+                        <!-- end -->
+
+
                     </div>
 
 
@@ -61,7 +71,6 @@
                             <option <?php echo $question['strSection'] == "VI" ? "selected": "" ?>>V</option>
                             <option <?php echo $question['strSection'] == "VII" ? "selected": "" ?>>V</option>
                         </select> -->
-
 
                         <select name="strSection" required class="form-control" id="strSection">
                             <option value="" selected disabled>--select section--</option>
