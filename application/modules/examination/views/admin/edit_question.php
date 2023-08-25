@@ -151,7 +151,7 @@
                             <div class="form-group">
                                 <label>Image (optional)</label>
                                 <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
-                                    <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                    <input type="file" id="" name="choiceImage" class="form-control inputImage"
                                         accept="image/*">
                                     <button type="button" class="btn btn-primary btnResetImage">Reset</button>
                                 </div>
@@ -219,7 +219,7 @@ const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
                         <div class="form-group">
                              <label>Image (optional)</label>
                             <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
-                                <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                <input type="file" id="" name="choiceImage" class="form-control inputImage"
                                     accept="image/*">
                                 <button type="button"
                                     class="btn btn-primary btnResetImage">Reset</button>
