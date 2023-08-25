@@ -124,6 +124,7 @@ class Examination extends CI_Controller {
                             'id' => $question['intID'],
                             'title'=> $question['strTitle'],
                             'section'=> $question['strSection'],
+                            'image' => base_url() . 'assets/photos/exam/' .$question['questionImage'],
                             'choices'=> $choice_array
                         );
                         
