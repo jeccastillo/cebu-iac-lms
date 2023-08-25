@@ -14,9 +14,8 @@
             <div class="box-header">
                 <h3 class="box-title">Edit Exam Question</h3>
             </div>
-
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_question" method="post"
-                role="form">
+                enctype="multipart/form-data" role="form">
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
 
@@ -33,38 +32,78 @@
                     </div>
 
 
-                    <div class="form-group col-xs-6">
-                        <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" value="<?php echo $question['strTitle']; ?>"
-                            class="form-control" id="strTitle" placeholder="Enter Question Title">
-                    </div>
-
-
-
-                    <div class="form-group col-xs-6">
-                        <label for="type">Section</label>
-                        <!-- <input type="text" name="strSection" value="<?php echo $question['strSection']; ?>"
-                            class="form-control" id="strSection" placeholder="Enter Section"> -->
-
-                        <select name="strSection" required class="form-control" id="strSection">
-                            <option value="" selected disabled>--select section--</option>
-                            <option <?php echo $question['strSection'] == "I" ? "selected": "" ?>>I</option>
-                            <option <?php echo $question['strSection'] == "II" ? "selected": "" ?>>II</option>
-                            <option <?php echo $question['strSection'] == "III" ? "selected": "" ?>>III</option>
-                            <option <?php echo $question['strSection'] == "IV" ? "selected": "" ?>>IV</option>
-                            <option <?php echo $question['strSection'] == "V" ? "selected": "" ?>>V</option>
-                            <option <?php echo $question['strSection'] == "VI" ? "selected": "" ?>>V</option>
-                            <option <?php echo $question['strSection'] == "VII" ? "selected": "" ?>>V</option>
-                        </select>
-                    </div>
-
                     <div class="form-group col-xs-12">
-                        <input type="submit" value="update" class="btn btn-default  btn-flat">
+                        <label for="strProgramCode">Question</label>
+                        <textarea id="editorQuestion" name="strTitle"
+                            required><?php echo $question['strTitle']; ?></textarea>
                     </div>
-                    <div style="clear:both"></div>
+
+
                 </div>
-            </form>
+                <div class="form-group col-xs-6">
+                    <label>Image (optional)</label>
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <input type="file" id="questionImage" name="questionImage" class="form-control"
+                            accept="image/*">
+                        <button type="button" onclick="document.querySelector('#questionImage').value = '';"
+                            class="btn btn-primary">Reset</button>
+
+                    </div>
+
+                    <br>
+
+                    <!-- question image -->
+                    <?php if($question && $question['image']): ?>
+                    <img src="<?php echo $question['image']?>" style="max-width:100%; height:auto" alt="">
+                    <br>
+                    <form style="text-align:center;" method="post"
+                        action="<?php echo base_url(); ?>examination/delete_image_question">
+                        <input type="hidden" value="<?php echo $question['intID'] ?>">
+                        <button class="btn btn-delete btn-sm btn-danger">Remove Image</button>
+                    </form>
+                    <?php endif; ?>
+                    <!-- end -->
+
+
+                </div>
+
+
+
+                <div class="form-group col-xs-6">
+                    <label for="type">Section</label>
+
+                    <select name="strSection" required class="form-control" id="strSection">
+                        <option value="" selected disabled>--select section--</option>
+                        <?php if($question['type'] == 'college' || $question['type'] == 'other' ): ?>
+
+                        <option <?php echo $question['strSection'] == "English" ? "selected": "" ?>>English</option>
+                        <option <?php echo $question['strSection'] == "Mathematics" ? "selected": "" ?>>Mathematics
+                        </option>
+                        <option <?php echo $question['strSection'] == "Abstract" ? "selected": "" ?>>Abstract
+                        </option>
+                        <option <?php echo $question['strSection'] == "Visuospatial" ? "selected": "" ?>>
+                            Visuospatial
+                        </option>
+
+                        <?php else : ?>
+                        <option <?php echo $question['strSection'] == "English" ? "selected": "" ?>>English</option>
+                        <option <?php echo $question['strSection'] == "Mathematics" ? "selected": "" ?>>Mathematics
+                        </option>
+                        <option <?php echo $question['strSection'] == "Filipino" ? "selected": "" ?>>Filipino
+                        </option>
+                        <option <?php echo $question['strSection'] == "Science" ? "selected": "" ?>>Science</option>
+                        <?php endif; ?>
+
+                    </select>
+                </div>
+
+                <div class="form-group col-xs-12">
+                    <input type="submit" value="update" class="btn btn-default  btn-flat">
+                </div>
+                <div style="clear:both"></div>
         </div>
+        </form>
+    </div>
     </div>
 
     <div class="content">
@@ -81,7 +120,7 @@
                 <input type="hidden" id="selected_index" name="selected_index" value="" />
                 <div class="box-body">
 
-                    <div class="form-group col-xs-6" id="choices_container">
+                    <div class="form-group col-md-6 col-xs-12" id="choices_container">
                         <?php if(count($choices) == 0): ?>
                         <!-- <div>
                             <label for="strProgramCode">Enter Choice Value</label>
@@ -98,8 +137,8 @@
                         <div class="choice_box alert" style="background: #e6e9e9;">
                             <div class="form-group">
                                 <label for="strProgramCode">Enter Choice Value</label>
-                                <input type="text" name="strChoice[]" value="<?php echo $choice['strChoice'];?>"
-                                    class="form-control" placeholder="Enter choice name">
+                                <textarea type="text" name="strChoice[]" class="form-control" rows="5"
+                                    placeholder="Enter choice name"><?php echo $choice['strChoice'];?></textarea>
 
                                 <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
                                     class="form-control" placeholder="">
@@ -107,7 +146,12 @@
 
                             <div class="form-group">
                                 <label>Image (optional)</label>
-                                <input type="file" name="choiceImage[]" class="form-control" accept="image/*">
+                                <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
+                                    <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                        accept="image/*">
+                                    <button type="button" class="btn btn-primary btnResetImage">Reset</button>
+
+                                </div>
                             </div>
 
 
@@ -146,23 +190,31 @@
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
 const btnRemove = $(".btn_remove");
 
-const toAppend = `<div class="choice_box">
+const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
                     <div>
                         <div class="form-group">
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
-                            <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
+                            <textarea type="text" name="strChoice[]" class="form-control" rows="5"
+                                    placeholder="Enter choice name"></textarea>
                         </div>
 
                         <div class="form-group">
-                                <label>Image (optional)</label>
-                                <input type="file" name="choiceImage[]"  class="form-control" accept="image/*">
+                             <label>Image (optional)</label>
+                            <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
+                                <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                    accept="image/*">
+                                <button type="button"
+                                    class="btn btn-primary btnResetImage">Reset</button>
+
                             </div>
+                        </div>
                        
                         <div class="form-group">
                             <label>Correct Answer</label>
@@ -183,13 +235,12 @@ addNewBtn.on("click", () => {
 })
 
 
-$("#choices_container").on("click", "button", function() {
-    $(this).parent('div').remove();
-})
+// $("#choices_container").on("click", "button", function() {
+//     $(this).parent('div').remove();
+// })
 
 
-
-
+// getting the selected radio button value
 $("#choices_container").on("click", ".radioBtn", function() {
     var radioButtons = $("#choices-form input:radio[name='is_correct[]']");
     var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
@@ -197,4 +248,15 @@ $("#choices_container").on("click", ".radioBtn", function() {
     $("#selected_index").val(selectedIndex);
 
 })
+// end
+
+//reset input file per choice
+$("#choices_container").on("click", ".btnResetImage", function() {
+    $(this).closest('.inputGroup').find(".inputImage").val('');
+})
+// end
+</script>
+
+<script>
+CKEDITOR.replace('strTitle');
 </script>

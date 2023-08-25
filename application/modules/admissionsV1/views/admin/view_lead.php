@@ -788,14 +788,39 @@
                                 @click.prevent="copyClipBoard(student_exam_link)">Copy</a>
                         </div>
                         <hr />
-                        <div class="row" v-if="entrance_exam">
-                            <div class="col-sm-6">
-                                Date Submitted: {{ entrance_exam.date_taken }}
-                            </div>
-                            <div class="col-sm-6">
-                                Score: {{ entrance_exam.score }}
-                            </div>
-                        </div>
+
+
+                        <table class="table table-sm" v-if="entrance_exam">
+                            <thead>
+                                <th>Section</th>
+                                <th>Scores</th>
+                                <th>Percentage</th>
+                            </thead>
+                            <tbody v-if="sections_scores">
+                                <tr v-for="score in sections_scores">
+                                    <td>
+                                        {{score.section}}
+                                    </td>
+                                    <td>
+                                        {{score.score + ' / ' + score.items}}
+                                    </td>
+                                    <td>
+                                        {{score.percentage}}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3">&nbsp</td>
+                                </tr>
+
+                                <tr>
+                                    <td> <strong>Date Submitted:</strong> {{ entrance_exam.date_taken }}</td>
+                                    <td></td>
+                                    <td> <strong>Total Score:</strong> {{ entrance_exam.score }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -1111,6 +1136,28 @@ new Vue({
             from: "",
             to: "",
         },
+
+        sections_scores: [{
+                section: "English",
+                score: 44,
+                items: 60,
+                percentage: 0
+            },
+            {
+
+                section: "Mathematics",
+                score: 50,
+                items: 60,
+                percentage: 0
+            },
+            {
+
+                section: "Science",
+                score: 50,
+                items: 60,
+                percentage: 0
+            }
+        ],
 
         exam_types: [],
         student_exam_link: "",
