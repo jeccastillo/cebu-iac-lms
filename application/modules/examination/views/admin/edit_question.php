@@ -4,6 +4,10 @@
             Exam Question
             <small></small>
         </h1>
+
+        <a class="btn btn-primary btn-sm" style="margin-top:1rem;"
+            href="<?php echo base_url();?>examination/edit_exam_type/<?php echo $question['exam_id']?>">
+            BACK</a>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Exam Question</a></li>
             <li class="active">Edit Program</li>
@@ -114,8 +118,8 @@
 
 
 
-            <form id="choices-form" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
-                role="form">
+            <form id="choices-form" enctype="multipart/form-data"
+                action="<?php echo base_url(); ?>examination/submit_choice" method="post" role="form">
                 <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
                 <input type="hidden" id="selected_index" name="selected_index" value="" />
                 <div class="box-body">
@@ -150,8 +154,12 @@
                                     <input type="file" id="" name="questionImage" class="form-control inputImage"
                                         accept="image/*">
                                     <button type="button" class="btn btn-primary btnResetImage">Reset</button>
-
                                 </div>
+                                <!-- <form action="" style="text-align:center; margin-top:1rem;">
+                                    <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto" alt="">
+                                    <input type="text" value="<?php echo $choice['intID'] ?>">
+                                    <button type="button" class="btn btn-sm btn-danger">Remove Image</button>
+                                </form> -->
                             </div>
 
 
@@ -163,7 +171,10 @@
                                 </select>
                             </div>
                             <br>
-                            <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
+                            <form action="<?php echo base_url(); ?>examination/delete_choice" method="post">
+                                <input type="hidden" name="choice_id" value="<?php echo $choice['intID'] ?>">
+                                <button type="submit" class="btn btn-sm btn-danger">Remove Choice</button>
+                            </form>
                             <hr>
 
                         </div>
@@ -226,7 +237,7 @@ const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
 
                     </div>
                      <br>
-                    <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove</button>
+                    <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove Choice </button>
                     <hr>
                  </div>`
 
@@ -235,9 +246,9 @@ addNewBtn.on("click", () => {
 })
 
 
-// $("#choices_container").on("click", "button", function() {
-//     $(this).parent('div').remove();
-// })
+$("#choices_container").on("click", ".btn_remove", function() {
+    $(this).parent('div').remove();
+})
 
 
 // getting the selected radio button value
