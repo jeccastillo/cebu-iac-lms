@@ -53,6 +53,7 @@
 
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_question" method="post"
                 role="form" enctype="multipart/form-data">
+
                 <div class="box-body">
                     <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
@@ -163,7 +164,8 @@
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<!-- <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script> -->
+<script src="https://cdn.ckeditor.com/4.4.7/standard-all/ckeditor.js"></script>
 
 
 <script>
@@ -210,5 +212,6 @@ $("#choices_container").on("click", ".radioBtn", function() {
 
 
 <script>
+CKEDITOR.config.extraPlugins = 'justify';
 CKEDITOR.replace('strTitle');
 </script>

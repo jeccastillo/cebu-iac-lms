@@ -60,11 +60,10 @@
                     <?php if($question && $question['image']): ?>
                     <img src="<?php echo $question['image']?>" style="max-width:100%; height:auto" alt="">
                     <br>
-                    <form style="text-align:center;" method="post"
-                        action="<?php echo base_url(); ?>examination/delete_image_question">
-                        <input type="hidden" value="<?php echo $question['intID'] ?>">
-                        <button class="btn btn-delete btn-sm btn-danger">Remove Image</button>
-                    </form>
+                    <div style="text-align:center;" method="post">
+                        <a href="<?php echo base_url(); ?>examination/delete_image_question/<?php echo $question['intID'] ?>"
+                            class="btn btn-delete btn-sm btn-danger">Remove Image</a>
+                    </div>
                     <?php endif; ?>
                     <!-- end -->
 
@@ -155,11 +154,12 @@
                                         accept="image/*">
                                     <button type="button" class="btn btn-primary btnResetImage">Reset</button>
                                 </div>
-                                <!-- <form action="" style="text-align:center; margin-top:1rem;">
+                                <div action="" style="text-align:center; margin-top:1rem;">
                                     <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto" alt="">
-                                    <input type="text" value="<?php echo $choice['intID'] ?>">
-                                    <button type="button" class="btn btn-sm btn-danger">Remove Image</button>
-                                </form> -->
+                                    <a href="<?php echo base_url() ?>examination/<?php echo $choice['intID'] ?>"
+                                        class="btn btn-sm btn-danger">Remove
+                                        Image</a>
+                                </div>
                             </div>
 
 
@@ -201,7 +201,7 @@
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.4.7/standard-all/ckeditor.js"></script>
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
@@ -269,5 +269,6 @@ $("#choices_container").on("click", ".btnResetImage", function() {
 </script>
 
 <script>
+CKEDITOR.config.extraPlugins = 'justify';
 CKEDITOR.replace('strTitle');
 </script>
