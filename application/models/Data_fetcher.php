@@ -1752,13 +1752,14 @@ class Data_fetcher extends CI_Model {
 
     public function getQuestion($id)
     {
+        $query = "SELECT CONCAT( '". base_url()."assets/photos/exam/', tb_mas_questions.questionImage) AS image, 
+            tb_mas_questions.intID, tb_mas_questions.strTitle, tb_mas_questions.exam_id, 
+            tb_mas_questions.strSection, tb_mas_questions.questionImage from tb_mas_questions 
+            INNER JOIN tb_mas_exam ON tb_mas_exam.intID = tb_mas_questions.exam_id  WHERE tb_mas_questions.intID = ".$id;
+        
         return current($this->db
-            ->select('*')
-            ->select('tb_mas_questions.intID', 'tb_mas_questions.strTitle', 'tb_mas_questions.exam_id', 'tb_mas_questions.strSection', 'tb_mas_questions.questionImage', 'tb_mas_exam.strName')
-            ->from('tb_mas_questions')
-            ->where('tb_mas_questions.intID',$id)
-            ->join('tb_mas_exam', 'tb_mas_exam.intID = tb_mas_questions.exam_id')
-            ->get()->result_array());
+                    ->query($query)
+                    ->result_array());
     }
 
     public function getChoice($id)
