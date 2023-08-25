@@ -61,7 +61,14 @@
 
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Image (optional)</label>
-                        <input type="file" name="questionImage" class="form-control" accept="image/*">
+
+                        <div style="display:flex; align-items:center; gap:1rem;">
+                            <input type="file" id="questionImage" name="questionImage" class="form-control"
+                                accept="image/*">
+                            <button type="button" onclick="document.querySelector('#questionImage').value = '';"
+                                class="btn btn-primary">Reset</button>
+
+                        </div>
                     </div>
 
                     <input type="hidden" value="<?php echo $item['intID']; ?>" name="exam_id" id="exam_id">

@@ -123,6 +123,7 @@ class Examination extends CI_Controller {
                         $question_array[] = array(
                             'id' => $question['intID'],
                             'title'=> $question['strTitle'],
+                            'section'=> $question['strSection'],
                             'choices'=> $choice_array
                         );
                         
@@ -239,13 +240,14 @@ class Examination extends CI_Controller {
             // $config['max_width']  = '1024';
             // $config['max_height']  = '768';
             $this->load->library('upload', $config);
-            if ( ! $this->upload->do_upload("questionImage"))
+            if ( ! $this->upload->do_upload("questionImage"))   
+            
             {
                 // $this->session->set_flashdata('upload_errors',$this->upload->display_errors();
                 $post['questionImage'] = $file['file_name'];
                 $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
                 $this->data_poster->post_data('tb_mas_questions',$post);
-                redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
+                redirect(base_url()."examination/edit_question/".$this->db->insert_id());
             }
             else
             {
@@ -254,7 +256,7 @@ class Examination extends CI_Controller {
                 $post['questionImage'] = $file['file_name'];
                 $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
                 $this->data_poster->post_data('tb_mas_questions',$post);
-                redirect(base_url()."examination/edit_exam_type/".$post['exam_id']);
+                redirect(base_url()."examination/edit_question/".$this->db->insert_id());
             }
         }else
             redirect(base_url()."unity");

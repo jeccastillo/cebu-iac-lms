@@ -14,11 +14,6 @@
             <div class="box-header">
                 <h3 class="box-title">Edit Exam Question</h3>
             </div>
-
-
-            <?php print_r($question) ?>
-
-
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_question" method="post"
                 enctype="multipart/form-data" role="form">
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
