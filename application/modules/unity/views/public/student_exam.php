@@ -23,8 +23,8 @@
                 <div class="panel-heading"> Question # {{q_index + 1}}</div>
                 <div class="panel-body">
 
-                    <div style="white-space:pre-line">
-                        {{q.title}}
+                    <div v-html="q.title">
+
                     </div>
                     <hr>
 

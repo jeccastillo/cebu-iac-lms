@@ -52,12 +52,11 @@
             </div>
 
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_question" method="post"
-                role="form">
+                role="form" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
-                        <textarea type="text" name="strTitle" rows="5" class="form-control" id="strTitle" required
-                            placeholder="Enter Question Title"></textarea>
+                        <textarea id="editorQuestion" name="strTitle" required></textarea>
                     </div>
 
                     <div class="form-group col-xs-6">
@@ -156,8 +155,10 @@
     -webkit-box-orient: vertical;
 }
 </style>
-
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
@@ -198,4 +199,9 @@ $("#choices_container").on("click", ".radioBtn", function() {
 
     $("#selected_index").val(selectedIndex);
 })
+</script>
+
+
+<script>
+CKEDITOR.replace('strTitle');
 </script>

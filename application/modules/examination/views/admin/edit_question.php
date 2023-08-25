@@ -16,7 +16,7 @@
             </div>
 
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_edit_question" method="post"
-                role="form">
+                enctype="multipart/form-data" role="form">
                 <input type="hidden" name="intID" value="<?php echo $question['intID']; ?>" />
                 <div class="box-body">
 
@@ -35,12 +35,14 @@
 
                     <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
-                        <textarea type="text" name="strTitle" rows="10" class="form-control" id="strTitle"
-                            placeholder="Enter Question Title"><?php echo $question['strTitle']; ?></textarea>
+                        <!-- <textarea type="text" name="strTitle" rows="10" class="form-control" id="strTitle"
+                            placeholder="Enter Question Title"><?php echo $question['strTitle']; ?></textarea> -->
+                        <textarea id="editorQuestion" name="strTitle"
+                            required><?php echo $question['strTitle']; ?></textarea>
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="strProgramCode">Image (optional)</label>
-                        <input type="file" name="questionImage" class="form-control" accept="image/*">
+                        <!-- <input type="file" name="questionImage" class="form-control" accept="image/*"> -->
                     </div>
 
 
@@ -174,6 +176,7 @@
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
@@ -226,4 +229,8 @@ $("#choices_container").on("click", ".radioBtn", function() {
     $("#selected_index").val(selectedIndex);
 
 })
+</script>
+
+<script>
+CKEDITOR.replace('strTitle');
 </script>
