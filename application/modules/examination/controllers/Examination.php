@@ -92,6 +92,8 @@ class Examination extends CI_Controller {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->data['choices']= $this->data_fetcher->getChoice($id);
+        // print_r($this->data['choices']);
+        // die();
         $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
@@ -233,8 +235,6 @@ class Examination extends CI_Controller {
     public function submit_question()
     {    
         $post = $this->input->post();
-        print_r('1');
-        die();
         if($this->is_super_admin() || $this->is_admissions()){
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
@@ -292,8 +292,7 @@ class Examination extends CI_Controller {
     }
     
     public function delete_image_question($intID)
-    {
-        // $post = $this->input->post();            
+    {     
         $post['questionImage'] = '';
         $this->data_poster->post_data('tb_mas_questions',$post, $intID);
         redirect(base_url()."examination/edit_question/".$intID);
@@ -329,19 +328,19 @@ class Examination extends CI_Controller {
 
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']	= '400';
+            // $config['max_size']	= '400';
             $config['file_name'] = rand(1000,9999);
-            $config['max_width']  = '1024';
-            $config['max_height']  = '768';
+            // $config['max_width']  = '1024';
+            // $config['max_height']  = '768';
             $this->load->library('upload', $config);
 
             $choiceCount = count($post['strChoice']);
             $i = 0;
             foreach($post['strChoice'] as $choice){
-                $questions = $this->db->order_by('intID','DESC')->get('tb_mas_questions')->first_row('array');
-                $questionID = $questions['intID'] + 1;
 
                 if($post['choiceID'][$i]){
+                    // $questions = $this->db->get_where('tb_mas_choices',array('intID'=>$post['choiceID']))->first_row('array');
+                    $questionID = $post['choiceID'][$i];
                     //update choice
                     if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
@@ -367,6 +366,8 @@ class Examination extends CI_Controller {
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
                     }
                 }else{
+                    $questions = $this->db->order_by('intID','DESC')->get('tb_mas_choices')->first_row('array');
+                    $questionID = $questions['intID'] + 1;
                     //add choice
                     if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
@@ -428,6 +429,13 @@ class Examination extends CI_Controller {
             redirect(base_url()."examination/edit_question/".$info['question_id']);
         }
         echo json_encode($data);
+    }
+
+    public function delete_image_choice($questionID, $intID)
+    {
+        $post['choiceImage'] = '';
+        $this->data_poster->post_data('tb_mas_choices',$post, $intID);
+        redirect(base_url()."examination/edit_question/".$questionID);
     }
 
     public function generate_exam()

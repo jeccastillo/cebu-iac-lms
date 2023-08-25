@@ -373,10 +373,6 @@ class CI_Upload {
 	 */
 	public function do_upload($field = 'userfile')
 	{
-		print_r($field);
-		print_r($_FILES[$field]);
-		print_r(isset($_FILES[$field]));
-		die();
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
 		{
@@ -691,7 +687,7 @@ class CI_Upload {
 				if (strpos($this->_file_name_override, '.') === FALSE)
 				{
 					// $this->file_name .= $this->file_ext;
-					$this->file_name = $questionID . '' . $file['name'];
+					$this->file_name = $questionID . '' . $field['name'];
 				}
 				else
 				{
