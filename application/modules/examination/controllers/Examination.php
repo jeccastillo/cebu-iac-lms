@@ -313,7 +313,11 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-            
+            // print_r($post['strChoice'][0]);
+
+            // print_r($_FILES['choiceImage'][1]);
+            // die();
+
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
             $config['max_size']	= '400';
@@ -322,29 +326,20 @@ class Examination extends CI_Controller {
             $config['max_height']  = '768';
             $this->load->library('upload', $config);
 
-            print_r(gettype($post['choiceImage'][0]));
-		if (isset($_FILES['choiceImage'][0]))
-		{
-			print_r('yes');
-		}else{
-
-			print_r('no');
-        }
-        die();
+            $choiceCount = count($post['strChoice']);
             $i = 0;
             foreach($post['strChoice'] as $choice){
                 if($post['choiceID'][$i]){
-                    print_r("CHOICE ID : " . $post['choiceID'][$i]);
-                    die();
+                    // print_r("CHOICE ID : " . $post['choiceID'][$i]);
+                    // die();
                     //update choice
-                    if ( ! $this->upload->do_upload("choiceImage")){
+                    if ( ! $this->upload->do_upload_multiple("choiceImage", $choiceCount)){
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                         
                         $questionChoice = array(
                             'question_id'=>$post['question_id'],
                             'strChoice'=>$choice,
-                            'is_correct'=>$post['is_correct'][$i]
-                            ,
+                            'is_correct'=>$post['is_correct'][$i],
                         );                   
                         $this->data_poster->post_data('tb_mas_choices',$questionChoice,$post['choiceID'][$i]);
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
@@ -362,7 +357,7 @@ class Examination extends CI_Controller {
                     }
                 }else{
                     //add choice
-                    if ( ! $this->upload->do_upload("choiceImage")){
+                    if ( ! $this->upload->do_upload_multiple("choiceImage", $choiceCount)){
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
 
                         $questionChoice = array(
@@ -396,15 +391,17 @@ class Examination extends CI_Controller {
 
     public function delete_choice()
     {
-        $data['message'] = "failed";
-        $data['success'] = false;
+        // $data['message'] = "failed";
+        // $data['success'] = false;
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();            
-            $info = $this->data_fetcher->fetch_single_entry('tb_mas_choices',$post['chocieID']);
-            $this->data_poster->deleteItem('tb_mas_choices',$post['chocieID'],'intID');
-            $this->data_poster->log_action('Choice','Deleted a choice: '.$info['choice'],'red');
-            $data['message'] = "success";
-            $data['success'] = true;
+        
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_choices',$post['choice_id']);
+            $this->data_poster->deleteItem('tb_mas_choices',$post['choice_id'],'intID');
+            $this->data_poster->log_action('Choice','Deleted a choice: '.$info['strChoice'],'red');
+            // $data['message'] = "success";
+            // $data['success'] = true;
+            redirect(base_url()."examination/edit_question/".$info['question_id']);
         }
         echo json_encode($data);
     }
