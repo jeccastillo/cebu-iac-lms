@@ -54,10 +54,10 @@
             <form id="validate-program" action="<?php echo base_url(); ?>examination/submit_question" method="post"
                 role="form">
                 <div class="box-body">
-                    <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" class="form-control" id="strTitle" required
-                            placeholder="Enter Question Title">
+                        <textarea type="text" name="strTitle" rows="5" class="form-control" id="strTitle" required
+                            placeholder="Enter Question Title"></textarea>
                     </div>
 
                     <div class="form-group col-xs-6">
@@ -73,13 +73,20 @@
 
                         <select name="strSection" required class="form-control" id="strSection">
                             <option value="" selected disabled>--select section--</option>
-                            <option>I</option>
-                            <option>II</option>
-                            <option>III</option>
-                            <option>IV</option>
-                            <option>V</option>
-                            <option>VI</option>
-                            <option>VII</option>
+                            <?php if($item['type'] == 'college' || $item['type'] == 'other' ): ?>
+
+                            <option>English</option>
+                            <option>Mathematics</option>
+                            <option>Abstract</option>
+                            <option>Visuospatial</option>
+
+                            <?php else : ?>
+                            <option>English</option>
+                            <option>Mathematics</option>
+                            <option>Filipino</option>
+                            <option>Science</option>
+                            <?php endif; ?>
+
                         </select>
                     </div>
 
@@ -117,9 +124,13 @@
                     <tbody>
                         <?php foreach($question as $q): ?>
                         <tr>
-                            <td><?php echo $q['strTitle']; ?></td>
-                            <td><?php echo $q['strSection']; ?></td>
                             <td>
+                                <div class="ellipsis">
+                                    <?php echo $q['strTitle']; ?>
+                                </div>
+                            </td>
+                            <td><?php echo $q['strSection']; ?></td>
+                            <td style="white-space:nowrap">
                                 <a href="<?php echo base_url(); ?>examination/edit_question/<?php echo $q['intID']; ?>"
                                     class="btn btn-primary">Edit</a>
                                 <a class="delete-question btn btn-danger" rel="<?php echo $q['intID']; ?>"
@@ -135,6 +146,16 @@
         </div><!-- /.box -->
     </div>
 </aside>
+
+<style>
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+</style>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>

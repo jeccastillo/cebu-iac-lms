@@ -33,20 +33,23 @@
                     </div>
 
 
-                    <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-12">
                         <label for="strProgramCode">Question</label>
-                        <input type="text" name="strTitle" value="<?php echo $question['strTitle']; ?>"
-                            class="form-control" id="strTitle" placeholder="Enter Question Title">
+                        <textarea type="text" name="strTitle" rows="10" class="form-control" id="strTitle"
+                            placeholder="Enter Question Title"><?php echo $question['strTitle']; ?></textarea>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="strProgramCode">Image (optional)</label>
+                        <input type="file" name="questionImage" class="form-control" accept="image/*">
                     </div>
 
 
 
                     <div class="form-group col-xs-6">
                         <label for="type">Section</label>
-                        <!-- <input type="text" name="strSection" value="<?php echo $question['strSection']; ?>"
-                            class="form-control" id="strSection" placeholder="Enter Section"> -->
 
-                        <select name="strSection" required class="form-control" id="strSection">
+
+                        <!-- <select name="strSection" required class="form-control" id="strSection">
                             <option value="" selected disabled>--select section--</option>
                             <option <?php echo $question['strSection'] == "I" ? "selected": "" ?>>I</option>
                             <option <?php echo $question['strSection'] == "II" ? "selected": "" ?>>II</option>
@@ -55,6 +58,31 @@
                             <option <?php echo $question['strSection'] == "V" ? "selected": "" ?>>V</option>
                             <option <?php echo $question['strSection'] == "VI" ? "selected": "" ?>>V</option>
                             <option <?php echo $question['strSection'] == "VII" ? "selected": "" ?>>V</option>
+                        </select> -->
+
+
+                        <select name="strSection" required class="form-control" id="strSection">
+                            <option value="" selected disabled>--select section--</option>
+                            <?php if($question['type'] == 'college' || $question['type'] == 'other' ): ?>
+
+                            <option <?php echo $question['strSection'] == "English" ? "selected": "" ?>>English</option>
+                            <option <?php echo $question['strSection'] == "Mathematics" ? "selected": "" ?>>Mathematics
+                            </option>
+                            <option <?php echo $question['strSection'] == "Abstract" ? "selected": "" ?>>Abstract
+                            </option>
+                            <option <?php echo $question['strSection'] == "Visuospatial" ? "selected": "" ?>>
+                                Visuospatial
+                            </option>
+
+                            <?php else : ?>
+                            <option <?php echo $question['strSection'] == "English" ? "selected": "" ?>>English</option>
+                            <option <?php echo $question['strSection'] == "Mathematics" ? "selected": "" ?>>Mathematics
+                            </option>
+                            <option <?php echo $question['strSection'] == "Filipino" ? "selected": "" ?>>Filipino
+                            </option>
+                            <option <?php echo $question['strSection'] == "Science" ? "selected": "" ?>>Science</option>
+                            <?php endif; ?>
+
                         </select>
                     </div>
 
@@ -98,8 +126,8 @@
                         <div class="choice_box alert" style="background: #e6e9e9;">
                             <div class="form-group">
                                 <label for="strProgramCode">Enter Choice Value</label>
-                                <input type="text" name="strChoice[]" value="<?php echo $choice['strChoice'];?>"
-                                    class="form-control" placeholder="Enter choice name">
+                                <textarea type="text" name="strChoice[]" class="form-control" rows="5"
+                                    placeholder="Enter choice name"><?php echo $choice['strChoice'];?></textarea>
 
                                 <input type="hidden" name="choiceID[]" value="<?php echo $choice['intID'];?>"
                                     class="form-control" placeholder="">
@@ -151,12 +179,13 @@ const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
 const btnRemove = $(".btn_remove");
 
-const toAppend = `<div class="choice_box">
+const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
                     <div>
                         <div class="form-group">
                             <label for="strProgramCode">Enter Choice Value</label>
                             <input type="hidden" name="choiceID[]" class="form-control" placeholder="">
-                            <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
+                            <textarea type="text" name="strChoice[]" class="form-control" rows="5"
+                                    placeholder="Enter choice name"></textarea>
                         </div>
 
                         <div class="form-group">

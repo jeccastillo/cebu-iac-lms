@@ -9,6 +9,8 @@
                 <br><br>
             </div>
 
+            <p><strong>Student Name:</strong> {{student.first_name + ' ' + student.last_name}} </p>
+
             <div v-if="!request.success" style="margin-top:3rem">
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <strong>{{request.message}}</strong>
@@ -18,13 +20,20 @@
 
             <div v-for="(q,q_index) in request.question" class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading">{{q.title}}</div>
+                <div class="panel-heading"> Question # {{q_index + 1}}</div>
                 <div class="panel-body">
+
+                    <div style="white-space:pre-line">
+                        {{q.title}}
+                    </div>
+                    <hr>
+
+
                     <div class="choices_box">
-                        <div v-for="(c,index) in q.choices" class="in_choice">
+                        <div v-for="(c,index) in q.choices" class="in_choice" style="white-space:pre-line">
                             <input type="radio" v-model="c.is_selected" value="1"
                                 @click="updateChoices(q.choices, index, q_index)" :name="'question-' + q_index" required
-                                id="choice1">
+                                class="radioBtn">
                             <label for="choice1" class="choices_label"> {{c.choice}} </label>
                         </div>
 
@@ -159,13 +168,17 @@ new Vue({
 
 .in_choice {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 1rem;
 }
 
 .choices_label {
     margin-bottom: 0 !important;
     font-weight: normal
+}
+
+.radioBtn {
+    transform: scale(1.5);
 }
 
 @media screen and (max-width: 767px) {
