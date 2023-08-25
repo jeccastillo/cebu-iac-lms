@@ -20,12 +20,21 @@
 
             <div v-for="(q,q_index) in request.question" class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading"> Question # {{q_index + 1}}</div>
+                <div class="panel-heading">
+                    <div style="display:flex; justify-content:space-between; width:100%">
+                        <span> Question # {{q_index + 1}}</span>
+                        <span>{{q.section}}</span>
+                    </div>
+                </div>
                 <div class="panel-body">
 
                     <div v-html="q.title">
-
                     </div>
+
+                    <div v-if="q.image">
+                        <img :src="q.image" style="max-width:100%; display:block; margin:0 auto;" alt="">
+                    </div>
+
                     <hr>
 
 
