@@ -261,12 +261,33 @@ class Examination extends CI_Controller {
 
     public function submit_edit_question()
     {
+        $post = $this->input->post();
         if($this->is_super_admin() || $this->is_admissions()){
-            $post = $this->input->post();
-            $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
-            $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
-        }
-        redirect(base_url()."examination/edit_question/".$post['intID']);
+            $config['upload_path'] = './assets/photos/exam';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']	= '400';
+            $config['file_name'] = rand(1000,9999);
+            $config['max_width']  = '1024';
+            $config['max_height']  = '768';
+            $this->load->library('upload', $config);
+            if ( ! $this->upload->do_upload("questionImage"))
+            {
+                // $this->session->set_flashdata('upload_errors',$this->upload->display_errors();
+                $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
+                $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
+                redirect(base_url()."examination/edit_question/".$post['intID']);
+            }
+            else
+            {
+                $data = array('upload_data' => $this->upload->data());
+                $file = $this->upload->data();
+                $post['questionImage'] = $file['file_name'];
+                $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
+                $this->data_poster->post_data('tb_mas_questions',$post, $post['intID']);
+                redirect(base_url()."examination/edit_question/".$post['intID']);
+            }
+        }else
+            redirect(base_url()."unity");
     }
 
     public function delete_question($id,$exam_id)
