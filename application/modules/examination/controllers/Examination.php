@@ -291,6 +291,13 @@ class Examination extends CI_Controller {
         }else
             redirect(base_url()."unity");
     }
+    
+    public function delete_image_question()
+    {
+        $post['questionImage'] = '';
+        $this->data_poster->post_data('tb_mas_questions',$post, $post['intID']);
+        redirect(base_url()."examination/edit_question/".$post['intID']);
+    }
 
     public function delete_question($id,$exam_id)
     {
