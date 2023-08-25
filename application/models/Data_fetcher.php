@@ -1752,13 +1752,13 @@ class Data_fetcher extends CI_Model {
 
     public function getQuestion($id)
     {
-        // return current($this->db->get_where('tb_mas_questions',array('intID'=>$id))->result_array());
-        return $this->db
+        return current($this->db
+            ->select('*')
             ->select('tb_mas_questions.intID', 'tb_mas_questions.strTitle', 'tb_mas_questions.exam_id', 'tb_mas_questions.strSection', 'tb_mas_questions.questionImage', 'tb_mas_exam.strName')
             ->from('tb_mas_questions')
-            ->join('tb_mas_exam', 'tb_mas_exam.intID = tb_mas_questions.exam_id')
             ->where('tb_mas_questions.intID',$id)
-            ->get()->result_array();
+            ->join('tb_mas_exam', 'tb_mas_exam.intID = tb_mas_questions.exam_id')
+            ->get()->result_array());
     }
 
     public function getChoice($id)
