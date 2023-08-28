@@ -692,6 +692,7 @@ new Vue({
                                         formdata.append('or_used',this.or_update.or_number);
                                         formdata.append('payments',pay_length);
                                         formdata.append('description',this.or_update_description);
+                                        formdata.append('description_other',this.description_other);
                                         formdata.append('total_amount',this.or_update.total_amount_due);
                                         formdata.append('registration_id',this.registration.intRegistrationID);                                                                                
                                         axios.post(base_url + 'finance/next_or', formdata, {
