@@ -52,6 +52,11 @@
                         <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.did_not_reserve + stats.rejected + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end)/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
+                        <th>For Reservation:</th>
+                        <td>{{ stats.for_reservation}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <th>Rejected</th>
                         <td>{{ stats.rejected }}</td>
                         <td>{{ ((stats.rejected/(stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
