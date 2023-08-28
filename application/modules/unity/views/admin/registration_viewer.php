@@ -559,8 +559,7 @@ new Vue({
                                     this.payments_paid.push(this.payments[i]);                         
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
-                                }
-                                console.log(this.payments_paid);
+                                }                                
                             }                        
 
                             axios.get(api_url + 'finance/reservation/' + this.slug)
