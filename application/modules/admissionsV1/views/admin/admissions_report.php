@@ -48,7 +48,7 @@
                     </tr>                    
                     <tr>
                         <th>Interviewed</th>
-                        <td>{{ stats.for_reservation + stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
+                        <td>{{ stats.for_reservation + stats.reserved + stats.confirmed + stats.did_not_reserve + stats.rejected + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
                         <td>{{ (((stats.for_reservation + stats.reserved + stats.confirmed + stats.did_not_reserve + stats.rejected + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end)/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
