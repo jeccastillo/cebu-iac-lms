@@ -659,7 +659,7 @@ $(document).ready(function() {
 
     $("#submit-ay").click(function(e) {
         var submit_sy = confirm(
-            "Are you sure you want to switch school year? All students will be set to inactive status and all subjects will be finalized"
+            "Are you sure you want to switch school year?"
         );
         if (submit_sy) {
             $("#set-ay-form").submit();
