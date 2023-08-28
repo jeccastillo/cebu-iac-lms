@@ -1664,7 +1664,7 @@ class Registrar extends CI_Controller {
         $this->data_poster->log_action('Academic Term','Updated Term: '.$activeSem['enumSem']." term ".$activeSem['strYearStart']."-".$activeSem['strYearEnd'],'blue');
         //echo $activeSem['strYearStart']-1;
         
-        redirect(base_url()."/registrar/set_ay");
+        redirect(base_url()."registrar/set_ay");
             
     }
     
