@@ -92,6 +92,8 @@ class Examination extends CI_Controller {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->data['choices']= $this->data_fetcher->getChoice($id);
+        // print_r($this->data['choices']);
+        // die();
         $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
@@ -236,22 +238,18 @@ class Examination extends CI_Controller {
         if($this->is_super_admin() || $this->is_admissions()){
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
-            // $config['max_size']	= '400';
+            $config['max_size']	= '400';
             $config['file_name'] = rand(1000,9999);
-            // $config['max_width']  = '1024';
-            // $config['max_height']  = '768';
+            $config['max_width']  = '1024';
+            $config['max_height']  = '768';
             $this->load->library('upload', $config);
-            if ( ! $this->upload->do_upload("questionImage"))   
-            
-            {
-                // $this->session->set_flashdata('upload_errors',$this->upload->display_errors();
-                $post['questionImage'] = $file['file_name'];
+            if ( ! $this->upload->do_upload("questionImage")){
+                $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
+                $post['questionImage'] = '';
                 $this->data_poster->log_action('Exam Question','Added a new question: '.$post['strTitle'],'green');
                 $this->data_poster->post_data('tb_mas_questions',$post);
                 redirect(base_url()."examination/edit_question/".$this->db->insert_id());
-            }
-            else
-            {
+            }else{
                 $data = array('upload_data' => $this->upload->data());
                 $file = $this->upload->data();
                 $post['questionImage'] = $file['file_name'];
@@ -269,21 +267,19 @@ class Examination extends CI_Controller {
         if($this->is_super_admin() || $this->is_admissions()){
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
-            // $config['max_size']	= '400';
+            $config['max_size']	= '400';
             $config['file_name'] = rand(1000,9999);
-            // $config['max_width']  = '1024';
-            // $config['max_height']  = '768';
+            $config['max_width']  = '1024';
+            $config['max_height']  = '768';
             $this->load->library('upload', $config);
-            if ( ! $this->upload->do_upload("questionImage"))
-            {
-                // $this->session->set_flashdata('upload_errors',$this->upload->display_errors();
-                $post['questionImage'] = $file['file_name'];
+            // print($_FILES['questionImage']);
+            // die();
+            if ( ! $this->upload->do_upload("questionImage")){
+                $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                 $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
                 $this->data_poster->post_data('tb_mas_questions',$post,$post['intID']);
                 redirect(base_url()."examination/edit_question/".$post['intID']);
-            }
-            else
-            {
+            }else{
                 $data = array('upload_data' => $this->upload->data());
                 $file = $this->upload->data();
                 $post['questionImage'] = $file['file_name'];
@@ -295,11 +291,11 @@ class Examination extends CI_Controller {
             redirect(base_url()."unity");
     }
     
-    public function delete_image_question()
-    {
+    public function delete_image_question($intID)
+    {     
         $post['questionImage'] = '';
-        $this->data_poster->post_data('tb_mas_questions',$post, $post['intID']);
-        redirect(base_url()."examination/edit_question/".$post['intID']);
+        $this->data_poster->post_data('tb_mas_questions',$post, $intID);
+        redirect(base_url()."examination/edit_question/".$intID);
     }
 
     public function delete_question($id,$exam_id)
@@ -318,42 +314,128 @@ class Examination extends CI_Controller {
     }
 
     public function submit_choice()
-    {    
+    {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
+            // print_r($post['strChoice'][0]);
+
             
-            $this->data_poster->deleteItem('tb_mas_choices',$post['question_id'],'question_id');
+            $files = $this->reArrayFiles($_FILES['choiceImage']);
+            // print_r($_FILES['choiceImage']);
+            // print_r($files[0]);
+
+            // die();
+
+            $config['upload_path'] = './assets/photos/exam';
+            $config['allowed_types'] = 'gif|jpg|png';
+            // $config['max_size']	= '400';
+            $config['file_name'] = rand(1000,9999);
+            // $config['max_width']  = '1024';
+            // $config['max_height']  = '768';
+            $this->load->library('upload', $config);
+
+            $choiceCount = count($post['strChoice']);
             $i = 0;
             foreach($post['strChoice'] as $choice){
-                if($choice){
-                    $questionChoice = array(
-                        'question_id'=>$post['question_id'],
-                        'strChoice'=>$choice,
-                        'is_correct'=>$post['is_correct'][$i],
-                    );                   
-                    $this->data_poster->post_data('tb_mas_choices',$questionChoice);
-                    $i++;
-                    $this->data_poster->log_action('Choice','Added choices: '.$post['strChoice'],'green');
+
+                if($post['choiceID'][$i]){
+                    // $questions = $this->db->get_where('tb_mas_choices',array('intID'=>$post['choiceID']))->first_row('array');
+                    $questionID = $post['choiceID'][$i];
+                    //update choice
+                    if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
+                        $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
+                        
+                        $questionChoice = array(
+                            'question_id'=>$post['question_id'],
+                            'strChoice'=>$choice,
+                            'is_correct'=>$post['is_correct'][$i],
+                        );                   
+                        $this->data_poster->post_data('tb_mas_choices',$questionChoice,$post['choiceID'][$i]);
+                        $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
+                    }else{
+                        // $file = $this->upload->data();
+
+                        $file = $questionID . '' . $files[$i]['name'];
+                        $questionChoice = array(
+                            'question_id' => $post['question_id'],
+                            'strChoice' => $choice,
+                            'choiceImage' => $file,
+                            'is_correct' => $post['is_correct'][$i],
+                        );                  
+                        $this->data_poster->post_data('tb_mas_choices',$questionChoice,$post['choiceID'][$i]);
+                        $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
+                    }
+                }else{
+                    $questions = $this->db->order_by('intID','DESC')->get('tb_mas_choices')->first_row('array');
+                    $questionID = $questions['intID'] + 1;
+                    //add choice
+                    if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
+                        $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
+
+                        $questionChoice = array(
+                            'question_id'=>$post['question_id'],
+                            'strChoice'=>$choice,
+                            'is_correct'=>$post['is_correct'][$i]
+                            ,
+                        );                   
+                        $this->data_poster->post_data('tb_mas_choices',$questionChoice);
+                        $this->data_poster->log_action('Choice','Added choice: '.$post['strChoice'],'green');
+                    }else{
+                        // $file = $this->upload->data();
+
+                        $file = $questionID . '' . $files[$i]['name'];
+                        
+                        $questionChoice = array(
+                            'question_id' => $post['question_id'],
+                            'strChoice' => $choice,
+                            'choiceImage' => $file,
+                            'is_correct' => $post['is_correct'][$i],
+                        );                   
+                        $this->data_poster->post_data('tb_mas_choices',$questionChoice);
+                        $this->data_poster->log_action('Choice','Added choice: '.$post['strChoice'],'green');
+
+                    }
                 }
+                $i++;
             }
             redirect(base_url()."examination/edit_question/".$post['question_id']);
         }else
             redirect(base_url()."unity");
     }
+    
+    function reArrayFiles(&$file_post) {
+
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+    
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                $file_ary[$i][$key] = $file_post[$key][$i];
+            }
+        }
+    
+        return $file_ary;
+    }
 
     public function delete_choice()
     {
-        $data['message'] = "failed";
-        $data['success'] = false;
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();            
-            $info = $this->data_fetcher->fetch_single_entry('tb_mas_choices',$post['id']);
-            $this->data_poster->deleteItem('tb_mas_choices',$post['id'],'intID');
-            $this->data_poster->log_action('Choice','Deleted a choice: '.$info['choice'],'red');
-            $data['message'] = "success";
-            $data['success'] = true;
+        
+            $info = $this->data_fetcher->fetch_single_entry('tb_mas_choices',$post['choice_id']);
+            $this->data_poster->deleteItem('tb_mas_choices',$post['choice_id'],'intID');
+            $this->data_poster->log_action('Choice','Deleted a choice: '.$info['strChoice'],'red');
+            redirect(base_url()."examination/edit_question/".$info['question_id']);
         }
         echo json_encode($data);
+    }
+
+    public function delete_image_choice($questionID, $intID)
+    {
+        $post['choiceImage'] = '';
+        $this->data_poster->post_data('tb_mas_choices',$post, $intID);
+        redirect(base_url()."examination/edit_question/".$questionID);
     }
 
     public function generate_exam()

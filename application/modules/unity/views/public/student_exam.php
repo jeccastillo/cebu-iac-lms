@@ -9,7 +9,7 @@
                 <br><br>
             </div>
 
-            <p><strong>Student Name:</strong> {{student.first_name + ' ' + student.last_name}} </p>
+            <!-- <p v-if="student.id"><strong>Student Name:</strong> {{student.first_name + ' ' + student.last_name}} </p> -->
 
             <div v-if="!request.success" style="margin-top:3rem">
                 <div class="alert alert-danger alert-dismissible" role="alert">
@@ -78,6 +78,7 @@ new Vue({
         token: "<?php echo $this->uri->segment('5'); ?>",
     },
     mounted() {
+
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.student = data.data.data;

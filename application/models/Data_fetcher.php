@@ -1764,11 +1764,17 @@ class Data_fetcher extends CI_Model {
 
     public function getChoice($id)
     {
+        // return $this->db
+        //      ->select('*')
+        //      ->from('tb_mas_choices')
+        //      ->where('question_id',$id)
+        //      ->get()->result_array();
+        $query = "SELECT CONCAT( '". base_url()."assets/photos/exam/', choiceImage) AS image, 
+            intID, question_id, strChoice, is_correct from tb_mas_choices WHERE question_id = ".$id;
+        
         return $this->db
-             ->select('*')
-             ->from('tb_mas_choices')
-             ->where('question_id',$id)
-             ->get()->result_array();
+                    ->query($query)
+                    ->result_array();
     }
 
     public function getExamQuestion($id)

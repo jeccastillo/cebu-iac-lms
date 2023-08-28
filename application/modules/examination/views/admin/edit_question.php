@@ -4,6 +4,10 @@
             Exam Question
             <small></small>
         </h1>
+
+        <a class="btn btn-primary btn-sm" style="margin-top:1rem;"
+            href="<?php echo base_url();?>examination/edit_exam_type/<?php echo $question['exam_id']?>">
+            BACK</a>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Exam Question</a></li>
             <li class="active">Edit Program</li>
@@ -56,11 +60,10 @@
                     <?php if($question && $question['image']): ?>
                     <img src="<?php echo $question['image']?>" style="max-width:100%; height:auto" alt="">
                     <br>
-                    <form style="text-align:center;" method="post"
-                        action="<?php echo base_url(); ?>examination/delete_image_question">
-                        <input type="hidden" value="<?php echo $question['intID'] ?>">
-                        <button class="btn btn-delete btn-sm btn-danger">Remove Image</button>
-                    </form>
+                    <div style="text-align:center;" method="post">
+                        <a href="<?php echo base_url(); ?>examination/delete_image_question/<?php echo $question['intID'] ?>"
+                            class="btn btn-delete btn-sm btn-danger">Remove Image</a>
+                    </div>
                     <?php endif; ?>
                     <!-- end -->
 
@@ -114,8 +117,8 @@
 
 
 
-            <form id="choices-form" action="<?php echo base_url(); ?>examination/submit_choice" method="post"
-                role="form">
+            <form id="choices-form" enctype="multipart/form-data"
+                action="<?php echo base_url(); ?>examination/submit_choice" method="post" role="form">
                 <input type="hidden" name="question_id" value="<?php echo $question['intID']; ?>" />
                 <input type="hidden" id="selected_index" name="selected_index" value="" />
                 <div class="box-body">
@@ -147,10 +150,15 @@
                             <div class="form-group">
                                 <label>Image (optional)</label>
                                 <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
-                                    <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                    <input type="file" id="" name="choiceImage[]" class="form-control inputImage"
                                         accept="image/*">
                                     <button type="button" class="btn btn-primary btnResetImage">Reset</button>
-
+                                </div>
+                                <div action="" style="text-align:center; margin-top:1rem;">
+                                    <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto" alt="">
+                                    <a href="<?php echo base_url() ?>examination/delete_image_choice/<?php echo $question['intID'] ?>/<?php echo $choice['intID'] ?>"
+                                        class="btn btn-sm btn-danger">Remove
+                                        Image</a>
                                 </div>
                             </div>
 
@@ -163,7 +171,10 @@
                                 </select>
                             </div>
                             <br>
-                            <button type="button" class="btn btn-sm btn-danger btn_remove">Remove</button>
+                            <form action="<?php echo base_url(); ?>examination/delete_choice" method="post">
+                                <input type="hidden" name="choice_id" value="<?php echo $choice['intID'] ?>">
+                                <button type="submit" class="btn btn-sm btn-danger">Remove Choice</button>
+                            </form>
                             <hr>
 
                         </div>
@@ -190,7 +201,7 @@
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.4.7/standard-all/ckeditor.js"></script>
 <script>
 const choicesBox = $("#choices_container");
 const addNewBtn = $("#add_new");
@@ -208,7 +219,7 @@ const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
                         <div class="form-group">
                              <label>Image (optional)</label>
                             <div style="display:flex; align-items:center; gap:1rem;" class="inputGroup">
-                                <input type="file" id="" name="questionImage" class="form-control inputImage"
+                                <input type="file" id="" name="choiceImage[]" class="form-control inputImage"
                                     accept="image/*">
                                 <button type="button"
                                     class="btn btn-primary btnResetImage">Reset</button>
@@ -226,7 +237,7 @@ const toAppend = `<div class="choice_box alert" style="background: #e6e9e9;">
 
                     </div>
                      <br>
-                    <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove</button>
+                    <button type="button"  class="btn btn-sm btn-danger btn_remove">Remove Choice </button>
                     <hr>
                  </div>`
 
@@ -235,9 +246,9 @@ addNewBtn.on("click", () => {
 })
 
 
-// $("#choices_container").on("click", "button", function() {
-//     $(this).parent('div').remove();
-// })
+$("#choices_container").on("click", ".btn_remove", function() {
+    $(this).parent('div').remove();
+})
 
 
 // getting the selected radio button value
@@ -258,5 +269,6 @@ $("#choices_container").on("click", ".btnResetImage", function() {
 </script>
 
 <script>
+CKEDITOR.config.extraPlugins = 'justify';
 CKEDITOR.replace('strTitle');
 </script>
