@@ -1645,11 +1645,11 @@ class Registrar extends CI_Controller {
         $post = $this->input->post();       
 
         $current_term = [
-            'value' => $post['current'];
+            'value' => $post['current']
         ];
         
         $application_term = [
-            'value' => $post['application'];
+            'value' => $post['application']
         ];
         
         //print_r($post);
