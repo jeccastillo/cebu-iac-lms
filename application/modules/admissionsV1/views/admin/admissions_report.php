@@ -42,7 +42,7 @@
                         <td>{{ ((stats.floating/total)*100).toFixed(2) }}%</td>
                     </tr> -->
                     <tr>
-                        <th>Cancelled Applications</th>
+                        <th>Cancelled Applications (Paid Application fee but was not Interviewed)</th>
                         <td>{{ stats.cancelled }}</td>
                         <td>{{ ((stats.cancelled/stats.paid)*100).toFixed(2) }}%</td>
                     </tr>                    
