@@ -1624,6 +1624,8 @@ class Registrar extends CI_Controller {
         if($this->is_super_admin() || $this->is_registrar())
         {
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current'] = $this->data_fetcher->get_active_sem();
+            $this->data['application'] = $this->data_fetcher->get_processing_sem();
             $this->data['page'] = "set_ay";
             $this->data['opentree'] = "registrar";
             //print_r($this->data['classlist']);
@@ -1640,17 +1642,23 @@ class Registrar extends CI_Controller {
     public function submit_ay()
     {
         
-        $post = $this->input->post();
-        $id2 = $post['intProcessing'];        
-        $post['enumStatus'] = "active";
-        $post2['intProcessing'] = 1;
-        $id = $post['strAcademicYear'];
+        $post = $this->input->post();       
+
+        $current_term = [
+            'value' => $post['current'];
+        ];
         
-        unset($post['strAcademicYear']);
+        $application_term = [
+            'value' => $post['application'];
+        ];
+        
         //print_r($post);
-        $this->data_poster->set_ay_inactive();
-        $this->data_poster->post_data('tb_mas_sy',$post,$id);
-        $this->data_poster->post_data('tb_mas_sy',$post2,$id2);
+        $this->db->where(array('setting_name'=>'current_term'))
+                ->update('tb_mas_system_settings',$current_term);
+
+        //print_r($post);
+        $this->db->where(array('setting_name'=>'application_term'))
+                ->update('tb_mas_system_settings',$application_term);
         
         $activeSem = $this->data_fetcher->get_active_sem();
         $this->data_poster->log_action('Academic Term','Updated Term: '.$activeSem['enumSem']." term ".$activeSem['strYearStart']."-".$activeSem['strYearEnd'],'blue');

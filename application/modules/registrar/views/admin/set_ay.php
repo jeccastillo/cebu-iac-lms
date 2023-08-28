@@ -23,18 +23,18 @@
                      
                 <div class="form-group col-xs-6">
                     <label>Choose Academic Year to activate</label>
-                    <select class="form-control" name="strAcademicYear">
+                    <select class="form-control" name="current">
                         <?php foreach($sy as $s): ?>
-                            <option <?php echo ($s['enumStatus'] == "active")?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
+                            <option <?php echo ($current == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
                 <div class="form-group col-xs-6">
                     <label>Choose Academic Year for processing</label>
-                    <select class="form-control" name="intProcessing">
+                    <select class="form-control" name="application">
                         <?php foreach($sy as $s): ?>
-                            <option <?php echo ($s['intProcessing'] == 1)?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
+                            <option <?php echo ($application == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
