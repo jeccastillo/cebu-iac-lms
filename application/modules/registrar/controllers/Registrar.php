@@ -1624,8 +1624,10 @@ class Registrar extends CI_Controller {
         if($this->is_super_admin() || $this->is_registrar())
         {
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current'] = $this->data_fetcher->get_active_sem();
-            $this->data['application'] = $this->data_fetcher->get_processing_sem();
+            $current = $this->data_fetcher->get_active_sem();
+            $this->data['current'] = $current['intID'];
+            $application = $this->data_fetcher->get_processing_sem();
+            $this->data['application'] = $application['intID'];
             $this->data['page'] = "set_ay";
             $this->data['opentree'] = "registrar";
             //print_r($this->data['classlist']);

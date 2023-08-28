@@ -22,7 +22,7 @@
                      
                      
                 <div class="form-group col-xs-6">
-                    <label>Choose Academic Year to activate <?php echo $current; ?></label>
+                    <label>Choose Academic Year to activate</label>
                     <select class="form-control" name="current">
                         <?php foreach($sy as $s): ?>
                             <option <?php echo ($current == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <label>Choose Academic Year for application <?php echo $selected; ?></label>
+                    <label>Choose Academic Year for application</label>
                     <select class="form-control" name="application">
                         <?php foreach($sy as $s): ?>
                             <option <?php echo ($application == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
