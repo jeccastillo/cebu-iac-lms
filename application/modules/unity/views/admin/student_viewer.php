@@ -65,7 +65,7 @@
                             <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
                             <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
                             <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
-                            <li><a :href="base_url + 'unity/delete_registration/' + student.intID + '/' + active_sem.intID"><i class="ion ion-android-close"></i> Reset Status</a> </li>
+                            <li><a @click.prevent="resetStatus()" :href="#"><i class="ion ion-android-close"></i> Reset Status</a> </li>
                             <li>
                                 <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
                                     <span style="color:#009000" v-if="registration" >{{ registration.date_enlisted }}</span>
@@ -450,6 +450,23 @@ new Vue({
     },
 
     methods: {  
+        resetStatus: function(){
+            let reset_url = base_url + 'unity/delete_registration/' + this.student.intID + '/' + this.active_sem.intID;
+            Swal.fire({
+                title: 'Reset Registration?',
+                text: "Continue with reset?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    document.location = reset_url;
+                }
+            });
+        },
         removeFromClasslist: function(classlistID){
             Swal.fire({
                 title: 'Delete Entry?',
