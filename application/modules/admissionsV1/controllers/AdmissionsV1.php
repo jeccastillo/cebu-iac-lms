@@ -167,7 +167,7 @@ class AdmissionsV1 extends CI_Controller {
                 'percentage'=> $exam['percentage'],
             );
         }
-        $ret['entrance_exam'] = $scorePerSectionArray;
+        $ret['section_scores'] = $scorePerSectionArray;
         echo json_encode($ret);
     }
 
