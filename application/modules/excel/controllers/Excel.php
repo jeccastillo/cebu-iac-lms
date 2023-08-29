@@ -208,7 +208,7 @@ class Excel extends CI_Controller {
     public function generate_excel_links()
     {
         $date = date("Y-m-d H:i:s");
-        $exams = $this->db->get_where('tb_mas_student_exam',array('token'=>NULL))->result_array();
+        $exams = $this->db->get_where('tb_mas_student_exam',array('token !='=>NULL))->result_array();
         
       
         error_reporting(E_ALL);
