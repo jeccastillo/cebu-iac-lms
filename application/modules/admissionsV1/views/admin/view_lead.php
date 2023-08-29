@@ -1228,8 +1228,7 @@ new Vue({
                     .then((data) => {
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
-                        this.sections_scores = this.entrance_exam ? this.entrance_exam.sections_scores :
-                            ''
+                        this.sections_scores = this.section_scores;
                         this.status_update_manual = this.request.status;
                         this.sy = data.data.sy;
                         this.filtered_programs = this.programs.filter((prog) => {
