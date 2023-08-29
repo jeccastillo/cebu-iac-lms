@@ -35,11 +35,12 @@
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="type">Program</label>
-                        <select class="form-control" name="program_type" id="program_type" required>
+                        <select class="form-control" name="programType" id="programType" required>
                             <option value="" disabled selected>--select type--</option>
-                            <option>Computing</option>
-                            <option>Business</option>
-                            <option>Design</option>
+                            <option>shs</option>
+                            <option>computing</option>
+                            <option>business</option>
+                            <option>design</option>
                         </select>
                     </div>
 

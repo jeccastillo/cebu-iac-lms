@@ -1148,27 +1148,7 @@ new Vue({
             to: "",
         },
 
-        sections_scores: [{
-                section: "English",
-                score: 44,
-                items: 60,
-                percentage: 0
-            },
-            {
-
-                section: "Mathematics",
-                score: 50,
-                items: 60,
-                percentage: 0
-            },
-            {
-
-                section: "Science",
-                score: 50,
-                items: 60,
-                percentage: 0
-            }
-        ],
+        sections_scores: null,
         sy_reference: undefined,
         exam_types: [],
         student_exam_link: "",
@@ -1229,7 +1209,6 @@ new Vue({
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
                         this.sections_scores = data.data.section_scores;
-
 
                         this.status_update_manual = this.request.status;
                         this.sy = data.data.sy;

@@ -25,6 +25,8 @@
                             id="strName" placeholder="Enter Name">
                     </div>
 
+                    <?php print_r($item)?>
+
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
                         <select class="form-control" name="type" id="type" required>
@@ -37,11 +39,13 @@
 
                     <div class="form-group col-xs-6">
                         <label for="type">Program</label>
-                        <select class="form-control" name="program_type" id="program_type" required>
+                        <select class="form-control" name="programType" id="programType" required>
                             <option value="" disabled selected>--select type--</option>
-                            <option <?php echo ($item['type'] == "computing")?'selected':''; ?>>computing</option>
-                            <option <?php echo ($item['type'] == "business")?'selected':''; ?>>business</option>
-                            <option <?php echo ($item['type'] == "design")?'selected':''; ?>>design</option>
+                            <option <?php echo ($item['programType'] == "shs")?'selected':''; ?>>shs</option>
+                            <option <?php echo ($item['programType'] == "computing")?'selected':''; ?>>computing
+                            </option>
+                            <option <?php echo ($item['programType'] == "business")?'selected':''; ?>>business</option>
+                            <option <?php echo ($item['programType'] == "design")?'selected':''; ?>>design</option>
                         </select>
                     </div>
 
