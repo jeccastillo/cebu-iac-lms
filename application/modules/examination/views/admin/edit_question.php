@@ -58,8 +58,10 @@
 
                     <!-- question image -->
                     <?php if($question && $question['image']): ?>
-                    <img src="<?php echo $question['image']?>" style="max-width:100%; height:auto" alt="">
-                    <br>
+                    <div>
+                        <img src="<?php echo $question['image']?>"
+                            style="max-width:100%; height:auto; display:block; margin:0 auto;" alt="">
+                    </div>
                     <div style="text-align:center;" method="post">
                         <a href="<?php echo base_url(); ?>examination/delete_image_question/<?php echo $question['intID'] ?>"
                             class="btn btn-delete btn-sm btn-danger">Remove Image</a>
@@ -124,16 +126,7 @@
                 <div class="box-body">
 
                     <div class="form-group col-md-6 col-xs-12" id="choices_container">
-                        <?php if(count($choices) == 0): ?>
-                        <!-- <div>
-                            <label for="strProgramCode">Enter Choice Value</label>
-                            <input type="text" name="strChoice[]" class="form-control" placeholder="Enter choice name">
-                            <input type="radio" name="is_correct[]" value="1" required> is
-                            Correct?
-                            <hr>
-                        </div> -->
-
-                        <?php else:
+                        <?php 
                             foreach ($choices as $choice):
                         ?>
 
@@ -155,10 +148,15 @@
                                     <button type="button" class="btn btn-primary btnResetImage">Reset</button>
                                 </div>
                                 <div action="" style="text-align:center; margin-top:1rem;">
-                                    <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto" alt="">
-                                    <a href="<?php echo base_url() ?>examination/delete_image_choice/<?php echo $question['intID'] ?>/<?php echo $choice['intID'] ?>"
-                                        class="btn btn-sm btn-danger">Remove
-                                        Image</a>
+                                    <div>
+                                        <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto"
+                                            alt="">
+                                    </div>
+                                    <div>
+                                        <a href="<?php echo base_url() ?>examination/delete_image_choice/<?php echo $question['intID'] ?>/<?php echo $choice['intID'] ?>"
+                                            class="btn btn-sm btn-danger">Remove
+                                            Image</a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -181,7 +179,6 @@
 
 
                         <?php endforeach; ?>
-                        <?php endif; ?>
 
 
                     </div>

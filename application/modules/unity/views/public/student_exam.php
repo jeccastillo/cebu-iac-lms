@@ -39,7 +39,8 @@
 
 
                     <div class="choices_box">
-                        <div v-for="(c,index) in q.choices" class="" style="white-space:pre-line">
+                        <div v-for="(c,index) in q.choices" class="choice_container alert" style="background:#e3e7e552"
+                            style="white-space:pre-line">
 
 
                             <div class="in_choice">
@@ -50,8 +51,8 @@
 
                             </div>
                             <br>
-                            <div v-if="q.image">
-                                <img :src="q.image" style="max-width:100%; display:block;" alt="">
+                            <div v-if="c.choice_image">
+                                <img :src="c.choice_image" style="max-width:100%; display:block;" alt="">
                             </div>
                         </div>
 
@@ -202,7 +203,7 @@ new Vue({
 
 @media screen and (max-width: 767px) {
     .choices_box {
-        grid-template-rows: repeat(1, 1fr);
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 </style>
