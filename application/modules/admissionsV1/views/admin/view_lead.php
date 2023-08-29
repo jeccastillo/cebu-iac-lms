@@ -103,11 +103,14 @@
                         <hr>
 
                     </div>
-                    <div v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
+                    <div
+                        v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
                         <label>Select Term</label>
-                        <select required @change="updateField('syid',$event)" v-model="sy_reference" class="form-control">
-                            <option v-for="sem in sy" :value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
-                            
+                        <select required @change="updateField('syid',$event)" v-model="sy_reference"
+                            class="form-control">
+                            <option v-for="sem in sy" :value="sem.intID">
+                                {{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
+
                         </select>
                         <hr />
                     </div>
@@ -1169,7 +1172,7 @@ new Vue({
         sy_reference: undefined,
         exam_types: [],
         student_exam_link: "",
-        sy:[],
+        sy: [],
         loader_spinner: true,
         base_url: "<?php echo base_url(); ?>",
         type: "",
@@ -1225,11 +1228,15 @@ new Vue({
                     .then((data) => {
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
+                        this.sections_scores = this.entrance_exam ? this.entrance_exam.sections_scores :
+                            ''
                         this.status_update_manual = this.request.status;
                         this.sy = data.data.sy;
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
+
+
 
                         if (this.entrance_exam && this.entrance_exam.token) {
                             this.student_exam_link = this.base_url + 'unity/student_exam/' + this.slug +

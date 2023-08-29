@@ -35,6 +35,16 @@
                         </select>
                     </div>
 
+                    <div class="form-group col-xs-6">
+                        <label for="type">Program</label>
+                        <select class="form-control" name="program_type" id="program_type" required>
+                            <option value="" disabled selected>--select type--</option>
+                            <option <?php echo ($item['type'] == "computing")?'selected':''; ?>>computing</option>
+                            <option <?php echo ($item['type'] == "business")?'selected':''; ?>>business</option>
+                            <option <?php echo ($item['type'] == "design")?'selected':''; ?>>design</option>
+                        </select>
+                    </div>
+
 
                     <div class="form-group col-xs-12">
                         <input type="submit" value="Update" class="btn btn-default  btn-flat">
@@ -96,6 +106,8 @@
 
                         </select>
                     </div>
+
+
 
                     <div class="form-group col-xs-12">
                         <input type="submit" value="add" class="btn btn-default  btn-flat">
