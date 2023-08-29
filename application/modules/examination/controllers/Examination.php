@@ -142,7 +142,7 @@ class Examination extends CI_Controller {
                             $choice_array[] = array(
                                 'id' => $choice['intID'],
                                 'choice' => $choice['strChoice'],
-                                'choice_image' => $choice['choiceImage'],
+                                'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' .$choice['choiceImage'] : '',
                                 'is_selected'=>0,
                             );
                         }
