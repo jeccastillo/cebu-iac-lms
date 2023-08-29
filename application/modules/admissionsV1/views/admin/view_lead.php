@@ -103,10 +103,17 @@
                         <hr>
 
                     </div>
+                    <div v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
+                        <label>Select Term</label>
+                        <select required @change="updateField('email',$event)" v-model="sy_reference" class="form-control">
+                            <option v-for="sy as sem" value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
+                            
+                        </select>
+                    </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
                         <input type="text"
-                            v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                            v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'"
                             class="form-control" v-model="request.email" @blur="updateField('email',$event)" />
                         <p v-else class="text-muted">
                             {{request.email}}
@@ -1158,9 +1165,10 @@ new Vue({
                 percentage: 0
             }
         ],
-
+        sy_reference: undefined,
         exam_types: [],
         student_exam_link: "",
+        sy:[],
         loader_spinner: true,
         base_url: "<?php echo base_url(); ?>",
         type: "",
@@ -1209,6 +1217,7 @@ new Vue({
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
                 this.request = data.data.data;
+                this.sy_reference = this.request.sy_reference;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug)
@@ -1216,7 +1225,7 @@ new Vue({
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
                         this.status_update_manual = this.request.status;
-                        console.log(this.status_update);
+                        this.sy = data.data.sy;
                         this.filtered_programs = this.programs.filter((prog) => {
                             return prog.type == this.request.type
                         })
