@@ -62,6 +62,10 @@
                         </select>
                 </div>     
                 <div class="form-group col-xs-12 col-lg-4">
+                    <label for="midterm_start">End of Application</label>
+                    <input type="date" name="endOfApplicationPeriod" value="<?php echo $item['endOfApplicationPeriod']; ?>" class="form-control" />                         
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
                     <label for="midterm_start">Start of Midterm Grading</label>
                     <input type="date" name="midterm_start" value="<?php echo $item['midterm_start']; ?>" class="form-control" />                         
                 </div>
