@@ -55,9 +55,7 @@
                         <?php print_r($sy); ?>
                         <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required v-model="request.syid">
-                            <?php foreach($sy as $s): ?>
-                                <option value="<?php $s['intID'] ?>"><?php $s['enumSem']." Term SY ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                            <?php endforeach; ?>
+                            <option v-for="s in sy" :value="s.intID">{{ s.enumSem+" Term SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
                         </select>
                     </div>
                 </div>
@@ -801,6 +799,7 @@ new Vue({
         loading_spinner: false,
         programs: [],
         programs_group: [],
+        sy:[],
         types: [],
         base_url: "<?php echo base_url(); ?>",
     },
@@ -815,6 +814,7 @@ new Vue({
 
             .then((data) => {
                 this.programs = data.data.data;
+                this.sy = data.data.sy;
             })
             .catch((e) => {
                 console.log("error");
