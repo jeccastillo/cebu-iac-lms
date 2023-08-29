@@ -1218,6 +1218,7 @@ new Vue({
             .then((data) => {
                 this.request = data.data.data;
                 this.sy_reference = this.request.sy_reference;
+                console.log(this.sy_reference);
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug)
