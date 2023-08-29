@@ -188,7 +188,12 @@ $(document).ready(function(){
         document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
         
     }
-    );  
+    );
+    
+    $("#select-term-leads").on('change', function(e){
+        const term = $(this).val();
+        document.location = "<?php echo base_url()."admissionsV1/admissions_report/"; ?>"+term;
+    });
 });
 </script>
 
