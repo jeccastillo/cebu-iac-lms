@@ -130,7 +130,7 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',
-        current_sem: '<?php echo $active_sem['intID']; ?>',
+        current_sem: '<?php echo $current_sem; ?>',
         stats: undefined,
         enrolled: undefined,        
         programs: undefined,
