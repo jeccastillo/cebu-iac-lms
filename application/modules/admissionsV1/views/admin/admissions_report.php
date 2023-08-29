@@ -26,6 +26,11 @@
                 <i class="fa fa-calendar"></i> Choose Date Range
                 <i class="fa fa-caret-down"></i>
             </button>
+            <select id="select-term-leads" class="form-control" >
+                <?php foreach($sy as $s): ?>
+                    <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -180,7 +185,7 @@ $(document).ready(function(){
         endDate: moment()
     },
     function(start, end) {
-        document.location = base_url + 'admissionsV1/admissions_report/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
+        document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_term; ?>/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
         
     }
     );  

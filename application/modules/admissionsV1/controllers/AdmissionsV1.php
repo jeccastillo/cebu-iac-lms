@@ -104,8 +104,16 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
-    public function admissions_report($start = 0,$end=0)    
+    public function admissions_report($term = 0,$start = 0,$end=0)    
     {
+        if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);  
+                
+            
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['current_sem'] = $term['intID'];
         
         $this->data['start'] = $start;
         $this->data['end'] = $end;        
