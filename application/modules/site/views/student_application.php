@@ -18,6 +18,9 @@
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet <strong>(Cebu Campus)</strong></h4>
+        <h4>
+            <?php echo $term['enumSem']." ".$term_type." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+        </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
 

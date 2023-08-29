@@ -15,6 +15,7 @@ class Site extends CI_Controller {
 		$this->config->load('courses');
 		$theme = 'site';
 			
+		$this->data['term_type'] = $this->config->item('term_type');
 		$this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";
 		$this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
 		$this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";	
@@ -35,9 +36,11 @@ class Site extends CI_Controller {
 	public function student_application($term = 0) {		
 
 		if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
+            $term = $this->data_fetcher->get_processing_sem();        
 		else
 			$term = $this->data_fetcher->get_sem_by_id($term);
+
+		$this->data['term'] = $term;
 
 		$this->data['current_term'] = $term['intID'];		
         
