@@ -266,7 +266,7 @@ class Excel extends CI_Controller {
                     //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
                     ->setCellValue('A'.$i,$ctr)
                     ->setCellValue('B'.$i, $exam['student_name'])
-                    ->setCellValue('C'.$i, base_url()."unity/student_exam/".$exam['student_id']."/".$exam_id."/".$token);                                                                       
+                    ->setCellValue('C'.$i, base_url()."unity/student_exam/".$exam['student_id']."/".$exam['exam_id']."/".$exam['token']);                                                                       
 
             $styleArray = array(
                 'borders' => array(
