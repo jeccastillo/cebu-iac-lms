@@ -40,10 +40,12 @@ class Site extends CI_Controller {
 		else
 			$term = $this->data_fetcher->get_sem_by_id($term);
 
-		if((date("Y-m-d h:i:s") >= $term['endOfApplicationPeriod']) && $term['endOfApplicationPeriod']){
+		if((date("Y-m-d h:i:s") >= $term['endOfApplicationPeriod']) || !$term['endOfApplicationPeriod']){
 			echo "Application Period has ended for this term";
 			die();
 		}
+
+		$this->data['sy'] = $this->db->get_where('tb_mas_sy',array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))->result_array();
 
 		$this->data['term'] = $term;
 
