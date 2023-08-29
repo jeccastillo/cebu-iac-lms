@@ -35,8 +35,10 @@ class Site extends CI_Controller {
 	public function student_application($term = 0) {		
 
 		if($term == 0)
-			$term = $this->data_fetcher->get_processing_sem();
-			
+                $term = $this->data_fetcher->get_processing_sem();        
+		else
+			$term = $this->data_fetcher->get_sem_by_id($term);
+
 		$this->data['current_term'] = $term['intID'];		
         
 		$this->load->view('common/header_new',$this->data);  

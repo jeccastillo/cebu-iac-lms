@@ -199,7 +199,13 @@ $(document).ready(function() {
     $("#status_filter").on('change',function(e){
         
         dtable.fnDraw(false);
-    })
+    });
+
+    $("#select-term-leads").on('change', function(e){
+        document.location = "<?php echo base_url()."admissionsV1/view_all_leads/".$current_sem; ?>";
+    });
+
+
 
 });
 </script>

@@ -5,6 +5,13 @@
             <small>            
                 <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> Export to Excel</a>
             </small>
+            <div class="pull-right">
+                <select id="select-term-leads" class="form-control" >
+                    <?php foreach($sy as $s): ?>
+                        <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
