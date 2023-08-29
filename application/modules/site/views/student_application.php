@@ -956,10 +956,8 @@ new Vue({
                 this.request.health_concern = this.request.health_concerns.join(
                     ", "
                 );
-
-                this.request.address = this.address.join(
-                    ", "
-                );
+                
+                this.request.address = this.address.hns+", "+this.address.brgy_subd+", "+this.address.city_town+", "+this.address.province+", "+this.address.zipcode;
 
                 axios
                     .post(api_url + url, data, {
