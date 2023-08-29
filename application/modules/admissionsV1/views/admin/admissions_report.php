@@ -122,9 +122,9 @@
 
 <script>
 <?php if($start!=0): ?>
-    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>&campus=<?php echo $campus; ?>&sy_reference=<?php echo $current_sem; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>&start=<?php echo $start; ?>&end=<?php echo $end; ?>';
 <?php else: ?>
-    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $active_sem['intID']; ?>&campus=<?php echo $campus; ?>&sy_reference=<?php echo $current_sem; ?>';
+    var query_str = 'admissions/applications/adstats?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>';
 <?php endif; ?>
 new Vue({
     el: '#registration-container',
