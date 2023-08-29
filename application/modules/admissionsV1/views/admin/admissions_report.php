@@ -79,7 +79,7 @@
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
-                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Withdrawn Enrollment Before Opening of SY</th>
