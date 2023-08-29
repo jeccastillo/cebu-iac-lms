@@ -886,6 +886,7 @@ new Vue({
         },
         loading_spinner: false,
         programs: [],
+        sy:[],
         filtered_programs: [],
         programs_group: [],
         types: [],
@@ -902,7 +903,7 @@ new Vue({
 
             .then((data) => {
                 this.programs = data.data.data;
-                console.log(this.programs)
+                this.sy = data.data.sy;
             })
             .catch((e) => {
                 console.log("error");
