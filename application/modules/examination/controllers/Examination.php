@@ -362,7 +362,7 @@ class Examination extends CI_Controller {
                         // $file = $this->upload->data();
                         $file = $questionID . '' . $files[$i]['name'];
                         // $file = preg_replace('/\s+/', '_', $file);
-                        
+
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                         
                         $questionChoice = array(
@@ -539,6 +539,16 @@ class Examination extends CI_Controller {
             }
         }
 
+        $examArray = array(
+            'date_taken'=> date("Y-m-d h:i:s"),
+            'score' => $totalScore,
+            'exam_overall' => $totalOverallScore,
+            'token'=>'',
+        );
+        $postExam = $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
+        $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
+
+
         //save score per section
         foreach($sectionArray as $secArray){
             $totalOverallScore += $secArray['exam_overall'];
@@ -546,7 +556,7 @@ class Examination extends CI_Controller {
                 $secArray['score'] = 0;
             }
             $scoreArray = array(
-                'tb_mas_student_exam_id' => $examQuestion['id'],
+                'tb_mas_student_exam_id' => $postExam['intID'],
                 'score'=> $secArray['score'],
                 'exam_overall' => $secArray['exam_overall'],
                 'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
@@ -554,16 +564,7 @@ class Examination extends CI_Controller {
             );
             $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
         }
-
-        $examArray = array(
-            'date_taken'=> date("Y-m-d h:i:s"),
-            'score' => $totalScore,
-            'exam_overall' => $totalOverallScore,
-            'token'=>'',
-        );
-        $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
-        $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
-
+        
         $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
         $data['success'] = true;
 
