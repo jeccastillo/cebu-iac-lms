@@ -92,8 +92,6 @@ class Examination extends CI_Controller {
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->data['choices']= $this->data_fetcher->getChoice($id);
-        // print_r($this->data['choices']);
-        // die();
         $this->data['exam']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getQuestion($id);
         $this->load->view("common/header",$this->data);
@@ -142,7 +140,7 @@ class Examination extends CI_Controller {
                             $choice_array[] = array(
                                 'id' => $choice['intID'],
                                 'choice' => $choice['strChoice'],
-                                'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' .$choice['choiceImage'] : '',
+                                'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' . $choice['choiceImage'] : '',
                                 'is_selected'=>0,
                             );
                         }
@@ -341,14 +339,8 @@ class Examination extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
-            // print_r($post['strChoice'][0]);
-
             
             $files = $this->reArrayFiles($_FILES['choiceImage']);
-            // print_r($_FILES['choiceImage']);
-            // print_r($files[0]);
-
-            // die();
 
             $config['upload_path'] = './assets/photos/exam';
             $config['allowed_types'] = 'gif|jpg|png';
@@ -363,10 +355,14 @@ class Examination extends CI_Controller {
             foreach($post['strChoice'] as $choice){
 
                 if($post['choiceID'][$i]){
-                    // $questions = $this->db->get_where('tb_mas_choices',array('intID'=>$post['choiceID']))->first_row('array');
                     $questionID = $post['choiceID'][$i];
                     //update choice
                     if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
+
+                        // $file = $this->upload->data();
+                        $file = $questionID . '' . $files[$i]['name'];
+                        // $file = preg_replace('/\s+/', '_', $file);
+                        
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                         
                         $questionChoice = array(
@@ -377,8 +373,7 @@ class Examination extends CI_Controller {
                         $this->data_poster->post_data('tb_mas_choices',$questionChoice,$post['choiceID'][$i]);
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
                     }else{
-                        // $file = $this->upload->data();
-
+                        $file = $this->upload->data();
                         $file = $questionID . '' . $files[$i]['name'];
                         $questionChoice = array(
                             'question_id' => $post['question_id'],
@@ -390,6 +385,7 @@ class Examination extends CI_Controller {
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
                     }
                 }else{
+                    
                     $questions = $this->db->order_by('intID','DESC')->get('tb_mas_choices')->first_row('array');
                     $questionID = $questions['intID'] + 1;
                     //add choice
@@ -521,22 +517,48 @@ class Examination extends CI_Controller {
         $post = $this->input->post();
         
         $examQuestions = json_decode($post['question'], true);
-        $score = 0;
+        $totalScore = $totalOverallScore = 0;
+        $sectionArray = array();
         foreach($examQuestions as $examQuestion){
             foreach($examQuestion['choices'] as $choice){
                 if($choice['is_selected'] == '1'){
-                    // $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->result_array();
-                    // if($checkChoice[0]['is_correct'] == '1')
                     $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
-                    if($checkChoice['is_correct'] == '1')
-                        $score++;
+                    if($checkChoice['is_correct'] == '1'){
+                        if(isset($sectionArray[$examQuestion['section']]['score']))
+                            $sectionArray[$examQuestion['section']]['score'] += 1;
+                        else
+                            $sectionArray[$examQuestion['section']]['score'] = 1;
+                        $totalScore++;
+                    }
+                    if(isset($sectionArray[$examQuestion['section']]['exam_overall']))
+                        $sectionArray[$examQuestion['section']]['exam_overall'] += 1;
+                    else
+                        $sectionArray[$examQuestion['section']]['exam_overall'] = 1;
+                    $sectionArray[$examQuestion['section']]['section'] = $examQuestion['section'];
                 }
             }
         }
-        
+
+        //save score per section
+        foreach($sectionArray as $secArray){
+            $totalOverallScore += $secArray['exam_overall'];
+            if(!isset($secArray['score'])){
+                $secArray['score'] = 0;
+            }
+            $scoreArray = array(
+                'tb_mas_student_exam_id' => $examQuestion['id'],
+                'score'=> $secArray['score'],
+                'exam_overall' => $secArray['exam_overall'],
+                'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
+                'section' => $secArray['section'],
+            );
+            $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
+        }
+
         $examArray = array(
             'date_taken'=> date("Y-m-d h:i:s"),
-            'score' => $score,
+            'score' => $totalScore,
+            'exam_overall' => $totalOverallScore,
             'token'=>'',
         );
         $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
