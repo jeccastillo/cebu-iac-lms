@@ -13,6 +13,7 @@
                 </select>
             </div>
         </h1>
+        <hr />
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
             <li class="active">View All Leads</li>
