@@ -56,7 +56,7 @@ class AdmissionsV1 extends CI_Controller {
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
         $this->data['page'] = "subjects";
 
-        $sem = $this->data_fetcher->get_active_sem();        
+        $sem = $this->data_fetcher->get_processing_sem();        
         $this->data['current_sem'] = $sem['intID'];
     }
     
@@ -100,7 +100,7 @@ class AdmissionsV1 extends CI_Controller {
         
         $this->data['start'] = $start;
         $this->data['end'] = $end;        
-        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/admissions_report",$this->data);
         $this->load->view("common/footer",$this->data); 

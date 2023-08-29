@@ -32,9 +32,11 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function student_application() {		
+	public function student_application($term = 0) {		
 
-		$term = $this->data_fetcher->get_active_sem();
+		if($term == 0)
+			$term = $this->data_fetcher->get_processing_sem();
+			
 		$this->data['current_term'] = $term['intID'];		
         
 		$this->load->view('common/header_new',$this->data);  
