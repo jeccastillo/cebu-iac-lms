@@ -64,25 +64,46 @@ $(document).ready(function() {
                     $("#print_form").show();
                     $("#print_form").click(function(e) {
                         e.preventDefault();
+                        console.log(json);
+                        let formData = new FormData();
+                        formData.append("applicant", JSON.stringify(json.data))
+
+                        axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData)
+                            .then(function(data) {
+                                if (data.data.success) {
+                                    Swal.fire(
+                                        'SUCCESS!',
+                                        'Exam link has been generated.',
+                                        'success'
+                                    )
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                        
                         // The rest of this code assumes you are not using a library.
                         // It can be made less verbose if you use one.
-                        const form = document.createElement('form');
-                        form.method = "post";
-                        form.action =
-                            "<?php echo base_url() ?>excel/generate_excel_links";
-                        form.dataType = "json";
+                        // const form = document.createElement('form');
+                        // form.method = "post";
+                        // form.action =
+                        //     "<?php echo base_url() ?>excel/generate_excel_links";
+                        // form.dataType = "json";
 
 
-                        const hiddenField = document.createElement('input');
-                        hiddenField.type = 'hidden';
-                        hiddenField.name = 'data';
-                        hiddenField.value = JSON.stringify(json.data);
+                        // const hiddenField = document.createElement('input');
+                        // hiddenField.type = 'hidden';
+                        // hiddenField.name = 'data';
+                        // hiddenField.value = JSON.stringify(json.data);
 
-                        form.appendChild(hiddenField);
+                        // form.appendChild(hiddenField);
 
 
-                        document.body.appendChild(form);
-                        form.submit();
+                        // document.body.appendChild(form);
+                        // form.submit();
                     });
 
                 }
