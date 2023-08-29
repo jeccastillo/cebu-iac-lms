@@ -17,7 +17,10 @@
 <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
-            Student Information Sheet <strong>(Makati Campus)</strong></h4>
+            Student Information Sheet 
+            <strong>(Makati Campus)</strong><br />
+            <?php echo $term['enumSem']." ".$term_type." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+        </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
 
