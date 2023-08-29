@@ -192,7 +192,7 @@
                         </label>
                         <input type="text" required
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            name="" v-model="address.province" />
+                            name="" v-model="address.zipcode" />
                     </div>
                 </div>
                 <div class="mb-6">
