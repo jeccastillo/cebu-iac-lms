@@ -202,7 +202,8 @@ $(document).ready(function() {
     });
 
     $("#select-term-leads").on('change', function(e){
-        document.location = "<?php echo base_url()."admissionsV1/view_all_leads/".$current_sem; ?>";
+        const term = $(this).val();
+        document.location = "<?php echo base_url()."admissionsV1/view_all_leads/"; ?>"+term;
     });
 
 
