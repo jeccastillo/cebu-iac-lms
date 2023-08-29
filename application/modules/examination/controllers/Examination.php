@@ -136,12 +136,13 @@ class Examination extends CI_Controller {
                     foreach($questions as $question){          
                           
                         $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
-            
+                        
                         $choice_array = [];
                         foreach($choices as $choice){
                             $choice_array[] = array(
                                 'id' => $choice['intID'],
                                 'choice' => $choice['strChoice'],
+                                'choice_image' => $choice['choiceImage'],
                                 'is_selected'=>0,
                             );
                         }
