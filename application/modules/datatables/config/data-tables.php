@@ -44,7 +44,7 @@ $config['tb_mas_applications_index'] = "intApplicationID";
 $config['tb_mas_block_sections_columns'] = array("intID","name","strProgramCode");
 $config['tb_mas_block_sections_index'] = "intID";
 
-$config['tb_mas_exam_columns'] = array("intID","strName","type");
+$config['tb_mas_exam_columns'] = array("intID","strName","type","programType");
 $config['tb_mas_exam_index'] = "intID";
 
 $config['tb_mas_questions_columns'] = array("tb_mas_questions.intID","strTitle","strName","strChoice","strSection");
