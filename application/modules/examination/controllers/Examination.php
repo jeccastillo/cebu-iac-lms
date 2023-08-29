@@ -101,6 +101,29 @@ class Examination extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+     public function student_generate_exam($term = 0)
+    {
+       
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);  
+                
+            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            
+            $this->data['page'] = "student_generate_exam";
+            $this->data['opentree'] = "examination";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/generate_exam",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/generate_exam_conf",$this->data); 
+            //print_r($this->data['classlist']);
+      
+    }
+
     public function get_questions_per_section($id, $token, $student_id)
     {
         $student_exam = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$student_id))->first_row('array');

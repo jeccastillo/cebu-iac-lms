@@ -224,7 +224,7 @@
                                     class="fa fa-book"> </i> View FI Calendar</a></li>
 
                     </ul>
-                </li>                
+                </li>
                 <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="examination")?'active':''; ?>">
@@ -242,6 +242,9 @@
                         <li class="<?php echo (isset($page) && $page=="add_exam_type")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/add_exam_type" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> Add Exam Type</a></li>
+                        <li class="<?php echo (isset($page) && $page=="student_generate_exam")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>examination/student_generate_exam"
+                                style="margin-left: 10px;"><i class="fa fa-book"> </i> Generate Exam Link</a></li>
 
                     </ul>
                 </li>

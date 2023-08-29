@@ -39,11 +39,20 @@
 
 
                     <div class="choices_box">
-                        <div v-for="(c,index) in q.choices" class="in_choice" style="white-space:pre-line">
-                            <input type="radio" v-model="c.is_selected" value="1"
-                                @click="updateChoices(q.choices, index, q_index)" :name="'question-' + q_index" required
-                                class="radioBtn">
-                            <label for="choice1" class="choices_label"> {{c.choice}} </label>
+                        <div v-for="(c,index) in q.choices" class="" style="white-space:pre-line">
+
+
+                            <div class="in_choice">
+                                <input type="radio" v-model="c.is_selected" value="1"
+                                    @click="updateChoices(q.choices, index, q_index)" :name="'question-' + q_index"
+                                    required class="radioBtn">
+                                <label for="choice1" class="choices_label"> {{c.choice}} </label>
+
+                            </div>
+                            <br>
+                            <div v-if="q.image">
+                                <img :src="q.image" style="max-width:100%; display:block;" alt="">
+                            </div>
                         </div>
 
                     </div>
