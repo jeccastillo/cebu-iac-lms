@@ -106,7 +106,7 @@
                     <div v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
                         <label>Select Term</label>
                         <select required @change="updateField('email',$event)" v-model="sy_reference" class="form-control">
-                            <option v-for="sem in sy" value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
+                            <option v-for="sem in sy" :value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
                             
                         </select>
                     </div>
@@ -1218,7 +1218,6 @@ new Vue({
             .then((data) => {
                 this.request = data.data.data;
                 this.sy_reference = this.request.sy_reference;
-                console.log(this.sy_reference);
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug)
