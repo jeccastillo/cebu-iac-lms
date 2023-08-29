@@ -52,7 +52,6 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Select Term <span class="text-red-500">*</span>
                         </label>
-                        <?php print_r($sy); ?>
                         <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required v-model="request.syid">
                             <option v-for="s in sy" :value="s.intID">{{ s.enumSem+" Term SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
