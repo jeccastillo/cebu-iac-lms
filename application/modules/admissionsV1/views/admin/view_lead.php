@@ -106,7 +106,7 @@
                     <div v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
                         <label>Select Term</label>
                         <select required @change="updateField('email',$event)" v-model="sy_reference" class="form-control">
-                            <option v-for="sy as sem" value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
+                            <option v-for="sem in sy" value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
                             
                         </select>
                     </div>
