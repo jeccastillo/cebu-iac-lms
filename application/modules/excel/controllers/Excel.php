@@ -203,6 +203,119 @@ class Excel extends CI_Controller {
         
         
     }
+
+
+    public function generate_excel_links()
+    {
+        $date = date("Y-m-d H:i:s");
+        $exams = $this->db->get_where('tb_mas_student_exam',array('token'=>NULL))->result_array();
+        
+      
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                        ->setLastModifiedBy("Jec Castillo")
+                                        ->setTitle("Generate Exam List")
+                                        ->setSubject("Generate Exam List Download")
+                                        ->setDescription("Generate Exam List Download.")
+                                        ->setKeywords("office 2007 openxml php")
+                                        ->setCategory("Generate Exam List");
+    
+            
+          
+            
+
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('B1', 'Examinees');                    
+        
+         $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+            );
+        
+        // Add some datat
+        $objPHPExcel->setActiveSheetIndex(0)
+                    //->setCellValue('A2', 'Name')
+                    ->setCellValue('A3', 'No.')
+                    ->setCellValue('B3', 'Student Name')                    
+                    ->setCellValue('C3', 'Exam Link');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('A3:C3')->applyFromArray($styleArray);
+            unset($styleArray);
+        
+        $i = 4;
+        $ctr = 1;
+        foreach($exams as $exam)
+        {
+            // Add some datat
+            $objPHPExcel->setActiveSheetIndex(0)
+                    //->setCellValue('A'.$i, $student['strLastname'].", ".$student['strFirstname'])
+                    ->setCellValue('A'.$i,$ctr)
+                    ->setCellValue('B'.$i, $s['student_name'])
+                    ->setCellValue('C'.$i, base_ur()."unity/student_exam/".$exam['student_id']."/".$exam_id."/".$token);                                                                       
+
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+            );
+        
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->applyFromArray($styleArray);
+            unset($styleArray);
+            
+
+            $i++;
+            $ctr++;
+        }
+    
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(70);    
+        
+        
+        $objPHPExcel->getActiveSheet()->setTitle("Exam List");
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="exam_list'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
+    }
+
     public function download_classlist($id,$all = 0)
     {
         $date = date("Y-m-d H:i:s");
