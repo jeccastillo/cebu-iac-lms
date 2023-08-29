@@ -2073,7 +2073,7 @@ class Data_fetcher extends CI_Model {
     
 
     public function generateNewStudentNumber($campus){
-        $sem = $this->get_active_sem();
+        $sem = $this->get_processing_sem();
         
         if($campus == "Cebu")
             $studentNum = $this->getMaxCurrentStudentNumber($sem);
@@ -2086,7 +2086,7 @@ class Data_fetcher extends CI_Model {
     }
 
     public function generateNewTempNumber(){
-        $sem = $this->get_active_sem();
+        $sem = $this->get_processing_sem();
         $studentNum = $this->getMaxCurrentTempNumber($sem);
         $newStudentNumber =  preg_replace_callback( "|(\d+)(?!.*\d)|", "increment_student_number", $studentNum);
                 
