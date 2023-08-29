@@ -109,6 +109,7 @@
                             <option v-for="sem in sy" :value="sem.intID">{{ sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
                             
                         </select>
+                        <hr />
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
