@@ -174,7 +174,7 @@ class Site extends CI_Controller {
             $ret[] = $temp;
         }
 
-		$ret['sy'] = $this->db->get_where('tb_mas_sy',array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))->result_array();
+		$data['sy'] = $this->db->get_where('tb_mas_sy',array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))->result_array();
 
         $data['data'] = $ret;
 
