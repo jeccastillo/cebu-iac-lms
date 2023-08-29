@@ -146,16 +146,55 @@
                 <div class="mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Address <span class="text-red-500">*</span>
+                            Address Line 1(House No/Bldg/Street/Block/Lot) <span class="text-red-500">*</span>
                         </label>
                         <textarea required
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            name="" rows="4" v-model="request.address">></textarea>
+                            name="" rows="4" v-model="address.hns">></textarea>
 
                     </div>
                 </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Address Line 2(Brgy/Subd) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" required
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="" v-model="address.brgy_subd" />
 
-
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Town/City <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" required
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="" v-model="address.city_town" />
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Province/Region <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" required
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="" v-model="address.province" />
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <div class="md:w-5/5">
+                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                            Zip Code <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" required
+                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="" v-model="address.province" />
+                    </div>
+                </div>
                 <div class="mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
@@ -785,6 +824,13 @@
 new Vue({
     el: "#adminssions-form",
     data: {
+        address:{
+            hns:undefined,
+            brgy_subd:undefined,
+            city_town:undefined,
+            province: undefined,
+            zipcode: undefined,
+        },
         request: {
             type_id: "",
             date_of_birth: "",
@@ -908,6 +954,10 @@ new Vue({
 
 
                 this.request.health_concern = this.request.health_concerns.join(
+                    ", "
+                );
+
+                this.request.address = this.address.join(
                     ", "
                 );
 
