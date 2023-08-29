@@ -19,7 +19,6 @@
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet 
             <strong>(Cebu Campus)</strong><br />
-            <?php echo $term['enumSem']." ".$term_type." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
         </h4>
         
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
