@@ -294,8 +294,6 @@ class Examination extends CI_Controller {
             $config['max_width']  = '1024';
             $config['max_height']  = '768';
             $this->load->library('upload', $config);
-            // print($_FILES['questionImage']);
-            // die();
             if ( ! $this->upload->do_upload("questionImage")){
                 $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                 $this->data_poster->log_action('Exam Question','Updated Question Info: '.$post['name'],'green');
@@ -545,9 +543,8 @@ class Examination extends CI_Controller {
             'exam_overall' => $totalOverallScore,
             'token'=>'',
         );
-        $postExam = $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
+        $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
         $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
-
 
         //save score per section
         foreach($sectionArray as $secArray){
@@ -555,8 +552,10 @@ class Examination extends CI_Controller {
             if(!isset($secArray['score'])){
                 $secArray['score'] = 0;
             }
+            $examID = $this->db->order_by('intID','DESC')->get('tb_mas_student_exam')->first_row('array');
+
             $scoreArray = array(
-                'tb_mas_student_exam_id' => $postExam['intID'],
+                'tb_mas_student_exam_id' => $examID['intID'],
                 'score'=> $secArray['score'],
                 'exam_overall' => $secArray['exam_overall'],
                 'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
