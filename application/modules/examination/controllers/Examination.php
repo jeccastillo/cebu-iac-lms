@@ -212,6 +212,7 @@ class Examination extends CI_Controller {
         $this->data['item']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getExamQuestion($id);
         $this->data['choices']= $this->data_fetcher->getExamQuestionChoice($id);
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
