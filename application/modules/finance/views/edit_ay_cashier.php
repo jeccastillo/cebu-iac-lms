@@ -30,23 +30,23 @@
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>First Installment Date</label>
-                        <input type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
+                        <input required type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Second Installment Date</label>
-                        <input type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
+                        <input required type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Third Installment Date</label>
-                        <input type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
+                        <input required type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Fourth Installment Date</label>
-                        <input type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
+                        <input required type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Fifth Installment Date</label>
-                        <input type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
+                        <input required type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
                     </div>                                                        
                             
                     <div class="form-group col-xs-12">
