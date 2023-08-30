@@ -107,7 +107,6 @@ class Examination extends CI_Controller {
             else
                 $term = $this->data_fetcher->get_sem_by_id($term);  
                 
-            
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];
             
@@ -551,6 +550,8 @@ class Examination extends CI_Controller {
 
                 if($program){
                     $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
+                    print_r($examType);
+                    die();
                     if($examType){
                         if($program['school'] == $examType['programType']){
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
