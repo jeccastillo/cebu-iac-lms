@@ -266,36 +266,36 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
-                                <td>DOWN PAYMENT</td>
-                                <td></td>
+                                <td>DOWN PAYMENT</td>                                
                                 <td style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
+                                <td></td>
                             </tr>';
                             
                                 $html .= '
                                 <tr>
                                     <td>1st INSTALLMENT</td>
-                                    <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>2nd INSTALLMENT</td>
-                                    <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment2'])).'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>3rd INSTALLMENT</td>
-                                    <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment3'])).'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>4th INSTALLMENT</td>
-                                    <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment4'])).'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>5th INSTALLMENT</td>
-                                    <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment5'])).'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
+                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 ';                    
                             
