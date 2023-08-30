@@ -538,18 +538,19 @@ class Examination extends CI_Controller {
         }
     }
 
-    public function generate_exam_link($examID, $programType)
+    public function generate_exam_link()
     {
         if($this->is_super_admin() || $this->is_admissions()){
             $post = $this->input->post();
             $applicants = json_decode($post['applicant'], true);
+            $examID = $post['exam_id'];
+            $programType = $post['programType'];
 
             foreach($applicants as $post){
-
                 $program = $this->db->get_where('tb_mas_programs',array('strProgramDescription'=>$post['program']))->first_row('array');
+
                 if($program){
                     $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
-
                     if($examType){
                         if($program['school'] == $examType['programType']){
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
@@ -567,24 +568,9 @@ class Examination extends CI_Controller {
                                 $this->data_poster->log_action('Student Exam','Added a new student exam: '. $post['first_name'] . ' ' . $post['last_name'],'green');
                                 $data['message'] = "Successfully generated.";
                                 $data['success'] = true;
-                            }else{
-                                if($post['id'] == 93){
-                                    print($post['last_name']);
-                                    print('existing exam');
-                                    die();
-                                }
-                            }
-                        }else{
-                            if($post['id'] == 93 && $examType['intID'] == 3){
-                                print($post['last_name']);
-                                print('no type');
-                                die();
                             }
                         }
                     }
-                }else{
-                    print('no program');
-                    die();
                 }
             }
         }
