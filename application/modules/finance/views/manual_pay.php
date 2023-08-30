@@ -218,7 +218,7 @@
                                     <td>{{ payment.response_message }}</td>
                                     <td>{{ payment.updated_at }}</td>            
                                     <td>
-                                        <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                        <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
                                                 @click="or_update.id = payment.id;" 
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
