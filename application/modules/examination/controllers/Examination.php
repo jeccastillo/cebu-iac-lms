@@ -549,16 +549,23 @@ class Examination extends CI_Controller {
                 $program = $this->db->get_where('tb_mas_programs',array('strProgramDescription'=>$post['program']))->first_row('array');
                 if($post['id'] == '87'){
                 if($program){
+                    print('EXAM ID :' .$examID);
+                    print('programType :' .$programType);
 
                     print_r($program);
+                    print_r('111');
                     $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
-                    print_r($examType . '1');
+                    print_r($examType);
+                    print_r('222');
                     if($examType){
-                        print_r($program . '@@');
+                        print_r($program);
+                        print_r('333');
                         if($program['school'] == $examType['programType']){
-                            print_r($post . '2');
+                            print_r($post);
+                            print_r('444');
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
-                            print_r($isGenerated . '3');
+                            print_r($isGenerated);
+                            print_r('555');
                             if(!$isGenerated){
                                 $sem = $this->data_fetcher->get_active_sem();
                                 $applicant = array(
