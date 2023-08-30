@@ -270,14 +270,35 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td></td>
                                 <td style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
                             </tr>';
-                            for($i=0;$i<5;$i++){
+                            
                                 $html .= '
                                 <tr>
-                                    <td>'.switch_num($i + 1).' INSTALLMENT</td>
+                                    <td>1st INSTALLMENT</td>
                                     <td></td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>';                    
-                            }
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                </tr>
+                                <tr>
+                                    <td>2nd INSTALLMENT</td>
+                                    <td></td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment2'])).'</td>
+                                </tr>
+                                <tr>
+                                    <td>3rd INSTALLMENT</td>
+                                    <td></td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment3'])).'</td>
+                                </tr>
+                                <tr>
+                                    <td>4th INSTALLMENT</td>
+                                    <td></td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment4'])).'</td>
+                                </tr>
+                                <tr>
+                                    <td>5th INSTALLMENT</td>
+                                    <td></td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').' '.date('F j, Y (W)',strtotime($active_sem['installment5'])).'</td>
+                                </tr>
+                                ';                    
+                            
 
                     $html .= 
                         '<tr>
