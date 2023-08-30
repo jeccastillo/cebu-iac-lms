@@ -15,7 +15,7 @@
                 <h3 class="box-title">Finance Term Edit</h3>                
         </div>                   
         <div class="box-body">
-            <div class="pull-right">
+            <div class="mb-5">
                 <label for="sem">Select Term:</label>
                 <select id="sem-select-edit-ay" class="form-control select2" >                        
                     <?php foreach($sy as $s): ?>
