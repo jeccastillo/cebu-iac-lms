@@ -62,6 +62,18 @@
                         </select>
                 </div>     
                 <div class="form-group col-xs-12 col-lg-4">
+                    <label>Start of Classes</label>
+                    <input required type="date" name="start_of_classes" value="<?php echo $item['start_of_classes']; ?>" class="form-control" />                         
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label>Start of Final Exams</label>
+                    <input required type="date" name="final_exam_start" value="<?php echo $item['final_exam_start']; ?>" class="form-control" />                         
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                    <label>End of Final Exams</label>
+                    <input required type="date" name="final_exam_end" value="<?php echo $item['final_exam_end']; ?>" class="form-control" />                         
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
                     <label for="midterm_start">End of Application</label>
                     <input type="datetime-local" name="endOfApplicationPeriod" value="<?php echo $item['endOfApplicationPeriod']; ?>" class="form-control" />                         
                 </div>
@@ -80,7 +92,8 @@
                 <div class="form-group col-xs-12 col-lg-4">
                     <label for="final_end">End of Final Grading</label>
                     <input type="date" name="final_end" value="<?php echo $item['final_end']; ?>" class="form-control" />                         
-                </div>                                        
+                </div>          
+                                              
                 <div class="form-group col-xs-12 col-lg-4">
                     <label for="enumFinalized">Finalized</label>
                     <select name="enumFinalized" class="form-control">
