@@ -550,10 +550,10 @@ class Examination extends CI_Controller {
 
                 if($program){
                     $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
-                    print_r($examType);
-                    die();
                     if($examType){
                         if($program['school'] == $examType['programType']){
+                            print_r($post);
+                            die();
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
                             if(!$isGenerated){
                                 $sem = $this->data_fetcher->get_active_sem();
