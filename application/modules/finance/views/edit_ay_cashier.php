@@ -12,44 +12,46 @@
 <div class="content">
     <div class="box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Finance Term Edit</h3>
-                <div class="pull-right">
-                    <label for="sem">Select Term:</label>
-                    <select id="sem" class="form-control select2" >                        
-                        <?php foreach($sy as $s): ?>
-                            <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <h3 class="box-title">Finance Term Edit</h3>                
         </div>                   
-        <form id="validate-subject" action="<?php echo base_url(); ?>registrar/edit_submit_ay" method="post" role="form">
-            <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
-                <div class="form-group col-xs-12 col-lg-4">
-                    <label>First Installment Date</label>
-                    <input type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
-                </div>
-                <div class="form-group col-xs-12 col-lg-4">
-                    <label>Second Installment Date</label>
-                    <input type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
-                </div>
-                <div class="form-group col-xs-12 col-lg-4">
-                    <label>Third Installment Date</label>
-                    <input type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
-                </div>
-                <div class="form-group col-xs-12 col-lg-4">
-                    <label>Fourth Installment Date</label>
-                    <input type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
-                </div>
-                <div class="form-group col-xs-12 col-lg-4">
-                    <label>Fifth Installment Date</label>
-                    <input type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
-                </div>                                                        
-                           
-                <div class="form-group col-xs-12">
-                    <input type="submit" value="update" class="btn btn-default  btn-flat">
-                </div>
-            <div style="clear:both"></div>
-        </form>    
+        <div class="box-body">
+            <div class="pull-right">
+                <label for="sem">Select Term:</label>
+                <select id="sem-select-edit-ay" class="form-control select2" >                        
+                    <?php foreach($sy as $s): ?>
+                        <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <form id="validate-subject" action="<?php echo base_url(); ?>registrar/edit_submit_ay" method="post" role="form">
+                <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label>First Installment Date</label>
+                        <input type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label>Second Installment Date</label>
+                        <input type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label>Third Installment Date</label>
+                        <input type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label>Fourth Installment Date</label>
+                        <input type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label>Fifth Installment Date</label>
+                        <input type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
+                    </div>                                                        
+                            
+                    <div class="form-group col-xs-12">
+                        <input type="submit" value="update" class="btn btn-default  btn-flat">
+                    </div>
+                <div style="clear:both"></div>
+            </form>    
+        </div>
     </div>
     
 </aside>
