@@ -25,7 +25,6 @@
                             id="strName" placeholder="Enter Name">
                     </div>
 
-                    <?php print_r($item)?>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
@@ -52,6 +51,13 @@
 
                     <div class="form-group col-xs-12">
                         <input type="submit" value="Update" class="btn btn-default  btn-flat">
+                    </div>
+
+                    <hr>
+                    <div class="col-lg-12 text-center">
+                        <p> <strong>NOTE:</strong></p>
+                        <a id="generateBtn" class="btn btn-success">GENERATE EXAM LINK</a>
+                        <br><br>
                     </div>
                     <div style="clear:both"></div>
                 </div>
@@ -227,7 +233,64 @@ $("#choices_container").on("click", ".radioBtn", function() {
 </script>
 
 
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script>
 CKEDITOR.config.extraPlugins = 'justify';
 CKEDITOR.replace('strTitle');
+
+// for exam generation
+
+const generateButton = document.querySelector("#generateBtn");
+generateButton.addEventListener("click", async () => {
+
+
+    axios.get(api_url +
+        'admissions/applications?filter=New&current_sem=26&campus=Makati').then((data) => {
+
+        // to generate student exam
+
+        let formData = new FormData();
+        formData.append("applicant", JSON.stringify(data.data.data))
+        formData.append("exam_id", <?php  echo $item['intID']  ?>)
+        formData.append("programType", '<?php  echo $item['programType']; ?>')
+
+        axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData).then(
+            () => {
+
+                const form = document.createElement('form');
+                form.method = "post";
+                form.action =
+                    "<?php echo base_url() ?>excel/generate_excel_links";
+                form.dataType = "json";
+
+                const hiddenFieldExamId = document.createElement('input');
+                hiddenFieldExamId.type = 'hidden';
+                hiddenFieldExamId.name = 'exam_id';
+                hiddenFieldExamId.value = <?php  echo $item['intID']  ?>
+
+                const hiddenFieldProgramType = document.createElement('input');
+                hiddenFieldProgramType.type = 'hidden';
+                hiddenFieldProgramType.name = 'programType';
+                hiddenFieldProgramType.value = '<?php  echo $item['programType']  ?>'
+
+                form.appendChild(hiddenFieldExamId);
+                form.appendChild(hiddenFieldProgramType);
+
+
+                document.body.appendChild(form);
+                form.submit();
+
+
+            }).catch((e) => {
+            console.log(e)
+        })
+
+
+    }).catch((e) => {
+        console.log(e)
+    })
+
+
+
+})
 </script>

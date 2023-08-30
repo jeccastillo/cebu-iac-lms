@@ -212,6 +212,7 @@ class Examination extends CI_Controller {
         $this->data['item']= $this->data_fetcher->getExam($id);
         $this->data['question']= $this->data_fetcher->getExamQuestion($id);
         $this->data['choices']= $this->data_fetcher->getExamQuestionChoice($id);
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_exam_type",$this->data);
         $this->load->view("common/footer",$this->data); 
@@ -483,6 +484,110 @@ class Examination extends CI_Controller {
             }
         }
         echo json_encode($data);
+    }
+
+    public function generate_exam_links()
+    {
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();
+            $applicants = json_decode($post['applicant'], true);
+
+            foreach($applicants as $post){
+
+                $program = $this->db->get_where('tb_mas_programs',array('strProgramDescription'=>$post['program']))->first_row('array');
+                if($program){
+                    $examTypes = $this->data_fetcher->fetch_table('tb_mas_exam');
+                    
+                    foreach($examTypes as $examType){
+                        if($program['school'] == $examType['programType']){
+                            $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
+                            if(!$isGenerated){
+                                $sem = $this->data_fetcher->get_active_sem();
+                                $applicant = array(
+                                    'student_name' => $post['first_name'] . ' ' . $post['last_name'],
+                                    'student_id' => $post['slug'],
+                                    'exam_id' => $examType['intID'],
+                                    'syid' => $sem['intID'],
+                                    'token' => $this->generateRandomString(),
+                                    'score' => '0',
+                                );
+                                $this->data_poster->post_data('tb_mas_student_exam',$applicant);
+                                $this->data_poster->log_action('Student Exam','Added a new student exam: '. $post['first_name'] . ' ' . $post['last_name'],'green');
+                                $data['message'] = "Successfully generated.";
+                                $data['success'] = true;
+                            }else{
+                                if($post['id'] == 93){
+                                    print($post['last_name']);
+                                    print('existing exam');
+                                    die();
+                                }
+                            }
+                        }else{
+                            if($post['id'] == 93 && $examType['intID'] == 3){
+                                print($post['last_name']);
+                                print('no type');
+                                die();
+                            }
+                        }
+                    }
+                }else{
+                    print('no program');
+                    die();
+                }
+            }
+        }
+    }
+
+    public function generate_exam_link($examID, $programType)
+    {
+        if($this->is_super_admin() || $this->is_admissions()){
+            $post = $this->input->post();
+            $applicants = json_decode($post['applicant'], true);
+
+            foreach($applicants as $post){
+
+                $program = $this->db->get_where('tb_mas_programs',array('strProgramDescription'=>$post['program']))->first_row('array');
+                if($program){
+                    $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
+
+                    if($examType){
+                        if($program['school'] == $examType['programType']){
+                            $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
+                            if(!$isGenerated){
+                                $sem = $this->data_fetcher->get_active_sem();
+                                $applicant = array(
+                                    'student_name' => $post['first_name'] . ' ' . $post['last_name'],
+                                    'student_id' => $post['slug'],
+                                    'exam_id' => $examType['intID'],
+                                    'syid' => $sem['intID'],
+                                    'token' => $this->generateRandomString(),
+                                    'score' => '0',
+                                );
+                                $this->data_poster->post_data('tb_mas_student_exam',$applicant);
+                                $this->data_poster->log_action('Student Exam','Added a new student exam: '. $post['first_name'] . ' ' . $post['last_name'],'green');
+                                $data['message'] = "Successfully generated.";
+                                $data['success'] = true;
+                            }else{
+                                if($post['id'] == 93){
+                                    print($post['last_name']);
+                                    print('existing exam');
+                                    die();
+                                }
+                            }
+                        }else{
+                            if($post['id'] == 93 && $examType['intID'] == 3){
+                                print($post['last_name']);
+                                print('no type');
+                                die();
+                            }
+                        }
+                    }
+                }else{
+                    print('no program');
+                    die();
+                }
+            }
+        }
     }
 
     function generateRandomString($length = 10) {
