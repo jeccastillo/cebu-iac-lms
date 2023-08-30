@@ -538,7 +538,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
-                            this.or_update.student_campus = this.student_campus;
+                            this.or_update.student_campus = this.request.student_campus;
                         }                        
                         
 

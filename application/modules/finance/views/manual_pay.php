@@ -376,7 +376,7 @@ new Vue({
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;
                 this.or_update.sy_reference = data.data.current_sem;     
-                this.or_update.student_campus = this.student_campus;           
+                this.or_update.student_campus = this.request.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;
