@@ -26,7 +26,7 @@
                 </div>
             </div>       
             <hr />     
-            <form id="validate-subject" action="<?php echo base_url(); ?>registrar/edit_submit_ay" method="post" role="form">
+            <form id="validate-subject" action="<?php echo base_url(); ?>finance/edit_submit_ay" method="post" role="form">
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>First Installment Date</label>

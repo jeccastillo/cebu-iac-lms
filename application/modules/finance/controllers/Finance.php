@@ -74,6 +74,16 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function edit_submit_ay()
+    {
+        $post = $this->input->post();                
+       // $this->data_poster->set
+        $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
+        $this->data_poster->log_action('Finance Details Updated','Updated Term Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
+        redirect(base_url()."finance/edit_ay/".$post['intID']);
+            
+    }
+
     public function edit_ay($id = 0){
 
         if($id == 0)
