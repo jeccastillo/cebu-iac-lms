@@ -74,6 +74,21 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function edit_ay($id = 0){
+
+        if($id == 0)
+            $this->data['item'] = $this->data_fetcher->get_active_sem();
+        else
+            $this->data['item'] = $this->data_fetcher->getAy($id);        
+        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("edit_ay_finance",$this->data);
+        $this->load->view("common/footer",$this->data);         
+        $this->load->view("common/edit_ay_conf",$this->data); 
+    }
+
     public function student_ledger($id,$sem = 0){
 
         $special_role = $this->session->userdata('special_role');        
