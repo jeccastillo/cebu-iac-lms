@@ -15,15 +15,16 @@
                 <h3 class="box-title">Finance Term Edit</h3>                
         </div>                   
         <div class="box-body">
-            <div class="mb-5">
-                <label for="sem">Select Term:</label>
-                <select id="sem-select-edit-ay" class="form-control select2" >                        
-                    <?php foreach($sy as $s): ?>
-                        <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <hr style="clear:both" />
+            <div class="row">
+                <div class="mb-5 col-sm-6">
+                    <label for="sem">Select Term:</label>
+                    <select id="sem-select-edit-ay" class="form-control select2" >                        
+                        <?php foreach($sy as $s): ?>
+                            <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>            
             <form id="validate-subject" action="<?php echo base_url(); ?>registrar/edit_submit_ay" method="post" role="form">
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
                     <div class="form-group col-xs-12 col-lg-4">
