@@ -207,13 +207,25 @@ class Excel extends CI_Controller {
 
     public function generate_excel_links()
     {
+        $post = $this->input->post();
+        $programType = '';
+
         $date = date("Y-m-d H:i:s");
         $exams = $this->db->where(array('token !='=>NULL))
                       ->order_by('student_name','ASC')
                       ->get('tb_mas_student_exam')
                       ->result_array();
         
-      
+        if($post['exam_id'] && $post['programType']){
+            $programType = $post['programType'];
+            $exams = $this->db->select('tb_mas_student_exam.*')
+                    ->from('tb_mas_student_exam')
+                    ->join('tb_mas_exam','tb_mas_student_exam.exam_id = tb_mas_exam.intID')
+                    ->where(array('tb_mas_student_exam.exam_id'=>$post['exam_id'], 'tb_mas_student_exam.token !='=>NULL,'tb_mas_student_exam.token !='=>'', 'tb_mas_exam.programType'=> $programType))
+                    ->get()
+                    ->result_array();
+        }
+
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -303,7 +315,7 @@ class Excel extends CI_Controller {
  
          // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-         header('Content-Disposition: attachment;filename="exam_list'.$date.'.xls"');
+         header('Content-Disposition: attachment;filename="exam_list_'.$programType.''.$date.'.xls"');
          header('Cache-Control: max-age=0');
          // If you're serving to IE 9, then the following may be needed
          header('Cache-Control: max-age=1');
