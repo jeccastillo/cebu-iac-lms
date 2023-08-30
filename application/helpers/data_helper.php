@@ -647,25 +647,25 @@ if(!function_exists('switch_day'))
     {
         switch($num)
             {
-                case '0':
+                case 0:
                     $num = "Sun";
                     break;
-                case '1':
+                case 1:
                     $num = "Mon";
                     break;
-                case '2':
+                case 2:
                     $num = "Tue";
                     break;
-                case '3':
+                case 3:
                     $num = "Wed";
                     break;
-                case '4':
+                case 4:
                     $num = "Thu";
                     break;
-                case '5':
+                case 5:
                     $num = "Fri";
                     break;
-                case '6':
+                case 6:
                     $num = "Sat";
                     break;
             }

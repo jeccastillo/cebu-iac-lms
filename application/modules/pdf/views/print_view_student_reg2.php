@@ -280,22 +280,22 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <tr>
                                     <td>2nd INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment2'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment2'])).' ('.switch_day(date('N',strtotime($active_sem['installment2']))).')</td>
                                 </tr>
                                 <tr>
                                     <td>3rd INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment3'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment3'])).' ('.switch_day(date('N',strtotime($active_sem['installment3']))).')</td>
                                 </tr>
                                 <tr>
                                     <td>4th INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment4'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment4'])).' ('.switch_day(date('N',strtotime($active_sem['installment4']))).')</td>
                                 </tr>
                                 <tr>
                                     <td>5th INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment5'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment5'])).' ('.switch_day(date('N',strtotime($active_sem['installment5']))).')</td>
                                 </tr>
                                 ';                    
                             
