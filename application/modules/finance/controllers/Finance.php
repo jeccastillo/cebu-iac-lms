@@ -84,7 +84,7 @@ class Finance extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         
         $this->load->view("common/header",$this->data);
-        $this->load->view("edit_ay_finance",$this->data);
+        $this->load->view("edit_ay_cashier",$this->data);
         $this->load->view("common/footer",$this->data);         
         $this->load->view("common/edit_ay_conf",$this->data); 
     }
