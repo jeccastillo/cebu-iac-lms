@@ -302,9 +302,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                     $html .= 
                         '<tr>
-                            <td style="font-weight:bold;">Total</td>
-                            <td></td>
+                            <td style="font-weight:bold;">Total</td>                            
                             <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                            <td></td>
                         </tr>
                         </table>
                     </td>
