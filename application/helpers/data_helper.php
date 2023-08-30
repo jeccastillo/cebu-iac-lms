@@ -646,10 +646,7 @@ if(!function_exists('switch_day'))
     function switch_day($num)
     {
         switch($num)
-            {
-                case 0:
-                    $num = "Sun";
-                    break;
+            {                
                 case 1:
                     $num = "Mon";
                     break;
@@ -667,6 +664,9 @@ if(!function_exists('switch_day'))
                     break;
                 case 6:
                     $num = "Sat";
+                    break;
+                case 7:
+                    $num = "Sun";
                     break;
             }
         
