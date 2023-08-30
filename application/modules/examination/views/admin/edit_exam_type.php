@@ -25,7 +25,6 @@
                             id="strName" placeholder="Enter Name">
                     </div>
 
-                    <?php print_r($item)?>
 
                     <div class="form-group col-xs-6">
                         <label for="type">Exam Type</label>
@@ -52,6 +51,15 @@
 
                     <div class="form-group col-xs-12">
                         <input type="submit" value="Update" class="btn btn-default  btn-flat">
+                    </div>
+
+                    <hr>
+                    <div class="col-lg-12 text-center">
+                        <p> <strong>NOTE:</strong></p>
+                        <a href="<?php echo base_url();?>examination/generate_exam_link/<?php echo $item['intID'] .'/'. $item['programType'];?>"
+                            class="btn btn-success">GENERATE EXAM LINK</a>
+                        <br><br>
+
                     </div>
                     <div style="clear:both"></div>
                 </div>
