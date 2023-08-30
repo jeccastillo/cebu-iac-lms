@@ -89,7 +89,11 @@ class Finance extends CI_Controller {
         if($id == 0)
             $this->data['item'] = $this->data_fetcher->get_active_sem();
         else
-            $this->data['item'] = $this->data_fetcher->getAy($id);        
+            $this->data['item'] = $this->data_fetcher->getAy($id);  
+        
+        $this->data['page'] = "installment_dates";
+        $this->data['opentree'] = "finance_student_account";
+            
         
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         

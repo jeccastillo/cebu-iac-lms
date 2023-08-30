@@ -455,7 +455,10 @@
                                 href="#"><i class="ion"></i>
                                 <span>Order Detailed Report</span> </a>
                         </li>
-
+                        <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="ion"></i>
+                                <span>Edit Installment Dates</span> </a>
+                        </li>
                     </ul>
                 </li>
                 <?php endif; ?>
@@ -475,7 +478,6 @@
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Tuition Config</a>
                         </li>
-
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Payee Set-up</span> </a>
