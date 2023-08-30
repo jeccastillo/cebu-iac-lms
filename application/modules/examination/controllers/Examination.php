@@ -549,7 +549,10 @@ class Examination extends CI_Controller {
                 $program = $this->db->get_where('tb_mas_programs',array('strProgramDescription'=>$post['program']))->first_row('array');
                 if($post['id'] == '87'){
                 if($program){
+
+                    print_r($program);
                     $examType = $this->db->get_where('tb_mas_exam',array('programType'=>$programType, 'intID'=> $examID))->first_row('array');
+                    print_r($examType);
                     if($examType){
                         if($program['school'] == $examType['programType']){
                             print_r($post);
