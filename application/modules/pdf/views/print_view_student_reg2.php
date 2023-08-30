@@ -275,27 +275,27 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <tr>
                                     <td>1st INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.date('M j, Y (l)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>2nd INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.date('M j, Y (l)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>3rd INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.date('M j, Y (l)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>4th INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.date('M j, Y (l)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 <tr>
                                     <td>5th INSTALLMENT</td>
                                     <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                    <td style="text-align:right;">'.date('F j, Y (W)',strtotime($active_sem['installment1'])).'</td>
+                                    <td style="text-align:right;">'.date('M j, Y (l)',strtotime($active_sem['installment1'])).'</td>
                                 </tr>
                                 ';                    
                             
