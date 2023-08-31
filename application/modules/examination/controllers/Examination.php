@@ -490,7 +490,12 @@ class Examination extends CI_Controller {
                     $examTypes = $this->data_fetcher->fetch_table('tb_mas_exam');
                     
                     foreach($examTypes as $examType){
-                        if($program['school'] == $examType['programType']){
+                        // if($program['school'] == $examType['programType']){
+                        if((($program['school'] == 'Computing' || $program['school'] == 'computing') && $examType['programType'] == 'computing') ||
+                        (($program['school'] == 'Business' || $program['school'] == 'business') && $examType['programType'] == 'business') ||
+                        (($program['school'] == 'Design' || $program['school'] == 'design') && $examType['programType'] == 'design') ||
+                        (($program['type'] == 'shs' || $program['school'] == 'iacademy') && $examType['programType'] == 'shs')    
+                        ){
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
                             if(!$isGenerated){
                                 $sem = $this->data_fetcher->get_active_sem();

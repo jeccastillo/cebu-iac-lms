@@ -216,7 +216,7 @@ class Excel extends CI_Controller {
                       ->get('tb_mas_student_exam')
                       ->result_array();
         
-        if($post['exam_id'] && $post['programType']){
+        if(isset($post['exam_id']) && isset($post['programType'])){
             $programType = $post['programType'];
             $exams = $this->db->select('tb_mas_student_exam.*')
                     ->from('tb_mas_student_exam')
@@ -225,7 +225,7 @@ class Excel extends CI_Controller {
                     ->get()
                     ->result_array();
         }
-
+        
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
