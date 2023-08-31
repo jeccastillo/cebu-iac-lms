@@ -68,7 +68,7 @@ $(document).ready(function() {
                         let formData = new FormData();
                         formData.append("applicant", JSON.stringify(json.data))
 
-                        axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData)
+                        axios.post("<?php echo base_url();?>" + "examination/generate_exam_links", formData)
                             .then(function(data) {
                                 if (data.data.success) {
                                     Swal.fire(
