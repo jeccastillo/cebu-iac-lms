@@ -254,7 +254,8 @@ generateButton.addEventListener("click", async () => {
         formData.append("exam_id", <?php  echo $item['intID']  ?>)
         formData.append("programType", '<?php  echo $item['programType']; ?>')
 
-        axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData).then(
+        axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData)
+        .then(
             () => {
 
                 const form = document.createElement('form');
