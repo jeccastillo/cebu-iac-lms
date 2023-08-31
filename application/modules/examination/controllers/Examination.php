@@ -506,24 +506,9 @@ class Examination extends CI_Controller {
                                 $this->data_poster->log_action('Student Exam','Added a new student exam: '. $post['first_name'] . ' ' . $post['last_name'],'green');
                                 $data['message'] = "Successfully generated.";
                                 $data['success'] = true;
-                            }else{
-                                if($post['id'] == 93){
-                                    print($post['last_name']);
-                                    print('existing exam');
-                                    die();
-                                }
-                            }
-                        }else{
-                            if($post['id'] == 93 && $examType['intID'] == 3){
-                                print($post['last_name']);
-                                print('no type');
-                                die();
                             }
                         }
                     }
-                }else{
-                    print('no program');
-                    die();
                 }
             }
         }
