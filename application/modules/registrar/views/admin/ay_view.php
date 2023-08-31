@@ -26,12 +26,9 @@
                                     <table id="ay-table" class="table">
                                         <thead><tr>
                                             <th>Sem</th>
-                                            <th>Year</th>
-                                            <th>Status</th>
-                                            <th>Finalized</th>
-                                            <th>PG Period</th>
-                                            <th>MG Period</th>
-                                            <th>FTG Period</th>
+                                            <th>Year</th>                                            
+                                            <th>Finalized</th>                                            
+                                            <th>Type</th>
                                             <th>Actions</th>
                                         </tr>
                                         </thead>
@@ -40,12 +37,9 @@
                                             <tr>
                                                 
                                                 <td><?php echo $ay['enumSem']; ?></td>
-                                                <td><?php echo $ay['strYearStart']." - ".$ay['strYearEnd']; ?></td>
-                                                <td><?php echo $ay['enumStatus']; ?></td>
+                                                <td><?php echo $ay['strYearStart']." - ".$ay['strYearEnd']; ?></td>                                                
                                                 <td><?php echo $ay['enumFinalized']; ?></td>
-                                                <td><?php echo $ay['enumGradingPeriod']; ?></td>
-                                                <td><?php echo $ay['enumMGradingPeriod']; ?></td>
-                                                <td><?php echo $ay['enumFGradingPeriod']; ?></td>
+                                                <td><?php echo $ay['term_student_type']; ?></td>                                                                                                
                                                 <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-default">Actions</button>
