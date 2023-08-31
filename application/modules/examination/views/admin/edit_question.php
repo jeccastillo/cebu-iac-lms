@@ -152,11 +152,14 @@
                                         <img src="<?php echo $choice['image']?>" style="max-width:100%; height:auto"
                                             alt="">
                                     </div>
+
+                                    <?php if($choice && $choice['image']): ?>
                                     <div>
                                         <a href="<?php echo base_url() ?>examination/delete_image_choice/<?php echo $question['intID'] ?>/<?php echo $choice['intID'] ?>"
                                             class="btn btn-sm btn-danger">Remove
                                             Image</a>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
