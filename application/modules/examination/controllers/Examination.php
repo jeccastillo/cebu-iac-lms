@@ -630,6 +630,7 @@ class Examination extends CI_Controller {
                     $sectionArray[$examQuestion['section']]['section'] = $examQuestion['section'];
                 }
             }
+            $totalOverallScore++;
         }
 
         $examArray = array(
@@ -652,7 +653,7 @@ class Examination extends CI_Controller {
             $scoreArray = array(
                 'tb_mas_student_exam_id' => $examID['intID'],
                 'score'=> $secArray['score'],
-                'exam_overall' => $totalOverallScore,
+                'exam_overall' => $secArray['exam_overall'],
                 'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
                 'section' => $secArray['section'],
             );
