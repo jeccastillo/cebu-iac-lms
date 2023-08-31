@@ -673,14 +673,14 @@
                         class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
 
 
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'college'" class="mt-2">
                             <input type="radio" required name="student_type" id="rb-ug-freshman" data-type="college"
                                 @change="filterCourses('college')" v-model="request.student_type"
                                 value="COLLEGE - Freshman" />
                             <label for="rb-ug-freshman"> COLLEGE - Freshman</label>
                         </div>
 
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'college'" class="mt-2">
                             <input type="radio" required name="student_type" id="rb-ug-transferee" data-type="college"
                                 @change="filterCourses('college')" v-model="request.student_type"
                                 value="COLLEGE - Transferee" />
@@ -688,27 +688,27 @@
                             <label for="rb-ug-transferee"> COLLEGE - Transferee</label>
                         </div>
 
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
                             <input type="radio" id="rb-shs-freshman" required name="student_type" data-type="shs"
                                 @change="filterCourses('shs')" v-model="request.student_type" value="SHS - Freshman" />
                             <label for="rb-shs-freshman">SHS - Freshman</label>
                         </div>
 
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
                             <input type="radio" required id="rb-shs-transferee" name="student_type" data-type="shs"
                                 @change="filterCourses('shs')" v-model="request.student_type"
                                 value="SHS - Transferee" />
 
                             <label for="rb-shs-transferee">SHS - Transferee</label>
                         </div>
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
                             <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
                                 @change="filterCourses('drive')" v-model="request.student_type"
                                 value="SHS - DRIVE HomeSchool Program" />
                             <label for="rb-shs-drive">SHS - DRIVE HomeSchool Program</label>
                         </div>
 
-                        <div class="mt-2">
+                        <div v-if="term.term_student_type == 'college'" class="mt-2">
                             <input type="radio" required id="rb-2nd-deg" name="student_type" data-type="second_degree"
                                 @change="filterCourses('other')" v-model="request.student_type" value="2ND - DEGREE" />
                             <label for="rb-2nd-deg"> 2ND - DEGREE
