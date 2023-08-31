@@ -690,7 +690,7 @@
                         <div v-if="term.term_student_type == 'shs'" class="mt-2">
                             <input type="radio" id="rb-shs-freshman" required name="student_type" data-type="shs"
                                 @change="filterCourses('shs')" v-model="request.student_type" value="SHS - Freshman" />
-                            <label for="rb-shs-freshman">SHS - Freshman</label>
+                            <label for="rb-shs-freshman">SHS - New</label>
                         </div>
 
                         <div v-if="term.term_student_type == 'shs'" class="mt-2">
