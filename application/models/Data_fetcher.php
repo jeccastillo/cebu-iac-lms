@@ -730,6 +730,13 @@ class Data_fetcher extends CI_Model {
         
     }
 
+    function get_processing_sem_shs()
+    {
+        $current_term = $this->db->get_where('tb_mas_system_settings',array('setting_name'=>'shs_default_application'))->first_row();
+        return current($this->db->get_where('tb_mas_sy',array('intID'=>$current_term->value))->result_array());
+        
+    }
+
     function get_active_PrelimPeriod($id)
     {
         return current($this->db->get_where('tb_mas_sy',array('enumGradingPeriod'=>'active', 'intID'=>$id))->result_array());

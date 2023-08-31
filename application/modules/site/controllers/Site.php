@@ -33,10 +33,13 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function student_application($term = 0) {		
+	public function student_application($term = 0,$type = 0) {		
 
 		if($term == 0){
-            $term = $this->data_fetcher->get_processing_sem();        			
+			if($type == 0)
+            	$term = $this->data_fetcher->get_processing_sem();        			
+			else
+				$term = $this->data_fetcher->get_processing_sem_shs();        						
 		}
 		else
 			$term = $this->data_fetcher->get_sem_by_id($term);
