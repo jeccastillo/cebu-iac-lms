@@ -13,7 +13,7 @@ $(document).ready(function() {
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>admissionsV1/view_lead/' +
-                        row[0] + '">Edit</a></li><li><a href="#" rel="' + row[0] +
+                        row[5] + '">View</a></li><li><a href="#" rel="' + row[0] +
                         '" class="trash-item">Delete</a></li></ul></div>';
                 }
             },
