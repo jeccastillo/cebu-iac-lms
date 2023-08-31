@@ -176,7 +176,7 @@ class Site extends CI_Controller {
             $ret[] = $temp;
         }
 
-		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))
+		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s"),'term_student_type'=>$term['term_student_type']))
 								->order_by("strYearStart ASC, enumSem ASC")
 								->get('tb_mas_sy')
 								->result_array();
@@ -237,7 +237,7 @@ class Site extends CI_Controller {
             $ret['drive'][] = $temp;
         }
 
-		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))
+		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s"),'term_student_type'=>$term['term_student_type']))
 								->order_by("strYearStart ASC, enumSem ASC")
 								->get('tb_mas_sy')
 								->result_array();
