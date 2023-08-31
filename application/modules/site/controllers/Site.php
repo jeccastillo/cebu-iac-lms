@@ -35,8 +35,9 @@ class Site extends CI_Controller {
 
 	public function student_application($term = 0) {		
 
-		if($term == 0)
-            $term = $this->data_fetcher->get_processing_sem();        
+		if($term == 0){
+            $term = $this->data_fetcher->get_processing_sem();        			
+		}
 		else
 			$term = $this->data_fetcher->get_sem_by_id($term);
 
@@ -174,7 +175,10 @@ class Site extends CI_Controller {
             $ret[] = $temp;
         }
 
-		$data['sy'] = $this->db->get_where('tb_mas_sy',array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))->result_array();
+		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))
+								->order_by("strYearStart ASC, enumSem ASC")
+								->get('tb_mas_sy')
+								->result_array();
 
         $data['data'] = $ret;
 
