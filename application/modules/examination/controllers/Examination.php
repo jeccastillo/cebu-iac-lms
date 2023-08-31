@@ -555,7 +555,7 @@ class Examination extends CI_Controller {
                         if((($program['school'] == 'Computing' || $program['school'] == 'computing') && $examType['programType'] == 'computing') ||
                         (($program['school'] == 'Business' || $program['school'] == 'business') && $examType['programType'] == 'business') ||
                         (($program['school'] == 'Design' || $program['school'] == 'design') && $examType['programType'] == 'design') ||
-                        (($program['school'] == 'shs' || $program['school'] == 'iacademy') && $examType['programType'] == 'shs')    
+                        (($program['type'] == 'shs' || $program['school'] == 'iacademy') && $examType['programType'] == 'shs')    
                         ){
                             $isGenerated = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['slug']))->first_row('array');
                             if(!$isGenerated){
