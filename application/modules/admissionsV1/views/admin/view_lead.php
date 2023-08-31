@@ -828,7 +828,7 @@
                                     <td> <strong>Date Submitted:</strong> {{ entrance_exam.date_taken }}</td>
                                     <td></td>
                                     <td> <strong>Total Score:</strong>
-                                        {{ entrance_exam.score + '/' entrance_exam.exam_overall }}</td>
+                                        {{ entrance_exam.score + '/' + entrance_exam.exam_overall }}</td>
                                 </tr>
                             </tbody>
                         </table>
