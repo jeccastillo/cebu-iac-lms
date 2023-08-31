@@ -55,7 +55,8 @@
 
                     <hr>
                     <div class="col-lg-12 text-center">
-                        <p> <strong>NOTE:</strong></p>
+                        <p> <strong>NOTE: </strong>The generated exam link will be based on the program type selected.
+                        </p>
                         <a id="generateBtn" class="btn btn-success">GENERATE EXAM LINK</a>
                         <br><br>
                     </div>
@@ -255,36 +256,36 @@ generateButton.addEventListener("click", async () => {
         formData.append("programType", '<?php  echo $item['programType']; ?>')
 
         axios.post("<?php echo base_url();?>" + "examination/generate_exam_link", formData)
-        .then(
-            () => {
+            .then(
+                () => {
 
-                const form = document.createElement('form');
-                form.method = "post";
-                form.action =
-                    "<?php echo base_url() ?>excel/generate_excel_links";
-                form.dataType = "json";
+                    const form = document.createElement('form');
+                    form.method = "post";
+                    form.action =
+                        "<?php echo base_url() ?>excel/generate_excel_links";
+                    form.dataType = "json";
 
-                const hiddenFieldExamId = document.createElement('input');
-                hiddenFieldExamId.type = 'hidden';
-                hiddenFieldExamId.name = 'exam_id';
-                hiddenFieldExamId.value = <?php  echo $item['intID']  ?>
+                    const hiddenFieldExamId = document.createElement('input');
+                    hiddenFieldExamId.type = 'hidden';
+                    hiddenFieldExamId.name = 'exam_id';
+                    hiddenFieldExamId.value = <?php  echo $item['intID']  ?>
 
-                const hiddenFieldProgramType = document.createElement('input');
-                hiddenFieldProgramType.type = 'hidden';
-                hiddenFieldProgramType.name = 'programType';
-                hiddenFieldProgramType.value = '<?php  echo $item['programType']  ?>'
+                    const hiddenFieldProgramType = document.createElement('input');
+                    hiddenFieldProgramType.type = 'hidden';
+                    hiddenFieldProgramType.name = 'programType';
+                    hiddenFieldProgramType.value = '<?php  echo $item['programType']  ?>'
 
-                form.appendChild(hiddenFieldExamId);
-                form.appendChild(hiddenFieldProgramType);
-
-
-                document.body.appendChild(form);
-                form.submit();
+                    form.appendChild(hiddenFieldExamId);
+                    form.appendChild(hiddenFieldProgramType);
 
 
-            }).catch((e) => {
-            console.log(e)
-        })
+                    document.body.appendChild(form);
+                    form.submit();
+
+
+                }).catch((e) => {
+                console.log(e)
+            })
 
 
     }).catch((e) => {
