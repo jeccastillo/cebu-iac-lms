@@ -357,10 +357,6 @@ class Examination extends CI_Controller {
                     //update choice
                     if ( ! $this->upload->do_upload_original_name($files[$i], $questionID)){
 
-                        // $file = $this->upload->data();
-                        $file = $questionID . '' . $files[$i]['name'];
-                        // $file = preg_replace('/\s+/', '_', $file);
-
                         $this->session->set_flashdata('upload_errors',$this->upload->display_errors());
                         
                         $questionChoice = array(
@@ -372,7 +368,7 @@ class Examination extends CI_Controller {
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
                     }else{
                         $file = $this->upload->data();
-                        $file = $questionID . '' . $files[$i]['name'];
+                        $file = $questionID . '' . preg_replace('/\s+/', '_', $files[$i]['name']);
                         $questionChoice = array(
                             'question_id' => $post['question_id'],
                             'strChoice' => $choice,
@@ -383,7 +379,6 @@ class Examination extends CI_Controller {
                         $this->data_poster->log_action('Choice','Update choice: '.$post['strChoice'],'green');
                     }
                 }else{
-                    
                     $questions = $this->db->order_by('intID','DESC')->get('tb_mas_choices')->first_row('array');
                     $questionID = $questions['intID'] + 1;
                     //add choice
@@ -399,9 +394,7 @@ class Examination extends CI_Controller {
                         $this->data_poster->post_data('tb_mas_choices',$questionChoice);
                         $this->data_poster->log_action('Choice','Added choice: '.$post['strChoice'],'green');
                     }else{
-                        // $file = $this->upload->data();
-
-                        $file = $questionID . '' . $files[$i]['name'];
+                        $file = $questionID . '' . preg_replace('/\s+/', '_', $files[$i]['name']);
                         
                         $questionChoice = array(
                             'question_id' => $post['question_id'],
@@ -411,7 +404,6 @@ class Examination extends CI_Controller {
                         );                   
                         $this->data_poster->post_data('tb_mas_choices',$questionChoice);
                         $this->data_poster->log_action('Choice','Added choice: '.$post['strChoice'],'green');
-
                     }
                 }
                 $i++;
