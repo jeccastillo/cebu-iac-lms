@@ -19,6 +19,7 @@
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet 
             <strong>(Cebu Campus)</strong><br />
+            {{ term.enumSem + " Term " + term.strYearStart + "-" + term.strYearEnd  }}
         </h4>
         
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
@@ -841,6 +842,7 @@ new Vue({
             student_type: 'freshman',
         },
         loading_spinner: false,
+        term: undefined,
         programs: [],
         programs_group: [],
         sy:[],
@@ -850,7 +852,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs', {
+            .get(this.base_url + 'site/view_active_programs/'+this.request.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -859,6 +861,7 @@ new Vue({
             .then((data) => {
                 this.programs = data.data.data;
                 this.sy = data.data.sy;
+                this.term = data.data.term;
             })
             .catch((e) => {
                 console.log("error");

@@ -19,7 +19,7 @@
         <h4 class="font-medium text-2xl mb-5">
             Student Information Sheet 
             <strong>(Makati Campus)</strong><br />
-            <?php echo $term['enumSem']." ".$term_type." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+            {{ term.enumSem + " Term " + term.strYearStart + "-" + term.strYearEnd  }}            
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
@@ -896,6 +896,7 @@ new Vue({
             type_id2: "",
             type_id3: ""
         },
+        term: undefined,
         loading_spinner: false,
         programs: [],
         sy:[],
@@ -907,7 +908,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs_makati', {
+            .get(this.base_url + 'site/view_active_programs_makati/'+this.request.syid, {            
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -916,6 +917,7 @@ new Vue({
             .then((data) => {
                 this.programs = data.data.data;
                 this.sy = data.data.sy;
+                this.term = data.data.term;
             })
             .catch((e) => {
                 console.log("error");
@@ -928,7 +930,7 @@ new Vue({
                 },
             })
             .then((data) => {
-                this.types = data.data.data;
+                this.types = data.data.data;                
                 setTimeout(() => {
                     $(".admissions_submission_cb").on("click", e => {
                         $(".admissions_submission_cb")

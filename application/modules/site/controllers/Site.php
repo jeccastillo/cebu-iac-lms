@@ -163,7 +163,8 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer',$this->data);
     }
 
-	public function view_active_programs(){
+	public function view_active_programs($syid){
+		$term = $this->data_fetcher->get_sem_by_id($syid);
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
         $ret = [];
         foreach($programs as $prog){
@@ -179,14 +180,16 @@ class Site extends CI_Controller {
 								->order_by("strYearStart ASC, enumSem ASC")
 								->get('tb_mas_sy')
 								->result_array();
-
+		$data['term'] = $term;
         $data['data'] = $ret;
 
         echo json_encode($data);
 
     }
 
-	public function view_active_programs_makati(){
+	public function view_active_programs_makati($syid){
+		$term = $this->data_fetcher->get_sem_by_id($syid);
+		
         $programs_college = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
 		$programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));
 		$programs_sd = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'other'));
@@ -233,6 +236,13 @@ class Site extends CI_Controller {
             $temp['strMajor'] = $prog['strMajor'];
             $ret['drive'][] = $temp;
         }
+
+		$data['sy'] = $this->db->where(array('endOfApplicationPeriod != '=>NULL,'endOfApplicationPeriod >'=>date("Y:m:d H:i:s")))
+								->order_by("strYearStart ASC, enumSem ASC")
+								->get('tb_mas_sy')
+								->result_array();
+
+		$data['term'] = $term;								
 		
 
         $data['data'] = $ret;
