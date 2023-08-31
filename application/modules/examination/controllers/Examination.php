@@ -451,7 +451,7 @@ class Examination extends CI_Controller {
 
     public function delete_image_choice($questionID, $intID)
     {
-        $post['choiceImage'] = '';
+        $post['choiceImage'] = NULL;
         $this->data_poster->post_data('tb_mas_choices',$post, $intID);
         redirect(base_url()."examination/edit_question/".$questionID);
     }
