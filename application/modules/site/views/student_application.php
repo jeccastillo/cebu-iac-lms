@@ -842,7 +842,9 @@ new Vue({
             student_type: 'freshman',
         },
         loading_spinner: false,
-        term: undefined,
+        term: {
+            term_student_type: 'college',
+        },
         programs: [],
         programs_group: [],
         sy:[],
