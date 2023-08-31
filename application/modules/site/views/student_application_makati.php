@@ -17,7 +17,7 @@
 <div class="custom-container" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
-            Application Form for {{ term.term_studen_type.toUpperCase() }}
+            Application Form for {{ term.term_student_type | upperCased }}
             <strong>(Makati Campus)</strong><br />
             {{ term.enumSem + " Term " + term.strYearStart + "-" + term.strYearEnd  }}            
         </h4>
