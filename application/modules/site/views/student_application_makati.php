@@ -43,7 +43,7 @@
         <div class="flex md:space-x-5 mb-6 mt-10 justify-center">
             <div class="md:w-1/2 w-full">
 
-                <div class="mb-6">
+                <!-- <div class="mb-6">
                     <div class="md:w-5/5">
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Select Term <span class="text-red-500">*</span>
@@ -53,7 +53,7 @@
                             <option v-for="s in sy" :value="s.intID">{{ s.enumSem+" Term SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="mb-6">
                     <div class="md:w-5/5">
