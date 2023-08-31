@@ -18,8 +18,7 @@
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Application Form for {{ term.term_student_type.toUpperCase() }}
-            <strong>(Cebu Campus)</strong><br />
-            {{ term.enumSem + " Term " + term.strYearStart + "-" + term.strYearEnd  }}
+            <strong>(Cebu Campus)</strong><br />            
         </h4>
         
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
