@@ -647,7 +647,7 @@ class Examination extends CI_Controller {
             if(!isset($secArray['score'])){
                 $secArray['score'] = 0;
             }
-            $examID = $this->db->order_by('intID','DESC')->get('tb_mas_student_exam')->first_row('array');
+            $examID = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
 
             $scoreArray = array(
                 'tb_mas_student_exam_id' => $examID['intID'],
