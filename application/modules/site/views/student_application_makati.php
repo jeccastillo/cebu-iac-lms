@@ -18,7 +18,7 @@
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Application Form for {{ term.term_student_type.toUpperCase() }}
-            <strong>(Makati Campus)</strong><br />                       
+            <strong>(Makati Campus)</strong><br />
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
@@ -47,9 +47,11 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Select Term <span class="text-red-500">*</span>
                         </label>
-                        <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        <select
+                            class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required v-model="request.syid">
-                            <option v-for="s in sy" :value="s.intID">{{ s.enumSem+" Term SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
+                            <option v-for="s in sy" :value="s.intID">
+                                {{ s.enumSem+" Term SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
                         </select>
                     </div>
                 </div>
@@ -898,7 +900,7 @@ new Vue({
         term: undefined,
         loading_spinner: false,
         programs: [],
-        sy:[],
+        sy: [],
         filtered_programs: [],
         programs_group: [],
         types: [],
@@ -907,7 +909,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs_makati/'+this.request.syid, {            
+            .get(this.base_url + 'site/view_active_programs_makati/' + this.request.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -929,7 +931,7 @@ new Vue({
                 },
             })
             .then((data) => {
-                this.types = data.data.data;                
+                this.types = data.data.data;
                 setTimeout(() => {
                     $(".admissions_submission_cb").on("click", e => {
                         $(".admissions_submission_cb")
@@ -948,6 +950,16 @@ new Vue({
                         }
                     });
                 }, 500);
+
+                document.querySelector('#course_first_choice').onchange = (e) => {
+                    this.request.program = e.target.selectedOptions[0].getAttribute('data-title');
+                };
+                document.querySelector('#course_second_choice').onchange = (e) => {
+                    this.request.program2 = e.target.selectedOptions[0].getAttribute('data-title');
+                };
+                document.querySelector('#course_third_choice').onchange = (e) => {
+                    this.request.program3 = e.target.selectedOptions[0].getAttribute('data-title');
+                };
             })
             .catch((e) => {
                 console.log("error");
@@ -956,15 +968,6 @@ new Vue({
 
 
 
-        document.querySelector('#course_first_choice').onchange = (e) => {
-            this.request.program = e.target.selectedOptions[0].getAttribute('data-title');
-        };
-        document.querySelector('#course_second_choice').onchange = (e) => {
-            this.request.program2 = e.target.selectedOptions[0].getAttribute('data-title');
-        };
-        document.querySelector('#course_third_choice').onchange = (e) => {
-            this.request.program3 = e.target.selectedOptions[0].getAttribute('data-title');
-        };
 
 
     },
