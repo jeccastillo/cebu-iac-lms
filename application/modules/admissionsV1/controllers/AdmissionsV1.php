@@ -159,9 +159,9 @@ class AdmissionsV1 extends CI_Controller {
 
         $scorePerSectionArray = [];
         $examPerSection = $this->db->get_where('tb_mas_student_exam_score_per_section',array('tb_mas_student_exam_id'=>$ret['entrance_exam']['intID']))->result_array('array');
-        print_r($examPerSection);
-        die();
         foreach($examPerSection as $exam){
+            print_r($exam);
+            die();
             $scorePerSectionArray[] = array(
                 'section' => $exam['section'],
                 'score' =>  $exam['score'],
