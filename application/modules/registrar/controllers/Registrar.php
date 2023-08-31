@@ -1623,7 +1623,8 @@ class Registrar extends CI_Controller {
     {
         if($this->is_super_admin() || $this->is_registrar())
         {
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'college'))->result_array();
+            $this->data['sy_shs'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'shs'))->result_array();
             $current = $this->data_fetcher->get_active_sem();
             $this->data['current'] = $current['intID'];
             $application = $this->data_fetcher->get_processing_sem();
@@ -1653,6 +1654,25 @@ class Registrar extends CI_Controller {
         $application_term = [
             'value' => $post['application']
         ];
+
+        if($post['currentshs'] || $post['applicationshs'])
+        {
+            $application_term_shs = [
+                'value' => $post['applicationshs']
+            ];
+            //print_r($post);
+            $this->db->where(array('setting_name'=>'shs_default_application'))
+                ->update('tb_mas_system_settings',$application_term_shs); 
+
+            $current_term_shs = [
+                'value' => $post['currentshs']
+            ];
+            //print_r($post);
+            $this->db->where(array('setting_name'=>'shs_default_term'))
+                ->update('tb_mas_system_settings',$current_term_shs); 
+            
+
+        }
         
         //print_r($post);
         $this->db->where(array('setting_name'=>'current_term'))
@@ -1661,6 +1681,8 @@ class Registrar extends CI_Controller {
         //print_r($post);
         $this->db->where(array('setting_name'=>'application_term'))
                 ->update('tb_mas_system_settings',$application_term);
+
+                       
         
         $activeSem = $this->data_fetcher->get_active_sem();
         $this->data_poster->log_action('Academic Term','Updated Term: '.$activeSem['enumSem']." term ".$activeSem['strYearStart']."-".$activeSem['strYearEnd'],'blue');
