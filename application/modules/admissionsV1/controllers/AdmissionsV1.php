@@ -156,7 +156,7 @@ class AdmissionsV1 extends CI_Controller {
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['entrance_exam'] = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$slug))->first_row('array'); 
-
+        print_r($ret['entrance_exam']);
         $scorePerSectionArray = [];
         $examPerSection = $this->db->get_where('tb_mas_student_exam_score_per_section',array('tb_mas_student_exam_id'=>$ret['entrance_exam']['intID']))->result_array('array');
         print_r($examPerSection);
