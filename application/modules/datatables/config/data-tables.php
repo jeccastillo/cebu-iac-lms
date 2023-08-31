@@ -50,6 +50,6 @@ $config['tb_mas_exam_index'] = "intID";
 $config['tb_mas_questions_columns'] = array("tb_mas_questions.intID","strTitle","strName","strChoice","strSection");
 $config['tb_mas_questions_index'] = "intID";
 
-$config['tb_mas_student_exam_columns'] = array("tb_mas_student_exam.intID","student_name","date_taken","strName","score");
+$config['tb_mas_student_exam_columns'] = array("tb_mas_student_exam.intID","student_name","date_taken","strName","score","student_id");
 $config['tb_mas_student_exam_index'] = "intID";
 ?>
