@@ -336,8 +336,8 @@ new Vue({
                 var new_price_with_qty = new_price * qty;
 
                 new_charge = ((new_charge / 100) * new_price_with_qty);
-                if (new_charge < 25) {
-                    new_charge = 25.00;
+                if (new_charge < 28) {
+                    new_charge = 28.00;
                 }
 
 
