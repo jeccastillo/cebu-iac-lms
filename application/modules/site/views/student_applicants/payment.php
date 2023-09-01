@@ -438,7 +438,7 @@ new Vue({
                                 text: data.data.message,
                                 icon: "success"
                             }).then(function() {
-                                window.location = base_url;
+                                window.location = "https://iacademy.edu.ph";
                             });
 
                         }
