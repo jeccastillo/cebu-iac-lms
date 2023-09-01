@@ -61,6 +61,7 @@ new Vue({
         selected_year: current_year,
         tags: ['foo', 'bar'],         
         interviews: undefined, 
+        campus: "<?php echo $campus ?>",
     },
     computed : {
         years () {            
@@ -70,7 +71,7 @@ new Vue({
 
     mounted() {
         
-        axios.get(api_url + 'interview-schedules/year/' + this.selected_year, {
+        axios.get(api_url + 'interview-schedules/year/' + this.selected_year + '/' + this.campus, {
             headers: {
                 Authorization: `Bearer ${window.token}`
             },
@@ -91,7 +92,7 @@ new Vue({
 
     methods: {
         updateList: function(){            
-            axios.get(api_url + 'interview-schedules/year/' + this.selected_year, {
+            axios.get(api_url + 'interview-schedules/year/' + this.selected_year + '/' + this.campus, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
