@@ -26,6 +26,10 @@
                         </select>
                 </div>
                 <div class="form-group col-xs-12 col-lg-4">
+                    <label>Label</label>
+                    <input required type="text" name="term_label" value="<?php echo $item['term_label']; ?>" class="form-control" />                         
+                </div>
+                <div class="form-group col-xs-12 col-lg-4">
                     <label for="classType">Classes Type</label>
                     <select name="classType" class="form-control">
                             <option <?php echo $item['classType']=='regular'?'selected':''; ?> value="regular">Regular</option>
