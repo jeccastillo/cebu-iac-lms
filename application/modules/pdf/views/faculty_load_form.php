@@ -111,7 +111,7 @@ foreach($classlists as $classlist):
         <td></td>
     </tr>
     <tr style="text-align:center;">
-        <td>RUNDATE&TIME: <?php echo date('Y-m-d'); ?></td>
+        <td>RUNDATE&TIME: <?php echo date('Y-m-d h:i a'); ?></td>
         <td></td>
         <td></td>
         <td></td>
