@@ -8,7 +8,7 @@
                     All Reports
                 </a> 
                 <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" ><i class="fa fa-book"></i>Print PDF</a> 
-                <a class="btn btn-app" target="_blank" href="<?php echo $excel; ?>" ><i class="fa fa-book"></i>Download Excel</a> 
+                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Download Excel</a> 
             </small>
             
         </h1> 
