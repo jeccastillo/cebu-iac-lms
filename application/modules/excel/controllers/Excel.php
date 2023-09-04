@@ -860,6 +860,20 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('C6', $year);
 
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+
+        $style2 = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+            )
+        );
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("C6")->applyFromArray($style2);
+
 
 
         //$active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']
@@ -932,13 +946,17 @@ class Excel extends CI_Controller {
                  ->setCellValue('K'.$i, $total_units);
                  
          
-         
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
                 $i++;
             }
         }
 
-        $objPHPExcel->getActiveSheet()->getStyle('I2:I'.count($students))
+        $objPHPExcel->getActiveSheet()->getStyle('C7:K7')
         ->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('C8:K8')
+        ->getAlignment()->setWrapText(true);
+
+        
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
