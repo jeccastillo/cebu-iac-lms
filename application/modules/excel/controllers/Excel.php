@@ -901,6 +901,8 @@ class Excel extends CI_Controller {
 
 
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("I7")->applyFromArray($style);                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("K7")->applyFromArray($style);                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("C7")->applyFromArray($style);
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A7:A8');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B7:B8');
@@ -950,6 +952,7 @@ class Excel extends CI_Controller {
                  
          
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("K".$i)->applyFromArray($style);
                 $i++;
             }
         }
