@@ -949,8 +949,8 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(45);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
         // Miscellaneous glyphs, UTF-8
         //$objPHPExcel->setActiveSheetIndex(0)
         //          ->setCellValue('A4', 'Miscellaneous glyphs')
