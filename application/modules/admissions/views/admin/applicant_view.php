@@ -66,7 +66,7 @@
                     </div>
                
                     <div class="col-sm-4">
-                        <label for="sem">Admission Academic Year:</label>
+                        <label for="sem">Admission School Term/Sem:</label>
                         <select id="sem" class="form-control select2" >
                             <option <?php echo ($sem == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
                             <?php foreach($sy as $s): ?>

@@ -42,7 +42,7 @@
                                 <th>FTG</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th>Academic Year</th>
+                                <th>Term</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

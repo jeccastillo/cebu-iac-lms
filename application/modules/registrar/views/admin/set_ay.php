@@ -1,18 +1,18 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Academic Year
+                        School Term
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-                        <li class="active">Set Academic Year</li>
+                        <li class="active">Set Term</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Set Academic Year</h3>
+                <h3 class="box-title">Set Term</h3>
         </div>
        
             
@@ -22,7 +22,7 @@
                      
                      
                 <div class="form-group col-xs-6">
-                    <label>Choose Academic Year to activate (College)</label>
+                    <label>Choose Term to activate (College)</label>
                     <select class="form-control" name="current">
                         <?php foreach($sy as $s): ?>
                             <option <?php echo ($current == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
@@ -40,7 +40,7 @@
                 </div>
                 <?php if($campus != "Cebu"): ?>
                 <div class="form-group col-xs-6">
-                    <label>Choose Academic Year to activate (SHS)</label>
+                    <label>Choose Sem to activate (SHS)</label>
                     <select class="form-control" name="currentshs">
                         <?php foreach($sy_shs as $s): ?>
                             <option <?php echo ($current == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label>Choose Default Term for Application/Enrollment (SHS)</label>
+                    <label>Choose Default Sem for Application/Enrollment (SHS)</label>
                     <select class="form-control" name="applicationshs">
                         <?php foreach($sy_shs as $s): ?>
                             <option <?php echo ($application == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>

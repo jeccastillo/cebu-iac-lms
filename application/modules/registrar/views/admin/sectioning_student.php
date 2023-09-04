@@ -63,7 +63,7 @@
                 
                     <div style="border:1px solid #d2d2d2;">
                     <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
-                Set Academic Year
+                Set Active Terms
                 <select class="form-control" id="strAcademicYear" name="strAcademicYear">
                             <?php foreach($sy as $s): ?>
                                 <option rel="<?php echo $s['intProcessing']; ?>" <?php echo ($s['intProcessing'] == 1)?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>

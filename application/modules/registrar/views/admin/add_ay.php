@@ -1,18 +1,18 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Academic Year
+                        School Term
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-                        <li class="active">Add Academic Year</li>
+                        <li class="active">Add New Term</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">New Academic Year</h3>
+                <h3 class="box-title">New Term</h3>
         </div>
        
             

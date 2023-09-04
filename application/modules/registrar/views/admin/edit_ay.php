@@ -1,18 +1,18 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Academic Year
+                        School Term
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-                        <li class="active">Edit Academic Year</li>
+                        <li class="active">Edit Term</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Academic Year</h3>
+                <h3 class="box-title">Edit Term</h3>
         </div>                   
         <form id="validate-subject" action="<?php echo base_url(); ?>registrar/edit_submit_ay" method="post" role="form">
             <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />

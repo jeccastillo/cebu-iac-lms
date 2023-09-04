@@ -53,7 +53,7 @@
                     <thead><tr>
                         <th>id</th>
                         <th>Section</th>
-                        <th>Sem/Academic Year</th>
+                        <th>Term/Sem</th>
                         <th>Subject</th>
                         <th>Actions</th>
                     </tr>

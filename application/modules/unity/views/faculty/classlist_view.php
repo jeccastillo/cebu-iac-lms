@@ -74,7 +74,7 @@
                             
                     
                     <div class="form-group">
-                        <label for="strAcademicYear">Academic Year:</label>
+                        <label for="strAcademicYear">Select Term:</label>
                         <select class="form-control" name="strAcademicYear">
                             <?php foreach($sy as $s): ?>
                                 <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>

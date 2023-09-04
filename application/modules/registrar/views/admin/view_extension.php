@@ -5,7 +5,7 @@
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url().'registrar/edit_ay/'.$item['syid']; ?>"><i class="fa fa-dashboard"></i> Academic Year</a></li>
+                        <li><a href="<?php echo base_url().'registrar/edit_ay/'.$item['syid']; ?>"><i class="fa fa-dashboard"></i> Term</a></li>
                         <li class="active">View Grading Extension</li>
                     </ol>
                 </section>

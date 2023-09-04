@@ -46,7 +46,7 @@
                             <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
                             <h3>Registration Details</h3>
                             
-                            Select Academic Year
+                            Select Term
                             <select id="strAcademicYear" name="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
                                 <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                             </select>

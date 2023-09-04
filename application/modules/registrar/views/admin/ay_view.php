@@ -1,12 +1,12 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Academic Year
+                        School Term
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> AY</a></li>
-                        <li class="active">View All AY</li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Terms</a></li>
+                        <li class="active">View All Terms</li>
                     </ol>
                 </section>
     <div class="content">
@@ -25,7 +25,7 @@
                                 <div class="box-body table-responsive">
                                     <table id="ay-table" class="table">
                                         <thead><tr>
-                                            <th>Sem</th>
+                                            <th>Term/Sem</th>
                                             <th>Year</th>                                            
                                             <th>Finalized</th>                                            
                                             <th>Type</th>

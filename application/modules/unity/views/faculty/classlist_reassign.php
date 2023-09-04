@@ -34,7 +34,7 @@
                         <h4><?php echo $classlist['strClassName']; ?></h4>
                     </div>
                 <div class="form-group">
-                        <label for="strAcademicYear">Sem/Academic Year</label>
+                        <label for="strAcademicYear">Term/Sem</label>
                         <h4><?php echo $classlist['strAcademicYear']; ?></h4>
                     </div>
                 <div class="form-group">

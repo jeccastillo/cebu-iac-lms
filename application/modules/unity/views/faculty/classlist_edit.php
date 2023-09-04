@@ -61,7 +61,7 @@
                     <input type="text" disabled id="sub_section" name="sub_section" class="form-control" value="<?php echo $classlist['sub_section']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
-                        <label for="strAcademicYear">Sem/Academic Year</label>
+                        <label for="strAcademicYear">Term/Sem</label>
                         <select class="form-control" name="strAcademicYear">
                             <?php foreach($sy as $s): ?>
                                 <option <?php echo ($classlist['strAcademicYear'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
