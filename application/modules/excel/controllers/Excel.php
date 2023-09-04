@@ -811,7 +811,7 @@ class Excel extends CI_Controller {
         $this->data['sy'] = $active_sem;
 
         
-        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$course))->first_row();
+        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$course))->first_row('array');
 
        
 
