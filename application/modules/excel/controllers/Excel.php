@@ -899,6 +899,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('J7', 'Subjects Enrolled')
                     ->setCellValue('K7', 'No. of Units');
 
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("I7")->applyFromArray($style);                    
+
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A7:A8');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B7:B8');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('F7:F8');
@@ -927,7 +930,7 @@ class Excel extends CI_Controller {
                 $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
                 foreach($cl as $class){
             
-                    $classes .=",".$class['strCode'];                                                        
+                    $classes .=($classes=="")?$class['strCode']:",".$class['strCode'];                                                        
                     $total_units += $class['strUnits'];                   
                 }
 
