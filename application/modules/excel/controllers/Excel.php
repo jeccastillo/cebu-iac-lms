@@ -910,7 +910,8 @@ class Excel extends CI_Controller {
             {
                 $classes = "";
                 $total_units = 0;    
-                foreach($student['classes'] as $class){
+                $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+                foreach($cl as $class){
             
                     $classes .=",".$class['strCode'];                                                        
                     $total_units += $class['strUnits'];
