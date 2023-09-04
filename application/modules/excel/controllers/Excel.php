@@ -914,26 +914,26 @@ class Excel extends CI_Controller {
                 foreach($cl as $class){
             
                     $classes .=",".$class['strCode'];                                                        
-                    $total_units += $class['strUnits'];
-
-                    // Add some datat
-                    $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A'.$i, $active_sem['enumSem'])
-                            ->setCellValue('B'.$i, $student['strStudentNumber'])
-                            ->setCellValue('C'.$i, $student['strLastname'])
-                            ->setCellValue('D'.$i, $student['strFirstname'])
-                            ->setCellValue('E'.$i, $student['strMiddlename'])
-                            ->setCellValue('F'.$i, $student['strProgramCode'])
-                            ->setCellValue('G'.$i, $student['enumGender'])
-                            ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
-                            ->setCellValue('I'.$i, $student['intYearLevel'])
-                            ->setCellValue('J'.$i, $classes)
-                            ->setCellValue('K'.$i, $total_units);
-                            
-                    
-                    
-                    $i++;
+                    $total_units += $class['strUnits'];                   
                 }
+
+                 // Add some datat
+                 $objPHPExcel->setActiveSheetIndex(0)
+                 ->setCellValue('A'.$i, $active_sem['enumSem'])
+                 ->setCellValue('B'.$i, $student['strStudentNumber'])
+                 ->setCellValue('C'.$i, $student['strLastname'])
+                 ->setCellValue('D'.$i, $student['strFirstname'])
+                 ->setCellValue('E'.$i, $student['strMiddlename'])
+                 ->setCellValue('F'.$i, $student['strProgramCode'])
+                 ->setCellValue('G'.$i, $student['enumGender'])
+                 ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
+                 ->setCellValue('I'.$i, $student['intYearLevel'])
+                 ->setCellValue('J'.$i, $classes)
+                 ->setCellValue('K'.$i, $total_units);
+                 
+         
+         
+                $i++;
             }
         }
 
