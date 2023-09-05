@@ -32,11 +32,13 @@
                 <h3 class="box-title">Collection Report <?php echo ($other)?'(NON-STUDENT)':''; ?></h3>                
             </div><!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
-                <div>
+                <div class="col-sm-6">
+                    <label>Search Field<label>
                     <select id="search_field" class="form-control">
                         <option value="is_cash">Payment Mode</option>
                     </select>
                 </div>
+                <hr />
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>     
