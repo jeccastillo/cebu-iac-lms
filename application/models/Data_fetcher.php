@@ -3018,7 +3018,7 @@ class Data_fetcher extends CI_Model {
         // if($year != 0)
         //     $where['tb_mas_registration.intYearLevel'] = $year;        
         return  $this->db
-                ->select("tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber,date_enlisted,tb_mas_faculty.strUsername as fusername")
+                ->select("tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strProgramCode,strStudentNumber,date_enlisted as date_added,tb_mas_faculty.strUsername as fusername")
                 ->from("tb_mas_users")
                 //->group_by("intSubjectID")             
                 ->where($where)    
