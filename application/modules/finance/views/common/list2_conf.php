@@ -66,6 +66,8 @@ $(document).ready(function() {
                 api_url + api +daterange, {
                     limit: 100,                    
                     page: data.start / data.length + 1,
+                    search_data: data.search.value,
+                    search_field: "student_name",
                     count_content: data.length,
                     sort_field: s_column,
                     order_by: data.order[0].dir,
