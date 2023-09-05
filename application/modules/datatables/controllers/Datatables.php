@@ -1100,7 +1100,7 @@ class Datatables extends CI_Controller {
             $sWhere .= "WHERE level = 'college' ";
 
         
-        $sWhere .= "AND tb_mas_registration.intAYID = ".$sem." AND tb_mas_registration.intROG = 1 ";
+        $sWhere .= "AND tb_mas_registration.intAYID = ".$sem." AND tb_mas_registration.intROG = 0 ";
                    
         if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
         {
