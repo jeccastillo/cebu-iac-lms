@@ -99,6 +99,8 @@ class Grading extends CI_Controller {
                                                         ->order_by('strCode','ASC')
                                                         ->get('tb_mas_subjects')
                                                         ->result_array();
+
+        print_r($this->data['subjects_not_selected_midterm']);
         
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_grading",$this->data);
