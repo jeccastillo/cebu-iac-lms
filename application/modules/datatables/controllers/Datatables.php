@@ -1006,7 +1006,7 @@ class Datatables extends CI_Controller {
 		
         $aColumns = $this->config->item('tb_mas_users_columns');
         $sIndexColumn = $this->config->item('tb_mas_users_index');
-        $sTable = $table;
+        $sTable = 'tb_mas_users';
         
        
         
