@@ -57,7 +57,7 @@
                             <td>OR Number</td>
                             <td>Applicant Number</td>
                             <td>Name</td>
-                            <td>is_cash</td>
+                            <td><input type="text" class="payment-type form-control" /></td>
                             <td>Check/CC/Debit #</td>
                             <td>Amount Paid</td>
                             <td>Payment For</td>                                                                                                                                          

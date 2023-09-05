@@ -44,14 +44,6 @@ $(document).ready(function() {
         dtable.fnDraw(false);   
     }
     );     
-
-    $('#subjects-table thead tr.search td').each( function () {
-        var title = $(this).text();
-        if(title != "Actions")
-            $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');
-        else
-            $(this).html('');
-    });
             
     
     var dtable = $('#subjects-table').DataTable({
@@ -310,7 +302,7 @@ $(document).ready(function() {
         //     }
         // } );
 
-        $( 'input', this.header() ).on( 'keyup change', function () {
+        $( 'input.payment_type', this.header() ).on( 'keyup change', function () {
             if ( that.search() !== this.value ) {
                 that
                     .search( this.value )
