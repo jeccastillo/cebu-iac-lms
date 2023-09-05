@@ -98,7 +98,7 @@
             </div>
         </form>  
         <div class="box-header">
-            <h3 class="box-title">Selected Subjects</h3>
+            <h3 class="box-title">FINAL GRADING</h3>
         </div>               
         <form  action="<?php echo base_url(); ?>grading/add_selected" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
@@ -137,7 +137,7 @@
             </div>
         </form>      
         <div class="box-header">
-            <h3 class="box-title">Selected Subjects</h3>
+            <h3 class="box-title">MIDTERM GRADING</h3>
         </div>               
         <form  action="<?php echo base_url(); ?>grading/add_selected/midterm" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
