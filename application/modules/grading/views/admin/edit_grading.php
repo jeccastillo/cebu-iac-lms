@@ -59,7 +59,7 @@
             </div>
         </form>                       
         <div class="box-header">
-            <h3 class="box-title">Selected Subjects</h3>
+            <h3 class="box-title">Final Grading</h3>
         </div>               
         <form  action="<?php echo base_url(); ?>grading/add_selected" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
@@ -98,46 +98,7 @@
             </div>
         </form>  
         <div class="box-header">
-            <h3 class="box-title">FINAL GRADING</h3>
-        </div>               
-        <form  action="<?php echo base_url(); ?>grading/add_selected" method="post" role="form">
-            <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>CODE</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach($subjects_selected as $item): ?>
-                                <tr>
-                                    <td><?php echo $item['strCode']; ?></td>
-                                    <td><?php echo $item['strDescription']; ?></td>
-                                </tr>        
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>                                
-                    </div>
-                    <div class="col-md-6">                        
-                        <label for="subjects">Select Subjects to Add</label>                                           
-                        <select required name="subjects[]" multiple class="form-control" style="height: 300px;">                    
-                        <?php foreach($subjects_not_selected as $item): ?>
-                            <option value="<?php echo $item['intID']; ?>"><?php echo $item['strCode']; ?></option>
-                        <?php endforeach; ?>
-                        </select>       
-                        <hr />             
-                        <input type="submit" value="add subjects >>" class="btn btn-default btn-flat btn-lg">
-                    </div>
-                </div>                
-                
-            </div>
-        </form>      
-        <div class="box-header">
-            <h3 class="box-title">MIDTERM GRADING</h3>
+            <h3 class="box-title">Midterm grading</h3>
         </div>               
         <form  action="<?php echo base_url(); ?>grading/add_selected/midterm" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
@@ -174,7 +135,7 @@
                 </div>                
                 
             </div>
-        </form>           
+        </form>                      
     </div>
 
 </aside>
