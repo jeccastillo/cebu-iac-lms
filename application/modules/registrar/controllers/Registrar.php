@@ -1725,6 +1725,9 @@ class Registrar extends CI_Controller {
         $post['midterm_end'] = date("Y-m-d",strtotime($post['midterm_end']));
         $post['final_start'] = date("Y-m-d",strtotime($post['final_start']));
         $post['final_end'] = date("Y-m-d",strtotime($post['final_end']));
+        $post['start_of_classes'] = date("Y-m-d",strtotime($post['start_of_classes']));
+        $post['final_exam_start'] = date("Y-m-d",strtotime($post['final_exam_start']));
+        $post['final_exam_end'] = date("Y-m-d",strtotime($post['final_exam_end']));        
        // $this->data_poster->set
         $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
         $this->data_poster->log_action('School Year','Updated SY Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
