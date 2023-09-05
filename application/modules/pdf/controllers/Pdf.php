@@ -1199,7 +1199,8 @@ class Pdf extends CI_Controller {
 
         $this->data['sy'] = $active_sem;
         $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender,$start,$end);                        
-      
+        print_r($students);
+        die();
                                
        
         // set margins
