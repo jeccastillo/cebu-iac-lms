@@ -976,13 +976,286 @@ class Datatables extends CI_Controller {
         {
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            {                                
-                $row[] = $aRow->$aColumns[$i];                                
+            {              
+                
+                if($aColumns[$i] == 'strLastname'){
+                    $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
+                }
+                else if($aColumns[$i] == 'strFirstname'){
+
+                }
+                else                  
+                    $row[] = $aRow->$aColumns[$i];                                
             }
             $output['aaData'][] = $row;
         }
 	   echo json_encode( $output );
 
+    }
+
+    public function data_tables_ajax_enlistment($course = 0,$yearlevel=0,$gender=0,$sem=0,$start=0,$end=0){
+
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+         * TABLE CONFIG
+         */
+
+        /* Array of database columns which should be read and sent back to DataTables. Use a space where
+         * you want to insert a non-database field (for example a counter or static image)
+         */
+        $this->config->load('data-tables');		
+		
+        $aColumns = $this->config->item('tb_mas_users_columns');
+        $sIndexColumn = $this->config->item('tb_mas_users_index');
+        $sTable = $table;
+        
+       
+        
+        /* 
+         * Paging
+         */
+        $sLimit = "";
+        $sOrder = "";
+        $sGroup = "";
+        
+        
+        
+        if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
+        {
+            $sLimit = "LIMIT ".mysqli_real_escape_string($this->db->conn_id,$_GET['iDisplayStart']).", ".
+                mysqli_real_escape_string($this->db->conn_id,$_GET['iDisplayLength']);
+        }
+
+
+        /*
+         * Ordering
+         */
+        if ( isset( $_GET['iSortCol_0'] ) )
+        {
+            $sOrder = "ORDER BY  ";
+            for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+            {
+                if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+                {
+                    $sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+                        ".mysqli_real_escape_string($this->db->conn_id,$_GET['sSortDir_'.$i]) .", ";
+                }
+            }
+
+            $sOrder = substr_replace( $sOrder, "", -2 );
+            if ( $sOrder == "ORDER BY" )
+            {
+                $sOrder = "";
+            }
+        }
+
+
+        /* 
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+         */
+        $sWhere = "";
+     
+        
+       
+        if($gender!=0){
+            if($astatus != 0 || $scholarship!=0)
+                if($gender == 1)
+                    $sWhere .= "AND $table.enumGender = 'male' ";
+                else
+                    $sWhere .= "AND $table.enumGender = 'female' ";
+            else
+                if($gender == 1)
+                    $sWhere .= "WHERE $table.enumGender = 'male' ";
+                else
+                    $sWhere .= "WHERE $table.enumGender = 'female' ";
+            
+        }        
+        
+        if($yearlevel!=0)
+            if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
+                $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
+            else
+                $sWhere .= "WHERE tb_mas_registration.intYearLevel = ".$yearlevel." ";
+        
+        
+        // if($course!=0 && $table =='tb_mas_users')
+        //     if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 )
+        //         $sWhere .= "AND $table.intProgramID = '".$course."' ";
+        //     else
+        //         $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
+       
+        
+        if($sem == 0)
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        
+        
+            
+        
+        if($gender!=0 || $yearlevel!=0 )
+            $sWhere .= "AND level = 'college' ";
+    
+        else
+            $sWhere .= "WHERE level = 'college' ";
+                   
+        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
+        {
+            if($user==null || ($trashed!=null && $table == 'tb_mas_message_user') )
+                $sWhere = "WHERE (";
+            elseif($table == 'tb_mas_applications')
+            {
+                $sWhere = "WHERE (";
+            }
+            else
+                $sWhere .= "AND (";
+            
+            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+            {
+                if(($aColumns[$i] != "strFirstname" && $aColumns[$i] != "strLastname") || $table != 'tb_mas_users')
+                    $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'] )."%' OR ";
+                else
+                    $sWhere .= "CONCAT_WS(' ',strFirstname,strLastname,strMiddlename) LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'])."%' OR ";
+                
+            }
+            $sWhere = substr_replace( $sWhere, "", -3 );
+            $sWhere .= ')';
+            
+        }
+        
+        /* Individual column filtering */
+        for ( $i=0 ; $i<count($aColumns) ; $i++ )
+        {
+            if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
+            {
+                if ( $sWhere == "" )
+                {
+                    $sWhere = "WHERE ";
+                }
+                else
+                {
+                    $sWhere .= " AND ";
+                }                
+               
+                if($table == "tb_mas_users" && $i > 3)
+                    $col = $i + 2;
+                else
+                    $col = $i;
+                
+                if($table == "tb_mas_users" && $i  == 2){                        
+                    $st = "";
+                    $ct = 0;
+                    $str = str_split($_GET['sSearch_'.$i]);
+                    foreach($str as $letter){
+                        if($ct == 5 || $ct == 7)
+                            $st .= "-";
+                        $st .= $letter;
+                        $ct++;
+                    }                    
+                    
+                    $_GET['sSearch_'.$i] =  $st;                    
+                }
+                    
+                $sWhere .= $aColumns[$col]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch_'.$i])."%' ";
+                    
+        
+                    
+            }
+        }
+
+        $join = "";
+        
+        if($table == 'tb_mas_users')
+        {
+            $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";            
+            
+            $join .= "LEFT JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
+        }
+        
+        /*
+         * SQL queries
+         * Get data to display
+         */
+        $sQuery = "
+            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns)). 
+            " FROM $sTable
+            $join
+            $sWhere
+            $sGroup
+            $sOrder
+            $sLimit
+            
+            
+        ";
+        
+        $rResult = $this->db->query($sQuery);
+        
+
+        /* Data set length after filtering */
+        $sQuery = "
+            SELECT FOUND_ROWS() as frows
+        ";
+        $rResultFilterTotal = $this->db->query($sQuery);
+        $aResultFilterTotal = $rResultFilterTotal->result();
+        $iFilteredTotal = $aResultFilterTotal[0]->frows;
+
+        /* Total data set length */
+        $sQuery = "
+            SELECT COUNT(".$sIndexColumn.") as cnt
+            FROM   $sTable
+        ";
+        $rResultTotal = $this->db->query($sQuery);
+        $aResultTotal = $rResultTotal->result();
+        $iTotal = $aResultTotal[0]->cnt;
+
+        
+
+        /*
+         * Output
+         */
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
+        );
+        $output['query'] = $sWhere;
+        foreach ($rResult->result() as $aRow)
+        {
+            $row = array();
+            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+            {
+                if ( $aColumns[$i] == "strLastname")
+                {
+                    /* Special output formatting for 'version' column */
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
+                }
+                else if ( $aColumns[$i] == "strStudentNumber")
+                {
+                    /* Special output formatting for 'version' column */
+                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->$aColumns[$i]);
+                }
+                else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename"))
+                {
+                    
+                }                
+                else if ( $aColumns[$i] != ' ' )
+                {
+                    if(strpos($aColumns[$i], ".") !== false){
+                        $new = explode(".",$aColumns[$i]);
+                        $aColumns[$i] = $new[1];
+                    }
+                    /* General output */
+                    $row[] = $aRow->$aColumns[$i];
+                }
+                
+            }
+            $output['aaData'][] = $row;
+        }
+        
+	   echo json_encode( $output );
     }
     
     public function data_tables_ajax_cs_faculty($sem = 0)

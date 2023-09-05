@@ -9,8 +9,10 @@
         var year = $("#intYearLevel").val();
         var gender = $("#gender").val();        
         var sem = $("#sem").val();        
+        var start = $("#start").val(); 
+        var end = $("#end").val(); 
 
-        document.location = "<?php echo base_url(); ?>registrar/enlistment_report/"+course+"/"+year+"/"+gender+"/"+sem;
+        document.location = "<?php echo base_url(); ?>registrar/enlistment_report/"+course+"/"+year+"/"+gender+"/"+sem+"/"+start+"/"+end;
         
     });
 
@@ -25,7 +27,7 @@
             "bProcessing": true,
             "bServerSide": true,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/0/".$postyear."/".$gender."/0/0/1/".$sem; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax_enlistment/<?php echo $course."/".$postyear."/".$gender."/".$sem."/".$start."/".$end; ?>",
             "aoColumnDefs":[               
                 {
                     "aTargets":[0],

@@ -656,7 +656,7 @@ class Registrar extends CI_Controller {
         $this->load->view("common/enrollment_report_conf",$this->data); 
     }
 
-    public function enlistment_report($course = 0, $year=1,$gender = 0,$sem=0)    
+    public function enlistment_report($course = 0, $year=1,$gender = 0,$sem=0, $start=0, $end=0)    
     {
 
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
@@ -666,8 +666,17 @@ class Registrar extends CI_Controller {
         $this->data['postyear'] = $year;
         $this->data['gender'] = $gender;               
         $this->data['sem'] = $sem; 
-        $this->data['pdf_link'] = base_url()."pdf/print_enlisted_students/".$course."/".$year."/".$gender."/".$sem;
-        $this->data['excel_link'] = base_url()."excel/enlisted_students/".$course."/".$year."/".$gender."/".$sem;
+        if($start != 0){
+            $this->data['start'] = $start; 
+            $this->data['end'] = $end; 
+        }
+        else{
+            $this->data['start'] = date("Y-m-d"); 
+            $this->data['end'] = date("Y-m-d");
+        }
+        
+        $this->data['pdf_link'] = base_url()."pdf/print_enlisted_students/".$course."/".$year."/".$gender."/".$sem."/".$start."/".$end;
+        $this->data['excel_link'] = base_url()."excel/enlisted_students/".$course."/".$year."/".$gender."/".$sem."/".$start."/".$end;
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/enlistment_report",$this->data);
