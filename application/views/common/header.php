@@ -420,9 +420,6 @@
                         <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i>
                                 <span>Collection Report</span></a></li>
-                        <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i>
-                                <span>Cashiers</span> </a></li>
                         <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i>
                                 <span>Add Non-Student Payment</span> </a></li>
@@ -482,10 +479,9 @@
                                 href="#"><i class="ion"></i>
                                 <span>Payee Set-up</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
-                                <span>Cashier Set-up</span> </a>
-                        </li>
+                        <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i>
+                                <span>Cashier Set-up</span> </a></li>
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Delete & Cancel Receipt</span> </a>

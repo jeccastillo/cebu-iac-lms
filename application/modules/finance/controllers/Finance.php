@@ -539,7 +539,7 @@ class Finance extends CI_Controller {
             redirect(base_url()."unity");
 
         $this->data['page'] = "cashier";
-        $this->data['opentree'] = "cashier";
+        $this->data['opentree'] = "finance_admin";
         $this->load->view("common/header",$this->data);
         $this->load->view("cashier",$this->data);
         $this->load->view("common/footer",$this->data);        
