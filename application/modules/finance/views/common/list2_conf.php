@@ -45,7 +45,7 @@ $(document).ready(function() {
     }
     );     
 
-    $('#subjects-table thead tr.search th').each( function () {
+    $('#subjects-table thead tr.search td').each( function () {
         var title = $(this).text();
         if(title != "Actions")
             $(this).html( '<input type="text" class="form-control" placeholder="'+title+'" size="15" />');

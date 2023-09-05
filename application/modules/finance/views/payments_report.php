@@ -50,19 +50,19 @@
                             <th>Actions</th>
                         </tr>
                         <tr class="search">
-                            <th>id</th>
-                            <th>slug</th>     
-                            <th>Cashier</th>                  
-                            <th>Date Updated</th>
-                            <th>OR Number</th>
-                            <th>Applicant Number</th>
-                            <th>Name</th>
-                            <th>Payment Mode</th>
-                            <th>Check/CC/Debit #</th>
-                            <th>Amount Paid</th>
-                            <th>Payment For</th>                                                                                                                                          
-                            <th>Remarks</th>  
-                            <th>Actions</th>
+                            <td>id</td>
+                            <td>slug</td>     
+                            <td>Cashier</td>                  
+                            <td>Date Updated</td>
+                            <td>OR Number</td>
+                            <td>Applicant Number</td>
+                            <td>Name</td>
+                            <td>Payment Mode</td>
+                            <td>Check/CC/Debit #</td>
+                            <td>Amount Paid</td>
+                            <td>Payment For</td>                                                                                                                                          
+                            <td>Remarks</td>  
+                            <td>Actions</td>
                         </tr>
                     </thead>
                     <tbody>
