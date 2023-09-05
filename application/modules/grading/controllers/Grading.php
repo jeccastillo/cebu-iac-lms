@@ -96,6 +96,7 @@ class Grading extends CI_Controller {
                                                         ->result_array();
 
         $this->data['subjects_not_selected_midterm'] = $this->db->where(array('grading_system_id_midterm !='=>$id))
+                                                        ->or_where('grading_system_id_midterm',NULL)
                                                         ->order_by('strCode','ASC')
                                                         ->get('tb_mas_subjects')
                                                         ->result_array();
