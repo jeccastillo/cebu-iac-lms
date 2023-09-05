@@ -32,6 +32,11 @@
                 <h3 class="box-title">Collection Report <?php echo ($other)?'(NON-STUDENT)':''; ?></h3>                
             </div><!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
+                <div>
+                    <select id="search_field" class="form-control">
+                        <option value="is_cash">Payment Mode</option>
+                    </select>
+                </div>
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>     
@@ -48,22 +53,7 @@
                             <th>Payment For</th>                                                                                                                                          
                             <th>Remarks</th>
                             <th>Actions</th>
-                        </tr>
-                        <tr class="search">
-                            <td>id</td>
-                            <td>slug</td>     
-                            <td>Cashier</td>                  
-                            <td>Date Updated</td>
-                            <td>OR Number</td>
-                            <td>Applicant Number</td>
-                            <td>Name</td>
-                            <td><input type="text" class="payment-type form-control" /></td>
-                            <td>Check/CC/Debit #</td>
-                            <td>Amount Paid</td>
-                            <td>Payment For</td>                                                                                                                                          
-                            <td>Remarks</td>  
-                            <td>Actions</td>
-                        </tr>
+                        </tr>                       
                     </thead>
                     <tbody>
                     </tbody>

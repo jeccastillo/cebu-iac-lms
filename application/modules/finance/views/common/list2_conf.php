@@ -59,8 +59,7 @@ $(document).ready(function() {
                     limit: 100,                    
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
-                    search_field: "student_name",
-                    search_type: $(".payment-type").val(),
+                    search_field: $("#search_field").val(),
                     count_content: data.length,
                     sort_field: s_column,
                     order_by: data.order[0].dir,
@@ -289,10 +288,6 @@ $(document).ready(function() {
         
         dtable.fnDraw(false);
     })
-
-    $("input.payment_type").on('keyup change',function(){
-        dtable.fnDraw(false);   
-    });
 
 });
 </script>
