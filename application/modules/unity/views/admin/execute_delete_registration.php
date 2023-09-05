@@ -52,6 +52,7 @@ new Vue({
     data: {
         term: "<?php echo $sem; ?>",
         student_id: <?php echo $student['intID']; ?>,    
+        slug: "<?php echo $student['slug']; ?>"
     },
 
     mounted() {
