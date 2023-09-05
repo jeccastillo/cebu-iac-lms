@@ -1883,6 +1883,17 @@ class Unity extends CI_Controller {
                                                     ->order_by('value','ASC')
                                                     ->get('tb_mas_grading_item')
                                                     ->result_array();
+            
+            if($this->data['subject']['grading_system_id_midterm']) 
+                $this->data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$this->data['subject']['grading_system_id_midterm']))
+                                                ->order_by('value','ASC')
+                                                ->get('tb_mas_grading_item')
+                                                ->result_array();         
+                                                
+            else
+                $this->data['grading_items_midterm'] = $this->data['grading_items'];
+
+                
             $passing =0;
             $incomplete =0;
             $ud = 0;
