@@ -18,6 +18,7 @@
             <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />
                 <div class="box-body">
                     <h3>Details</h3>
+                    <hr />
                     <div class="row">
                         <div class="form-group col-xs-12 col-lg-4">
                             <label for="enumSem"><?php echo $term_type; ?></label>
@@ -77,6 +78,7 @@
                     </div>
                     <hr />
                     <h3>Dates Setup</h3>
+                    <hr />
                     <div class="row">
                         <div class="form-group col-xs-12 col-lg-4">
                             <label>Start of Classes</label>
@@ -97,6 +99,7 @@
                     </div>
                     <hr />
                     <h3>Grading Period Setup</h3>
+                    <hr />
                     <div class="row">
                         
                         <div class="form-group col-xs-12 col-lg-4">
@@ -118,6 +121,7 @@
                     </div>
                     <hr />          
                     <h3>Term Finalization</h3>
+                    <hr />
                     <div class="row">
                         <div class="form-group col-xs-12 col-lg-4">
                             <label for="enumFinalized">Finalized</label>
