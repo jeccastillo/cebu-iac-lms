@@ -147,6 +147,7 @@ class Finance extends CI_Controller {
             ->result_array();
 
         $data['student'] = $this->data_fetcher->getStudent($id);
+        $data['user'] = $this->data["user"];
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $sem = $this->data_fetcher->get_active_sem();  
         $data['active_sem'] = $sem['intID'];

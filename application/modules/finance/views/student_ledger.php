@@ -44,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>                             
-                        <tr>
+                        <tr v-if="finance && finance.special_role != 0">
                             
                             <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
                             <td colspan="2">
@@ -141,7 +141,8 @@ new Vue({
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
         ledger: [],        
-        other: [], 
+        other: [],
+        finance: undefined, 
         student: {
             strFirstname:'',
             strLastname:'',
@@ -191,6 +192,7 @@ new Vue({
             .then((data) => {
                 ledger_temp = data.data.ledger;
                 other_temp = data.data.other;
+                this.finance = data.data.user;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
