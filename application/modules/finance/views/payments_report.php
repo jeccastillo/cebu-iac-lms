@@ -39,6 +39,7 @@
                             <option value="is_cash">Payment Mode</option>
                             <option value="last_name">Last Name</option>
                             <option value="first_name">First Name</option>
+                            <option value="or_number">OR NUMBER</option>
                         </select>
                     </div>
                 </div>
