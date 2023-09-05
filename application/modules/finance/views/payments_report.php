@@ -33,7 +33,7 @@
             </div><!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x:auto;margin-right:60px;">
                 <div class="row">
-                    <div class="col-md-6 offset-md-6">
+                    <div class="col-md-6 col-md-offset-6">
                         <label>Search Field: <label>
                         <select id="search_field" class="form-control">
                             <option value="is_cash">Payment Mode</option>
