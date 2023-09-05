@@ -250,7 +250,7 @@
                 </li>
                 <?php endif; ?>
                 <li class="header">Admin Menu</li>
-                <?php if(in_array($user['intUserLevel'],array(0,1,2,4)) ): ?>
+                <?php if($user['teaching'] == 1): ?>
 
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                     <a href="#">
