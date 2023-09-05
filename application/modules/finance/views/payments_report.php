@@ -50,7 +50,7 @@
                             <th>Actions</th>
                         </tr>
                         <tr class="search">
-                        <th>id</th>
+                            <th>id</th>
                             <th>slug</th>     
                             <th>Cashier</th>                  
                             <th>Date Updated</th>
