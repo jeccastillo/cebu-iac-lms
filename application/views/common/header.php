@@ -422,7 +422,7 @@
                                 <span>Collection Report</span></a></li>
                         <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i>
-                                <span>Transactions without OR</span> </a></li>
+                                <span>Online Payments</span> </a></li>
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
