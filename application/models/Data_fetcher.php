@@ -1734,7 +1734,7 @@ class Data_fetcher extends CI_Model {
         
             return  current(
                      $this->db
-                         ->select( 'tb_mas_subjects.intID,intProgramID,strCode,strDescription,strUnits,intLab,tb_mas_subjects.intPrerequisiteID, grading_system_id')
+                         ->select( 'tb_mas_subjects.intID,intProgramID,strCode,strDescription,strUnits,intLab,tb_mas_subjects.intPrerequisiteID, grading_system_id, grading_system_id_midterm')
                          ->from('tb_mas_subjects')
                          ->where(array('tb_mas_subjects.intID'=>$id))
                          ->get()
