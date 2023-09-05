@@ -37,6 +37,8 @@
                         <label>Search Field: <label>
                         <select id="search_field" class="form-control">
                             <option value="is_cash">Payment Mode</option>
+                            <option value="last_name">Last Name</option>
+                            <option value="first_name">First Name</option>
                         </select>
                     </div>
                 </div>
