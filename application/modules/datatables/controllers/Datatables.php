@@ -1077,7 +1077,7 @@ class Datatables extends CI_Controller {
       
         
         
-        if($course!=0 && $table =='tb_mas_users')
+        if($course!=0)
             if($gender!=0 || $yearlevel!=0 )
                 $sWhere .= "AND $table.intProgramID = '".$course."' ";
             else
