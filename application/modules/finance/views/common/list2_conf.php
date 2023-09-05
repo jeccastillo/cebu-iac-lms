@@ -46,7 +46,7 @@ $(document).ready(function() {
     );     
             
     
-    var dtable = $('#subjects-table').DataTable({
+    var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
         "bServerSide": true,
