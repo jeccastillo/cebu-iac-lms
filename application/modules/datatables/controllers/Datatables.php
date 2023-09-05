@@ -1168,7 +1168,7 @@ class Datatables extends CI_Controller {
 
         
         $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";            
-        $join .= "LEFT JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
+        $join .= "JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
         
         
         /*

@@ -65,11 +65,11 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="sem">Select Term:</label>
+                        <label for="sem">Start Date:</label>
                         <input type="date" id="start" name="date_start" class="form-control" value="<?php echo $start; ?>" />
                     </div>
                     <div class="col-sm-4">
-                        <label for="sem">Select Term:</label>
+                        <label for="sem">End Date:</label>
                         <input type="date" id="end" name="date_start" class="form-control" value="<?php echo $end; ?>" />
                     </div>
                 </div>
