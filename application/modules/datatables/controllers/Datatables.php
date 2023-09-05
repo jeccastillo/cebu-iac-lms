@@ -1004,7 +1004,7 @@ class Datatables extends CI_Controller {
          */
         $this->config->load('data-tables');		
 		
-        $aColumns = $this->config->item('tb_mas_users_columns');
+        $aColumns = array("intID","slug","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intYearLevel","date_enlisted");
         $sIndexColumn = $this->config->item('tb_mas_users_index');
         $sTable = 'tb_mas_users';
         
@@ -1240,7 +1240,11 @@ class Datatables extends CI_Controller {
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename"))
                 {
                     
-                }                
+                } 
+                else if ( $aColumns[$i] == "date_enlisted")
+                {
+                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                }               
                 else if ( $aColumns[$i] != ' ' )
                 {
                     if(strpos($aColumns[$i], ".") !== false){

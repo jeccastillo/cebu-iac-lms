@@ -122,6 +122,7 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>                            
+                            <th>Date Enlisted</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -132,7 +133,8 @@
                             <th>Student Number</th>
                             <th>Last Name</th>
                             <th>Program</th>
-                            <th>Year Level</th>                            
+                            <th>Year Level</th>    
+                            <th>Date Enlisted</th>                        
                         </tr>
                     </tfoot>
                 </table>
