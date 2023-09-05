@@ -289,5 +289,29 @@ $(document).ready(function() {
         dtable.fnDraw(false);
     })
 
+    //Apply the search
+    table.columns().every( function () {
+        var that = this;
+
+        // $( 'input', this.footer() ).on( 'keyup change', function () {
+        //     if ( that.search() !== this.value ) {
+        //         that
+        //             .search( this.value )
+        //             //.search( "^" + $(this).val() + "$", true, false, true )
+        //             .draw();
+        //     }
+        // } );
+
+        $( 'input', this.header() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    //.search( "^" + $(this).val() + "$", true, false, true )
+                    .draw();
+            }
+        } );
+
+    } );
+
 });
 </script>
