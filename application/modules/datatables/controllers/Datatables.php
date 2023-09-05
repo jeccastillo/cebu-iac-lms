@@ -1061,9 +1061,9 @@ class Datatables extends CI_Controller {
        
         if($gender!=0){           
                 if($gender == 1)
-                    $sWhere .= "WHERE $table.enumGender = 'male' ";
+                    $sWhere .= "WHERE enumGender = 'male' ";
                 else
-                    $sWhere .= "WHERE $table.enumGender = 'female' ";
+                    $sWhere .= "WHERE enumGender = 'female' ";
             
         }        
         
@@ -1079,9 +1079,9 @@ class Datatables extends CI_Controller {
         
         if($course!=0)
             if($gender!=0 || $yearlevel!=0 )
-                $sWhere .= "AND $table.intProgramID = '".$course."' ";
+                $sWhere .= "AND intProgramID = '".$course."' ";
             else
-                $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
+                $sWhere .= "WHERE intProgramID = '".$course."' ";
        
         
         if($sem == 0){
