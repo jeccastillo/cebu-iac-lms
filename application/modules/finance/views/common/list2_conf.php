@@ -290,7 +290,7 @@ $(document).ready(function() {
     })
 
     //Apply the search
-    table.columns().every( function () {
+    dtable.columns().every( function () {
         var that = this;
 
         // $( 'input', this.footer() ).on( 'keyup change', function () {
