@@ -289,29 +289,9 @@ $(document).ready(function() {
         dtable.fnDraw(false);
     })
 
-    //Apply the search
-    dtable.columns().every( function () {
-        var that = this;
-
-        // $( 'input', this.footer() ).on( 'keyup change', function () {
-        //     if ( that.search() !== this.value ) {
-        //         that
-        //             .search( this.value )
-        //             //.search( "^" + $(this).val() + "$", true, false, true )
-        //             .draw();
-        //     }
-        // } );
-
-        $( 'input.payment_type', this.header() ).on( 'keyup change', function () {
-            if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    //.search( "^" + $(this).val() + "$", true, false, true )
-                    .draw();
-            }
-        } );
-
-    } );
+    $("input.payment_type").on('keyup change',function(){
+        dtable.fnDraw(false);   
+    });
 
 });
 </script>
