@@ -87,7 +87,13 @@ class Grading extends CI_Controller {
         $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id))->first_row('array');
         $this->data['grading_items'] = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$id))->result_array();
         $this->data['subjects_selected'] = $this->db->get_where('tb_mas_subjects',array('grading_system_id'=>$id))->result_array();
+        $this->data['subjects_selected_midterm'] = $this->db->get_where('tb_mas_subjects',array('grading_system_id_midterm'=>$id))->result_array();
         $this->data['subjects_not_selected'] = $this->db->where(array('grading_system_id !='=>$id))
+                                                        ->order_by('strCode','ASC')
+                                                        ->get('tb_mas_subjects')
+                                                        ->result_array();
+
+        $this->data['subjects_not_selected_midterm'] = $this->db->where(array('grading_system_id_midterm !='=>$id))
                                                         ->order_by('strCode','ASC')
                                                         ->get('tb_mas_subjects')
                                                         ->result_array();
@@ -101,14 +107,20 @@ class Grading extends CI_Controller {
         
     }
 
-    public function add_selected(){
+    public function add_selected($type = "final"){
         $post = $this->input->post();
         
         foreach($post['subjects'] as $subject){
-            $data = array(
-                "grading_system_id"=>$post['id'],                
-            );
+            if($type == "final")
+                $data = array(
+                    "grading_system_id"=>$post['id'],                
+                );
 
+            else
+                $data = array(
+                    "grading_system_id_midterm"=>$post['id'],                
+                );
+            
             $this->data_poster->post_data('tb_mas_subjects',$data,$subject);
 
         }
