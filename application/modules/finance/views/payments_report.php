@@ -62,6 +62,7 @@
                             <th>Amount Paid</th>
                             <th>Payment For</th>                                                                                                                                          
                             <th>Remarks</th>  
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
