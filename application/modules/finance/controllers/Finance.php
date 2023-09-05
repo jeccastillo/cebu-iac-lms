@@ -105,10 +105,6 @@ class Finance extends CI_Controller {
 
     public function student_ledger($id,$sem = 0){
 
-        $special_role = $this->session->userdata('special_role');        
-        if($special_role < 1)
-            redirect(base_url()."unity/faculty_dashboard");
-
         $this->data['id'] = $id;        
         $this->data['sem'] = $sem;
         $this->data['page'] = "view_all_students";
