@@ -2639,7 +2639,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function enlisted_students($course,$year,$gender,$sem){
+    public function enlisted_students($course,$year,$gender,$sem,$start,$end){
         
         if($sem == 0)      
             $active_sem = $this->data_fetcher->get_active_sem();
@@ -2647,7 +2647,7 @@ class Excel extends CI_Controller {
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
         $this->data['sy'] = $active_sem;
-        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender);
+        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender,$start,$end);
         
         foreach($students as $student){
             $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);

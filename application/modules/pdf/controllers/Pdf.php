@@ -1179,7 +1179,7 @@ class Pdf extends CI_Controller {
         $this->load->view("print_sched",$this->data);
     }
 
-    public function print_enlisted_students($course,$year,$gender,$sem){
+    public function print_enlisted_students($course,$year,$gender,$sem,$start,$end){
 
         //print_r($this->data['spouse']);
         tcpdf();
@@ -1198,7 +1198,7 @@ class Pdf extends CI_Controller {
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
         $this->data['sy'] = $active_sem;
-        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender);                        
+        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender,$start,$end);                        
       
                                
        

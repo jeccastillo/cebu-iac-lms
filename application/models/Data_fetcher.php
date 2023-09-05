@@ -2964,7 +2964,7 @@ class Data_fetcher extends CI_Model {
                  ->result_array();
     }
 
-    function getClassListStudentsEnlistedOnly($id,$sem = 0,$course=0,$year=0,$gender=0)
+    function getClassListStudentsEnlistedOnly($id,$sem = 0,$course=0,$year=0,$gender=0,$start=0,$end=0)
     {
         $faculty_id = $this->session->userdata("intID");
         $where = [];        
@@ -2987,7 +2987,7 @@ class Data_fetcher extends CI_Model {
                 ->from("tb_mas_classlist_student")
                 //->group_by("intSubjectID")             
                 ->where($where)    
-                ->where(array("tb_mas_registration.intROG"=>0))
+                ->where(array("tb_mas_registration.intROG"=>0,"date_enlisted >="=>$start,"date_enlisted <="=>$end))                
                 ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                 ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
