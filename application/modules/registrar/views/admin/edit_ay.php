@@ -133,7 +133,7 @@
                 </div>           
                 <div class="row">             
                     <div class="form-group col-xs-12 text-right">
-                        <input type="submit" value="update" class="btn btn-default  btn-flat">
+                        <input type="submit" value="update" class="btn btn-default btn-lg  btn-flat">
                     </div>
                 </div>  
             </div>          
