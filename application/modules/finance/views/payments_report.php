@@ -57,7 +57,7 @@
                             <td>OR Number</td>
                             <td>Applicant Number</td>
                             <td>Name</td>
-                            <td>Payment Mode</td>
+                            <td>is_cash</td>
                             <td>Check/CC/Debit #</td>
                             <td>Amount Paid</td>
                             <td>Payment For</td>                                                                                                                                          
