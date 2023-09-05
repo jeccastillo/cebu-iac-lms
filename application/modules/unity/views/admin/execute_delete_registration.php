@@ -100,7 +100,7 @@ new Vue({
                                             text: data.data.message,
                                             icon: "success"
                                         }).then(function() {
-                                            location.reload();
+                                            document.location = base_url +"student/view_all_students";
                                         });                                                                                                                              
 
                                             
