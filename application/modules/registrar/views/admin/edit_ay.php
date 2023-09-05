@@ -90,14 +90,15 @@
                             <label>End of Final Exams</label>
                             <input type="date" name="final_exam_end" value="<?php echo $item['final_exam_end']; ?>" class="form-control" />                         
                         </div>
+                        <div class="form-group col-xs-12 col-lg-4">
+                            <label for="midterm_start">End of Application Period</label>
+                            <input type="datetime-local" name="endOfApplicationPeriod" value="<?php echo $item['endOfApplicationPeriod']; ?>" class="form-control" />                         
+                        </div>
                     </div>
                     <hr />
                     <h3>Grading Period Setup</h3>
                     <div class="row">
-                        <div class="form-group col-xs-12 col-lg-4">
-                            <label for="midterm_start">End of Application</label>
-                            <input type="datetime-local" name="endOfApplicationPeriod" value="<?php echo $item['endOfApplicationPeriod']; ?>" class="form-control" />                         
-                        </div>
+                        
                         <div class="form-group col-xs-12 col-lg-4">
                             <label for="midterm_start">Start of Midterm Grading</label>
                             <input type="date" name="midterm_start" value="<?php echo $item['midterm_start']; ?>" class="form-control" />                         
