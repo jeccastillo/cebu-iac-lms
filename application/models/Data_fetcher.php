@@ -2998,6 +2998,40 @@ class Data_fetcher extends CI_Model {
                 ->result_array();
         
     }
+
+    function getStudentsEnlistedOnly($id,$sem = 0,$course=0,$year=0,$gender=0,$start=0,$end=0)
+    {
+        $faculty_id = $this->session->userdata("intID");
+        $where = [];        
+        if($course != 0)
+            $where['tb_mas_users.intProgramID'] = $course;
+        if($gender != 0){
+            if($gender == 1){
+                $gender = "male";
+            }
+            else
+                $gender = "female";
+            $where['tb_mas_users.enumGender'] = $gender;
+        }        
+        if($sem != 0)
+            $where['tb_mas_registration.intAYID'] = $sem;
+        // if($year != 0)
+        //     $where['tb_mas_registration.intYearLevel'] = $year;        
+        return  $this->db
+                ->select("tb_mas_users.intID, tb_mas_users.strFirstname,tb_mas_users.strMiddlename,tb_mas_users.strLastname,strStudentNumber,date_enlisted,tb_mas_faculty.strUsername as fusername")
+                ->from("tb_mas_users")
+                //->group_by("intSubjectID")             
+                ->where($where)    
+                ->where(array("tb_mas_registration.intROG"=>0,"date_enlisted >="=>$start,"date_enlisted <="=>$end))                                
+                ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+                ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_registration.enlisted_by','left')        
+                ->group_by('tb_mas_users.intID')                                                       
+                ->order_by('strLastName asc, strFirstname asc')
+                ->get()
+                ->result_array();
+        
+    }
     
     function checkStudentSubject($sem,$subjectId,$studentId)
     {

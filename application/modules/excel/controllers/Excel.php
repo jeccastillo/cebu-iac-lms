@@ -2647,7 +2647,7 @@ class Excel extends CI_Controller {
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
         $this->data['sy'] = $active_sem;
-        $students = $this->data_fetcher->getClassListStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender,$start,$end);
+        $students = $this->data_fetcher->getStudentsEnlistedOnly(0,$active_sem['intID'],$course,$year,$gender,$start,$end);
         
         foreach($students as $student){
             $student['reg_info'] = $this->data_fetcher->getRegistrationInfo($student['intID'],$active_sem['intID']);
