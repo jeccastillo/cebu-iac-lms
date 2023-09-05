@@ -102,10 +102,11 @@
                             <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
                             <td :class="item.muted">{{ item.balance }}</td>
                             <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                            <td>
+                            <td v-if="finance && finance.special_role != 0">
                                 <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
                                 <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
                             </td>
+                            <td v-else></td>
                         </tr>
                         <tr>
                             <td></td>
