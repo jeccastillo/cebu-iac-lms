@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside id="registration-container" class="right-side">
 <section class="content-header">
                     <h1>
                         Reset Student Status
@@ -19,22 +19,102 @@
         </div>
        
             
-            <form action="<?php echo base_url(); ?>unity/delete_registration_confirm" method="post" role="form">
-                <div class="box-body">
-                         
-                            <input type="hidden" name="studentid" class="form-control" value="<?php echo $student['intID']; ?>">
-                    <input type="hidden" name="sem" class="form-control" value="<?php echo $sem; ?>">
-                            <div class="alert alert-warning alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-                                Warning This will delete registration data and all records from advising and classlist.
-                              </div>
-                            <div class="form-group col-xs-12">
-                                <input type="submit" value="Execute" class="btn btn-default  btn-flat">
+            <form method="post" role="form">
+                <div class="box-body">                         
+                        <input type="hidden" v-model="student_id" name="studentid" class="form-control">
+                        <input type="hidden" v-model="term" name="sem" class="form-control">
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                            Warning This will delete registration data and all records from advising and classlist.
                             </div>
+                        <div class="form-group col-xs-12">
+                            <input type="submit" @click.prevent="deleteRegistration" value="Execute" class="btn btn-default  btn-flat">
+                        </div>
                     <div style="clear:both"></div>
                 </div>
             </form>
     </div>
     </div>
 </aside>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+<script>
+new Vue({
+    el: '#registration-container',
+    data: {
+        term: "<?php echo $sem; ?>",
+        student_id: <?php echo $student['intID']; ?>,    
+    },
+
+    mounted() {
+
+
+    },
+
+    methods: {      
+        deleteRegistration: function(payment){        
+            let url = base_url + "unity/delete_registration_confirm";
+            Swal.fire({
+                title: 'Continue with Reset',
+                text: "Are you sure you want to continue?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (data) => {    
+                        var formdata= new FormData();
+                        formdata.append('intID',this.cashier.intID);
+                        formdata.append('or_current',this.cashier.or_current);  
+                        formdata.append('or_used',this.request.or_number);                                      
+                        return axios.post(url, formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    
+                                    axios.post(api_url + 'admissions/student-info/' + this.slug +
+                                    '/update-status', {
+                                        status: "Confirmed",
+                                        remarks: "Automated Change Reset Enrollment",
+                                        admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                                    }, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    })
+                                    .then(function(data){
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });                                                                                                                              
+
+                                            
+                                    });                                        
+                                                                       
+                                });                             
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                               
+                    
+            });  
+        },
+        
+    }
+
+})
+</script>
