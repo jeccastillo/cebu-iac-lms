@@ -75,9 +75,8 @@ new Vue({
                 showLoaderOnConfirm: true,
                     preConfirm: (data) => {    
                         var formdata= new FormData();
-                        formdata.append('intID',this.cashier.intID);
-                        formdata.append('or_current',this.cashier.or_current);  
-                        formdata.append('or_used',this.request.or_number);                                      
+                        formdata.append('studentid',this.student_id);
+                        formdata.append('sem',this.term);                                    
                         return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
