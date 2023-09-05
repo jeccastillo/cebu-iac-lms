@@ -69,7 +69,7 @@
                         <tr v-for="item in ledger">
                             <td :class="item.muted">{{ item.date }}</td>
                             <td :class="item.muted">{{ item.type }} </td>
-                            <td><button @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
+                            <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
@@ -95,7 +95,7 @@
                         <tr v-for="item in other">
                             <td :class="item.muted">{{ item.date }}</td>
                             <td :class="item.muted">{{ item.type }}</td>
-                            <td><button @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
+                            <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
                             <td :class="item.muted">{{ item.name }}</td>
                             <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
                             <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
