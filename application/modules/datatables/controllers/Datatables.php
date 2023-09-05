@@ -1059,13 +1059,7 @@ class Datatables extends CI_Controller {
      
         
        
-        if($gender!=0){
-            if($astatus != 0 || $scholarship!=0)
-                if($gender == 1)
-                    $sWhere .= "AND $table.enumGender = 'male' ";
-                else
-                    $sWhere .= "AND $table.enumGender = 'female' ";
-            else
+        if($gender!=0){           
                 if($gender == 1)
                     $sWhere .= "WHERE $table.enumGender = 'male' ";
                 else
@@ -1074,32 +1068,39 @@ class Datatables extends CI_Controller {
         }        
         
         if($yearlevel!=0)
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
+            if($gender!=0 )
                 $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
             else
                 $sWhere .= "WHERE tb_mas_registration.intYearLevel = ".$yearlevel." ";
+
+
+      
         
         
-        // if($course!=0 && $table =='tb_mas_users')
-        //     if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 )
-        //         $sWhere .= "AND $table.intProgramID = '".$course."' ";
-        //     else
-        //         $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
+        if($course!=0 && $table =='tb_mas_users')
+            if($gender!=0 || $yearlevel!=0 )
+                $sWhere .= "AND $table.intProgramID = '".$course."' ";
+            else
+                $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
        
         
-        if($sem == 0)
+        if($sem == 0){
             $active_sem = $this->data_fetcher->get_active_sem();
+            $sem = $active_sem['intID'];
+        }
         else
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         
         
             
         
-        if($gender!=0 || $yearlevel!=0 )
-            $sWhere .= "AND level = 'college' ";
-    
+        if($gender!=0 || $yearlevel!=0 || $course!=0 )
+            $sWhere .= "AND level = 'college' ";    
         else
             $sWhere .= "WHERE level = 'college' ";
+
+        
+        $sWhere .= "AND tb_mas_registration.intAYID = ".$sem." ";
                    
         if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
         {
