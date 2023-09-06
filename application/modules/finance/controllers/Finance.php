@@ -123,6 +123,7 @@ class Finance extends CI_Controller {
             $id = $post['id'];
         }
         else{
+            unset($post['id']);
             $this->db->insert('tb_mas_ns_payee',$post);
             $id = $this->db->insert_id();
         }
