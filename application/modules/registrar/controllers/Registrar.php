@@ -148,15 +148,16 @@ class Registrar extends CI_Controller {
                               ->select('tb_mas_classlist.intID as classlistID, tb_mas_faculty.intID as facultyID, strClassName,year,strSection,sub_section,strCode,strFirstname,strMiddlename,strLastname')
                               ->where(array('intFacultyID !='=>999))
                               ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+                              ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                               ->get('tb_mas_classlist')
                               ->result_array();
 
             $ret_fac = [];
             $ret_fac_selected = [];
             foreach($classlists as $cl){
-                $tmp = $this->db->select('tb_mas_sy_grading_extension_faculty.id')
+                $tmp = $this->db->select('tb_mas_sy_grading_extension_faculty.intID')
                             ->where(array('classlist_id'=>$cl['intID'],'grading_extension_id'=>$this->data['item']['id']))
-                            ->join('tb_mas_classlist','tb_mas_sy_grading_extension_faculty.classlist_id = tb_mas_classlist.intID')                            
+                            ->join('tb_mas_classlist','tb_mas_sy_grading_extension_faculty.classlist_id = tb_mas_classlist.intID')
                             ->get('tb_mas_sy_grading_extension_faculty')
                             ->first_row('array');
 
