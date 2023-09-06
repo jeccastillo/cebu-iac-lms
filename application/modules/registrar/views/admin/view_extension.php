@@ -34,6 +34,7 @@
                                     <tr>
                                         <th>Last Name</th>
                                         <th>First Name</th>
+                                        <th>Subject</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>

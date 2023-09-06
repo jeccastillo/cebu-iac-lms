@@ -147,8 +147,12 @@ class Registrar extends CI_Controller {
             $ret_fac = [];
             $ret_fac_selected = [];
             foreach($faculty as $fac){
-                $tmp = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$fac['intID'],'grading_extension_id'=>$this->data['item']['id']))
-                         ->first_row('array');
+                $tmp = $this->db->select('tb_mas_sy_grading_extension_faculty.*,strClassName,year,strSection,sub_section,strCode')
+                            ->where(array('faculty_id'=>$fac['intID'],'grading_extension_id'=>$this->data['item']['id']))
+                            ->join('tb_mas_classlist','tb_mas_sy_grading_extension_faculty.classlist_id = tb_mas_classlist.intID')
+                            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID','left')
+                            ->get('tb_mas_sy_grading_extension_faculty')
+                            ->first_row('array');
 
                                          
                 if($tmp){
