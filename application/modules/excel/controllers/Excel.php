@@ -3418,11 +3418,14 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)       
             ->setCellValue('M'.$i, '=SUM(M2:M'.($i-1).')');
 
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("H".$i.":M".$i)->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("M2:M".($i-1))->getFont()->setBold( true );
 
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(45);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
