@@ -243,63 +243,63 @@ new Vue({
                 });
             // }
             
-            Swal.fire({
-                title: 'Continue with Payment',
-                text: "Are you sure you want to add payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
+            // Swal.fire({
+            //     title: 'Continue with Payment',
+            //     text: "Are you sure you want to add payment?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true,
+            //         preConfirm: (login) => {
 
 
                         
-                        this.request.description = this.description_other;                                
+            //             this.request.description = this.description_other;                                
                         
 
-                        this.request.subtotal_order = this.amount_to_pay;
-                        this.request.total_amount_due = this.amount_to_pay;
+            //             this.request.subtotal_order = this.amount_to_pay;
+            //             this.request.total_amount_due = this.amount_to_pay;
 
                         
-                        return axios.post(url, this.request, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success){
-                                        var formdata= new FormData();
-                                        formdata.append('intID',this.cashier.intID);
-                                        formdata.append('or_current',this.cashier.or_current);
-                                        axios.post(base_url + 'finance/next_or_other', formdata, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                        })
-                                        .then(function(){  
-                                            location.reload();                                             
-                                        })                                                     
-                                    }                                            
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                });                                
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
+            //             return axios.post(url, this.request, {
+            //                         headers: {
+            //                             Authorization: `Bearer ${window.token}`
+            //                         }
+            //                     })
+            //                     .then(data => {
+            //                         this.loader_spinner = false;
+            //                         if(data.data.success){
+            //                             var formdata= new FormData();
+            //                             formdata.append('intID',this.cashier.intID);
+            //                             formdata.append('or_current',this.cashier.or_current);
+            //                             axios.post(base_url + 'finance/next_or_other', formdata, {
+            //                             headers: {
+            //                                 Authorization: `Bearer ${window.token}`
+            //                             }
+            //                             })
+            //                             .then(function(){  
+            //                                 location.reload();                                             
+            //                             })                                                     
+            //                         }                                            
+            //                         else
+            //                             Swal.fire({
+            //                                 title: "Failed",
+            //                                 text: data.data.message,
+            //                                 icon: "error"
+            //                             }).then(function() {
+            //                                 location.reload();
+            //                             });
+            //                     });                                
+            //         },
+            //         allowOutsideClick: () => !Swal.isLoading()
+            //     }).then((result) => {
                 
-            })
+            // })
             
-            },       
+         },       
 
 
     }
