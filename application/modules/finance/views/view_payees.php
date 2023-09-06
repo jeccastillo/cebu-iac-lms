@@ -1,8 +1,7 @@
 
 <aside class="right-side">
     <section class="content-header">
-        <h1>
-            Payee
+        <h1>            
             <small>
                <a class="btn btn-app" href="<?php echo base_url().'finance/payee'; ?>" ><i class="fa fa-user" aria-hidden="true"></i>Add Payee</a> 
                <a class="btn btn-app" href="<?php echo base_url().'finance/view_payees'; ?>" ><i class="fa fa-users" aria-hidden="true"></i>View All Payees</a> 
