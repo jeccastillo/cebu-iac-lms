@@ -208,11 +208,10 @@ new Vue({
     },
 
     methods: {              
-        selectPayee: function(event){            
-            console.log("Test",this.payees[0]);
-            this.request.firstname = this.payees[event.target.value].firstname;
-            this.request.lastname = this.payees[event.target.value].lastname;
-            this.request.middlename = this.payees[event.target.value].middlename;
+        selectPayee: function(event){                        
+            this.request.first_name = this.payees[event.target.value].firstname;
+            this.request.last_name = this.payees[event.target.value].lastname;
+            this.request.middle_name = this.payees[event.target.value].middlename;
             this.request.contact_number = this.payees[event.target.value].contact_number;
         }   
 
