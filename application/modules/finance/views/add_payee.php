@@ -14,7 +14,7 @@
                     <form @submit.prevent="submitNewPayee" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
                             <div class="box-header">                            
-                                <h4 class="box-title">Payee</h4>                            
+                                <h4 class="box-title">{{ request.firstname?"Edit "+request.firstname+" "+request.lastname:"Add Payee" }}</h4>                            
                             </div>
                             <div class="box-body">                                    
                                 <!-- modal header  -->                                        
