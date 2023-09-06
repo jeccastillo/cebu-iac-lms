@@ -3343,10 +3343,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C1', 'Applicant Number')
                     ->setCellValue('D1', 'Name')
                     ->setCellValue('E1', 'Payment Particulars')
-                    ->setCellValue('F1', 'Check/CC/Debit #')
-                    ->setCellValue('G1', 'Amount Paid')
-                    ->setCellValue('H1', 'Payment For')
-                    ->setCellValue('I1', 'Remarks');
+                    ->setCellValue('F1', 'Term/Sem')                                                            
+                    ->setCellValue('G1', 'Remarks');
                     
         
         $i = 2;
@@ -3361,6 +3359,9 @@ class Excel extends CI_Controller {
                 $cashier_name = "N/A";
 
             $mode = "";
+            
+            $term = $this->data_fetcher->get_sem_by_id($d->sy_reference);
+            
             switch($d->is_cash){
                 case 0:
                     $mode = "Check";
@@ -3386,10 +3387,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, $d->student_information_id)
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
                     ->setCellValue('E'.$i, $d->description)
-                    ->setCellValue('F'.$i, $d->check_number)
-                    ->setCellValue('G'.$i, $d->subtotal_order)
-                    ->setCellValue('H'.$i, $d->description)
-                    ->setCellValue('I'.$i, $d->remarks);
+                    ->setCellValue('F'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
+                    ->setCellValue('G'.$i, $d->remarks);
                                                        
             $i++;
         }
