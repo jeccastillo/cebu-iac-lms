@@ -52,8 +52,10 @@
                         <div class="col-md-6">                        
                             <label for="faculty">Select Faculty to Add</label>                                           
                             <select required name="faculty[]" multiple class="form-control" style="height: 300px;">                    
-                            <?php foreach($non_selected_faculty as $item): ?>
-                                <option value="<?php echo $item['classlistID']; ?>"><?php echo $item['strLastname']." ".$item['strFirstname']; ?></option>
+                            <?php foreach($non_selected_faculty as $item):
+                                $section = $item['strClassName'].$item['year'].$item['strSection']." ".$item['sub_section'];
+                                ?>
+                                <option value="<?php echo $item['classlistID']; ?>"><?php echo $item['strCode']." ".$section." - ".$item['strLastname']." ".$item['strFirstname']; ?></option>
                             <?php endforeach; ?>
                             </select>       
                             <hr />             
