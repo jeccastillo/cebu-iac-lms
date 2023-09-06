@@ -30,21 +30,21 @@
                                 <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
                                     <div class="col-sm-12">
-                                        <label>Name:</label>
+                                        <label>Name: {{ request.last_name+" "+request.first_name+" "+request.middle_name}}</label>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">                                            
-                                            <input type="text" required class="form-control" placeholder="First Name" v-model="request.first_name" />
+                                            <input type="hidden" required class="form-control" placeholder="First Name" v-model="request.first_name" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">                                            
-                                            <input type="text" required class="form-control" placeholder="Last Name" v-model="request.last_name" />
+                                            <input type="hidden" required class="form-control" placeholder="Last Name" v-model="request.last_name" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">                                            
-                                            <input type="text" class="form-control" placeholder="Middle Name" v-model="request.middle_name" />
+                                            <input type="hidden" class="form-control" placeholder="Middle Name" v-model="request.middle_name" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
