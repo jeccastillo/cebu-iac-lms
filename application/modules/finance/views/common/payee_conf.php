@@ -24,7 +24,7 @@
             "bServerSide": true,
             "ordering": false,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_ns_payee/"; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_ns_payee/",
             "aoColumnDefs":[      
                 <?php if($user['special_role'] >= 1): ?>
                 {
