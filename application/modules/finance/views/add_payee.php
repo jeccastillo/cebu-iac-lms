@@ -114,7 +114,7 @@ new Vue({
             }
 
             axios
-            .post(base_url + 'finance/new_payee', formdata, {
+            .post(base_url + 'finance/submit_payee', formdata, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
@@ -122,7 +122,7 @@ new Vue({
             .then(data => {                
 
                 if (data.data.success) {
-                    location.reload();
+                    document.location = base_url+"finance/payee"+data.data.id;
                 } else {
                     Swal.fire(
                         'Failed!',

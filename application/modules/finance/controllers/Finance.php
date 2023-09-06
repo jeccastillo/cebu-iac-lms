@@ -114,6 +114,24 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);                 
     }
 
+    public function submit_payee(){
+        
+        $post = $this->input->post();
+        if($post['id']){
+            $this->db->where('id',$post['id'])
+                    ->update('tb_mas_ns_payee',$post);
+            $id = $post['id'];
+        }
+        else{
+            $this->db->insert('tb_mas_ns_payee',$post);
+            $id = $this->db->insert_id();
+        }
+
+        $data['success'] = true;
+        $data['id'] = $id;
+        echo json_encode($data);
+    }
+
     public function payee_data($id){
         if($id != 0)
             $data['payee'] = $this->db->get_where('tb_mas_ns_payee',array('id'=>$id))->first_row();
