@@ -121,7 +121,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <input type="text" required class="form-control" v-model="request.email_address" />                                                    
+                                            <input type="email" required class="form-control" v-model="request.email_address" />                                                    
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
