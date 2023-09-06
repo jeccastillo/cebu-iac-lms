@@ -50,15 +50,15 @@
                             <th>Actions</th>
                         </tr>                        
                         <tr class="search">
-                            <th>id</th>
-                            <th>id_number</th>
-                            <th>lastname</th>
-                            <th>firstname</th>
-                            <th>middlename</th>
-                            <th>tin</th>
-                            <th>address</th>
-                            <th>contact_number</th>
-                            <th>Actions</th>
+                            <td>id</td>
+                            <td>id_number</td>
+                            <td>lastname</td>
+                            <td>firstname</td>
+                            <td>middlename</td>
+                            <td>tin</td>
+                            <td>address</td>
+                            <td>contact_number</td>
+                            <td>Actions</td>
                         </tr>
                     </thead>                    
                     <tbody></tbody>
