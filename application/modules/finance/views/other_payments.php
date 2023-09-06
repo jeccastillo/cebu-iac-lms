@@ -154,7 +154,7 @@ new Vue({
         amount_to_pay: 0,
         description_other: '', 
         cashier: undefined,
-        selected_payee: -1,
+        selected_payee: undefined,
         payees: [],
         request:{
             first_name: '',
@@ -231,8 +231,8 @@ new Vue({
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
 
-            if(this.selected_payee == -1)
-            {
+            // if(this.selected_payee)
+            // {
                 Swal.fire({
                     title: "Cashier",
                     text: "Please select Name from List",
@@ -241,7 +241,7 @@ new Vue({
                     this.$refs.payee.focus();
                     return;
                 });
-            }
+            // }
             
             Swal.fire({
                 title: 'Continue with Payment',
