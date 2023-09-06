@@ -139,7 +139,7 @@ class Finance extends CI_Controller {
         else
             $data['payee'] = null;
 
-        return $data;
+        echo json_encode($data);
     }
 
     public function student_ledger($id,$sem = 0){
