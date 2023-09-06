@@ -28,7 +28,7 @@
             "aoColumnDefs":[      
                 <?php if($user['special_role'] >= 1): ?>
                 {
-                    "aTargets":[6],
+                    "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/payee/'+row[0]+'">Edit Payee</a>'; }
