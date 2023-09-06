@@ -212,7 +212,7 @@ new Vue({
             this.request.last_name = this.payees[event.target.value].lastname;
             this.request.middle_name = this.payees[event.target.value].middlename;
             this.request.contact_number = this.payees[event.target.value].contact_number;
-            this.request.email_address = this.payees[event.target.value].email_address;
+            this.request.email_address = this.payees[event.target.value].email;
         },
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
