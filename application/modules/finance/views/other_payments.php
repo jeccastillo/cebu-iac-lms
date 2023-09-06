@@ -32,27 +32,17 @@
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
                                     <div class="col-sm-12">
                                         <label>Name: {{ request.last_name+" "+request.first_name+" "+request.middle_name}}</label>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label>Select Term</label>
-                                        <select ref="payee" v-model="request.sy_reference" class="form-control">
-                                            <option v-for="(item,index) in sy" :value="item.intID">{{ item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}</option>
-                                        </select>                        
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                            
-                                            <input type="hidden" required class="form-control" placeholder="First Name" v-model="request.first_name" />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                            
-                                            <input type="hidden" required class="form-control" placeholder="Last Name" v-model="request.last_name" />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">                                            
-                                            <input type="hidden" class="form-control" placeholder="Middle Name" v-model="request.middle_name" />
-                                        </div>
+                                    </div>                                                                        
+                                    <input type="hidden" required class="form-control" placeholder="First Name" v-model="request.first_name" />                                                        
+                                    <input type="hidden" required class="form-control" placeholder="Last Name" v-model="request.last_name" />                            
+                                    <input type="hidden" class="form-control" placeholder="Middle Name" v-model="request.middle_name" />
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Select Term</label>
+                                            <select ref="payee" v-model="request.sy_reference" class="form-control">
+                                                <option v-for="(item,index) in sy" :value="item.intID">{{ item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}</option>
+                                            </select>               
+                                        </div>         
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
