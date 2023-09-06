@@ -154,7 +154,7 @@ new Vue({
         amount_to_pay: 0,
         description_other: '', 
         cashier: undefined,
-        selected_payee: undefined,
+        selected_payee: -1,
         payees: [],
         request:{
             first_name: '',
@@ -231,7 +231,7 @@ new Vue({
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
 
-            if(this.selected_payee == undefined)
+            if(this.selected_payee == -1)
             {
                 Swal.fire({
                     title: "Cashier",
