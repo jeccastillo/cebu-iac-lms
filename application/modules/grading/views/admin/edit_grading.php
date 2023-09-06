@@ -97,6 +97,7 @@
                 
             </div>
         </form>  
+        <hr />
         <div class="box-header">
             <h3 class="box-title">Midterm grading</h3>
         </div>               
