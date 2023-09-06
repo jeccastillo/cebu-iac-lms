@@ -59,6 +59,7 @@ class Finance extends CI_Controller {
         $sem = $this->data_fetcher->get_active_sem();        
         $data['current_sem'] = $sem['intID'];
         $data['sem_year'] = $sem['strYearStart'];
+        $data['payees'] = $this->db->get('tb_mas_ns_payee')->result_array();
         $data['message'] = "Success";
         $data['success'] = true;
         echo json_encode($data);

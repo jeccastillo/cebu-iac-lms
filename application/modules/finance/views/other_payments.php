@@ -19,7 +19,14 @@
                             
                         </div>
                         <div class="box-body">
-                            <div class="row">                                
+                            <div class="row">   
+                                <div class="form-group col-sm-6">
+                                    <select class="form-control select2" @change="selectPayee($event)">
+                                        <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
+                                    </select>                        
+                                </div>     
+                                <div class="col-sm-6">
+                                </div>
                                 <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
                                     <div class="col-sm-12">
@@ -146,6 +153,7 @@ new Vue({
         amount_to_pay: 0,
         description_other: '', 
         cashier: undefined,
+        payees: [],
         request:{
             first_name: '',
             slug: 0,
@@ -186,7 +194,8 @@ new Vue({
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
-                    this.request.cashier_id = this.cashier.user_id;                    
+                    this.request.cashier_id = this.cashier.user_id;    
+                    this.payees = data.data.payees;                
                 }
             })
             .catch((error) => {
@@ -198,79 +207,9 @@ new Vue({
     },
 
     methods: {              
-        cashierDetails: function(id){
-            axios.get(base_url + 'finance/cashier_details/' + id)
-            .then((data) => {            
-                var cashier_details = data.data.cashier_data;
-                Swal.fire({
-                    title: "Cashier",
-                    text: cashier_details.strFirstname+" "+cashier_details.strLastname,
-                    icon: "info"
-                })
-            })
-
-        },              
-        submitManualPayment: function(){
-            let url = api_url + 'finance/manual_payment';            
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with Payment',
-                text: "Are you sure you want to add payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-
-
-                        
-                        this.request.description = this.description_other;                                
-                        
-
-                        this.request.subtotal_order = this.amount_to_pay;
-                        this.request.total_amount_due = this.amount_to_pay;
-
-                        
-                        return axios.post(url, this.request, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    this.loader_spinner = false;
-                                    if(data.data.success){
-                                        var formdata= new FormData();
-                                        formdata.append('intID',this.cashier.intID);
-                                        formdata.append('or_current',this.cashier.or_current);
-                                        axios.post(base_url + 'finance/next_or_other', formdata, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                        })
-                                        .then(function(){  
-                                            location.reload();                                             
-                                        })                                                     
-                                    }                                            
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
-                                });                                
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                
-            })
-            
-        },        
+        selectPayee: function(event){
+            console.log(event.target.value);
+        }   
 
 
     }
