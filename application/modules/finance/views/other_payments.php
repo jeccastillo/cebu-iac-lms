@@ -21,7 +21,8 @@
                         <div class="box-body">
                             <div class="row">   
                                 <div class="form-group col-sm-6">
-                                    <select v-model="selected_payee" class="form-control" @change="selectPayee($event)">
+                                    <label>Select Name</label>
+                                    <select ref="payee" v-model="selected_payee" class="form-control" @change="selectPayee($event)">
                                         <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
                                     </select>                        
                                 </div>     
@@ -229,6 +230,17 @@ new Vue({
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
+
+            if(!selected_payee)
+            {
+                Swal.fire({
+                    title: "Cashier",
+                    text: "Please select Name from List",
+                    icon: "warning"
+                }).then(function() {
+                    this.$refs.payee.focus();
+                });
+            }
             
             Swal.fire({
                 title: 'Continue with Payment',
