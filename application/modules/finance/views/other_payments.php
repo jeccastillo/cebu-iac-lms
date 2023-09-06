@@ -21,7 +21,7 @@
                         <div class="box-body">
                             <div class="row">   
                                 <div class="form-group col-sm-6">
-                                    <select class="form-control select2" @change="selectPayee($event)">
+                                    <select v-model="selected_payee" class="form-control select2" @change="selectPayee($event)">
                                         <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
                                     </select>                        
                                 </div>     
@@ -153,6 +153,7 @@ new Vue({
         amount_to_pay: 0,
         description_other: '', 
         cashier: undefined,
+        selected_payee: undefined,
         payees: [],
         request:{
             first_name: '',
