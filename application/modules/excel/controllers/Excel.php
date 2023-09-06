@@ -3344,7 +3344,13 @@ class Excel extends CI_Controller {
                     ->setCellValue('D1', 'Name')
                     ->setCellValue('E1', 'Payment Particulars')
                     ->setCellValue('F1', 'Term/Sem')                                                            
-                    ->setCellValue('G1', 'Remarks');
+                    ->setCellValue('G1', 'Remarks')
+                    ->setCellValue('H1', 'Cash')
+                    ->setCellValue('I1', 'Check')
+                    ->setCellValue('J1', 'Credit')
+                    ->setCellValue('K1', 'Debit')
+                    ->setCellValue('L1', 'Online')
+                    ->setCellValue('M1', 'Total');
                     
         
         $i = 2;
@@ -3363,20 +3369,25 @@ class Excel extends CI_Controller {
             $term = $this->data_fetcher->get_sem_by_id($d->sy_reference);
             
             switch($d->is_cash){
-                case 0:
-                    $mode = "Check";
+                case 0:                    
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('I'.$i, $d->subtotal_order);
                     break;
                 case 1:
-                    $mode = "Cash";
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('H'.$i, $d->subtotal_order);
                     break;
                 case 2:
-                    $mode = "Credit Card";
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('J'.$i, $d->subtotal_order);
                     break;
                 case 3:
-                    $mode = "Debit Card";
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('K'.$i, $d->subtotal_order);
                     break;  
                 case 4:     
-                    $mode = "Online";
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('L'.$i, $d->subtotal_order);
                     break;                   
 
             }
@@ -3388,10 +3399,26 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
                     ->setCellValue('E'.$i, $d->description)
                     ->setCellValue('F'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
-                    ->setCellValue('G'.$i, $d->remarks);
+                    ->setCellValue('G'.$i, $d->remarks)
+                    ->setCellValue('M'.$i, '=SUM(H'.$i.':L'.$i.')');
                                                        
             $i++;
         }
+
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('H'.$i, '=SUM(H2:H'.($i-1).')');
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('I'.$i, '=SUM(I2:I'.($i-1).')');
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('J'.$i, '=SUM(J2:J'.($i-1).')');
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('K'.$i, '=SUM(K2:K'.($i-1).')');
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('L'.$i, '=SUM(L2:L'.($i-1).')');
+        $objPHPExcel->setActiveSheetIndex(0)       
+            ->setCellValue('M'.$i, '=SUM(M2:M'.($i-1).')');
+
+
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
