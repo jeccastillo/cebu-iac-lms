@@ -4,7 +4,8 @@
         <section class="content-header">
             <h1>
                 <small>
-                    <!-- <a class="btn btn-app" :href="base_url + 'unity/logs/0/0/Cashier'" ><i class="fa fa-file" aria-hidden="true"></i>View Cashier Logs</a>                                                                                                                               -->
+                    <a class="btn btn-app" :href="base_url + 'finance/payee'" ><i class="fa fa-user" aria-hidden="true"></i>Add Payee</a> 
+                    <a class="btn btn-app" :href="base_url + 'finance/view_payees'" ><i class="fa fa-users" aria-hidden="true"></i>View All Payees</a> 
                 </small>
             </h1>
         </section>
