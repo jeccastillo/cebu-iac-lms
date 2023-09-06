@@ -122,7 +122,7 @@ new Vue({
             .then(data => {                
 
                 if (data.data.success) {
-                    //document.location = base_url+"finance/payee/"+data.data.id;
+                    document.location = base_url+"finance/payee/"+data.data.id;
                 } else {
                     Swal.fire(
                         'Failed!',
