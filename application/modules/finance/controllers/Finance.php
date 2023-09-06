@@ -117,7 +117,7 @@ class Finance extends CI_Controller {
     public function submit_payee(){
         
         $post = $this->input->post();
-        if($post['id']){
+        if($post['id'] != "undefined"){
             $this->db->where('id',$post['id'])
                     ->update('tb_mas_ns_payee',$post);
             $id = $post['id'];
