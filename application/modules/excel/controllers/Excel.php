@@ -3337,17 +3337,16 @@ class Excel extends CI_Controller {
       
         
             
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Cashier')
-                    ->setCellValue('B1', 'Date')
-                    ->setCellValue('C1', 'OR Number')
-                    ->setCellValue('D1', 'Applicant Number')
-                    ->setCellValue('E1', 'Name')
-                    ->setCellValue('F1', 'Payment Mode')
-                    ->setCellValue('G1', 'Check/CC/Debit #')
-                    ->setCellValue('H1', 'Amount Paid')
-                    ->setCellValue('I1', 'Payment For')
-                    ->setCellValue('J1', 'Remarks');
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A1', 'Date')
+                    ->setCellValue('B1', 'OR Number')
+                    ->setCellValue('C1', 'Applicant Number')
+                    ->setCellValue('D1', 'Name')
+                    ->setCellValue('E1', 'Payment Particulars')
+                    ->setCellValue('F1', 'Check/CC/Debit #')
+                    ->setCellValue('G1', 'Amount Paid')
+                    ->setCellValue('H1', 'Payment For')
+                    ->setCellValue('I1', 'Remarks');
                     
         
         $i = 2;
@@ -3381,17 +3380,16 @@ class Excel extends CI_Controller {
 
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $cashier_name)
-                    ->setCellValue('B'.$i, $d->updated_at)
-                    ->setCellValue('C'.$i, $or_number)
-                    ->setCellValue('D'.$i, $d->student_information_id)
-                    ->setCellValue('E'.$i, strtoupper($d->student_name))
-                    ->setCellValue('F'.$i, $mode)
-                    ->setCellValue('G'.$i, $d->check_number)
-                    ->setCellValue('H'.$i, $d->subtotal_order)
-                    ->setCellValue('I'.$i, $d->description)
-                    ->setCellValue('J'.$i, $d->remarks);
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A'.$i, $d->updated_at)
+                    ->setCellValue('B'.$i, $or_number)
+                    ->setCellValue('C'.$i, $d->student_information_id)
+                    ->setCellValue('D'.$i, strtoupper($d->student_name))
+                    ->setCellValue('E'.$i, $d->description)
+                    ->setCellValue('F'.$i, $d->check_number)
+                    ->setCellValue('G'.$i, $d->subtotal_order)
+                    ->setCellValue('H'.$i, $d->description)
+                    ->setCellValue('I'.$i, $d->remarks);
                                                        
             $i++;
         }
