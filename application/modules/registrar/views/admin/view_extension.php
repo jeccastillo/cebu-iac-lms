@@ -50,8 +50,8 @@
                             </table>                                
                         </div>
                         <div class="col-md-6">                        
-                            <label for="faculty">Select Section to Extend</label>                                           
-                            <select required name="faculty[]" multiple class="form-control" style="height: 300px;">                    
+                            <label for="classlist">Select Section to Extend</label>                                           
+                            <select required name="classlist[]" multiple class="form-control" style="height: 300px;">                    
                             <?php foreach($non_selected_faculty as $item):
                                 $section = $item['strClassName'].$item['year'].$item['strSection']." ".$item['sub_section'];
                                 ?>

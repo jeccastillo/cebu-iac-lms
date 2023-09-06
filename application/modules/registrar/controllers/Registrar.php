@@ -186,10 +186,10 @@ class Registrar extends CI_Controller {
     public function add_selected(){
         $post = $this->input->post();
         
-        foreach($post['faculty'] as $faculty){
+        foreach($post['classlist'] as $classlist){
             $data = array(
                 "grading_extension_id"=>$post['id'],             
-                "faculty_id"=>$faculty   
+                "classlist_id"=>$classlist   
             );
 
             $this->data_poster->post_data('tb_mas_sy_grading_extension_faculty',$data);
