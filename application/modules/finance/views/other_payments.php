@@ -21,7 +21,7 @@
                         <div class="box-body">
                             <div class="row">   
                                 <div class="form-group col-sm-6">
-                                    <label>Select Name</label>
+                                    <label>Select From List</label>
                                     <select ref="payee" v-model="selected_payee" class="form-control" @change="selectPayee($event)">
                                         <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
                                     </select>                        
@@ -32,6 +32,12 @@
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
                                     <div class="col-sm-12">
                                         <label>Name: {{ request.last_name+" "+request.first_name+" "+request.middle_name}}</label>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Select Term</label>
+                                        <select ref="payee" v-model="request.sy_reference" class="form-control">
+                                            <option v-for="(item,index) in sy" :value="item.intID">{{ item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}</option>
+                                        </select>                        
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">                                            
@@ -155,6 +161,7 @@ new Vue({
         description_other: '', 
         cashier: undefined,
         selected_payee: undefined,
+        sy: [],
         payees: [],
         request:{
             first_name: '',
@@ -197,7 +204,8 @@ new Vue({
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
                     this.request.cashier_id = this.cashier.user_id;    
-                    this.payees = data.data.payees;                
+                    this.payees = data.data.payees;   
+                    this.sy = data.data.sy;             
                 }
             })
             .catch((error) => {

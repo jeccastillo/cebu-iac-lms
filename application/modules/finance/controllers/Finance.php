@@ -58,6 +58,7 @@ class Finance extends CI_Controller {
         $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
         $sem = $this->data_fetcher->get_active_sem();        
         $data['current_sem'] = $sem['intID'];
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $data['sem_year'] = $sem['strYearStart'];
         $data['payees'] = $this->db->get('tb_mas_ns_payee')->result_array();
         $data['message'] = "Success";
