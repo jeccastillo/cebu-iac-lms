@@ -53,7 +53,7 @@
                             <label for="faculty">Select Faculty to Add</label>                                           
                             <select required name="faculty[]" multiple class="form-control" style="height: 300px;">                    
                             <?php foreach($non_selected_faculty as $item): ?>
-                                <option value="<?php echo $item['intID']; ?>"><?php echo $item['strLastname']." ".$item['strFirstname']; ?></option>
+                                <option value="<?php echo $item['classlistID']; ?>"><?php echo $item['strLastname']." ".$item['strFirstname']; ?></option>
                             <?php endforeach; ?>
                             </select>       
                             <hr />             
