@@ -237,8 +237,7 @@ new Vue({
                     title: "Cashier",
                     text: "Please select Name from List",
                     icon: "warning"
-                }).then(function() {
-                    this.$refs.payee.focus();
+                }).then(function() {                    
                     return;
                 });
             }
