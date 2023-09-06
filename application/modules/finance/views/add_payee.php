@@ -48,6 +48,10 @@
                                     <label>Contact Number</label>
                                     <input type="text" v-model="request.contact_number" class="form-control" />
                                 </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="text" v-model="request.email" class="form-control" />
+                                </div>
                             </div><!---box body--->
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>                                        
@@ -87,6 +91,7 @@ new Vue({
             tin: undefined,
             address: undefined,
             contact_number: undefined,
+            email: undefined,
         },        
              
     },
