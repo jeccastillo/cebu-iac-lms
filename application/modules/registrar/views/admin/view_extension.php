@@ -59,7 +59,7 @@
                             <?php endforeach; ?>
                             </select>       
                             <hr />             
-                            <input type="submit" value="add faculty >>" class="btn btn-default btn-flat btn-lg">
+                            <input type="submit" value="<< add faculty" class="btn btn-default btn-flat btn-lg">
                         </div>
                     </div>                
                     
