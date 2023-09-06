@@ -106,7 +106,7 @@ class Finance extends CI_Controller {
     public function payee($id = 0){
         
         $this->data['page'] = "add_payee";
-        $this->data['opentree'] = "cashier";  
+        $this->data['opentree'] = "finance_admin";  
         $this->data['id'] = $id;                          
         
         $this->load->view("common/header",$this->data);
@@ -140,6 +140,20 @@ class Finance extends CI_Controller {
             $data['payee'] = null;
 
         echo json_encode($data);
+    }
+
+    public function view_payees(){
+
+        $this->data['id'] = $id;        
+        $this->data['sem'] = $sem;
+        $this->data['page'] = "view_all_payees";
+        $this->data['opentree'] = "finance_admin";
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("view_payees",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/payee_conf",$this->data);
+
     }
 
     public function student_ledger($id,$sem = 0){
