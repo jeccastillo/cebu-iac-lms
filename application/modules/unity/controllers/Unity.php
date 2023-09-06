@@ -1847,7 +1847,7 @@ class Unity extends CI_Controller {
                                                  ->first_row('array');
 
             if($mx){
-                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$mx['id']))
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('classlist_id'=>$clist['intID'],'grading_extension_id'=>$mx['id']))
                                                         ->first_row('array');            
                 
                 if($ext && $mx['date'] > $this->data['classlist']['midterm_end'])                                                        
@@ -1856,7 +1856,7 @@ class Unity extends CI_Controller {
             
                 
             if($fx){
-                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('faculty_id'=>$clist['intFacultyID'],'grading_extension_id'=>$fx['id']))
+                $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('classlist_id'=>$clist['intID'],'grading_extension_id'=>$fx['id']))
                                                         ->first_row('array');
                 if($ext && $fx['date'] > $this->data['classlist']['final_end'])                                                        
                     $this->data['classlist']['final_end']  = $fx['date'];
