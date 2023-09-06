@@ -173,7 +173,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
-            campus: '<?php echo $campus; ?>',
+            student_campus: '<?php echo $campus; ?>',
         },
        
              
@@ -279,7 +279,7 @@ new Vue({
                                             }
                                             })
                                             .then(function(){  
-                                                //location.reload();                                             
+                                                location.reload();                                             
                                             })                                                     
                                         }                                            
                                         else
