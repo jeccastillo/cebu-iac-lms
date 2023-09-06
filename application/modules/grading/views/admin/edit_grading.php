@@ -65,7 +65,7 @@
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="max-height:300px;overflow-y:scroll">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -104,7 +104,7 @@
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="max-height:300px;overflow-y:scroll">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
