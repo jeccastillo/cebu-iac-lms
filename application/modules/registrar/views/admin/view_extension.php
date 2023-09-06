@@ -32,17 +32,18 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Last Name</th>
-                                        <th>First Name</th>
-                                        <th>Subject</th>
+                                        <th>Subject/Section</th>
+                                        <th>Faculty</th>                                                                                
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($selected_faculty as $item): ?>
+                                <?php foreach($selected_faculty as $item): 
+                                    $section = $item['strClassName'].$item['year'].$item['strSection']." ".$item['sub_section'];
+                                    ?>
                                     <tr>
-                                        <td><?php echo $item['strLastname']; ?></td>
-                                        <td><?php echo $item['strFirstname']; ?></td>
+                                        <td><?php echo $item['strCode']." ".$section; ?></td>
+                                        <td><?php echo $item['strLastname']." ".$item['strFirstname']; ?></td>
                                         <td><button rel="<?php echo $item['extnsion_faculty']; ?>" class="btn-danger btn delete-selected-faculty">Remove</btn>
                                     </tr>        
                                 <?php endforeach; ?>
