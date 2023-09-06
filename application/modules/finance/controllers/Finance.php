@@ -105,7 +105,7 @@ class Finance extends CI_Controller {
 
     public function payee($id = 0){
         
-        $this->data['page'] = "add_payee";
+        $this->data['page'] = "payee_setup";
         $this->data['opentree'] = "finance_admin";  
         $this->data['id'] = $id;                          
         
@@ -144,7 +144,7 @@ class Finance extends CI_Controller {
 
     public function view_payees(){
         
-        $this->data['page'] = "view_all_payees";
+        $this->data['page'] = "payee_setup";
         $this->data['opentree'] = "finance_admin";
 
         $this->load->view("common/header",$this->data);

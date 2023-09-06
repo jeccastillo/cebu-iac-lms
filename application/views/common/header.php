@@ -475,19 +475,19 @@
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i>
                                 <span>Add Non-Student Payment</span> </a></li> -->
-                        <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/view_payees"><i class="fa fa-users"></i>
+                        <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/view_payees" style="margin-left: 10px;"><i class="fa fa-users"></i>
                                 <span>Payee Set-up</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-android-list"></i>
+                                href="<?php echo base_url() ?>finance/cashier" style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a></li>
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
+                                href="#" style="margin-left: 10px;"><i class="ion"></i>
                                 <span>Delete & Cancel Receipt</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="#"><i class="ion"></i>
+                                href="#" style="margin-left: 10px;"><i class="ion"></i>
                                 <span>Overwrite Payment</span> </a>
                         </li>
 
