@@ -209,10 +209,10 @@ new Vue({
 
     methods: {              
         selectPayee: function(event){            
-            this.request.firstname = this.payee[event.target.value].firstname;
-            this.request.lastname = this.payee[event.target.value].lastname;
-            this.request.middlename = this.payee[event.target.value].middlename;
-            this.request.contact_number = this.payee[event.target.value].contact_number;
+            this.request.firstname = this.payees[event.target.value].firstname;
+            this.request.lastname = this.payees[event.target.value].lastname;
+            this.request.middlename = this.payees[event.target.value].middlename;
+            this.request.contact_number = this.payees[event.target.value].contact_number;
         }   
 
 
