@@ -49,7 +49,8 @@
                     <thead>
                         <tr>     
                             <th>id</th>
-                            <th>slug</th>                                               
+                            <th>slug</th>     
+                            <th>Cashier</th>                  
                             <th>Date Updated</th>
                             <th>OR Number</th>
                             <th>Applicant Number</th>
@@ -57,7 +58,7 @@
                             <th>Payment Mode</th>
                             <th>Check/CC/Debit #</th>
                             <th>Amount Paid</th>
-                            <th>Payment For</th>                                                                                                                                          
+                            <th>Particulars</th>                                                                                                                                          
                             <th>Remarks</th>
                             <th>Actions</th>
                         </tr>                       
