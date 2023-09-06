@@ -465,12 +465,12 @@
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
-                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition
-                                Config</a>
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition Fee
+                                </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> View Tuition Config</a>
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
                         </li>
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i>
@@ -481,7 +481,7 @@
                         </li>
                         <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/cashier"><i class="ion ion-cash"></i>
-                                <span>Cashier Set-up</span> </a></li>
+                                <span>OR Assignment</span> </a></li>
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Delete & Cancel Receipt</span> </a>

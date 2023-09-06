@@ -103,6 +103,26 @@ class Finance extends CI_Controller {
         $this->load->view("common/edit_ay_conf",$this->data); 
     }
 
+    public function payee($id = 0){
+        
+        $this->data['page'] = "add_payee";
+        $this->data['opentree'] = "cashier";  
+        $this->data['id'] = $id;                          
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("add_payee",$this->data);
+        $this->load->view("common/footer",$this->data);                 
+    }
+
+    public function payee_data($id){
+        if($id != 0)
+            $data['payee'] = $this->db->get_where('tb_mas_ns_payee',array('id'=>$id))->first_row();
+        else
+            $data['payee'] = null;
+
+        return $data;
+    }
+
     public function student_ledger($id,$sem = 0){
 
         $this->data['id'] = $id;        
