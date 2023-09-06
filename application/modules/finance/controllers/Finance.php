@@ -143,9 +143,7 @@ class Finance extends CI_Controller {
     }
 
     public function view_payees(){
-
-        $this->data['id'] = $id;        
-        $this->data['sem'] = $sem;
+        
         $this->data['page'] = "view_all_payees";
         $this->data['opentree'] = "finance_admin";
 
