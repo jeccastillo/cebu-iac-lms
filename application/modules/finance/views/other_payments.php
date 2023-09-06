@@ -231,7 +231,7 @@ new Vue({
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
 
-            if(this.selected_payee)
+            if(this.selected_payee == undefined)
             {
                 Swal.fire({
                     title: "Cashier",
