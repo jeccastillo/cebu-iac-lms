@@ -15,7 +15,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3>Search</h3>
-                    <form @submit.prevent="searchGrades">
+                    <form @submit.prevent="searchGrades" method="post">
                         <div class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
                                 Department
