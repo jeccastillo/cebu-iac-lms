@@ -14,7 +14,7 @@
         <div class="content">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3>Search</h3>
+                    <h3 class="text-left">Search</h3>
                     <div class="row" style="margin-bottom:10px">
                         <div class="col-sm-2">
                             Department
