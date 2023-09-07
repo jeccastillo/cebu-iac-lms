@@ -19,7 +19,7 @@
                         <div class="col-sm-2">
                             Department
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <select class="form-control" @change="changeDept($event)">
                                 <option value="college">College</option>
                                 <option value="shs">SHS</option>
@@ -30,7 +30,7 @@
                         <div class="col-sm-2">
                             Term
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <select class="form-control" v-model="request.term">
                                 <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                             </select>
@@ -40,7 +40,7 @@
                         <div class="col-sm-2">
                             Faculty
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <select class="form-control" v-model="request.faculty">
                                 <option v-for="fac in faculty" :value="fac.intID">{{ fac.strLastname + " " + fac.strFirstname }}</option>
                             </select>
