@@ -56,7 +56,7 @@
                                     <option v-for="section in sections" :value="section.intID">{{ section.strClassName+section.year+section.strSection }}</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 text-left">
                                 *Leave blank to display all sections
                             </div>
                         </div>
