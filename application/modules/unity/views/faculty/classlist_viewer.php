@@ -86,6 +86,7 @@
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td>                                                                                     
                                             <select <?php echo (($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
+                                                <option value="NGS">NGS</option>
                                                 <?php foreach($grading_items_midterm as $grading_item): ?>
                                                     <option <?php echo $student['floatMidtermGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value'].'-'.$grading_item['remarks'] ; ?>"><?php echo $grading_item['value']; ?></option>
                                                 <?php endforeach; ?>                                                                                                
@@ -93,6 +94,7 @@
                                         </td>
                                         <td>                                            
                                             <select <?php echo (($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
+                                                <option value="NGS">NGS</option>
                                                 <?php foreach($grading_items as $grading_item): ?>
                                                     <option <?php echo $student['floatFinalGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value'].'-'.$grading_item['remarks'] ; ?>"><?php echo $grading_item['value']; ?></option>
                                                 <?php endforeach; ?>                                               
