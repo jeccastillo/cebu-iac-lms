@@ -150,33 +150,34 @@
 
                                     class="btn btn-warning"><i class="fa fa-arrow-left"></i> Transfer Selected To</a>
                                      <a href="#" id="view-classlist" class="btn btn-primary"><i class="fa fa-arrow-right"></i> View Classlist</a>
-                                    <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php 
-                                        
+                                     <?php 
+                                        $label = "Submit"; 
                                         if  ($classlist['intFinalized'] == 0) {
                                             if($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")){
-                                                    echo '';
+                                                    $disable_submit =  '';
                                                     $label = "Submit Midterm Grades";
                                                 }
                                                 else
-                                                    echo 'disabled';
+                                                    $disable_submit =  'disabled';
 
                                         }
                                         else if  ($classlist['intFinalized'] == 1) {
                                             if($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")){
-                                                    echo '';
+                                                    $disable_submit =  '';
                                                     $label = "Submit Final Grades";
                                             }
                                                 else
-                                                    echo 'disabled';
+                                                    $disable_submit =  'disabled';
 
                                         }
                                         else if($classlist['intFinalized'] == 2) {  
                                                 $label = "Submit";                                          
-                                                echo 'disabled';
+                                                $disable_submit =  'disabled';
 
                                         }
                                  
-                                    ?>">
+                                    ?>
+                                    <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php echo $disable_submit; ?>">
                                     <i class="fa fa-arrow-right"></i> <?php echo $label; ?></a>
                                     
                                 </div>
