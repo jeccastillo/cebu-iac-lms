@@ -15,7 +15,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3>Search</h3>
-                    <div class="row">
+                    <div class="row mb-5">
                         <div class="col-sm-2">
                             Department
                         </div>
@@ -26,7 +26,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-5">
                         <div class="col-sm-2">
                             Term
                         </div>
