@@ -25,6 +25,8 @@
                                 <option value="shs">SHS</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-2">
                             Term
                         </div>
@@ -84,8 +86,7 @@ new Vue({
         axios.get('<?php echo base_url(); ?>registrar/search_grading_data/college')
         .then((data) => {
             this.terms = data.data.terms;
-            
-            
+                        
         })
         .catch((error) => {
             console.log(error);
