@@ -31,8 +31,18 @@
                             Term
                         </div>
                         <div class="col-sm-6">
-                            <select class="form-control" v-model="selectedterm">
+                            <select class="form-control" v-model="request.term">
                                 <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:10px">
+                        <div class="col-sm-2">
+                            Faculty
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="form-control" v-model="request.faculty">
+                                <option v-for="fac in faculty" :value="fac.intID">{{ fac.strLastname + " " + fac.strFirstname }}</option>
                             </select>
                         </div>
                     </div>
@@ -73,7 +83,10 @@ new Vue({
     data: {
         terms:[],
         faculty:[],    
-        selectedterm:  undefined, 
+        request: {
+            faculty: undefined,
+            term: undefined,
+        }, 
         
     },
 
@@ -87,6 +100,7 @@ new Vue({
         axios.get('<?php echo base_url(); ?>registrar/search_grading_data/college')
         .then((data) => {
             this.terms = data.data.terms;
+            this.faculty = data.data.faculty;
                         
         })
         .catch((error) => {
@@ -101,8 +115,7 @@ new Vue({
         changeDept: function(event){
             axios.get('<?php echo base_url(); ?>registrar/search_grading_data/'+event.target.value)
             .then((data) => {
-                this.terms = data.data.terms;
-                
+                this.terms = data.data.terms;                
                 
             })
             .catch((error) => {
