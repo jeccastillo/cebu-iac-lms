@@ -15,27 +15,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3>Search</h3>
-                    <div class="row">
-                        <div class="col-sm-2">
-                            Department
-                        </div>
-                        <div class="col-sm-6">
-                            <select class="form-control" @change="changeDept($event)">
-                                <option value="college">College</option>
-                                <option value="shs">SHS</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-2">
-                            Term
-                        </div>
-                        <div class="col-sm-6">
-                            <select class="form-control" v-model="selected-term">
-                                <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
-                            </select>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="box-body">
                     <table class="table table-bordered table-striped">
