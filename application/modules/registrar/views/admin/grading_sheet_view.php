@@ -65,7 +65,7 @@
                                 Subject
                             </div>
                             <div class="col-sm-4">
-                                <select class="form-control" v-model="request.section">
+                                <select class="form-control" v-model="request.subject">
                                     <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode }}</option>
                                 </select>
                             </div>
