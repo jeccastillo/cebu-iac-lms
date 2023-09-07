@@ -15,37 +15,49 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3>Search</h3>
-                    <div class="row" style="margin-bottom:10px">
-                        <div class="col-sm-2 text-right">
-                            Department
+                    <form>
+                        <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-2 text-right">
+                                Department
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" @change="changeDept($event)">
+                                    <option value="college">College</option>
+                                    <option value="shs">SHS</option>
+                                </select>
+                            </div>
+                        </div>                    
+                        <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-2 text-right">
+                                Term
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" @change="selectTerm($event)" v-model="request.term">
+                                    <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <select class="form-control" @change="changeDept($event)">
-                                <option value="college">College</option>
-                                <option value="shs">SHS</option>
-                            </select>
+                        <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-2 text-right">
+                                Faculty
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" v-model="request.faculty">
+                                    <option v-for="fac in faculty" :value="fac.intID">{{ fac.strLastname + " " + fac.strFirstname }}</option>
+                                </select>
+                            </div>
+                        </div>                       
+                        <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-2 text-right">
+                                Section
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" v-model="request.section">
+                                    <option v-for="section in sections" :value="section.intID">{{ section.strClassName+section.year+section.strSection }}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>                    
-                    <div class="row" style="margin-bottom:10px">
-                        <div class="col-sm-2 text-right">
-                            Term
-                        </div>
-                        <div class="col-sm-4">
-                            <select class="form-control" v-model="request.term">
-                                <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom:10px">
-                        <div class="col-sm-2 text-right">
-                            Faculty
-                        </div>
-                        <div class="col-sm-4">
-                            <select class="form-control" v-model="request.faculty">
-                                <option v-for="fac in faculty" :value="fac.intID">{{ fac.strLastname + " " + fac.strFirstname }}</option>
-                            </select>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="box-body">
                     <table class="table table-bordered table-striped">
@@ -83,9 +95,11 @@ new Vue({
     data: {
         terms:[],
         faculty:[],    
+        sections:[],
         request: {
             faculty: undefined,
             term: undefined,
+            section: undefined,
         }, 
         
     },
@@ -123,6 +137,18 @@ new Vue({
             })
 
         },
+        selectTerm: function(event){
+            axios.get('<?php echo base_url(); ?>registrar/search_grading_sections/'+event.target.value)
+            .then((data) => {
+                this.sections = data.data.sections;                
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+        },
+        
 
     }
 
