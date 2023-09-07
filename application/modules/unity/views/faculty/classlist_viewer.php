@@ -153,26 +153,31 @@
                                     <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php 
                                         
                                         if  ($classlist['intFinalized'] == 0) {
-                                            if($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d"))
+                                            if($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")){
                                                     echo '';
+                                                    $label = "Submit Midterm Grades";
+                                                }
                                                 else
                                                     echo 'disabled';
 
                                         }
                                         else if  ($classlist['intFinalized'] == 1) {
-                                            if($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d"))
+                                            if($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")){
                                                     echo '';
+                                                    $label = "Submit Final Grades";
+                                            }
                                                 else
                                                     echo 'disabled';
 
                                         }
-                                        else if($classlist['intFinalized'] == 2) {                                            
+                                        else if($classlist['intFinalized'] == 2) {  
+                                                $label = "Submit";                                          
                                                 echo 'disabled';
 
                                         }
                                  
                                     ?>">
-                                    <i class="fa fa-arrow-right"></i> Finalize Period</a>
+                                    <i class="fa fa-arrow-right"></i> <?php echo $label; ?></a>
                                     
                                 </div>
                             </div>
