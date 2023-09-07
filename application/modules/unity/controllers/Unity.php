@@ -2087,6 +2087,11 @@ class Unity extends CI_Controller {
         {
             $post = $this->input->post();
             
+            if($post['intFinalized'] == 0)
+                $post['date_midterm_submitted'] = date("Y-m-d H:i:s");
+            if($post['intFinalized'] == 1)
+                $post['date_final_submitted'] = date("Y-m-d H:i:s");
+            
             $post['intFinalized'] += 1;
             
 		    $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
