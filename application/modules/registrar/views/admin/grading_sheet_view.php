@@ -141,6 +141,7 @@ new Vue({
             axios.get('<?php echo base_url(); ?>registrar/search_grading_sections/'+event.target.value)
             .then((data) => {
                 this.sections = data.data.sections;                
+                this.request.section = undefined;
                 
             })
             .catch((error) => {
