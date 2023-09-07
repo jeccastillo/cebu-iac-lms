@@ -73,6 +73,8 @@
                                 *Leave blank to display all subjects
                             </div>
                         </div>
+                        <hr />
+                        <input type="submit" class="btn btn-default" value="Search" />
                     </form>
                 </div>
                 <div class="box-body">
