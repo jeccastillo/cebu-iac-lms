@@ -179,16 +179,13 @@
                                                 else
                                                     $disable_submit =  'disabled';
 
-                                        }
-                                        else if($classlist['intFinalized'] == 2) {  
-                                                $label = "Submit";                                          
-                                                $disable_submit =  'disabled';
-
-                                        }
+                                        }                                        
                                  
                                     ?>
+                                    <?php if($classlist['intFinalized'] < 2): ?>
                                     <a href="#" data-csid="<?php echo $classlist['intID']; ?>" rel="<?php echo $classlist['intFinalized']; ?>" id="finalize-term" class="btn btn-success <?php echo $disable_submit; ?>">
                                     <i class="fa fa-arrow-right"></i> <?php echo $label; ?></a>
+                                    <?php endif; ?>
                                     
                                 </div>
                             </div>
