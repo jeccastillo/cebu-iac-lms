@@ -62,7 +62,7 @@
                         </div>
                         <div class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
-                                Section
+                                Subject
                             </div>
                             <div class="col-sm-4">
                                 <select class="form-control" v-model="request.section">
