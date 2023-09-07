@@ -153,18 +153,18 @@
                                      <?php 
                                         $label = "Submit"; 
                                         if  ($classlist['intFinalized'] == 0) {
+                                            $label = "Submit Midterm Grades";
                                             if($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")){
-                                                    $disable_submit =  '';
-                                                    $label = "Submit Midterm Grades";
+                                                    $disable_submit =  '';                                                    
                                                 }
                                                 else
                                                     $disable_submit =  'disabled';
 
                                         }
                                         else if  ($classlist['intFinalized'] == 1) {
+                                            $label = "Submit Final Grades";
                                             if($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")){
-                                                    $disable_submit =  '';
-                                                    $label = "Submit Final Grades";
+                                                    $disable_submit =  '';                                                
                                             }
                                                 else
                                                     $disable_submit =  'disabled';
