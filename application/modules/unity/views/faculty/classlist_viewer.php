@@ -84,13 +84,18 @@
                                     <!--td><input <?php echo ($classlist['intFinalized']==1 || !$is_super_admin)?'disabled':''; ?> type="text" value="<?php echo $student['strStudentNumber']; ?>" name="strStudentNumber" class="studNumInput form-control" id="strStudentNumber" placeholder="Enter Stud-Number" size="3" rel="<?php echo $student['intID'] ?>"></td-->
                                     
                                         <?php if(!empty($student['registered'])): ?>                                       
-                                        <td>                                                                                     
-                                            <select <?php echo (($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
+                                        <td>        
+                                            <?php if(($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
+                                                    echo $student['floatMidtermGrade'];
+                                                ?>                                                
+                                            <?php else: ?>                                                                            
+                                            <select id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
                                                 <option value="NGS">NGS</option>
                                                 <?php foreach($grading_items_midterm as $grading_item): ?>
                                                     <option <?php echo $student['floatMidtermGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value'].'-'.$grading_item['remarks'] ; ?>"><?php echo $grading_item['value']; ?></option>
                                                 <?php endforeach; ?>                                                                                                
                                             </select>
+                                            <?php endif; ?>
                                         </td>
                                         <td>                                            
                                             <select <?php echo (($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
