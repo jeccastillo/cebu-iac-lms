@@ -97,13 +97,18 @@
                                             </select>
                                             <?php endif; ?>
                                         </td>
-                                        <td>                                            
-                                            <select <?php echo (($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin)?'disabled':''; ?> id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
+                                        <td>   
+                                        <?php if(($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
+                                                    echo $student['floatFinalGrade'];
+                                                ?>                                                
+                                            <?php else: ?>                                                                                                                     
+                                            <select id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
                                                 <option value="NGS">NGS</option>
                                                 <?php foreach($grading_items as $grading_item): ?>
                                                     <option <?php echo $student['floatFinalGrade'] == $grading_item['value']?'selected':''; ?> value="<?php echo $grading_item['value'].'-'.$grading_item['remarks'] ; ?>"><?php echo $grading_item['value']; ?></option>
                                                 <?php endforeach; ?>                                               
-                                            </select>                                            
+                                            </select>      
+                                            <?php endif; ?>                                      
                                         </td>                                        
                                         <?php else: ?>                
                                             <td></td>
