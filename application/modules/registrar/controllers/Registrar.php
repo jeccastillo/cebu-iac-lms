@@ -234,6 +234,21 @@ class Registrar extends CI_Controller {
 
         echo json_encode($data);
     }
+
+    public function search_grading(){
+        
+        $this->data['page'] = "grading_sheet_view";
+        $this->data['opentree'] = "registrar";
+        //print_r($this->data['classlist']);
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/grading_sheet_view",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    
+    }
+
+    public function search_grading_data(){
+
+    }
     
     public function edit_ay($id)
     {
