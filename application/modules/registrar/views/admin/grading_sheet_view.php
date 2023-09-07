@@ -74,7 +74,9 @@
                             </div>
                         </div>
                         <hr />
-                        <input type="submit" class="btn btn-default" value="Search" />
+                        <div class="text-left">
+                            <input type="submit" class="btn btn-default" value="Search" />
+                        </div>
                     </form>
                 </div>
                 <div class="box-body">
