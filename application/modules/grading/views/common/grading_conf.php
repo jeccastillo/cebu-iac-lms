@@ -38,15 +38,23 @@
                             'data':data,
                             'dataType':'json',
                             'success':function(ret){
-                                if(ret.message == "failed"){
-                                    $("#alert-text").html('<b>Alert!</b> cannot be deleted it is connected to classlist.')
-                                    $(".alert").show();
-                                    setTimeout(function() {
-                                        $(".alert").hide('fade', {}, 500)
-                                    }, 3000);
+                                if(ret.message != "success"){
+                                    Swal.fire(
+                                        'Failed!',
+                                        ret.message,
+                                        'error'
+                                    )
                                 }
-                                else
-                                    parent.hide();
+                                else{
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Successfully Deleted',
+                                        'success'
+                                    ).then(function(){
+                                        parent.hide();
+                                    });
+                                }
+                                    
 
                                 $(".loading-img").hide();
                                 $(".overlay").hide();
