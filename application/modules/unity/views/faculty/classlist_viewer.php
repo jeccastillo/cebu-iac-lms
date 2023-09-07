@@ -28,8 +28,8 @@
                     <?php else: ?>
                         <li class="pull-right"><a  href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>/1" class="text-muted"><i class="fa fa-check"></i> Show All</a></li>
                     <?php endif; ?>
-                    <li class="pull-right"><a  href="<?php echo base_url() ?>unity/edit_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-gear"></i> Edit</a></li>
-                    <?php if($is_super_admin || $is_registrar): ?>
+                    <?php if($is_super_admin || $is_registrar): ?>   
+                        <li class="pull-right"><a  href="<?php echo base_url() ?>unity/edit_classlist/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-gear"></i> Edit</a></li>                    
                         <li class="pull-right"><a href="<?php echo base_url() ?>excel/download_classlist/<?php echo $classlist['intID']."/".$showall; ?>" class="text-muted"><i class="fa fa-table"></i> Download Spreadsheet</a></li>
                     <?php endif; ?>
                     <li class="pull-right"><a target="_blank" href="<?php echo base_url() ?>pdf/print_classlist_registrar/<?php echo $classlist['intID']; ?>/front" class="text-muted"><i class="fa fa-print"></i>PDF Report</a></li>
