@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                         </div>                       
-                        <div class="row" style="margin-bottom:10px">
+                        <div v-if="request.term" class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
                                 Section
                             </div>
@@ -60,7 +60,7 @@
                                 *Leave blank to display all sections
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom:10px">
+                        <div v-if="request.term" class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
                                 Subject
                             </div>
