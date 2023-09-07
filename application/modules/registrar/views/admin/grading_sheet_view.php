@@ -32,7 +32,7 @@
                                 Term
                             </div>
                             <div class="col-sm-4">
-                                <select class="form-control" @change="selectTerm($event)" v-model="request.term">
+                                <select class="form-control" required @change="selectTerm($event)" v-model="request.term">
                                     <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                                 </select>
                             </div>
