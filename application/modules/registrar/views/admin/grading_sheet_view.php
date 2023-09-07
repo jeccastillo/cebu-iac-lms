@@ -74,8 +74,10 @@
                             </div>
                         </div>
                         <hr />
-                        <div class="text-left">
-                            <input type="submit" class="btn btn-default" value="Search" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="submit" class="btn btn-default" value="Search" />
+                            </div>
                         </div>
                     </form>
                 </div>
