@@ -278,18 +278,7 @@ class Finance extends CI_Controller {
     public function next_or_other(){
         $post = $this->input->post();
         $data = $post;
-        $current_or = $post['or_current'];
-        if(isset($post['registration_id'])){
-            unset($data['payments']);
-            unset($data['description']);
-            unset($data['registration_id']);
-            unset($data['student_id']);
-            unset($data['total_amount']);            
-            unset($data['or_number']);
-            unset($data['installment']);
-        }
-
-        $sem = $this->data_fetcher->get_active_sem();  
+        $current_or = $post['or_current'];        
         
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
