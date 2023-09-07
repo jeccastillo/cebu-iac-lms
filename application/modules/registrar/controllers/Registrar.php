@@ -246,8 +246,11 @@ class Registrar extends CI_Controller {
     
     }
 
-    public function search_grading_data(){
-
+    public function search_grading_data($dept){
+        
+        $data['terms'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$dept))->result_array();
+        echo json_encode($data);
+        
     }
     
     public function edit_ay($id)
