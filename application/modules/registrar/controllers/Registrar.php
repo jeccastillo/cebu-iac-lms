@@ -261,6 +261,14 @@ class Registrar extends CI_Controller {
                                      ->get('tb_mas_classlist')
                                      ->result_array();
 
+        $data['subjects'] = $this->db
+                            ->select('tb_mas_subjects.*')
+                            ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                            ->where(array('strAcademicYear'=>$term))
+                            ->group_by('intSubjectID')
+                            ->get('tb_mas_classlist')
+                            ->result_array();                                     
+
         echo json_encode($data);
 
     }

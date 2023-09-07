@@ -15,7 +15,7 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3>Search</h3>
-                    <form>
+                    <form @submit.prevent="searchGrades">
                         <div class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
                                 Department
@@ -60,6 +60,19 @@
                                 *Leave blank to display all sections
                             </div>
                         </div>
+                        <div class="row" style="margin-bottom:10px">
+                            <div class="col-sm-2 text-right">
+                                Section
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" v-model="request.section">
+                                    <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode }}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 text-left">
+                                *Leave blank to display all subjects
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="box-body">
@@ -99,10 +112,12 @@ new Vue({
         terms:[],
         faculty:[],    
         sections:[],
+        subjects:[],
         request: {
             faculty: undefined,
             term: undefined,
             section: undefined,
+            subject: undefined,
         }, 
         
     },
@@ -145,11 +160,16 @@ new Vue({
             .then((data) => {
                 this.sections = data.data.sections;                
                 this.request.section = undefined;
+                this.subjects = data.data.subjects;
+                this.request.subject = undefined;
                 
             })
             .catch((error) => {
                 console.log(error);
             })
+
+        },
+        searchGrades: function(){
 
         },
         
