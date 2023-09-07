@@ -85,8 +85,8 @@
                                     
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td>        
-                                            <?php if(($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
-                                                    echo $student['floatMidtermGrade'];
+                                            <?php if(($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin):                                                     
+                                                    echo $student['floatMidtermGrade']?$student['floatMidtermGrade']:"NGS";
                                                 ?>                                                
                                             <?php else: ?>                                                                            
                                             <select id="inputMidtermID-<?php echo $student['intCSID']; ?>"class="midtermInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>" value="<?php echo $student['floatMidtermGrade']; ?>">                              
@@ -99,7 +99,7 @@
                                         </td>
                                         <td>   
                                         <?php if(($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
-                                                    echo $student['floatFinalGrade'];
+                                                    echo $student['floatFinalGrade']?$student['floatFinalGrade']:"NGS";
                                                 ?>                                                
                                             <?php else: ?>                                                                                                                     
                                             <select id="inputFinalsID-<?php echo $student['intCSID']; ?>"class="finalsInput grade-input form-control" rel="<?php echo $student['intCSID'] ?>">                              
