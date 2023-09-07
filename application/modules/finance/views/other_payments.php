@@ -51,7 +51,8 @@
                                                 <option value="Cash Return">Cash Return</option>
                                                 <option value="Other Liability">Other Liability</option>                                                        
                                                 <option value="Refund from Supplier">Refund from Supplier</option>
-                                                <option value="Accounts Receivable Others">Accounts Receivable Others</option>                                                
+                                                <option value="Accounts Receivable Others">Accounts Receivable Others</option>    
+                                                <option value="Other Revenue">Other Revenue</option>                                            
                                             </select>                                            
                                         </div>
                                     </div>
