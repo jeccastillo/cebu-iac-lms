@@ -73,68 +73,25 @@
                     
               
                 <div class="form-group">
-                    <label for="intSubjectID">Finalized</label>
+                    <label for="intSubjectID">Grades for Submission</label>
                     <select <?php echo (!$admin)?'disabled':'';?> class="form-control" name="intFinalized" >
-                            <option <?php echo ($classlist['intFinalized'] == 0)?'selected':''; ?> value="0">Prelim</option> 
-                            <option  <?php echo ($classlist['intFinalized'] == 1)?'selected':''; ?> value="1">Midterm</option> 
-                            <option  <?php echo ($classlist['intFinalized'] == 2)?'selected':''; ?> value="2">Finals</option> 
-                            <option  <?php echo ($classlist['intFinalized'] == 3)?'selected':''; ?> value="3">Finished</option> 
+                            <option <?php echo ($classlist['intFinalized'] == 0)?'selected':''; ?> value="0">Midterm</option> 
+                            <option  <?php echo ($classlist['intFinalized'] == 1)?'selected':''; ?> value="1">Final</option> 
+                            <option  <?php echo ($classlist['intFinalized'] == 2)?'selected':''; ?> value="2">Done</option>                             
                     </select>
                 </div>
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="intSubjectID">Payable</label>
                     <select class="form-control" name="intWithPayment" >
                             <option <?php echo ($classlist['intWithPayment'] == 0)?'selected':''; ?> value="0">Yes</option> 
                             <option  <?php echo ($classlist['intWithPayment'] == 1)?'selected':''; ?> value="1">No</option> 
                     </select>
-                </div>
+                </div> -->
                 
            
                 
                 <input type="hidden" value="student" name="r1" >
-                   
-                
-                
-                <div id="student-box" class="<?php echo ($classlist['intFinalized'] == 1)?'hidden':''; ?>">
-                    <hr />
-                    
-                <h4>Select Students</h4>
-                <table id="student-chooser" class="table table-hover">
-                                        <thead><tr><th>id</th><th>Slug</th><th>Student Number</th><th>Name</th><th>Course</th><th>Actions</th></tr></thead>
-                                        <tbody></tbody>
-                                    </table>
-                <?php /*
-                    <table id="student-chooser" class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Course</th>
-                            <th>Year</th>
-                            <th>Section</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                
-                <?php foreach($students as $student): ?>
-                    <tr class="filter-year">
-                        <td><input type="checkbox" name="students[]" <?php echo (in_array($student['intID'],$students_in))?'checked':''; ?>  value="<?php echo $student['intID'] ?>"> <?php echo $student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']; ?>
-                    </td>
-                        <td>
-                            <?php echo $student['strCourse']; ?>
-                        </td>
-                        <td>
-                            <?php echo date("Y",strtotime($student['dteCreated'])); ?>
-                        </td>
-                        <td>
-                            <?php echo $student['strSection']; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                    </tbody>
-                </table>
-                */ ?>
-                </div>    
                 <hr />
                 <input type="submit" value="update" class="btn btn-default  btn-flat">
             </form>

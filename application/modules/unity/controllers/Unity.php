@@ -296,7 +296,7 @@ class Unity extends CI_Controller {
     public function edit_classlist($id)
     {
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
-        if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
+        if($this->is_registrar() || $this->is_super_admin())
         {
             $this->data["faculty_data"] = $this->session->all_userdata();
             $this->data['faculty_logged_in'] = $this->faculty_logged_in();
