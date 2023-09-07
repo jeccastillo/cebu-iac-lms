@@ -137,6 +137,34 @@ class Grading extends CI_Controller {
 
         redirect(base_url()."grading/edit_grading/".$post['id']);
     }
+
+    public function delete_grading_system(){
+       
+    
+        $post = $this->input->post();
+        $gs = $this->db->where('grading_system_id',$post['id'])
+                        ->or_where('grading_system_id_midterm',$post['id'])
+                        ->get('tb_mas_subjects')
+                        ->result_array();
+        if(empty($gs)){
+            $for_deletion = $this->db->get_where('tb_mas_grading',array('id'=>$post['id']))->first_row('array');
+            
+            $this->db->where('id',$post['id'])
+                    ->delete('tb_mas_grading');
+            $this->db->where('grading_id',$post['id'])
+                    ->delete('tb_mas_grading_item');
+
+            $data['message'] = "success";
+            $this->data_poster->log_action('Grading System','Deleted a Grading System | Name:'.$for_deletion['name'],'red');
+        }
+        else{
+            $data['message'] = "Grading System is in use can not delete";
+        }
+        
+    
+        echo json_encode($data);
+    
+    }
     
     public function submit_grading()
     {
