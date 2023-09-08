@@ -284,8 +284,7 @@ class Registrar extends CI_Controller {
                             ->select('tb_mas_classlist.*,strCode,strDescription,strLastname,strFirstname')
                             ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                             ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
-                            ->where($where)
-                            ->group_by('intSubjectID')
+                            ->where($where)                            
                             ->get('tb_mas_classlist')
                             ->result_array();   
 
