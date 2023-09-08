@@ -196,9 +196,11 @@ new Vue({
 
     methods: {        
         resetValues: function(){
-            this.request.faculty = undefined;
-            this.request.term = undefined;
+            this.request.faculty = undefined;            
             this.request.section = undefined;
+            this.request.sub_section = undefined;
+            this.request.year = undefined;
+            this.request.class_name = undefined;
             this.request.subject = undefined;
             this.results = [];
         },
