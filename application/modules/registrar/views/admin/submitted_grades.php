@@ -32,9 +32,9 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname+" "+item.strMiddlename }}</td>
                                 <td v-if="classlist.intFinalized >= 1">{{ item.floatMidtermGrade }}</td>
-                                <td v-else></td>
+                                <td v-else>Not yet submitted</td>
                                 <td v-if="classlist.intFinalized >= 2">{{ item.floatFinalGrade }}</td>
-                                <td v-else></td>
+                                <td v-else>Not yet submitted</td>
                             </tr>
                         </tbody>
                     </table>
