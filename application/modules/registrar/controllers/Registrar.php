@@ -275,11 +275,16 @@ class Registrar extends CI_Controller {
 
     public function search_grading_results(){
         $post = $this->input->post();
+        $where = array('strAcademicYear'=>$post['term']);
+        
+        if($post['faculty'] != "undefined")
+            $where['intFacultyID'] = $post['faculty'];
+
         $data['results'] = $this->db
                             ->select('tb_mas_classlist.*,strCode,strDescription,strLastname,strFirstname')
                             ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                             ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
-                            ->where(array('strAcademicYear'=>$post['term']))
+                            ->where($where)
                             ->group_by('intSubjectID')
                             ->get('tb_mas_classlist')
                             ->result_array();   
