@@ -104,6 +104,7 @@
                                 <td>{{ item.strClassName + item.year + item.strSection + " " + item.sub_section }}</td>
                                 <td>{{ item.strCode }}</td>
                                 <td>{{ item.strDescription }}</td>
+                                <td>{{ item.strLastname+" "+item.strFirstname }}</td>
                                 <td>{{ item.date_midterm_submitted}}</td>
                                 <td>{{ item.date_final_submitted }}</td>
                                 <td></td>
