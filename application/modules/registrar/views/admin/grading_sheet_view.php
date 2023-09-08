@@ -98,6 +98,17 @@
                                 <th>Final</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in results">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ item.strClassName + item.year + item.strSection + " " + item.sub_section }}</td>
+                                <td>{{ item.strCode }}</td>
+                                <td>{{ item.strDescription }}</td>
+                                <td>{{ item.date_midterm_submitted}}</td>
+                                <td>{{ item.date_final_submitted }}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -119,6 +130,7 @@ new Vue({
         faculty:[],    
         sections:[],
         subjects:[],
+        results:[],
         request: {
             faculty: undefined,
             term: undefined,
@@ -177,6 +189,21 @@ new Vue({
         },
         searchGrades: function(){
 
+            var formdata= new FormData();
+                for (const [key, value] of Object.entries(this.request)) {
+                    formdata.append(key,value);
+                }                                                    
+
+                this.loader_spinner = true;
+                axios.post(base_url + 'registrar/search_grading_results', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.loader_spinner = false;
+                    this.results = data.data.results;
+                });
         },
         
 

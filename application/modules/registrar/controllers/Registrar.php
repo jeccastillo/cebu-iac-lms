@@ -272,6 +272,17 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
 
     }
+
+    public function search_grading_results(){
+        $post = $this->input->post();
+        $data['results'] = $this->db
+                            ->select('tb_mas_classlist.*,strCode,strDescription')
+                            ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                            ->where(array('strAcademicYear'=>$post['term']))
+                            ->group_by('intSubjectID')
+                            ->get('tb_mas_classlist')
+                            ->result_array();   
+    }
     
     public function edit_ay($id)
     {
