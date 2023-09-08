@@ -208,6 +208,9 @@ new Vue({
                         if(this.results[i].sub_section != null){
                             this.results[i].sub_section = "-"+this.results[i].sub_section;
                         }
+                        else{
+                            this.results[i].sub_section = "";
+                        }
                     }
                 });
         },
