@@ -1714,8 +1714,10 @@ class Pdf extends CI_Controller {
         
         if($request['campus'] == "Cebu")
             $html = $this->load->view("print_or",$this->data,true);
-        else
+        else{
+            $pdf->SetFont( 'Arial', 'BI', 10 );
             $html = $this->load->view("print_or_makati",$this->data,true);
+        }
         //$html = $pdf->unhtmlentities($html);
 
         $this->data_poster->insert_or_print(
