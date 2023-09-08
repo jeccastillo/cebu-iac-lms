@@ -247,6 +247,7 @@ class Registrar extends CI_Controller {
 
     public function submitted_grades_data($id){
         $data['students'] = $this->data_fetcher->getClassListStudents($id);
+        $data['classlist'] = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row();
 
         echo json_encode($data);
     }

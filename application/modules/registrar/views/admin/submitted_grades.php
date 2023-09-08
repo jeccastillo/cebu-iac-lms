@@ -35,8 +35,10 @@
                             <tr v-for="(item,index) in results">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname+" "+item.strMiddlename }}</td>
-                                <td>{{ item.floatMidtermGrade }}</td>
-                                <td>{{ item.floatFinalGrade }}</td>
+                                <td v-if="classlist.intFinalized >= 1">{{ item.floatMidtermGrade }}</td>
+                                <td v-else></td>
+                                <td v-if="classlist.intFinalized >= 2">{{ item.floatFinalGrade }}</td>
+                                <td v-else></td>
                             </tr>
                         </tbody>
                     </table>
@@ -58,6 +60,7 @@ new Vue({
     data: {
         id:<?php echo $id; ?>,
         results:[],
+        classlist: undefined,
         
     },
 
@@ -71,6 +74,7 @@ new Vue({
         axios.get('<?php echo base_url(); ?>registrar/submitted_grades_data/'+this.id)
         .then((data) => {
            this.results = data.data.students;
+           this.classlist = data.data.classlist;
                         
         })
         .catch((error) => {
