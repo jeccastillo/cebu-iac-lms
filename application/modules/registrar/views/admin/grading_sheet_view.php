@@ -165,10 +165,10 @@ new Vue({
 
     methods: {        
         resetValues: function(){
-            this.request.faculty = undefined,
-            this.request.term = undefined,
-            this.request.section = undefined,
-            this.request.subject = undefined,
+            this.request.faculty = undefined;
+            this.request.term = undefined;
+            this.request.section = undefined;
+            this.request.subject = undefined;
         },
         changeDept: function(event){
             axios.get('<?php echo base_url(); ?>registrar/search_grading_data/'+event.target.value)
