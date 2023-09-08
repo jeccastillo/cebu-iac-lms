@@ -52,8 +52,36 @@
                                 Section
                             </div>
                             <div class="col-sm-4">
+                                <select class="form-control" v-model="request.class_name">
+                                    <option v-for="section in sections" :value="section.strClassName">{{ section.strClassName }}</option>
+                                </select>
+                                <select class="form-control" v-model="request.year">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
                                 <select class="form-control" v-model="request.section">
-                                    <option v-for="section in sections" :value="section.intID">{{ section.strClassName+section.year+section.strSection }}</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                                <select class="form-control" v-model="request.sub_section">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
                                 </select>
                             </div>
                             <div class="col-sm-4 text-left">
@@ -138,6 +166,9 @@ new Vue({
             term: undefined,
             section: undefined,
             subject: undefined,
+            class_name:undefined,
+            year: undefined,
+            sub_section: undefined,
         }, 
         
     },
