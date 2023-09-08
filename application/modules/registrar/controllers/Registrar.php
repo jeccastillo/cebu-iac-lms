@@ -279,6 +279,16 @@ class Registrar extends CI_Controller {
         
         if($post['faculty'] != "undefined")
             $where['intFacultyID'] = $post['faculty'];
+        
+        if($post['section'] != "undefined"){
+            $section = $this->db->get_where('tb_mas_classlist',array('intID'=>$post['section']))->first_row();
+            $where['strSection'] = $section->strSection;
+            $where['strClassName'] = $section->strClassName;
+            $where['year'] = $section->year;
+            if($section->sub_section){
+                $where['sub_section'] = $section->sub_section;
+            }
+        }
 
         $data['results'] = $this->db
                             ->select('tb_mas_classlist.*,strCode,strDescription,strLastname,strFirstname')
