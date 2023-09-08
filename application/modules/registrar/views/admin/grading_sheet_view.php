@@ -77,7 +77,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <input type="submit" class="btn btn-default" value="Search" />                            
-                                <button class="btn btn-default" @click="resetValues">Reset</button>
+                                <button class="btn btn-default" @click.prevent="resetValues">Reset</button>
                             </div>
                         </div>
                     </form>
@@ -169,6 +169,7 @@ new Vue({
             this.request.term = undefined;
             this.request.section = undefined;
             this.request.subject = undefined;
+            this.results = [];
         },
         changeDept: function(event){
             axios.get('<?php echo base_url(); ?>registrar/search_grading_data/'+event.target.value)
