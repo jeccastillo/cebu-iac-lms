@@ -282,6 +282,8 @@ class Registrar extends CI_Controller {
                             ->group_by('intSubjectID')
                             ->get('tb_mas_classlist')
                             ->result_array();   
+                            
+        echo json_encode($data);                            
     }
     
     public function edit_ay($id)
