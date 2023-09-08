@@ -204,6 +204,11 @@ new Vue({
                 .then(data => {
                     this.loader_spinner = false;
                     this.results = data.data.results;
+                    for(i in this.results){
+                        if(this.results[i].sub_section == "null"){
+                            this.results[i].sub_section = "";
+                        }
+                    }
                 });
         },
         
