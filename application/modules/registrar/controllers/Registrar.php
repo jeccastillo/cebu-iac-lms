@@ -279,6 +279,9 @@ class Registrar extends CI_Controller {
         
         if($post['faculty'] != "undefined")
             $where['intFacultyID'] = $post['faculty'];
+
+        if($post['subject'] != "undefined")
+            $where['intSubjectID'] = $post['subject'];
         
         if($post['section'] != "undefined"){        
             $where['strSection'] = $post['section'];        
