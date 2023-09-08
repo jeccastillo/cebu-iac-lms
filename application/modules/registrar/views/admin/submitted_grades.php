@@ -25,11 +25,7 @@
                                 <th rowspan="2">Student Name</th>                                
                                 <th rowspan="2">Midterm Grade</th>
                                 <th rowspan="2">Final Grade</th>                                
-                            </tr>
-                            <tr>                                
-                                <th>Midterm</th>
-                                <th>Final</th>
-                            </tr>
+                            </tr>                            
                         </thead>
                         <tbody>
                             <tr v-for="(item,index) in results">
