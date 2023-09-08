@@ -76,9 +76,7 @@
                         <hr />
                         <div class="row">
                             <div class="col-sm-6">
-                                <input type="submit" class="btn btn-default" value="Search" />
-                            </div>
-                            <div class="col-sm-6">
+                                <input type="submit" class="btn btn-default" value="Search" />                            
                                 <button class="btn btn-default" @click="resetValues">Reset</button>
                             </div>
                         </div>
