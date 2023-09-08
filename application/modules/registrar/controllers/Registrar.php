@@ -275,7 +275,7 @@ class Registrar extends CI_Controller {
 
     public function search_grading_results(){
         $post = $this->input->post();
-        $where = array('strAcademicYear'=>$post['term']);
+        $where = array('strAcademicYear'=>$post['term'],'isDissolved'=>0);
         
         if($post['faculty'] != "undefined")
             $where['intFacultyID'] = $post['faculty'];
