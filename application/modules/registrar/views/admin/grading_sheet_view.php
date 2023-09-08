@@ -101,7 +101,7 @@
                         <tbody>
                             <tr v-for="(item,index) in results">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.strClassName + item.year + item.strSection + " " + item.sub_section }}</td>
+                                <td>{{ item.strClassName + item.year + item.strSection + item.sub_section }}</td>
                                 <td>{{ item.strCode }}</td>
                                 <td>{{ item.strDescription }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname }}</td>
@@ -206,7 +206,7 @@ new Vue({
                     this.results = data.data.results;
                     for(i in this.results){
                         if(this.results[i].sub_section == null){
-                            this.results[i].sub_section = "";
+                            this.results[i].sub_section = "-"+this.results[i].sub_section;
                         }
                     }
                 });
