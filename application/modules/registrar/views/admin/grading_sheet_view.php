@@ -52,11 +52,13 @@
                                 Section
                             </div>
                             <div class="col-sm-2">
+                                <label>Class Name</label>
                                 <select class="form-control" v-model="request.class_name">
                                     <option v-for="section in sections" :value="section.strClassName">{{ section.strClassName }}</option>
                                 </select>
                             </div>
                             <div class="col-sm-2">
+                                <label>Year Level</label>
                                 <select class="form-control" v-model="request.year">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -65,6 +67,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-2">
+                                <label>Section Number</label>
                                 <select class="form-control" v-model="request.section">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -78,6 +81,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-2">
+                                <label>Sub Section</label>
                                 <select class="form-control" v-model="request.sub_section">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -89,11 +93,8 @@
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                 </select>
-                            </div>                            
-                            <div class="col-sm-4 text-left">
-                                *Leave blank to display all sections
-                            </div>
-                        </div>
+                            </div>                                                        
+                        </div>                        
                         <div v-if="request.term" class="row" style="margin-bottom:10px">
                             <div class="col-sm-2 text-right">
                                 Subject
@@ -102,10 +103,7 @@
                                 <select class="form-control" v-model="request.subject">
                                     <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode }}</option>
                                 </select>
-                            </div>
-                            <div class="col-sm-4 text-left">
-                                *Leave blank to display all subjects
-                            </div>
+                            </div>                            
                         </div>
                         <hr />
                         <div class="row">
