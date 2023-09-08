@@ -504,13 +504,17 @@
                         <i class="fa fa-circle text-green"></i> <span>Registrar</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
-                    <ul class="treeview-menu">
+                    <ul class="treeview-menu">                        
                         <li class="<?php echo (isset($page) && $page=="reports")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>registrar/registrar_reports"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Reports</a></li>
-                        <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a
+                        <!-- <li class="<?php echo (isset($page) && $page=="add_ay")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>registrar/completions" style="margin-left: 10px;"><i
-                                    class="ion ion-android-list"></i> View Completions</a></li>
+                                    class="ion ion-android-list"></i> View Completions</a></li> -->
+                                    
+                        <li class="<?php echo (isset($page) && $page=="grading_sheet_view")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>registrar/search_grading" style="margin-left: 10px;"><i
+                                    class="fa fa-file"></i> Grading Sheet</a></li>                                    
                         <li class="<?php echo (isset($page) && $page=="register_student")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>registrar/register_student" style="margin-left: 10px;"><i
                                     class="ion ion-compose"></i> Student Fee Assessment</a></li>
