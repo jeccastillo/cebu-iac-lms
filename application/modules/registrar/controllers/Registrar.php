@@ -257,7 +257,7 @@ class Registrar extends CI_Controller {
     public function search_grading_sections($term){
         
         $data['sections'] = $this->db->where(array('strAcademicYear'=>$term))
-                                     ->group_by(array('strClassName','year','strSection'))
+                                     ->group_by(array('strClassName'))
                                      ->get('tb_mas_classlist')
                                      ->result_array();
 
