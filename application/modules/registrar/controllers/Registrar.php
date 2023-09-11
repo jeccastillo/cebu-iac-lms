@@ -257,7 +257,7 @@ class Registrar extends CI_Controller {
 
     }
 
-    public function student_grade_slip_data($sem,$id){
+    public function student_grade_slip_data($id,$sem){
                         
         $ret['student'] = $this->data_fetcher->getStudent($id);
         switch($ret['student']['level']){
