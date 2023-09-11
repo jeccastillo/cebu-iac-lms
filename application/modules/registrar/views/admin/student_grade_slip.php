@@ -43,7 +43,8 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         sem: '<?php echo $sem; ?>',        
-        id: '<?php echo $id; ?>',                                      
+        id: '<?php echo $id; ?>',    
+        student: undefined,                                  
     },
 
     mounted() {
@@ -53,10 +54,7 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'registrar/student_grade_slip_data/'+this.id+'/'+this.sem)
                 .then((data) => {  
-                   this.enrolled = data.data.data;
-                   for(i in this.enrolled){
-                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
-                   }
+                  this.student = data.data.student;
                    
                 })
             .catch((error) => {
