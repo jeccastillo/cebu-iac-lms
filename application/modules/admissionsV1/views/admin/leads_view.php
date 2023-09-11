@@ -14,7 +14,7 @@
         <div class="pull-right">
             <select id="select-term-leads" class="form-control" >
                 <?php foreach($sy as $s): ?>
-                    <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                    <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
