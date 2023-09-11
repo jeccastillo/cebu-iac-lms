@@ -4,22 +4,22 @@
                     
                 </td>
             </tr>            
-            <tr>
-                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="120" /></td>        
+            <tr>                
             </tr>            
 <table border="0">    
     <tr style="line-height:12px;">
+        <td style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="120" /></td>        
         <td style="font-size:9px;text-align:center;"><b>Information and Communications Technology Academy, Inc.</b></td>
     </tr>
     <tr style="line-height:12px;">
-        <td style="font-size:9px;text-align:center;"><b>(iACADEMY <?php echo $campus; ?>)</b></td>
+        <td colspan="2" style="font-size:9px;text-align:center;"><b>(iACADEMY <?php echo $campus; ?>)</b></td>
     </tr>
     <tr style="line-height:12px;">
-        <td style="font-size:9px;text-align:center;"><b>Grading Sheet</b></td>
+        <td colspan="2" style="font-size:9px;text-align:center;"><b>Grading Sheet</b></td>
     </tr>
         
     <tr style="line-height:10px;">
-        <td style="font-size:9px;text-align:center"></td>
+        <td colspan="2" style="font-size:9px;text-align:center"></td>
     </tr>
 </table>
 <table>    
@@ -69,7 +69,7 @@
         <th style="font-size:8px;"><b>Final</b></th>
     </tr>
 <?php 
-$hgt = 385; 
+$hgt = 395; 
 foreach($students as $student): 
     $hgt -= 15;
 ?>
