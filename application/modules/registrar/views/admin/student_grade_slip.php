@@ -3,12 +3,12 @@
         <h1>
             Student Grade Slip
             <small>
-                <a class="btn btn-app" href="<?php echo base_url(); ?>registrar/registrar_reports" >
+                <!-- <a class="btn btn-app" href="<?php echo base_url(); ?>registrar/registrar_reports" >
                     <i class="ion ion-arrow-left-a"></i>
                     All Reports
-                </a> 
-                <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" ><i class="fa fa-book"></i>Generate PDF</a> 
-                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a> 
+                </a>  -->
+                <!-- <a class="btn btn-app" target="_blank" href="<?php echo $pdf_link; ?>" ><i class="fa fa-book"></i>Generate PDF</a> 
+                <a class="btn btn-app" target="_blank" href="<?php echo $excel_link; ?>" ><i class="fa fa-book"></i>Generate Excel</a>  -->
             </small>
         </h1>     
     </section>
