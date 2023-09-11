@@ -69,7 +69,7 @@
         <th style="font-size:8px;"><b>Final</b></th>
     </tr>
 <?php 
-$hgt = 405; 
+$hgt = 385; 
 foreach($students as $student): 
     $hgt -= 15;
 ?>
