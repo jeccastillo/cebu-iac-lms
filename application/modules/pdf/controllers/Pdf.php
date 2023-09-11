@@ -517,6 +517,72 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
+    public function student_grade_slip_data($id,$sem){
+                        
+        $ret['student'] = $this->data_fetcher->getStudent($id);
+        switch($ret['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        
+        if($sem != 0)
+            $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == 'shs')
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        else
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+
+            $this->data['selected_ay'] = $ret['active_sem']['intID'];
+
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);                
+                
+        $sc_ret = [];
+        $gwa = 0;
+        $sum = 0;        
+        foreach($records as $record)
+        {
+            
+            if($record['include_gwa'] && $record['v3'])
+                $sum += $record['v3'];
+
+            $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
+            $record['schedule'] = $schedule;
+            $sc_ret[] = $record;
+        } 
+        if(count($records) > 0)
+            $gwa =  $sum/count($records);
+
+
+        $this->data['other_data'] = 
+        array(
+            'academic_standing' => null,
+            'totalUnitsEarned' => null,
+            'gwa' => $gwa,
+            'academic_standing' => null,
+
+        );
+        
+        $this->data['class_data'] = $sc_ret;
+        $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+        $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);                
+        
+
+        $html = $this->load->view("grade_slip",$this->data);
+
+    }
+
     function reservation_summary($sem){
         
         $post = $this->input->post();
