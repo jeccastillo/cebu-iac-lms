@@ -544,9 +544,9 @@ class Pdf extends CI_Controller {
         else
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
 
-            $this->data['selected_ay'] = $ret['active_sem']['intID'];
+            $this->data['selected_ay'] = $this->data['active_sem']['intID'];
 
-        $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);                
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);                
                 
         $sc_ret = [];
         $gwa = 0;
@@ -575,8 +575,8 @@ class Pdf extends CI_Controller {
         );
         
         $this->data['class_data'] = $sc_ret;
-        $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
-        $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);                
+        $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+        $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);                
         
 
         $html = $this->load->view("grade_slip",$this->data);
