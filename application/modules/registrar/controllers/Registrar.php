@@ -245,6 +245,79 @@ class Registrar extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+    public function student_grade_slip($id,$sem = 0){
+        $this->data['page'] = "student_grade_slip";
+        $this->data['opentree'] = "registrar";
+        $this->data['id'] = $id;        
+        $this->data['sem'] = $sem;
+        //print_r($this->data['classlist']);
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/student_grade_slip",$this->data);
+        $this->load->view("common/footer",$this->data); 
+
+    }
+
+    public function student_grade_slip_data($sem,$id){
+                        
+        $ret['student'] = $this->data_fetcher->getStudent($id);
+        switch($ret['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+        }
+        
+        if($sem != 0)
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == 'shs')
+            $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        else
+            $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+
+        $ret['selected_ay'] = $ret['active_sem']['intID'];
+
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
+
+        $ret['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();
+        
+        $sc_ret = [];
+        foreach($records as $record)
+        {
+            $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
+            $sc_ret = array_merge($sc_ret, $schedule);
+        }
+        
+        if($tab!=null)
+            $ret['tab'] = $tab;
+        else
+            $ret['tab'] = "tab_1";
+
+        $ret['other_data'] = 
+        array(
+            'academic_standing' => null,
+            'totalUnitsEarned' => null,
+            'gpa_curriculum' => null,
+            'academic_standing' => null,
+
+        );
+        
+        
+        $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+        $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);                
+        
+
+        echo json_encode($ret);
+
+    }
+
     public function submitted_grades_data($id){
         $data['students'] = $this->data_fetcher->getClassListStudents($id);
         $data['classlist'] = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row();
