@@ -961,7 +961,7 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue('B'.$i, "Prepared By: ____________________________")
-        ->setCellValue('B'.($i + 1), "               Registrar");
+        ->setCellValue('B'.($i + 1), "                                                         Registrar");
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.($i+1).':E'.($i+1));
