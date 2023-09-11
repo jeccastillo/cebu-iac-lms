@@ -456,7 +456,7 @@ class Pdf extends CI_Controller {
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
          
-        $html = $this->load->view("faculty_load_form",$this->data,true); 
+        $html = $this->load->view("grading_sheet",$this->data,true); 
         $pdf->AddPage();
         $pdf->writeHTML($html, true, false, true, false, '');            
         $pdf->Output("grading_sheet.pdf", 'I');
