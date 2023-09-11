@@ -306,7 +306,7 @@ class Registrar extends CI_Controller {
 
         );
         
-        
+        $ret['class_data'] = $sc_ret;
         $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
         $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);                
         
