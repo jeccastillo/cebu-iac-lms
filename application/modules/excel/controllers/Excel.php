@@ -841,7 +841,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A3', "Institutional Identifier");
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C3', '07XXX');
+                ->setCellValue('C3', '');
         
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A4', $active_sem['term_label']);
@@ -939,10 +939,10 @@ class Excel extends CI_Controller {
                  // Add some datat
                  $objPHPExcel->setActiveSheetIndex(0)
                  ->setCellValue('A'.$i, $active_sem['enumSem'])
-                 ->setCellValue('B'.$i, $student['strStudentNumber'])
+                 ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                  ->setCellValue('C'.$i, $student['strLastname'])
                  ->setCellValue('D'.$i, $student['strFirstname'])
-                 ->setCellValue('E'.$i, $student['strMiddlename'])
+                 ->setCellValue('E'.$i, strtoupper($student['strMiddlename']))
                  ->setCellValue('F'.$i, $student['strProgramCode'])
                  ->setCellValue('G'.$i, $student['enumGender'])
                  ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
@@ -956,6 +956,15 @@ class Excel extends CI_Controller {
                 $i++;
             }
         }
+
+        $i += 2;
+
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('B'.$i, "Prepared By: ____________________________")
+        ->setCellValue('B'.($i + 1), "               Registrar");
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.$i.':J'.$i);
 
         $objPHPExcel->getActiveSheet()->getStyle('C7:K7')
         ->getAlignment()->setWrapText(true);
