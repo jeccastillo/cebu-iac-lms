@@ -978,14 +978,7 @@ class Datatables extends CI_Controller {
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
             {              
                 
-                if($aColumns[$i] == 'strLastname'){
-                    $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
-                }
-                else if($aColumns[$i] == 'strFirstname'){
-
-                }
-                else                  
-                    $row[] = $aRow->$aColumns[$i];                                
+                $row[] = $aRow->$aColumns[$i];                                
             }
             $output['aaData'][] = $row;
         }
