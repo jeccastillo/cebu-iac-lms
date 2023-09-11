@@ -517,7 +517,7 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
-    public function student_grade_slip_data($id,$sem){
+    public function student_grade_slip($id,$sem){
                         
         $ret['student'] = $this->data_fetcher->getStudent($id);
         switch($ret['student']['level']){
