@@ -273,6 +273,8 @@ class Registrar extends CI_Controller {
             case 'other':
                 $stype = 'college';
             break;
+            default: 
+                $stype = 'college';
         }
         
         if($sem != 0)
