@@ -40,7 +40,7 @@
     <tr>
         <td>Section</td>
         <td colspan="2"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
-        <td><?php echo $sem['term_lable']; ?></td>
+        <td><?php echo $sem['term_label']; ?></td>
         <td colspan="2"><?php echo $sem['enumSem']; ?></td>
     </tr>
     <tr>
