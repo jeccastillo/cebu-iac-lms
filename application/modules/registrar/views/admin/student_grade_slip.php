@@ -90,7 +90,7 @@ new Vue({
 
     methods: {      
         selectTerm: function(event){
-            document.location = base_url + 'registrar/student_grade_slip/'+this.id+'/'+this.sem
+            document.location = base_url + 'registrar/student_grade_slip/'+this.id+'/'+event.target.value;
 
         },
                                        
