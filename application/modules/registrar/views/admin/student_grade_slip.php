@@ -65,7 +65,8 @@ new Vue({
         sem: '<?php echo $sem; ?>',        
         id: '<?php echo $id; ?>',    
         student: undefined,      
-        registration: undefined,                            
+        registration: undefined,      
+        terms: [],                      
     },
 
     mounted() {
@@ -77,7 +78,7 @@ new Vue({
                 .then((data) => {  
                   this.student = data.data.student;
                   this.registration = data.data.registration;
-                   
+                  this.terms = data.data.sy; 
                 })
             .catch((error) => {
                 console.log(error);
