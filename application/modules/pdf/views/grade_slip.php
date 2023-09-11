@@ -70,6 +70,9 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
+         <td style="line-height:10px;" colspan=5></td>         
+     </tr> 
+     <tr>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;">Course Code</th>
          <th style="width:40%;font-size:9px;border-bottom:1px solid #333;">Descriptive Title</th>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">Units</th>         
