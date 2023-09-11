@@ -520,7 +520,7 @@ class Pdf extends CI_Controller {
     public function student_grade_slip($id,$sem){
                         
         $this->data['student'] = $this->data_fetcher->getStudent($id);
-        switch($ret['student']['level']){
+        switch($this->data['student']['level']){
             case 'shs':
                 $stype = 'shs';
             break;
