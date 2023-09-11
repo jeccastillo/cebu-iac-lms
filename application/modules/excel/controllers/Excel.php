@@ -964,7 +964,9 @@ class Excel extends CI_Controller {
         ->setCellValue('B'.($i + 1), "               Registrar");
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.($i+1).':E'.($i+1));
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.$i.':J'.$i);
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.($i+1).':J'.($i+1));
 
         $objPHPExcel->getActiveSheet()->getStyle('C7:K7')
         ->getAlignment()->setWrapText(true);
