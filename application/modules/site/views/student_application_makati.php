@@ -892,7 +892,7 @@ new Vue({
             health_concerns: [],
             campus: "Makati",
             citizenship: 'Philippines',
-            syid: "<?php echo $current_term; ?>",
+            syid: undefined,
             student_type: '',
             type_id2: "",
             type_id3: ""

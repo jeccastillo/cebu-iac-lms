@@ -837,7 +837,7 @@ new Vue({
             program: "",
             health_concerns: [],
             citizenship: 'Philippines',
-            syid: "<?php echo $current_term; ?>",
+            syid: undefined,
             student_type: 'freshman',
         },
         loading_spinner: false,
