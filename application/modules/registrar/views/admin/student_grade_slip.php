@@ -19,11 +19,9 @@
                 <h4>Student Grade Slip</h4>
             </div>
             <div class="box-body">
-                <div class="row" style="margin-bottom:10px">
-                    <div class="col-sm-2 text-right">
-                        Term
-                    </div>
+                <div class="row" style="margin-bottom:10px">                    
                     <div class="col-sm-4">
+                        <label>Select Term</label>
                         <select class="form-control" required @change="selectTerm($event)" v-model="sem">
                             <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                         </select>
