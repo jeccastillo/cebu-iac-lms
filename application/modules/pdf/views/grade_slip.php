@@ -80,7 +80,7 @@ $html .= '
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">Units Earned</th>
      </tr>
      <tr>
-         <td style="line-height:10px;" colspan=5></td>         
+         <td style="line-height:5px;" colspan=5></td>         
      </tr>     
      ';
      
