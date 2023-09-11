@@ -37,18 +37,29 @@
             </tr>        
             </table>
            ';
-    $html .= '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>                            
-                <td style="border-bottom:1px solid #333">             
-                   <font style="font-size: 9;font-weight: bold;">Student Number:<br />'.$student['strStudentNumber'].'</font>
-               </td>
-               <td style="border-bottom:1px solid #333">             
-                   <font style="font-size: 9;font-weight: bold;">Student Name:<br />'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
-               </td>
-               <td style="border-bottom:1px solid #333">             
-                   <font style="font-size: 9;font-weight: bold;">Course:<br />'.$student['strProgramDescription'].'</font>
-               </td>
-           </tr>        
+    $html .= '<table border="1" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+                <tr>                            
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">Student Number:<br /></font>
+                    </td>
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">Student Name:<br /></font>
+                    </td>
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">Course:<br /></font>
+                    </td>
+                </tr>
+                <tr>                            
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">'.$student['strStudentNumber'].'</font>
+                    </td>
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+                    </td>
+                    <td style="border-bottom:1px solid #333">             
+                        <font style="font-size: 8;">'.$student['strProgramDescription'].'</font>
+                    </td>
+                </tr>        
            </table>
           ';
     
@@ -84,7 +95,7 @@ $html .= '
                 <td style="font-size:8px;">'.$units_earned.'</td>
             </tr>
             <tr style="line-height:5px;">
-                <th colspan="6"></th>
+                <th colspan="6">GWA:'.$other_data['gwa'].'</th>
             </tr>
             ';
     }
