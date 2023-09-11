@@ -87,9 +87,9 @@ $html .= '
             <tr>
                 <td style="font-size:8px;">'.$item['strCode'].'</td>
                 <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                <td style="font-size:8px;">'.$item['strUnits'].'</td>
+                <td style="font-size:8px;">'.nubmer_format($item['strUnits'],1).'</td>
                 <td style="font-size:8px;">'.$grade.'</td>
-                <td style="font-size:8px;">'.$units_earned.'</td>
+                <td style="font-size:8px;">'.nubmer_format($item['strUnits'],1).'</td>
             </tr>            
             ';
     }
@@ -98,7 +98,7 @@ $html .= '
     $html .='<tr style="line-height:5px;">
                 <th colspan="6">GWA:'.$other_data['gwa'].'</th>
             </tr>
-        </table>';
+            </table>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
