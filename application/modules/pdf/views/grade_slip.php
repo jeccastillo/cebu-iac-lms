@@ -87,7 +87,7 @@ $html .= '
             <tr>
                 <td style="font-size:8px;">'.$item['strCode'].'</td>
                 <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                <td style="font-size:8px;">'.number_format($item['strUnits'], 1).'</td>
+                <td style="font-size:8px;">'.$item['strUnits'].'</td>
                 <td style="font-size:8px;">'.$grade.'</td>
                 <td style="font-size:8px;">'.$units_earned.'</td>
             </tr>            
