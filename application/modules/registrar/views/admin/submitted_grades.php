@@ -4,7 +4,12 @@
         <section class="content-header">
             <h1>
                 Grades
-                <small>                
+                <small>    
+                    <a class="btn btn-app" :href="base_url + 'pdf/grading_sheet/' + id" >
+                        <i class="ion ion-printer"></i>
+                        Generate Report
+                    </a>  
+                                
                 </small>
             </h1>
 
@@ -32,9 +37,9 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname+" "+item.strMiddlename }}</td>
                                 <td v-if="classlist.intFinalized >= 1">{{ item.floatMidtermGrade }}</td>
-                                <td v-else>Not yet submitted</td>
+                                <td v-else>NGS</td>
                                 <td v-if="classlist.intFinalized >= 2">{{ item.floatFinalGrade }}</td>
-                                <td v-else>Not yet submitted</td>
+                                <td v-else>NGS</td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,6 +62,7 @@ new Vue({
         id:<?php echo $id; ?>,
         results:[],
         classlist: undefined,
+        base_url: '<?php echo base_url(); ?>',
         
     },
 

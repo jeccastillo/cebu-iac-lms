@@ -3277,6 +3277,56 @@ class Data_fetcher extends CI_Model {
 
         return $ret;
     }
+
+    function getClasslistById($id)
+    {
+        $ret = [];
+        $where = array('tb_mas_classlist.intID'=>$id);        
+
+        $classlist = $this->db
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
+        ->from('tb_mas_classlist')
+        ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
+        ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+        ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
+        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
+        ->where($where)
+        ->get()
+        ->first_row('array'); 
+
+        
+            $classlist['slots_taken_enrolled'] = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->get()
+                ->num_rows();
+
+            $schedule = $this->getScheduleByCode($classlist['intID']);        
+            $sched_day = '';
+            $sched_time = '';
+            $sched_room = '';                
+            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                    
+            foreach($schedule as $sched) {
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
+                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+            }
+                                                                
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
+
+            $classlist['sched_day'] = $sched_day;
+            $classlist['sched_time'] = $sched_time;
+            $classlist['sched_room'] = $sched_room;
+
+        return $classlist;
+    }
+
     
     function getAllClasslist($sem,$dept = null,$admin=false)
     {
