@@ -40,13 +40,13 @@
     $html .= '<table border="1" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
                     <td style="border-bottom:1px solid #333">             
-                        <font style="font-size: 8;">Student Number:<br /></font>
+                        <font style="font-size: 8;">Student Number:</font>
                     </td>
                     <td style="border-bottom:1px solid #333">             
-                        <font style="font-size: 8;">Student Name:<br /></font>
+                        <font style="font-size: 8;">Student Name:</font>
                     </td>
                     <td style="border-bottom:1px solid #333">             
-                        <font style="font-size: 8;">Course:<br /></font>
+                        <font style="font-size: 8;">Course:</font>
                     </td>
                 </tr>
                 <tr>                            
