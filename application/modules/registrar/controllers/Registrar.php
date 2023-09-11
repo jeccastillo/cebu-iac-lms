@@ -290,6 +290,7 @@ class Registrar extends CI_Controller {
 
         $ret['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();
                 
+        $sc_ret = [];
         foreach($records as $record)
         {
             $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
