@@ -824,6 +824,7 @@
 new Vue({
     el: "#adminssions-form",
     data: {
+        syid: <?php echo $current_term; ?>,
         address:{
             hns:undefined,
             brgy_subd:undefined,
@@ -853,7 +854,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs/'+this.request.syid, {
+            .get(this.base_url + 'site/view_active_programs/'+this.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },

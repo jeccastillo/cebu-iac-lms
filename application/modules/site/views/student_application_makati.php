@@ -885,6 +885,7 @@
 new Vue({
     el: "#adminssions-form",
     data: {
+        syid: <?php echo $current_term; ?>,
         request: {
             type_id: "",
             date_of_birth: "",
@@ -909,7 +910,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs_makati/' + this.request.syid, {
+            .get(this.base_url + 'site/view_active_programs_makati/' + this.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
