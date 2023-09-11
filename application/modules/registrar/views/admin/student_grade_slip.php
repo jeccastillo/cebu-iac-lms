@@ -66,7 +66,7 @@
                     </tbody>
                 </table>
                 <hr />
-                <a :href="base_url + 'pdf/student_grade_slip/'+id+'/'+sem" class="btn btn-app"><i class="fa fa-print"></i> Print</a>
+                <a target="_blank" :href="base_url + 'pdf/student_grade_slip/'+id+'/'+sem" class="btn btn-app"><i class="fa fa-print"></i> Print</a>
             </div>        
         </div>
     </div>
