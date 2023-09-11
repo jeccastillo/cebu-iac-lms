@@ -27,6 +27,7 @@
                         </select>
                     </div>
                 </div>
+                <hr />
                 <div class="row">
                     <div class="col-sm-4">
                         Student Number:<br />
