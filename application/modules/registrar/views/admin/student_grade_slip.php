@@ -42,6 +42,29 @@
                         {{ student.strProgramDescription }}
                     </div>
                 </div>
+                <hr />
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Descriptive Title</th>
+                            <th>Units</th>
+                            <th>Final Grade</th>
+                            <th>Units Earned</th>
+                        </tr>                        
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in records">
+                            <td>{{ item.strCode }}</td>
+                            <td>{{ item.strDescription }}</td>
+                            <td>{{ item.strUnits }}</td>
+                            <td v-if="item.intFinalized >=2">{{ item.v3 }}</td>
+                            <td v-else>NGS</td>
+                            <td v-if="item.strRemarks =='Passed'">{{ item.strUnits }}</td>
+                            <td v-else>0</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>        
         </div>
     </div>
@@ -65,7 +88,8 @@ new Vue({
         id: '<?php echo $id; ?>',    
         student: undefined,      
         registration: undefined,      
-        terms: [],                      
+        terms: [],     
+        records:[],                 
     },
 
     mounted() {
@@ -77,7 +101,8 @@ new Vue({
                 .then((data) => {  
                   this.student = data.data.student;
                   this.registration = data.data.registration;
-                  this.terms = data.data.sy;                   
+                  this.terms = data.data.sy;   
+                  this.records = data.data.class_data;                
                 })
             .catch((error) => {
                 console.log(error);
