@@ -13,24 +13,38 @@
         </h1>     
     </section>
         <hr />
-    <div class="content">                
-        <h4>Student Grade Slip</h4>
-        <div>
-            <div class="row">
-                <div class="col-sm-4">
-                    Student Number:<br />
-                    {{ student.strStudentNumber }}
-                </div>
-                <div class="col-sm-4">
-                    Name:<br />
-                    {{ student.strLastname+", "+student.strFirstname }}
-                </div>
-                <div class="col-sm-4">
-                    Course:<br />
-                    {{ student.strProgramDescription }}
-                </div>
+    <div class="content">  
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4>Student Grade Slip</h4>
             </div>
-        </div>        
+            <div class="box-body">
+                <div class="row" style="margin-bottom:10px">
+                    <div class="col-sm-2 text-right">
+                        Term
+                    </div>
+                    <div class="col-sm-4">
+                        <select class="form-control" required @change="selectTerm($event)" v-model="request.term">
+                            <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        Student Number:<br />
+                        {{ student.strStudentNumber }}
+                    </div>
+                    <div class="col-sm-4">
+                        Name:<br />
+                        {{ student.strLastname+", "+student.strFirstname }}
+                    </div>
+                    <div class="col-sm-4">
+                        Course:<br />
+                        {{ student.strProgramDescription }}
+                    </div>
+                </div>
+            </div>        
+        </div>
     </div>
   
 </aside>
@@ -50,7 +64,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         sem: '<?php echo $sem; ?>',        
         id: '<?php echo $id; ?>',    
-        student: undefined,                                  
+        student: undefined,      
+        registration: undefined,                            
     },
 
     mounted() {
@@ -61,6 +76,7 @@ new Vue({
             axios.get(this.base_url + 'registrar/student_grade_slip_data/'+this.id+'/'+this.sem)
                 .then((data) => {  
                   this.student = data.data.student;
+                  this.registration = data.data.registration;
                    
                 })
             .catch((error) => {
@@ -72,7 +88,10 @@ new Vue({
     },
 
     methods: {      
-       
+        selectTerm: function(event){
+            document.location = base_url + 'registrar/student_grade_slip/'+this.id+'/'+this.sem
+
+        },
                                        
     }
 
