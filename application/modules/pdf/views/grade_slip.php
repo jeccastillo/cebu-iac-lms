@@ -37,13 +37,16 @@
             </tr>        
             </table>
            ';
-    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-           <tr>                            
-               <td style="border-bottom:1px solid #333">             
-                   <font style="font-size: 11;font-weight: bold;">Student Name:<br />'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+    $html .= '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+            <tr>                            
+                <td style="border-bottom:1px solid #333">             
+                   <font style="font-size: 9;font-weight: bold;">Student Number:<br />'.$student['strStudentNumber'].'</font>
                </td>
                <td style="border-bottom:1px solid #333">             
-                   <font style="font-size: 11;font-weight: bold;">Course:<br />'.$student['strProgramDescription'].'</font>
+                   <font style="font-size: 9;font-weight: bold;">Student Name:<br />'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+               </td>
+               <td style="border-bottom:1px solid #333">             
+                   <font style="font-size: 9;font-weight: bold;">Course:<br />'.$student['strProgramDescription'].'</font>
                </td>
            </tr>        
            </table>
