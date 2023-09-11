@@ -963,6 +963,10 @@ class Excel extends CI_Controller {
         ->setCellValue('B'.$i, "Prepared By: ____________________________")
         ->setCellValue('B'.($i + 1), "                                                         Registrar");
 
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('I'.$i, "Certified Correct: ____________________________")
+        ->setCellValue('I'.($i + 1), "                                                      College Dean");
+
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.($i+1).':E'.($i+1));
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.$i.':J'.$i);
