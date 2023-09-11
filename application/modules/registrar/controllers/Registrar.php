@@ -295,12 +295,7 @@ class Registrar extends CI_Controller {
         {
             $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
             $sc_ret = array_merge($sc_ret, $schedule);
-        }
-        
-        if($tab!=null)
-            $ret['tab'] = $tab;
-        else
-            $ret['tab'] = "tab_1";
+        }        
 
         $ret['other_data'] = 
         array(
