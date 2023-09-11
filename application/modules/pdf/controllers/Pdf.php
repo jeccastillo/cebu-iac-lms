@@ -565,7 +565,7 @@ class Pdf extends CI_Controller {
             $sc_ret[] = $record;
         } 
         if($total > 0)
-            $gwa =  $sum/$total;
+            $gwa =  round(($sum/$total),2);
 
 
         $this->data['other_data'] = 
