@@ -3,9 +3,7 @@
                 <td colspan = "3" width="100%" style="text-align: center;">             
                     
                 </td>
-            </tr>            
-            <tr>                
-            </tr>            
+            </tr>             
 <table border="0">    
     <tr style="line-height:12px;">
         <td style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="120" /></td>        
