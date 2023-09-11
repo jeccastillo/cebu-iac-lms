@@ -35,27 +35,27 @@
 <table border="1" cellpadding="2px">
     <tr>
         <td>Course Code</td>
-        <td colspan="2"><?php echo $classlist['strCode']; ?></td>
+        <td colspan="2"><b><?php echo $classlist['strCode']; ?></b></td>
         <td>SY</td>
-        <td colspan="2"><?php echo $sem['strYearStart'] . "-" . $sem['strYearEnd']; ?></td>
+        <td colspan="2"><b><?php echo $sem['strYearStart'] . "-" . $sem['strYearEnd']; ?></b></td>
     </tr>    
     <tr>
         <td>Course Description</td>
-        <td colspan="5"><?php echo $classlist['subjectDescription']; ?></td>                
+        <td colspan="5"><b><?php echo $classlist['subjectDescription']; ?></b></td>                
     </tr>        
     <tr>
         <td>Section</td>
-        <td colspan="2"><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></td>
+        <td colspan="2"><b><?php echo $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section']; ?></b></td>
         <td><?php echo $sem['term_label']; ?></td>
-        <td colspan="2"><?php echo $sem['enumSem']; ?></td>
+        <td colspan="2"><b><?php echo $sem['enumSem']; ?></b></td>
     </tr>
     <tr>
         <td>Schedule</td>
-        <td colspan="5"><?php echo $classlist['sched_day']." ".$classlist['sched_time']." ".$classlist['sched_room']; ?></td>                
+        <td colspan="5"><b><?php echo $classlist['sched_day']." ".$classlist['sched_time']." ".$classlist['sched_room']; ?></b></td>                
     </tr>
     <tr>
         <td>Faculty Name</td>
-        <td colspan="5"><?php echo $classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']; ?></td>                
+        <td colspan="5"><b><?php echo $classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']; ?></b></td>                
     </tr>
     <tr style="line-height:16px;text-align:center;">                        
         <th rowspan="2" style="font-size:8px;" width="15%"><b>Student No.</b></th>
