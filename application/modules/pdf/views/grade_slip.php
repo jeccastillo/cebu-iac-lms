@@ -75,10 +75,7 @@ $html .= '
          <th style="width:15%;font-size:9px;">Units</th>         
          <th style="width:15%;font-size:9px;">Final Grade</th>
          <th style="width:15%;font-size:9px;">Units Earned</th>
-     </tr>
-     <tr style="line-height:10px;">
-        <th colspan="6"></th>
-     </tr>
+     </tr>     
      ';
      
     
@@ -93,14 +90,16 @@ $html .= '
                 <td style="font-size:8px;">'.$item['strUnits'].'</td>
                 <td style="font-size:8px;">'.$grade.'</td>
                 <td style="font-size:8px;">'.$units_earned.'</td>
-            </tr>
-            <tr style="line-height:5px;">
-                <th colspan="6">GWA:'.$other_data['gwa'].'</th>
-            </tr>
+            </tr>            
             ';
     }
   
             
+    $html .='<tr style="line-height:5px;">
+                <th colspan="6">GWA:'.$other_data['gwa'].'</th>
+            </tr>
+        </table>';
+
 $pdf->writeHTML($html, true, false, true, false, '');
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
