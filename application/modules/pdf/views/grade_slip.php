@@ -88,14 +88,14 @@ $html .= '
     foreach($records as $item){                
         
         $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
-        $units_earned = ($item['strRemarks'] == "Passed")?$item['strUnits']:0;
+        $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.$item['strCode'].'</td>
                 <td style="font-size:8px;">'.$item['strDescription'].'</td>
                 <td style="font-size:8px;text-align:center;">'.number_format($item['strUnits'],1).'</td>
                 <td style="font-size:8px;text-align:center;">'.$grade.'</td>
-                <td style="font-size:8px;text-align:center;">'.number_format($item['strUnits'],1).'</td>
+                <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
             </tr>            
             ';
     }
