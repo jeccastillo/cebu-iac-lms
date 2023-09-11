@@ -16,17 +16,15 @@
     <div class="content">                
         <h4>Student Grade Slip</h4>
         <div>
-            
-        </div>
-        <!-- <h4>Enrolled</h4>
-        <div v-for="prog in reserved" class="row">
-            <div class="col-md-6">
-                {{ prog.program }}
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ student.strStudentNumber }}
+                </div>
+                <div class="col-sm-6">
+                    {{ student.strLastname+", "+student.strFirstname }}
+                </div>
             </div>
-            <div class="col-md-6">
-                {{ prog.reserved_count }}
-            </div>
-        </div> -->
+        </div>        
     </div>
   
 </aside>
