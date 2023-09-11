@@ -17,11 +17,17 @@
         <h4>Student Grade Slip</h4>
         <div>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
+                    Student Number:<br />
                     {{ student.strStudentNumber }}
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
+                    Name:<br />
                     {{ student.strLastname+", "+student.strFirstname }}
+                </div>
+                <div class="col-sm-4">
+                    Course:<br />
+                    {{ student.strProgramDescription }}
                 </div>
             </div>
         </div>        
