@@ -24,7 +24,7 @@
                         Term
                     </div>
                     <div class="col-sm-4">
-                        <select class="form-control" required @change="selectTerm($event)">
+                        <select class="form-control" required @change="selectTerm($event)" v-model="sem">
                             <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                         </select>
                     </div>
@@ -78,7 +78,7 @@ new Vue({
                 .then((data) => {  
                   this.student = data.data.student;
                   this.registration = data.data.registration;
-                  this.terms = data.data.sy; 
+                  this.terms = data.data.sy;                   
                 })
             .catch((error) => {
                 console.log(error);
