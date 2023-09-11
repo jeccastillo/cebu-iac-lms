@@ -83,12 +83,12 @@ $html .= '
          <td style="line-height:5px;" colspan=5></td>         
      </tr>     
      ';
-     
-    
+         
     foreach($records as $item){                
         
         $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
         $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
+        
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.$item['strCode'].'</td>
@@ -102,7 +102,8 @@ $html .= '
   
             
     $html .='<tr style="line-height:5px;">
-                <th colspan="6">GWA:'.$other_data['gwa'].'</th>
+                <th colspan="2">Total Units Earned:'.number_format($other_data['total_units'],1).'</th>
+                <th colspan="2">GWA:'.$other_data['gwa'].'</th>
             </tr>
             </table>';
 

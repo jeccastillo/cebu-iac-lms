@@ -552,12 +552,17 @@ class Pdf extends CI_Controller {
         $gwa = 0;
         $sum = 0;       
         $total = 0; 
+        $total_units = 0;
         foreach($records as $record)
         {
             
             if($record['include_gwa'] && $record['v3']){
                 $sum += $record['v3'];
                 $total++;
+            }
+
+            if($record['strRemarks'] == "Passed"){
+                $total_units += $record['strUnits'];
             }
 
             $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
@@ -571,7 +576,7 @@ class Pdf extends CI_Controller {
         $this->data['other_data'] = 
         array(
             'academic_standing' => null,
-            'totalUnitsEarned' => null,
+            'total_units' => $total_units,
             'gwa' => $gwa,
             'academic_standing' => null,
 
