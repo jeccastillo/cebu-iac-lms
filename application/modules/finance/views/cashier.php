@@ -41,7 +41,7 @@
                                         {{ cashier.or_current }}
                                     </td>  
                                     <td>
-                                        <input type="checkbox" class="form-control" :value="cashier.temporary_admin" />
+                                        <input type="checkbox" :value="cashier.temporary_admin" />
                                     </td>                                                                       
                                 </tr>                                 
                             </table>
