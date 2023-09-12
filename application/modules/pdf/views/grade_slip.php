@@ -132,7 +132,11 @@ $html .= '
                 <td style="line-height:10px;border-top:1px solid #333"></td>         
                 <td style="line-height:10px;border-top:1px solid #333"></td>         
             </tr>
-            </table>';
+            </table>
+            <h4>Grading System</h4>
+            <p>
+            </p>
+            ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
