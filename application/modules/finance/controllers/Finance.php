@@ -715,7 +715,12 @@ class Finance extends CI_Controller {
 
     public function cashier_data(){                             
 
-        $data['cashiers'] = $this->data_fetcher->getCashiers();        
+        $data['cashiers'] = [];
+        $cashiers = $this->data_fetcher->getCashiers();   
+        foreach($cashiers as $cashier){
+            $cashier['temporary_admin'] = $cashier['temporary_admin']?true:false;
+            $data['cashiers'][] = $cashier;
+        }     
         $data['finance_users'] = $this->data_fetcher->getFinanceList();
         $data['message'] = "Success";
         $data['success'] = true;
