@@ -41,7 +41,7 @@
                                         {{ cashier.or_current }}
                                     </td>  
                                     <td>
-                                        <input type="checkbox" :value="cashier.temporary_admin" />
+                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :value="cashier.temporary_admin" />
                                     </td>                                                                       
                                 </tr>                                 
                             </table>
@@ -131,6 +131,31 @@ new Vue({
 
                 if (data.data.success) {
                     location.reload();
+                } else {
+                    Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                    )
+                }
+            });
+        },
+
+        updateTemporaryAdmin: function(id,event){
+
+            var formdata = new FormData();                    
+            formdata.append('intID',id);
+            formdata.append('temporary_admin',event.target.value);
+            axios
+            .post(base_url + 'finance/temp_admin', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {                
+
+                if (data.data.success) {
+                    
                 } else {
                     Swal.fire(
                         'Failed!',
