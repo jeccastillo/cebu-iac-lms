@@ -118,12 +118,12 @@ $html .= '
             </tr>
             
             <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;">General Weighted Average</th> 
-                <th style="text-align:center;">'.$other_data['gwa'].'</th>
+                <th colspan="3" style="text-align:right;"><b>General Weighted Average</b></th> 
+                <th style="text-align:center;"><b>'.$other_data['gwa'].'</b></th>
             </tr>
             <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;">Total Units Earned</th>
-                <th style="text-align:center;">'.number_format($other_data['total_units'],1).'</th>                
+                <th colspan="3" style="text-align:right;"><b>Total Units Earned</b></th>
+                <th style="text-align:center;"><b>'.number_format($other_data['total_units'],1).'</b></th>                
             </tr>
             </table>';
 
