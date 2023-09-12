@@ -116,13 +116,14 @@ $html .= '
             <tr>
                 <td style="line-height:15px;" colspan=5></td>         
             </tr>
+            
             <tr>
-                <th colspan="3" style="text-align:right">Total Units Earned</th>
-                <th style="text-align:center;">'.number_format($other_data['total_units'],1).'</th>                
+                <th colspan="3" style="text-align:right;font-size:9px;">General Weighted Average</th> 
+                <th style="text-align:center;">'.$other_data['gwa'].'</th>
             </tr>
             <tr>
-                <th colspan="3" style="text-align:right">General Weighted Average</th> 
-                <th style="text-align:center;">'.$other_data['gwa'].'</th>
+                <th colspan="3" style="text-align:right;font-size:9px;">Total Units Earned</th>
+                <th style="text-align:center;">'.number_format($other_data['total_units'],1).'</th>                
             </tr>
             </table>';
 
