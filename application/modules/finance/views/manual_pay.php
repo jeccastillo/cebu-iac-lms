@@ -92,7 +92,7 @@
                                         <div class="form-group">
                                             <label>OR Number:</label>
                                             <label>OR Number <span class="text-danger">*</span> </label>
-                                            <div v-if="user.special_role == 2">
+                                            <div v-if="user.special_role == 2 || cashier.temporary_admin">
                                                 <input type="number" class="form-control" v-model="request.or_number" />
                                             </div>
                                             <div v-else>
