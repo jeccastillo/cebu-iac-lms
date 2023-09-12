@@ -11,7 +11,7 @@
     $pdf->SetTitle("Enrollment Summary");
     
     // set margins
-    $pdf->SetMargins(10, 20 , 10);
+    $pdf->SetMargins(10, 5 , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->SetFont('helvetica','',10);
@@ -33,14 +33,14 @@
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
                 <tr>             
                     <td></td>
-                    <td width="80%" style="text-align: center; border-bottom:1px solid #333">             
-                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
                     </td>
                 </tr>
                 <tr>             
                     <td></td>               
-                    <td width="80%" style="text-align: center; border-bottom:1px solid #333">             
-                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
                     </td>
                 </tr> 
                 <tr>
