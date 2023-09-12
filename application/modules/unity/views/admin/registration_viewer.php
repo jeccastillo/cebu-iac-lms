@@ -193,8 +193,8 @@
                                                         <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a></td>                                                        
                                                     </tr> 
                                                     <tr v-for="(inst,ctr) in installments">
-                                                        <td>Installment</td>
-                                                        <td>{{ '(' + installment_dates[ctr]+ ')' }}<a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
+                                                        <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
+                                                        <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
                                                     </tr>
                                                 </table>                                                
                                             </div>                                                                             
