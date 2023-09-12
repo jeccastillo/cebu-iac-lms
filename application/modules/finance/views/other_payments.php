@@ -46,7 +46,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Payment Type:</label>
+                                            <label>Particulars:</label>
                                             <select required class="form-control" v-model="description_other">
                                                 <option value="Cash Return">Cash Return</option>
                                                 <option value="Other Liability">Other Liability</option>                                                        
