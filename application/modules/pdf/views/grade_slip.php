@@ -84,11 +84,11 @@ $html .= '
          <td style="line-height:10px;" colspan=5></td>         
      </tr> 
      <tr>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;">Course Code</th>
-         <th style="width:40%;font-size:9px;border-bottom:1px solid #333;">Descriptive Title</th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">Units</th>         
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">Final Grade</th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">Units Earned</th>
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
+         <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Final Grade</b></th>
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
      </tr>
      <tr>
          <td style="line-height:5px;" colspan=5></td>         
