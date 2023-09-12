@@ -114,7 +114,7 @@ $html .= '
             
     $html .='
             <tr>
-                <td style="line-height:15px;" colspan=2></td>         
+                <td style="line-height:15px;" colspan=5></td>         
             </tr>
             
             <tr style="font-size:9px;">
@@ -126,7 +126,7 @@ $html .= '
                 <th style="text-align:center;"><b>'.number_format($other_data['total_units'],1).'</b></th>                
             </tr>
             <tr>
-                <td style="line-height:15px;border-bottom:1px solid #333" colspan=2></td>         
+                <td style="line-height:15px;border-bottom:1px solid #333" colspan=5></td>         
             </tr>
             </table>';
 
