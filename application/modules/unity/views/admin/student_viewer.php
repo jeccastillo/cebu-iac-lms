@@ -116,8 +116,10 @@
                                             <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>                                            
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
                                             <p><strong>Admission Status: </strong>{{ applicant_data.tos }}</p>
-                                            <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}</p>
-                                            <p><strong>Academic Status: </strong>{{ registration.enumRegistrationStatus }}</p>
+                                            <span v-if="registration">
+                                                <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}</p>
+                                                <p><strong>Academic Status: </strong>{{ registration.enumRegistrationStatus }}</p>
+                                            </span>
                                             <hr />                                        
                                         </div>                            
                                         <div class="col-lg-6">
