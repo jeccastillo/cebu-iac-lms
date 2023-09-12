@@ -502,13 +502,12 @@ new Vue({
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
                         
-                        this.installment_dates.push(this.sy.installment1);
-                        this.installment_dates.push(this.sy.installment2);
-                        this.installment_dates.push(this.sy.installment3);
-                        this.installment_dates.push(this.sy.installment4);
-                        this.installment_dates.push(this.sy.installment5);
-
-                        console.log(this.installment_dates);
+                        
+                        this.installment_dates.push(data.data.active_sem.installment1);
+                        this.installment_dates.push(data.data.active_sem.installment2);
+                        this.installment_dates.push(data.data.active_sem.installment3);
+                        this.installment_dates.push(data.data.active_sem.installment4);
+                        this.installment_dates.push(data.data.active_sem.installment5);                        
 
                         
                         if(data.data.registration){         
@@ -614,8 +613,6 @@ new Vue({
                                 
                                 var val = 0;                                
                                 
-
-                                console.log(this.installments);
 
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
                                 this.loader_spinner = false;
