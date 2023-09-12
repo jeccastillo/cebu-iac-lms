@@ -41,7 +41,7 @@
                                         {{ cashier.or_current }}
                                     </td>  
                                     <td>
-                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :v-model="cashier.temporary_admin" />
+                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :v-model="cashier.temporary_admin?1:0" />
                                     </td>                                                                       
                                 </tr>                                 
                             </table>
