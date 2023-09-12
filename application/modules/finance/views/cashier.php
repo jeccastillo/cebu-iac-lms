@@ -145,7 +145,12 @@ new Vue({
 
             var formdata = new FormData();                    
             formdata.append('intID',id);
-            formdata.append('temporary_admin',event.target.value);
+            
+            if('checked' in event.target) {
+                formdata.append('temporary_admin',1);
+            else
+                formdata.append('temporary_admin',0);
+
             axios
             .post(base_url + 'finance/temp_admin', formdata, {
                 headers: {
