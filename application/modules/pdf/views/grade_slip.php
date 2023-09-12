@@ -40,7 +40,7 @@
                 <tr>             
                     <td></td>               
                     <td width="80%" style="text-align: center; border-bottom:1px solid #333">             
-                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active['enumSem']).'</font>
+                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
                     </td>
                 </tr> 
                 <tr>
