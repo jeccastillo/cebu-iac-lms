@@ -1830,8 +1830,7 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $request['description'];
         $this->data['total_amount_due'] = $request['total_amount_due'];
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
-        echo $this->data['decimal'];
-        die();
+        $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  $request['transaction_date'];        
         
         if($request['campus'] == "Cebu")
