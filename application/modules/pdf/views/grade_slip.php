@@ -136,6 +136,9 @@ $html .= '
             <font style="font-weight:bold;">Grading System</font>
             <p>
             </p>
+            <div style="text-align:center;font-weight:bold;margin-top:15px;">
+                ___________________________________________________<br />Registrar
+            </div>
             ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
