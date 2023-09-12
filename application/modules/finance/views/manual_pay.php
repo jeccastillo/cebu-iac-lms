@@ -268,14 +268,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>OR Number <span class="text-danger">*</span> </label>
-                            <div v-if="user.special_role == 2">
-                                <input type="number" class="form-control" v-model="or_update.or_number" required>                        
-                            </div>
-                            <div v-else>
-                                <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
-                                <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>
-                            </div>
+                            <label>OR Number <span class="text-danger">*</span> </label>                           
+                            <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
+                            <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>                           
                         </div>
                     </div>
                     <div class=" modal-footer">
