@@ -136,7 +136,7 @@ $html .= '
             <font style="font-weight:bold;">Grading System</font>
             <p>
             </p>
-            <div style="text-align:center;font-weight:bold;margin-top:10px;">
+            <div style="text-align:center;font-weight:bold;margin-top:10px;font-size:9px;">
                 ___________________________________________________<br />Registrar
             </div>
             ';
