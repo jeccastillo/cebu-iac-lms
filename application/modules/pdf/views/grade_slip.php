@@ -118,7 +118,7 @@ $html .= '
             </tr>
             
             <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;"><b>General Weighted Average</b></th> 
+                <th colspan="3" style="text-align:right;"><b>General Weighted Average(GWA)</b></th> 
                 <th style="text-align:center;"><b>'.$other_data['gwa'].'</b></th>
             </tr>
             <tr style="font-size:9px;">
