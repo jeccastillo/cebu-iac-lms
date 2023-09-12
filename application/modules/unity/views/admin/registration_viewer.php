@@ -194,7 +194,7 @@
                                                     </tr> 
                                                     <tr v-for="(inst,ctr) in installments">
                                                         <td>Installment</td>
-                                                        <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ '(' + installment_dates[ctr]+ ')' + inst }}</a></td>
+                                                        <td>{{ '(' + installment_dates[ctr]+ ')' }}<a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
                                                     </tr>
                                                 </table>                                                
                                             </div>                                                                             
@@ -507,6 +507,8 @@ new Vue({
                         this.installment_dates.push(this.sy.installment3);
                         this.installment_dates.push(this.sy.installment4);
                         this.installment_dates.push(this.sy.installment5);
+
+                        console.log(this.installment_dates);
 
                         
                         if(data.data.registration){         
