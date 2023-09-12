@@ -24,6 +24,7 @@
                                     <th>OR End</th>
                                     <th>Update</th>
                                     <th>Current OR</th>                                                                        
+                                    <th>Temporary Admin</th>
                                 </tr>    
                                 <tr v-for="cashier in cashiers">
                                     <td>Cashier {{ cashier.intID }}</td>
@@ -38,7 +39,10 @@
                                     <td><a href="#" @click.prevent.stop="changeValue(cashier.intID)">change</a></td>
                                     <td>
                                         {{ cashier.or_current }}
-                                    </td>                                                                        
+                                    </td>  
+                                    <td>
+                                        <input type="checkbox" class="form-control" :value="cashier.temporary_admin" />
+                                    </td>                                                                       
                                 </tr>                                 
                             </table>
                             <hr />                                    
