@@ -41,7 +41,7 @@
                                         {{ cashier.or_current }}
                                     </td>  
                                     <td>
-                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :value="cashier.temporary_admin?true:false" />
+                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :checked="cashier.temporary_admin?true:false" />
                                     </td>                                                                       
                                 </tr>                                 
                             </table>
