@@ -91,8 +91,14 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number:</label>
-                                            <div>{{ request.or_number }}</div>
-                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                            <label>OR Number <span class="text-danger">*</span> </label>
+                                            <div v-if="user.special_role == 2">
+                                                <input type="number" class="form-control" v-model="request.or_number" />
+                                            </div>
+                                            <div v-else>
+                                                <div>{{ request.or_number }}</div>                                            
+                                                <input type="hidden" class="form-control" v-model="request.or_number" />
+                                            </div>                                            
                                         </div>
                                     </div>  
                                     <!-- <div class="col-sm-6">
@@ -263,8 +269,13 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>OR Number <span class="text-danger">*</span> </label>
-                            <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
-                            <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>
+                            <div v-if="user.special_role == 2">
+                                <input type="number" class="form-control" v-model="or_update.or_number" required>                        
+                            </div>
+                            <div v-else>
+                                <input type="hidden" class="form-control" v-model="or_update.or_number" required>                        
+                                <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>
+                            </div>
                         </div>
                     </div>
                     <div class=" modal-footer">
@@ -296,6 +307,9 @@ new Vue({
         applicant_id: undefined,
         reservation_payment: undefined,
         application_payment: undefined, 
+        user: {
+            special_role:0,
+        },
         payments: [],  
         uploaded_requirements: false,
         refunded_payments: [],    
@@ -375,7 +389,8 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;
-                this.or_update.sy_reference = data.data.current_sem;     
+                this.or_update.sy_reference = data.data.current_sem;   
+                this.user = data.data.user;  
                 this.or_update.student_campus = this.request.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){

@@ -68,6 +68,7 @@ class Finance extends CI_Controller {
     public function manualPayData($slug){
         $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_users',$slug,'slug');        
         $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
+        $data['user'] = $this->data['user'];
         $sem = $this->data_fetcher->get_active_sem();        
         $data['current_sem'] = $sem['intID'];
         $data['sem_year'] = $sem['strYearStart'];
