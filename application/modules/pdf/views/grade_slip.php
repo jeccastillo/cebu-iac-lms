@@ -32,14 +32,14 @@
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
                 <tr>             
-                    <td></td>
+                    <td width="20%"></td>
                     <td width="80%">             
                         <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
                     </td>
                 </tr>
                 <tr>             
                     <td></td>               
-                    <td width="80%">             
+                    <td>             
                         <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
                     </td>
                 </tr> 
