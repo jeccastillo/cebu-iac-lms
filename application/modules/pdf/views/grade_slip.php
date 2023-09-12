@@ -28,12 +28,13 @@
 
     $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
     $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
+    $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-                <tr>             
+                <tr>                             
                     <td rowspan="3" width="20%">
-                        <img width="60px;" src="https://i.ibb.co/9hgbYNB/seal.png" alt="seal" border="0">
+                        <img width="60px;" src="'.$seal.'" alt="seal" border="0">
                     </td>
                     <td width="80%">             
                         <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
