@@ -26,7 +26,7 @@
                                     <th>Current OR</th>                                                                        
                                     <th>Temporary Admin</th>
                                 </tr>    
-                                <tr v-for="cashier in cashiers">
+                                <tr v-for="(cashier,index) in cashiers">
                                     <td>Cashier {{ cashier.intID }}</td>
                                     <td>{{ cashier.strFirstname + " " + cashier.strLastname }}</td>                                    
                                     <td>
@@ -41,7 +41,7 @@
                                         {{ cashier.or_current }}
                                     </td>  
                                     <td>
-                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :checked="cashier.temporary_admin?checked:''" />
+                                        <input @click="updateTemporaryAdmin(cashier.intID,$event)" type="checkbox" :v-model="cashier[index].temporary_admin" />
                                     </td>                                                                       
                                 </tr>                                 
                             </table>
