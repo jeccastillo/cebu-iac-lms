@@ -33,7 +33,7 @@
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
                 <tr>             
                     <td rowspan="3" width="20%">
-                        <img width="100px;" src="https://i.ibb.co/9hgbYNB/seal.png" alt="seal" border="0">
+                        <img width="50px;" src="https://i.ibb.co/9hgbYNB/seal.png" alt="seal" border="0">
                     </td>
                     <td width="80%">             
                         <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
