@@ -26,18 +26,29 @@
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage('P', 'LEGAL');            
 
-    
+    $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
+    $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>                            
-                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Student Grade Slip '.$active_sem['enumSem'].' Term SY'.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].'</font>
-                </td>
-            </tr>        
+                <tr>             
+                    <td></td>
+                    <td width="80%" style="text-align: center; border-bottom:1px solid #333">             
+                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
+                    </td>
+                </tr>
+                <tr>             
+                    <td></td>               
+                    <td width="80%" style="text-align: center; border-bottom:1px solid #333">             
+                        <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active['enumSem']).'</font>
+                    </td>
+                </tr> 
+                <tr>
+                    <td style="line-height:10px;" colspan=5></td>         
+                </tr>        
             </table>
            ';
-    $html .= '<table border="1" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+    $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
                     <td style="border-bottom:1px solid #333">             
                         <font style="font-size: 8;">Student Number:</font>
