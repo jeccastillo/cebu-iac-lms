@@ -53,10 +53,10 @@
                     <td width="20%" style="border-bottom:1px solid #333">             
                         <font style="font-size: 8;">Student Number:</font>
                     </td>
-                    <td width="50%" style="border-bottom:1px solid #333">             
+                    <td width="40%" style="border-bottom:1px solid #333">             
                         <font style="font-size: 8;">Student Name:</font>
                     </td>
-                    <td width="30%" style="border-bottom:1px solid #333">             
+                    <td width="40%" style="border-bottom:1px solid #333">             
                         <font style="font-size: 8;">Course:</font>
                     </td>
                 </tr>
