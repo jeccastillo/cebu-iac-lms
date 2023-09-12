@@ -50,24 +50,24 @@
            ';
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
-                    <td width="20%" style="border-bottom:1px solid #333">             
+                    <td width="20%">             
                         <font style="font-size: 8;">Student Number:</font>
                     </td>
-                    <td width="40%" style="border-bottom:1px solid #333">             
+                    <td width="40%">             
                         <font style="font-size: 8;">Student Name:</font>
                     </td>
-                    <td width="40%" style="border-bottom:1px solid #333">             
+                    <td width="40%">             
                         <font style="font-size: 8;">Course:</font>
                     </td>
                 </tr>
                 <tr>                            
-                    <td style="border-bottom:1px solid #333">             
+                    <td>             
                         <font style="font-size: 8;">'.$student['strStudentNumber'].'</font>
                     </td>
-                    <td style="border-bottom:1px solid #333">             
+                    <td>             
                         <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>
-                    <td style="border-bottom:1px solid #333">             
+                    <td>             
                         <font style="font-size: 8;">'.$student['strProgramDescription'].'</font>
                     </td>
                 </tr>        
@@ -114,7 +114,7 @@ $html .= '
             
     $html .='
             <tr>
-                <td style="line-height:15px;" colspan=5></td>         
+                <td style="line-height:15px;" colspan=2></td>         
             </tr>
             
             <tr style="font-size:9px;">
@@ -124,6 +124,9 @@ $html .= '
             <tr style="font-size:9px;">
                 <th colspan="3" style="text-align:right;"><b>Total Units Earned</b></th>
                 <th style="text-align:center;"><b>'.number_format($other_data['total_units'],1).'</b></th>                
+            </tr>
+            <tr>
+                <td style="line-height:15px;border-bottom:1px solid #333" colspan=2></td>         
             </tr>
             </table>';
 
