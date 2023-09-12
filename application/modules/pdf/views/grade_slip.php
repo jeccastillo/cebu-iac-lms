@@ -133,7 +133,8 @@ $html .= '
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
             </tr>
             </table>
-            <font style="font-weight:bold;">Grading System</font>            
+            <font style="font-weight:bold;">Grading System</font>      
+            <p></p>      
             <div style="text-align:center;font-weight:bold;margin-top:10px;font-size:9px;">
                 ___________________________________________________<br />Registrar
             </div>
