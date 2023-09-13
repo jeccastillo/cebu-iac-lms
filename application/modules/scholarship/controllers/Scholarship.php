@@ -148,9 +148,28 @@ class Scholarship extends CI_Controller {
         $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$st_scholarship['discount_id']))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('intID'=>$st_scholarship['student_id']))->first_row('array');
         
+        $deductions = 0;
+        //Get deduction amount
+
         if($this->db
         ->where(array('id'=>$post['id']))
         ->update('tb_mas_student_discount',$post)){
+            if($post['status'] ==  "applied"){
+                //Add to Ledger            
+                $ledger['student_id'] = $student['intID'];
+                $ledger['name'] = "Scholarship";
+                $ledger['amount'] = -1 * $deductions;                
+                $ledger['date'] = date("Y-m-d H:i:s");
+                $ledger['syid'] = $st_scholarship['syid'];
+                $ledger['remarks'] = "Scholarship Deduction -OSAS Admin";
+                $ledger['scholarship_id'] = $scholarship['intID'];
+                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+            }            
+            else{
+                //remove from Ledger
+                $this->db->where(array('scholarship_id'=>$scholarship['intID'],'syid'=>$st_scholarship['syid'],'student_id'=>$student['intID']))
+                         ->delete('tb_mas_student_ledger');
+            }
             $data['success'] = "success";
             $data['message'] = "Updated Successfully";
             $this->data_poster->log_action('Scholarships','Updated Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
