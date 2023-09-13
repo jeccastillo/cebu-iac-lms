@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <hr />
-                    <input type="submit" value="update" class="btn btn-default btn-flat">
+                    <input type="submit" value="update details" class="btn btn-default btn-flat">
             </form>
         </div>
         <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_grading" method="post" role="form">
@@ -68,7 +68,7 @@
                 <button class="btn btn-default" id="remove-grade-line">-</button>
                 <button class="btn btn-default" id="add-grade-line">+</button>
                 <hr />
-                <input type="submit" value="update" class="btn btn-default btn-flat">
+                <input type="submit" value="add items" class="btn btn-default btn-flat">
             </div>
         </form>                       
         <div class="box-header">
