@@ -32,8 +32,7 @@
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
                         </div>
                         <div v-if="registration && user.special_role == 2" style="margin-right:1rem;" class="pull-right">                                                                         
-                            <select v-model="change_payment_type" @change="changeType($event)" class="form-control">
-                                <option value="none">None</option>
+                            <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>                                
                             </select>
@@ -523,12 +522,7 @@ new Vue({
                             this.tuition_data = data.data.tuition_data;                                               
                             this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total; 
-                            if(this.registration.downpayment == 1)
-                                this.change_payment_type = "partial";
-                            else if(this.registration.fullpayment == 1)                                                      
-                                this.change_payment_type = "full";
-                            else
-                                this.change_payment_type = "none";
+                            this.change_payment_type = this.payment_type;
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
@@ -1097,19 +1091,7 @@ new Vue({
             let url = this.base_url + 'unity/update_registration_payment_type';
             var formdata= new FormData();
             formdata.append("intRegistrationID",this.registration.intRegistrationID);
-            if(event.target.value == "full")
-            {                
-                formdata.append("downpayment",0);
-                formdata.append("fullpayment",1);
-            }
-            else if(event.target.value == "partial"){
-                formdata.append("downpayment",1);
-                formdata.append("fullpayment",0);
-            }
-            else{
-                formdata.append("downpayment",0);
-                formdata.append("fullpayment",0);
-            }
+            formdata.append("paymentType",event.target.value);                        
                         
             this.loader_spinner = true;
             
