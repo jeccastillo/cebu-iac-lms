@@ -86,7 +86,8 @@
                                 <th>Payment</th>
                                 <th>Balance</th>
                                 <th>Added/Changed By</th>                                
-                                <th>Actions</th>
+                                <th>Switch to Other</th>
+                                <th>Disable</th>
                             </tr>
                         </thead>
                         <tbody>                                                         
@@ -131,7 +132,8 @@
                                 <th>Payment</th>
                                 <th>Balance</th>
                                 <th>Added/Changed By</th>                                
-                                <th>Actions</th>
+                                <th>Switch to Tuition</th>
+                                <th>Disable</th>
                             </tr>
                         </thead>
                         <tbody>                            
