@@ -1105,7 +1105,7 @@ new Vue({
                             '/update-status', {
                                 status: this.registration_status,
                                 remarks: "Finance Admin Update",
-                                admissions_officer: this.user.strFirstname." ".this.user.strLastname,
+                                admissions_officer: this.user.strFirstname+" "+this.user.strLastname,
                             }, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
