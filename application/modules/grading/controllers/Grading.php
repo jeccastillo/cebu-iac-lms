@@ -237,8 +237,9 @@ class Grading extends CI_Controller {
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['grading_systems'] = $this->db->get('tb_mas_grading')->result_array();
         $ret['subjects'] = $this->db->get('tb_mas_subjects')->result_array();
-        $ret['overrides'] = $this->db->select('tb_mas_sy_grading_override.*,tb_mas_grading.name')
+        $ret['overrides'] = $this->db->select('tb_mas_sy_grading_override.*,tb_mas_grading.name,tb_mas_subjects.strCode')
                                      ->join('tb_mas_grading', 'tb_mas_sy_grading_override.grading_system_id = tb_mas_grading.id')
+                                     ->join('tb_mas_subjects', 'tb_mas_sy_grading_override.subject_id = tb_mas_subjects.intID')
                                      ->where(array('syid'=>$ret['active_sem']['intID']))
                                      ->get('tb_mas_sy_grading_override')
                                      ->result_array();
@@ -252,6 +253,17 @@ class Grading extends CI_Controller {
         $this->db->insert('tb_mas_sy_grading_override',$post);
         $data['sucess'] = true;
         $data['message'] = "Successfully added";
+        echo json_encode($data);
+    }
+
+    public function delete_override(){
+        $post =  $this->input->post();
+        
+        $this->db->where('id',$post['id'])
+                ->delete('tb_mas_sy_grading_override');
+
+        $data['sucess'] = true;
+        $data['message'] = "Successfully deleted";
         echo json_encode($data);
     }
     

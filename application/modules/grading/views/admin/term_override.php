@@ -50,6 +50,31 @@
                 <hr />                                
             </div>        
         </div>
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4>Overrides for this {{ active_sem.term_label }}</h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Grading System</th>
+                            <th>Subject</th>
+                            <th>Period</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in overrides">
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.strCode }}</td>
+                            <td>{{ item.period }}</td>
+                            <td><a class="btn btn-danger" href="#" @click.prevent="deleteOverride(item.id)">Delete</a></td>
+                        </tr>
+                    </tbody>
+                </table>                
+            </div>        
+        </div>
     </div>
   
 </aside>
@@ -67,7 +92,8 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',
-        sem: '<?php echo $sem; ?>',                    
+        sem: '<?php echo $sem; ?>',
+        active_sem: undefined,                    
         terms: [],      
         grading_systems:[],        
         subjects: [],
@@ -92,6 +118,7 @@ new Vue({
                   this.subjects = data.data.subjects;
                   this.overrides = data.data.overrides;   
                   this.sem = data.data.active_sem.intID; 
+                  this.active_sem = data.data.active_sem;
                   this.request.syid = this.sem;    
                 })
             .catch((error) => {
@@ -106,6 +133,44 @@ new Vue({
         selectTerm: function(event){
             document.location = base_url + 'grading/term_override/'+event.target.value;
 
+        },
+        deleteOverride: function(id){
+            var formdata= new FormData();
+            formdata.append('id',id);
+              
+
+            this.loader_spinner = true;
+            Swal.fire({
+                title: 'Continue?',
+                text: "Are you sure you want to continue deleting?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {     
+                    axios.post(base_url + 'grading/delete_override', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: "Delete Successful",
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        })
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                });
         },
         addOverride: function(){
             var formdata= new FormData();
