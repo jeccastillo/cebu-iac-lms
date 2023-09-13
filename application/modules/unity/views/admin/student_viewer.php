@@ -39,18 +39,7 @@
                 <div class="box-tools pull-right">
                     <select v-model="sem_student" @change="changeTermSelected" class="form-control" >
                         <option v-for="s in sy" :value="s.intID">{{s.enumSem + ' ' + term_type + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
-                    </select>
-                    <div v-if="registration" class="pull-right">
-            
-                        <label style="font-size:.6em;"> Registration Status</label>
-                            
-                        <select v-model="registration_status" @change="changeRegStatus" class="form-control">
-                            <option value="0">Registered</option>
-                            <option value="1">Enrolled</option>
-                            <option value="2">Cleared</option>
-                        </select>
-                        
-                    </div>
+                    </select>                   
                 </div>
                 <div style="clear:both"></div>
             </h1>
@@ -69,8 +58,7 @@
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
                             <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
-                            <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
-                            <li><a style="font-size:13px;" href="#">Country of Citizenship <span class="pull-right">{{ applicant_data.citizenship }}</span></a></li>
+                            <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>                            
                             <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
                             <li><a @click.prevent="resetStatus()" href="#"><i class="ion ion-android-close"></i> Reset Status</a> </li>
                             <li>
@@ -117,6 +105,7 @@
                                             <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>                                            
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
                                             <p><strong>Admission Status: </strong>{{ applicant_data.tos }}</p>
+                                            <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</li>
                                             <span v-if="registration">
                                                 <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}</p>
                                                 <p><strong>Academic Status: </strong>{{ registration.enumRegistrationStatus }}</p>
@@ -582,31 +571,7 @@ new Vue({
             document.location = this.base_url + "unity/student_viewer/" + 
             this.student.intID + "/" + this.sem_student + "/" + this.tab;
         },          
-         
-        changeRegStatus: function(){
-            let url = this.base_url + 'unity/update_rog_status';
-            var formdata= new FormData();
-            formdata.append("intRegistrationID",this.registration.intRegistrationID);
-            formdata.append("intROG",this.registration_status);
-            this.loader_spinner = true;
-            axios.post(url, formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {
-                this.loader_spinner = false;
-                Swal.fire({
-                    title: "Success",
-                    text: data.data.message,
-                    icon: "success"
-                }).then(function() {
-                    
-                });
-            });
-            
-            
-        }
+                 
     }
 
 })

@@ -469,6 +469,7 @@ class Unity extends CI_Controller {
             $ret['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
+            $ret['user'] = $this->data['user'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
             //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);

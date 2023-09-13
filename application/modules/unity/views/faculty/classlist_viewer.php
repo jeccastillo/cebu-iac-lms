@@ -85,7 +85,7 @@
                                     
                                         <?php if(!empty($student['registered'])): ?>                                       
                                         <td>        
-                                            <?php if(($classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin):                                                     
+                                            <?php if(($student['floatMidtermGrade'] == "OW" || $student['floatFinalGrade'] == "OW" || $classlist['intFinalized'] >= 1 || ($classlist['midterm_start'] <= date("Y-m-d") && $classlist['midterm_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin):                                                     
                                                     echo $student['floatMidtermGrade']?$student['floatMidtermGrade']:"NGS";
                                                 ?>                                                
                                             <?php else: ?>                                                                            
@@ -98,7 +98,7 @@
                                             <?php endif; ?>
                                         </td>
                                         <td>   
-                                        <?php if(($classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
+                                        <?php if(($student['floatMidtermGrade'] == "OW" || $student['floatFinalGrade'] == "OW" || $classlist['intFinalized'] >= 2 || ($classlist['final_start'] <= date("Y-m-d") && $classlist['final_end'] >= date("Y-m-d")) != 'active')  && !$is_super_admin): 
                                                     echo $student['floatFinalGrade']?$student['floatFinalGrade']:"NGS";
                                                 ?>                                                
                                             <?php else: ?>                                                                                                                     

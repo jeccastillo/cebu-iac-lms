@@ -14,17 +14,17 @@
                 </a>                           
             </small>
         </h1>
-        <!-- <div v-if="registration" class="pull-right">
+        <div v-if="registration" class="pull-right">
             
             <label style="font-size:.6em;"> Registration Status</label>
                 
             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
-                <option value="0">Registered</option>
+                <option value="0">Enlisted</option>
                 <option value="1">Enrolled</option>
                 <option value="2">Cleared</option>
             </select>
             
-        </div> -->        
+        </div>      
     </section>
         <hr />
     <div class="content">
@@ -414,6 +414,7 @@ new Vue({
         student:{},    
         cashier: undefined,     
         user_level: undefined, 
+        user: undefined,
         payment_type: 'full', 
         or_print: {
             or_number: undefined,
@@ -518,7 +519,7 @@ new Vue({
                             this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total;                            
                         }
-
+                        this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
                         this.student = data.data.student;         
                         this.or_print.student_name = this.request.strFirstname + ' ' + this.request.strLastname;
@@ -1098,14 +1099,37 @@ new Vue({
             })
             .then(data => {
                 this.loader_spinner = false;
-                if(data.data.success)
-                    Swal.fire({
-                        title: "Success",
-                        text: data.data.message,
-                        icon: "success"
-                    }).then(function() {
-                        location.reload();
-                    });
+                if(data.data.success){
+                    return axios
+                        .post(api_url + 'admissions/student-info/' + this.slug +
+                            '/update-status', {
+                                status: this.registration_status,
+                                remarks: "Finance Admin Update",
+                                admissions_officer: this.user.strFirstname." ".this.user.strLastname,
+                            }, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            if (data.data.success) {
+                                Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                   
+                }
                 else
                     Swal.fire({
                         title: "Failed",
