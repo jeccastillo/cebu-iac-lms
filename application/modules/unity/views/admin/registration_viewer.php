@@ -31,7 +31,7 @@
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
                         </div>
-                        <div v-if="registration && user.special_role == 2" style="margin-right:1rem;" class="pull-right">                                                                         
+                        <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>                                
