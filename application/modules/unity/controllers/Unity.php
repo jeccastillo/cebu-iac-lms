@@ -1880,19 +1880,35 @@ class Unity extends CI_Controller {
             
 
             $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
-            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$this->data['subject']['grading_system_id']))
+            //Check for override
+            $override_final = $this->db->where(array('subject_id'=>$this->data['classlist']['intSubjectID'],'period'=>'final','syid'=>$cl_ay))
+                                       ->get('tb_mas_sy_grading_override')
+                                       ->first_row('array');
+            
+            $grading_system = $override_final?$override_final['grading_system_id']:$this->data['subject']['grading_system_id'];
+            
+                
+            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$grading_system))
                                                     ->order_by('value','ASC')
                                                     ->get('tb_mas_grading_item')
                                                     ->result_array();
             
-            if($this->data['subject']['grading_system_id_midterm']) 
-                $this->data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$this->data['subject']['grading_system_id_midterm']))
+            
+            if(!$this->data['subject']['grading_system_id_midterm']) 
+                $this->data['grading_items_midterm'] = $this->data['grading_items'];                                                
+            else{
+                //Check for override midterm
+                $override_midterm = $this->db->where(array('subject_id'=>$this->data['classlist']['intSubjectID'],'period'=>'midterm','syid'=>$cl_ay))
+                                       ->get('tb_mas_sy_grading_override')
+                                       ->first_row('array');
+                
+                $grading_system_midterm = $override_midterm?$override_midterm['grading_system_id']:$this->data['subject']['grading_system_id_midterm'];
+
+                $this->data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$grading_system_midterm))
                                                 ->order_by('value','ASC')
                                                 ->get('tb_mas_grading_item')
-                                                ->result_array();         
-                                                
-            else
-                $this->data['grading_items_midterm'] = $this->data['grading_items'];
+                                                ->result_array();                  
+            }
 
                 
             $passing =0;
