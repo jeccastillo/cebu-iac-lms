@@ -522,7 +522,13 @@ new Vue({
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
                             this.payment_type = this.registration.paymentType;
-                            this.remaining_amount = data.data.tuition_data.total;                            
+                            this.remaining_amount = data.data.tuition_data.total; 
+                            if(this.registration.downpayment == 1)
+                                this.change_payment_type = "partial";
+                            else if(this.registration.fullpayment == 1)                                                      
+                                this.change_payment_type = "full";
+                            else
+                                this.change_payment_type = "none";
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
