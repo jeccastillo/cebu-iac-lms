@@ -167,6 +167,15 @@ class Grading extends CI_Controller {
         echo json_encode($data);
     
     }
+    public function update_details(){
+        if($this->is_admin() || $this->is_registrar()){
+            $post = $this->input->post();
+            $this->db->where(array('id'=>$post['id']))
+                     ->update('tb_mas_grading',$post);
+
+            redirect(base_url()."grading/edit_grading/".$post['id']);
+        }
+    }
     
     public function submit_grading()
     {

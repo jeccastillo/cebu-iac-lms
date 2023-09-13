@@ -9,14 +9,23 @@
                         <li class="active"><?php echo $grading['name']; ?></li>
                     </ol>
                 </section>
-<div class="content">
+<div class="content">    
     <div class="span10 box box-primary">
         <div class="box-header">
                 <h3 class="box-title">Edit Grading System - <?php echo $grading['name']; ?></h3>
+                <form action="<?php echo base_url(); ?>grading/update_details" method="post" role="form">
+                    <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">  
+                    <div class="row">
+                        <label>Name</label>
+                        <input type="text" required value="<?php echo $grading['name']; ?>" class="form-control" name="name" />
+                    </div>
+                    <hr />
+                    <input type="submit" value="update" class="btn btn-default btn-flat">
+                </form>
         </div>               
         <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_grading" method="post" role="form">
-            <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">
-            <div class="box-body">
+            <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">            
+            <div class="box-body">                                
                     <div class="row mt-5">
                         <div class="col-sm-4">
                             VALUE
