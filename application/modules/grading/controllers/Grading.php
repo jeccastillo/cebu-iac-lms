@@ -246,6 +246,14 @@ class Grading extends CI_Controller {
 
     }
     
+    public function submit_override()
+    {
+        $post =  $this->input->post();
+        $this->db->insert('tb_mas_sy_grading_override',$post);
+        $data['sucess'] = true;
+        $data['message'] = "Successfully added";
+        echo json_encode($data);
+    }
     
     
     public function delete_grading_item()

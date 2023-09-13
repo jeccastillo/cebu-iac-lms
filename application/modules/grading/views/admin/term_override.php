@@ -44,6 +44,8 @@
                             </select>
                         </div>
                     </div>
+                    <hr />
+                    <input type="submit" value="Add" class="btn btn-primary btn-lg" />
                 </form>
                 <hr />                                
             </div>        
@@ -109,6 +111,40 @@ new Vue({
             for (const [key, value] of Object.entries(this.request)) {
                 formdata.append(key,value);
             }  
+
+            this.loader_spinner = true;
+            Swal.fire({
+                title: 'Continue?',
+                text: "Are you sure you want to continue adding?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {     
+                    axios.post(base_url + 'grading/submit_override', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: "Adding Successful",
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        })
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                });
+            
         },
                                        
     }
