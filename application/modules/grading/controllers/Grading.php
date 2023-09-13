@@ -65,8 +65,8 @@ class Grading extends CI_Controller {
             $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
             
             $this->data['dpt'] = $dpt;
-            $this->data['page'] = "add_subject";
-            $this->data['opentree'] = "subject";
+            $this->data['page'] = "add_grading_system";
+            $this->data['opentree'] = "grading";
             
            
             $this->load->view("common/header",$this->data);
@@ -82,6 +82,8 @@ class Grading extends CI_Controller {
     
     public function edit_grading($id)
     {
+        $this->data['page'] = "add_grading_system";
+        $this->data['opentree'] = "grading";
                         
         $this->data['userlevel'] = $this->session->userdata('intUserLevel');
         $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id))->first_row('array');
@@ -201,8 +203,8 @@ class Grading extends CI_Controller {
     public function view_all_grading()
     {
         
-        $this->data['page'] = "view_subjects";
-        $this->data['opentree'] = "subject";
+        $this->data['page'] = "view_grading_systems";
+        $this->data['opentree'] = "grading";
         //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/grading_view",$this->data);
@@ -210,6 +212,37 @@ class Grading extends CI_Controller {
         $this->load->view("common/grading_conf",$this->data); 
         //print_r($this->data['classlist']);
         
+    }
+
+    public function term_override($sem = 0)
+    {
+        
+        $this->data['sem'] = $sem;
+        $this->data['page'] = "term_override";
+        $this->data['opentree'] = "grading";
+        //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/term_override",$this->data);
+        $this->load->view("common/footer",$this->data);         
+        //print_r($this->data['classlist']);
+        
+    }
+
+    public function term_override_data($sem){
+        if($sem != 0)
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        else
+            $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+
+        $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
+        $ret['grading_systems'] = $this->db->get('tb_mas_grading')->result_array();
+        $ret['subjects'] = $this->db->get('tb_mas_subjects')->result_array();
+        $ret['overrides'] = $this->db->select('tb_mas_sy_grading_override.*,tb_mas_grading.name')
+                                     ->join('tb_mas_grading', 'tb_mas_sy_grading_override.grading_system_id = tb_mas_grading.id')
+                                     ->where(array('syid'=>$ret['active_sem']['intID']))
+                                     ->get('tb_mas_sy_grading_override')
+                                     ->result_array();
+    
     }
     
     
