@@ -16,11 +16,22 @@
                 <div class="row" style="margin-bottom:10px">                    
                     <div class="col-sm-4">
                         <label>Select Term</label>
-                        <select class="form-control" required @change="selectTerm($event)" v-model="sem">
+                        <select class="form-control" @change="selectTerm($event)" v-model="sem">
                             <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                         </select>
                     </div>
                 </div>
+                <h4>Add Override</h4>
+                <form method="post" @submit.prevent="addOverride">
+                    <div class="row" style="margin-bottom:10px">                    
+                        <div class="col-sm-6">
+                            <label>Select Subject</label>
+                            <select class="form-control" required v-model="sem">
+                                <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode + " " + subject.strDescription  }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
                 <hr />                                
             </div>        
         </div>
@@ -72,6 +83,9 @@ new Vue({
     methods: {      
         selectTerm: function(event){
             document.location = base_url + 'grading/term_override/'+event.target.value;
+
+        },
+        addOverride: function(){
 
         },
                                        
