@@ -563,7 +563,7 @@
                                     class="ion ion-ios-plus-empty"></i> Add Grading</a></li>
                         <li class="<?php echo (isset($page) && $page=="term_override")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>grading/term_override" style="margin-left: 10px;"><i
-                                    class="ion ion-android-list"></i> Override Grading System for Term</a></li>                                    
+                                    class="ion ion-android-list"></i> GS Override</a></li>                                    
 
                     </ul>
 
