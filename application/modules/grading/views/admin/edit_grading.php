@@ -16,8 +16,10 @@
                 <form action="<?php echo base_url(); ?>grading/update_details" method="post" role="form">
                     <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">  
                     <div class="row">
-                        <label>Name</label>
-                        <input type="text" required value="<?php echo $grading['name']; ?>" class="form-control" name="name" />
+                        <div class="col-sm-6">
+                            <label>Name</label>
+                            <input type="text" required value="<?php echo $grading['name']; ?>" class="form-control" name="name" />
+                        </div>
                     </div>
                     <hr />
                     <input type="submit" value="update" class="btn btn-default btn-flat">
