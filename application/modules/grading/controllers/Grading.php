@@ -242,8 +242,8 @@ class Grading extends CI_Controller {
                                      ->where(array('syid'=>$ret['active_sem']['intID']))
                                      ->get('tb_mas_sy_grading_override')
                                      ->result_array();
-        echo json_encode($data);
-        
+        echo json_encode($ret);
+
     }
     
     
