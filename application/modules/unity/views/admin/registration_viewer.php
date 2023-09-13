@@ -31,6 +31,14 @@
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
                         </div>
+                        <div v-if="registration && user.special_role == 2" style="margin-right:1rem;" class="pull-right">                                                                         
+                            <select v-model="change_payment_type" @change="changeType($event)" class="form-control">
+                                <option value="none">None</option>
+                                <option value="full">Full Payment</option>
+                                <option value="partial">Installment</option>                                
+                            </select>
+                            
+                        </div>
                         <div v-if="registration" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
@@ -411,6 +419,7 @@ new Vue({
         cashier: undefined,     
         user_level: undefined, 
         user: undefined,
+        change_payment_type: undefined,
         payment_type: 'full', 
         or_print: {
             or_number: undefined,
@@ -1078,6 +1087,45 @@ new Vue({
                 })
             
         },       
+        changeType: function(event){
+            let url = this.base_url + 'unity/update_registration_payment_type';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intID);
+            if(event.target.value == "full")
+            {                
+                formdata.append("downpayment",0);
+                formdata.append("fullpayment",1);
+            }
+            else if(event.target.value == "partial"){
+                formdata.append("downpayment",1);
+                formdata.append("fullpayment",0);
+            }
+            else{
+                formdata.append("downpayment",0);
+                formdata.append("fullpayment",0);
+            }
+                        
+            this.loader_spinner = true;
+            
+            //validate description
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                if (data.data.success) {
+                        Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        },
         changeRegStatus: function(){
             let url = this.base_url + 'unity/update_rog_status';
             var formdata= new FormData();

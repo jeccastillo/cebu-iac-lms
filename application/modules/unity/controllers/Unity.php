@@ -1807,7 +1807,14 @@ class Unity extends CI_Controller {
         
         redirect(base_url()."unity/view_classlist_archive_admin");
     }
-    
+    public function update_registration_payment_type(){
+        $post = $this->input->post();
+        $this->db->where('intRegistrationID',$post['intRegistrationID'])
+                 ->update('tb_mas_registration',$post);
+
+        $data['success'] = true;
+        echo json_encode($data);
+    }
     public function classlist_viewer($id,$showAll = 0)
     {
 
