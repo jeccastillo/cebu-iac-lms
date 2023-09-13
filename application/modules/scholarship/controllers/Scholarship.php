@@ -150,11 +150,13 @@ class Scholarship extends CI_Controller {
         
         $deductions = 0;
         //Get deduction amount
-        $tuition_data = $this->data_fetcher->getTuition($student['intID'],$st_scholarship['syid'],$scholarship['intID']);
-        print_r($tuition_data);
-        die();
+        $tuition_data = $this->data_fetcher->getTuition($student['intID'],$st_scholarship['syid'],$scholarship['intID']);        
 
-        $deductions = $tuition_data['discount_deductions'];
+        if($scholarship['deduction_type'] == "scholarship")
+            $deductions = $tuition_data['scholarship_deductions'];
+        else
+            $deductions = $tuition_data['discount_deductions'];
+
         if($this->db
         ->where(array('id'=>$post['id']))
         ->update('tb_mas_student_discount',$post)){
