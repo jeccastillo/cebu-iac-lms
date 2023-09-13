@@ -12,8 +12,10 @@
 <div class="content">    
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Grading System - <?php echo $grading['name']; ?></h3>
-                <form action="<?php echo base_url(); ?>grading/update_details" method="post" role="form">
+                <h3 class="box-title">Edit Grading System - <?php echo $grading['name']; ?></h3>                
+        </div>               
+        <div class="box-body">
+            <form action="<?php echo base_url(); ?>grading/update_details" method="post" role="form">
                     <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">  
                     <div class="row">
                         <div class="col-sm-6">
@@ -23,8 +25,8 @@
                     </div>
                     <hr />
                     <input type="submit" value="update" class="btn btn-default btn-flat">
-                </form>
-        </div>               
+            </form>
+        </div>
         <form id="validate-subject" action="<?php echo base_url(); ?>grading/submit_grading" method="post" role="form">
             <input type="hidden" name="id"  id="id" value="<?php echo $grading['id']; ?>">            
             <div class="box-body">                                
