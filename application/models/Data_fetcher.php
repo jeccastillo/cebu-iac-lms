@@ -2193,7 +2193,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$scholarship,$discount,$subjects,$id,$class_type="regular",$syid,)
+    function getTuitionSubjects($stype,$scholarship,$discount,$subjects,$id,$class_type="regular",$syid)
     {
 
         $tuition = 0;
