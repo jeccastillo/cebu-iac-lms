@@ -94,7 +94,7 @@
                             <tr v-for="item in ledger">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
-                                <td :class="item.muted"></td>
+                                <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted">{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
