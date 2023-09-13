@@ -34,8 +34,7 @@
                         <div v-if="registration" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
-                                <option value="1">Enrolled</option>
-                                <option value="2">Cleared</option>
+                                <option value="1">Enrolled</option>                                
                             </select>
                             
                         </div>
