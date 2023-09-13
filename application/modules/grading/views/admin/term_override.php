@@ -91,7 +91,8 @@ new Vue({
                   this.grading_systems = data.data.grading_systems;  
                   this.subjects = data.data.subjects;
                   this.overrides = data.data.overrides;   
-                  this.sem = data.data.active_sem.intID;     
+                  this.sem = data.data.active_sem.intID; 
+                  this.request.syid = this.sem;    
                 })
             .catch((error) => {
                 console.log(error);
