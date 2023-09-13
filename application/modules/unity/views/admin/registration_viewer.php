@@ -1096,7 +1096,7 @@ new Vue({
         changeType: function(event){
             let url = this.base_url + 'unity/update_registration_payment_type';
             var formdata= new FormData();
-            formdata.append("intRegistrationID",this.registration.intID);
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
             if(event.target.value == "full")
             {                
                 formdata.append("downpayment",0);
