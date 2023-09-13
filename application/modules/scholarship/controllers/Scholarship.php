@@ -163,11 +163,11 @@ class Scholarship extends CI_Controller {
             if($post['status'] ==  "applied"){
                 //Add to Ledger            
                 $ledger['student_id'] = $student['intID'];
-                $ledger['name'] = "Scholarship";
+                $ledger['name'] = "Scholarship/Discount";
                 $ledger['amount'] = -1 * $deductions;                
                 $ledger['date'] = date("Y-m-d H:i:s");
                 $ledger['syid'] = $st_scholarship['syid'];
-                $ledger['remarks'] = "Scholarship Deduction -OSAS Admin";
+                $ledger['remarks'] = "Scholarship/Discount Deduction -OSAS Admin";
                 $ledger['scholarship_id'] = $scholarship['intID'];
                 $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
             }            
