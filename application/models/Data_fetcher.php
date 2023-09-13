@@ -2344,7 +2344,7 @@ class Data_fetcher extends CI_Model {
         $lab_scholarship_installment = 0;
         $other_scholarship = 0;
         $ctr = 0;        
-        
+        $scholarships_for_ledger = [];
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
@@ -2468,7 +2468,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment[] = $total_scholarship_installment_temp;
 
                 $scholarship_installment_grand_total += $total_scholarship_installment_temp;
-                $scholarship_grand_total += $total_scholarship_temp;
+                $scholarship_grand_total += $total_scholarship_temp;                
 
                 $ctr++;
             }

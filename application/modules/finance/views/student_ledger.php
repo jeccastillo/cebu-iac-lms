@@ -24,100 +24,143 @@
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                     <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
-                    <h4 class="widget-user-desc" style="margin-left:0;">Student Ledger</h4>                   
+                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
+                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4>                   
                 </div>                
             </div>                            
-            <form @submit.prevent="submitLedgerItem" method="post">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Date/Time</th>
-                            <th colspan="2">type</th>
-                            <th>Detail</th>
-                            <th>Sem/Term</th>
-                            <th>Assessment</th>
-                            <th>Payment</th>
-                            <th>Added/Changed By</th>
-                            <th>Balance</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>                             
-                        <tr v-if="finance && finance.special_role != 0">
-                            
-                            <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
-                            <td colspan="2">
-                                <select class="form-control" required v-model="request.type">
-                                    <option value="tuition">tuition</option>
-                                    <option value="other">other</option>
-                                </select>
-                            </td>
-                            <td><input type="text" class="form-control" required v-model="request.name"></td>
-                            <td>
-                                <select class="form-control" required v-model="request.syid">
-                                    <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                                </select>
-                            </td>
-                            <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
-                            <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
-                            <td></td>             
-                        </tr>
-                        <tr>
-                            <th colspan="10">Tuition</th>
-                        </tr>                           
-                        <tr v-for="item in ledger">
-                            <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }} </td>
-                            <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
-                            <td :class="item.muted">{{ item.name }}</td>
-                            <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                            <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
-                            <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
-                            <td :class="item.muted">{{ item.balance }}</td>
-                            <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                            <td v-if="finance && finance.special_role != 0">
-                                <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
-                                <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
-                            </td>
-                            <td v-else></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>Running Balance</td>
-                            <td>{{ running_balance }}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th colspan="10">Other</th>
-                        </tr>                           
-                        <tr v-for="item in other">
-                            <td :class="item.muted">{{ item.date }}</td>
-                            <td :class="item.muted">{{ item.type }}</td>
-                            <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'tuition')" class="btn btn-default">Switch</button></td>
-                            <td :class="item.muted">{{ item.name }}</td>
-                            <td :class="item.muted">{{ item.enumSem + " Term " + item.strYearStart + " - " + item.strYearEnd }}</td>
-                            <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
-                            <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
-                            <td :class="item.muted">{{ item.balance }}</td>
-                            <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                            <td v-if="finance && finance.special_role != 0">
-                                <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
-                                <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
-                            </td>
-                            <td v-else></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>Running Balance</td>
-                            <td>{{ running_balance_other }}</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>     
-            </form>  
+            <div class="box box-primary">
+                <div class="box-header">Add Ledger Item</div>
+                <div class="box-body">
+                    <form @submit.prevent="submitLedgerItem" method="post">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Particulars</th>
+                                    <th>Sem/Term</th>
+                                    <th>Amount</th>
+                                    <th>Remarks</th>
+                                    <th>Submit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="finance && finance.special_role != 0">                                
+                                    <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
+                                    <td colspan="2">
+                                        <select class="form-control" required v-model="request.type">
+                                            <option value="tuition">tuition</option>
+                                            <option value="other">other</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" required v-model="request.name"></td>
+                                    <td>
+                                        <select class="form-control" required v-model="request.syid">
+                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
+                                    <td><input type="text" v-model="request.remarks" class="form-control"></td>
+                                    <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
+                                    <td></td>             
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>  
+                </div>
+            </div>
+            <div class="box box-primary">
+                <div class="box-header">Tuition</div>
+                <div class="box-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>School Year</th>
+                                <th>Term/Semester</th>
+                                <th>Scholarship</th>
+                                <th>Payment Description</th>
+                                <th>O.R. Date</th>
+                                <th>O.R. Number</th>
+                                <th>Remarks</th>
+                                <th>Assessment</th>
+                                <th>Payment</th>
+                                <th>Balance</th>
+                                <th>Added/Changed By</th>                                
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>                                                         
+                            <tr v-for="item in ledger">
+                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
+                                <td :class="item.muted"></td>
+                                <td :class="item.muted">{{ item.name }}</td>
+                                <td :class="item.muted">{{  item.date }}</td>
+                                <td :class="item.muted">{{  item.or_number }}</td>
+                                <td :class="item.muted">{{  item.remarks }}</td>
+                                <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
+                                <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
+                                <td :class="item.muted">{{ item.balance }}</td>
+                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                                <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
+                                <td v-if="finance && finance.special_role != 0">
+                                    <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
+                                    <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
+                                </td>
+                                <td v-else></td>
+                            </tr>
+                            <tr>                                
+                                <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th colspan="10">Other</th>
+                            </tr>           
+                        </tbody>                
+                    </table>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>School Year</th>
+                                <th>Term/Semester</th>                                
+                                <th>Payment Description</th>
+                                <th>O.R. Date</th>
+                                <th>O.R. Number</th>
+                                <th>Remarks</th>
+                                <th>Assessment</th>
+                                <th>Payment</th>
+                                <th>Balance</th>
+                                <th>Added/Changed By</th>                                
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            <tr v-for="item in other">
+                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
+                                <td :class="item.muted">{{ item.name }}</td>
+                                <td :class="item.muted">{{  item.date }}</td>
+                                <td :class="item.muted">{{  item.or_number }}</td>
+                                <td :class="item.muted">{{  item.remarks }}</td>
+                                <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
+                                <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
+                                <td :class="item.muted">{{ item.balance }}</td>
+                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
+                                <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
+                                <td v-if="finance && finance.special_role != 0">
+                                    <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
+                                    <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
+                                </td>
+                                <td v-else></td>
+                            </tr>
+                            <tr>                                
+                                <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
+                            </tr>
+                        </tbody>
+                    </table>                     
+                </div>
+            </div>
+            
         </section>
     </div>
 </aside>
@@ -162,7 +205,8 @@ new Vue({
             name: undefined,
             syid: 0,
             amount: undefined, 
-            type: 'tuition',           
+            type: 'tuition',   
+            remarks: "",        
         }
     },
     mounted() {        
