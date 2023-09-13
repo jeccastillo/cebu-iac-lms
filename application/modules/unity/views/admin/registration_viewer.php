@@ -31,10 +31,7 @@
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
                         </div>
-                        <div v-if="registration" class="pull-right">
-            
-                            Registration Status: 
-                                
+                        <div v-if="registration" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>
