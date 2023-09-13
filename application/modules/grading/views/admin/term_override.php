@@ -26,8 +26,21 @@
                     <div class="row" style="margin-bottom:10px">                    
                         <div class="col-sm-6">
                             <label>Select Subject</label>
-                            <select class="form-control" required v-model="sem">
+                            <select class="form-control" required v-model="request.subject_id">
                                 <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode + " " + subject.strDescription  }}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Grading System</label>
+                            <select class="form-control" required v-model="request.grading_system_id">
+                                <option v-for="item in grading_systems" :value="item.id">{{ item.name  }}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Period</label>
+                            <select class="form-control" required v-model="request.period">
+                                <option value="midterm">Midterm</option>
+                                <option value="final">Final</option>
                             </select>
                         </div>
                     </div>
@@ -57,6 +70,12 @@ new Vue({
         grading_systems:[],        
         subjects: [],
         overrides:[],
+        request:{
+            subject_id: undefined,
+            period: undefined,
+            syid: '<?php echo $sem; ?>',
+            grading_system_id: undefined,
+        }
     },
 
     mounted() {
@@ -86,7 +105,10 @@ new Vue({
 
         },
         addOverride: function(){
-
+            var formdata= new FormData();
+            for (const [key, value] of Object.entries(this.request)) {
+                formdata.append(key,value);
+            }  
         },
                                        
     }

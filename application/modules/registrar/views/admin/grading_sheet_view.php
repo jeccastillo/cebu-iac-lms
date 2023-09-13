@@ -236,28 +236,28 @@ new Vue({
         searchGrades: function(){
 
             var formdata= new FormData();
-                for (const [key, value] of Object.entries(this.request)) {
-                    formdata.append(key,value);
-                }                                                    
+            for (const [key, value] of Object.entries(this.request)) {
+                formdata.append(key,value);
+            }                                                    
 
-                this.loader_spinner = true;
-                axios.post(base_url + 'registrar/search_grading_results', formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
+            this.loader_spinner = true;
+            axios.post(base_url + 'registrar/search_grading_results', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                this.results = data.data.results;
+                for(i in this.results){
+                    if(this.results[i].sub_section != null && this.results[i].sub_section != ""){
+                        this.results[i].sub_section = "-"+this.results[i].sub_section;
                     }
-                })
-                .then(data => {
-                    this.loader_spinner = false;
-                    this.results = data.data.results;
-                    for(i in this.results){
-                        if(this.results[i].sub_section != null && this.results[i].sub_section != ""){
-                            this.results[i].sub_section = "-"+this.results[i].sub_section;
-                        }
-                        else{
-                            this.results[i].sub_section = "";
-                        }
+                    else{
+                        this.results[i].sub_section = "";
                     }
-                });
+                }
+            });
         },
         
 
