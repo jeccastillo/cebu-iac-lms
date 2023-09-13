@@ -184,8 +184,8 @@ class Finance extends CI_Controller {
 
     public function student_ledger_data($id,$sem){
                 
-        $where_tuition = array('student_id'=>$id,'type'=>'tuition');
-        $where_other = array('student_id'=>$id,'type'=>'other');
+        $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');
+        $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
 
         if($sem != 0){
             $where_tuition['syid'] = $sem;
