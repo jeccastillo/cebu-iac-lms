@@ -13,18 +13,7 @@
                     <i class="ion ion-printer"></i>RF No Header
                 </a>                           
             </small>
-        </h1>
-        <div v-if="registration" class="pull-right">
-            
-            <label style="font-size:.6em;"> Registration Status</label>
-                
-            <select v-model="registration_status" @change="changeRegStatus" class="form-control">
-                <option value="0">Enlisted</option>
-                <option value="1">Enrolled</option>
-                <option value="2">Cleared</option>
-            </select>
-            
-        </div>      
+        </h1>              
     </section>
         <hr />
     <div class="content">
@@ -41,6 +30,17 @@
                         <!-- /.widget-user-image -->
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
+                        </div>
+                        <div v-if="registration" class="pull-right">
+            
+                            Registration Status: 
+                                
+                            <select v-model="registration_status" @change="changeRegStatus" class="form-control">
+                                <option value="0">Enlisted</option>
+                                <option value="1">Enrolled</option>
+                                <option value="2">Cleared</option>
+                            </select>
+                            
                         </div>
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
