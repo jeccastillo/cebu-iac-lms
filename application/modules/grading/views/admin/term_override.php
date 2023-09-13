@@ -58,7 +58,8 @@ new Vue({
                   this.terms = data.data.sy;                       
                   this.grading_systems = data.data.grading_systems;  
                   this.subjects = data.data.subjects;
-                  this.overrides = data.data.overrides;           
+                  this.overrides = data.data.overrides;   
+                  this.sem = data.data.active_sem.intID;     
                 })
             .catch((error) => {
                 console.log(error);
