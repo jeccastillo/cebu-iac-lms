@@ -1100,10 +1100,15 @@ new Vue({
             .then(data => {
                 this.loader_spinner = false;
                 if(data.data.success){
+                    var st = "Enrolled";
+                    if(this.registration_status == 0){
+                        st = "Enlisted";
+                    }
+
                     return axios
                         .post(api_url + 'admissions/student-info/' + this.slug +
                             '/update-status', {
-                                status: this.registration_status,
+                                status: st,
                                 remarks: "Finance Admin Update",
                                 admissions_officer: this.user.strFirstname+" "+this.user.strLastname,
                             }, {
