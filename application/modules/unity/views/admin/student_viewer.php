@@ -387,18 +387,18 @@ new Vue({
 
     mounted() {
 
-        let url_string = window.location.href;        
+        let url_string = window.location.href;                
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem )
                 .then((data) => {  
+                    console.log(data);
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
                         this.scholarship = data.data.scholarship?data.data.scholarship:{name:'none'};
                         this.discount = data.data.discount?data.data.discount:{name:'none'};
                         this.user_level = data.data.user_level;
-                        this.registration = data.data.registration;
-                        console.log(data.data);
+                        this.registration = data.data.registration;                        
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
