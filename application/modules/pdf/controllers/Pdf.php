@@ -560,6 +560,8 @@ class Pdf extends CI_Controller {
         else{
             $this->data['period_label'] = "Midterm Grade";
         }
+        print_r($records);
+        die();
         foreach($records as $record)
         {
             
