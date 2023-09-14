@@ -403,8 +403,17 @@ new Vue({
                         }
                         else{
                             this.scholarship = {name:'none'};
+                        } 
+                        if(data.data.discount.length > 0){
+                            var sch = "";
+                            for(i in data.data.discount)
+                                sch += data.data.discount[i].name+" ";
+                            this.discount = {name:sch};
+                        }
+                        else{
+                            this.discount = {name:'none'};
                         }                               
-                        this.discount = data.data.discount?data.data.discount:{name:'none'};
+                        
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;                        
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
