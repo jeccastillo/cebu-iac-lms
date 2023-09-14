@@ -1089,7 +1089,13 @@ class Unity extends CI_Controller {
                 }
 
                 $prev_year_sem = $grades[$i]['syID'];
-                $remarks = (strtoupper($grades[$i]['strRemarks'])=='PASSED')?'green-bg':''; ?> <?php echo ($grades[$i]['strRemarks']=='Failed' || $grades[$i]['strRemarks']=='Failed(U.D.)')?'red-bg':'';
+                if($grades[$i]['strRemarks']=='Failed' || $grades[$i]['strRemarks']=='Failed(U.D.)')
+                    $remarks = "red-bg";
+                else if(strtoupper($grades[$i]['strRemarks'])=='PASSED')
+                    $remarks = "green-bg";
+                else
+                    $remarks = "";                
+
                 $ave = number_format(getAve($grades[$i]['floatPrelimGrade'],$grades[$i]['floatMidtermGrade'],$grades[$i]['floatFinalsGrade']), 2);
                 $student_grade_table .='    
                     <tr class="'.$remarks.'">
