@@ -6,7 +6,7 @@
                 Classlist
                 <small>                     
                         <a class="btn btn-app" v-if="(is_super_admin || is_registrar) && show_all"  :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/0'"><i class="fa fa-check"></i> Hide Enlisted</a></li>                    
-                        <a class="btn btn-app" v-else :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1'"><i class="fa fa-check"></i> Hide Enlisted</a>                    
+                        <a class="btn btn-app" v-else :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1'"><i class="fa fa-check"></i> Show Enlisted</a>                    
                 </small>
             </h1>            
         </section>
