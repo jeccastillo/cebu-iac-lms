@@ -45,10 +45,10 @@
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'midterm')"class="form-control" :value="student.floatMidtermGrade">                              
-                                        <option value="NGS">NGS</option>                                        
-                                            <option v-for="grading_item in grading_items_midterm" :selected="student.floatMidtermGrade === 'grading_item.value'? true : false"  :value="grading_item.value+'-'+grading_item.remarks">
-                                                {{ grading_item.value }}
-                                            </option>                                        
+                                        <option :selected="(!student.floatMidtermGrade || student.floatMidtermGrade == 50)? true : false"  value="NGS">NGS</option>                                        
+                                        <option v-for="grading_item in grading_items_midterm" :selected="student.floatMidtermGrade === 'grading_item.value'? true : false"  :value="grading_item.value+'-'+grading_item.remarks">
+                                            {{ grading_item.value }}
+                                        </option>                                        
                                     </select>                                    
                                 </td>                             
                                 <td v-else></td>
@@ -57,7 +57,7 @@
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'final')"class="form-control" :value="student.floatFinalGrade">                              
-                                        <option value="NGS">NGS</option>                                        
+                                        <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>                                        
                                         <option v-for="grading_item in grading_items" :selected="student.floatFinalGrade === 'grading_item.value'? true : false"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
