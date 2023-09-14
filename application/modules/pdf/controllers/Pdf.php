@@ -565,10 +565,10 @@ class Pdf extends CI_Controller {
             
             if($record['include_gwa'] && $record['v3'] && $period == "final"){
                 $sum += $record['v3'];
-                $total++;
+                $total++;                
             }
             if($record['include_gwa'] && $record['v2'] && $period == "midterm"){
-                $sum += $record['v2'];
+                $sum += $record['v2'];                
                 $total++;
             }
 
@@ -580,6 +580,7 @@ class Pdf extends CI_Controller {
             $record['schedule'] = $schedule;
             $sc_ret[] = $record;
         } 
+        echo $total." ".$sum;
         if($total > 0)
             $gwa =  round(($sum/$total),2);
 
