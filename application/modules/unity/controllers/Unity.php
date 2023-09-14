@@ -1971,7 +1971,7 @@ class Unity extends CI_Controller {
         $this->data['showAll'] = $showAll;
         $this->load->view("common/header",$this->data);
         $this->load->view("faculty/classlist_viewer_v",$this->data);
-        $this->load->view("common/footer_classlist",$this->data); 
+        $this->load->view("common/footer",$this->data); 
 
             //print_r($this->data['classlist']);
     

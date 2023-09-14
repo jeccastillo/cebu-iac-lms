@@ -40,7 +40,7 @@
                             </div>
                             
                             <table class="table table-striped">
-                            <?php if($is_super_admin): ?>    
+                                <?php if($is_super_admin): ?>    
                                 <th></th>
                                 <?else: ?>
                                 <?php endif; ?>
