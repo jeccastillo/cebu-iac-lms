@@ -48,7 +48,7 @@
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="box box-widget widget-user-2">
+                    <div v-if="student" class="box box-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-red">
                             <!-- /.widget-user-image -->
