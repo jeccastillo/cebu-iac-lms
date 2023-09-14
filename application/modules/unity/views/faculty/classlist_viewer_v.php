@@ -39,10 +39,10 @@
                                 <td v-if="is_super_admin"><input type="checkbox" class="student-select minimal" :value="student.intID" /></td>                                                                                    
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
-                                <td>{{ student.strProgramCode }} {{ classlist.midterm_start +'<='+ cdate }}</td>
+                                <td>{{ student.strProgramCode }}</td>
                                 <td v-if="student.registered">        
                                     <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 1 || (classlist.midterm_start <= cdate && classlist.midterm_end >= cdate) && !is_super_admin">
-                                        {{ student.floatMidtermGrade?student.floatMidtermGrade:"NGS" }}
+                                        {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateMidterm($event)"class="form-control" :value="student.floatMidtermGrade">                              
                                         <option value="NGS">NGS</option>                                        
@@ -97,7 +97,7 @@ new Vue({
         const date = current.getFullYear() + '-'
              + ('0' + (current.getMonth()+1)).slice(-2) + '-'
              + ('0' + current.getDate()).slice(-2);
-             
+
         this.cdate = date;
 
         this.loader_spinner = true;
