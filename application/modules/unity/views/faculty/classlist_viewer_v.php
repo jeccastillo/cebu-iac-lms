@@ -3,15 +3,26 @@
     <div id="vue-container">
         <section class="content-header">
             <h1>
+                Classlist
                 <small>                                                                        
                 </small>
-            </h1>
-
-
+            </h1>            
         </section>
         <hr />
         <div class="content">            
-                
+            <div class="box">                                
+                <div class="box-header">
+                    <h3 class="box-title">
+                        {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' + classlist.sub_section}}
+                        <small>
+                            {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }}
+                        </small>
+                    </h3>                    
+                </div>
+                <div class="box-body">
+
+                </div>
+            </div>
         </div><!---content container--->
     </div><!---vue container--->
 </aside>
@@ -28,6 +39,16 @@ new Vue({
     data: {
         id: <?php echo $id; ?>,
         show_all: <?php echo $showAll; ?>,
+        active_sem: undefined,
+        cl: [],
+        classlist:undefined,
+        grading_items: [],
+        grading_items_midterm:[],
+        is_admin: false,
+        is_registrar: false,
+        is_super_admin: false,
+        subject: undefined,
+
     },
 
     mounted() {
@@ -39,8 +60,17 @@ new Vue({
 
         axios.get(base_url + 'unity/classlist_viewer_data/'+this.id+'/'+this.show_all)
         .then((data) => {
-           
-
+            this.active_sem = data.data.active_sem;
+            this.cl = data.data.cl;
+            this.classlist = data.data.classlist;
+            this.grading_items =  data.data.grading_items;
+            this.grading_items_midterm =  data.data.grading_items_midterm;
+            this.is_admin = data.data.is_admin;
+            this.is_registrar = data.data.is_registrar;
+            this.is_super_admin = data.data.is_super_admin;
+            this.show_all = data.data.showall;
+            this.students = data.data.students;
+            this.subject = data.data.subject;
             
         })
         .catch((error) => {
