@@ -398,7 +398,7 @@ new Vue({
                         this.discount = data.data.discount?data.data.discount:{name:'none'};
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;
-                        console.log(this.registration);
+                        console.log(data.data);
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
                         this.active_sem = data.data.active_sem;
                         this.reg_status = data.data.reg_status;
