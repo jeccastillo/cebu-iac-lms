@@ -41,7 +41,7 @@
                                 <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
                                 <td>{{ student.strProgramCode }}</td>
                                 <td v-if="student.registered">        
-                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized == 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end )) && !is_super_admin">
+                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 1 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end )) && !is_super_admin">
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'midterm')"class="form-control">                              
@@ -53,7 +53,7 @@
                                 </td>                             
                                 <td v-else></td>
                                 <td v-if="student.registered">        
-                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized == 1 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end )) && !is_super_admin">
+                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 2 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end )) && !is_super_admin">
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'final')"class="form-control">                              
