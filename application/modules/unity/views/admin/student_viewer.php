@@ -338,7 +338,11 @@ new Vue({
         id: '<?php echo $id; ?>', 
         tab: '<?php echo $tab; ?>',                          
         sem: '<?php echo $sem; ?>',
-        student: {},
+        student: {
+            strFirstname: 'Firstname',
+            strLastname: 'Lastname',
+            strMiddlename: 'Middlename',
+        },
         scholarship:{
             name:'none'
         },
