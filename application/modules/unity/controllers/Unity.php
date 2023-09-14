@@ -1845,8 +1845,8 @@ class Unity extends CI_Controller {
         $data['success'] = true;
         echo json_encode($data);
     }
-    public function classlist_viewer($id,$showAll = 0)
-    {
+
+    public function classlist_viewer_data($id,$showAll = 0){
 
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $clist_sy_id = $clist['strAcademicYear'];
@@ -1856,22 +1856,22 @@ class Unity extends CI_Controller {
         
         if($this->is_super_admin())
                 $active_sem['enumGradingPeriod'] = "active";
-            
-        $this->data['active_sem'] = $active_sem;
         
+        $data['active_sem'] = $active_sem;
+
         if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {
-            $this->data['alert'] = $this->session->flashdata('message');
-            $this->data['classlist'] = $clist;
             
-            if(!$this->data['classlist']['grading_system'])
-                $this->data['classlist']['grading_system'] = 1;
+            $data['classlist'] = $clist;
+            
+            if(!$data['classlist']['grading_system'])
+                $data['classlist']['grading_system'] = 1;
             
             
-            $this->data['is_admin'] = $this->is_super_admin();
+            $data['is_admin'] = $this->is_super_admin();
             
-            $cl_ay = $this->data['classlist']['strAcademicYear'];
-            $cl_subj = $this->data['classlist']['intSubjectID'];
+            $cl_ay = $data['classlist']['strAcademicYear'];
+            $cl_subj = $data['classlist']['intSubjectID'];
 
             //GET EXTENSIONS FOR MIDTERM AND FINAL
             $mx = $this->db->where(array('syid'=>$active_sem['intID'],'type'=>'midterm'))
@@ -1889,133 +1889,92 @@ class Unity extends CI_Controller {
                                                         ->first_row('array');            
                 
                 if($ext && $mx['date'] > $this->data['classlist']['midterm_end'])                                                        
-                    $this->data['classlist']['midterm_end']  = $mx['date'];
+                    $data['classlist']['midterm_end']  = $mx['date'];
             }
             
                 
             if($fx){
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('classlist_id'=>$clist['intID'],'grading_extension_id'=>$fx['id']))
                                                         ->first_row('array');
-                if($ext && $fx['date'] > $this->data['classlist']['final_end'])                                                        
-                    $this->data['classlist']['final_end']  = $fx['date'];
+                if($ext && $fx['date'] > $data['classlist']['final_end'])                                                        
+                    $data['classlist']['final_end']  = $fx['date'];
             }
 
             
-            $this->data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
+            $data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
             
             
             
-            $this->data['is_super_admin'] = $this->is_super_admin();
-            $this->data['is_registrar'] = $this->is_registrar();
+            $data['is_super_admin'] = $this->is_super_admin();
+            $data['is_registrar'] = $this->is_registrar();
             
             if($showAll > 0 && ($this->session->userdata('intUserLevel') == 2 || $this->session->userdata('intUserLevel') == 3))
-                $this->data['showall'] = true;
+                $data['showall'] = true;
             else
-                $this->data['showall'] = false;
+                $data['showall'] = false;
 
             $students = $this->data_fetcher->getClassListStudents($id);
             
 
-            $this->data['subject'] = $this->data_fetcher->getSubjectNoCurr($this->data['classlist']['intSubjectID']);
+            $data['subject'] = $this->data_fetcher->getSubjectNoCurr($data['classlist']['intSubjectID']);
             //Check for override
-            $override_final = $this->db->where(array('subject_id'=>$this->data['classlist']['intSubjectID'],'period'=>'final','syid'=>$cl_ay))
+            $override_final = $this->db->where(array('subject_id'=>$data['classlist']['intSubjectID'],'period'=>'final','syid'=>$cl_ay))
                                        ->get('tb_mas_sy_grading_override')
                                        ->first_row('array');
             
-            $grading_system = $override_final?$override_final['grading_system_id']:$this->data['subject']['grading_system_id'];
+            $grading_system = $override_final?$override_final['grading_system_id']:$data['subject']['grading_system_id'];
             
                 
-            $this->data['grading_items'] = $this->db->where(array("grading_id"=>$grading_system))
+            $data['grading_items'] = $this->db->where(array("grading_id"=>$grading_system))
                                                     ->order_by('value','ASC')
                                                     ->get('tb_mas_grading_item')
                                                     ->result_array();
             
             
-            if(!$this->data['subject']['grading_system_id_midterm']) 
-                $this->data['grading_items_midterm'] = $this->data['grading_items'];                                                
+            if(!$data['subject']['grading_system_id_midterm']) 
+                $data['grading_items_midterm'] = $data['grading_items'];                                                
             else{
                 //Check for override midterm
-                $override_midterm = $this->db->where(array('subject_id'=>$this->data['classlist']['intSubjectID'],'period'=>'midterm','syid'=>$cl_ay))
+                $override_midterm = $this->db->where(array('subject_id'=>$data['classlist']['intSubjectID'],'period'=>'midterm','syid'=>$cl_ay))
                                        ->get('tb_mas_sy_grading_override')
                                        ->first_row('array');
                 
-                $grading_system_midterm = $override_midterm?$override_midterm['grading_system_id']:$this->data['subject']['grading_system_id_midterm'];
+                $grading_system_midterm = $override_midterm?$override_midterm['grading_system_id']:$data['subject']['grading_system_id_midterm'];
 
-                $this->data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$grading_system_midterm))
+                $data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$grading_system_midterm))
                                                 ->order_by('value','ASC')
                                                 ->get('tb_mas_grading_item')
                                                 ->result_array();                  
             }
 
-                
-            $passing =0;
-            $incomplete =0;
-            $ud = 0;
-            $od = 0;
-            $failing =0;
-            $lineOfOne = 0;
-            $lifeOfTwo = 0;
-            $lineOfThree = 0;
-            $totalUD = 0;
-            $totalFailed = 0;
-            $st = array();
+                            
+            $st = [];
             
             foreach($students as $student)
             { 
-                $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$this->data['classlist']['strAcademicYear']);
-                $st[] = $student;
-                $ave = getAve($student['floatPrelimGrade'],$student['floatMidtermGrade'],$student['floatFinalsGrade']);
-                $eq = getEquivalent($ave);
-                //$eq = getEquivalent($student['floatFinalGrade']);
-                if($eq>=5 && $student['enumStatus'] == "drp")
-                    $failing++;
-                else if ($student['enumStatus'] == "drp")
-                    $ud++;
-                else if ($student['enumStatus'] == "odrp")
-                    $od++;
-                else if ($student['enumStatus'] == "inc")
-                    $incomplete++;
-                else
-                    $passing++;
-                    
-                if($eq >=1.00 && $eq <= 1.75 && $student['enumStatus'] != "inc" && $student['enumStatus'] != "drp" && $student['enumStatus'] != "odrp")
-                    $lineOfOne++;
-                else if($eq >= 2.00 && $eq <= 2.75 && $student['enumStatus'] != "inc" && $student['enumStatus'] != "drp" && $student['enumStatus'] != "odrp")
-                    $lifeOfTwo++;
-                else if($eq == 3.00 && $student['enumStatus'] != "inc" && $student['enumStatus'] != "drp" && $student['enumStatus'] != "odrp")
-                    $lineOfThree++;
-                else if ($student['enumStatus'] == "act" && $student['strRemarks'] == "Failed")
-                    $totalFailed++;
-                else if ($student['enumStatus'] == "drp" && $student['strRemarks'] == "Failed(U.D.)")
-                    $totalUD++;
-                
+                $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
+                $st[] = $student;                                                
                 
             }
-            $this->data['students'] = $st;
-            $this->data['passing'] = $passing;
-            $this->data['ud'] = $ud;
-            $this->data['od'] = $od;
-            $this->data['incomplete'] = $incomplete;
-            $this->data['failing'] = $failing;
-            $this->data['lineOfOne'] = $lineOfOne;
-            $this->data['lineOfTwo'] = $lifeOfTwo;
-            $this->data['lineOfThree'] = $lineOfThree;
-            $this->data['totalFailed'] = $totalFailed;
-            $this->data['totalUD'] = $totalUD;
-            $this->data['total'] = $incomplete + $lineOfOne + $lifeOfTwo + $lineOfThree + $totalFailed + $totalUD + $od;
-            
-            
-            $this->data['schedule'] = $this->data_fetcher->getScheduleBySection($this->data['classlist']['strSection'],$this->data['classlist']['strAcademicYear']);
-            
-            $this->load->view("common/header",$this->data);
-            $this->load->view("faculty/classlist_viewer",$this->data);
-            $this->load->view("common/footer_classlist",$this->data); 
-            $this->load->view("common/classlist_viewer_conf",$this->data); 
-            //print_r($this->data['classlist']);
-            
+            $data['students'] = $st;
+            echo json_encode($data);   
         }
-        else
-            redirect(base_url()."unity");   
+                                
+
+    }
+
+    public function classlist_viewer($id,$showAll = 0)
+    {
+
+        
+        $this->data['id'] = $id;
+        $this->data['showAll'] = $showAll;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("faculty/classlist_viewer_v",$this->data);
+        $this->load->view("common/footer_classlist",$this->data); 
+
+            //print_r($this->data['classlist']);
+    
     
     }
     
