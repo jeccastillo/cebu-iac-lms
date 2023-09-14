@@ -419,7 +419,7 @@ new Vue({
                         this.other_data = data.data.other_data;
                         this.assessment = data.data.assessment;    
                         var sched = data.data.schedule;
-                        console.log(registration);
+                        console.log(this.registration);
                         axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                         .then((data) => {
                             this.applicant_data = data.data.data;
