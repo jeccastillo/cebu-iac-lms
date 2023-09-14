@@ -28,7 +28,7 @@
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'registrar/student_grade_slip/' + student.intID">
                         <i class="fa fa-book"></i>Grade Slip
                     </a>  
-                    <a v-if="user_level == 2 || user_level == 7" class="btn btn-app" :href="base_url + 'student/edit_student_scholarship/' + student.intID">
+                    <a v-if="user_level == 2 || user_level == 7" class="btn btn-app" :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
                         <i class="fa fa-book"></i>Scholarship/Discount
                     </a>                                       
                 </small>
