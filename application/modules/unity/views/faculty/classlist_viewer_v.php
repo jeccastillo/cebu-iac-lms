@@ -38,7 +38,9 @@
                             <tr v-for="(student,index) in students">                                    
                                 <td v-if="is_super_admin"><input type="checkbox" class="student-select minimal" :value="student.intID" /></td>                                                                                    
                                 <td>{{ index + 1 }}</td>
-                                                 
+                                <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
+                                <td>{{ student.strProgramCode }}</td>
+                                
 
                             </tr>
                         </tbody>                        
