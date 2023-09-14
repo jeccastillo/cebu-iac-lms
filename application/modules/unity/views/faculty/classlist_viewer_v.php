@@ -38,20 +38,7 @@
                             <tr v-for="(student,index) in students">                                    
                                 <td v-if="is_super_admin"><input type="checkbox" class="student-select minimal" :value="student.intID" /></td>                                                                                    
                                 <td>{{ index + 1 }}</td>
-                                <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
-                                <td>{{ student.strProgramCode }}</td>
-                                <td v-if="student.registered">        
-                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 1 || (classlist.midterm_start <= cdate && classlist.midterm_end >= cdate) && !is_super_admin">
-                                        {{ student.floatMidtermGrade']?student.floatMidtermGrade:"NGS"; }}
-                                    </span>                                                                                                                 
-                                    <select v-else @change="updateMidterm($event)"class="form-control" rel="<?php echo $student['intCSID'] ?>" :value="student.floatMidtermGrade">                              
-                                        <option value="NGS">NGS</option>                                        
-                                            <option v-for="grading_item in grading_items_midterm"  :value="grading_item.value+'-'+grading_item.remarks">
-                                                {{ grading_item.value }}
-                                            </option>                                        
-                                    </select>                                    
-                                </td>                             
-                                <td v-else></td>                                   
+                                                 
 
                             </tr>
                         </tbody>                        
