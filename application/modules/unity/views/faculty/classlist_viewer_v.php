@@ -5,8 +5,11 @@
             <h1>
                 Classlist
                 <small>                     
-                        <a class="btn btn-app" v-if="(is_super_admin || is_registrar) && show_all"  :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/0'"><i class="fa fa-times"></i> Hide Enlisted</a></li>                    
-                        <a class="btn btn-app" v-else :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1'"><i class="fa fa-check"></i> Show Enlisted</a>                    
+                    <a class="btn btn-app" v-if="(is_super_admin || is_registrar) && show_all"  :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/0'"><i class="fa fa-times"></i> Hide Enlisted</a></li>                    
+                    <a class="btn btn-app" v-else :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1'"><i class="fa fa-check"></i> Show Enlisted</a>                                            
+                    <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit</a>                    
+                    <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'excel/download_classlist/'+ classlist.intID + '/' + show_all"><i class="fa fa-table"></i> Download Spreadsheet</a>                
+                    <a target="_blank" class="btn btn-app" :href="base_url + 'pdf/print_classlist_registrar/' + classlist.intID +'/front'"><i class="fa fa-print"></i>PDF Report</a>
                 </small>
             </h1>            
         </section>
