@@ -384,10 +384,31 @@ class Finance extends CI_Controller {
                      ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
             }
 
-            if(!empty($update))
+            if(!empty($update)){
                 $this->db
                         ->where(array('intRegistrationID'=>$post['registration_id']))
                         ->update('tb_mas_registration',$update);
+
+                $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
+                $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                            
+                //remove from Ledger
+                    $this->db->where(array('name'=>'tuition','syid'=>$registration['intAYID'],'student_id'=>$registration['intStudentID']))
+                    ->delete('tb_mas_student_ledger');
+        
+                $amount = 0;
+                if($post['paymentType'] == "full")
+                    $amount = $tuition_data['total_before_deductions'];
+                else
+                    $amount = $tuition_data['ti_before_deductions'];
+        
+                $ledger['student_id'] = $registration['intStudentID'];
+                $ledger['name'] = "tuition";
+                $ledger['amount'] = $amount;
+                $ledger['date'] = date("Y-m-d H:i:s");
+                $ledger['syid'] = $sem['intID'];
+                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
+            
+            }
 
 
                    
