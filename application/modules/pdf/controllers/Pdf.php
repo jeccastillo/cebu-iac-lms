@@ -579,8 +579,7 @@ class Pdf extends CI_Controller {
             $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
             $record['schedule'] = $schedule;
             $sc_ret[] = $record;
-        } 
-        echo $total." ".$sum;
+        }         
         die();
         if($total > 0)
             $gwa =  round(($sum/$total),2);
