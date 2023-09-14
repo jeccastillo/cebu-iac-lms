@@ -146,8 +146,37 @@ new Vue({
     },
 
     methods: {                
-        updateGrade: function(event,period){
+        updateGrade: function(event,period){            
 
+            var type = 3;
+            var formdata= new FormData();
+            formdata.append("intCSID",this.classlist.intID);
+            var values = event.target.value.split("-");
+            formdata.append("strRemarks",values[1]);
+            if(period == 'midterm'){
+                formdata.append("floatMidtermGrade",values[0]);
+                type = 2;
+            }
+            else
+                formdata.append("floatFinalGrade",values[0]);
+            
+
+            this.loader_spinner = true;
+            axios.post(base_url + 'unity/update_grade/'+type, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
         }
 
     }
