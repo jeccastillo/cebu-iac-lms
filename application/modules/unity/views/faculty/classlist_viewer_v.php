@@ -13,7 +13,8 @@
             <div class="box">                                
                 <div class="box-header">
                     <h3 class="box-title">
-                        {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' + classlist.sub_section}}
+                            {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' }}
+                            <span v-if="classlist.sub_section">{{ classlist.sub_section }}</span>
                         <small>
                             {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }}
                         </small>
