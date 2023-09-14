@@ -163,6 +163,8 @@ class Scholarship extends CI_Controller {
         }
         else{
             $tuition_data = $this->data_fetcher->getTuition($student['intID'],$st_scholarship['syid'],0,$scholarship['intID']);                    
+            print_r($tuition_data);
+            die();
             if($reg && $reg['paymentType'] == "full")            
                 $deductions = $tuition_data['scholarship_deductions_dc'];            
             else
