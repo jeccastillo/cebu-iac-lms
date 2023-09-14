@@ -564,11 +564,11 @@ class Pdf extends CI_Controller {
         {
             
             if($record['include_gwa'] && $record['v3'] && $period == "final"){
-                $sum += $record['v3'];
+                $sum += (float)$record['v3'];
                 $total++;                
             }
             if($record['include_gwa'] && $record['v2'] && $period == "midterm"){
-                $sum += $record['v2'];                
+                $sum += (float)$record['v2'];                
                 $total++;
             }
 
