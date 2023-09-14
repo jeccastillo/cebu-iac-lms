@@ -89,7 +89,7 @@ $html .= '
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
          <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Final Grade</b></th>
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>'.$period_label.'</b></th>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
      </tr>
      <tr>
@@ -99,7 +99,11 @@ $html .= '
          
     foreach($records as $item){                
         
-        $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
+        if($period == "final")
+            $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
+        else
+            $grade = ($item['intFinalized'] >= 2)?$item['v2']:'NGS';
+        
         $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
         
         $html .= '            

@@ -517,7 +517,7 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
-    public function student_grade_slip($id,$sem){
+    public function student_grade_slip($id,$sem,$period = "midterm"){
                         
         $this->data['student'] = $this->data_fetcher->getStudent($id);
         switch($this->data['student']['level']){
@@ -553,15 +553,26 @@ class Pdf extends CI_Controller {
         $sum = 0;       
         $total = 0; 
         $total_units = 0;
+        $this->data['period'] = $period;
+        if($period == "final"){
+            $this->data['period_label'] = "Final Grade";
+        }
+        else{
+            $this->data['period_label'] = "Midterm Grade";
+        }
         foreach($records as $record)
         {
             
-            if($record['include_gwa'] && $record['v3']){
+            if($record['include_gwa'] && $record['v3'] && $period == "final"){
                 $sum += $record['v3'];
                 $total++;
             }
+            if($record['include_gwa'] && $record['v2'] && $period == "midterm"){
+                $sum += $record['v2'];
+                $total++;
+            }
 
-            if($record['include_gwa'] && $record['strRemarks'] == "Passed"){
+            if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final"){
                 $total_units += $record['strUnits'];
             }
 
