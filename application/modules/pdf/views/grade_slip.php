@@ -107,8 +107,10 @@ $html .= '
         $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
             $units = number_format($item['strUnits'],1);
-        else
+        else{
             $units = "(".number_format($item['strUnits'],1).")";
+            $units_earned = "(".$units_earned.")";
+        }
         
         $html .= '            
             <tr>
