@@ -64,7 +64,7 @@
                                     </select>                                    
                                 </td>                             
                                 <td v-else></td>                                   
-                                <td><textarea rows="1" cols="10" style="resize: none;font-weight:bold;" disabled="disabled" >{{ student.strRemarks }}</textarea>
+                                <td>{{ student.strRemarks }}</td>
                             </tr>
                         </tbody>                        
                     </table>
