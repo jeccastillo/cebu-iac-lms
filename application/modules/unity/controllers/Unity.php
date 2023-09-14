@@ -959,12 +959,14 @@ class Unity extends CI_Controller {
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
                                             ->join('tb_mas_student_discount','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')  
+                                            ->group_by('name')
                                             ->get('tb_mas_scholarships')
                                             ->result_array();
 
             $ret['discount'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"discount"))
                                             ->join('tb_mas_student_discount','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')  
+                                            ->group_by('name')
                                             ->get('tb_mas_scholarships')
                                             ->result_array();
             
