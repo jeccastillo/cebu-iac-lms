@@ -93,8 +93,11 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
-        const current = new Date();
-        const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
+        const current = new Date();         
+        const date = current.getFullYear() + '-'
+             + ('0' + (current.getMonth()+1)).slice(-2) + '-'
+             + ('0' + current.getDate()).slice(-2);
+             
         this.cdate = date;
 
         this.loader_spinner = true;
