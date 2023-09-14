@@ -84,24 +84,37 @@
         
         $("#finalize-term").click(function(e){
             e.preventDefault();
-            conf = confirm("are you sure you want to finalize?");
-            if(conf){
-                $(".loading-img").show();
-                $(".overlay").show();
-                var csid = $(this).attr('data-csid');
-                var intFinalized = $(this).attr('rel');
-                var parent = $(this).parent();
-                var data = {'intID':csid,'intFinalized':intFinalized};
-                $.ajax({
-                    'url':'<?php echo base_url(); ?>unity/finalize_term',
-                    'method':'post',
-                    'data':data,
-                    'dataType':'json',
-                    'success':function(ret){
-                        document.location ="<?php echo current_url(); ?>";
-                    }
-                });
-            }
+            Swal.fire({
+                title: 'Submit Grades?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    $(".loading-img").show();
+                    $(".overlay").show();
+                    var csid = $(this).attr('data-csid');
+                    var intFinalized = $(this).attr('rel');
+                    var parent = $(this).parent();
+                    var data = {'intID':csid,'intFinalized':intFinalized};
+                    $.ajax({
+                        'url':'<?php echo base_url(); ?>unity/finalize_term',
+                        'method':'post',
+                        'data':data,
+                        'dataType':'json',
+                        'success':function(ret){
+                            document.location ="<?php echo current_url(); ?>";
+                        }
+                    });
+                }
+            });
+            
+                
+            
         
         });
         
