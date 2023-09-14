@@ -106,10 +106,10 @@
                                             <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>                                                
                                             <p><strong>Admission Status: </strong>{{ applicant_data.tos }}</p>
                                             <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</li>
-                                            <span v-if="registration">
+                                            <div v-if="registration">
                                                 <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}</p>
                                                 <p><strong>Academic Status: </strong>{{ registration.enumRegistrationStatus }}</p>
-                                            </span>
+                                            </div>
                                             <hr />                                        
                                         </div>                            
                                         <div class="col-lg-6">
@@ -418,8 +418,7 @@ new Vue({
                         this.gpa = data.data.gpa;
                         this.other_data = data.data.other_data;
                         this.assessment = data.data.assessment;    
-                        var sched = data.data.schedule;
-                        console.log(this.registration);
+                        var sched = data.data.schedule;                        
                         axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                         .then((data) => {
                             this.applicant_data = data.data.data;
