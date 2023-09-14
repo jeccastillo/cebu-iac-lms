@@ -1812,7 +1812,7 @@ class Unity extends CI_Controller {
         $this->db->where('intRegistrationID',$post['intRegistrationID'])
                  ->update('tb_mas_registration',$post);
 
-        $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['intRegistrationID']))->first_row();
+        $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['intRegistrationID']))->first_row('array');
         $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                    
         print_r($tuition_data);
         die();
