@@ -17,8 +17,8 @@
                     <li class="pull-right hide"><a href="#" id="addStudentModal" class="text-muted"><i class="fa fa-plus"></i> Add Student</a></li>
                 </ul>
         <div class="span10 box box-primary">
-            <div class="box-header">
-                 <h3 class="box-title">Edit Classlist</h3>
+            <div class="box-header">                 
+                 <h3 class="box-title">Edit <?php echo $classlist['strCode'].' - '.$classlist['strClassName'].' '.$classlist['year'].$classlist['strSection'].' '.$classlist['sub_section']; ?> <small><?php echo $classlist['enumSem']." ".$term_type." ".$classlist['strYearStart']."-".$classlist['strYearEnd']; ?></small></h3>
             </div>
             <form action="<?php echo base_url(); ?>unity/edit_class" method="post" role="form">
                 
@@ -41,7 +41,7 @@
                         <input type="number" name="slots" class="form-control" id="slots" placeholder="ex. 30" value="<?php echo $classlist['slots']; ?>" />                        
                     </div>
                 </div>
-                <div class="form-group col-xs-6">
+                <!-- <div class="form-group col-xs-6">
                         <label for="strUnits">Checked By:</label>
                         <input type="text" name="strSignatory1Name" class="form-control" id="strSignatory1Name" placeholder="Enter Name" value="<?php echo $classlist['strSignatory1Name']; ?>">
                         <input type="text" name="strSignatory1Title" class="form-control" id="strSignatory1Title" placeholder="Enter Title" value="<?php echo $classlist['strSignatory1Title']; ?>">
@@ -50,7 +50,7 @@
                         <label for="strUnits">Noted By:</label>
                         <input type="text" name="strSignatory2Name" class="form-control" id="strSignatory2Name" placeholder="Enter Name" value="<?php echo $classlist['strSignatory2Name']; ?>">
                         <input type="text" name="strSignatory2Title" class="form-control" id="strSignatory2Title" placeholder="Enter Title" value="<?php echo $classlist['strSignatory2Title']; ?>">
-                    </div>
+                    </div> -->
                 
                 <div class="form-group">
                     <label for="strSection">Section <a rel="locked" href="#" id="section-lock"><i class="ion ion-locked"></i></a></label>
