@@ -151,12 +151,17 @@ class Scholarship extends CI_Controller {
         $deductions = 0;
         //Get deduction amount
         
-
+        $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$st_scholarship['syid']))->first_row('array');
         //First Check if for installment or full payment
         //Discount still getting 0 on ledger
-        if($scholarship['deduction_type'] == "scholarship"){
+        if($scholarship['deduction_type'] == "scholarship"){            
             $tuition_data = $this->data_fetcher->getTuition($student['intID'],$st_scholarship['syid'],$scholarship['intID']);        
-            $deductions = $tuition_data['scholarship_deductions'];
+            print_r($tuition_data);
+            die();
+            if($reg && $reg['paymentType'] == "full")            
+                $deductions = $tuition_data['scholarship_deductions'];            
+            else
+                $deductions = $tuition_data['scholarship_deductions_installment'];            
         }
         else{
             $tuition_data = $this->data_fetcher->getTuition($student['intID'],$st_scholarship['syid'],0,$scholarship['intID']);        
