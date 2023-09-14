@@ -105,7 +105,7 @@ class Data_fetcher extends CI_Model {
     {
                
         return  $this->db
-                     ->select("tb_mas_classlist_student.intCSID,strCode,strSection , intSubjectID, year, sub_section, strClassName,intClasslistID, intLab, floatPrelimGrade, floatMidtermGrade, floatFinalsGrade, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID")
+                     ->select("tb_mas_classlist_student.intCSID,strCode,strSection , intSubjectID, year, sub_section, strClassName,intClasslistID, intLab, floatPrelimGrade, floatMidtermGrade, floatFinalsGrade, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID, tb_mas_classlist.intFinalized")
                      ->from("tb_mas_classlist_student")
             
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))

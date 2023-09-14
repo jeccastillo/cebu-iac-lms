@@ -560,16 +560,15 @@ class Pdf extends CI_Controller {
         else{
             $this->data['period_label'] = "Midterm Grade";
         }
-        print_r($records);
-        die();
+        
         foreach($records as $record)
         {
             
-            if($record['include_gwa'] && $record['v3'] && $period == "final"){
+            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1){
                 $sum += (float)$record['v3'];
                 $total++;                
             }
-            if($record['include_gwa'] && $record['v2'] && $period == "midterm"){
+            if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1){
                 $sum += (float)$record['v2'];                
                 $total++;
             }
