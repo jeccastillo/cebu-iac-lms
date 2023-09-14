@@ -1813,16 +1813,16 @@ class Unity extends CI_Controller {
                  ->update('tb_mas_registration',$post);
 
         $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['intRegistrationID']))->first_row('array');
-        $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                    
-        print_r($tuition_data);
-        die();
+        $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                            
         //remove from Ledger
          $this->db->where(array('name'=>'tuition','syid'=>$registration['intAYID'],'student_id'=>$registration['intStudentID']))
             ->delete('tb_mas_student_ledger');
 
         $amount = 0;
         if($post['paymentType'] == "full")
-            $amount = $tuition_data[''];
+            $amount = $tuition_data['total_before_deductions'];
+        else
+            $amount = $tuition_data['ti_before_deductions'];
 
         $ledger['student_id'] = $registration['intStudentID'];
         $ledger['name'] = "tuition";
