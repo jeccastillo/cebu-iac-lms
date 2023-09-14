@@ -346,7 +346,9 @@ new Vue({
             name:'none'
         },
         user_level: undefined,
-        registration: undefined,
+        registration: {
+            enumStudentType:'none',
+        },
         applicant_data:{},
         active_sem: {},
         sections: [],
