@@ -66,7 +66,7 @@
                                 <td v-else></td>                                   
                                 <td>{{ student.strRemarks }}</td>
                                 <td style="text-align:center;">
-                                    {{ student.registered?'<span style="color:#777;">no</span>':'<span style="color:#009000;">yes</span>' }} ?>
+                                    {{ student.registered?'no':'yes' }} ?>
                                 </td>
                             </tr>
                         </tbody>                        
