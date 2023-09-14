@@ -53,7 +53,7 @@
                                 </td>                             
                                 <td v-else></td>
                                 <td v-if="student.registered">        
-                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized == 1 || (classlist.final_start <= cdate && classlist.final_end >= cdate) && !is_super_admin">
+                                    <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized == 1 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end )) && !is_super_admin">
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'final')"class="form-control">                              
