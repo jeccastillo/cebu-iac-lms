@@ -342,6 +342,7 @@ new Vue({
             strFirstname: 'Firstname',
             strLastname: 'Lastname',
             strMiddlename: 'Middlename',
+            strStudentNumber: '0',
         },
         scholarship:{
             name:'none'

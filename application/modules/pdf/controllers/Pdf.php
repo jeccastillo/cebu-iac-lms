@@ -520,6 +520,7 @@ class Pdf extends CI_Controller {
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
         $this->data['student'] = $this->data_fetcher->getStudent($id);
+        $this->data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $this->data['student']['strStudentNumber']);
         switch($this->data['student']['level']){
             case 'shs':
                 $stype = 'shs';
