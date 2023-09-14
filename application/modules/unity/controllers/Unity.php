@@ -1038,15 +1038,7 @@ class Unity extends CI_Controller {
                     $record['recStatus'] = "Submitted";                    
                 else
                     $record['recStatus'] = "Not Yet Submitted";                                                    
-
-                
-                if($record['intFinalized'] > 2){
-                    if($record['v3'] != 5.00){
-                        $record['v3Display'] =  ($record['v3']==3.50) ? 'inc' : number_format($record['v3'], 2, '.' ,',');
-                    }  
-                }                
-                else
-                    $record['v3Display'] = "-";
+                                
 
                 $ret['records'][] = $record;
             }
@@ -1108,8 +1100,7 @@ class Unity extends CI_Controller {
                     $remarks = "green-bg";
                 else
                     $remarks = "";                
-
-                $ave = number_format(getAve($grades[$i]['floatPrelimGrade'],$grades[$i]['floatMidtermGrade'],$grades[$i]['floatFinalsGrade']), 2);
+                
                 $student_grade_table .='    
                     <tr class="'.$remarks.'">
                         <td><a href="'.base_url().'unity/classlist_viewer/'.$grades[$i]['classListID'].'">'.$grades[$i]['strCode'].'</a></td>
