@@ -395,7 +395,15 @@ new Vue({
                     console.log(data);
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
-                        this.scholarship = data.data.scholarship?data.data.scholarship:{name:'none'};
+                        if(data.data.scholarship.length > 0){
+                            var sch = "";
+                            for(i in data.data.scholarship)
+                                sch += data.data.scholarship[i].name+" ";
+                            this.scholarship = {name:sch};
+                        }
+                        else{
+                            this.scholarship = {name:'none'};
+                        }                               
                         this.discount = data.data.discount?data.data.discount:{name:'none'};
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;                        

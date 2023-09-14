@@ -955,7 +955,13 @@ class Unity extends CI_Controller {
             
             
             $ret['student'] = $this->data_fetcher->getStudent($id);
-            $ret['scholarship'] = $this->db->get_where('tb_mas_scholarships',array("intID" => $ret['student']['enumScholarship']))->first_row('array');
+            
+            $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
+                                            ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
+                                            ->join('tb_mas_student_discount','tb_mas_scholarships.intID = tb_mas_student_discount.id')  
+                                            ->get('tb_mas_scholarships')
+                                            ->result_array();
+
             $ret['discount'] = $this->db->get_where('tb_mas_scholarships',array("intID" => $ret['student']['enumDiscount']))->first_row('array');
 
             if(!$ret['student'])
