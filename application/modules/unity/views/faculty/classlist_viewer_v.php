@@ -42,9 +42,14 @@
                                 <td>{{ student.strProgramCode }}</td>
                                 <td v-if="student.registered">        
                                     <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 1 || (classlist.midterm_start <= cdate && classlist.midterm_end >= cdate) && !is_super_admin">
-                                        {{ student.floatMidtermGrade']?student.floatMidtermGrade:"NGS"; }}
+                                        {{ student.floatMidtermGrade?student.floatMidtermGrade:"NGS"; }}
                                     </span>                                                                                                                 
-                                                                   
+                                    <select v-else @change="updateMidterm($event)"class="form-control" rel="<?php echo $student['intCSID'] ?>" :value="student.floatMidtermGrade">                              
+                                        <option value="NGS">NGS</option>                                        
+                                            <option v-for="grading_item in grading_items_midterm"  :value="grading_item.value+'-'+grading_item.remarks">
+                                                {{ grading_item.value }}
+                                            </option>                                        
+                                    </select>                                    
                                 </td>                             
                                 <td v-else></td>                                   
 
