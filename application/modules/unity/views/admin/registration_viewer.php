@@ -1133,14 +1133,19 @@ new Vue({
                 this.loader_spinner = false;
                 if(data.data.success){
                     var st = "Enrolled";
+                    var date_enrolled = null;
                     if(this.registration_status == 0){
                         st = "Enlisted";
+                    }
+                    else{
+                        date_enrolled = "<?php echo date("Y-m-d"); ?>";
                     }
 
                     return axios
                         .post(api_url + 'admissions/student-info/' + this.slug +
                             '/update-status', {
                                 status: st,
+                                date_enrolled: date_enrolled,
                                 remarks: "Finance Admin Update",
                                 admissions_officer: this.user.strFirstname+" "+this.user.strLastname,
                             }, {
