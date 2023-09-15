@@ -2229,13 +2229,13 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_student_discount')
                 ->result();
         else{
-            
+            echo $scholarship;
+            $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+                ->where(array('intID'=>$scholarship,'syid'=>$syid,'student_id'=>$student['intID']))
+                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                ->get('tb_mas_student_discount')
+                ->result();
         }
-            // $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-            //     ->where(array('intID'=>$scholarship,'syid'=>$syid,'student_id'=>$student['intID']))
-            //     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-            //     ->get('tb_mas_student_discount')
-            //     ->result();
         
         if($discount == 0)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
@@ -2243,14 +2243,12 @@ class Data_fetcher extends CI_Model {
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result(); 
-        else{
-
-        }
-            // $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-            //     ->where(array('intID'=>$discount,'syid'=>$syid,'student_id'=>$student['intID']))
-            //     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-            //     ->get('tb_mas_student_discount')
-            //     ->result(); 
+        else
+            $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+                ->where(array('intID'=>$discount,'syid'=>$syid,'student_id'=>$student['intID']))
+                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                ->get('tb_mas_student_discount')
+                ->result(); 
 
         
         
