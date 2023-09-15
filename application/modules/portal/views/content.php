@@ -163,12 +163,12 @@
                         <?php if($record['intFinalized'] == 1): ?>                                
                             <td><?php echo $record['v2']; ?></td>
                         <?php else: ?>
-                            <td>---</td>
+                            <td>NGS</td>
                         <?php endif; ?>    
                         <?php if($record['intFinalized'] == 2): ?>                                
                             <td><?php echo $record['v3']; ?></td>
                         <?php else: ?>
-                            <td>---</td>
+                            <td>NGS</td>
                         <?php endif; ?>
                             <td>
                             <?php
