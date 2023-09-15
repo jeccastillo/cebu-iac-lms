@@ -27,7 +27,7 @@
                         <li><a href="#tab_2" data-toggle="tab">Payments</a></li>                        
                     </ul>           
                     <div class="tab-content">            
-                        <div class="tab-pane" id="tab_1">
+                        <div class="tab-pane active" id="tab_1">
                             <div class="row">
                                 <div v-if="student" class="col-md-6">
                                     Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
