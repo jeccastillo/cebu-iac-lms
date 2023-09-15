@@ -78,7 +78,7 @@
                     </table>
                     <div class="box-footer">                        
                         <div class="row">
-                            <form method="post" @submit.prevent="transferToClasslist">
+                            <form v-if="classlist.intFinalized == 0 && is_super_admin && is_registrar" method="post" @submit.prevent="transferToClasslist">
                                 <div class="col-sm-2">
                                     <button type="submit" class="btn btn-warning btn-block">Transfer to <i class="fa fa-arrow-right"></i></button>
                                 </div>
