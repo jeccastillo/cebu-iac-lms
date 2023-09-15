@@ -244,37 +244,55 @@ new Vue({
             });
         },
         finalizePeriod: function(){
-            Swal.fire({
-                title: 'Submit Grades?',
-                text: "Are you sure you want to submit?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append("intID",this.classlist.intID);
-                    formdata.append("intFinalized",this.classlist.intFinalized);
-                    return axios.post(base_url + 'unity/finalize_term', formdata, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    })
-                    .then(data => {
-                        this.loader_spinner = false;
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                    });                    
+            var complete_grades = true;
+            for(i in this.students){
+                if(this.classlist.intFinalized == 0){
+                    if(!this.students[i].floatMidtermGrade || this.students[i].floatMidtermGrade == 50 || this.students[i].floatMidtermGrade == "NGS")
+                        complete_grades = false;
                 }
-            });
+                else
+                    if(!this.students[i].floatFinalGrade || this.students[i].floatFinalGrade == 50 || this.students[i].floatFinalGrade == "NGS")
+                        complete_grades = false;
+            }
+            if(complete_grades)
+                Swal.fire({
+                    title: 'Submit Grades?',
+                    text: "Are you sure you want to submit?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        var formdata= new FormData();
+                        formdata.append("intID",this.classlist.intID);
+                        formdata.append("intFinalized",this.classlist.intFinalized);
+                        return axios.post(base_url + 'unity/finalize_term', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        });                    
+                    }
+                });
+            else
+                Swal.fire({
+                    title: "Warning",
+                    text: "Complete grades before submitting",
+                    icon: "warning"
+                }).then(function() {                    
+                });
         },
         transferToClasslist: function(){
             if(this.checked.length == 0)

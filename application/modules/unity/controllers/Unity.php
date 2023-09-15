@@ -1950,10 +1950,11 @@ class Unity extends CI_Controller {
                             
             $st = [];
             
+            
             foreach($students as $student)
             { 
                 $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
-                $st[] = $student;                                                
+                $st[] = $student;                    
                 
             }
             $data['students'] = $st;
