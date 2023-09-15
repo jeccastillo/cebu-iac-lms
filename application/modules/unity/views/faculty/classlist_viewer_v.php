@@ -237,7 +237,18 @@ new Vue({
             });
         },
         transferToClasslist: function(){
-            console.log(this.checked);
+            if(this.checked.length == 0)
+            {
+                Swal.fire({
+                    title: "Warning",
+                    text: "Please check at least one student",
+                    icon: "warning"
+                }).then(function() {                    
+                });                
+            }
+            else{
+
+            }
         },
 
     }
