@@ -79,7 +79,7 @@
                     <div class="box-footer">
                         <div class="pull-right">
                             <div class="row">
-                                <form v-if="classlist.intFinalized > 0" method="post" @submit.prevent="transferToClasslist">
+                                <form method="post" @submit.prevent="transferToClasslist">
                                     <div class="col-sm-4">
                                         <select required v-model="transfer_to" class="form-control">
                                             <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
