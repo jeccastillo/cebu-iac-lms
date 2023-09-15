@@ -413,7 +413,7 @@ class Finance extends CI_Controller {
 
                    
 
-            if($post['description'] == "Tuition Fee" && $post['payments'] == 0){
+            if($post['description'] == "Tuition Fee" && $registration['intROG'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $ret['send_notif'] = true;
                 $reg_update = [
