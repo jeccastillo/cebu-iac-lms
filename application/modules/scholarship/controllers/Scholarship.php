@@ -106,6 +106,18 @@ class Scholarship extends CI_Controller {
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$student))->first_row('array');
 
+        $ret['registration'] = $this->data_fetcher->getRegistrationInfo($student,$sem);
+        
+        if($ret['registration']){
+            $data['tuition'] = $this->data_fetcher->getTuition($student,$sem,$ret['registration']['enumScholarship']);
+            $ret['tuition_data'] = $data['tuition'];
+            $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
+            $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intRegistrationID']))->result_array();
+        }
+        else
+            $data['tuition'] = "";
+
+
         $ret['student_scholarships'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'scholarship'))
                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
