@@ -258,10 +258,9 @@ new Vue({
                         showCloseButton: true,
                         showLoaderOnConfirm: true,
                         preConfirm: (login) => {
+                            console.log(this.checked);
                             var formdata= new FormData();
-                            formdata.append("transferTo",this.transfer_to);
-                            if(!Array.isArray(this.checked))
-                                this.checked = [this.checked];
+                            formdata.append("transferTo",this.transfer_to);                            
                             formdata.append("students",this.checked);
                             formdata.append("classlistFrom",this.classlist.intID);
                             
