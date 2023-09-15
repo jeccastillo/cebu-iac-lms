@@ -1960,18 +1960,18 @@ class Unity extends CI_Controller {
 
             
             $data['label'] = "Submit"; 
-            if  ($data['classlist']['intFinalized'] == 0) {
+            if ($data['classlist']['intFinalized'] == 0) {
                 $data['label'] = "Submit Midterm Grades";
-                if($data['classlist']['midterm_start'] <= date("Y-m-d") && $data['classlist']['midterm_end'] <= date("Y-m-d")){
+                if($data['classlist']['midterm_start'] <= date("Y-m-d") && $data['classlist']['midterm_end'] >= date("Y-m-d")){
                     $data['disable_submit'] =  false;                                                    
                 }
                 else
                     $data['disable_submit'] =  true;
 
             }
-            else if  ($data['classlist']['intFinalized'] == 1) {
+            else if ($data['classlist']['intFinalized'] == 1) {
                 $data['label'] = "Submit Final Grades";
-                if($data['classlist']['final_start'] <= date("Y-m-d") && $data['classlist']['final_end'] <= date("Y-m-d")){
+                if($data['classlist']['final_start'] <= date("Y-m-d") && $data['classlist']['final_end'] >= date("Y-m-d")){
                         $data['disable_submit'] =  false;                                                
                 }
                     else
