@@ -170,8 +170,7 @@
                                                 <th>Grade</th>
                                                 <th>Remarks</th>
                                                 <th>Faculty</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
+                                                <th>Status</th>                                                
                                             </tr>
                                         </thead>
                                         <tbody>                                          
@@ -179,17 +178,13 @@
                                                 <td>{{ record.strSection }}</td>
                                                 <td>{{ record.strCode }}</td>
                                                 <td>{{ record.strUnits }}</td>
-                                                <td>{{ record.v3Display }}</td>
+                                                <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                                <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
                                                 <td>{{ record.strRemarks }}</td>
                                                 <td>{{ record.facultyName }}</td>
-                                                <td>{{ record.recStatus }}</td>
-                                                <td>                                                    
-                                                    <a v-if="record.intFinalized < 2 && registration.intROG < 2" href="#"  @click.prevent.stop="removeFromClasslist(record.intCSID)">Remove</a><br />
-                                                    <a v-if="record.intFinalized < 2" :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                                                    
-                                                    <a v-else :href="base_url + 'unity/classlist_viewer/' + record.classlistID">View Classlist</a>                               
-                                                </td>
+                                                <td>{{ record.recStatus }}</td>                                                
                                             </tr>
-                                            <tr style="font-size: 13px;">
+                                            <!-- <tr style="font-size: 13px;">
                                                 <td></td>
                                                 <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
                                                 <td>{{ total_units }}</td>
@@ -200,7 +195,7 @@
                                                 <td align="right"><strong>GPA:</strong></td>
                                                 <td>{{ gpa }}</td>
                                                 <td colspan="3"></td>
-                                            </tr>
+                                            </tr> -->
 
                                         </tbody>
                                     </table>
