@@ -237,6 +237,7 @@ new Vue({
         reservation_payment: undefined,
         application_payment: undefined,
         amount_paid_formatted: 0,
+        remaining_amount_formatted:0,
         student: undefined,    
         request_scholarship:{
             discount_id: undefined,
