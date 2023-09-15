@@ -1963,19 +1963,19 @@ class Unity extends CI_Controller {
             if  ($data['classlist']['intFinalized'] == 0) {
                 $data['label'] = "Submit Midterm Grades";
                 if((date("Y-m-d") < $data['classlist']['midterm_start'] && date("Y-m-d") < $data['classlist']['midterm_end']) || (date("Y-m-d") > $data['classlist']['midterm_start'] && date("Y-m-d") > $data['classlist']['midterm_end'])){
-                        $data['disable_submit'] =  '';                                                    
+                        $data['disable_submit'] =  false;                                                    
                     }
                     else
-                        $data['disable_submit'] =  'disabled';
+                        $data['disable_submit'] =  true;
 
             }
             else if  ($data['classlist']['intFinalized'] == 1) {
                 $data['label'] = "Submit Final Grades";
                 if((date("Y-m-d") < $data['classlist']['final_start'] && date("Y-m-d") < $data['classlist']['final_end']) || (date("Y-m-d") > $data['classlist']['final_start'] && date("Y-m-d") > $data['classlist']['final_end'])){
-                        $data['disable_submit'] =  '';                                                
+                        $data['disable_submit'] =  false;                                                
                 }
                     else
-                        $data['disable_submit'] =  'disabled';
+                        $data['disable_submit'] =  true;
 
             }                                        
                                  
