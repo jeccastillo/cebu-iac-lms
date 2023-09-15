@@ -260,8 +260,11 @@ new Vue({
                         preConfirm: (login) => {
                             console.log(this.checked);
                             var formdata= new FormData();
-                            formdata.append("transferTo",this.transfer_to);                            
-                            formdata.append("students",this.checked);
+                            formdata.append("transferTo",this.transfer_to);  
+                            
+                            for(i in checked)                          
+                                formdata.append("students[]",this.checked[i]);
+
                             formdata.append("classlistFrom",this.classlist.intID);
                             
                             return axios.post(base_url + 'unity/transfer_classlist', formdata, {
