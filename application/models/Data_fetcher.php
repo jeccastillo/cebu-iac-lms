@@ -2218,6 +2218,8 @@ class Data_fetcher extends CI_Model {
         $discounted_price = 0;        
         $scholar = null;
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
+        print_r($discount);
+        die();
 
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);
