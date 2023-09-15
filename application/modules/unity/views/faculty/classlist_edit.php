@@ -4,7 +4,7 @@
                         Classlist
                     </h1>
                     <small>
-                    <a class="btn btn-app" href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>"><i class="fa fa-gear"></i> View Classlist</a>                    
+                    <a class="btn btn-app" href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>"><i class="fa fa-list"></i> View Classlist</a>                    
                     </small>
                 </section>
 <section class="content">
