@@ -246,7 +246,7 @@ new Vue({
                 }).then(function() {                    
                 });                
             }
-            else{                                 
+            else{                                           
                 Swal.fire({
                         title: 'Transfer Students?',
                         text: "Are you sure you want to transfer? Warning: Transferring students will reset their grade and remarks.",
@@ -260,6 +260,8 @@ new Vue({
                         preConfirm: (login) => {
                             var formdata= new FormData();
                             formdata.append("transferTo",this.transfer_to);
+                            if(!this.checked.isArray())
+                                this.checked = [this.checked];
                             formdata.append("students",this.checked);
                             formdata.append("classlistFrom",this.classlist.intID);
                             
