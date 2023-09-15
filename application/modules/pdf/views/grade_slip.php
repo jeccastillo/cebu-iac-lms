@@ -104,7 +104,7 @@ $html .= '
         else
             $grade = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
         
-        $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2)?number_format($item['strUnits'],1):0;
+        $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2 && $period == "final")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
             $units = number_format($item['strUnits'],1);
         else{
