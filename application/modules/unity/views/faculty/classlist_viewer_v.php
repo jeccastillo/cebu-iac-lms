@@ -246,8 +246,40 @@ new Vue({
                 }).then(function() {                    
                 });                
             }
-            else{
-
+            else{                                 
+                Swal.fire({
+                        title: 'Transfer Students?',
+                        text: "Are you sure you want to transfer? Warning: Transferring students will reset their grade and remarks.",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        imageWidth: 100,
+                        icon: "question",
+                        cancelButtonText: "No, cancel!",
+                        showCloseButton: true,
+                        showLoaderOnConfirm: true,
+                        preConfirm: (login) => {
+                            var formdata= new FormData();
+                            formdata.append("transferTo",this.transfer_to);
+                            formdata.append("students",this.checked);
+                            formdata.append("classlistFrom",this.classlist.intID);
+                            
+                            return axios.post(base_url + 'unity/transfer_classlist', formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            });                    
+                        }
+                    });
             }
         },
 
