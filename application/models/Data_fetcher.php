@@ -2240,12 +2240,14 @@ class Data_fetcher extends CI_Model {
                 ->result(); 
 
 
-        if($sch == 0)
+        if($sch == 0){
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','tb_mas_student_discount.status'=>'applied'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result(); 
+                print_r($sch);
+        }
         else{
             print_r($sch);
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
