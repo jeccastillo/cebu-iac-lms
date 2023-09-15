@@ -262,7 +262,7 @@ new Vue({
                             var formdata= new FormData();
                             formdata.append("transferTo",this.transfer_to);  
                             
-                            for(i in checked)                          
+                            for(i in this.checked)                          
                                 formdata.append("students[]",this.checked[i]);
 
                             formdata.append("classlistFrom",this.classlist.intID);
