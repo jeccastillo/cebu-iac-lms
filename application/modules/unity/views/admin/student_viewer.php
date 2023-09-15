@@ -161,25 +161,6 @@
                         <div v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']" class="tab-pane" id="tab_2">
                             <div class="box box-primary">
                                 <div class="box-body">                                    
-                                    <div v-if="active_sem.enumFinalized == 'no' && registration && sections.length > 0" class="row">
-                                        <div class="col-sm-6">
-                                            <div class="input-group">
-                                                <select v-model="add_subject.subject" class="select2" id="subjectSv" name="subjectSv">
-                                                    <option v-for="s in curriculum_subjects" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
-                                                </select>
-                                                <a :href="base_url + 'subject/subject_viewer/' + curriculum_subjects[0].intSubjectID" id="viewSchedules" target="_blank" class='btn btn-default input-group-addon  btn-flat'>View Schedules</a>
-                                            </div>                                                        
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <select v-model="add_subject.section" class="form-control" id="sections-to-add">
-                                                <option v-for="sc in sections" :value="sc.intID">{{ sc.strSection }}</option>                                                
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <a href="#" @click="submitSubject" class='btn btn-default  btn-flat'>Add Subject <i class='fa fa-plus'></i></a>
-                                        </div>
-                                    </div>
-                                    <hr />                                    
                                     <table v-if="registration" class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
