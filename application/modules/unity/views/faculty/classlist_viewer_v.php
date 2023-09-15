@@ -78,6 +78,9 @@
                     </table>
                     <div class="box-footer">
                         <div class="pull-right">
+                            <select v-model="transfer_to" class="form-control">
+                               <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + c.sub_section }}</option>                                
+                            </select>
                             <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
                                 <i class="fa fa-arrow-right"></i> {{ label }}
                             </a>
@@ -104,6 +107,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         active_sem: undefined,
         cl: [],
+        transfer_to: undefined,
         classlist:undefined,
         grading_items: [],
         grading_items_midterm:[],
