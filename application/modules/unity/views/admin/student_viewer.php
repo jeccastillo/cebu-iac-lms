@@ -22,9 +22,9 @@
                     <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                        
-                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
+                    <!-- <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Student Fee Asssessment
-                    </a>
+                    </a> -->
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'registrar/student_grade_slip/' + student.intID">
                         <i class="fa fa-book"></i>Grade Slip
                     </a>  
@@ -234,7 +234,7 @@
                             </div>
                         </div>
                         <!-- /.tab-pane -->
-                        <div v-if="advanced_privilages1" :class="[(tab == 'tab_3') ? 'active' : '']" class="tab-pane" id="tab_3">
+                        <!-- <div v-if="advanced_privilages1" :class="[(tab == 'tab_3') ? 'active' : '']" class="tab-pane" id="tab_3">
                             <div class="row">
                                 <div class="col-md-10 col-md-offset-1">
                                     <table class="table table-bordered">
@@ -258,7 +258,7 @@
                                     <div v-html="assessment"></div>                                    
                                 </div> 
                             </div>                                
-                        </div>                                        
+                        </div>                                         -->
                         <div v-if="registration" :class="[(tab == 'tab_5') ? 'active' : '']" class="tab-pane" id="tab_5">
                             <div class="box box-primary">
                                 <div class="box-body">
