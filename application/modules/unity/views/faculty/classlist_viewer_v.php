@@ -237,7 +237,7 @@ new Vue({
             });
         },
         transferToClasslist: function(){
-
+            console.log(this.checked);
         },
 
     }
