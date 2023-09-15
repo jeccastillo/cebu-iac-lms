@@ -135,9 +135,8 @@
                         <th width="10%"> Course Code</th>
                         <th >Course Title</th>
                         <th style="text-align: center;">Units</th>                        
-                        <th>M</th>                        
-                        <th>FG</th>                        
-                        <th></th>
+                        <th>Midterm</th>                        
+                        <th>Final Grade</th>                                                
 						<th>Remarks</th>
                         <th>Faculty</th>
                     </tr>
