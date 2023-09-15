@@ -7,10 +7,10 @@
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
-                    <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+                    <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
-                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
+                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a v-if="reg_status != 'For Subject Enlistment' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
