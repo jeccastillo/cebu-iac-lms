@@ -260,7 +260,7 @@ new Vue({
                         preConfirm: (login) => {
                             var formdata= new FormData();
                             formdata.append("transferTo",this.transfer_to);
-                            if(!this.checked.isArray())
+                            if(!Array.isArray(this.checked))
                                 this.checked = [this.checked];
                             formdata.append("students",this.checked);
                             formdata.append("classlistFrom",this.classlist.intID);
