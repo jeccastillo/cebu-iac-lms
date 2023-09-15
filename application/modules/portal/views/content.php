@@ -161,12 +161,12 @@
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
                         <?php if($record['intFinalized'] == 1): ?>                                
-                            <td><?php echo $record['v2']; ?></td>
+                            <td><strong><?php echo $record['v2']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
                         <?php endif; ?>    
                         <?php if($record['intFinalized'] == 2): ?>                                
-                            <td><?php echo $record['v3']; ?></td>
+                            <td><strong><?php echo $record['v3']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
                         <?php endif; ?>
