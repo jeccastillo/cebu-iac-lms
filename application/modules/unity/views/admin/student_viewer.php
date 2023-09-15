@@ -22,9 +22,9 @@
                     <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                        
-                    <!-- <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
-                        <i class="fa fa-book"></i>Student Fee Asssessment
-                    </a> -->
+                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
+                        <i class="fa fa-book"></i>Student Fee Assessment
+                    </a>
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'registrar/student_grade_slip/' + student.intID">
                         <i class="fa fa-book"></i>Grade Slip
                     </a>  
@@ -76,7 +76,7 @@
                     <ul class="nav nav-tabs">
                         <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
                         <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
-                        <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                        
+                        <!-- <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                         -->
                         <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
                         <li v-if="advanced_privilages2"><a :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a></li>                        
                         <!-- <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li> -->
