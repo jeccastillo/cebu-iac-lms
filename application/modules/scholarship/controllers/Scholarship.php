@@ -111,8 +111,7 @@ class Scholarship extends CI_Controller {
         if($ret['registration']){
             $data['tuition'] = $this->data_fetcher->getTuition($student,$sem,$ret['registration']['enumScholarship']);
             $ret['tuition_data'] = $data['tuition'];
-            $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
-            $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intRegistrationID']))->result_array();
+            $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);         
         }
         else
             $data['tuition'] = "";
