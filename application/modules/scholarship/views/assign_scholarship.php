@@ -237,6 +237,8 @@ new Vue({
         payments_paid: [],
         reservation_payment: undefined,
         application_payment: undefined,
+        remaining_amount:0,
+        amount_paid: 0,
         amount_paid_formatted: 0,
         installments:[],
         remaining_amount_formatted:0,
