@@ -190,7 +190,37 @@ new Vue({
             });
         },
         finalizePeriod: function(){
-
+            Swal.fire({
+                title: 'Submit Grades?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("intID",this.classlist.intID);
+                    formdata.append("intFinalized",this.classlist.intFinalized);
+                    return axios.post(base_url + 'unity/finalize_term', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {
+                        this.loader_spinner = false;
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    });                    
+                }
+            });
         },
 
     }
