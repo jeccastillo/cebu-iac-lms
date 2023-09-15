@@ -234,6 +234,7 @@ new Vue({
         payments: [],
         other_payments: [],
         student_discounts:[],    
+        payments_paid: [],
         reservation_payment: undefined,
         application_payment: undefined,
         amount_paid_formatted: 0,
