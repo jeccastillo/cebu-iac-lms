@@ -41,7 +41,7 @@
                         </thead>
                         <tbody>                        
                             <tr v-for="(student,index) in students">                                    
-                                <td v-if="is_super_admin"><input type="checkbox" class="student-select minimal" :value="student.intID" /></td>                                                                                    
+                                <td v-if="is_super_admin"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
                                 <td>{{ student.strProgramCode }}</td>
@@ -79,11 +79,16 @@
                     <div class="box-footer">
                         <div class="pull-right">
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <select v-model="transfer_to" class="form-control">
-                                        <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
-                                    </select>
-                                </div>
+                                <form v-if="classlist.intFinalized > 0" method="post" @submit.prevent="transferToClasslist">
+                                    <div class="col-sm-4">
+                                        <select required v-model="transfer_to" class="form-control">
+                                            <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="submit" class="btn btn-warning" />
+                                    </div>
+                                </form>
                                 <div class="col-sm-4">
                                     <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
                                         <i class="fa fa-arrow-right"></i> {{ label }}
@@ -113,6 +118,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         active_sem: undefined,
         cl: [],
+        checked: [],
         transfer_to: undefined,
         classlist:undefined,
         grading_items: [],
@@ -231,6 +237,9 @@ new Vue({
                     });                    
                 }
             });
+        },
+        transferToClasslist: function(){
+
         },
 
     }
