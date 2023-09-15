@@ -79,7 +79,7 @@
                     <div class="box-footer">
                         <div class="pull-right">
                             <select v-model="transfer_to" class="form-control">
-                               <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + c.sub_section }}</option>                                
+                               <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
                             </select>
                             <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
                                 <i class="fa fa-arrow-right"></i> {{ label }}
