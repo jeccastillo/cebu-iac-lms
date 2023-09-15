@@ -160,56 +160,8 @@
                             <td><strong><?php echo $record['v3']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
-                        <?php endif; ?>
-                            <td>
-                            <?php
-                                $totalSub++;
-                                $totalFinalized += $record['intFinalized']; 
-                                if($record['v3'] != 3.50 && $record['v3'] != "0" )
-                                
-                                {
-
-                                    
-                                    if ($record['intBridging'] == 1){
-                                        $countBridg  = $countBridg + $record['intBridging'];
-                                        //$num_of_bridging = count($record['intBridging']);
-                                        if ($record['intFinalized'] != 3) {
-                                            $totalUnits = 0; 
-                                        }
-                                        else {
-                                            $totalUnits += $record['strUnits'];
-                                            $totalUnits-=3;
-                                        }
-                                    }
-                                    else{
-                                        $product = $record['strUnits'] * $record['v3']; 
-                                        $products[] = $product;
-                                        if ($record['intFinalized'] != 3) {
-                                            $totalUnits = 0;
-                                           
-                                        }
-                                        else {
-                                            $totalUnits += $record['strUnits'];
-                                              
-                                        }
-                                        
-                                    }     
-                                    /*
-                                    //$productArray = array();
-                                    $product = $record['strUnits'] * $record['v3']; 
-                                    $products[] = $product;
-                                    //echo $product
-                                    $totalUnits += $record['strUnits'];*/
-                                }
-                            ?>
-                            </td>
-						<?php if($record['v3'] == 5.00): 
-                        ?>  
-                        <td><span class="text-red"><?php echo ($record['intFinalized'] == 3)?$record['strRemarks']:''; ?></span></td>
-                        <?php else: ?>
-                        <td><?php echo ($record['intFinalized'] == 3)?$record['strRemarks']:''; ?></td>
-                        <?php endif; ?>
-                        
+                        <?php endif; ?>                                                        
+                        <td><span class="text-red"><?php echo ($record['intFinalized'] >= 1)?$record['strRemarks']:''; ?></span></td>                        
                         <td><?php if($record['strFirstname']!="unassigned"){
                                     $firstNameInitial = substr($record['strFirstname'], 0,1);
                                     echo $firstNameInitial.". ".$record['strLastname'];  
