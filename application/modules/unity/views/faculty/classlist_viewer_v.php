@@ -76,6 +76,13 @@
                             </tr>
                         </tbody>                        
                     </table>
+                    <div class="box-footer">
+                        
+                        <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
+                            <i class="fa fa-arrow-right"></i> {{ label }}
+                        </a>
+                        
+                    </div>
                 </div>
             </div>
         </div><!---content container--->
@@ -105,6 +112,8 @@ new Vue({
         is_super_admin: false,
         subject: undefined,        
         cdate: undefined,
+        label: 'Submit',
+        disable_submit: true,
 
     },
 
@@ -135,6 +144,8 @@ new Vue({
             this.show_all = data.data.showall;
             this.students = data.data.students;
             this.subject = data.data.subject;
+            this.label = data.data.label;
+            this.disable_submit = data.data.disable_submit;
             
         })
         .catch((error) => {
