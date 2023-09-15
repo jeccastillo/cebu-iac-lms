@@ -1021,9 +1021,7 @@ class Unity extends CI_Controller {
                         $products[] = $product;
                         $totalUnits += intval($record['strUnits']);
                     }    
-                }
-                if($record['intFinalized']  <= 2)
-                    $record['strRemarks'] = "-";
+                }                
                     
                 if($record['strFirstname']!="unassigned"){
                     $firstNameInitial = substr($record['strFirstname'], 0,1);
