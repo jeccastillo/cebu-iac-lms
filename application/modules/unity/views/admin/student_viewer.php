@@ -167,7 +167,8 @@
                                                 <th>Section Code</th>
                                                 <th>Course Code</th>
                                                 <th>Units</th>
-                                                <th>Grade</th>
+                                                <th>Midterm</th>
+                                                <th>Final</th>
                                                 <th>Remarks</th>
                                                 <th>Faculty</th>
                                                 <th>Status</th>                                                
