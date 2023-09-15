@@ -159,16 +159,16 @@
                         <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
-                        <td style="text-align: center;"><?php echo $record['strUnits']?>                        
-                        <td class="g-content"><?php echo ($record['floatMidtermGrade']==0 || $record['intFinalized'] > 1)?$record['floatMidtermGrade']:'-'; ?></td>                        
-                        <?php if($record['intFinalized'] == 3): ?>                                
-                            <?php if( $record['floatFinalGrade'] == 5.00): ?>
-                                <td style="text-align: center;"><span class="text-red"><?php echo $record['floatFinalGrade']; ?></span></td>
-                            <?php else: ?>
-                                <td style="text-align:center;"></span><span style="font-weight:bold; "><?php echo $record['floatFinalGrade']; ?></span></td>
-                            <?php endif; ?>
-                        <?php else: ?>                            
-                            <td style="text-align: center;"><span class="text-green" >--</span></td>
+                        <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
+                        <?php if($record['intFinalized'] == 1): ?>                                
+                            <td><?php echo $record['intMidtermGrade']; ?></td>
+                        <?php else: ?>
+                            <td>---</td>
+                        <?php endif; ?>    
+                        <?php if($record['intFinalized'] == 2): ?>                                
+                            <td><?php echo $record['intFinalGrade']; ?></td>
+                        <?php else: ?>
+                            <td>---</td>
                         <?php endif; ?>
                             <td>
                             <?php
