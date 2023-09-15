@@ -78,18 +78,7 @@
     <!-- <div class="box box-solid box-warning"> -->
     <div class="box box-warning">
           <div class="box-header">
-            <h3 class="box-title" ><?php echo 'Grades - A.Y. ' . $active_sem['strYearStart']."-".$active_sem['strYearEnd'] . " " .  $active_sem['enumSem']." ".$term_type." "; ?></h3>
-
-            <div class="box-tools pull-right">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-box-tool dropdown-toogle" data-toggle="dropdown">
-                        <i class ="fa fa-wrench"> </i></button>
-                        <ul class="dropdown-menu" role="menu" style="font-weight:normal;text-transform:Capitalize;text-align:left;">
-                            <li><a href="#" id="gradeToggle">Hide Breakdown</a></li>
-                            <li><a target="_blank" href="<?php echo base_url()."pdf/student_viewer_rog_print/".$student['intID'] ."/". $active_sem['intID']; ?>">Print</a></li>
-                        </ul>
-                </div>
-            </div>
+            <h3 class="box-title" ><?php echo 'Grades - A.Y. ' . $active_sem['strYearStart']."-".$active_sem['strYearEnd'] . " " .  $active_sem['enumSem']." ".$term_type." "; ?></h3>            
          </div>
         
         <?php if ($reg_status =="For Subject Enlistment"):  { ?>
