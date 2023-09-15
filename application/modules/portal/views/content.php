@@ -160,7 +160,7 @@
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
-                        <?php if($record['intFinalized'] == 1): ?>                                
+                        <?php if($record['intFinalized'] >= 1): ?>                                
                             <td><strong><?php echo $record['v2']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
