@@ -238,53 +238,6 @@
     <?php endif; ?>
 
     
-<div class="box box-primary">
-        <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr> 
-                            <td><strong>UNITS CREDITED:</strong></td> <td>
-                                <?php 
-                                    if (($totalSub*3)== $totalFinalized) {
-                                        echo $totalUnits;
-                                    }
-                                    else {
-                                        echo '--';
-                                }
-                                ?></td>
-                            <td><strong>GPA:</strong></td>
-                            <td>
-                                <?php
-                                   if (($totalSub*3) == $totalFinalized) {
-                                    $gpa = round(array_sum($products) / $totalUnits, 2) ;
-                                    echo $gpa;
-                                }
-                                else {
-                                    echo '--';
-                                }
-                                ?>
-                            <input type="hidden" id="totalSub" value="<?php echo $totalSub*3;?> ">
-                           <input type="hidden" id="totalFinalized" value="<?php echo $totalFinalized;?> ">    
-                            </td>
-
-                        
-                        </tr>
-                      
-                        <?php if($countBridg > 0): ?>
-                            <td colspan="4" style="font-style:italic;font-size:13px;"><small>Note: (<?php echo $countBridg; ?>) Bridging course/s - not computed in units & GPA.</small></td>
-                            <?php endif; ?> 
-                        </tr>
-                           
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                
-
-        </div>
-    </div>
-
-</div>
 
 <div class="modal fade" id="modal-default" style="display:none;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
@@ -376,7 +329,7 @@
                 <!-- <td> <?php echo substr($grades[$key]['strYearStart'], 2) . substr($grades[$key]['strYearEnd'], 2)?></td>
                 <td><?php echo $grades[$key]['enumSem'];?>  </td> -->
                 <td>
-                     <?php echo ($key)?number_format($grades[$key]['floatFinalGrade'], 2, ".", ","):'NR'; ?>
+                     <?php echo ($key)?$grades[$key]['floatFinalGrade']:'NGS'; ?>
                 </td>
             </tr>
         <?php if($prev_year_sem != $curriculum_subjects[$i+1]['intYearLevel']."_".$curriculum_subjects[$i+1]['intSem'] || count($curriculum_subjects) == $i+1): ?>   
