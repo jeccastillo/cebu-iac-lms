@@ -150,7 +150,7 @@
                         <?php else: ?>
                             <td>NGS</td>
                         <?php endif; ?>                                                        
-                        <td><span class="text-red"><?php echo ($record['intFinalized'] >= 1)?$record['strRemarks']:''; ?></span></td>                        
+                        <td><?php echo ($record['intFinalized'] >= 1)?$record['strRemarks']:''; ?></td>                        
                         <td><?php if($record['strFirstname']!="unassigned"){
                                     $firstNameInitial = substr($record['strFirstname'], 0,1);
                                     echo $firstNameInitial.". ".$record['strLastname'];  
