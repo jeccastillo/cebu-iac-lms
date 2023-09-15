@@ -234,7 +234,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 endif;
                     if(!empty($tuition['scholarship'])):
                         $ctr = 0;
-                        foreach($tuition['scholarships'] as $sch):                                      
+                        foreach($tuition['scholarship'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
                                         <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
