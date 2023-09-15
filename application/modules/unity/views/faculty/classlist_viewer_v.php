@@ -188,7 +188,10 @@ new Vue({
                     
                 });
             });
-        }
+        },
+        finalizePeriod: function(){
+
+        },
 
     }
 
