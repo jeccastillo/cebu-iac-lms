@@ -456,7 +456,7 @@ class Unity extends CI_Controller {
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
             if($ret['registration']){
-                $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+                $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay']);
                 $ret['tuition_data'] = $data['tuition'];
                 $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
                 $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intRegistrationID']))->result_array();
@@ -525,7 +525,7 @@ class Unity extends CI_Controller {
         }
         $ret['payment'] = $pay;        
         //--------TUITION-------------------------------------------------------------------
-        $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+        $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay']);
         $ret['tuition_data'] = $data['tuition'];
         $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
         $ret['success']= true;
@@ -582,7 +582,7 @@ class Unity extends CI_Controller {
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
             if($ret['registration']){
-                $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay'],$ret['registration']['enumScholarship']);
+                $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay']);
                 $ret['tuition_data'] = $data['tuition'];
                 $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
             }
@@ -768,7 +768,7 @@ class Unity extends CI_Controller {
             $reg = $this->data_fetcher->getRegistrationInfo($id,$sy['intID']);
             if(!empty($reg)){ 
                 $sdata['sy'] = $sy;
-                $pdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID'],$reg['enumScholarship']);                      
+                $pdata['tuition'] = $this->data_fetcher->getTuition($id,$sy['intID']);                      
                 $sdata['tuition'] = $pdata['tuition'];
                 $sdata['tuition_view'] = $this->load->view('tuition/tuition_view', $pdata, true);
                 $sdata['tuition_view_table'] = $this->load->view('tuition/tuition_view_table', $pdata, true);
