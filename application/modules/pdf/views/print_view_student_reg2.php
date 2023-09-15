@@ -174,7 +174,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                         $totalLec = $totalLab + $lec;
                                     }     
                                 }    
-
+print_r($tuition);
                          
         $html.='
         <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
