@@ -49,6 +49,7 @@
                             <th>Course Code</th>
                             <th>Descriptive Title</th>
                             <th>Units</th>
+                            <th>Midterm Grade</th>
                             <th>Final Grade</th>
                             <th>Units Earned</th>
                         </tr>                        
@@ -58,6 +59,8 @@
                             <td>{{ item.strCode }}</td>
                             <td>{{ item.strDescription }}</td>
                             <td>{{ item.strUnits }}</td>
+                            <td v-if="item.intFinalized >=1">{{ item.v2 }}</td>
+                            <td v-else>NGS</td>
                             <td v-if="item.intFinalized >=2">{{ item.v3 }}</td>
                             <td v-else>NGS</td>
                             <td v-if="item.strRemarks =='Passed'">{{ item.strUnits }}</td>
