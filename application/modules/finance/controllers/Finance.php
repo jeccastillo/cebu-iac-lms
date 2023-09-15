@@ -384,9 +384,9 @@ class Finance extends CI_Controller {
                      ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
             }
             
-            if($post['registration_id'])
-                $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
-
+           
+            $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
+           
             if(!empty($update)){
                 $this->db
                         ->where(array('intRegistrationID'=>$post['registration_id']))
@@ -416,7 +416,7 @@ class Finance extends CI_Controller {
 
                    
 
-            if($post['description'] == "Tuition Fee" && $registration && $registration['intROG'] == 0){
+            if($post['description'] == "Tuition Fee" && $registration['intROG'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $ret['send_notif'] = true;
                 $reg_update = [
