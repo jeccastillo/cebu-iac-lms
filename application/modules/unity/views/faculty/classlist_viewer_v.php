@@ -80,7 +80,7 @@
                         <div class="row">
                             <form method="post" @submit.prevent="transferToClasslist">
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-warning">Transfer to <i class="fa fa-arrow-right"></i></button>
+                                    <button type="submit" class="btn btn-warning btn-block">Transfer to <i class="fa fa-arrow-right"></i></button>
                                 </div>
                                 <div class="col-sm-4">
                                     <select required v-model="transfer_to" class="form-control">
