@@ -2128,7 +2128,7 @@ class Data_fetcher extends CI_Model {
         return $ret;
     }
 
-    function getTuition($id,$sem,$scholarship = 0,$discount = 0)
+    function getTuition($id,$sem,$sch = 0,$discount = 0)
     {
         
 
@@ -2150,10 +2150,7 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
 
-        print_r($scholarship);
-        die();
-
-        return $this->getTuitionSubjects($registration['enumStudentType'],$scholarship,$discount,$subjects,$id,$registration['type_of_class'],$sem);
+        return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem);
         
     }
 
