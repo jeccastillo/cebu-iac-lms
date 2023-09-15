@@ -2221,8 +2221,7 @@ class Data_fetcher extends CI_Model {
 
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);        
-        echo $sch;
-        die();
+        
         if($sch == 0){
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','tb_mas_student_discount.status'=>'applied'))
@@ -2231,6 +2230,8 @@ class Data_fetcher extends CI_Model {
                 ->result();
         }
         else{
+            echo $sch;
+            die();
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
