@@ -50,7 +50,7 @@
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'midterm')" class="form-control" v-model="students[index].floatMidtermGrade">                              
-                                        <option :selected="(!student.floatMidtermGrade || student.floatMidtermGrade == 50)? true : false"  value="NGS">NGS</option>                                        
+                                        <option  value="NGS">NGS</option>                                        
                                         <option v-for="grading_item in grading_items_midterm" :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
@@ -62,7 +62,7 @@
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'final')" class="form-control" v-model="students[index].floatFinalGrade">                              
-                                        <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>                                        
+                                        <option value="NGS">NGS</option>                                        
                                         <option v-for="grading_item in grading_items" :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
