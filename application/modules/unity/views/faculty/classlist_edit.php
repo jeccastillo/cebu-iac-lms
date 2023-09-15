@@ -3,18 +3,17 @@
                     <h1>
                         Classlist
                     </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url(); ?>unity/view_classlist"><i class="ion ion-android-book"></i> Classlist</a></li>
-                        <li class="active">Edit Classlists</li>
-                    </ol>
+                    <small>
+                    <a class="btn btn-app" href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>"><i class="fa fa-gear"></i> View Classlist</a>                    
+                    </small>
                 </section>
 <section class="content">
     <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     
                     <!--li><a href="#tab_3" data-toggle="tab">Quiz Record</a></li-->
-                    <li class="pull-right"><a href="<?php echo base_url() ?>unity/classlist_viewer/<?php echo $classlist['intID']; ?>" class="text-muted"><i class="fa fa-bars"></i> View</a></li>
-                    <li class="pull-right hide"><a href="#" id="addStudentModal" class="text-muted"><i class="fa fa-plus"></i> Add Student</a></li>
+                    
+                    
                 </ul>
         <div class="span10 box box-primary">
             <div class="box-header">                 
