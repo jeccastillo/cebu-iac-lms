@@ -89,7 +89,7 @@
                                 </div>                                
                             </form>
                             <div class="col-sm-4">
-                                <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
+                                <a v-if="classlist.intFinalized < 2" href="#" data-target="#myModal" data-toggle="modal" class="btn btn-success" :disabled = "disable_submit">
                                     {{ label }}
                                 </a>
                             </div>
@@ -98,6 +98,46 @@
                 </div>
             </div>
         </div><!---content container--->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Submit Grades</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">                        
+                        <thead>
+                            <tr>                                                    
+                                <th></th>
+                                <th>Name</th>
+                                <th>Program</th>                                
+                                <th v-if="classlist.intFinalized == 0">MIDTERM GRADE</th>
+                                <th v-else>FINAL GRADE</th>  
+                                <th>Remarks</th>                                                                                                                 
+                            </tr>
+                        </thead>
+                        <tbody>                        
+                            <tr v-for="(student,index) in students">                                                                
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</td>
+                                <td>{{ student.strProgramCode }}</td>
+                                <td v-if="classlist.intFinalized == 0">                                        
+                                    {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}                                                                           
+                                </td>                             
+                                <td v-else> {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}</td>                                                                                  
+                                <td>{{ student.strRemarks }}</td>                                
+                            </tr>
+                        </tbody>                        
+                    </table>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="button" :disabled="disable_submit" @click="finalizePeriod" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
