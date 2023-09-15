@@ -66,7 +66,7 @@
               <p> <?php  echo 'major in '. $student['strMajor']; ?></p>
             </div>
             <div class="col-xs-4 col-md-4">
-              <p><strong>Student Number: </strong><?php echo $student['strStudentNumber']; ?></p>
+              <p><strong>Student Number: </strong><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']); ?></p>
               <p><strong>Year Level: </strong><?php echo $academic_standing['year']; ?></p>
               <p><strong>Academic Status: </strong><?php echo $academic_standing['status']; ?></p>
               <p><strong>Enrollment Status: </strong><?php echo $reg_status; ?></p>
