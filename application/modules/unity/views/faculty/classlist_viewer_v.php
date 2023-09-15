@@ -77,11 +77,11 @@
                         </tbody>                        
                     </table>
                     <div class="box-footer">
-                        
-                        <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
-                            <i class="fa fa-arrow-right"></i> {{ label }}
-                        </a>
-                        
+                        <div class="pull-right">
+                            <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
+                                <i class="fa fa-arrow-right"></i> {{ label }}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
