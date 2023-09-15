@@ -384,12 +384,14 @@ class Finance extends CI_Controller {
                      ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
             }
 
+            $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
+
             if(!empty($update)){
                 $this->db
                         ->where(array('intRegistrationID'=>$post['registration_id']))
                         ->update('tb_mas_registration',$update);
 
-                $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
+                
                 $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                            
                 //remove from Ledger
                     $this->db->where(array('name'=>'tuition','syid'=>$registration['intAYID'],'student_id'=>$registration['intStudentID']))
