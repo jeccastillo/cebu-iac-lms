@@ -49,7 +49,7 @@
                                     <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 1 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end )) && !is_super_admin">
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
-                                    <select v-else @change="updateGrade($event,'midterm')" class="form-control" >                              
+                                    <select v-else @change="updateGrade($event,'midterm',student.intCSID)" class="form-control" >                              
                                         <option :selected="(!student.floatMidtermGrade || student.floatMidtermGrade == 50)? true : false"  value="NGS">NGS</option>                                        
                                         <option v-for="grading_item in grading_items_midterm" :selected="student.floatMidtermGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
@@ -61,7 +61,7 @@
                                     <span v-if="student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized >= 2 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end )) && !is_super_admin">
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
-                                    <select v-else @change="updateGrade($event,'final')"class="form-control">                              
+                                    <select v-else @change="updateGrade($event,'final',student.intCSID)"class="form-control">                              
                                         <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>                                        
                                         <option v-for="grading_item in grading_items" :selected="student.floatFinalGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
@@ -146,11 +146,11 @@ new Vue({
     },
 
     methods: {                
-        updateGrade: function(event,period){            
+        updateGrade: function(event,period,csid){            
 
             var type = 3;
             var formdata= new FormData();
-            formdata.append("intCSID",this.classlist.intID);
+            formdata.append("intCSID",csid);
             var values = event.target.value.split("-");
             formdata.append("strRemarks",values[1]);
             if(period == 'midterm'){
