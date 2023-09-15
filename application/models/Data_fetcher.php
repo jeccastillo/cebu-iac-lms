@@ -2247,7 +2247,8 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_student_discount')
                 ->result_array();             
         }
-        else{                       
+        else{         
+            print_r($sch);              
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
