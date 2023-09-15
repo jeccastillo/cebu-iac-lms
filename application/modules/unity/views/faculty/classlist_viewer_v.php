@@ -103,7 +103,7 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Submit Grades</h4>
+                    <h4 class="modal-title">Review Grades</h4>
                 </div>
                 <div class="modal-body">
                     <table class="table table-striped">                        
@@ -112,8 +112,8 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Program</th>                                
-                                <th v-if="classlist.intFinalized == 0">MIDTERM GRADE</th>
-                                <th v-else>FINAL GRADE</th>  
+                                <th v-if="classlist.intFinalized == 0">MIDTERM GRADES</th>
+                                <th v-else>FINAL GRADES</th>  
                                 <th>Remarks</th>                                                                                                                 
                             </tr>
                         </thead>
