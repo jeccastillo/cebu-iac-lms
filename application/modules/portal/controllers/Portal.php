@@ -183,7 +183,7 @@ class Portal extends CI_Controller {
     
             $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
             $this->data['student'] = $this->data_fetcher->getStudent($this->session->userdata('intID'));
-            $this->data['records'] = $this->data_fetcher->getClassListStudentsStPortal($this->session->userdata('intID'),$this->data['selected_ay']);
+            $this->data['records'] = $this->data_fetcher->getClassListStudentsSt($this->session->userdata('intID'),$this->data['selected_ay']);
             $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
             $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$this->data['selected_ay']);
             //$this->data['home'] = true;
