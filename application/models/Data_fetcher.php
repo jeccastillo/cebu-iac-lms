@@ -2238,9 +2238,6 @@ class Data_fetcher extends CI_Model {
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result();
-
-            print_r($scholarships);
-            die();
         }
         
         if($discount == 0)
