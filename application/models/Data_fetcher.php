@@ -2222,10 +2222,7 @@ class Data_fetcher extends CI_Model {
         $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);        
         
-        $scholarship = (int)$scholarship;
-        $discount = (int)$discount;
-
-        if($scholarship == 0){
+        if($scholarship){
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','tb_mas_student_discount.status'=>'applied'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
@@ -2240,7 +2237,7 @@ class Data_fetcher extends CI_Model {
                 ->result();
         }
         
-        if($discount == 0)
+        if($discount)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'discount','tb_mas_student_discount.status'=>'applied'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
