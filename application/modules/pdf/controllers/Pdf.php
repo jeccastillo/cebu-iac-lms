@@ -701,10 +701,7 @@ class Pdf extends CI_Controller {
 
         $registration = $this->data['registration'];
         $tuition = $this->data['tuition'];
-        //$total = $data['total'];
-        
-        //--------TUITION-------------------------------------------------------------------
-        $this->data['tuition'] = $this->data_fetcher->getTuition($id,$this->data['selected_ay'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$this->data['registration']['enumScholarship']);
+        //$total = $data['total'];       
                         
 
         switch($this->data['student']['strProgramCode'])
