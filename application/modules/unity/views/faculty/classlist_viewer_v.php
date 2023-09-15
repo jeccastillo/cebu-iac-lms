@@ -76,26 +76,24 @@
                             </tr>
                         </tbody>                        
                     </table>
-                    <div class="box-footer">
-                        <div class="pull-right">
-                            <div class="row">
-                                <form method="post" @submit.prevent="transferToClasslist">
-                                    <div class="col-sm-4">
-                                        <select required v-model="transfer_to" class="form-control">
-                                            <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <input type="submit" class="btn btn-warning" />
-                                    </div>
-                                </form>
+                    <div class="box-footer">                        
+                        <div class="row">
+                            <form method="post" @submit.prevent="transferToClasslist">
                                 <div class="col-sm-4">
-                                    <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
-                                        <i class="fa fa-arrow-right"></i> {{ label }}
-                                    </a>
+                                    <input type="submit" class="btn btn-warning" value="transfer to" />
                                 </div>
+                                <div class="col-sm-4">
+                                    <select required v-model="transfer_to" class="form-control">
+                                        <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
+                                    </select>
+                                </div>                                
+                            </form>
+                            <div class="col-sm-4">
+                                <a v-if="classlist.intFinalized < 2" href="#" @click="finalizePeriod"  class="btn btn-success" :disabled = "disable_submit">
+                                    <i class="fa fa-arrow-right"></i> {{ label }}
+                                </a>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
