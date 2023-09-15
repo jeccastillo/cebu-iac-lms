@@ -232,9 +232,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
                                 </tr>';
                 endif;
-                    if(!empty($tuition['scholarship'])):
+                    if(!empty($tuition['scholarships'])):
                         $ctr = 0;
-                        foreach($tuition['scholarship'] as $sch):                                      
+                        foreach($tuition['scholarships'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
                                         <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
@@ -243,9 +243,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         $ctr++;
                         endforeach;
                     endif;
-                    if(!empty($tuition['discount'])):
+                    if(!empty($tuition['discounts'])):
                         $ctr = 0;
-                        foreach($tuition['discount'] as $sch):                                      
+                        foreach($tuition['discounts'] as $sch):                                      
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
                                         <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
