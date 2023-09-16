@@ -1826,6 +1826,7 @@ class Unity extends CI_Controller {
          $this->db->where(array('name'=>'tuition','syid'=>$registration['intAYID'],'student_id'=>$registration['intStudentID']))
             ->delete('tb_mas_student_ledger');
 
+        $data['tuition_data'] = $tuition_data;
         $amount = 0;
         if($post['paymentType'] == "full")
             $amount = $tuition_data['total_before_deductions'];
