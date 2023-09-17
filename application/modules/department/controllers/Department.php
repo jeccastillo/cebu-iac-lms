@@ -412,8 +412,7 @@ class Department extends CI_Controller {
 
         foreach($set as $s)
         {
-            $this->data_poster->removeFacultyClasslist($s);
-            $this->data_poster->deleteSchedule($s);
+            $this->data_poster->removeFacultyClasslist($s);            
         }
 
         foreach($post['classlists'] as $cs)
