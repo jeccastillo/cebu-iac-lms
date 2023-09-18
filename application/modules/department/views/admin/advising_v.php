@@ -160,8 +160,9 @@ new Vue({
                     this.prev_records = data.data.prev_records;
                     this.subjects_not_taken = data.data.subjects_not_taken;
                     this.advised_subjects = data.data.advised_subjects;
-                    for(i in data.data.advised_subjects){
-                        var list = this.subjects_not_taken.filter((el) => el.intID !== data.data.advised_subjects[i].intID);
+                    
+                    for(i in this.advised_subjects){
+                        var list = this.subjects_not_taken.filter((el) => el.intID !== this.advised_subjects[i].intID);
                         this.subjects_not_taken = list;
                     }
                 })
