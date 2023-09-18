@@ -60,6 +60,32 @@ class AdmissionsV1 extends CI_Controller {
         $this->data['current_sem'] = $sem['intID'];
     }
     
+    public function edit_submit_ay()
+    {
+        $post = $this->input->post();                
+       // $this->data_poster->set
+        $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
+        $this->data_poster->log_action('Admissions Details Updated','Updated Term Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
+        redirect(base_url()."admissions/edit_ay/".$post['intID']);
+            
+    }
+
+    public function edit_ay($id = 0){
+
+        if($id == 0)
+            $this->data['item'] = $this->data_fetcher->get_active_sem();
+        else
+            $this->data['item'] = $this->data_fetcher->getAy($id);  
+        
+        $this->data['page'] = "admissions_sy_setup";                    
+        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        
+        $this->load->view("common/header",$this->data);
+        $this->load->view("edit_sy_admissions",$this->data);
+        $this->load->view("common/footer",$this->data);         
+        $this->load->view("common/edit_sy_conf",$this->data); 
+    }
     
     public function view_all_leads($term = 0)
     {
