@@ -74,7 +74,7 @@
             </div> 
             <div class="box box-success">                
                 <div class="box-footer">
-                    <div class="row">
+                    <div class="row" style="font-weight:bold;">
                         <div class="col-sm-3 text-right">
                             Total Units Earned:
                         </div>
