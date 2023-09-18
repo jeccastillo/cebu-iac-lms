@@ -57,19 +57,40 @@
                             </tr>
                             <tr style="font-size: 13px;">
                                 <td></td>
-                                <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
+                                <td align="right"><strong>Units Earned for Term:</strong></td>
                                 <td>{{ term.units_earned }}</td>
                                 <td colspan="3"></td>
                             </tr>
                             <tr style="font-size: 11px;">
                                 <td></td>
-                                <td align="right"><strong>GWA:</strong></td>
+                                <td align="right"><strong>Term GWA:</strong></td>
                                 <td>{{ term.gwa }}</td>
                                 <td colspan="3"></td>
                             </tr>
 
                         </tbody>
                     </table>
+                </div>
+            </div> 
+            <div class="box box-success">
+                <div class="box-header">
+                    <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-3 pull-right">
+                            Total Units Earned:
+                        </div>
+                        <div class="col-sm-3">
+                            {{ units }}
+                        </div>
+                        <div class="col-sm-3 pull-right">
+                            GWA
+                        </div>
+                        <div class="col-sm-3">
+                            {{ gwa }}
+                        </div>
+                    </div>
                 </div>
             </div> 
         </div>
@@ -101,6 +122,8 @@ new Vue({
         slug: undefined,
         student:undefined,         
         records: [],         
+        gwa: undefined,
+        units: undefined,
     },
 
     mounted() {
@@ -111,7 +134,9 @@ new Vue({
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
                     this.student = data.data.student;
-                    this.records = data.data.data;            
+                    this.records = data.data.data;         
+                    this.gwa = data.data.gwa;
+                    this.units = data.data.total_units_earned;   
                 })
                 .catch((error) => {
                     console.log(error);
