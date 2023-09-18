@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>                                          
                             <tr v-for="record in term.records" style="font-size: 13px;">
-                                <td>{{ record.strSection }}</td>
+                                <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                 <td>{{ record.strCode }}</td>
                                 <td>{{ record.strUnits }}</td>
                                 <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
