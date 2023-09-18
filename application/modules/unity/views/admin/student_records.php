@@ -54,18 +54,18 @@
                                 <td>{{ record.facultyName }}</td>
                                                                                
                             </tr>
-                            <!-- <tr style="font-size: 13px;">
+                            <tr style="font-size: 13px;">
                                 <td></td>
                                 <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
-                                <td>{{ total_units }}</td>
+                                <td>{{ record.units_earned }}</td>
                                 <td colspan="3"></td>
                             </tr>
                             <tr style="font-size: 11px;">
                                 <td></td>
-                                <td align="right"><strong>GPA:</strong></td>
-                                <td>{{ gpa }}</td>
+                                <td align="right"><strong>GWA:</strong></td>
+                                <td>{{ record.gwa }}</td>
                                 <td colspan="3"></td>
-                            </tr> -->
+                            </tr>
 
                         </tbody>
                     </table>
