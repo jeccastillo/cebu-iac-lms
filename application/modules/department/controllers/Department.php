@@ -452,6 +452,7 @@ class Department extends CI_Controller {
         if(isset($post['subjects']))
         {
             $post['subjects'] = json_decode($post['subjects']);
+            print_r($post['subjects']);
             
             //TODO: CHECK if advised if not advised for the semester add advised data
             if(!$this->data_fetcher->checkStudentAdvised($post['studentID'],$ay)) //check per subject
