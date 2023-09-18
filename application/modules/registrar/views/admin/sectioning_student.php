@@ -33,10 +33,11 @@
                             <th>Student Number</th>
                             <th>Lastname</th>
                             <th>Firstname</th>
-                            <th>Middlename</th>
-                            <th>Scholarship</th>
+                            <th>Middlename</th>                            
                             <th>Course</th>
                             <th>Registration Status</th>
+                            <th>Term</th>
+                            <th>Type</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,10 +45,11 @@
                             <td><?php echo $student['strStudentNumber']; ?></td>
                             <td><?php echo $student['strLastname']; ?></td>
                             <td><?php echo $student['strFirstname']; ?></td>
-                            <td><?php echo $student['strMiddlename']; ?></td>
-                            <td><?php echo $student['enumScholarship']; ?></td>
+                            <td><?php echo $student['strMiddlename']; ?></td>                            
                             <td><?php echo $student['strProgramCode']; ?></td>
                             <td><?php echo $reg_status; ?></td>
+                            <td><?php echo $active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']." ".$active_sem['strYearEnd']; ?></td>
+                            <td><?php echo $active_sem['term_student_type']; ?></td>
                         </tr>
                     </tbody>
                 </table>
