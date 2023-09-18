@@ -62,7 +62,7 @@ new Vue({
 
     methods: {      
         selectTerm($event){
-            document.location = base_url + 'department/load_subjects' + this.id +'/'+ event.target.value;
+            document.location = base_url + 'department/load_subjects/' + this.id +'/'+ event.target.value;
         }
     }
 
