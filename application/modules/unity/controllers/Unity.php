@@ -902,11 +902,38 @@ class Unity extends CI_Controller {
                                   ->result_array();
 
         $terms = [];
+        $total_units_earned = 0;
+        $total_units_gwa = 0;
+        $gwa = 0;
         foreach($registrations as $reg){
             $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
-            $terms[] = array('records'=> $records,'reg'=>$reg);
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa']){
+                    $sum_grades += $record['v3'] * $record['strUnits'];
+                    $total += $record['strUnits'];
+                }
+
+
+            }
+            $total_units_earned += $units_earned;
+            $term_gwa = $sum_grades/$total;
+            $term_gwa = round($term_gwa,3);
+            $gwa += $sum_grades;
+            $total_units_gwa += $total;
+            $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
 
+        $gwa = $gwa/$total_units_gwa;
+        $gwa = round($gwa,3);
+
+        $data['gwa'] = $gwa;
+        $data['total_units_earned'] = $total_units_earned;
         $data['data'] = $terms;
 
         echo json_encode($data);
