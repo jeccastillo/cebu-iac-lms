@@ -72,7 +72,7 @@
                     
               
                 <div class="form-group">
-                    <label for="intSubjectID">Grades for Submission</label>
+                    <label for="intSubjectID">Submit/Unfinalize Grading</label>
                     <select <?php echo (!$admin)?'disabled':'';?> class="form-control" name="intFinalized" >
                             <option <?php echo ($classlist['intFinalized'] == 0)?'selected':''; ?> value="0">Midterm</option> 
                             <option  <?php echo ($classlist['intFinalized'] == 1)?'selected':''; ?> value="1">Final</option> 
