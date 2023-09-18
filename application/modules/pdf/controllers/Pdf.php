@@ -565,11 +565,11 @@ class Pdf extends CI_Controller {
         foreach($records as $record)
         {
             
-            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1){
+            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
                 $sum += (float)$record['v3'] * $record['strUnits'];
                 $total += $record['strUnits'];                
             }
-            if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1){
+            if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
                 $sum += (float)$record['v2'] * $record['strUnits'];                
                 $total += $record['strUnits'];
             }
