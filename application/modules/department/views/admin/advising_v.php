@@ -220,7 +220,12 @@ new Vue({
 
         },
         loadSubjects: function(){
-            console.log(this.subject_selector);
+
+            for(i in this.subject_selector){                                          
+                var list = this.subjects_not_taken.filter((el) => el.intID !== this.subject_selector[i]);
+                this.subjects_not_taken = list;
+            }
+            
         }
     }
 
