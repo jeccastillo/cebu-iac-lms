@@ -223,6 +223,8 @@ new Vue({
 
             for(i in this.subject_selector){                                          
                 var list = this.subjects_not_taken.filter((el) => el.intID !== this.subject_selector[i]);
+                var selected = this.subjects_not_taken.filter((el) => el.intID == this.subject_selector[i]);
+                this.advised_subjects.push({'intID':this.subject_selector[i],'strCode':selected[0].strCode});
                 this.subjects_not_taken = list;
             }
             
