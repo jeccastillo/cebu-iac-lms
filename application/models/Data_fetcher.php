@@ -358,36 +358,36 @@ class Data_fetcher extends CI_Model {
         
         foreach($subjects as $subj)
         {
-            $add = true;
+            // $add = true;
             
-            $r = $this->db
-                      ->get_where('tb_mas_prerequisites',array('intSubjectID'=>$subj['intID']))
-                      ->result_array();
+            // $r = $this->db
+            //           ->get_where('tb_mas_prerequisites',array('intSubjectID'=>$subj['intID']))
+            //           ->result_array();
             
-            if(!empty($r))
-            {
-                foreach($r as $res){
-                    $s = $this->db
-                      ->select('tb_mas_classlist_student.intCSID')
-                      ->from('tb_mas_classlist_student')
-                      ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
-                      ->where(array('intSubjectID'=>$res['intPrerequisiteID'],'strRemarks'=>'Passed','intStudentID'=>$studentID))
-                      ->get()
-                      ->result_array();
+            // if(!empty($r))
+            // {
+            //     foreach($r as $res){
+            //         $s = $this->db
+            //           ->select('tb_mas_classlist_student.intCSID')
+            //           ->from('tb_mas_classlist_student')
+            //           ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
+            //           ->where(array('intSubjectID'=>$res['intPrerequisiteID'],'strRemarks'=>'Passed','intStudentID'=>$studentID))
+            //           ->get()
+            //           ->result_array();
                     
-                    if(empty($s))
-                    {
-                        $add = false;
-                        break;
-                    }
+            //         if(empty($s))
+            //         {
+            //             $add = false;
+            //             break;
+            //         }
                     
-                }
+            //     }
                 
                 
-            }
+            // }
             
-            if($add)
-                $ret[] = $subj;
+            // if($add)
+            $ret[] = $subj;
                     
         }
         return $ret;
