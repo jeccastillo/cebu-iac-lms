@@ -473,7 +473,7 @@ $(document).ready(function() {
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
                                     .classlists[j].strClassName + " " 
                                     + ret.subjects[i].classlists[j].year + " "
-                                    + ret.subjects[i].classlists[j].strClassName + " " + ret.subjects[i].classlists[j].year + " " + ret.subjects[i].classlists[j].strSection + " " + (ret.subjects[i].classlists[j].sub_section?ret.subjects[i].classlists[j].sub_section:"")
+                                    + ret.subjects[i].classlists[j].strClassName + " " + ret.subjects[i].classlists[j].year + " " + ret.subjects[i].classlists[j].strSection + " "
                                     + subsection
                                     + "(" + ret.subjects[i]
                                     .classlists[j].numCount + ")</option>";
