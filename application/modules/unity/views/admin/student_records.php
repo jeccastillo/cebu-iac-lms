@@ -57,13 +57,13 @@
                             <tr style="font-size: 13px;">
                                 <td></td>
                                 <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
-                                <td>{{ record.units_earned }}</td>
+                                <td>{{ term.records.units_earned }}</td>
                                 <td colspan="3"></td>
                             </tr>
                             <tr style="font-size: 11px;">
                                 <td></td>
                                 <td align="right"><strong>GWA:</strong></td>
-                                <td>{{ record.gwa }}</td>
+                                <td>{{ term.records.gwa }}</td>
                                 <td colspan="3"></td>
                             </tr>
 
