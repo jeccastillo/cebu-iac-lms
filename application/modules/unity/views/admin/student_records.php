@@ -2,7 +2,7 @@
     <section class="content-header">
         <h1>
             <small>
-                <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>                                       
+                <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a>                                       
             </small>
         </h1>
         <hr />
