@@ -9,7 +9,18 @@
         <hr />
     </section>
         <hr />
-    <div class="content">            
+    <div class="content">        
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <select class="form-control" required @change="selectTerm($event)" v-model="sem">
+                            <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
     
 </aside>
@@ -29,6 +40,7 @@ new Vue({
         id: <?php echo $id; ?>,    
         sem: <?php echo $sem; ?>,
         base_url: '<?php echo base_url(); ?>',
+        sy: [],
     },
 
     mounted() {
@@ -38,7 +50,8 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'department/load_subjects_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                          
-                     
+                    this.sy = data.data.sy;     
+                    this.sem =  data.data.active_sem.intID;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -48,7 +61,9 @@ new Vue({
     },
 
     methods: {      
-        
+        selectTerm($event){
+            document.location = base_url + 'department/load_subjects' + this.id +'/'+ event.target.value;
+        }
     }
 
 })
