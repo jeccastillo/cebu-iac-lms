@@ -208,7 +208,7 @@
                 <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
                 <li class="header">Admissions</li>
                 <li class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>"><a
-                        href="<?php echo base_url() ?>admissions/edit_ay/"><i class="ion"></i>
+                        href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i class="ion"></i>
                         <span>Edit Application Dates</span> </a>
                 </li>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
