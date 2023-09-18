@@ -82,7 +82,7 @@ class AdmissionsV1 extends CI_Controller {
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         
         $this->load->view("common/header",$this->data);
-        $this->load->view("edit_sy_admissions",$this->data);
+        $this->load->view("admin/edit_sy_admissions",$this->data);
         $this->load->view("common/footer",$this->data);         
         $this->load->view("common/edit_sy_conf",$this->data); 
     }
