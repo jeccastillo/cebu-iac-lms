@@ -228,6 +228,16 @@ new Vue({
                 this.subjects_not_taken = list;
             }
             
+        },
+        removeSubjects: function(){
+
+            for(i in this.subject_selector_advised){                                          
+                var list = this.advised_subjects.filter((el) => el.intID !== this.subject_selector_advised[i]);
+                var selected = this.advised_subjects.filter((el) => el.intID == this.subject_selector_advised[i]);
+                this.subjects_not_taken.push({'intID':this.subject_selector_advised[i],'strCode':selected[0].strCode});
+                this.advised_subjects = list;
+            }
+
         }
     }
 
