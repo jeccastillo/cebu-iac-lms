@@ -433,6 +433,7 @@ $(document).ready(function() {
             'success': function(ret) {
                 total_units = 0;
                 button.removeAttr('disabled');
+                $("#submit-button").removeAttr('disabled');
                 if (ret.subjects.length > 0) {
                     for (i in ret.subjects) {
                         selected = '';
