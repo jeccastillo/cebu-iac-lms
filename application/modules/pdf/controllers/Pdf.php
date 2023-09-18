@@ -566,12 +566,12 @@ class Pdf extends CI_Controller {
         {
             
             if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1){
-                $sum += (float)$record['v3'];
-                $total++;                
+                $sum += (float)$record['v3'] * $record['strUnits'];
+                $total += $record['strUnits'];                
             }
             if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1){
-                $sum += (float)$record['v2'];                
-                $total++;
+                $sum += (float)$record['v2'] * $record['strUnits'];                
+                $total += $record['strUnits'];
             }
 
             if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
@@ -583,7 +583,7 @@ class Pdf extends CI_Controller {
             $sc_ret[] = $record;
         }                 
         if($total > 0)
-            $gwa =  round(($sum/$total),2);
+            $gwa =  round(($sum/$total),3);
 
 
         $this->data['other_data'] = 
