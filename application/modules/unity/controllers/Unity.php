@@ -85,14 +85,7 @@ class Unity extends CI_Controller {
             $registered_students = $this->data_fetcher->count_table_contents('tb_mas_registration',null,array('intAYID'=>$this->data['active_sem']['intID']));
            
             $this->data['registration_data_all'] = $this->data_fetcher->getRegistrationData($this->data['active_sem']['intID']);
-            $sem_temp = $this->data['active_sem'];
-            for($i=0;$i<3;$i++){
-                $this->data['grades_charts'][$i] = getGradeAverages($sem_temp['intID']); 
-                $this->data['grades_charts'][$i]['label'] = $sem_temp['enumSem']." ".$this->data['term_type']." ".$sem_temp['strYearStart']."-".$sem_temp['strYearEnd'];
-                $sem_temp = $this->data_fetcher->get_prev_sem($sem_temp['intID']);
-                if(empty($sem_temp))
-                    break;
-            }
+            
             
             $this->data['submitted_classlists'] = $this->data_fetcher->count_classlist(1);
             $this->data['un_submitted_classlists'] = $this->data_fetcher->count_classlist(0);
