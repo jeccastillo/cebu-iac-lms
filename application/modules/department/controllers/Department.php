@@ -205,6 +205,7 @@ class Department extends CI_Controller {
         
         
         $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();
         
         $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID'],$studNum);
         $data['selected_ay'] = $data['active_sem']['intID'];
