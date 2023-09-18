@@ -214,7 +214,7 @@ class Department extends CI_Controller {
         
         
         
-        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$data['selected_ay']);
+        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($studNum,$data['selected_ay']);
         
         $grades = $this->data_fetcher->assessCurriculum($data['student']['intID'],$data['student']['intCurriculumID']);
         array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
