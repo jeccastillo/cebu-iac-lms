@@ -5,7 +5,7 @@
                 </td>
             </tr>            
             <tr>
-                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="120" /></td>        
+                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/xL1WcSm/iac-cebu.png"  width="90" /></td>        
             </tr>            
 <table border="0">    
     <tr style="line-height:12px;">
@@ -21,11 +21,6 @@
     <tr style="line-height:10px;">
         <td style="font-size:9px;text-align:center"></td>
     </tr>
-</table>
-<table>    
-    <tr style="line-height:10px;">
-        <td colspan="7"></td>        
-    </tr>  
 </table>
 <table>    
     <tr style="line-height:10px;">
