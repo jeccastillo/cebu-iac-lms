@@ -61,16 +61,12 @@
                 <input type="hidden" value="0" id="total-units">
                 <input type="hidden" value="<?php echo $student['enumScholarship']; ?>" id="enumScholarship" />
                 
-                    <div style="border:1px solid #d2d2d2;">
-                    <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">
-                Set Active Terms
-                <select class="form-control" id="strAcademicYear" name="strAcademicYear">
-                            <?php foreach($sy as $s): ?>
-                                <option rel="<?php echo $s['intProcessing']; ?>" <?php echo ($s['intProcessing'] == 1)?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
-                            <?php endforeach; ?>
-                </select>
+                <div style="border:1px solid #d2d2d2;">
+                    <div class="col-sm-8" style="padding:1rem;background:#f2f2f2;">                
+                        <input type="hidden" value="<?php echo $active_sem['intID']; ?>" class="form-control" id="strAcademicYear" name="strAcademicYear">                
+
                         <hr />
-                <div id="regular-option" class="row">
+                    <div id="regular-option" class="row">
                         <div class="col-sm-12" style="margin-bottom:1rem">
                         <a href="#" id="load-subjects" class="btn btn-default  btn-flat">Load Subjects for Sectioning <i class="fa fa-arrow-circle-down"></i></a>
                             </div>
