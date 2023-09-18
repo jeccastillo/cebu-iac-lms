@@ -44,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>                                          
-                        <tr v-for="record in term.records" style="font-size: 13px;">
+                        <tr v-for="record in term.data" style="font-size: 13px;">
                             <td>{{ record.strSection }}</td>
                             <td>{{ record.strCode }}</td>
                             <td>{{ record.strUnits }}</td>
@@ -97,11 +97,7 @@ new Vue({
         id: '<?php echo $id; ?>',    
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
-        student:{
-            strFirstName: "Loading",
-            strLastName: "Loading",
-            strMiddleName: "Loading",
-        },         
+        student:undefined,         
         records: [],         
     },
 
@@ -113,7 +109,7 @@ new Vue({
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
                     this.student = data.data.student;
-                    this.records = data.data.records;            
+                    this.records = data.data.data;            
                 })
                 .catch((error) => {
                     console.log(error);
