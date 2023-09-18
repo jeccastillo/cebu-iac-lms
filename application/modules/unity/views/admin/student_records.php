@@ -51,9 +51,9 @@
                                 <td>{{ record.strUnits }}</td>
                                 <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                 <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
-                                <td>{{ record.strRemarks }}</td>
+                                <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
                                 <td>{{ record.facultyName }}</td>
-                                <td>{{ record.recStatus }}</td>                                                
+                                                                               
                             </tr>
                             <!-- <tr style="font-size: 13px;">
                                 <td></td>

@@ -162,30 +162,43 @@
                             <div class="box box-primary">
                                 <div class="box-body">                                    
                                     <table v-if="registration" class="table table-condensed table-bordered">
-                                            <thead>
-                                                <tr style="font-size: 13px;">
-                                                    <th>Section</th>
-                                                    <th>Sub Section</th>
-                                                    <th>Course Code</th>
-                                                    <th>Course Description</th>
-                                                    <th>Units</th>
-                                                    <th>Schedule</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>                                            
-                                                <tr v-for="record in records"  style="font-size: 13px;">
-                                                    <td>{{ record.strClassName + ' ' + record.year + record.strSection }}</td>
-                                                    <td>{{ record.sub_section!=null?record.sub_section:'' }}</td>
-                                                    <td>{{ record.strCode }}</td>
-                                                    <td>{{ record.strDescription }}</td>
-                                                    <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
-                                                    <td v-if="record.schedule.schedString != ''">                                                    
-                                                        {{ record.schedule.schedString }}                                                       
-                                                    </td>
-                                                    <td v-else></td>                                                
-                                                </tr>
-                                            </tbody>
-                                        </table>  
+                                        <thead>
+                                            <tr>
+                                                <th>Section Code</th>
+                                                <th>Course Code</th>
+                                                <th>Units</th>
+                                                <th>Midterm</th>
+                                                <th>Final</th>
+                                                <th>Remarks</th>
+                                                <th>Faculty</th>
+                                                <th>Status</th>                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                          
+                                            <tr v-for="record in records" style="font-size: 13px;">
+                                                <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strUnits }}</td>
+                                                <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                                <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
+                                                <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
+                                                <td>{{ record.facultyName }}</td>
+                                            </tr>
+                                            <!-- <tr style="font-size: 13px;">
+                                                <td></td>
+                                                <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
+                                                <td>{{ total_units }}</td>
+                                                <td colspan="3"></td>
+                                            </tr>
+                                            <tr style="font-size: 11px;">
+                                                <td></td>
+                                                <td align="right"><strong>GPA:</strong></td>
+                                                <td>{{ gpa }}</td>
+                                                <td colspan="3"></td>
+                                            </tr> -->
+
+                                        </tbody>
+                                    </table>
                                     <hr />
                                     <a target="_blank" class="btn btn-default  btn-flat" :href="base_url + 'pdf/student_viewer_rog_print/' + student.intID + '/' + active_sem.intID">
                                         <i class="ion ion-printer"></i> Print Preview
