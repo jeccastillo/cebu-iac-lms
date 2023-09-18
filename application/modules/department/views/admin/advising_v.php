@@ -181,7 +181,7 @@ new Vue({
             formdata.append("cid",this.student.intCurriculumID);                                                            
             axios.post(url,formdata)
             .then((data) => {                                          
-                console.log(data);
+                console.log(data.data);
             })
             .catch((error) => {
                 console.log(error);
