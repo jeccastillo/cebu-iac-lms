@@ -182,7 +182,7 @@ class Department extends CI_Controller {
         redirect(base_url().'department/crediting/'.$post['intStudentID']);
     }
 
-    public function load_subjects_data($studNum,$sem = 0){
+    public function load_subjects_data($studNum,$sem){
 
         //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         $data['student'] = $this->data_fetcher->getStudent($studNum);
@@ -203,13 +203,9 @@ class Department extends CI_Controller {
                 $stype = 'college';
         }
         
-        if($sem != 0)
-            $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-        elseif($stype == 'shs')
-            $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
-        else
-            $data['active_sem'] = $this->data_fetcher->get_active_sem();
-
+        
+        $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        
         $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID'],$studNum);
         $data['selected_ay'] = $data['active_sem']['intID'];
         
