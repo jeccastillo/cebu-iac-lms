@@ -902,7 +902,7 @@ class Unity extends CI_Controller {
                                   ->result_array();
 
         $terms = [];
-        foreach($registration as $reg){
+        foreach($registrations as $reg){
             $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
             $terms[] = array('records'=> $records,'reg'=>$reg);
         }
