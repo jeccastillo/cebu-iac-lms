@@ -24,7 +24,53 @@
                     </ul>
                 </div>
             </div>                
-        </div>  
+        </div> 
+        <div v-for="term in records" class="box box-success">
+            <div class="box-header">
+                <h4>{{ term.enumSem + " " + term.term_label + " SY" + term.strYearStart + "-" + term.strYearEnd }}</h4>
+            </div>
+            <div class="box-body">
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Section Code</th>
+                            <th>Course Code</th>
+                            <th>Units</th>
+                            <th>Midterm</th>
+                            <th>Final</th>
+                            <th>Remarks</th>
+                            <th>Faculty</th>
+                            <th>Status</th>                                                
+                        </tr>
+                    </thead>
+                    <tbody>                                          
+                        <tr v-for="record in term.records" style="font-size: 13px;">
+                            <td>{{ record.strSection }}</td>
+                            <td>{{ record.strCode }}</td>
+                            <td>{{ record.strUnits }}</td>
+                            <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                            <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
+                            <td>{{ record.strRemarks }}</td>
+                            <td>{{ record.facultyName }}</td>
+                            <td>{{ record.recStatus }}</td>                                                
+                        </tr>
+                        <!-- <tr style="font-size: 13px;">
+                            <td></td>
+                            <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
+                            <td>{{ total_units }}</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr style="font-size: 11px;">
+                            <td></td>
+                            <td align="right"><strong>GPA:</strong></td>
+                            <td>{{ gpa }}</td>
+                            <td colspan="3"></td>
+                        </tr> -->
+
+                    </tbody>
+                </table>
+            </div>
+        </div> 
     </div>
     
 </aside>
