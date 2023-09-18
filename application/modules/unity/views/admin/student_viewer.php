@@ -13,15 +13,15 @@
                     <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
-                    <a v-if="reg_status != 'For Subject Enlistment' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                    <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>Print Subjects
                     </a> 
                     <a v-else-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'department/load_subjects/' + student.intID">
                         <i class="fa fa-book"></i>Subject Enlistment</a> 
                     </a>
-                    <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
+                    <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
-                    </a>                        
+                    </a>                         -->
                     <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
                         <i class="fa fa-book"></i>Student Fee Assessment
                     </a>
