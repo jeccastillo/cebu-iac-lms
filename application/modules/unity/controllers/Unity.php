@@ -909,7 +909,7 @@ class Unity extends CI_Controller {
             $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
             $units = 0;
             $sum_grades = 0;
-            $units_earned;
+            $units_earned = 0;
             $total = 0;
             foreach($records as $record){
                 if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
