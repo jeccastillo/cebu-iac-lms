@@ -162,6 +162,7 @@ new Vue({
                     this.advised_subjects = data.data.advised_subjects;
                     
                     for(i in this.advised_subjects){
+                        console.log(this.advised_subjects[i].intID);
                         var list = this.subjects_not_taken.filter((el) => el.intID !== this.advised_subjects[i].intID);
                         this.subjects_not_taken = list;
                     }
