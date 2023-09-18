@@ -489,6 +489,7 @@ class Department extends CI_Controller {
         }
         
         $data['message'] = "Success";
+        $data['sid'] = $student;
         
         echo json_encode($data);
     }
