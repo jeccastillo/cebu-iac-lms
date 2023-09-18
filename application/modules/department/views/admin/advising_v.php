@@ -195,7 +195,7 @@ new Vue({
 
             let url = base_url + 'department/submit_advised/';
             var formdata= new FormData();
-            formdata.append("subjects",this.advised_subjects);
+            formdata.append("subjects",JSON.stringify(this.advised_subjects));
             formdata.append("strAcademicYear",this.sem);
             formdata.append("studentID",this.student.intID);                                                          
             axios.post(url,formdata)
