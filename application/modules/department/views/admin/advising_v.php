@@ -41,6 +41,38 @@
                 <h3>Enlistment of Subjects</h3>
                 <h4 class="text-center">Currently processing: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + "-" + active_sem.strYearEnd }}</h4>
             </div>
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="5" class="text-center">
+                                Previous Record
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="5">
+                                {{ prev_sem.enumSem + " " + prev_sem.term_label+ " "+prev_semstrYearStart + "-" + prev_sem.strYearEnd }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Course Code</th>
+                            <th class="text-center">Units</th>
+                            <th class="text-center">Final Grade</th>
+                            <th>Remarks</th>
+                            <th>Faculty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="rec in prev_records">
+                            <td>{{ rec.strCode }}</td>
+                            <td class="text-center">{{rec.strUnits }}</td>
+                            <td class="text-center">{{ $rec.v3 }}</td>
+                            <td>{{rec.strRemarks }}</td>
+                            <td>{{rec.strFirstname + " " + rec.strLastname }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>    
     </div>
     
@@ -79,6 +111,8 @@ new Vue({
                     this.student  = data.data.student;
                     this.academic_standing =  data.data.academic_standing;
                     this.active_sem = data.data.active_sem;
+                    this.prev_sem = data.data.prev_sem;
+                    this.prev_records = data.data.prev_records;
                 })
                 .catch((error) => {
                     console.log(error);
