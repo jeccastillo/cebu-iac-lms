@@ -72,11 +72,8 @@
                     </table>
                 </div>
             </div> 
-            <div class="box box-success">
-                <div class="box-header">
-                    <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
-                </div>
-                <div class="box-body">
+            <div class="box box-success">                
+                <div class="box-footer">
                     <div class="row">
                         <div class="col-sm-3 pull-right">
                             Total Units Earned:
