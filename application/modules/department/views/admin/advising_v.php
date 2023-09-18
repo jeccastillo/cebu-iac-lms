@@ -74,6 +74,21 @@
                 </table>
                 <hr />
                 <div class="row">
+                    <div class="col-sm-6">
+                        <label>Year Level</label>
+                        <div class="form-group">
+                            <select v-model="year" class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>                    
+                </div>                
+                <hr />
+                <div class="row">
                     <div class="col-md-5">
                         <h4>Suggested Subjects</h4>
                         <select style="height:300px" class="form-control" v-model="subject_selector" multiple>                            
@@ -118,6 +133,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         sy: [],
         student: undefined,
+        year: 1,
         academic_standing: undefined,
         active_sem: undefined,
         prev_records: [],
@@ -160,7 +176,7 @@ new Vue({
             let url = base_url + 'unity/load_advised_subjects/'+this.academic_standing.status;
             var data = {'year':year,'sem':sem,'sid':sid,'cid':cid};
             var formdata= new FormData();
-            formdata.append("year",this.academic_standing.year);
+            formdata.append("year",this.year);
             formdata.append("sem",this.sem);
             formdata.append("sid",this.student.intID);
             formdata.append("cid",this.student.intCurriculumID);                                                            
