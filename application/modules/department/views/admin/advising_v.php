@@ -66,7 +66,7 @@
                         <tr v-for="rec in prev_records">
                             <td>{{ rec.strCode }}</td>
                             <td class="text-center">{{rec.strUnits }}</td>
-                            <td class="text-center">{{ $rec.v3 }}</td>
+                            <td class="text-center">{{ rec.v3 }}</td>
                             <td>{{rec.strRemarks }}</td>
                             <td>{{rec.strFirstname + " " + rec.strLastname }}</td>
                         </tr>
