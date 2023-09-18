@@ -170,8 +170,7 @@
                                                 <th>Midterm</th>
                                                 <th>Final</th>
                                                 <th>Remarks</th>
-                                                <th>Faculty</th>
-                                                <th>Status</th>                                                
+                                                <th>Faculty</th>                                                                                               
                                             </tr>
                                         </thead>
                                         <tbody>                                          
