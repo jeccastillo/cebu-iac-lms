@@ -451,9 +451,7 @@ class Department extends CI_Controller {
         //print_r($post);
         if(isset($post['subjects']))
         {
-            $post['subjects'] = json_decode($post['subjects']);
-            $post['subjects'] = (array)$post['subjects'];
-            
+            $post['subjects'] = json_decode($post['subjects']); 
             
             //TODO: CHECK if advised if not advised for the semester add advised data
             if(!$this->data_fetcher->checkStudentAdvised($post['studentID'],$ay)) //check per subject
@@ -475,7 +473,7 @@ class Department extends CI_Controller {
             foreach($post['subjects'] as $subject)
             {
                     
-                $data_subject['intSubjectID'] = $subject;
+                $data_subject['intSubjectID'] = $subject->intID;
                 $data_subject['intAdvisedID'] = $id;
                 $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
 
