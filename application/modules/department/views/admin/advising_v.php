@@ -183,8 +183,8 @@ new Vue({
             .then((data) => {                                          
                 this.advised_subjects = data.data;
                 for(i in data.data){
-                    let updateStudentList = this.subjects_not_taken.filter((el) => el.intID !== data.data['intID']);
-                    this.subjects_not_taken = updateStudentList;
+                    var list = this.subjects_not_taken.filter((el) => el.intID !== data.data['intID']);
+                    this.subjects_not_taken = list;
                 }
             })
             .catch((error) => {
