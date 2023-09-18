@@ -84,7 +84,7 @@
                     <div id="tuitionContainer">
                     
                     </div>
-                    <input type="button" id="submit-button" <?php echo ($reg_status!="For Sectioning")?'disabled':''; ?> value="Confirm" class="btn btn-default  btn-flat btn-block">
+                    <input disabled type="button" id="submit-button" <?php echo ($reg_status!="For Sectioning")?'disabled':''; ?> value="Confirm" class="btn btn-default  btn-flat btn-block">
                     </div>
                     <div style="clear:both"></div>
                 </div>
