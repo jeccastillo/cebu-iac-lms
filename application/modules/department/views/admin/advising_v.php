@@ -34,7 +34,6 @@
                 </div>                
             </div>
         </div> 
-        </div>
         <div class="box box-primary">
             <div class="box-header">
                 
