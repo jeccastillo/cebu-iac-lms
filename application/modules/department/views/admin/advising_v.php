@@ -72,6 +72,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <hr />
                 <div class="row">
                     <div class="col-md-5">
                         <h4>Suggested Subjects</h4>
