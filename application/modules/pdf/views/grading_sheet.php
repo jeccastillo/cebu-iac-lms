@@ -83,7 +83,7 @@ foreach($students as $student):
         <?php else: ?>
             <td style="font-size:8px;">NGS</td>
         <?php endif; ?>        
-        <td style="font-size:8px;"><?php echo $student['strRemarks']; ?></td>                
+        <td style="font-size:8px;"><?php echo ($classlist['intFinalized'] >= 1)?$student['strRemarks']:"---"; ?></td>                
     </tr>
    <?php        
     endforeach; ?>    
