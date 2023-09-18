@@ -48,7 +48,7 @@
                             
                             Select Term
                             <select id="strAcademicYear" name="strAcademicYear" class="form-control" v-model="request.strAcademicYear">
-                                <option v-for="sy in school_years" :value="sy.intID">{{sy.enumSem + ' ' + term_type + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
+                                <option v-for="sy in school_years" :value="sy.intID">{{sy.term_student_type + ' ' + sy.enumSem + ' ' + sy.term_label + ' ' + sy.strYearStart + '-' + sy.strYearEnd}}</option>                            
                             </select>
                                 <hr />
                             <label for="enumRegistrationStatus">Academic Status</label>
