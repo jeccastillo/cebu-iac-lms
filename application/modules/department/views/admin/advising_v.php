@@ -36,9 +36,10 @@
                 </div>                
             </div>
         </div> 
-        <div class="box box-primary">
+        <div class="box box-primary">           
             <div class="box-header">
-                
+                <h3>Enlistment of Subjects</h3>
+                <h4 class="text-center">Currently processing: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + "-" + active_sem.strYearEnd }}</h4>
             </div>
         </div>    
     </div>
