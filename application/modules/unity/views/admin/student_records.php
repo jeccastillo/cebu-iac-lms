@@ -44,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>                                          
-                        <tr v-for="record in term.data" style="font-size: 13px;">
+                        <tr v-for="record in term.records" style="font-size: 13px;">
                             <td>{{ record.strSection }}</td>
                             <td>{{ record.strCode }}</td>
                             <td>{{ record.strUnits }}</td>
