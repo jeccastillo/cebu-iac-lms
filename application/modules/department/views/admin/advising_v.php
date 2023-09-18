@@ -100,7 +100,7 @@
                         <a href="#" class="btn btn-default  btn-flat btn-block" @click.prevent="autoload">Autoload <br /> Subjects </a>
                         <a href="#" id="load-advised" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
                         <a href="#" id="unload-advised" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
-                        <a href="#" id="save-advised" class="btn btn-default  btn-flat btn-block">Save</a>
+                        <a href="#" @click.prevent="saveAdvised" class="btn btn-default  btn-flat btn-block">Save</a>
                         
                     </div>
                     <div class="col-md-5">
@@ -190,6 +190,29 @@ new Vue({
             .catch((error) => {
                 console.log(error);
             })
+        },
+        saveAdvised: function(){
+
+            let url = base_url + 'department/submit_advised/';
+            var formdata= new FormData();
+            formdata.append("subjects",this.advised_subjects);
+            formdata.append("strAcademicYear",this.sem);
+            formdata.append("studentID",this.student.intID);                                                          
+            axios.post(url,formdata)
+            .then((data) => {                  
+                Swal.fire({
+                    title: "Success",
+                    text: "Update Success",
+                    icon: "success"
+                }).then(function() {
+                    document.location = base_url + 'registrar/register_old_student/' + this.student.intID;
+                });                         
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
         }
     }
 
