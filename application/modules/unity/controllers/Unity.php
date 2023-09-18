@@ -922,15 +922,19 @@ class Unity extends CI_Controller {
 
             }
             $total_units_earned += $units_earned;
-            $term_gwa = $sum_grades/$total;
-            $term_gwa = round($term_gwa,3);
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = round($term_gwa,3);
+            }
             $gwa += $sum_grades;
             $total_units_gwa += $total;
             $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
 
-        $gwa = $gwa/$total_units_gwa;
-        $gwa = round($gwa,3);
+        if($total_units_gwa > 0){
+            $gwa = $gwa/$total_units_gwa;
+            $gwa = round($gwa,3);
+        }
 
         $data['gwa'] = $gwa;
         $data['total_units_earned'] = $total_units_earned;
