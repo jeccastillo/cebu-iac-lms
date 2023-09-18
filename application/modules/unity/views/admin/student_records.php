@@ -75,13 +75,13 @@
             <div class="box box-success">                
                 <div class="box-footer">
                     <div class="row">
-                        <div class="col-sm-3 pull-right">
+                        <div class="col-sm-3 text-right">
                             Total Units Earned:
                         </div>
                         <div class="col-sm-3">
                             {{ units }}
                         </div>
-                        <div class="col-sm-3 pull-right">
+                        <div class="col-sm-3 text-right">
                             GWA
                         </div>
                         <div class="col-sm-3">
