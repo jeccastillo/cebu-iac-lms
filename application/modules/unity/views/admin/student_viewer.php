@@ -6,7 +6,7 @@
                 <small>                    
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'unity/student_records/' + '/' + student.intID"><i class="fa fa-user"></i>Assessment</a> 
+                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'unity/student_records/' + '/' + student.intID"><i class="fa fa-user"></i>Assessment</a> 
                     <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
@@ -162,44 +162,30 @@
                             <div class="box box-primary">
                                 <div class="box-body">                                    
                                     <table v-if="registration" class="table table-condensed table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Section Code</th>
-                                                <th>Course Code</th>
-                                                <th>Units</th>
-                                                <th>Midterm</th>
-                                                <th>Final</th>
-                                                <th>Remarks</th>
-                                                <th>Faculty</th>
-                                                <th>Status</th>                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>                                          
-                                            <tr v-for="record in records" style="font-size: 13px;">
-                                                <td>{{ record.strSection }}</td>
-                                                <td>{{ record.strCode }}</td>
-                                                <td>{{ record.strUnits }}</td>
-                                                <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
-                                                <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
-                                                <td>{{ record.strRemarks }}</td>
-                                                <td>{{ record.facultyName }}</td>
-                                                <td>{{ record.recStatus }}</td>                                                
-                                            </tr>
-                                            <!-- <tr style="font-size: 13px;">
-                                                <td></td>
-                                                <td align="right"><strong>TOTAL UNITS CREDITED:</strong></td>
-                                                <td>{{ total_units }}</td>
-                                                <td colspan="3"></td>
-                                            </tr>
-                                            <tr style="font-size: 11px;">
-                                                <td></td>
-                                                <td align="right"><strong>GPA:</strong></td>
-                                                <td>{{ gpa }}</td>
-                                                <td colspan="3"></td>
-                                            </tr> -->
-
-                                        </tbody>
-                                    </table>
+                                            <thead>
+                                                <tr style="font-size: 13px;">
+                                                    <th>Section</th>
+                                                    <th>Sub Section</th>
+                                                    <th>Course Code</th>
+                                                    <th>Course Description</th>
+                                                    <th>Units</th>
+                                                    <th>Schedule</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                            
+                                                <tr v-for="record in records"  style="font-size: 13px;">
+                                                    <td>{{ record.strClassName + ' ' + record.year + record.strSection }}</td>
+                                                    <td>{{ record.sub_section!=null?record.sub_section:'' }}</td>
+                                                    <td>{{ record.strCode }}</td>
+                                                    <td>{{ record.strDescription }}</td>
+                                                    <td>{{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}</td>     
+                                                    <td v-if="record.schedule.schedString != ''">                                                    
+                                                        {{ record.schedule.schedString }}                                                       
+                                                    </td>
+                                                    <td v-else></td>                                                
+                                                </tr>
+                                            </tbody>
+                                        </table>  
                                     <hr />
                                     <a target="_blank" class="btn btn-default  btn-flat" :href="base_url + 'pdf/student_viewer_rog_print/' + student.intID + '/' + active_sem.intID">
                                         <i class="ion ion-printer"></i> Print Preview
