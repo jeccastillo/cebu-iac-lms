@@ -74,8 +74,8 @@
                 </table>
                 <hr />
                 <div class="row">
-                    <div class="col-sm-6">
-                        <label>Year Level</label>
+                    <div class="col-sm-4">
+                        <label>Year Level (for autoload)</label>
                         <div class="form-group">
                             <select v-model="year" class="form-control">
                                 <option value="1">1</option>
@@ -98,7 +98,7 @@
                     <div class="col-md-2">
                         <br /><br />
                         <a href="#" class="btn btn-default  btn-flat btn-block" @click.prevent="autoload">Autoload <br /> Subjects </a>
-                        <a href="#" id="load-advised" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
+                        <a href="#" @click.prevent="loadSubjects" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
                         <a href="#" id="unload-advised" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
                         <a href="#" @click.prevent="saveAdvised" class="btn btn-default  btn-flat btn-block">Save</a>
                         
@@ -218,6 +218,9 @@ new Vue({
                 console.log(error);
             })
 
+        },
+        loadSubjects: function(){
+            console.log(subject_selector);
         }
     }
 
