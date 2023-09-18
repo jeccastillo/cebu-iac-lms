@@ -451,7 +451,8 @@ class Department extends CI_Controller {
         //print_r($post);
         if(isset($post['subjects']))
         {
-            $post['subjects'] = (array) json_decode($post['subjects']);
+            $post['subjects'] = json_decode($post['subjects']);
+            $post['subjects'] = (array)$post['subjects'];
             
             
             //TODO: CHECK if advised if not advised for the semester add advised data
