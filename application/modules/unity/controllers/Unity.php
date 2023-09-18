@@ -912,7 +912,7 @@ class Unity extends CI_Controller {
             $units_earned = 0;
             $total = 0;
             foreach($records as $record){
-                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
                     $units_earned += $record['strUnits'];
                 if($record['intFinalized'] == 2 && $record['include_gwa']){
                     $sum_grades += $record['v3'] * $record['strUnits'];
