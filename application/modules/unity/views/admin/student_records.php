@@ -47,7 +47,8 @@
                             <tr v-for="record in term.records" style="font-size: 13px;">
                                 <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                 <td>{{ record.strCode }}</td>
-                                <td>{{ record.strUnits }}</td>
+                                <td v-if="record.include_gwa">{{ record.strUnits }}</td>
+                                <td v-else>({{ record.strUnits }})</td>
                                 <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                 <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
                                 <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
