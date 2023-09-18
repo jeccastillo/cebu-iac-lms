@@ -9,8 +9,22 @@
     </section>
         <hr />
     <div class="content">        
-        <div class="row">
-        </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div v-if="student" class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-red">
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}</h3>
+                    <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }} {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
+                </div>
+                <div class="box-footer no-padding">
+                    <ul class="nav nav-stacked">
+                        <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
+                    </ul>
+                </div>
+            </div>                
+        </div>  
     </div>
     
 </aside>
@@ -48,7 +62,8 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
-                              
+                    this.student = data.data.student;
+                    this.records = data.data.records;            
                 })
                 .catch((error) => {
                     console.log(error);
