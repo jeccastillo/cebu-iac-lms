@@ -72,6 +72,28 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4>Suggested Subjects</h4>
+                        <select style="height:300px" class="form-control" id="subject-selector" multiple>                            
+                            <option v-for="sn in subjects_not_taken" :value="sn.intID">{{ sn.strCode }}</option>                            
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <br /><br />
+                        <a href="#" class="btn btn-default  btn-flat btn-block" id="autoload-advised">Autoload <br /> Subjects </a>
+                        <a href="#" id="load-advised" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
+                        <a href="#" id="unload-advised" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
+                        <a href="#" id="save-advised" class="btn btn-default  btn-flat btn-block">Save</a>
+                        
+                    </div>
+                    <div class="col-md-5">
+                        <h4>Enlisted Subjects</h4>
+                        <select style="height:300px" class="form-control" id="advised-subjects" multiple>
+                            <option v-for="sn in advised_subjects" :value="sn.intSubjectID">{{ sn.strCode }}</option>                            
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>    
     </div>
@@ -99,6 +121,8 @@ new Vue({
         active_sem: undefined,
         prev_records: [],
         prev_sem: undefined,
+        subjects_not_taken: [],
+        advised_subjects: [],
     },
 
     mounted() {
@@ -115,6 +139,8 @@ new Vue({
                     this.active_sem = data.data.active_sem;
                     this.prev_sem = data.data.prev_sem;
                     this.prev_records = data.data.prev_records;
+                    this.subjects_not_taken = data.data.subjects_not_taken;
+                    this.advised_subjects = data.data.advised_subjects;
                 })
                 .catch((error) => {
                     console.log(error);
