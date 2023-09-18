@@ -45,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>                                          
-                            <tr v-for="record in term.records" style="font-size: 13px;">
+                            <tr v-for="record in term.records" style="font-size: 13px;" :style="(record.intFinalized >= 2 && record.strRemarks == 'Passed')?background-color:#009900;">
                                 <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                 <td>{{ record.strCode }}</td>
                                 <td>{{ record.strUnits }}</td>
