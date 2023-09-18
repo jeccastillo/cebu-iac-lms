@@ -922,6 +922,7 @@ class Unity extends CI_Controller {
 
             }
             $total_units_earned += $units_earned;
+            $term_gwa = 0;
             if($total > 0){
                 $term_gwa = $sum_grades/$total;
                 $term_gwa = round($term_gwa,3);
