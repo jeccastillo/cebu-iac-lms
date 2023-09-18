@@ -257,7 +257,7 @@ class Department extends CI_Controller {
 
     }
 
-    public function load_subjects($studNum = null){
+    public function load_subjects($studNum = null,$sem = 0){
         
         if($studNum == null){
             $post = $this->input->post();
@@ -265,6 +265,8 @@ class Department extends CI_Controller {
         }
         else
             $this->data['id']  = $studNum;
+
+        $this->data['sem'] = $sem;
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/advising_v",$this->data);

@@ -26,7 +26,8 @@
 new Vue({
     el: '#registration-container',
     data: {
-        id: '<?php echo $id; ?>',    
+        id: <?php echo $id; ?>,    
+        sem: <?php echo $sem; ?>,
         base_url: '<?php echo base_url(); ?>',
     },
 
@@ -35,7 +36,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'department/load_subjects_data/' + this.id + '/')
+            axios.get(this.base_url + 'department/load_subjects_data/' + this.id + '/' + this.sem)
                 .then((data) => {                                          
                      
                 })
