@@ -266,7 +266,33 @@ class Department extends CI_Controller {
         else
             $this->data['id']  = $studNum;
 
-        $this->data['sem'] = $sem;
+        //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+        $student = $this->data_fetcher->getStudent($this->data['id']);
+        switch($student['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        
+        if($sem != 0)
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == 'shs')
+            $active_sem = $this->data_fetcher->get_active_sem_shs();
+        else
+            $active_sem = $this->data_fetcher->get_active_sem();
+
+        $this->data['sem'] = $active_sem['intID'];
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/advising_v",$this->data);
