@@ -76,13 +76,13 @@
                 <div class="row">
                     <div class="col-md-5">
                         <h4>Suggested Subjects</h4>
-                        <select style="height:300px" class="form-control" id="subject-selector" multiple>                            
+                        <select style="height:300px" class="form-control" v-model="subject_selector" multiple>                            
                             <option v-for="sn in subjects_not_taken" :value="sn.intID">{{ sn.strCode }}</option>                            
                         </select>
                     </div>
                     <div class="col-md-2">
                         <br /><br />
-                        <a href="#" class="btn btn-default  btn-flat btn-block" id="autoload-advised">Autoload <br /> Subjects </a>
+                        <a href="#" class="btn btn-default  btn-flat btn-block" @click.prevent="autoload">Autoload <br /> Subjects </a>
                         <a href="#" id="load-advised" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
                         <a href="#" id="unload-advised" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
                         <a href="#" id="save-advised" class="btn btn-default  btn-flat btn-block">Save</a>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-md-5">
                         <h4>Enlisted Subjects</h4>
-                        <select style="height:300px" class="form-control" id="advised-subjects" multiple>
+                        <select style="height:300px" class="form-control" v-model="subject_selector_advised" multiple>
                             <option v-for="sn in advised_subjects" :value="sn.intSubjectID">{{ sn.strCode }}</option>                            
                         </select>
                     </div>
@@ -124,6 +124,8 @@ new Vue({
         prev_sem: undefined,
         subjects_not_taken: [],
         advised_subjects: [],
+        subject_selector:[],
+        subject_selector_advised:[],
     },
 
     mounted() {
@@ -151,8 +153,24 @@ new Vue({
     },
 
     methods: {      
-        selectTerm($event){
+        selectTerm: function($event){
             document.location = base_url + 'department/load_subjects/' + this.id +'/'+ event.target.value;
+        },
+        autoload: function(){
+            let url = base_url + 'unity/load_advised_subjects/'+this.academic_standing.status;
+            var data = {'year':year,'sem':sem,'sid':sid,'cid':cid};
+            var formdata= new FormData();
+            formdata.append("year",this.academic_standing.year);
+            formdata.append("sem",this.sem);
+            formdata.append("sid",this.student.intID);
+            formdata.append("cid",this.student.intCurriculumID);                                                            
+            axios.post(url,formdata)
+            .then((data) => {                                          
+                location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         }
     }
 
