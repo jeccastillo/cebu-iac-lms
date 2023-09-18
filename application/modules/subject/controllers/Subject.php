@@ -268,18 +268,6 @@ class Subject extends CI_Controller {
             
             $this->data['grades_charts'] = [];
             
-            for($i=0;$i<4;$i++){
-                $chart = getGradeAveragesSubject($sem_temp['intID'],$id);
-               
-                if(!empty($chart)){
-                    $this->data['grades_charts'][$i] = $chart; 
-                    $this->data['grades_charts'][$i]['label'] = $sem_temp['enumSem']." ".$this->data['term_type']." ".$sem_temp['strYearStart']."-".$sem_temp['strYearEnd'];
-                }
-                $sem_temp = $this->data_fetcher->get_prev_sem($sem_temp['intID']);
-                if(empty($sem_temp))
-                    break;
-            }
-            
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/subject_viewer",$this->data);
             $this->load->view("common//footer",$this->data); 

@@ -757,7 +757,7 @@ class Data_fetcher extends CI_Model {
         return current($this->db->get_where('tb_mas_sy',array('enumFGradingPeriod'=>'active', 'intID'=>$id))->result_array());
     }
   
-    function get_prev_sem($sem)
+    function get_prev_sem($sem,$id)
     {
         
         $active = $this->db->get_where('tb_mas_sy',array('intID'=>$sem))->first_row('array');
@@ -778,7 +778,12 @@ class Data_fetcher extends CI_Model {
             $yearEnd = $active['strYearEnd'] - 1;
         }
         
-        return current($this->db->get_where('tb_mas_sy',array('enumSem'=>$sem,'strYearStart'=>$yearStart,'strYearEnd'=>$yearEnd,'term_student_type'=>$active['term_student_type']))->result_array());
+        return $this->db
+                ->select('tb_mas_sy.*')
+                ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
+                ->where(array('intStudentID'=>$id,'enumSem'=>$sem,'strYearStart'=>$yearStart,'strYearEnd'=>$yearEnd,'term_student_type'=>$active['term_student_type']))
+                ->get('tb_mas_registration')
+                ->first_row('array');
         
         
     }

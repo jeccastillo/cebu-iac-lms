@@ -272,7 +272,7 @@ class Pdf extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
         $this->data['student'] = $this->data_fetcher->getStudent($id);
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($active_sem['intID']);
+        $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($active_sem['intID'],$id);
             
 
         if(!empty($this->data['prev_sem']))
@@ -285,7 +285,7 @@ class Pdf extends CI_Controller {
                 if(empty($this->data['prev_sem']))
                     break;
 
-                $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID']);
+                $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID'],$id);
                 $this->data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($this->data['student']['intID'],$this->data['prev_sem']['intID']);
             }
 

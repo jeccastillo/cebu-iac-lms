@@ -186,7 +186,7 @@ class Department extends CI_Controller {
 
         //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         $data['active_sem'] = $this->data_fetcher->get_active_sem();
-        $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID']);
+        $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID'],$studNum);
         $data['selected_ay'] = $data['active_sem']['intID'];
         $data['student'] = $this->data_fetcher->getStudent($studNum);
         
@@ -201,7 +201,7 @@ class Department extends CI_Controller {
                 if(empty($data['prev_sem']))
                     break;
                 
-                $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['prev_sem']['intID']);
+                $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['prev_sem']['intID'],$studNum);
                 $data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($data['student']['intID'],$data['prev_sem']['intID']);
             }
             
@@ -248,7 +248,7 @@ class Department extends CI_Controller {
             $this->data['errors'] = $this->session->flashdata('upload_errors');
             //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-            $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['active_sem']['intID']);
+            $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['active_sem']['intID'],$studNum);
             
             
             
@@ -275,7 +275,7 @@ class Department extends CI_Controller {
                     if(empty($this->data['prev_sem']))
                         break;
                     
-                    $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID']);
+                    $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID'],$studNum);
                     $this->data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($this->data['student']['intID'],$this->data['prev_sem']['intID']);
                 }
                 
