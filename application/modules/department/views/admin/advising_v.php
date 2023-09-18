@@ -106,7 +106,7 @@
                     <div class="col-md-5">
                         <h4>Enlisted Subjects</h4>
                         <select style="height:300px" class="form-control" v-model="subject_selector_advised" multiple>
-                            <option v-for="sn in advised_subjects" :value="sn.intSubjectID">{{ sn.strCode }}</option>                            
+                            <option v-for="sn in advised_subjects" :value="sn.intID">{{ sn.strCode }}</option>                            
                         </select>
                     </div>
                 </div>
@@ -162,7 +162,7 @@ new Vue({
                     this.advised_subjects = data.data.advised_subjects;
                     
                     for(i in this.advised_subjects){                                          
-                        var list = this.subjects_not_taken.filter((el) => el.intID !== this.advised_subjects[i].intSubjectID);
+                        var list = this.subjects_not_taken.filter((el) => el.intID !== this.advised_subjects[i].intID);
                         this.subjects_not_taken = list;
                     }
                 })

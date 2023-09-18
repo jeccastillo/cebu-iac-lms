@@ -472,8 +472,9 @@ class Department extends CI_Controller {
 
             foreach($post['subjects'] as $subject)
             {
+                $subject = (array)$subject;
                     
-                $data_subject['intSubjectID'] = $subject->intID;
+                $data_subject['intSubjectID'] = $subject['intID'];
                 $data_subject['intAdvisedID'] = $id;
                 $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
 
