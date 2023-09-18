@@ -66,7 +66,7 @@ class AdmissionsV1 extends CI_Controller {
        // $this->data_poster->set
         $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
         $this->data_poster->log_action('Admissions Details Updated','Updated Term Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
-        redirect(base_url()."admissions/edit_ay/".$post['intID']);
+        redirect(base_url()."admissionsV1/edit_ay/".$post['intID']);
             
     }
 
