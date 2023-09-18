@@ -27,7 +27,7 @@
         </div> 
         <div v-for="term in records" class="box box-success">
             <div class="box-header">
-                <h4>{{ term.enumSem + " " + term.term_label + " SY" + term.strYearStart + "-" + term.strYearEnd }}</h4>
+                <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
             </div>
             <div class="box-body">
                 <table class="table table-condensed table-bordered">
@@ -97,7 +97,11 @@ new Vue({
         id: '<?php echo $id; ?>',    
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
-        student:{},         
+        student:{
+            strFirstName: "Loading",
+            strLastName: "Loading",
+            strMiddleName: "Loading",
+        },         
         records: [],         
     },
 
