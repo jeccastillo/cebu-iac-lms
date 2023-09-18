@@ -220,7 +220,7 @@ new Vue({
 
         },
         loadSubjects: function(){
-            console.log(subject_selector);
+            console.log(this.subject_selector);
         }
     }
 
