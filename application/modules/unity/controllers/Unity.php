@@ -882,6 +882,35 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");
             
     }
+
+    public function student_records($id){
+        
+        $this->data['id'] = $id;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/student_records",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
+    public function student_records_data($id){
+
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        $registrations = $this->db->where(array('intStudentID'=>$id))
+                                  ->order_by("strYearStart ASC, enumSem ASC")
+                                  ->get('tb_mas_registration')
+                                  ->result_array();
+
+        $terms = [];
+        foreach($registration as $reg){
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
+            $term = $this->db->get_where('tb_mas_sy',array('intID'=>$reg['intAYID']));
+            $terms[] = array('records'=> $records,'term'=>$term);
+        }
+
+        $data['data'] = $terms;
+
+        echo json_encode($data);
+
+    }
     
     public function delete_registration_confirm()
     {

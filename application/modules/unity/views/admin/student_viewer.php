@@ -6,7 +6,7 @@
                 <small>                    
                     <a class="btn btn-app" :href="base_url + 'student/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                     
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i> Edit</a>                     
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'pdf/print_curriculum/' + student.intCurriculumID + '/' + student.intID"><i class="fa fa-print"></i>Curriculum Outline</a> 
+                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" target="_blank" :href="base_url + 'unity/student_records/' + '/' + student.intID"><i class="fa fa-user"></i>Assessment</a> 
                     <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                     
@@ -210,32 +210,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.tab-pane -->
-                        <!-- <div v-if="advanced_privilages1" :class="[(tab == 'tab_3') ? 'active' : '']" class="tab-pane" id="tab_3">
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Academic Standing</th>
-                                                <th>CGPA</th>
-                                                <th>Units Earned</th>
-                                                <th>Total Units</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{{ other_data.academic_standing.year}} Year / {{ other_data.academic_standing.status }}</td>
-                                                <td>{{ other_data.gpa_curriculum }}</td>
-                                                <td>{{ other_data.totalUnitsEarned }}</td>
-                                                <td>{{ other_data.units_in_curriculum }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div v-html="assessment"></div>                                    
-                                </div> 
-                            </div>                                
-                        </div>                                         -->
                         <div v-if="registration" :class="[(tab == 'tab_5') ? 'active' : '']" class="tab-pane" id="tab_5">
                             <div class="box box-primary">
                                 <div class="box-body">
@@ -413,8 +387,7 @@ new Vue({
                         this.total_units = data.data.total_units;
                         this.lab_units = data.data.lab_units;
                         this.gpa = data.data.gpa;
-                        this.other_data = data.data.other_data;
-                        this.assessment = data.data.assessment;    
+                        this.other_data = data.data.other_data;   
                         var sched = data.data.schedule;                        
                         axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                         .then((data) => {
