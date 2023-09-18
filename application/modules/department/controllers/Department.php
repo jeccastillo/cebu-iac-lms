@@ -232,88 +232,96 @@ class Department extends CI_Controller {
         echo json_encode($data);
 
     }
+
+    public function load_subjects($studNum = null){
+        
+        if($studNum == null){
+            $post = $this->input->post();
+            $this->data['id'] = $post['studentID'];
+        }
+        else
+            $this->data['id']  = $studNum;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/advising_v",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
     
-    public function load_subjects($studNum = null)
+    public function load_subjects_old($studNum = null)
     {
-        if($this->faculty_logged_in())
+        if($studNum == null){
+            $post = $this->input->post();
+            $id = $post['studentID'];
+        }
+        else
+            $id  = $studNum;
+        //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
+        
+        $this->data['errors'] = $this->session->flashdata('upload_errors');
+        //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['active_sem']['intID'],$studNum);
+        
+        
+        
+        
+        $this->data['selected_ay'] = $this->data['active_sem']['intID'];
+        
+        
+        //$this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
+        if($studNum==null){
+            $post = $this->input->post();
+            $this->data['student'] = $this->data_fetcher->getStudent($post['studentID']);
+        }
+        else
+            $this->data['student'] = $this->data_fetcher->getStudent($studNum);
+        
+        
+        if(!empty($this->data['prev_sem']))
         {
-            if($studNum == null){
-                $post = $this->input->post();
-                $id = $post['studentID'];
-            }
-            else
-                $id  = $studNum;
-            //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
             
-            $this->data['errors'] = $this->session->flashdata('upload_errors');
-            //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
-            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-            $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['active_sem']['intID'],$studNum);
+            $this->data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($this->data['student']['intID'],$this->data['prev_sem']['intID']);
             
-            
-            
-            
-            $this->data['selected_ay'] = $this->data['active_sem']['intID'];
-            
-            
-            //$this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
-            if($studNum==null){
-                $post = $this->input->post();
-                $this->data['student'] = $this->data_fetcher->getStudent($post['studentID']);
-            }
-            else
-                $this->data['student'] = $this->data_fetcher->getStudent($studNum);
-            
-            
-            if(!empty($this->data['prev_sem']))
+            while(empty($this->data['prev_records']))
             {
-			 
+                if(empty($this->data['prev_sem']))
+                    break;
+                
+                $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID'],$studNum);
                 $this->data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($this->data['student']['intID'],$this->data['prev_sem']['intID']);
-                
-                while(empty($this->data['prev_records']))
-                {
-                    if(empty($this->data['prev_sem']))
-                        break;
-                    
-                    $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($this->data['prev_sem']['intID'],$studNum);
-                    $this->data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($this->data['student']['intID'],$this->data['prev_sem']['intID']);
-                }
-                
             }
-            else
-                $this->data['prev_records'] = null;
-            
-            
-            $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID'], $this->data['selected_ay']);
-            
-            
-            
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
-            
-            $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-            $this->data['grades'] = $grades;
-            
-            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
-            $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
-            
-            
-            
-            $this->data['advised_subjects'] = $this->data_fetcher->getAdvisedSubjects($this->data['student']['intID'],$this->data['active_sem']['intID']);
-            
-            $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            
-    
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/advising",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("common/advised_conf",$this->data); 
-           // print_r($this->data['classlists']);
             
         }
         else
-            redirect(base_url()."unity");    
+            $this->data['prev_records'] = null;
         
+        
+        $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID'], $this->data['selected_ay']);
+        
+        
+        
+        $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);
+        
+        $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+        array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+        $this->data['grades'] = $grades;
+        
+        $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
+        $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
+        
+        
+        
+        $this->data['advised_subjects'] = $this->data_fetcher->getAdvisedSubjects($this->data['student']['intID'],$this->data['active_sem']['intID']);
+        
+        $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+        
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/advising",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/advised_conf",$this->data); 
+        // print_r($this->data['classlists']); 
         
     }
     
