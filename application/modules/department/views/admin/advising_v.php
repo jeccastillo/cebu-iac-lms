@@ -30,6 +30,7 @@
                         <ul class="nav nav-stacked">
                             <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
                             <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>
+                            <li><a href="#" style="font-size:13px;">Academic Standing <span class="pull-right text-blue">{{ academic_standing.status }}</span></a></li>
                         </ul>
                     </div>
                 </div>                
