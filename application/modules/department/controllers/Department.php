@@ -182,13 +182,37 @@ class Department extends CI_Controller {
         redirect(base_url().'department/crediting/'.$post['intStudentID']);
     }
 
-    public function load_subjects_data($studNum){
+    public function load_subjects_data($studNum,$sem = 0){
 
         //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
-        $data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $data['student'] = $this->data_fetcher->getStudent($studNum);
+        switch($data['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        
+        if($sem != 0)
+            $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == 'shs')
+            $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        else
+            $data['active_sem'] = $this->data_fetcher->get_active_sem();
+
         $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID'],$studNum);
         $data['selected_ay'] = $data['active_sem']['intID'];
-        $data['student'] = $this->data_fetcher->getStudent($studNum);
+        
         
         
         if(!empty($data['prev_sem']))
