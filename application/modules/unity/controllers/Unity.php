@@ -894,7 +894,9 @@ class Unity extends CI_Controller {
     public function student_records_data($id){
 
         $data['student'] = $this->data_fetcher->getStudent($id);
-        $registrations = $this->db->where(array('intStudentID'=>$id))
+        $registrations = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd')
+                                  ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
+                                  ->where(array('intStudentID'=>$id))
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
                                   ->result_array();
@@ -902,8 +904,7 @@ class Unity extends CI_Controller {
         $terms = [];
         foreach($registration as $reg){
             $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
-            $term = $this->db->get_where('tb_mas_sy',array('intID'=>$reg['intAYID']));
-            $terms[] = array('records'=> $records,'term'=>$term);
+            $terms[] = array('records'=> $records,'reg'=>$reg);
         }
 
         $data['data'] = $terms;
