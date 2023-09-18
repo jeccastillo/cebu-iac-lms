@@ -205,7 +205,7 @@ new Vue({
                     text: "Update Success",
                     icon: "success"
                 }).then(function() {
-                    document.location = base_url + 'registrar/register_old_student/' + this.student.intID;
+                    document.location = base_url + 'registrar/register_old_student/' + this.id;
                 });                         
                 
             })
