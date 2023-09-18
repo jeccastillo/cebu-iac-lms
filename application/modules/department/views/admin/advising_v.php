@@ -51,7 +51,7 @@
                         </tr>
                         <tr>
                             <th colspan="5">
-                                {{ prev_sem.enumSem + " " + prev_sem.term_label+ " "+prev_semstrYearStart + "-" + prev_sem.strYearEnd }}
+                                {{ prev_sem.enumSem + " " + prev_sem.term_label+ " "+prev_sem.strYearStart + "-" + prev_sem.strYearEnd }}
                             </th>
                         </tr>
                         <tr>
