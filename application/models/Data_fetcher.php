@@ -757,12 +757,10 @@ class Data_fetcher extends CI_Model {
         return current($this->db->get_where('tb_mas_sy',array('enumFGradingPeriod'=>'active', 'intID'=>$id))->result_array());
     }
   
-    function get_prev_sem($sem = null)
+    function get_prev_sem($sem)
     {
-        if($sem == null)
-            $active = current($this->db->get_where('tb_mas_sy',array('enumStatus'=>'active'))->result_array());
-        else     
-            $active = current($this->db->get_where('tb_mas_sy',array('intID'=>$sem))->result_array());
+        
+        $active = $this->db->get_where('tb_mas_sy',array('intID'=>$sem))->first_row('array');
         
         if($active['enumSem'] != "1st")
         {
@@ -771,13 +769,16 @@ class Data_fetcher extends CI_Model {
             $yearEnd = $active['strYearEnd'];
         }
         else
-        {
-            $sem = "2nd";
+        {   
+            if($active['term_student_type'] == "shs")         
+                $sem = "2nd";
+            else
+                $sem = "3rd";
             $yearStart = $active['strYearStart'] - 1;
             $yearEnd = $active['strYearEnd'] - 1;
         }
         
-        return current($this->db->get_where('tb_mas_sy',array('enumSem'=>$sem,'strYearStart'=>$yearStart,'strYearEnd'=>$yearEnd))->result_array());
+        return current($this->db->get_where('tb_mas_sy',array('enumSem'=>$sem,'strYearStart'=>$yearStart,'strYearEnd'=>$yearEnd,'term_student_type'=>$active['term_student_type']))->result_array());
         
         
     }

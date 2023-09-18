@@ -6,7 +6,7 @@ class Department extends CI_Controller {
 	{
 		parent::__construct();                
 
-        if(!$this->is_registrar() && !$this->is_super_admin() && !$this->is_department_head())
+        if(!$this->is_registrar() && !$this->is_super_admin())
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');
@@ -180,6 +180,57 @@ class Department extends CI_Controller {
         
         $this->data_poster->post_data('tb_mas_credited_grades',$post);
         redirect(base_url().'department/crediting/'.$post['intStudentID']);
+    }
+
+    public function load_subjects_data($studNum){
+
+        //$this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+        $data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['active_sem']['intID']);
+        $data['selected_ay'] = $data['active_sem']['intID'];
+        $data['student'] = $this->data_fetcher->getStudent($studNum);
+        
+        
+        if(!empty($data['prev_sem']))
+        {
+         
+            $data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($data['student']['intID'],$data['prev_sem']['intID']);
+            
+            while(empty($data['prev_records']))
+            {
+                if(empty($data['prev_sem']))
+                    break;
+                
+                $data['prev_sem'] = $this->data_fetcher->get_prev_sem($data['prev_sem']['intID']);
+                $data['prev_records'] = $this->data_fetcher->getClassListStudentsSt($data['student']['intID'],$data['prev_sem']['intID']);
+            }
+            
+        }
+        else
+            $data['prev_records'] = null;
+        
+        
+        $data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($data['student']['intID'],$data['student']['intCurriculumID'], $data['selected_ay']);
+        
+        
+        
+        $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$data['selected_ay']);
+        
+        $grades = $this->data_fetcher->assessCurriculum($data['student']['intID'],$data['student']['intCurriculumID']);
+        array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+        $data['grades'] = $grades;
+        
+        $data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($data['student']['intCurriculumID']);
+        $data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($data['student']['intCurriculumID']);
+        
+        
+        
+        $data['advised_subjects'] = $this->data_fetcher->getAdvisedSubjects($data['student']['intID'],$data['active_sem']['intID']);
+        
+        $data['academic_standing'] = $this->data_fetcher->getAcademicStanding($data['student']['intID'],$data['student']['intCurriculumID']);
+
+        echo json_encode($data);
+
     }
     
     public function load_subjects($studNum = null)
