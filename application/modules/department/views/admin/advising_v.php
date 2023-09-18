@@ -64,6 +64,7 @@ new Vue({
         sy: [],
         student: undefined,
         academic_standing: undefined,
+        active_sem: undefined,
     },
 
     mounted() {
@@ -77,6 +78,7 @@ new Vue({
                     this.sem =  data.data.active_sem.intID;
                     this.student  = data.data.student;
                     this.academic_standing =  data.data.academic_standing;
+                    this.active_sem = data.data.active_sem;
                 })
                 .catch((error) => {
                     console.log(error);
