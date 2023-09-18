@@ -174,7 +174,6 @@ new Vue({
         },
         autoload: function(){
             let url = base_url + 'unity/load_advised_subjects/'+this.academic_standing.status;
-            var data = {'year':year,'sem':sem,'sid':sid,'cid':cid};
             var formdata= new FormData();
             formdata.append("year",this.year);
             formdata.append("sem",this.sem);
