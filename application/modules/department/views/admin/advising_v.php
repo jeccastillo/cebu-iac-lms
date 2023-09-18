@@ -42,7 +42,7 @@
                 <h4 class="text-center">Currently processing: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + "-" + active_sem.strYearEnd }}</h4>
             </div>
             <div class="box-body">
-                <table class="table table-bordered">
+                <table v-if="prev_sem" class="table table-bordered">
                     <thead>
                         <tr>
                             <th colspan="5" class="text-center">
@@ -97,6 +97,8 @@ new Vue({
         student: undefined,
         academic_standing: undefined,
         active_sem: undefined,
+        prev_records: [],
+        prev_sem: undefined,
     },
 
     mounted() {
