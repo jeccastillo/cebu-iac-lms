@@ -433,7 +433,6 @@ $(document).ready(function() {
             'success': function(ret) {
                 total_units = 0;
                 button.removeAttr('disabled');
-                $("#submit-button").removeAttr('disabled');
                 if (ret.subjects.length > 0) {
                     for (i in ret.subjects) {
                         selected = '';
@@ -473,7 +472,7 @@ $(document).ready(function() {
                                     .classlists[j].intID + "'>Section: " + ret.subjects[i]
                                     .classlists[j].strClassName + " " 
                                     + ret.subjects[i].classlists[j].year + " "
-                                    + ret.subjects[i].classlists[j].strClassName + " " + ret.subjects[i].classlists[j].year + " " + ret.subjects[i].classlists[j].strSection + " "
+                                    + ret.subjects[i].classlists[j].strSection + " "
                                     + subsection
                                     + "(" + ret.subjects[i]
                                     .classlists[j].numCount + ")</option>";
