@@ -99,7 +99,7 @@
                         <br /><br />
                         <a href="#" class="btn btn-default  btn-flat btn-block" @click.prevent="autoload">Autoload <br /> Subjects </a>
                         <a href="#" @click.prevent="loadSubjects" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
-                        <a href="#" id="unload-advised" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
+                        <a href="#" @click.prevent="removeSubjects" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
                         <a href="#" @click.prevent="saveAdvised" class="btn btn-default  btn-flat btn-block">Save</a>
                         
                     </div>
