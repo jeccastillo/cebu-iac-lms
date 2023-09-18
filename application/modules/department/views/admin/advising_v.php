@@ -100,7 +100,7 @@
                         <a href="#" class="btn btn-default  btn-flat btn-block" @click.prevent="autoload">Autoload <br /> Subjects </a>
                         <a href="#" @click.prevent="loadSubjects" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
                         <a href="#" @click.prevent="removeSubjects" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
-                        <a href="#" @click.prevent="saveAdvised" class="btn btn-default  btn-flat btn-block">Save</a>
+                        <a href="#" @click.prevent="saveAdvised" class="btn btn-default  btn-flat btn-block">Save and Continue</a>
                         
                     </div>
                     <div class="col-md-5">
@@ -210,7 +210,7 @@ new Vue({
                     text: "Update Success",
                     icon: "success"
                 }).then(function() {
-                    document.location = base_url + 'registrar/register_old_student/' + data.data.sid;
+                    document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.sem;
                 });                         
                 
             })

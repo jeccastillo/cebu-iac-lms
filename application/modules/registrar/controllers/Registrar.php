@@ -1567,7 +1567,7 @@ class Registrar extends CI_Controller {
 
     }
 
-    public function register_old_student($studNum=null)
+    public function register_old_student($studNum=null,$sem = 0)
     {
         
        
@@ -1592,7 +1592,11 @@ class Registrar extends CI_Controller {
                 redirect(base_url().'registrar/register_student');
             }
 			$this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $active_sem = $this->data_fetcher->get_processing_sem();
+            if($sem == 0)
+                $active_sem = $this->data_fetcher->get_processing_sem();
+            else
+                $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+
             $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$active_sem['intID']);
             $sem = 1;
             
