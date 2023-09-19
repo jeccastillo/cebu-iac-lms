@@ -276,13 +276,13 @@
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">                    
-                        <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a
-                            href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user"></i>
-                            Student Search
+                        <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>">
+                        <a href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user"></i>
+                            Student Search</a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="deficiency_report")?'active':''; ?>"><a
                             href="<?php echo base_url()."deficiencies/deficiency_report" ?>"><i class="fa fa-book"></i>
-                            Deficiency List
+                            Deficiency List</a>
                         </li>
                     </ul>
                 </li>
