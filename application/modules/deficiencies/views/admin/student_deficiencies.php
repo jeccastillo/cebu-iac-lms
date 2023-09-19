@@ -21,7 +21,26 @@
                         </select>
                     </div>
                 </div>                
-                <hr />                                
+                <hr />  
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Deficiency</th>
+                            <th>Department</th>
+                            <th>Remarks</th>
+                            <th>Date Added</th>
+                            <th>Added By</th>
+                            <th>Date Resolved</th>
+                            <th>Resolved By</th>
+                            <th>Status</th>                                                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="deficiencies.length == 0">
+                            <td colspan='8'>No Deficiencies for this term</td>
+                        </tr>
+                    </tbody>
+                </table>                              
             </div>        
         </div>
         
