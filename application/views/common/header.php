@@ -195,10 +195,22 @@
                         href="<?php echo base_url()."faculty/my_profile" ?>"><i class="fa fa-user text-blue"></i>
                         <span>My Profile</span></a></li>
                 <?php if($user['special_role'] >= 2  || $user['intUserLevel'] == 2): ?>
-                    <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a
-                        href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user text-blue"></i>
-                        Deficiencies
-                    </li>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="deficiencies")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-circle"></i> <span>Deficiencies</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">                    
+                        <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a
+                            href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user"></i>
+                            Student Search
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="deficiency_report")?'active':''; ?>"><a
+                            href="<?php echo base_url()."deficiencies/deficiency_report" ?>"><i class="fa fa-book"></i>
+                            Deficiency List
+                        </li>
+                    </ul>
+                </li>
                 <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
                 <li class="<?php echo (isset($page) && $page=="add_classlist")?'active':''; ?>"><a
