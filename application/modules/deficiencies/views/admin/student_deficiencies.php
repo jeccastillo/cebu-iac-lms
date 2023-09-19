@@ -24,17 +24,18 @@
                 <hr />
                 <h4>Add Deficiency</h4>
                 <form method="post" @submit.prevent="submitDeficiency">
-                <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <label>Deficiency Details</label>
-                        <input type="text" required class="form-control" v-model="request.details">                                                                        
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <label>Remarks</label>
-                        <textarea required class="form-control" v-model="request.remarks"></textarea>
-                    </div>
-                </div>  
-                
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>Deficiency Details</label>
+                            <input type="text" required class="form-control" v-model="request.details">                                                                        
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label>Remarks</label>
+                            <textarea required class="form-control" v-model="request.remarks"></textarea>
+                        </div>
+                    </div>  
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <hr />
                 <table class="table table-bordered table-striped">
@@ -134,6 +135,50 @@ new Vue({
             document.location = base_url + 'deficiencies/student_deficiencies/'+this.student.intID+'/'+event.target.value;
 
         },
+        submitDeficiency: function(){            
+            Swal.fire({
+                title: 'Add Deficiency?',
+                text: "Continue adding deficiency?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.request)) {
+                        formdata.append(key,value);
+                    }                                                              
+                    return axios
+                        .post('<?php echo base_url(); ?>deficiencies/add_deficiency',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
        
                                        
     }

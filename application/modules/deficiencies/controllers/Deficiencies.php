@@ -95,6 +95,22 @@ class Deficiencies extends CI_Controller {
         $this->load->view("common/search_student_conf",$this->data);
     }
 
+    public function add_deficiency(){
+        $post = $this->input->post();
+        $post['date_added'] = date("Y-m-d");
+        if($this->db->insert('tb_mas_student_deficiencies',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully Added Deficiency";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Failed to Add";
+        }
+
+        echo json_encode($data);
+        
+    }
+
     
     
     public function faculty_logged_in()
