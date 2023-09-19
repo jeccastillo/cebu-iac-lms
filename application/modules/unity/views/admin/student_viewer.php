@@ -14,7 +14,7 @@
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a  target="_blank" class="btn btn-app" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
-                        <i class="ion ion-user"></i>Deficiencies
+                        <i class="fa fa-user"></i>Deficiencies
                     </a>                     
                     <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>Print Subjects
