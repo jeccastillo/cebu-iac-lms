@@ -36,7 +36,7 @@
                         </tr>
                         <tr v-else v-for="(item,index) in students">
                             <td>{{ index+1 }}</td>
-                            <td><a :href="base_url+'deficiencies/student_deficiencies/'+item.intID+'/'+sem">{{ item.strLastname + " " + item.strFirstname }}</a></td>
+                            <td><a :href="base_url+'deficiencies/student_deficiencies/'+item.student_id+'/'+sem">{{ item.strLastname + " " + item.strFirstname }}</a></td>
                             <td>{{ item.strStudentNumber.replace(/-/g, "")  }}</td>                          
                         </tr>
                     </tbody>
