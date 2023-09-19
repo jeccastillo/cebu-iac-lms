@@ -54,30 +54,10 @@ class Deficiencies extends CI_Controller {
         $this->data['page'] = "subjects";
     }
     
-    public function add_grading()
+    public function student_deficiencies()
     {
-        if($this->is_admin() || $this->is_registrar())
-        {
-            $dpt = array(); 
-            foreach($this->data['department_config'] as $dept)
-                $dpt[$dept] = $dept;
-
-            $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
-            
-            $this->data['dpt'] = $dpt;
-            $this->data['page'] = "add_grading_system";
-            $this->data['opentree'] = "grading";
-            
-           
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/add_grading",$this->data);
-            $this->load->view("common/footer",$this->data);
-            $this->load->view("subject_validation_js",$this->data); 
-            //print_r($this->data['classlist']);
-            
-        }
-        else
-            redirect(base_url()."unity");  
+        $post = $this->input->post();
+        print_r($post); 
     }
     
     public function student_search(){
