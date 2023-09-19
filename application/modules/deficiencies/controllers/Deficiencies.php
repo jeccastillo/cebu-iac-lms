@@ -72,6 +72,7 @@ class Deficiencies extends CI_Controller {
 
     }
 
+
     public function student_deficiencies_data($sem,$id){
                 
         if($sem != 0)
@@ -91,6 +92,37 @@ class Deficiencies extends CI_Controller {
                     ->result_array();
                     
         echo json_encode($ret);
+    }
+
+    public function deficiency_report($sem = 0)
+    {
+               
+        $this->data['sem'] = $sem;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/students_with_deficiencies",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+    public function deficiency_report_data($sem){
+
+        if($sem != 0)
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        else
+
+        $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+        $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
+       
+        $ret['students'] = $this->db
+                    ->select('tb_mas_student_deficiencies.*,strFirstname,strLastname,strStudentNumber,strMiddlename')
+                    ->join('tb_mas_users','tb_mas_student_deficiencies.student_id = tb_mas_users.intID')
+                    ->where(array('syid'=>$sem))
+                    ->group_by('student_id')
+                    ->get('tb_mas_student_deficiencies')
+                    ->result_array();
+                    
+        echo json_encode($ret);
+        
     }
     
     public function student_search(){
