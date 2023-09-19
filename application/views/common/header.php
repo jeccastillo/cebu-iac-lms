@@ -254,6 +254,21 @@
                 </li>
                 <?php endif; ?>
                 <li class="header">Menu</li>
+                
+                <?php if($user['teaching'] == 1): ?>
+
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa-user fa text-teal"></i> <span>Faculty Menu</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>unity/view_classlist" style="margin-left: 10px;"><i
+                                    class="ion ion-android-person-add"></i> My Classlists</a></li>
+                    </ul>
+                </li>
+                <?php endif; ?>
                 <?php if($user['special_role'] >= 2  || $user['intUserLevel'] == 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="deficiencies")?'active':''; ?>">
                     <a href="#">
@@ -269,20 +284,6 @@
                             href="<?php echo base_url()."deficiencies/deficiency_report" ?>"><i class="fa fa-book"></i>
                             Deficiency List
                         </li>
-                    </ul>
-                </li>
-                <?php endif; ?>
-                <?php if($user['teaching'] == 1): ?>
-
-                <li class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
-                    <a href="#">
-                        <i class="fa-user fa text-teal"></i> <span>Faculty Menu</span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>unity/view_classlist" style="margin-left: 10px;"><i
-                                    class="ion ion-android-person-add"></i> My Classlists</a></li>
                     </ul>
                 </li>
                 <?php endif; ?>
