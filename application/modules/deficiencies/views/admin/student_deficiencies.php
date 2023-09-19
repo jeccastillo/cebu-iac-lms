@@ -88,6 +88,7 @@ new Vue({
         terms: [],    
         department: undefined,
         request:{
+            added_by: undefined,
             details: undefined,
             department: undefined,
             remarks: undefined,
@@ -105,14 +106,14 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'deficiencies/student_deficiencies_data/'+this.sem+'/'+this.id)
                 .then((data) => {                                      
-                  this.terms = data.data.sy;                                        
-                  this.sem = data.data.active_sem.intID; 
-                  this.active_sem = data.data.active_sem;
-                  this.student = data.data.student;
-                  this.deficiencies = data.data.deficiencies;
-                  this.department = data.data.department;
-                  this.request.department = data.data.department;
-                
+                    this.terms = data.data.sy;                                        
+                    this.sem = data.data.active_sem.intID; 
+                    this.active_sem = data.data.active_sem;
+                    this.student = data.data.student;
+                    this.deficiencies = data.data.deficiencies;
+                    this.department = data.data.department;
+                    this.request.department = data.data.department;
+                    this.added_by = data.data.name;
                 })
             .catch((error) => {
                 console.log(error);
