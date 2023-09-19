@@ -17,14 +17,7 @@
         </div>
        
         <div class="box box-solid">
-            <div class="box-body">
-                <?php if($error_message!=""): ?>
-                    <div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Error</strong> <?php echo $error_message; ?></div>
-                <?php endif; ?>
-                
-                <hr />
-            
+            <div class="box-body">                               
              <form id="advise-student" action="<?php echo base_url(); ?>deficiencies/student_deficiencies" method="post" role="form">
                  <p>Search Student</p>
                  <div class="row">
