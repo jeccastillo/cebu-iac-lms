@@ -60,14 +60,7 @@
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
-                        </div>                        
-                        <div class="form-group col-xs-6">
-                            <label for="is_numerical">Numerical Rating?</label>
-                            <select class="form-control" name="is_numerical" id="is_numerical" >
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                        </div>                        
+                        </div>                                                                 
                         <div class="form-group col-xs-6">
                             <label for="intBridging">Bridging</label>
                             <select class="form-control" name="intBridging" id="intBridging" >
