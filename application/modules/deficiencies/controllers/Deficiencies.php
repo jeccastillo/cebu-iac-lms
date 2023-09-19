@@ -54,10 +54,33 @@ class Deficiencies extends CI_Controller {
         $this->data['page'] = "subjects";
     }
     
-    public function student_deficiencies()
+    public function student_deficiencies($id = 0,$sem = 0)
     {
-        $post = $this->input->post();
-        print_r($post); 
+        
+        if($id == 0){
+            $post = $this->input->post();
+            $this->data['id'] = $post['studentID'];
+        }
+        else
+            $this->data['id'] = $id;
+
+        $this->data['sem'] = $sem;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/student_deficiencies",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+
+    public function student_deficiencies_data($sem,$id){
+                
+        if($sem != 0)
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        else
+        $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+        $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
+
+        $ret['student'] =  $this->data_fetcher->getStudent($id);
     }
     
     public function student_search(){
