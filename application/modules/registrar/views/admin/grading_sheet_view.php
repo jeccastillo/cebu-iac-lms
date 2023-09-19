@@ -138,8 +138,8 @@
                                 <td>{{ item.strCode }}</td>
                                 <td>{{ item.strDescription }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname }}</td>
-                                <td>{{ item.intFinalized > 0 ? item.date_midterm_submitted: '' }}</td>
-                                <td>{{ item.intFinalized > 1 ? item.date_final_submitted: '' }}</td>
+                                <td>{{ (item.intFinalized > 0 )? item.date_midterm_submitted: '' }}</td>
+                                <td>{{ (item.intFinalized > 1 )? item.date_final_submitted: '' }}</td>
                                 <td></td>
                             </tr>
                         </tbody>
