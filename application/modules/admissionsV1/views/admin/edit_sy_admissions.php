@@ -20,7 +20,7 @@
                     <label for="sem">Select Term:</label>
                     <select id="sem-select-edit-ay" class="form-control select2" >                        
                         <?php foreach($sy as $s): ?>
-                            <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                            <option <?php echo ($item['intID'] == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
