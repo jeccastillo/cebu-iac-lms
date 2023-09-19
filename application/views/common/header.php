@@ -194,6 +194,10 @@
                 <li class="<?php echo (isset($page) && $page=="my_profile")?'active':''; ?>"><a
                         href="<?php echo base_url()."faculty/my_profile" ?>"><i class="fa fa-user text-blue"></i>
                         <span>My Profile</span></a></li>
+                <?php if($user['special_role'] >= 2  || $user['intUserLevel'] == 2): ?>
+                    <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a
+                        href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user text-blue"></i>
+                <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
                 <li class="<?php echo (isset($page) && $page=="add_classlist")?'active':''; ?>"><a
                         href="<?php echo base_url() ?>unity/faculty_classlists"><i class="fa fa-plus-square"></i>
@@ -436,7 +440,7 @@
                         <li class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
                     </ul>
                 </li>
-                <?php if($user['special_role'] >= 1): ?>
+                <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
                 <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
                     <a href="#">
@@ -463,7 +467,7 @@
                     </ul>
                 </li>
                 <?php endif; ?>
-                <?php if($user['special_role'] >= 2): ?>
+                <?php if(($user['special_role'] >= 2 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
