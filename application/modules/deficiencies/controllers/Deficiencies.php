@@ -81,6 +81,8 @@ class Deficiencies extends CI_Controller {
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
 
         $ret['student'] =  $this->data_fetcher->getStudent($id);
+
+        echo json_encode($ret);
     }
     
     public function student_search(){

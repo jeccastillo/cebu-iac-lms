@@ -1,7 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Term-Grading System Override
+            Student Deficiencies
             <small>                
             </small>
         </h1>     
@@ -10,7 +10,7 @@
     <div class="content">  
         <div class="box box-primary">
             <div class="box-header">
-                <h4>Override Grading System</h4>
+                <h4>Student Deficiencies</h4>
             </div>
             <div class="box-body">
                 <div class="row" style="margin-bottom:10px">                    
@@ -20,33 +20,7 @@
                             <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                         </select>
                     </div>
-                </div>
-                <h4>Add Override</h4>
-                <form method="post" @submit.prevent="addOverride">
-                    <div class="row" style="margin-bottom:10px">                    
-                        <div class="col-sm-4">
-                            <label>Select Subject</label>
-                            <select class="form-control" required v-model="request.subject_id">
-                                <option v-for="subject in subjects" :value="subject.intID">{{ subject.strCode + " " + subject.strDescription  }}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label>Grading System</label>
-                            <select class="form-control" required v-model="request.grading_system_id">
-                                <option v-for="item in grading_systems" :value="item.id">{{ item.name  }}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label>Period</label>
-                            <select class="form-control" required v-model="request.period">
-                                <option value="midterm">Midterm</option>
-                                <option value="final">Final</option>
-                            </select>
-                        </div>
-                    </div>
-                    <hr />
-                    <input type="submit" value="Add" class="btn btn-primary btn-lg" />
-                </form>
+                </div>                
                 <hr />                                
             </div>        
         </div>
