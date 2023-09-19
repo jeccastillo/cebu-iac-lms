@@ -49,7 +49,8 @@
                             <th>Added By</th>
                             <th>Date Resolved</th>
                             <th>Resolved By</th>
-                            <th>Status</th>                                                        
+                            <th>Status</th> 
+                            <th>Actions</th>                                                       
                         </tr>
                     </thead>
                     <tbody>
@@ -65,6 +66,10 @@
                             <td>{{ item.date_resolved }}</td>
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status }}</td>
+                            <td v-if="item.department == request.department && item.status != 'resolved'">
+                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a>
+                            </td>
+                            <td v-else></td>
                         </tr>
                     </tbody>
                 </table>                              
@@ -157,6 +162,48 @@ new Vue({
                     }                                                              
                     return axios
                         .post('<?php echo base_url(); ?>deficiencies/add_deficiency',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },
+        resolveDeficiency: function(id){
+            Swal.fire({
+                title: 'Resolve Deficiency?',
+                text: "Continue resolving deficiency?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('id',id);                                                                                  
+                    return axios
+                        .post('<?php echo base_url(); ?>deficiencies/resolve_deficiency',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
