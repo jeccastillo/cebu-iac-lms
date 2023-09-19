@@ -1,18 +1,18 @@
 <aside class="right-side">
 <section class="content-header">
                     <h1>
-                        Faculty
+                        User Accounts
                         <small></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Faculty</a></li>
-                        <li class="active">Edit Faculty</li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> User Accounts</a></li>
+                        <li class="active">Edit User Account</li>
                     </ol>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Faculty</h3>
+                <h3 class="box-title">Edit User Account</h3>
         </div>
             
             
