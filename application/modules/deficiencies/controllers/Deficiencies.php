@@ -116,7 +116,7 @@ class Deficiencies extends CI_Controller {
         $ret['students'] = $this->db
                     ->select('tb_mas_student_deficiencies.*,strFirstname,strLastname,strStudentNumber,strMiddlename')
                     ->join('tb_mas_users','tb_mas_student_deficiencies.student_id = tb_mas_users.intID')
-                    ->where(array('syid'=>$sem))
+                    ->where(array('syid'=>$ret['active_sem']['intID']))
                     ->group_by('student_id')
                     ->get('tb_mas_student_deficiencies')
                     ->result_array();
