@@ -93,7 +93,9 @@ new Vue({
         active_sem: undefined,      
         deficiencies:[],              
         terms: [],    
-        student: {},
+        student: {
+            strStudentNumber:'aaa-aaaa-aaa'
+        },
         department: undefined,
         request:{
             added_by: undefined,
