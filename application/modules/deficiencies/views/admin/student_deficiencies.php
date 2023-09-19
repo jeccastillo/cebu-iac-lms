@@ -191,7 +191,7 @@ new Vue({
         resolveDeficiency: function(id){
             Swal.fire({
                 title: 'Resolve Deficiency?',
-                text: "Continue resolving deficiency?",
+                text: "Continue resolving deficiency? Once resolved you can not change the status back to active.",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
