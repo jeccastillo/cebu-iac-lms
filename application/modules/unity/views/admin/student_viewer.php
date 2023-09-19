@@ -10,8 +10,11 @@
                     <!-- <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                      -->
-                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3) && deficiencies.length > 0" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
+                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3) && deficiencies.length == 0" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
                         <i class="ion ion-printer"></i>RF No Header
+                    </a>                     
+                    <a  target="_blank" class="btn btn-app" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
+                        <i class="ion ion-user"></i>Deficiencies
                     </a>                     
                     <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)" target="_blank" class="btn btn-app" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
                         <i class="ion ion-printer"></i>Print Subjects
