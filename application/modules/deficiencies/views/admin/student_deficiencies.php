@@ -107,13 +107,14 @@ new Vue({
             axios.get(this.base_url + 'deficiencies/student_deficiencies_data/'+this.sem+'/'+this.id)
                 .then((data) => {                                      
                     this.terms = data.data.sy;                                        
-                    this.sem = data.data.active_sem.intID; 
+                    this.sem = data.data.active_sem.intID;                     
                     this.active_sem = data.data.active_sem;
                     this.student = data.data.student;
                     this.deficiencies = data.data.deficiencies;
                     this.department = data.data.department;
                     this.request.department = data.data.department;
-                    this.added_by = data.data.name;
+                    this.request.added_by = data.data.name;
+                    this.request.syid = this.sem;
                 })
             .catch((error) => {
                 console.log(error);
