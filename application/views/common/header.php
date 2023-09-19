@@ -197,6 +197,8 @@
                 <?php if($user['special_role'] >= 2  || $user['intUserLevel'] == 2): ?>
                     <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a
                         href="<?php echo base_url()."deficiencies/student_search" ?>"><i class="fa fa-user text-blue"></i>
+                        Deficiencies
+                    </li>
                 <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
                 <li class="<?php echo (isset($page) && $page=="add_classlist")?'active':''; ?>"><a
