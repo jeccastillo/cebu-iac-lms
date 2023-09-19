@@ -360,7 +360,7 @@ new Vue({
                         else{
                             this.discount = {name:'none'};
                         }                               
-                        
+                        this.deficiencies = data.data.deficiencies;
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;                        
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
