@@ -202,6 +202,7 @@ new Vue({
                 preConfirm: (login) => {
                     var formdata= new FormData();
                     formdata.append('id',id);                                                                                  
+                    formdata.append('resolved_by',this.request.added_by);   
                     return axios
                         .post('<?php echo base_url(); ?>deficiencies/resolve_deficiency',formdata, {
                                 headers: {
