@@ -48,15 +48,15 @@
                                                     
                     <div class="form-group">
                         <label for="strClassName">Class Name:</label>
-                        <input type="text" name="strClassName" class="form-control" id="strClassName" >                                
+                        <input type="text" required name="strClassName" class="form-control" id="strClassName" >                                
                     </div>
                     <div class="form-group">
                         <label for="year">Year:</label>
-                        <input type="number" name="year" class="form-control" id="year" >                                
+                        <input type="number" required name="year" class="form-control" id="year" >                                
                     </div>                    
                     <div class="form-group">
                         <label for="strSection">Section:</label>
-                        <input type="text" name="strSection" class="form-control" id="strSection" >                                
+                        <input type="text" required name="strSection" class="form-control" id="strSection" >                                
                     </div>
                     <div class="form-group">
                         <label for="sub_section">Sub Section:</label>
