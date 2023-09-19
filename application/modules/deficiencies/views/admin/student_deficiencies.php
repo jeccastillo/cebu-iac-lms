@@ -44,7 +44,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         sem: '<?php echo $sem; ?>',
         id: '<?php echo $id; ?>',
-        active_sem: undefined,                    
+        active_sem: undefined,      
+        deficiencies:[],              
         terms: [],      
         
     },
@@ -60,6 +61,7 @@ new Vue({
                   this.sem = data.data.active_sem.intID; 
                   this.active_sem = data.data.active_sem;
                   this.student = data.data.student;
+                  this.deficiencies = data.data.deficiencies;
                 
                 })
             .catch((error) => {
