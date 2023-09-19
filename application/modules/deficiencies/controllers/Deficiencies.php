@@ -64,6 +64,8 @@ class Deficiencies extends CI_Controller {
         else
             $this->data['id'] = $id;
 
+        $this->data['opentree'] = "deficiencies";
+        $this->data['page'] = "deficiencies";
         $this->data['sem'] = $sem;
 
         $this->load->view("common/header",$this->data);
@@ -98,6 +100,9 @@ class Deficiencies extends CI_Controller {
     {
                
         $this->data['sem'] = $sem;
+        
+        $this->data['opentree'] = "deficiencies";
+        $this->data['page'] = "deficiency_report";
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/students_with_deficiencies",$this->data);
