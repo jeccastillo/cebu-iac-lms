@@ -72,7 +72,7 @@ new Vue({
 
     methods: {      
         selectTerm: function(event){
-            document.location = base_url + 'deficiencies/student_deficiencies/'+event.target.value +'/'+this.student.intID;
+            document.location = base_url + 'deficiencies/student_deficiencies/'+this.student.intID+'/'+event.target.value;
 
         },
        
