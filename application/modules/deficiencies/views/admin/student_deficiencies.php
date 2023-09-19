@@ -27,9 +27,14 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label>Deficiency Details</label>
-                        <input type="text" class="form-control" v-model="request.details">                        
+                        <input type="text" required class="form-control" v-model="request.details">                                                                        
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Remarks</label>
+                        <textarea required class="form-control" v-model="request.remarks"></textarea>
                     </div>
                 </div>  
+                
                 </form>
                 <hr />
                 <table class="table table-bordered table-striped">
