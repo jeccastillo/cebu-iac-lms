@@ -83,7 +83,13 @@ class Deficiencies extends CI_Controller {
         $ret['student'] =  $this->data_fetcher->getStudent($id);
         $ret['department'] = switch_user_level($this->session->userdata('intUserLevel'));
         $ret['name'] = $this->session->userdata('strFirstname')." ".$this->session->userdata('strLastname');
-        $ret['deficiencies'] = $this->db->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'syid'=>$sem))->result_array();
+        $ret['deficiencies'] = $this->db
+                    ->select('tb_mas_student_deficiencies.*,enumSem,term_label,strYearStart,strYearEnd')
+                    ->join('tb_mas_sy','tb_mas_student_deficiencies.syid = tb_mas_sy.intID')
+                    ->where(array('student_id'=>$id))
+                    ->get('tb_mas_student_deficiencies')
+                    ->result_array();
+                    
         echo json_encode($ret);
     }
     

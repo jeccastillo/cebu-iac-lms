@@ -42,6 +42,7 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th>Term</th>
                             <th>Deficiency</th>
                             <th>Department</th>
                             <th>Remarks</th>
@@ -58,6 +59,7 @@
                             <td colspan='8'>No Deficiencies for this term</td>
                         </tr>
                         <tr v-else v-for="item in deficiencies">
+                            <td>{{ item.enumSem + " " + item.term_label + " " + item.strYearStart + "-" + item.strYearEnd}}</td>
                             <td>{{ item.details }}</td>
                             <td>{{ item.department }}</td>
                             <td>{{ item.remarks }}</td>
