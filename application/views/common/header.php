@@ -341,10 +341,10 @@
                         <!--li class="<?php echo (isset($page) && $page=="sync")?'active':''; ?>"><a href="<?php echo base_url(); ?>unity/execute_sync" style="margin-left: 10px;"><i class="ion ion-android-sync"></i> Sync Students DB</a></li-->
                         <li class="<?php echo (isset($page) && $page=="add_faculty")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>faculty/add_faculty" style="margin-left: 10px;"><i
-                                    class="ion ion-android-person-add"></i> Add Faculty</a></li>
+                                    class="ion ion-android-person-add"></i> Add User Account</a></li>
                         <li class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>faculty/view_all_faculty" style="margin-left: 10px;"><i
-                                    class="ion ion-eye"></i> View Faculty</a></li>
+                                    class="ion ion-eye"></i> View User Accounts</a></li>
 
 
                         <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
