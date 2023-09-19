@@ -304,6 +304,7 @@ new Vue({
         records: [],
         other_data: undefined,
         reg_status: '',
+        deficiencies:[],
         sy: undefined,
         term_type: undefined,
         sem_student: undefined,
