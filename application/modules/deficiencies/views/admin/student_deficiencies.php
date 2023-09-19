@@ -21,7 +21,17 @@
                         </select>
                     </div>
                 </div>                
-                <hr />  
+                <hr />
+                <h4>Add Deficiency</h4>
+                <form method="post" @submit.prevent="submitDeficiency">
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label>Deficiency Details</label>
+                        <input type="text" class="form-control" v-model="request.details">                        
+                    </div>
+                </div>  
+                </form>
+                <hr />
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -38,6 +48,16 @@
                     <tbody>
                         <tr v-if="deficiencies.length == 0">
                             <td colspan='8'>No Deficiencies for this term</td>
+                        </tr>
+                        <tr v-else v-for="item in deficiencies">
+                            <td>{{ item.details }}</td>
+                            <td>{{ item.department }}</td>
+                            <td>{{ item.remarks }}</td>
+                            <td>{{ item.date_added }}</td>
+                            <td>{{ item.added_by }}</td>
+                            <td>{{ item.date_resolved }}</td>
+                            <td>{{ item.resolved_by }}</td>
+                            <td>{{ item.status }}</td>
                         </tr>
                     </tbody>
                 </table>                              
@@ -65,7 +85,16 @@ new Vue({
         id: '<?php echo $id; ?>',
         active_sem: undefined,      
         deficiencies:[],              
-        terms: [],      
+        terms: [],    
+        department: undefined,
+        request:{
+            details: undefined,
+            department: undefined,
+            remarks: undefined,
+            syid: <?php echo $sem; ?>, 
+            student_id: <?php echo $id; ?>,           
+            status: 'active',
+        }  
         
     },
 
@@ -81,6 +110,8 @@ new Vue({
                   this.active_sem = data.data.active_sem;
                   this.student = data.data.student;
                   this.deficiencies = data.data.deficiencies;
+                  this.department = data.data.department;
+                  this.request.department = data.data.department;
                 
                 })
             .catch((error) => {

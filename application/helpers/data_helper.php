@@ -681,29 +681,41 @@ if(!function_exists('switch_user_level'))
         switch($num)
             {
                 case 0:
-                    $num = "Faculty";
-                    break;
+                    $num = "Academics";
+                break;
                 case 1:
-                    $num = "Faculty Admin";
-                    break;
+                    $num = "Building Admin";
+                break;
                 case 2:
                     $num = "Super Admin";
-                    break;
+                break;
                 case 3:
                     $num = "Registrar";
-                    break;
+                break;
                 case 4:
                     $num = "Dean";
-                    break;
+                break;
                 case 5:
                     $num = "Admissions Officer";
-                    break;
+                break;
                 case 6:
                     $num = "Finance";
-                    break;
+                break;
                 case 7:
                     $num = "OSAS";
-                    break;
+                break;
+                case 8:
+                    $num = "Library";
+                break;
+                case 9:
+                    $num = "Discipline";
+                break;
+                case 10:
+                    $num = "Clinic";
+                break;
+                case 11:
+                    $num = "IT";
+                break;
             }
         
             return $num;
