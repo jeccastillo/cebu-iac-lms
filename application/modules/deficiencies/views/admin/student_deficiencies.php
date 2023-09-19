@@ -10,7 +10,8 @@
     <div class="content">  
         <div class="box box-primary">
             <div class="box-header">
-                <h4>Student Deficiencies</h4>
+                <h4>{{ student.strLastname + " " + student.strFirstname }}</h4>
+                <h5>{{ student.strStudentNumber.replace(/-/g, "") }}</h5>
             </div>
             <div class="box-body">
                 <div class="row" style="margin-bottom:10px">                    
