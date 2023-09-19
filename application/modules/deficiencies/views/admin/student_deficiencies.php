@@ -10,7 +10,7 @@
     <div class="content">  
         <div class="box box-primary">
             <div class="box-header">
-                <h4>Student Deficiencies</h4>
+                <h4>Student Deficiencies for {{ request.department }}</h4>
             </div>
             <div class="box-body">
                 <div class="row" style="margin-bottom:10px">                    
