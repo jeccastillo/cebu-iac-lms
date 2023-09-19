@@ -131,7 +131,8 @@ class Deficiencies extends CI_Controller {
     }
     
     public function student_search(){
-        $this->data['page'] = "deficiencies";               
+        $this->data['opentree'] = "deficiencies";
+        $this->data['page'] = "deficiencies";              
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/search_student",$this->data);
         $this->load->view("common/footer",$this->data);
