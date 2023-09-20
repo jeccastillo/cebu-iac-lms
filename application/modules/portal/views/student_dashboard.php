@@ -11,19 +11,23 @@
         </section>
     <section class="content">
        <div class="row">
-        <div class="col-md-4 col-sm-8 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-star"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">ACADEMIC YEAR</span>
-              <span class="info-box-number"><?php echo $active_sem['enumSem']." ".$term_type." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd']; ?></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-
-        </div>
+        <?php if($deficiencies_count > 0): ?>
+       <div class="col-md-4 col-sm-8 col-xs-12">
+           
+           <div class="small-box bg-red">
+           <div class="inner">
+             <h3>Deficiencies</h3>
+               <p>you have deficiencies</p>
+           </div>
+           <div class="icon">
+             <i class="fa fa-user"></i>
+           </div>
+           <a href="<?php echo base_url(); ?>portal/deficiencies" class="small-box-footer">
+             View Deficiencies <i class="fa fa-arrow-circle-right"></i>
+           </a>
+         </div>
+       </div>
+       <?php endif; ?>
         <div class="col-md-4 col-sm-8 col-xs-12">
            
             <div class="small-box bg-yellow">
