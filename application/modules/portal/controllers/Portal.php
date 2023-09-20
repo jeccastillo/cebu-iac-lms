@@ -212,7 +212,7 @@ class Portal extends CI_Controller {
     {
         
         
-        $this->data['id'] = $id;
+        $this->data['id'] = $this->session->userdata('intID');
         $this->data['sem'] = $sem;
        
         $this->load->view("common/header",$this->data);
