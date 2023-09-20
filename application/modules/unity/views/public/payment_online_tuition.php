@@ -368,6 +368,7 @@ new Vue({
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
                             this.payment_type = this.registration.paymentType;
+                            console.log(down_payment);
                             if(this.registration.downpayment == 1 || down_payment == 0){
                                 this.has_down = true;
 
