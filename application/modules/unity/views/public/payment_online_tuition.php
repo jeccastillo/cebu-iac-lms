@@ -376,6 +376,7 @@ new Vue({
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
                             this.payment_type = this.registration.paymentType;
+                            console.log(this.amount_paid);
                             console.log(down_payment);
                             if(this.registration.downpayment == 1 || down_payment == 0){
                                 this.has_down = true;
@@ -402,7 +403,7 @@ new Vue({
                             else{
                                 this.item_details.price = this.remaining_amount;
                             }       
-                            
+
                             axios.get(api_url + 'finance/reservation/' + this.slug)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
