@@ -360,6 +360,7 @@ new Vue({
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
                         this.tuition_data = data.data.tuition_data;          
+                        this.payment_type = this.registration.paymentType;
                         this.remaining_amount = data.data.tuition_data.total;
                         if(this.payment_type == "partial")                       
                             this.remaining_amount = data.data.tuition_data.total_installment;
@@ -379,7 +380,7 @@ new Vue({
                             
                             
                             this.other_payments = data.data.other;
-                            this.payment_type = this.registration.paymentType;       
+                                   
                                                          
 
                             axios.get(api_url + 'finance/reservation/' + this.slug)
