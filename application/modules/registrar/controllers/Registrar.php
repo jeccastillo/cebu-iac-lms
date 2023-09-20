@@ -1632,13 +1632,13 @@ class Registrar extends CI_Controller {
             
     }
 
-    public function register_old_student_data($studNum){
+    public function register_old_student_data($studNum,$sem){
 
         $data['student'] = $this->data_fetcher->getStudent($studNum);
                 
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy',array('intProcessing','desc'));
         $data['scholarship'] = $this->data_fetcher->fetch_single_entry('tb_mas_scholarships',$data['student']['enumScholarship']);
-        $active_sem = $this->data_fetcher->get_processing_sem();
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($data['student']['intID'],$active_sem['intID']);
             $sem = 1;
             
@@ -1668,13 +1668,15 @@ class Registrar extends CI_Controller {
 
     }    
     
-    public function register_old_student2($studNum=null)
+    public function register_old_student2($studNum=null,$sem)
     {
                    
             if($studNum==null){
                 $post = $this->input->post();
                 $studNum = $post['studentNumber'];
             }                        
+
+            $this->data['sem'] = $sem;
             
             $this->data['id'] = $studNum;
             

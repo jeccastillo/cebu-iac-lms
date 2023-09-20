@@ -25,7 +25,7 @@
                     <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         -->
-                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID">
+                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
                         <i class="fa fa-book"></i>Student Fee Assessment
                     </a>
                     <a v-if="user_level == 2 || user_level == 3" class="btn btn-app" :href="base_url + 'registrar/student_grade_slip/' + student.intID">

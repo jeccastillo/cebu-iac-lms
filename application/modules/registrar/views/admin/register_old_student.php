@@ -128,6 +128,7 @@ new Vue({
     el: '#registration-container',
     data: {
         id: '<?php echo $id; ?>',    
+        sem: '<?php echo $sem; ?>',  
         student_data:{},    
         request: {
             studentID: '<?php echo $id; ?>',
@@ -183,7 +184,7 @@ new Vue({
             this.header_title = 'Edit Tuition Year';
            
 
-            axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id)
+            axios.get('<?php echo base_url(); ?>registrar/register_old_student_data/' + this.id + '/' +this.sem)
                 .then((data) => {                    
                     //this.request = data.data.data;                                        
                     
