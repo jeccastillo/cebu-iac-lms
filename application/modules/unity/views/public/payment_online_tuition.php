@@ -31,7 +31,7 @@
                             <div class="box-body">                                   
                                 <hr />
                                 <form @submit.prevent="submitPayment">                                                                                               
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>Select Payment Type</label>
                                         <select @change="selectDescription" class="form-control" v-model="payment_type">
                                             <option value="Tuition Full">Tuition Full</option>
@@ -39,7 +39,9 @@
                                             <option v-else value="Tuition Down Payment">Tuition Down Payment</option>
                                                                             
                                         </select>
-                                    </div>                                                                
+                                    </div>     
+                                                                                                -->
+                                    <input type="hidden" value="Tuition Fee" v-model="desc" />                                                                                            
                                     <div>
                                         <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
                                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -68,7 +70,7 @@
                                             <table class="table" style="width:100%">
                                                 <tbody>
                                                     <tr v-if="item">
-                                                        <td> {{ payment_type }}
+                                                        <td> {{ desc }}
                                                         </td>
                                                         <td>₱ {{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                                                     </tr>
@@ -253,13 +255,14 @@ new Vue({
         loading_spinner: false,
         student:{},            
         student_api_data: {},
+        desc: 'Tuition Fee',
         payment_modes: [],
         mode_of_releases: [],
         area_delivery: [],
         city_delivery: [],
         payment_modes_nonbanks: [],
         selected_items: [],
-        payment_type: 'Tuition Full',
+        payment_type: 'full',
         item: {},
         request: {
             mode_of_release: "",
@@ -269,7 +272,7 @@ new Vue({
         },
         item_details: {
             price: 0,
-            hey: this.payment_type
+            hey: this.desc
         },                                             
         registration: {},
         other_payments:[],
@@ -301,7 +304,8 @@ new Vue({
         total_price_from_cart: 0,
         total_price_cart_with_charge_es: 0,
         total_price_cart_with_charge: 0,
-        payload: {},                   
+        payload: {},         
+        installments:[],          
     },
 
     mounted() {
@@ -362,14 +366,31 @@ new Vue({
                         .then((data) => {
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
-                            
-                            for(i in this.payments){
-                                if(this.payments[i].status == "Paid"){
-                                    if(this.payments[i].description == "Tuition Down Payment")
-                                        this.has_down = true;
-                                    if(this.payments[i].description == "Tuition Partial" || this.payments[i].description == "Tuition Down Payment")
-                                        this.has_partial = true;
+                            this.payment_type = this.registration.paymentType;
+                            if(this.registration.downpayment == 1){
+                                this.has_down = true;
+
+                                //installment amounts                                
+                                if(this.registration.downpayment == 1){
+                                    var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                    for(i=0; i < 5; i++){
+                                        if(this.tuition_data.installment_fee > temp){
+                                            val = this.tuition_data.installment_fee - temp;
+                                            val = val.toFixed(2);
+                                            this.item_details.price = val;
+                                            break;
+                                        }                                                                            
+                                    }
                                 }
+                                else
+                                    for(i=0; i < 5; i++)
+                                        this.installments.push(this.tuition_data.installment_fee);  
+                            }
+                            else if(this.payment_type != "full"){
+                                this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                            }                            
+                            else{
+                                this.item_details.price = this.remaining_amount;
                             }
 
                             if(this.has_partial)
@@ -423,24 +444,7 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
-        },
-        selectDescription: function(){
-                        
-            switch(this.payment_type){
-                case 'Tuition Full':
-                    this.item_details.price = this.remaining_amount;
-                break;
-                case 'Tuition Partial':
-                    this.item_details.price = (this.tuition_data.installment_fee > this.remaining_amount) ? this.remaining_amount : this.tuition_data.installment_fee;
-                break;
-                case 'Tuition Down Payment':                        
-                    this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                break;                    
-            }
-            if(this.selected_mode_of_payment.charge)
-                this.selectPayment(this.selected_mode_of_payment);            
-            
-        },
+        },        
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
@@ -471,7 +475,7 @@ new Vue({
             console.log("total_single_format", this.total_single_format);
             console.log("new_charge", this.new_charge);
 
-            let title = this.payment_type;
+            let title = this.desc;
 
             this.payload = {
                 "description": title,
