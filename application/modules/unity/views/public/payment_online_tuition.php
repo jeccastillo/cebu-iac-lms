@@ -375,7 +375,8 @@ new Vue({
                             let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                             
                             this.other_payments = data.data.other;
-                            this.payment_type = this.registration.paymentType;                            
+                            this.payment_type = this.registration.paymentType;       
+                            console.log(down_payment);
                             if(this.registration.downpayment == 1 || down_payment == 0){
                                 this.has_down = true;
 
