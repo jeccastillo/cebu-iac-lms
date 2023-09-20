@@ -2569,7 +2569,7 @@ class Unity extends CI_Controller {
         $ret = array();
         
         $subjects = $this->data_fetcher->getAdvisedSubjectsReg($post);
-        $active_sem = $this->data_fetcher->get_processing_sem();
+        $active_sem = $this->data_fetcher->get_sem_by_id($post['sem']);
         
         foreach($subjects as $subj)
         {
