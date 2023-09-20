@@ -369,6 +369,7 @@ new Vue({
                                 if(this.payments[i].status == "Paid"){                              
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
+                                    console.log(this.amount_paid);
                                 }
                             }                        
 
