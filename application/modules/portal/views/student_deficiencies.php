@@ -74,7 +74,7 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',
-        sem: '<?php echo $sem; ?>',
+        sem: '<?php echo $sem; ?>';
         id: '<?php echo $id; ?>',
         active_sem: undefined,      
         deficiencies:[],              
