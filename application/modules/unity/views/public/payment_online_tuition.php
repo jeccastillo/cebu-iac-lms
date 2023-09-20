@@ -359,8 +359,12 @@ new Vue({
                         this.slug = this.student.slug;                           
                         this.advanced_privilages = data.data.advanced_privilages;       
                         this.tuition = data.data.tuition;
-                        this.tuition_data = data.data.tuition_data;                                               
+                        this.tuition_data = data.data.tuition_data;          
                         this.remaining_amount = data.data.tuition_data.total;
+                        if(this.payment_type == "partial")                       
+                            this.remaining_amount = data.data.tuition_data.total_installment;
+                                      
+                            
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {                                                 
