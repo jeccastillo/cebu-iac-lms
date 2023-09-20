@@ -364,10 +364,11 @@ new Vue({
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
+                            let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
                             this.payment_type = this.registration.paymentType;
-                            if(this.registration.downpayment == 1){
+                            if(this.registration.downpayment == 1 || down_payment == 0){
                                 this.has_down = true;
 
                                 //installment amounts                                
@@ -386,15 +387,12 @@ new Vue({
                                     for(i=0; i < 5; i++)
                                         this.installments.push(this.tuition_data.installment_fee);  
                             }
-                            else if(this.payment_type != "full"){
-                                this.item_details.price = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                            else if(this.payment_type == "partial"){
+                                this.item_details.price = down_payment;
                             }                            
                             else{
                                 this.item_details.price = this.remaining_amount;
-                            }
-
-                            if(this.has_partial)
-                                this.remaining_amount = this.tuition_data.total_installment;
+                            }                            
 
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){                              
