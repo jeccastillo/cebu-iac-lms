@@ -135,7 +135,7 @@
                             <a href="<?php echo base_url() ?>portal/deficiencies">
                                 <i class="fa fa-user"></i> <span>My Deficiencies</span>
                                 <?php if($deficiencies_count > 0): ?>
-                                <span class="badge"><?php echo $deficiencies_count; ?></span>
+                                <span class="badge badge-danger"><?php echo $deficiencies_count; ?></span>
                                 <?php endif; ?>
                             </a>
                         </li>
