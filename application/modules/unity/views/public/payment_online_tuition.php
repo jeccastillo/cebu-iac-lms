@@ -393,7 +393,9 @@ new Vue({
                                 this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
                                 this.item_details.price = this.remaining_amount;
                                 this.loader_spinner = false;
+
                                 let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                                
                                 if(this.registration.downpayment == 1 || down_payment == 0){
                                     this.has_down = true;
 
@@ -414,6 +416,7 @@ new Vue({
                                             this.installments.push(this.tuition_data.installment_fee);  
                                 }
                                 else if(this.payment_type == "partial"){
+                                    console.log(this.payment_type);
                                     this.item_details.price = down_payment;
                                 }                            
                                 else{
