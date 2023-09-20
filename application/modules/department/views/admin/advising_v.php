@@ -202,6 +202,7 @@ new Vue({
             var formdata= new FormData();
             formdata.append("subjects",JSON.stringify(this.advised_subjects));
             formdata.append("strAcademicYear",this.sem);
+            var sem = this.sem;
             formdata.append("studentID",this.student.intID);                                                          
             axios.post(url,formdata)
             .then((data) => {                  
@@ -210,7 +211,7 @@ new Vue({
                     text: "Update Success",
                     icon: "success"
                 }).then(function() {
-                    document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.sem;
+                    document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + sem;
                 });                         
                 
             })
