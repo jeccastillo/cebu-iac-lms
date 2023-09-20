@@ -118,7 +118,7 @@ $(document).ready(function() {
                         +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
                         + row.or_number
                         +'">Delete OR Print</a></li>'
-                        +'<li></li><a href="#" class="print-or" data-student-name="'
+                        +'<li><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
                         +'data-slug = " " '
                         +'data-cashier-id = "'+ row.cashier_id +'" '
