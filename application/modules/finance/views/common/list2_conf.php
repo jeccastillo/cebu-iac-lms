@@ -126,7 +126,7 @@ $(document).ready(function() {
                         +'data-or-number = "'+ row.or_number +'" '
                         +'data-description = "'+ row.description +'" '
                         +'data-total-amount-due = "'+ row.total_amount_due +'" '
-                        +'data-transaction-date = "'+ row.transaction_date +'" '
+                        +'data-transaction-date = "'+ row.updated_at +'" '
                         +'data-remarks = "'+ row.remarks +'" '                        
                         +'data-student-id = '+ row.applicant_id +'" '
                         +'data-student-address = " " '                                                
