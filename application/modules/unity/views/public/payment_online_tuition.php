@@ -364,21 +364,18 @@ new Vue({
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {                                                 
-
+                            this.payments = data.data.data;
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){                              
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
-                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
-                                    console.log(this.amount_paid);
+                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;                                    
                                 }
                             }                        
 
                             let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                            this.payments = data.data.data;
+                            
                             this.other_payments = data.data.other;
-                            this.payment_type = this.registration.paymentType;
-                            console.log(this.amount_paid);
-                            console.log(down_payment);
+                            this.payment_type = this.registration.paymentType;                            
                             if(this.registration.downpayment == 1 || down_payment == 0){
                                 this.has_down = true;
 
