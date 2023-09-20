@@ -55,7 +55,7 @@ class Portal extends CI_Controller {
         $this->data['deficiencies_count'] = $this->db
                     ->select('tb_mas_student_deficiencies.*,enumSem,term_label,strYearStart,strYearEnd')
                     ->join('tb_mas_sy','tb_mas_student_deficiencies.syid = tb_mas_sy.intID')
-                    ->where(array('student_id'=>$this->session->userdata('intID')))
+                    ->where(array('student_id'=>$this->session->userdata('intID'),'status'=>'active'))
                     ->get('tb_mas_student_deficiencies')
                     ->num_rows();
     }
