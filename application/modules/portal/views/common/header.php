@@ -23,6 +23,17 @@
 
 
 <link rel="stylesheet" href="<?php echo $css_dir; ?>style.css">
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css"
+    integrity="sha512-5aabpGaXyIfdaHgByM7ZCtgSoqg51OAt8XWR2FHr/wZpTCea7ByokXbMX2WSvosioKvCfAGDQLlGDzuU6Nm37Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-the-mask/0.11.1/vue-the-mask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 <!-----END CSS------------------------------------------->
  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -122,8 +133,12 @@
                         <li class="<?php echo (isset($page) && $page=="accounting_summary")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/accounting_summary"><i class="ion ion-calculator"></i> <span>Accounting</span></a></li>
                     </ul> -->
                     <ul class="sidebar-menu">
+                        <li class="<?php echo (isset($page) && $page=="deficiencies")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/deficiencies"><i class="ion ion-locked"></i> <span>My Deficiencies</span></a></li>
+                    </ul>
+                    <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="change_password")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/change_password"><i class="ion ion-locked"></i> <span>Change Password</span></a></li>
                     </ul>
+                    
                     <?php endif; ?>
                     
                    

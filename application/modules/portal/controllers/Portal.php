@@ -207,6 +207,39 @@ class Portal extends CI_Controller {
         
        
 	}
+
+    public function deficiencies($id = 0,$sem = 0)
+    {
+        
+        
+        $this->data['id'] = $id;
+        $this->data['sem'] = $sem;
+       
+        $this->load->view("common/header",$this->data);
+        $this->load->view("student_deficiencies",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+
+    public function student_deficiencies_data($sem,$id){
+                
+        if($sem != 0)
+            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        else
+        $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+        $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
+
+        $ret['student'] =  $this->data_fetcher->getStudent($id);        
+        $ret['deficiencies'] = $this->db
+                    ->select('tb_mas_student_deficiencies.*,enumSem,term_label,strYearStart,strYearEnd')
+                    ->join('tb_mas_sy','tb_mas_student_deficiencies.syid = tb_mas_sy.intID')
+                    ->where(array('student_id'=>$id))
+                    ->get('tb_mas_student_deficiencies')
+                    ->result_array();
+                    
+        echo json_encode($ret);
+    }
+
     public function schedule()
 	{
              
