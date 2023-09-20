@@ -106,7 +106,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [
-            <?php if($other != 0): ?>
+            
             {
                 "aTargets": [12],
                 "mData": null,
@@ -114,7 +114,10 @@ $(document).ready(function() {
                 "mRender": function(data, type, row, meta) {
                     return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
                         + row.slug
-                        +'">Finance Viewer</a></li>'                       
+                        +'">Finance Viewer</a></li>'
+                        +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
+                        + row.or_number
+                        +'">Delete OR Print</a></li>'
                         +'<li><a href="#" class="print-or" data-student-name="'
                         + row.student_name.toUpperCase() +'" '
                         +'data-slug = " " '
@@ -131,23 +134,7 @@ $(document).ready(function() {
                         +'data-check-number = "'+ row.check_number +'" '
                         +'">Print OR</a></li></ul></div>';
                 }
-            },
-            <?php else: ?>
-            {
-                "aTargets": [12],
-                "mData": null,
-                "bSortable": false,
-                "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>finance/manualPay/'
-                        + row.slug
-                        +'">Finance Viewer</a></li>'
-                        +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
-                        + row.or_number
-                        +'">Delete OR Print</a></li>'
-                        +'</ul></div>';
-                }
-            },
-            <?php endif ?>
+            },           
             {
                 "aTargets": [2],                                
                 "mRender": function(data, type, row, meta) {
