@@ -363,7 +363,15 @@ new Vue({
                         this.remaining_amount = data.data.tuition_data.total;
 
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
-                        .then((data) => {
+                        .then((data) => {                                                 
+
+                            for(i in this.payments){
+                                if(this.payments[i].status == "Paid"){                              
+                                    this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
+                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
+                                }
+                            }                        
+
                             let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
@@ -393,15 +401,8 @@ new Vue({
                             }                            
                             else{
                                 this.item_details.price = this.remaining_amount;
-                            }                            
-
-                            for(i in this.payments){
-                                if(this.payments[i].status == "Paid"){                              
-                                    this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
-                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
-                                }
-                            }                        
-
+                            }       
+                            
                             axios.get(api_url + 'finance/reservation/' + this.slug)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
