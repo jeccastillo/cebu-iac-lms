@@ -407,7 +407,10 @@ new Vue({
                                             val = this.tuition_data.installment_fee - temp;                                            
                                             this.item_details.price = val;
                                             break;
-                                        }                                                                            
+                                        }     
+                                        else{
+                                            temp = temp - this.tuition_data.installment_fee;
+                                        }                                                                       
                                     }
                                     
                                     
