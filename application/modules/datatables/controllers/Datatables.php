@@ -2226,6 +2226,9 @@ class Datatables extends CI_Controller {
 
         if($registered == -1)
             $sGroup = "GROUP BY tb_mas_advised.intStudentID ";
+
+        if($table == "tb_mas_users")
+            $sGroup = "GROUP BY tb_mas_users.intID ";
         /*
          * SQL queries
          * Get data to display
