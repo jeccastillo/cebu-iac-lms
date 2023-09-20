@@ -90,7 +90,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'deficiencies/student_deficiencies_data/'+this.sem+'/'+this.id)
+            axios.get(this.base_url + 'portal/student_deficiencies_data/'+this.sem+'/'+this.id)
                 .then((data) => {                                      
                     this.terms = data.data.sy;                                        
                     this.sem = data.data.active_sem.intID;                     
