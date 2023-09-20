@@ -17,7 +17,7 @@
            <div class="small-box bg-red">
            <div class="inner">
              <h3>Deficiencies</h3>
-               <p>you have deficiencies</p>
+               <p>you have <?php echo $deficiencies_count; ?> deficiencies</p>
            </div>
            <div class="icon">
              <i class="fa fa-user"></i>
