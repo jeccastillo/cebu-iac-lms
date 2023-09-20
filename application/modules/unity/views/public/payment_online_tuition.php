@@ -371,7 +371,7 @@ new Vue({
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;                                    
                                 }
                             }                        
-
+                            console.log(this.tuition_data.down_payment);
                             let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                             
                             this.other_payments = data.data.other;
