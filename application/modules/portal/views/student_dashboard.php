@@ -20,7 +20,7 @@
                <p>you have <?php echo $deficiencies_count; ?> deficiencies</p>
            </div>
            <div class="icon">
-             <i class="fa fa-user"></i>
+             <i class="fa fa-exclamation-triangle"></i>
            </div>
            <a href="<?php echo base_url(); ?>portal/deficiencies" class="small-box-footer">
              View Deficiencies <i class="fa fa-arrow-circle-right"></i>
