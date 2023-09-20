@@ -416,10 +416,11 @@ new Vue({
                                             this.installments.push(this.tuition_data.installment_fee);  
                                 }
                                 else if(this.payment_type == "partial"){
-                                    console.log(this.payment_type);
+                                    
                                     this.item_details.price = down_payment;
                                 }                            
                                 else{
+                                    console.log(this.payment_type);
                                     this.item_details.price = this.remaining_amount;
                                 }      
                                 axios.get(api_url + 'admissions/student-info/' + this.slug)
