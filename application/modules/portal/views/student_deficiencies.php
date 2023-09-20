@@ -13,16 +13,7 @@
                 <h4>{{ student.strLastname + " " + student.strFirstname }}</h4>
                 <h5>{{ student.strStudentNumber.replace(/-/g, "") }}</h5>
             </div>
-            <div class="box-body">
-                <div class="row" style="margin-bottom:10px">                    
-                    <div class="col-sm-4">
-                        <label>Select Term</label>
-                        <select class="form-control" @change="selectTerm($event)" v-model="sem">
-                            <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
-                        </select>
-                    </div>
-                </div>                
-                <hr />                
+            <div class="box-body">                
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -77,8 +68,7 @@ new Vue({
         sem: '<?php echo $sem; ?>',
         id: '<?php echo $id; ?>',
         active_sem: undefined,      
-        deficiencies:[],              
-        terms: [],    
+        deficiencies:[],                      
         student: {
             strStudentNumber:'aaa-aaaa-aaa'
         },        
@@ -91,8 +81,7 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             axios.get(this.base_url + 'portal/student_deficiencies_data/'+this.sem+'/'+this.id)
-                .then((data) => {                                      
-                    this.terms = data.data.sy;                                        
+                .then((data) => {                                                                                                  
                     this.sem = data.data.active_sem.intID;                     
                     this.active_sem = data.data.active_sem;
                     this.student = data.data.student;
@@ -107,11 +96,7 @@ new Vue({
 
     },
 
-    methods: {      
-        selectTerm: function(event){
-            document.location = base_url + 'portal/deficiencies/'+this.student.intID+'/'+event.target.value;
-
-        },        
+    methods: {             
        
                                        
     }
