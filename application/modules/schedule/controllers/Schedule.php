@@ -277,9 +277,7 @@ class Schedule extends CI_Controller {
     public function submit_schedule()
     {
         $post = $this->input->post();
-        $sc = array();
-        $active_sem = $this->data_fetcher->get_active_sem();
-        $post['intSem'] = $active_sem['intID'];
+        $sc = array();                
         $post['intEncoderID'] = $this->session->userdata('intID');
         $schema = $post['strSchema'];
         unset($post['strSchema']);

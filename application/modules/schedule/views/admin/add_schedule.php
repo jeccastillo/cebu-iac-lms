@@ -55,6 +55,7 @@
                         <input type="hidden" name="strSchema" value="<?php echo isset($sug['strSchema'])?$sug['strSchema']:0; ?>">
                         <input type="hidden" name="dteStart" value="<?php echo $sug['dteStart']; ?>">
                         <input type="hidden" name="dteEnd" value="<?php echo $sug['dteEnd']; ?>">
+                        <input type="hidden" name="intSem" value="<?php echo $active_sem['intID']; ?>">
                         <input type="hidden" name="enumClassType" value="<?php echo $sug['enumClassType']; ?>">
                          <tr>
                             <td><?php echo $sug['roomCode']; ?></td>
