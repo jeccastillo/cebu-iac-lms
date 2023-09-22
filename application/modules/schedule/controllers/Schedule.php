@@ -67,6 +67,7 @@ class Schedule extends CI_Controller {
             $this->data['sy'] = $this->db->get('tb_mas_sy')->result_array();
             $this->data['alert'] = $this->session->flashdata('alert');
             $this->data['suggested'] = $this->session->flashdata('suggested_sched');
+            $this->data['active_sem'] = $active_sem;
             
             $this->data['page'] = "add_schedule";
             $this->data['opentree'] = "schedule";
