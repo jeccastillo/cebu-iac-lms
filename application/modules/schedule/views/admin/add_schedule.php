@@ -1,23 +1,23 @@
 <aside class="right-side">
 <section class="content-header">
-                    <h1>
-                        Add Schedule
-                        <small></small>
-                    </h1>
-                    <div class="pull-right">
-                        <div class="form-group">
-                            <label>Select Term</label>
-                            <select class="form-control" id="select-term-schedule">
-                            <?php foreach($sy as $s): ?>
-                                <option value="<?php echo $s['intID']; ?>" <?php echo ($s['intID'] == $active_sem['intID'])?'selected':''; ?> >
-                                    <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']." ".$s['strYearEnd']; ?>
-                                </option>
-                            <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                </section>
+    <h1>
+        Add Schedule
+        <small></small>
+    </h1>                    
+</section>
 <div class="content">
+    <div class="pull-right">
+        <div class="form-group">
+            <label>Select Term</label>
+            <select class="form-control" id="select-term-schedule">
+            <?php foreach($sy as $s): ?>
+                <option value="<?php echo $s['intID']; ?>" <?php echo ($s['intID'] == $active_sem['intID'])?'selected':''; ?> >
+                    <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']." ".$s['strYearEnd']; ?>
+                </option>
+            <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
     <div class="span10 box box-primary">
         <div class="box-header">
                 <h3 class="box-title">New Schedule</h3>
