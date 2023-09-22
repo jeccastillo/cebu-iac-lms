@@ -18,6 +18,7 @@
             </select>
         </div>
     </div>
+    <hr style="clear:both" />
     <div class="span10 box box-primary">
         <div class="box-header">
                 <h3 class="box-title">New Schedule</h3>
