@@ -4,10 +4,18 @@
                         Add Schedule
                         <small></small>
                     </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-                        <li class="active">Add Schedule</li>
-                    </ol>
+                    <div class="pull-right">
+                        <div class="form-group">
+                            <label>Select Term</label>
+                            <select class="form-control" id="select-term-schedule">
+                            <?php foreach($sy as $s): ?>
+                                <option value="<?php echo $s['intID']; ?>" <?php echo ($s['intID'] == $active_sem['intID'])?'selected':''; ?> >
+                                    <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']." ".$s['strYearEnd']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
                 </section>
 <div class="content">
     <div class="span10 box box-primary">

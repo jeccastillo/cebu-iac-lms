@@ -7,7 +7,7 @@ class Schedule extends CI_Controller {
         
 		parent::__construct();
 		
-        if(!$this->is_super_admin() && !$this->is_department_head() && !$this->is_registrar())
+        if(!$this->is_super_admin() && !$this->is_registrar())
             redirect(base_url()."unity");
         
         $this->config->load('themes');		
@@ -57,9 +57,14 @@ class Schedule extends CI_Controller {
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
     }
     
-    public function add_schedule()
+    public function add_schedule($sem = 0)
     {
-        
+            if($sem == 0)
+                $active_sem = $this->data_fetcher->get_active_sem();
+            else
+                $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+
+            $this->data['sy'] = $this->db->get('tb_mas_sy')->result_array();
             $this->data['alert'] = $this->session->flashdata('alert');
             $this->data['suggested'] = $this->session->flashdata('suggested_sched');
             
@@ -69,7 +74,7 @@ class Schedule extends CI_Controller {
             $this->data['schema'] = Array('0'=>'None','1 3 5'=>'M W F','2 4'=>'T TH','1 3'=>'M W','3 5'=>'W F','2 4 6'=>'T TH S', '1 4' =>'M TH','3 6'=> 'W S', '2 5'=>'T F', '3 6'=>'W S');
             $this->data['types'] = Array('lect','lab');
             $this->data['timeslots'] = Array('7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00', '19:30', '20:00', '20:30', '21:00');
-            $active_sem = $this->data_fetcher->get_active_sem();
+            
             $this->data['classlists'] = $this->data_fetcher->getAllClasslistAssigned($active_sem['intID'],$this->session->userdata('strDepartment'),$this->is_super_admin());
             
             $this->data['rooms'] = $this->data_fetcher->fetch_table('tb_mas_classrooms');
