@@ -21,5 +21,10 @@
             else
                 $("#strDay").removeAttr('disabled');
         });
+
+        $("#select-term-schedule").change(function(e){
+            var sem = $(this).val();
+            document.location = "<?php echo base_url(); ?>schedule/add_schedule/"+sem;
+        });
     });
 </script>
