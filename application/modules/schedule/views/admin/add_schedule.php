@@ -141,7 +141,7 @@
                          </select>
                     </div>
                      
-                    
+                    <input type="hidden" name="intSem" value="<?php echo $active_sem['intID']; ?>">
                      
                 
                      <div class="form-group col-xs-12">
