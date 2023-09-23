@@ -658,6 +658,7 @@ class Unity extends CI_Controller {
                     'id' => $choice['intID'],
                     'choice' => $choice['strChoice'],
                     'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' . $choice['choiceImage'] : '',
+                    'is_selected'=>0,
                 );
             }
 
