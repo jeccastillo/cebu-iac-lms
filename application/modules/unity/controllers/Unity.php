@@ -649,7 +649,7 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');
         // $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
-        $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
+        $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
                                
                                 ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
                                 ->join('tb_mas_exam','tb_mas_exam.intID = tb_mas_student_exam.exam_id')
