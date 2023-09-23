@@ -2092,8 +2092,11 @@ class Data_fetcher extends CI_Model {
     }
     
 
-    public function generateNewStudentNumber($campus){
-        $sem = $this->get_processing_sem();
+    public function generateNewStudentNumber($campus,$sem = 0){
+        if($sem == 0)
+            $sem = $this->get_processing_sem();
+        else
+            $sem = $this->get_sem_by_id($sem);
         
         if($campus == "Cebu")
             $studentNum = $this->getMaxCurrentStudentNumber($sem);

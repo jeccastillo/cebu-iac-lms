@@ -901,7 +901,7 @@ class Registrar extends CI_Controller {
             $this->data_poster->post_data('tb_mas_registration',$reg);
             
             if($student['strStudentNumber'][0] == "T")
-                $stud['strStudentNumber'] = $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus']);
+                $stud['strStudentNumber'] = $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$data['ayid']);
 
             $stud['intStudentYear'] = $academic_standing['year']; 
             $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);            
