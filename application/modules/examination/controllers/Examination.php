@@ -61,10 +61,12 @@ class Examination extends CI_Controller {
     
     
     public function index() {
-        print($userlevel);
-        die();
         if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		  redirect(base_url()."unity");
+
+          print_r($userlevel);
+        print($userlevel);
+        die();
 
         $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
