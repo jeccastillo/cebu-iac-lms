@@ -606,14 +606,22 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
-        
         $examQuestions = json_decode($post['question'], true);
+        
         $totalScore = $totalOverallScore = 0;
         $sectionArray = array();
         foreach($examQuestions as $examQuestion){
             foreach($examQuestion['choices'] as $choice){
                 if($choice['is_selected'] == '1'){
                     $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
+                    $answerArray = array(
+                        'question_id' => $examQuestion['id'],
+                        'is_correct' => $checkChoice['is_correct'],
+                        'choice_selected' => $choice['id'],
+                        'student_id' => $post['student_id']
+                    );
+                    $this->data_poster->post_data('tb_mas_student_exam_answers', $answerArray);
+                    
                     if($checkChoice['is_correct'] == '1'){
                         if(isset($sectionArray[$examQuestion['section']]['score']))
                             $sectionArray[$examQuestion['section']]['score'] += 1;
@@ -629,6 +637,12 @@ class Examination extends CI_Controller {
                 }
             }
             $totalOverallScore++;
+
+            // foreach($examQuestions as $examQuestion){
+            //     $answerArray = array(
+            //         $examQuestion['id']
+            //     );
+            // }
         }
 
         $examArray = array(
@@ -657,7 +671,6 @@ class Examination extends CI_Controller {
             $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
         }
         
-        // $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
         $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
         $data['success'] = true;
 
