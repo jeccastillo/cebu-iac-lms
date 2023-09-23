@@ -649,7 +649,7 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');
         $studentExamQuestion = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
-        $choices = $this->db->get_where('tb_mas_choices',array('intID'=>$studentExamQuestion['intID']))->result_array();
+        $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$studentExamQuestion['intID']))->result_array();
 
         // $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
                                
