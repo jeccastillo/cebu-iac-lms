@@ -1347,7 +1347,7 @@ class Data_fetcher extends CI_Model {
     function getStudentExamAnswer($student_id, $field)
     {
         $ret =  $this->db
-                     ->select('tb_mas_student_exam_answers.*')
+                     ->select('tb_mas_student_exam_answers.*', 'tb_mas_student_exam.intID')
                     //  ->select('tb_mas_student_exam_answers.*, tb_mas_questions.strTitle, tb_mas_choices.strChoice')
                      ->from('tb_mas_student_exam_answers')
                      ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
