@@ -1353,7 +1353,8 @@ class Data_fetcher extends CI_Model {
                      ->join('tb_mas_questions','tb_mas_questions.exam_id = tb_mas_student_exam.intID')   
                      ->join('tb_mas_choices','tb_mas_choices.question_id = tb_mas_questions.intID')
                      ->where(array('tb_mas_student_exam_answers.'.$field => $student_id))
-                     ->get();
+                     ->get()
+                     ->result_array();
 
         return $ret;
     }
