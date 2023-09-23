@@ -608,64 +608,62 @@ class Examination extends CI_Controller {
         $post = $this->input->post();
         
         $examQuestions = json_decode($post['question'], true);
-        print_r($examQuestions);
-        die();
         
-        // $totalScore = $totalOverallScore = 0;
-        // $sectionArray = array();
-        // foreach($examQuestions as $examQuestion){
-        //     foreach($examQuestion['choices'] as $choice){
-        //         if($choice['is_selected'] == '1'){
-        //             $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
-        //             if($checkChoice['is_correct'] == '1'){
-        //                 if(isset($sectionArray[$examQuestion['section']]['score']))
-        //                     $sectionArray[$examQuestion['section']]['score'] += 1;
-        //                 else
-        //                     $sectionArray[$examQuestion['section']]['score'] = 1;
-        //                 $totalScore++;
-        //             }
-        //             if(isset($sectionArray[$examQuestion['section']]['exam_overall']))
-        //                 $sectionArray[$examQuestion['section']]['exam_overall'] += 1;
-        //             else
-        //                 $sectionArray[$examQuestion['section']]['exam_overall'] = 1;
-        //             $sectionArray[$examQuestion['section']]['section'] = $examQuestion['section'];
-        //         }
-        //     }
-        //     $totalOverallScore++;
-        // }
+        $totalScore = $totalOverallScore = 0;
+        $sectionArray = array();
+        foreach($examQuestions as $examQuestion){
+            foreach($examQuestion['choices'] as $choice){
+                if($choice['is_selected'] == '1'){
+                    $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
+                    if($checkChoice['is_correct'] == '1'){
+                        if(isset($sectionArray[$examQuestion['section']]['score']))
+                            $sectionArray[$examQuestion['section']]['score'] += 1;
+                        else
+                            $sectionArray[$examQuestion['section']]['score'] = 1;
+                        $totalScore++;
+                    }
+                    if(isset($sectionArray[$examQuestion['section']]['exam_overall']))
+                        $sectionArray[$examQuestion['section']]['exam_overall'] += 1;
+                    else
+                        $sectionArray[$examQuestion['section']]['exam_overall'] = 1;
+                    $sectionArray[$examQuestion['section']]['section'] = $examQuestion['section'];
+                }
+            }
+            $totalOverallScore++;
+        }
 
-        // $examArray = array(
-        //     'date_taken'=> date("Y-m-d h:i:s"),
-        //     'score' => $totalScore,
-        //     'exam_overall' => $totalOverallScore,
-        //     'token'=>'',
-        // );
-        // $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
+        $examArray = array(
+            'date_taken'=> date("Y-m-d h:i:s"),
+            'score' => $totalScore,
+            'exam_overall' => $totalOverallScore,
+            'token'=>'',
+        );
+        $this->data_poster->post_data('tb_mas_student_exam', $examArray, $post['student_id']);
 
-        // //save score per section
-        // foreach($sectionArray as $secArray){
-        //     $totalOverallScore += $secArray['exam_overall'];
-        //     if(!isset($secArray['score'])){
-        //         $secArray['score'] = 0;
-        //     }
-        //     $examID = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
+        //save score per section
+        foreach($sectionArray as $secArray){
+            $totalOverallScore += $secArray['exam_overall'];
+            if(!isset($secArray['score'])){
+                $secArray['score'] = 0;
+            }
+            $examID = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$post['student_id']))->first_row('array');
 
-        //     $scoreArray = array(
-        //         'tb_mas_student_exam_id' => $examID['intID'],
-        //         'score'=> $secArray['score'],
-        //         'exam_overall' => $secArray['exam_overall'],
-        //         'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
-        //         'section' => $secArray['section'],
-        //     );
-        //     $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
-        // }
+            $scoreArray = array(
+                'tb_mas_student_exam_id' => $examID['intID'],
+                'score'=> $secArray['score'],
+                'exam_overall' => $secArray['exam_overall'],
+                'percentage'=> ($secArray['score'] / $secArray['exam_overall']) * 100,
+                'section' => $secArray['section'],
+            );
+            $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
+        }
         
         
-        // // $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
-        // $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
-        // $data['success'] = true;
+        // $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
+        $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
+        $data['success'] = true;
 
-        // echo json_encode($data);
+        echo json_encode($data);
     }
 
     public function is_super_admin()
