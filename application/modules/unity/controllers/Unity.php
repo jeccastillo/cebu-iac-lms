@@ -649,20 +649,20 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');
         // $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
-        $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
+        // $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
                                
-                                ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
-                                ->join('tb_mas_exam','tb_mas_exam.intID = tb_mas_student_exam.exam_id')
-                                ->join('tb_mas_questions','tb_mas_questions.exam_id = tb_mas_exam.intID')  
-                                ->where(array('tb_mas_student_exam_answers'=>$slug))
-                                ->get('tb_mas_student_exam_answers')
-                                ->result_array();
+        //                         ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
+        //                         ->join('tb_mas_exam','tb_mas_exam.intID = tb_mas_student_exam.exam_id')
+        //                         ->join('tb_mas_questions','tb_mas_questions.exam_id = tb_mas_exam.intID')  
+        //                         ->where(array('tb_mas_student_exam_answers'=>$slug))
+        //                         ->get('tb_mas_student_exam_answers')
+        //                         ->result_array();
 
 
-        // print_r($studentExamAnswer);
-        // die();
-        $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
-        $data['id'] = $student['intID'];
+        // // print_r($studentExamAnswer);
+        // // die();
+        // $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
+        // $data['id'] = $student['intID'];
            
         $this->load->view('public/header',$this->data);        
 		$this->load->view('public/student_exam',$data);
