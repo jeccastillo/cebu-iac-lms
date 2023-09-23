@@ -658,8 +658,6 @@ class Examination extends CI_Controller {
             $this->data_poster->post_data('tb_mas_student_exam_score_per_section', $scoreArray);
         }
         
-        
-        // $this->data_poster->log_action('Student Exam','Submit applicant exam: '.$post['student_name'],'green');
         $data['message'] = "You have successfully finished your Exam, your score is now being recorded. Good luck!";
         $data['success'] = true;
 
