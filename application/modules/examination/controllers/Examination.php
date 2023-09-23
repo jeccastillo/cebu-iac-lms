@@ -610,6 +610,7 @@ class Examination extends CI_Controller {
         $examQuestions = json_decode($post['question'], true);
         print_r($examQuestions);
         die();
+        
         // $totalScore = $totalOverallScore = 0;
         // $sectionArray = array();
         // foreach($examQuestions as $examQuestion){
