@@ -647,7 +647,7 @@ class Unity extends CI_Controller {
      public function student_exam($slug,$exam_id) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');
-        // $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
+        // $studentExamQuestion = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
         // $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
                                
@@ -659,8 +659,8 @@ class Unity extends CI_Controller {
         //                         ->result_array();
 
 
-        // // print_r($studentExamAnswer);
-        // // die();
+        // print_r($studentExamQuestion);
+        // die();
         // $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
         // $data['id'] = $student['intID'];
            
