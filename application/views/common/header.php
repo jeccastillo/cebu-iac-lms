@@ -237,7 +237,7 @@
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="<?php echo (isset($page) && $page=="view_exams")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="student_exam_list")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>examination/" style="margin-left: 10px;"><i
                                     class="fa fa-book"> </i> View Examination</a></li>
                         <li class="<?php echo (isset($page) && $page=="exam_type_list")?'active':''; ?>"><a
