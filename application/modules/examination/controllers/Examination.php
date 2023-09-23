@@ -608,8 +608,6 @@ class Examination extends CI_Controller {
         $post = $this->input->post();
         
         $examQuestions = json_decode($post['question'], true);
-        print_r($examQuestions);
-        die();
         
         $totalScore = $totalOverallScore = 0;
         $sectionArray = array();
@@ -617,6 +615,13 @@ class Examination extends CI_Controller {
             foreach($examQuestion['choices'] as $choice){
                 if($choice['is_selected'] == '1'){
                     $checkChoice = $this->db->get_where('tb_mas_choices',array('intID'=>$choice['id']))->first_row('array');
+                    $answerArray = array(
+                        'question_id' => $examQuestion['id'],
+                        'is_correct' => $checkChoice['is_correct'],
+                        'choice_selected' => $choice['id'],
+                    );
+                    $this->data_poster->post_data('tb_mas_student_exam_answers', $answerArray);
+                    
                     if($checkChoice['is_correct'] == '1'){
                         if(isset($sectionArray[$examQuestion['section']]['score']))
                             $sectionArray[$examQuestion['section']]['score'] += 1;
@@ -632,6 +637,12 @@ class Examination extends CI_Controller {
                 }
             }
             $totalOverallScore++;
+
+            // foreach($examQuestions as $examQuestion){
+            //     $answerArray = array(
+            //         $examQuestion['id']
+            //     );
+            // }
         }
 
         $examArray = array(
