@@ -647,7 +647,16 @@ class Unity extends CI_Controller {
      public function student_exam($slug,$exam_id) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');
-        $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
+        // $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
+
+        $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage, tb_mas_choices.strChoice', 'tb_mas_choices.choiceImage')
+                                ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
+                                ->join('tb_mas_exam','tb_mas_exam.intID = tb_mas_student_exam.exam_id')
+                                ->join('tb_mas_questions','tb_mas_questions.exam_id = tb_mas_exam.intID')  
+                                  ->where(array('tb_mas_student_exam_answers'=>$slug))
+                                  ->get('tb_mas_student_exam_answers')
+                                  ->result_array();
+
 
         print_r($studentExamAnswer);
         die();
