@@ -608,6 +608,8 @@ class Examination extends CI_Controller {
         $post = $this->input->post();
         
         $examQuestions = json_decode($post['question'], true);
+        print_r($examQuestions);
+        die();
         
         $totalScore = $totalOverallScore = 0;
         $sectionArray = array();
