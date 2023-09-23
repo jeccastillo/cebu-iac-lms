@@ -9,8 +9,7 @@ class Examination extends CI_Controller {
         
         $userlevel = $this->session->userdata('intUserLevel');   
         $ip = $this->input->ip_address();        
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
-		  redirect(base_url()."unity");
+        
 
 		$this->config->load('themes');		
 		$theme = $this->config->item('unity');
@@ -62,6 +61,9 @@ class Examination extends CI_Controller {
     
     
     public function index() {
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+		  redirect(base_url()."unity");
+
         $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/student_exam_list",$this->data);
@@ -70,6 +72,10 @@ class Examination extends CI_Controller {
     }
 
     public function question_list() {
+        
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+		  redirect(base_url()."unity");
+
         $this->data['page'] = "view_questions";
         $this->data['opentree'] = "examination";
         $this->load->view("common/header",$this->data);
@@ -79,6 +85,10 @@ class Examination extends CI_Controller {
     }
 
      public function add_question() {
+        
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+		  redirect(base_url()."unity");
+
         $this->data['page'] = "add_question";
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
@@ -89,6 +99,10 @@ class Examination extends CI_Controller {
     }
 
     public function edit_question($id) {
+        
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+		  redirect(base_url()."unity");
+
         $this->data['opentree'] = "examination";
         $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
         $this->data['choices']= $this->data_fetcher->getChoice($id);
@@ -101,6 +115,8 @@ class Examination extends CI_Controller {
 
      public function student_generate_exam($term = 0)
     {
+            if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+		    redirect(base_url()."unity");
        
             if($term == 0)
                 $term = $this->data_fetcher->get_processing_sem();        
