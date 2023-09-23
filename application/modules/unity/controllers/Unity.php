@@ -662,7 +662,7 @@ class Unity extends CI_Controller {
         // print_r($studentExamQuestion);
         // die();
         // $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
-        // $data['id'] = $student['intID'];
+        $data['id'] = $student['intID'];
            
         $this->load->view('public/header',$this->data);        
 		$this->load->view('public/student_exam',$data);
