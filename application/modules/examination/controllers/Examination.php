@@ -63,7 +63,7 @@ class Examination extends CI_Controller {
     public function index() {
         print($ip);
         die();
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		  redirect(base_url()."unity");
 
         $this->data['opentree'] = "examination";
@@ -75,7 +75,7 @@ class Examination extends CI_Controller {
 
     public function question_list() {
         
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		  redirect(base_url()."unity");
 
         $this->data['page'] = "view_questions";
@@ -88,7 +88,7 @@ class Examination extends CI_Controller {
 
      public function add_question() {
         
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		  redirect(base_url()."unity");
 
         $this->data['page'] = "add_question";
@@ -102,7 +102,7 @@ class Examination extends CI_Controller {
 
     public function edit_question($id) {
         
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		  redirect(base_url()."unity");
 
         $this->data['opentree'] = "examination";
@@ -117,7 +117,7 @@ class Examination extends CI_Controller {
 
      public function student_generate_exam($term = 0)
     {
-            if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+            if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3)
 		    redirect(base_url()."unity");
        
             if($term == 0)
