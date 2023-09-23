@@ -606,7 +606,8 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
-        
+        print_r($post);
+        die();
         $examQuestions = json_decode($post['question'], true);
         
         $totalScore = $totalOverallScore = 0;
