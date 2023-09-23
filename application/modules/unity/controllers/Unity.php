@@ -648,7 +648,7 @@ class Unity extends CI_Controller {
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');
         $answers = array();
-        $studentExamQuestion = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
+        $studentExamQuestion = $this->data_fetcher->getStudentExamQuestion($slug, 'student_id');
         foreach($studentExamQuestion as $question){
             $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
                         
@@ -658,24 +658,20 @@ class Unity extends CI_Controller {
                     'id' => $choice['intID'],
                     'choice' => $choice['strChoice'],
                     'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' . $choice['choiceImage'] : '',
-                    'is_selected'=>0,
                 );
             }
 
             $answerArray = array(
-                'choice_selected' => $question['choice_selected'],
-                'is_correct' => $question['is_correct'],
                 'question' => $question['strTitle'],
                 'image' => $question['questionImage'] ? base_url() . 'assets/photos/exam/' .$question['questionImage'] : '',
+                'choice_selected' => $question['choice_selected'],
+                'is_correct' => $question['is_correct'],
                 'choices' => $choice_array
                 
             );
             $answers[] = $answerArray;
         }
 
-        print_r($answers);
-        die();
-        // $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
         $data['id'] = $student['intID'];
         $data['answers'] = $answers;
            
