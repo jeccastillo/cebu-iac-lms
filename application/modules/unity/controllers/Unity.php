@@ -649,6 +649,8 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($slug, 'slug');
         $studentExamQuestion = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
+        $choices = $this->db->get_where('tb_mas_questions',array('intID'=>$studentExamQuestion['intID']))->result_array();
+
         // $studentExamAnswer = $this->db->select('tb_mas_student_exam_answers.student_id', 'tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_questions.questionImage')
                                
         //                         ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
@@ -658,8 +660,8 @@ class Unity extends CI_Controller {
         //                         ->get('tb_mas_student_exam_answers')
         //                         ->result_array();
 
-
         print_r($studentExamQuestion);
+        print_r($choices);
         die();
         // $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
         $data['id'] = $student['intID'];
