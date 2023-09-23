@@ -647,10 +647,11 @@ class Unity extends CI_Controller {
      public function student_exam($slug,$exam_id) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');
+        $studentExamAnswer = $this->data_fetcher->getStudentExamAnswer($slug, 'student_id');
 
-        $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
-        print_r($examAnswer);
+        print_r($studentExamAnswer);
         die();
+        $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
         $data['id'] = $student['intID'];
            
         $this->load->view('public/header',$this->data);        

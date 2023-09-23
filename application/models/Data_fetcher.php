@@ -1336,14 +1336,27 @@ class Data_fetcher extends CI_Model {
                      ->get()
                      ->first_row('array');
 
-        if($ret){
-            $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                             
-            $ret['dteCreated'] = isset($ret['dteCreated']) ? date("M j, Y",strtotime($ret['dteCreated'])): null;
-        }
-        return $ret;
+                     if($ret){
+                        $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                             
+                        $ret['dteCreated'] = isset($ret['dteCreated']) ? date("M j, Y",strtotime($ret['dteCreated'])): null;
+                    }
+                    return $ret;
                      
     }
 
+    function getStudentExamAnswer($student_id, $field)
+    {
+        $ret =  $this->db
+                     ->select('tb_mas_student_exam_answers.is_correct, tb_mas_questions.strTitle, tb_mas_choices.strChoice')
+                     ->from('tb_mas_student_exam_answers')
+                     ->join('tb_mas_student_exam','tb_mas_student_exam.student_id = tb_mas_student_exam_answers.student_id')
+                     ->join('tb_mas_questions','tb_mas_questions.exam_id = tb_mas_student_exam.intID')   
+                     ->join('tb_mas_choices','tb_mas_choices.question_id = tb_mas_questions.intID')
+                     ->where(array('tb_mas_student_exam_answers.'.$field => $student_id))
+                     ->get();
+
+        return $ret;
+    }
 
     function getCurriculumIDByCourse($id){
         $course = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$id))->row();        
