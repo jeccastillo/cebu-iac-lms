@@ -606,8 +606,6 @@ class Examination extends CI_Controller {
     public function submit_exam()
     {
         $post = $this->input->post();
-        print_r($post);
-        die();
         $examQuestions = json_decode($post['question'], true);
         
         $totalScore = $totalOverallScore = 0;
@@ -620,6 +618,7 @@ class Examination extends CI_Controller {
                         'question_id' => $examQuestion['id'],
                         'is_correct' => $checkChoice['is_correct'],
                         'choice_selected' => $choice['id'],
+                        'student_id' => $post['student_id']
                     );
                     $this->data_poster->post_data('tb_mas_student_exam_answers', $answerArray);
                     
