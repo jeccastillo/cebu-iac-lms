@@ -1515,6 +1515,9 @@ class Registrar extends CI_Controller {
         if(password_verify($post['password'],$auth_data->strPass))
         {
             $records = $this->data_fetcher->getClassListStudentsSt($post['id'],$post['sem']);
+            $data['registration'] = $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))
+            ->get('tb_mas_registration')
+            ->first_row();
             //post->period before opening, after opening, end of term
             if($post['period'] == "before"){                
                 foreach($records as $record){
@@ -1551,9 +1554,7 @@ class Registrar extends CI_Controller {
             }
 
                                 
-            $data['registration'] = $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))
-                                             ->get('tb_mas_registration')
-                                             ->first_row();
+           
             $data['success'] = true;
             $data['message'] = "Student has been withdrawn";
         
