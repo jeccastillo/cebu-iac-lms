@@ -831,11 +831,10 @@ class Excel extends CI_Controller {
                                      ->setKeywords("office 2007 openxml php")
                                      ->setCategory("Student List");
 
-        for($i = 0;$i < (count($programs) - 1); $i++)                                       
-            $objPHPExcel->createSheet($i);
-
+        
         $active_sheet = 0;
         foreach($programs as $program){
+            $objPHPExcel->createSheet($active_sheet);
             //--------------------------------HEADER----------------------------------------------
             $objPHPExcel->setActiveSheetIndex($active_sheet)
             ->setCellValue('A1', 'Name of Institution:');
