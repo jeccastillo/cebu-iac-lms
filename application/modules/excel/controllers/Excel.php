@@ -469,6 +469,8 @@ class Excel extends CI_Controller {
          $objWriter->save('php://output');
          exit;
     }
+
+    
     
     public function download_schedules($id)
     {
@@ -1183,7 +1185,11 @@ class Excel extends CI_Controller {
                     ->setCellValue('A4', date("M j, Y h:i a"));
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
-        $objPHPExcel->setActiveSheetIndex(0)
+        if($dissolved)
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "DISSOLVED CLASSES");
+        else
+            $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A6', "SCHEDULE OF CLASSES BY SUBJECT");
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
