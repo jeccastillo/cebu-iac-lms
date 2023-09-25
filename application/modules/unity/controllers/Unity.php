@@ -2224,6 +2224,18 @@ class Unity extends CI_Controller {
         $data['message'] = "success";
         echo json_encode($data);
     }
+
+    public function unfinalize_term(){
+        if($this->is_registrar() || $this->is_super_admin())
+        {
+            $post['intFinalized'] -= 1;            
+		    $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
+        
+            $data['message'] = "success";
+            echo json_encode($data);
+        }
+
+    }
     
     public function update_rog_status()
     {

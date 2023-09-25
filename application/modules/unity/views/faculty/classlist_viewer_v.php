@@ -7,7 +7,7 @@
                 <small>                     
                     <a class="btn btn-app" v-if="(is_super_admin || is_registrar) && show_all"  :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/0'"><i class="fa fa-times"></i> Hide Enlisted</a></li>                    
                     <a class="btn btn-app" v-else-if="(is_super_admin || is_registrar)" :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1'"><i class="fa fa-check"></i> Show Enlisted</a>                                            
-                    <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit/Unfinalize</a>                    
+                    <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit</a>                    
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'excel/download_classlist/'+ classlist.intID + '/' + show_all"><i class="fa fa-table"></i> Download Spreadsheet</a>                
                     <a target="_blank" class="btn btn-app" :href="base_url + 'pdf/print_classlist_registrar/' + classlist.intID +'/front'"><i class="fa fa-print"></i>Print Classlist</a>
                     <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a>                                            
@@ -93,6 +93,9 @@
                             <div class="col-sm-4">
                                 <a v-if="classlist.intFinalized < 2" href="#" data-target="#myModal" data-toggle="modal" class="btn btn-success" :disabled = "disable_submit">
                                     {{ label }}
+                                </a>
+                                <a v-if="classlist.intFinalized > 0 && (is_super_admin || is_registrar)" @click.prevent="unfinalize" href="#" class="btn btn-danger">
+                                    Unfinalize
                                 </a>
                             </div>
                         </div>                        
@@ -295,6 +298,39 @@ new Vue({
                     icon: "warning"
                 }).then(function() {                    
                 });
+        },
+        unfinalize: function(){
+            Swal.fire({
+                title: 'Unfinalize Period?',
+                text: "Are you sure you want to unfinalize?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("intID",this.classlist.intID);
+                    formdata.append("intFinalized",this.classlist.intFinalized);
+                    return axios.post(base_url + 'unity/unfinalize_term', formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                    .then(data => {
+                        this.loader_spinner = false;
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    });                    
+                }
+            });
         },
         transferToClasslist: function(){
             if(this.checked.length == 0)
