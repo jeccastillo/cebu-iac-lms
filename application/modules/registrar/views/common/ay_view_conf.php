@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#cut-off-registration").click(function(e){
+        $(".cut-off-registration").click(function(e){
             Swal.fire({
             title: 'Cut Off Registration',
             text: "Are you sure you want continue with cut off?",
