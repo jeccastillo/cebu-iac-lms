@@ -199,7 +199,7 @@ new Vue({
             this.show_all = data.data.showall;
             this.students = data.data.students;
             this.subject = data.data.subject;
-            console.log(this.subject);
+            console.log(this.classlist);
             this.label = data.data.label;
             this.disable_submit = data.data.disable_submit;
             
