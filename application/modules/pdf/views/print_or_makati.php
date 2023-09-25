@@ -117,7 +117,7 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">RECEIVED fr</span>                        
-                        <?php if($student_id != 'undefined' && $student_id != "" && $student_id != 0): ?>
+                        <?php if($student_id != 'undefined' && $student_id != ""): ?>
                         <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php echo $student_name; ?>                        
                         <?php else: ?>
                         <?php echo $student_name; ?>                        
