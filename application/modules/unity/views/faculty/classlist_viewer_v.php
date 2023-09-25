@@ -23,7 +23,7 @@
                             <span v-if="classlist.sub_section">{{ classlist.sub_section }}</span>
                         <small>
                             {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }} <br />
-                            {{ classlist.strFirstname+" "+classlist.strLastname}}
+                            <strong>{{ classlist.strFirstname+" "+classlist.strLastname}}</strong>
                         </small>
                     </h3>                    
                 </div>
