@@ -35,7 +35,7 @@
                                     if(ret.success){
                                         Swal.fire({
                                             title: "Success",
-                                            text: data.data.message,
+                                            text: ret.message,
                                             icon: "success"
                                         }).then(function() {
                                             location.reload();
@@ -44,7 +44,7 @@
                                     else{
                                         Swal.fire({
                                             title: "Failed",
-                                            text: data.data.message,
+                                            text: ret.message,
                                             icon: "error"
                                         }).then(function() {                                            
                                         });      
