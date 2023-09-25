@@ -22,7 +22,8 @@
                             {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' }}
                             <span v-if="classlist.sub_section">{{ classlist.sub_section }}</span>
                         <small>
-                            {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }}
+                            {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }} <br />
+                            {{ classlist.strFirstname+" "+classlist.strLastname}}
                         </small>
                     </h3>                    
                 </div>
@@ -198,8 +199,7 @@ new Vue({
             this.is_super_admin = data.data.is_super_admin;
             this.show_all = data.data.showall;
             this.students = data.data.students;
-            this.subject = data.data.subject;
-            console.log(this.classlist);
+            this.subject = data.data.subject;            
             this.label = data.data.label;
             this.disable_submit = data.data.disable_submit;
             
