@@ -1826,9 +1826,7 @@ class Pdf extends CI_Controller {
         // This method has several options, check the source code documentation for more information.
 
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
-        
-        echo "Student ID: ".$request['student_id'];
-        die();
+                
         $pdf->AddPage();        
         $this->data['student_name'] = strtoupper($request['student_name']);        
         $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
