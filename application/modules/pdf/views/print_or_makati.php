@@ -100,7 +100,7 @@
         <td style="width:70%">
             <table>
                 <tr style="line-height:18px;">
-                    <td style=""><?php //echo $or_number; ?></td>
+                    <td style=""><?php echo $or_number; ?></td>
                 </tr>
             </table>
             <table >
