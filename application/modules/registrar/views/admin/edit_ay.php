@@ -115,7 +115,29 @@
                         <input type="date" name="final_end" value="<?php echo $item['final_end']; ?>" class="form-control" />                         
                     </div>
                 </div>
-                <hr />          
+                <hr />  
+                <h3>Student Viewing Period Setup</h3>
+                <hr />
+                <div class="row">
+                    
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="midterm_start">Start of Midterm Viewing</label>
+                        <input type="date" name="viewing_midterm_start" value="<?php echo $item['viewing_midterm_start']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="midterm_end">End of Midterm Viewing</label>
+                        <input type="date" name="viewing_midterm_end" value="<?php echo $item['viewing_midterm_end']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="final_start">Start of Final Viewing</label>
+                        <input type="date" name="viewing_final_start" value="<?php echo $item['viewing_final_start']; ?>" class="form-control" />                         
+                    </div>
+                    <div class="form-group col-xs-12 col-lg-4">
+                        <label for="final_end">End of Final Viewing</label>
+                        <input type="date" name="viewing_final_end" value="<?php echo $item['viewing_final_end']; ?>" class="form-control" />                         
+                    </div>
+                </div>
+                <hr />         
                 <h3>Term Finalization</h3>
                 <hr />
                 <div class="row">
