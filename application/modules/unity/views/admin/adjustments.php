@@ -444,7 +444,8 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;   
+                                    this.loader_spinner = false;  
+                                    console.log(data.data.registration);
                                     if(data.data.registration.enumStudentType == "new"){                                 
                                         if(data.data.success){   
                                             var update_status = 'Withdrawn Before';
