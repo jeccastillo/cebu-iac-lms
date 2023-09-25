@@ -8,10 +8,10 @@
                             <?php else: ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"><i class="fa fa-list"></i> Show Non Dissolved</a>
                             <?php endif; ?>
+                            <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/'.$has_faculty; ?>"><i class="fa fa-download"></i> Download Report</a>
                             <?php if($has_faculty == 0): ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ><i class="fa fa-user"></i> Faculty Loading Summary</a>                                
-                            <?php else: ?>
-                                <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/1'; ?>"><i class="fa fa-download"></i> Download Report</a>                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ><i class="fa fa-user"></i> Faculty Loading Summary</a>                                                                
+                            <?php else: ?>                                                                
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>"><i class="fa fa-file"></i> Show All</a>
                             <?php endif; ?>
 
