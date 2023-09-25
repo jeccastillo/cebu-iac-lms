@@ -2228,6 +2228,7 @@ class Unity extends CI_Controller {
     public function unfinalize_term(){
         if($this->is_registrar() || $this->is_super_admin())
         {
+            $post = $this->input->post();
             $post['intFinalized'] -= 1;            
 		    $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
         
