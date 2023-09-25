@@ -800,7 +800,7 @@ class Excel extends CI_Controller {
 
     }
 
-    public function ched_enrollment_list($course = 0, $year=0,$gender = 0,$sem=0){
+    public function ched_enrollment_list($course = 0, $year=0,$gender = 0,$sem=0, $type='college'){
 
         if($sem == 0 )
         {
@@ -812,8 +812,10 @@ class Excel extends CI_Controller {
                 
         $this->data['sy'] = $active_sem;
 
-        
-        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$course))->first_row('array');
+        if($course != 0)
+            $programs = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$course))->result_array();
+        else
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
 
        
 
@@ -830,175 +832,177 @@ class Excel extends CI_Controller {
                                      ->setCategory("Student List");
 
         
-
-        //--------------------------------HEADER----------------------------------------------
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', 'Name of Institution:');
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C1', 'iACADEMY Cebu');
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A2', 'Address:');
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C2', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');                                        
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A3', "Institutional Identifier");
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C3', '');
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A4', $active_sem['term_label']);
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C4', $active_sem['enumSem'].' '.$active_sem['term_label'].', AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A5', "Course / Program:");
-        
-        $major = ($program['strMajor'] != "None" && $program['strMajor'] != "")?"Major in ".$program['strMajor']:'';
-
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C5', $program['strProgramDescription']." ".$major);     
-                
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A6', "Year Level:");
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C6', $year);
-
-        $style = array(
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-            )
-        );
-
-        $style2 = array(
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-            )
-        );
-
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("C6")->applyFromArray($style2);
-
-
-
-        //$active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']
-
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:B1');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:B2');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:B3');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:B4');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:B5');      
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:B6');  
-        //--------------------------------HEADER----------------------------------------------
-
-        $term_label = ($active_sem['term_label'] == "Sem")?'Semester':'Term';
-        // Add some datat
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A7', $term_label)
-                    ->setCellValue('B7', 'Student No.')
-                    ->setCellValue('C7', 'Student Name')
-                    ->setCellValue('F7', 'Course')
-                    ->setCellValue('G7', 'Gender')
-                    ->setCellValue('H7', 'Bdate')                                        
-                    ->setCellValue('I7', 'Current Year')     
-                    ->setCellValue('J7', 'Subjects Enrolled')
-                    ->setCellValue('K7', 'No. of Units');
-
-
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("I7")->applyFromArray($style);                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("K7")->applyFromArray($style);                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("C7")->applyFromArray($style);
-
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A7:A8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B7:B8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('F7:F8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('G7:G8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('H7:H8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I7:I8');                    
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('J7:J8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('K7:K8');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('C7:E7');
-
-        $objPHPExcel->setActiveSheetIndex(0)                                        
-                    ->setCellValue('C8', 'Surname')
-                    ->setCellValue('D8', 'First Name')
-                    ->setCellValue('E8', 'Middle Name');                    
-                    
-
-        $i = 9;
-
-        $st = [];
-        $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
-        if(!empty($students)){        
-            foreach($students as $student)
-            {
-                $classes = "";
-                $total_units = 0;    
-                $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
-                foreach($cl as $class){
+        $active_sheet = 0;
+        foreach($programs as $program){
+            //--------------------------------HEADER----------------------------------------------
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+            ->setCellValue('A1', 'Name of Institution:');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C1', 'iACADEMY Cebu');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A2', 'Address:');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C2', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');                                        
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A3', "Institutional Identifier");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C3', '');
             
-                    $classes .=($classes=="")?$class['strCode']:",".$class['strCode'];                                                        
-                    $total_units += $class['strUnits'];                   
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A4', $active_sem['term_label']);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C4', $active_sem['enumSem'].' '.$active_sem['term_label'].', AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A5', "Course / Program:");
+            
+            $major = ($program['strMajor'] != "None" && $program['strMajor'] != "")?"Major in ".$program['strMajor']:'';
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C5', $program['strProgramDescription']." ".$major);     
+                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A6', "Year Level:");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('C6', $year);
+
+            $style = array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                )
+            );
+
+            $style2 = array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                )
+            );
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("C6")->applyFromArray($style2);
+
+
+
+            //$active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A1:B1');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A2:B2');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A3:B3');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A4:B4');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A5:B5');      
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A6:B6');  
+            //--------------------------------HEADER----------------------------------------------
+
+            $term_label = ($active_sem['term_label'] == "Sem")?'Semester':'Term';
+            // Add some datat
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                        ->setCellValue('A7', $term_label)
+                        ->setCellValue('B7', 'Student No.')
+                        ->setCellValue('C7', 'Student Name')
+                        ->setCellValue('F7', 'Course')
+                        ->setCellValue('G7', 'Gender')
+                        ->setCellValue('H7', 'Bdate')                                        
+                        ->setCellValue('I7', 'Current Year')     
+                        ->setCellValue('J7', 'Subjects Enrolled')
+                        ->setCellValue('K7', 'No. of Units');
+
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("I7")->applyFromArray($style);                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("K7")->applyFromArray($style);                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("C7")->applyFromArray($style);
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('A7:A8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B7:B8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('F7:F8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('G7:G8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('H7:H8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('I7:I8');                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('J7:J8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('K7:K8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('C7:E7');
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)                                        
+                        ->setCellValue('C8', 'Surname')
+                        ->setCellValue('D8', 'First Name')
+                        ->setCellValue('E8', 'Middle Name');                    
+                        
+
+            $i = 9;
+
+            $st = [];
+            $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
+            if(!empty($students)){        
+                foreach($students as $student)
+                {
+                    $classes = "";
+                    $total_units = 0;    
+                    $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+                    foreach($cl as $class){
+                
+                        $classes .=($classes=="")?$class['strCode']:",".$class['strCode'];                                                        
+                        $total_units += $class['strUnits'];                   
+                    }
+
+                    // Add some datat
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('A'.$i, $active_sem['enumSem'])
+                    ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, $student['strLastname'])
+                    ->setCellValue('D'.$i, $student['strFirstname'])
+                    ->setCellValue('E'.$i, strtoupper($student['strMiddlename']))
+                    ->setCellValue('F'.$i, $student['strProgramCode'])
+                    ->setCellValue('G'.$i, $student['enumGender'])
+                    ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
+                    ->setCellValue('I'.$i, $student['intYearLevel'])
+                    ->setCellValue('J'.$i, $classes)
+                    ->setCellValue('K'.$i, $total_units);
+                    
+            
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("I".$i)->applyFromArray($style);
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("K".$i)->applyFromArray($style);
+                    $i++;
                 }
-
-                 // Add some datat
-                 $objPHPExcel->setActiveSheetIndex(0)
-                 ->setCellValue('A'.$i, $active_sem['enumSem'])
-                 ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
-                 ->setCellValue('C'.$i, $student['strLastname'])
-                 ->setCellValue('D'.$i, $student['strFirstname'])
-                 ->setCellValue('E'.$i, strtoupper($student['strMiddlename']))
-                 ->setCellValue('F'.$i, $student['strProgramCode'])
-                 ->setCellValue('G'.$i, $student['enumGender'])
-                 ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
-                 ->setCellValue('I'.$i, $student['intYearLevel'])
-                 ->setCellValue('J'.$i, $classes)
-                 ->setCellValue('K'.$i, $total_units);
-                 
-         
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("K".$i)->applyFromArray($style);
-                $i++;
             }
-        }
 
-        $i += 2;
+            $i += 2;
 
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('B'.$i, "Prepared By: ____________________________")
-        ->setCellValue('B'.($i + 1), "                                                         Registrar");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+            ->setCellValue('B'.$i, "Prepared By: ____________________________")
+            ->setCellValue('B'.($i + 1), "                                                         Registrar");
 
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('I'.$i, "Certified Correct: ____________________________")
-        ->setCellValue('I'.($i + 1), "                                                      College Dean");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+            ->setCellValue('I'.$i, "Certified Correct: ____________________________")
+            ->setCellValue('I'.($i + 1), "                                                      College Dean");
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.($i+1).':E'.($i+1));
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.$i.':J'.$i);
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I'.($i+1).':J'.($i+1));
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B'.$i.':E'.$i);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B'.($i+1).':E'.($i+1));
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('I'.$i.':J'.$i);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('I'.($i+1).':J'.($i+1));
 
-        $objPHPExcel->getActiveSheet()->getStyle('C7:K7')
-        ->getAlignment()->setWrapText(true);
-        $objPHPExcel->getActiveSheet()->getStyle('C8:K8')
-        ->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('C7:K7')
+            ->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('C8:K8')
+            ->getAlignment()->setWrapText(true);
+
+            
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(80);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+            // Miscellaneous glyphs, UTF-8
+            //$objPHPExcel->setActiveSheetIndex($active_sheet)
+            //          ->setCellValue('A4', 'Miscellaneous glyphs')
+            //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
 
         
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(80);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        // Miscellaneous glyphs, UTF-8
-        //$objPHPExcel->setActiveSheetIndex(0)
-        //          ->setCellValue('A4', 'Miscellaneous glyphs')
-        //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
-
-       
-       $objPHPExcel->getActiveSheet()->setTitle('Enrollment List');
+            $objPHPExcel->getActiveSheet()->setTitle($program['strProgramDescription']." ".$major);
+        }
        
 
 
