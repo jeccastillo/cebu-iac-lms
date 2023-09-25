@@ -1002,6 +1002,7 @@ class Excel extends CI_Controller {
 
         
             $objPHPExcel->getActiveSheet()->setTitle($program['strProgramCode']);
+            $active_sheet++;            
         }
        
 
