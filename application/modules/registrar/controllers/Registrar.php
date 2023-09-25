@@ -1632,6 +1632,37 @@ class Registrar extends CI_Controller {
             
     }
 
+    public function cut_off_registration($sem){
+        $post = $this->input->post();
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        if($post['date'] == date("Y-m-d")){
+            $classlists = $this->db->get_where('tb_mas_classlist',array('strAcademicYear'=>$sem))->result_array();
+            foreach($classlists as $classlist){
+                $students = $this->db
+                                ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG')
+                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')
+                                ->where(array('intClassListID'=>$classlist['intID']))                            
+                                ->get('tb_mas_classlist_student')
+                                ->result_array();
+                foreach($students as $student){
+                    if($student['intROG'] == "1")
+                        $this->db->where('intStudentID',$student['intStudentID'])
+                                ->delete();
+                }
+            }
+            $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
+            $data['success'] = true;
+            $data['message'] = "Successfully Cut off Registration";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Update Failed input valid date";
+        }
+
+        echo json_encode($data);
+
+    }
+
     public function register_old_student_data($studNum,$sem){
 
         $data['student'] = $this->data_fetcher->getStudent($studNum);
@@ -1954,6 +1985,7 @@ class Registrar extends CI_Controller {
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/ay_view",$this->data);
             $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/ay_view_conf",$this->data);             
             //print_r($this->data['classlist']);
             
         }

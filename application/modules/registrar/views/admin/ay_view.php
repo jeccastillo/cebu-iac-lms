@@ -51,7 +51,7 @@
                                                         <li><a href="<?php echo base_url() ?>registrar/edit_ay/<?php echo $ay['intID']; ?>"><i class="fi-widget"></i> Edit</a></li>
                                   <li><a href="<?php echo base_url() ?>registrar/ay_viewer/<?php echo $ay['intID']; ?>"><i class="fi-results"></i> View</a></li>
                                 <li>
-                                    <a href="#" class="update-ay-record" rel="<?php echo $ay['intID']; ?>"> Update Incompletes </a>                        
+                                    <a href="#" class="cut-off-registration" rel="<?php echo $ay['intID']; ?>">Registration Cut-off</a>                        
                                 </li>
                                   <li> <a href="#" class="trash-sy-record" rel="<?php echo $ay['intID']; ?>"><i class="fi-trash"></i> Delete</a></li>
                                                     </ul>
