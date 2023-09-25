@@ -1001,7 +1001,7 @@ class Excel extends CI_Controller {
             //          ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
 
         
-            $objPHPExcel->getActiveSheet()->setTitle($program['strProgramDescription']." ".$major);
+            $objPHPExcel->getActiveSheet()->setTitle($program['strProgramCode']);
         }
        
 
