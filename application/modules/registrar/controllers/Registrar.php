@@ -1646,8 +1646,8 @@ class Registrar extends CI_Controller {
                                 ->result_array();
                 foreach($students as $student){
                     if($student['intROG'] == "1")
-                        $this->db->where('intStudentID',$student['intStudentID'])
-                                ->delete();
+                        $this->db->where('intStudentID',$student['intStudentID'])                    
+                                ->delete('tb_mas_classlist_student');
                 }
             }
             $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
