@@ -647,11 +647,34 @@ class Unity extends CI_Controller {
      public function student_exam($slug,$exam_id) {                
         
         $student = $this->data_fetcher->getStudent($slug, 'slug');
+        $answers = array();
+        $studentExamQuestion = $this->data_fetcher->getStudentExamQuestion($slug, 'student_id');
+        foreach($studentExamQuestion as $question){
+            $choices = $this->db->get_where('tb_mas_choices',array('question_id'=>$question['intID']))->result_array();
+                        
+            $choice_array = [];
+            foreach($choices as $choice){
+                $choice_array[] = array(
+                    'id' => $choice['intID'],
+                    'choice' => $choice['strChoice'],
+                    'choice_image' => $choice['choiceImage'] ? base_url() . 'assets/photos/exam/' . $choice['choiceImage'] : '',
+                    'is_selected'=>0,
+                );
+            }
 
-        $examAnswer = $this->db->get_where('tb_mas_student_exam_answers', array('student_id' => $slug))->result_array();
-        print_r($examAnswer);
-        die();
+            $answerArray = array(
+                'question' => $question['strTitle'],
+                'image' => $question['questionImage'] ? base_url() . 'assets/photos/exam/' .$question['questionImage'] : '',
+                'choice_selected' => $question['choice_selected'],
+                'is_correct' => $question['is_correct'],
+                'choices' => $choice_array
+                
+            );
+            $answers[] = $answerArray;
+        }
+
         $data['id'] = $student['intID'];
+        $data['answers'] = $answers;
            
         $this->load->view('public/header',$this->data);        
 		$this->load->view('public/student_exam',$data);

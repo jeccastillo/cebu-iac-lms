@@ -61,6 +61,8 @@ class Examination extends CI_Controller {
     
     
     public function index() {
+        $userlevel = $this->session->userdata('intUserLevel');   
+        $ip = $this->input->ip_address();   
         if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
@@ -73,6 +75,8 @@ class Examination extends CI_Controller {
 
     public function question_list() {
         
+        $userlevel = $this->session->userdata('intUserLevel');   
+        $ip = $this->input->ip_address();   
         if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
@@ -86,6 +90,8 @@ class Examination extends CI_Controller {
 
      public function add_question() {
         
+        $userlevel = $this->session->userdata('intUserLevel');   
+        $ip = $this->input->ip_address();   
         if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
@@ -100,6 +106,8 @@ class Examination extends CI_Controller {
 
     public function edit_question($id) {
         
+        $userlevel = $this->session->userdata('intUserLevel');   
+        $ip = $this->input->ip_address();   
         if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
@@ -115,25 +123,26 @@ class Examination extends CI_Controller {
 
      public function student_generate_exam($term = 0)
     {
-            if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
-		    redirect(base_url()."unity");
+        $userlevel = $this->session->userdata('intUserLevel');   
+        $ip = $this->input->ip_address();   
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        redirect(base_url()."unity");
        
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term);  
-                
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
+        if($term == 0)
+            $term = $this->data_fetcher->get_processing_sem();        
+        else
+            $term = $this->data_fetcher->get_sem_by_id($term);  
             
-            $this->data['page'] = "student_generate_exam";
-            $this->data['opentree'] = "examination";
-            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/generate_exam",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/generate_exam_conf",$this->data); 
-            //print_r($this->data['classlist']);
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['current_sem'] = $term['intID'];
+        
+        $this->data['page'] = "student_generate_exam";
+        $this->data['opentree'] = "examination";
+        //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/generate_exam",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/generate_exam_conf",$this->data); 
       
     }
 
