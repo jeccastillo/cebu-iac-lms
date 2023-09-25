@@ -444,59 +444,62 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;                                    
-                                    if(data.data.success){   
-                                        var update_status = 'Withdrawn Before';
-                                        switch(this.withdrawal.period){
-                                            case 'before':
-                                                update_status = 'Withdrawn Before';
-                                            break;
-                                            case 'after':
-                                                update_status = 'Withdrawn After';
-                                            break;
-                                            case 'end':
-                                                update_status = 'Withdrawn End';
-                                            break;
-                                        }
-                                        axios.post(api_url + 'admissions/student-info/' + this.slug +
-                                            '/update-status', {
-                                                status: update_status,
-                                                remarks: "Student Withdrawn",
-                                                admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
-                                            }, {
-                                                headers: {
-                                                    Authorization: `Bearer ${window.token}`
-                                                }
-                                            })
-                                            .then(data => {
-                                                if (data.data.success) {
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: data.data.message,
-                                                        icon: "success"
-                                                    }).then(function() {
-                                                        location.reload();
-                                                    });
-                                                } else {
-                                                    Swal.fire(
-                                                        'Failed!',
-                                                        data.data.message,
-                                                        'error'
-                                                    )
-                                                }
-                                            });                                                                                                    
+                                    this.loader_spinner = false;   
+                                    if(data.data.registration.enumStudentType == "new"){                                 
+                                        if(data.data.success){   
+                                            var update_status = 'Withdrawn Before';
+                                            switch(this.withdrawal.period){
+                                                case 'before':
+                                                    update_status = 'Withdrawn Before';
+                                                break;
+                                                case 'after':
+                                                    update_status = 'Withdrawn After';
+                                                break;
+                                                case 'end':
+                                                    update_status = 'Withdrawn End';
+                                                break;
+                                            }
+                                            axios.post(api_url + 'admissions/student-info/' + this.slug +
+                                                '/update-status', {
+                                                    status: update_status,
+                                                    remarks: "Student Withdrawn",
+                                                    admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
+                                                }, {
+                                                    headers: {
+                                                        Authorization: `Bearer ${window.token}`
+                                                    }
+                                                })
+                                                .then(data => {
+                                                    if (data.data.success) {
+                                                        Swal.fire({
+                                                            title: "Success",
+                                                            text: data.data.message,
+                                                            icon: "success"
+                                                        }).then(function() {
+                                                            location.reload();
+                                                        });
+                                                    } else {
+                                                        Swal.fire(
+                                                            'Failed!',
+                                                            data.data.message,
+                                                            'error'
+                                                        )
+                                                    }
+                                                });                                                                                                    
 
-                                    }                                        
+                                        }                                        
+                                        else
+                                            Swal.fire({
+                                                title: "Failed",
+                                                text: data.data.message,
+                                                icon: "error"
+                                            }).then(function() {
+                                                //location.reload();
+                                            });                                        
+                                    }
                                     else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });                                        
-                                    });                                        
-                                                                        
+                                        location.reload();
+                                });                                                                                                                                                  
                             },
                             allowOutsideClick: () => !Swal.isLoading()
                         }).then((result) => {

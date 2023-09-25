@@ -1551,6 +1551,9 @@ class Registrar extends CI_Controller {
             }
 
                                 
+            $data['registration'] = $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))
+                                             ->get('tb_mas_registration')
+                                             ->first_row();
             $data['success'] = true;
             $data['message'] = "Student has been withdrawn";
         
