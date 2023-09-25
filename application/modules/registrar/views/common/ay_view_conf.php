@@ -27,7 +27,7 @@
                             var sem = $(this).attr('rel');
                             var data = {'date':inputValue};
                             $.ajax({
-                                'url':'<?php echo base_url(); ?>/registrar/cut_off_registration/'+sem,
+                                'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
                                 'method':'post',
                                 'data':data,
                                 'dataType':'json',
