@@ -2051,7 +2051,7 @@ class Unity extends CI_Controller {
             $data['label'] = "Submit"; 
             if ($data['classlist']['intFinalized'] == 0) {
                 $data['label'] = "Submit Midterm Grades";
-                if(($data['classlist']['midterm_start'] <= date("Y-m-d") && $data['classlist']['midterm_end'] >= date("Y-m-d")) || is_registrar() || is_super_admin()){
+                if(($data['classlist']['midterm_start'] <= date("Y-m-d") && $data['classlist']['midterm_end'] >= date("Y-m-d")) || $this->is_registrar() || $this->is_super_admin()){
                     $data['disable_submit'] =  false;                                                    
                 }
                 else
@@ -2060,7 +2060,7 @@ class Unity extends CI_Controller {
             }
             else if ($data['classlist']['intFinalized'] == 1) {
                 $data['label'] = "Submit Final Grades";
-                if(($data['classlist']['final_start'] <= date("Y-m-d") && $data['classlist']['final_end'] >= date("Y-m-d"))  || is_registrar() || is_super_admin()){
+                if(($data['classlist']['final_start'] <= date("Y-m-d") && $data['classlist']['final_end'] >= date("Y-m-d"))  || $this->is_registrar() || $this->is_super_admin()){
                         $data['disable_submit'] =  false;                                                
                 }
                     else
