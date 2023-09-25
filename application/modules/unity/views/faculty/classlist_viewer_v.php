@@ -91,7 +91,7 @@
                                 </div>                                
                             </form>
                             <div class="col-sm-4">
-                                <a v-if="classlist.intFinalized < 2" href="#" data-target="#myModal" data-toggle="modal" class="btn btn-success" :disabled = "disable_submit">
+                                <a v-if="classlist.intFinalized < 2 && !disable_submit" href="#" data-target="#myModal" data-toggle="modal" class="btn btn-success">
                                     {{ label }}
                                 </a>
                                 <a v-if="classlist.intFinalized > 0 && (is_super_admin || is_registrar)" @click.prevent="unfinalize" href="#" class="btn btn-danger">
