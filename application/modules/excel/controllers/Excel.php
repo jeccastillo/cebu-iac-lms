@@ -831,7 +831,7 @@ class Excel extends CI_Controller {
                                      ->setKeywords("office 2007 openxml php")
                                      ->setCategory("Student List");
 
-        for($i = 0;$i < count($programs); $i++)                                       
+        for($i = 0;$i < (count($programs) - 1); $i++)                                       
             $objPHPExcel->createSheet($i);
 
         $active_sheet = 0;
@@ -1013,7 +1013,7 @@ class Excel extends CI_Controller {
 
        // Redirect output to a client’s web browser (Excel2007)
        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-       header('Content-Disposition: attachment;filename="ched_enrollment_list'.strtolower($program['strProgramCode']).$active_sem['enumSem'].$active_sem['strYearStart'].$active_sem['strYearEnd'].'.xls"');
+       header('Content-Disposition: attachment;filename="ched_enrollment_list'.$active_sem['enumSem'].$active_sem['strYearStart'].$active_sem['strYearEnd'].'.xls"');
        header('Cache-Control: max-age=0');
        // If you're serving to IE 9, then the following may be needed
        header('Cache-Control: max-age=1');
