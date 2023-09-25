@@ -140,12 +140,12 @@
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
-                        <?php if($record['intFinalized'] >= 1): ?>                                
+                        <?php if($record['intFinalized'] >= 1 && $active_sem['viewing_midterm_start'] <= date("Y-m-d") && $active_sem['viewing_midterm_end'] > date("Y-m-d")): ?>                                
                             <td><strong><?php echo $record['v2']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
                         <?php endif; ?>    
-                        <?php if($record['intFinalized'] == 2): ?>                                
+                        <?php if($record['intFinalized'] >= 2 && $active_sem['viewing_final_start'] <= date("Y-m-d") && $active_sem['viewing_final_end'] > date("Y-m-d")): ?>                                
                             <td><strong><?php echo $record['v3']; ?></strong></td>
                         <?php else: ?>
                             <td>NGS</td>
