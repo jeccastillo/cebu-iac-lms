@@ -1640,14 +1640,17 @@ class Registrar extends CI_Controller {
             foreach($classlists as $classlist){
                 $students = $this->db
                                 ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG')
-                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')
+                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID','left')
                                 ->where(array('intClassListID'=>$classlist['intID']))                            
                                 ->get('tb_mas_classlist_student')
                                 ->result_array();
-                foreach($students as $student){
-                    if($student['intROG'] == "1")
-                        $this->db->where('intStudentID',$student['intStudentID'])                    
-                                ->delete('tb_mas_classlist_student');
+                foreach($students as $student){                    
+                    if($student['intROG'] == "0"){
+                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID']))                    
+                                ->delete('tb_mas_classlist_student');            
+                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
+                                ->delete('tb_mas_registration');                                            
+                    }
                 }
             }
             $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
