@@ -37,7 +37,7 @@
                                 <option v-for="item in programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>
                             </select>
                         </div>
-                        <div v-if="curriculum" class="form-group col-sm-6">
+                        <div v-if="curriculum.length > 0" class="form-group col-sm-6">
                             <label>Select Program to Shift to</label>
                             <select v-model="curriculum_selected" class="form-control" required>
                                 <option v-for="item in curriculum" :value="item.intID">{{ item.strName }}</option>
