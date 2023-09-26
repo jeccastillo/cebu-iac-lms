@@ -14,7 +14,7 @@
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a  target="_blank" v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i>Shifting
+                        <i class="fa fa-arrows-h"></i>Shifting
                     </a> 
                     <a  target="_blank" class="btn btn-app" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
                         <i class="fa fa-user"></i>Deficiencies
