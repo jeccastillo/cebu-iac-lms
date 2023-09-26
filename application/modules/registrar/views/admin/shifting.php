@@ -174,9 +174,7 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append("shifted_program",null);                                                            
-                    formdata.append("shifted_curriculum",null);   
+                    var formdata= new FormData();                       
                     formdata.append("intRegistrationID",this.registration.intRegistrationID);
                     formdata.append("intStudentID",this.student.intID);                    
                     return axios
