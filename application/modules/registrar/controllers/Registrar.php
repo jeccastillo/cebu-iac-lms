@@ -1516,7 +1516,7 @@ class Registrar extends CI_Controller {
             $post['current_program'] = $student['intProgramID'];
             $post['current_curriculum'] = $student['intCurriculumID'];
 
-            $this->db->where('intID',$r['intID'])->update('tb_mas_registration',$post);
+            $this->db->where('intRegistrationID',$r['intRegistrationID'])->update('tb_mas_registration',$post);
 
         }
     }
