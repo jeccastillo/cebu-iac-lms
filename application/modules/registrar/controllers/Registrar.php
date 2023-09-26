@@ -1214,6 +1214,8 @@ class Registrar extends CI_Controller {
             $data['success'] = false;
             $data['message'] = "Failed";
         }
+
+        echo json_encode($data);
     }
 
     function get_registration_info($slug){
