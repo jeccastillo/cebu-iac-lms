@@ -205,6 +205,8 @@ new Vue({
                     else
                         this.request.enumStudentType = "new";
 
+                    console.log(this.request.enumStudentType);
+
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
