@@ -14,7 +14,7 @@
                     <div v-if="cashier" class="box box-solid box-success">
                         <div class="box-header">                            
                             <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>  
-                            {{ payee.firstname+' '+payee.lastname }}                          
+                            <span v-if="payee">{{ payee.firstname+' '+payee.lastname }}</span>
                         </div>
                         <div class="box-body">
                             <div class="row">                                                                                              
