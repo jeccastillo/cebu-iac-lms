@@ -1174,7 +1174,7 @@ class Registrar extends CI_Controller {
     }
 
     function shifting_data($id,$sem){
-        $data['registration'] = $this->db->select('tb_mas_registration.*,strProgramCode,strProgramDescription,tb_mas_curriculum.strName')
+        $data['registration'] = $this->db->select('tb_mas_registration.*,strProgramCode,tb_mas_programs.intProgramID,strProgramDescription,tb_mas_curriculum.strName')
                                 ->join('tb_mas_curriculum','tb_mas_registration.current_curriculum = tb_mas_curriculum.intID')
                                 ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
                                 ->where(array('intStudentID'=>$id,'intAYID'=>$sem))                                
@@ -1189,7 +1189,7 @@ class Registrar extends CI_Controller {
                                 ->first_row();                                        
 
         $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row('array');
-        $data['programs'] = $this->db->get_where('tb_mas_programs',array('type'=>get_stype($data['student']['level'])))->result_array();
+        $data['programs'] = $this->db->get_where('tb_mas_programs',array('type'=>get_stype($data['student']['level']),'intProgramID !='=>$data['registration']['intProgramID']))->result_array();
         
         $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
