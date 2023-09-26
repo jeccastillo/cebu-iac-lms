@@ -1180,9 +1180,24 @@ class Registrar extends CI_Controller {
                                 ->where(array('intStudentID'=>$id,'intAYID'=>$sem))                                
                                 ->get('tb_mas_registration')
                                 ->first_row();
+
+        $data['shifted'] = $this->db->select('strProgramCode,strProgramDescription,tb_mas_curriculum.strName')
+                                ->join('tb_mas_curriculum','tb_mas_registration.shifted_curriculum = tb_mas_curriculum.intID')
+                                ->join('tb_mas_programs','tb_mas_registration.shifted_program = tb_mas_programs.intProgramID')
+                                ->where(array('intStudentID'=>$id,'intAYID'=>$sem))                                
+                                ->get('tb_mas_registration')
+                                ->first_row();                                        
+
         $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
+        $data['programs'] = $this->db->get_where('tb_mas_programs',array('type'=>get_stype($data['student']['level'])))->result_array();
+        
         $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
+        echo json_encode($data);
+    }
+
+    function get_curriculum($program){
+        $data['curriculum'] = $this->db->get_where('tb_mas_curriculum',array('intProgramID'=>$program))->result_array();
         echo json_encode($data);
     }
 

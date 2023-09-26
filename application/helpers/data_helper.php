@@ -258,6 +258,31 @@ if (!function_exists('getRemarks')) {
         }
 }
 
+if (!function_exists('get_stype')) {
+        
+    function get_stype($level)
+    {   
+        switch($level){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        return $stype;
+    }
+}
+
+
 if (!function_exists('getAve')) {
         
     function getAve($v1, $v2, $v3)
