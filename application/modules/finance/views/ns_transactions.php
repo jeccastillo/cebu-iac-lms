@@ -130,7 +130,7 @@ new Vue({
             first_name: "<?php echo $first_name; ?>",
             last_name: "<?php echo $last_name; ?>",
             sem: "<?php echo $sem; ?>",
-        }
+        },
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
         reservation_payment: undefined,
