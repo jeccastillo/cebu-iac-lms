@@ -37,7 +37,12 @@
                         <img width="60px;" src="'.$seal.'" alt="seal" border="0">
                     </td>
                     <td width="80%">             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.<br /> '.$cm.'</font>
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.'.$cm.'</font>
+                    </td>
+                </tr>
+                <tr>                                                 
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.$cm.'</font>
                     </td>
                 </tr>
                 <tr>                                           
