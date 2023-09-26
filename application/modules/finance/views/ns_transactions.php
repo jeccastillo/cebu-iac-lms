@@ -1,9 +1,9 @@
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
-            <h1>                
-                <small>
-                    <a class="btn btn-app" :href="base_url + 'admissionsV1/view_all_leads'" ><i class="ion ion-arrow-left-a"></i>All Students Applicants</a>                                                                                                                     
+            <h1>       
+                NS Payments         
+                <small>                    
                 </small>                
             </h1>
         </section>
@@ -11,17 +11,18 @@
         <div class="content">            
             <div class="row">       
                 <div class="col-sm-12">
-                <div class="box box-widget widget-user-2">
-                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-red">
-                        <div class="pull-right" style="margin-left:1rem;">
-                            <select class="form-control" @change="selectTerm($event)" v-model="request.sem">
-                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
-                            </select>
-                        </div>                        
-                        <h3 v-if="payee" class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ payee.firstname+' '+payee.lastname }}</h3>                                            
-                    
-                    </div>                
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-red">
+                            <div class="pull-right" style="margin-left:1rem;">
+                                <select class="form-control" @change="selectTerm($event)" v-model="request.sem">
+                                    <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                                </select>
+                            </div>                        
+                            <h3 v-if="payee" class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ payee.firstname+' '+payee.lastname }}</h3>                                            
+                        
+                        </div>                
+                    </div>
                 </div>                            
                 <div class="col-sm-12">
                     <div class="box box-solid box-success">
