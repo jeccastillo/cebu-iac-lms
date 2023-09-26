@@ -39,7 +39,7 @@
                                 </select>
                             </div>
                             <div v-if="curriculum.length > 0" class="form-group col-sm-6">
-                                <label>Select Program to Shift to</label>
+                                <label>Select Curriculum</label>
                                 <select v-model="curriculum_selected" class="form-control" required>
                                     <option v-for="item in curriculum" :value="item.intID">{{ item.strName }}</option>
                                 </select>
@@ -116,7 +116,7 @@ new Vue({
             
         },
         submitShifting: function(){
-            
+
         }
 
     }
