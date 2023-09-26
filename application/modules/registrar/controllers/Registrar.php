@@ -1508,6 +1508,19 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function sync_current_data(){
+        $reg = $this->db->get_where('tb_mas_registration')->result_array();
+
+        foreach($reg as $r){
+            $student = $this->get_where('tb_mas_users',array('intID'=>$r['intStudentID']))->first_row();
+            $post['current_program'] = $student['intProgramID'];
+            $post['current_curriculum'] = $student['intCurriculumID'];
+
+            $this->db->where('intID',$r['intID'])->update('tb_mas_registration',$post);
+
+        }
+    }
+
 
     public function withdraw_student(){
         $post = $this->input->post();
