@@ -169,7 +169,11 @@ new Vue({
         let year = d.getFullYear();
 
         this.loader_spinner = true;
-        axios.post(api_url + 'finance/ns_transactions',this.request)
+        axios.post(api_url + 'finance/ns_transactions',this.request,{
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            }
+        })
         .then((data) => {                        
             this.payments = this.student.payments;            
             
