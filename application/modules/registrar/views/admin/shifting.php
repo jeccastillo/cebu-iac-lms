@@ -20,14 +20,17 @@
                         <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
                         <li><a href="#" style="font-size:13px;">Current Program <span class="pull-right text-blue">{{ registration.strProgramCode }}</span></a></li>                            
                         <li><a href="#" style="font-size:13px;">Current Curriculum <span class="pull-right text-blue">{{ registration.strName }}</span></a></li>                            
-                        <li v-if="shifted"><a href="#" style="font-size:13px;">Current Program <span class="pull-right text-blue">{{ shifted.strProgramCode }}</span></a></li>                            
-                        <li v-if="shifted"><a href="#" style="font-size:13px;">Current Curriculum <span class="pull-right text-blue">{{ shifted.strName }}</span></a></li>                            
+                        <li v-if="shifted"><a href="#" style="font-size:13px;">Shifted Program <span class="pull-right text-blue">{{ shifted.strProgramCode }}</span></a></li>                            
+                        <li v-if="shifted"><a href="#" style="font-size:13px;">Shifted Curriculum <span class="pull-right text-blue">{{ shifted.strName }}</span></a></li>                            
                     </ul>
                 </div>
             </div>
             <div class="box box-primary">
                 <div class="box-header">
                     <h4>Shift Course</h4>
+                    <div class="pull-right" v-if="shifted">
+                        <button class="btn btn-danger" @click="revertShifting">Revert Shifting</button>
+                    </div>
                 </div>
                 <form method="post" @submit.prevent="submitShifting">
                     <div class="box-body">
@@ -134,6 +137,51 @@ new Vue({
                     formdata.append("intStudentID",this.student.intID);                    
                     return axios
                         .post('<?php echo base_url(); ?>registrar/shift_student/',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },
+        revertShifting: function(){
+            Swal.fire({
+                title: 'Revert?',
+                text: "Continue Reverting Shift?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("shifted_program",null);                                                            
+                    formdata.append("shifted_curriculum",null);   
+                    formdata.append("intRegistrationID",this.registration.intRegistrationID);
+                    formdata.append("intStudentID",this.student.intID);                    
+                    return axios
+                        .post('<?php echo base_url(); ?>registrar/revert_shift_student/',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
