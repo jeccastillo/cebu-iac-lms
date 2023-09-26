@@ -24,7 +24,7 @@
                     <div class="widget-user-header bg-red">
                         <div class="pull-right" style="margin-left:1rem;">
                             <select class="form-control" @change="selectTerm($event)" v-model="sem">
-                                <option v-for="s in sy" :value="s.intID">{{ s.enumSem }} Term {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
                         </div>
                         <!-- /.widget-user-image -->

@@ -11,14 +11,17 @@
         <div class="content">            
             <div class="row">       
                 <div class="col-sm-12">
-                    <div v-if="cashier" class="box box-solid box-success">
-                        <div class="box-header">                            
-                            <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>                              
-                        </div>
-                        <div class="box-body">
-                            <h4><span v-if="payee">{{ payee.firstname+' '+payee.lastname }}</span></h4>
-                        </div>
-                    </div>
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-red">
+                        <div class="pull-right" style="margin-left:1rem;">
+                            <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                            </select>
+                        </div>                        
+                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ payee.firstname+' '+payee.lastname }}</h3>                                            
+                    
+                    </div>                
                 </div>                            
                 <div class="col-sm-12">
                     <div class="box box-solid box-success">
@@ -106,8 +109,9 @@ new Vue({
         user: {
             special_role:0,
         },              
-        payments:[],                          
-        cashier: undefined,       
+        payments: [],                          
+        cashier: undefined, 
+        sy: [],      
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -145,7 +149,8 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
-                this.payee = data.data.payee;                                                      
+                this.payee = data.data.payee;  
+                this.sy = data.data.sy;                                                    
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
                     this.request.cashier_id = this.cashier.user_id;                    
@@ -204,6 +209,9 @@ new Vue({
             })
 
         },  
+        selectTerm: function(event){
+            document.location = base_url + "finance/ns_transactions/" + this.payee_id + "/" + event.target.value;
+        },
        
 
 
