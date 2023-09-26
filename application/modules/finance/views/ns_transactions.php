@@ -13,12 +13,10 @@
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
                         <div class="box-header">                            
-                            <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>  
-                            <span v-if="payee">{{ payee.firstname+' '+payee.lastname }}</span>
+                            <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>                              
                         </div>
                         <div class="box-body">
-                            <div class="row">                                                                                              
-                            </div>                            
+                            <h4><span v-if="payee">{{ payee.firstname+' '+payee.lastname }}</span></h4>
                         </div>
                     </div>
                 </div>                            
