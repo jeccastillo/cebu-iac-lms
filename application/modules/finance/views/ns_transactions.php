@@ -172,15 +172,11 @@ new Vue({
             this.payments = data.data.data;
             axios.get(base_url + 'finance/ns_transactions_data/' + this.slug)
             .then((data) => {            
-                this.cashier = data.data.cashier;
-                this.request.sy_reference = data.data.current_sem;                  
-                this.user = data.data.user;  
-                this.or_update.student_campus = data.data.campus;                           
+                this.cashier = data.data.cashier;                
+                this.user = data.data.user;                                         
                 if(this.cashier){
-                    this.request.or_number = this.cashier.or_current;
-                    this.or_update.or_number = this.cashier.or_current;
-                    this.request.cashier_id = this.cashier.user_id;
-                    this.or_update.cashier_id = this.cashier.user_id;
+                    this.request.or_number = this.cashier.or_current;                    
+                    this.request.cashier_id = this.cashier.user_id;                    
                 }
             })
             .catch((error) => {
