@@ -145,7 +145,7 @@ new Vue({
         })
         .then((data) => {                                            
             this.payments = data.data.data;
-            axios.get(base_url + 'finance/ns_transactions_data/' + this.payee_id + '/' + this.sem)
+            axios.get(base_url + 'finance/ns_transactions_data/' + this.payee_id + '/' + this.request.sem)
             .then((data) => {            
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
