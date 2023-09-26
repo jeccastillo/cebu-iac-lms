@@ -128,8 +128,8 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append("shifted_program",program_selected);                                                            
-                    formdata.append("shifted_curriculum",curriculum_selected);   
+                    formdata.append("shifted_program",this.program_selected);                                                            
+                    formdata.append("shifted_curriculum",this.curriculum_selected);   
                     formdata.append("intRegistrationID",this.registration.intRegistrationID);
                     formdata.append("intStudentID",this.student.intID);                    
                     return axios
