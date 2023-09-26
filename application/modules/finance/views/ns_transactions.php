@@ -3,7 +3,8 @@
         <section class="content-header">
             <h1>       
                 NS Payments         
-                <small>                    
+                <small>       
+                <a class="btn btn-app" :href="base_url + 'finance/view_payees_cashier'" ><i class="ion ion-arrow-left-a"></i>All Payees</a>              
                 </small>                
             </h1>
         </section>
