@@ -182,7 +182,7 @@ new Vue({
                         this.or_print.remarks = payment.remarks;
                         this.or_print.student_name =  this.payee.lastname+", "+this.payee.firstname+", "+this.payee.middlename;    
                         this.or_print.student_address = this.payee.address;
-                        this.or_print.student_id = 0;
+                        this.or_print.student_id = '';
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;
