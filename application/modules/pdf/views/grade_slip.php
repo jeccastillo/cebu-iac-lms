@@ -37,12 +37,12 @@
                         <img width="60px;" src="'.$seal.'" alt="seal" border="0">
                     </td>
                     <td width="80%">             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc. '.$cm.'</font>
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.<br />'.$cm.'</font>
                     </td>
                 </tr>
                 <tr>                                           
                     <td>             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Final Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.ucfirst($period).' Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
                     </td>
                 </tr> 
                 <tr>
@@ -70,7 +70,7 @@
                         <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>
                     <td>             
-                        <font style="font-size: 8;">'.$student['strProgramDescription'].'</font>
+                        <font style="font-size: 8;">'.trim($student['strProgramDescription']).'</font>
                     </td>
                 </tr>        
            </table>
