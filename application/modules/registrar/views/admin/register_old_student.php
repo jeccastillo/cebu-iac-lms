@@ -61,7 +61,7 @@
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">New</option>
                                     <option value="continuing">Continuing</option>
-                                    <option value="transferee">Transferee</option>                                    
+                                    <option value="shiftee">Shiftee</option>                                    
                                 </select>
                                 <br />       
                                 <label for="intYearLevel">Year Level</label>
@@ -149,6 +149,7 @@ new Vue({
         reservation_payment_amount: 0,
         reservation_or_number: "",
         total_units: 0,
+        prev_registration: undefined,
         subjectList: '',
         reg_status: null,
         subjects_loaded: false,
@@ -194,6 +195,13 @@ new Vue({
                         this.scholarship.intID = 0;
 
                     this.request.enumScholarship = this.scholarship.intID;
+                    this.prev_registration = data.data.prev_reg;
+                    if(this.prev_registration){
+                        if(this.prev_registration.shifted_program)
+                            this.request.enumStudentType = "shiftee";
+                        else
+                            this.request.enumStudentType = "continuing";
+                    }                    
 
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
