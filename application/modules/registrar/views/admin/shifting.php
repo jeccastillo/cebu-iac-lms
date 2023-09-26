@@ -30,7 +30,7 @@
                     <h4>Shift Course</h4>                    
                 </div>
                 <form method="post" @submit.prevent="submitShifting">
-                    <div class="box-body">
+                    <div v-if="!shifted" class="box-body">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Select Program to Shift to</label>
@@ -47,8 +47,9 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <button class="btn btn-primary" type="submit">Submit</button>
                         <button v-if="shifted" class="btn btn-danger" @click="revertShifting">Revert Shifting</button>
+                        <button v-else class="btn btn-primary" type="submit">Submit</button>
+                        
                     </div>
                 </form>
             </div>
