@@ -131,18 +131,11 @@ new Vue({
             last_name: "<?php echo $last_name; ?>",
             sem: "<?php echo $sem; ?>",
         },
-        base_url: "<?php echo base_url(); ?>",   
-        applicant_id: undefined,
-        reservation_payment: undefined,
-        application_payment: undefined, 
+        base_url: "<?php echo base_url(); ?>",                   
         user: {
             special_role:0,
-        },
-        payments: [],  
-        uploaded_requirements: false,
-        refunded_payments: [],    
-        amount_to_pay: 0,
-        description_other: '', 
+        },              
+        payments:[],                          
         cashier: undefined,       
         or_print: {
             or_number: undefined,
@@ -175,9 +168,8 @@ new Vue({
                 Authorization: `Bearer ${window.token}`
             }
         })
-        .then((data) => {                        
-            this.payments = this.student.payments;            
-            
+        .then((data) => {                                            
+            this.payments = data.data.data;
             axios.get(base_url + 'finance/ns_transactions_data/' + this.slug)
             .then((data) => {            
                 this.cashier = data.data.cashier;
