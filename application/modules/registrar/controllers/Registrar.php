@@ -1174,7 +1174,12 @@ class Registrar extends CI_Controller {
     }
 
     function shifting_data($id,$sem){
-        $data['registration'] = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem))->first_row();
+        $data['registration'] = $this->db->select('tb_mas_registration.*,strProgramCode,strProgramDescription,tb_mas_curriculum.strName')
+                                ->join('tb_mas_curriculum','tb_mas_registration.current_curriculum = tb_mas_curriculum.intID')
+                                ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intID')
+                                ->where(array('intStudentID'=>$id,'intAYID'=>$sem))                                
+                                ->get('tb_mas_registration')
+                                ->first_row();
         $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
         $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
