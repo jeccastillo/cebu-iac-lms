@@ -201,11 +201,13 @@ new Vue({
                             this.request.enumStudentType = "shiftee";
                         else
                             this.request.enumStudentType = "continuing";
+
+                        console.log(this.request.enumStudentType);
                     }
                     else
                         this.request.enumStudentType = "new";
 
-                    console.log(this.request.enumStudentType);
+                    
 
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
