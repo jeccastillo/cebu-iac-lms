@@ -124,8 +124,7 @@
 new Vue({
     el: '#vue-container',
     data: {
-        student: undefined,
-        type: "<?php echo $type; ?>",
+        student: undefined,        
         first_name: "<?php echo $first_name; ?>",
         last_name: "<?php echo $last_name; ?>",
         base_url: "<?php echo base_url(); ?>",   
