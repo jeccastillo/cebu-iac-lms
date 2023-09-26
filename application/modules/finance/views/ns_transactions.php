@@ -13,7 +13,8 @@
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
                         <div class="box-header">                            
-                            <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>                            
+                            <h4 class="box-title">Non-Student Transaction - Cashier {{ cashier.intID }}</h4>  
+                            {{ payee.firstname+' '+payee.lastname }}                          
                         </div>
                         <div class="box-body">
                             <div class="row">                                                                                              
@@ -95,7 +96,9 @@ new Vue({
     el: '#vue-container',
     data: {
         student: undefined, 
-        base_url: "<?php echo base_url(); ?>",       
+        base_url: "<?php echo base_url(); ?>", 
+        payee_id: "<?php echo $payee_id; ?>",  
+        payee: undefined,   
         request:{
             first_name: "<?php echo $first_name; ?>",
             last_name: "<?php echo $last_name; ?>",
@@ -140,10 +143,11 @@ new Vue({
         })
         .then((data) => {                                            
             this.payments = data.data.data;
-            axios.get(base_url + 'finance/ns_transactions_data/' + this.slug)
+            axios.get(base_url + 'finance/ns_transactions_data/' + this.payee_id)
             .then((data) => {            
                 this.cashier = data.data.cashier;                
-                this.user = data.data.user;                                         
+                this.user = data.data.user;  
+                this.payee = data.data.payee;                                       
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
                     this.request.cashier_id = this.cashier.user_id;                    

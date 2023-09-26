@@ -584,10 +584,11 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function ns_transactions($payee,$sem = 0){        
-        $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$payee))->first_row('array');
+    public function ns_transactions($payee_id,$sem = 0){        
+        $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$payee_id))->first_row('array');
         $this->data['first_name'] = $payee['firstname'];
         $this->data['last_name'] = $payee['lastname'];
+        $this->data['payee_id'] = $payee_id;
         if($sem != 0)
             $this->data['sem'] = $sem;
         else{
@@ -600,10 +601,11 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);        
     }
 
-    public function ns_transactions_data($sem){               
+    public function ns_transactions_data($sem,$payee){               
         $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
         $data['user'] = $this->data['user'];
         $sem = $this->data_fetcher->get_sem_by_id($sem);        
+        $data['payee'] = $this->db->get_where('tb_mas_ns_payee',array('id'=>$payee))->first_row('array');
         $data['current_sem'] = $sem['intID'];
         $data['sem_year'] = $sem['strYearStart'];
         $data['message'] = "Success";
