@@ -15,7 +15,7 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
                         <div class="pull-right" style="margin-left:1rem;">
-                            <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                            <select class="form-control" @change="selectTerm($event)" v-model="request.sem">
                                 <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
                         </div>                        
