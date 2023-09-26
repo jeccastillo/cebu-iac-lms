@@ -87,7 +87,11 @@ class Grading extends CI_Controller {
                         
         $this->data['userlevel'] = $this->session->userdata('intUserLevel');
         $this->data['grading'] = $this->db->get_where('tb_mas_grading',array('id'=>$id))->first_row('array');
-        $this->data['grading_items'] = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$id))->result_array();
+        $this->data['grading_items'] = $this->db
+                                            ->where(array('grading_id'=>$id))
+                                            ->order_by('value','ASC')
+                                            ->get('tb_mas_grading_item')
+                                            ->result_array();
         
         $this->data['subjects_selected'] = $this->db->where(array('grading_system_id'=>$id))
                                                 ->order_by('strCode','ASC')
