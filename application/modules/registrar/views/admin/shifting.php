@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <button v-if="shifted" class="btn btn-danger" @click="revertShifting">Revert Shifting</button>
+                        <button v-if="shifted" class="btn btn-danger" @click.prevent="revertShifting">Revert Shifting</button>
                         <button v-else class="btn btn-primary" type="submit">Submit</button>
                         
                     </div>
