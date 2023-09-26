@@ -29,22 +29,27 @@
                 <div class="box-header">
                     <h4>Shift Course</h4>
                 </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label>Select Program to Shift to</label>
-                            <select @change="getCurriculum($event)" v-model="program_selected" class="form-control" required>
-                                <option v-for="item in programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>
-                            </select>
-                        </div>
-                        <div v-if="curriculum.length > 0" class="form-group col-sm-6">
-                            <label>Select Program to Shift to</label>
-                            <select v-model="curriculum_selected" class="form-control" required>
-                                <option v-for="item in curriculum" :value="item.intID">{{ item.strName }}</option>
-                            </select>
+                <form method="post" @submit.prevent="submitShifting">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label>Select Program to Shift to</label>
+                                <select @change="getCurriculum($event)" v-model="program_selected" class="form-control" required>
+                                    <option v-for="item in programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>
+                                </select>
+                            </div>
+                            <div v-if="curriculum.length > 0" class="form-group col-sm-6">
+                                <label>Select Program to Shift to</label>
+                                <select v-model="curriculum_selected" class="form-control" required>
+                                    <option v-for="item in curriculum" :value="item.intID">{{ item.strName }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="box-footer">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </div><!---content container--->
     </div><!---vue container--->
@@ -108,6 +113,9 @@ new Vue({
             .catch((error) => {
                 console.log(error);
             })
+            
+        },
+        submitShifting: function(){
             
         }
 
