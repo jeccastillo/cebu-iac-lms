@@ -584,10 +584,16 @@ class Finance extends CI_Controller {
         $this->load->view("common/list_conf",$this->data); 
     }
 
-    public function ns_transactions($firstname,$lastname,$sem){        
-        $this->data['first_name'] = $firstname;
-        $this->data['last_name'] = $lastname;
-        $this->data['sem'] = $sem;
+    public function ns_transactions($payee,$sem = 0){        
+        $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$payee))->first_row('array');
+        $this->data['first_name'] = $payee['firstname'];
+        $this->data['last_name'] = $payee['lastname'];
+        if($sem != 0)
+            $this->data['sem'] = $sem;
+        else{
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
 
         $this->load->view("common/header",$this->data);
         $this->load->view("ns_transactions",$this->data);
