@@ -1201,6 +1201,21 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
     }
 
+    function shift_student(){
+        $post = $this->input->post();
+        if($this->db->where('intRegistrationID',$post['intRegistrationID'])->update('tb_mas_registration',$post)){            
+            $shift['intProgramID'] = $post['shifted_program'];
+            $shift['intCurriculumID'] = $post['shifted_curriculum'];
+            $this->db->where('intID',$post['intStudentID'])->update('tb_mas_users',$shift);
+            $data['success'] = true;
+            $data['message'] = "Successfully Shifted Student";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Failed";
+        }
+    }
+
     function get_registration_info($slug){
 
         $sem = $this->data_fetcher->get_active_sem();

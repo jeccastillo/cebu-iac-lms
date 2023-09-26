@@ -116,7 +116,49 @@ new Vue({
             
         },
         submitShifting: function(){
-
+            Swal.fire({
+                title: 'Shift Student?',
+                text: "Continue Shifting?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append("shifted_program",program_selected);                                                            
+                    formdata.append("shifted_curriculum",curriculum_selected);   
+                    formdata.append("intRegistrationID",this.registration.intRegistrationID);
+                    formdata.append("intStudentID",this.student.intID);                    
+                    return axios
+                        .post('<?php echo base_url(); ?>registrar/shift_student/',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         }
 
     }
