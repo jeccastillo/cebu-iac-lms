@@ -166,7 +166,7 @@ new Vue({
         let year = d.getFullYear();
 
         this.loader_spinner = true;
-        axios.get(api_url + 'finance/ns_transactions/' + this.slug)
+        axios.get(api_url + 'finance/ns_transactions')
         .then((data) => {            
             this.request.slug = this.slug;   
             this.payments = this.student.payments;            
