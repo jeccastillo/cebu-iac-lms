@@ -1512,7 +1512,7 @@ class Registrar extends CI_Controller {
         $reg = $this->db->get_where('tb_mas_registration')->result_array();
 
         foreach($reg as $r){
-            $student = $this->db->get_where('tb_mas_users',array('intID'=>$r['intStudentID']))->first_row();
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$r['intStudentID']))->first_row('array');
             $post['current_program'] = $student['intProgramID'];
             $post['current_curriculum'] = $student['intCurriculumID'];
 
