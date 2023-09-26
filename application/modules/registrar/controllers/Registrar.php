@@ -1188,7 +1188,7 @@ class Registrar extends CI_Controller {
                                 ->get('tb_mas_registration')
                                 ->first_row();                                        
 
-        $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
+        $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row('array');
         $data['programs'] = $this->db->get_where('tb_mas_programs',array('type'=>get_stype($data['student']['level'])))->result_array();
         
         $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
