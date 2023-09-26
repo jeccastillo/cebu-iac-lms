@@ -125,8 +125,11 @@ new Vue({
     el: '#vue-container',
     data: {
         student: undefined,        
-        first_name: "<?php echo $first_name; ?>",
-        last_name: "<?php echo $last_name; ?>",
+        request:{
+            first_name: "<?php echo $first_name; ?>",
+            last_name: "<?php echo $last_name; ?>",
+            sem: "<?php echo $sem; ?>",
+        }
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
         reservation_payment: undefined,
@@ -166,9 +169,8 @@ new Vue({
         let year = d.getFullYear();
 
         this.loader_spinner = true;
-        axios.get(api_url + 'finance/ns_transactions')
-        .then((data) => {            
-            this.request.slug = this.slug;   
+        axios.post(api_url + 'finance/ns_transactions',this.request)
+        .then((data) => {                        
             this.payments = this.student.payments;            
             
             axios.get(base_url + 'finance/ns_transactions_data/' + this.slug)
