@@ -133,7 +133,7 @@ new Vue({
         request: {
             studentID: '<?php echo $id; ?>',
             enumScholarship: 0,
-            enumStudentType: 'new',
+            enumStudentType: undefined,
             enumRegistrationStatus: 'regular',
             strAcademicYear: undefined,
             type_of_class: 'regular',
@@ -201,7 +201,9 @@ new Vue({
                             this.request.enumStudentType = "shiftee";
                         else
                             this.request.enumStudentType = "continuing";
-                    }                    
+                    }
+                    else
+                        this.request.enumStudentType = "new";
 
                     this.term_type = data.data.data.term_type;
                     this.school_years = data.data.data.sy;
