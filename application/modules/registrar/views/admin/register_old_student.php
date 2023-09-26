@@ -195,7 +195,7 @@ new Vue({
                         this.scholarship.intID = 0;
 
                     this.request.enumScholarship = this.scholarship.intID;
-                    this.prev_registration = data.data.prev_reg;
+                    this.prev_registration = data.data.data.prev_reg;
                     if(this.prev_registration){
                         if(this.prev_registration.shifted_program)
                             this.request.enumStudentType = "shiftee";
