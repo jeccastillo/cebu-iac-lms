@@ -19,7 +19,7 @@
                                 <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
                         </div>                        
-                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ payee.firstname+' '+payee.lastname }}</h3>                                            
+                        <h3 v-if="payee" class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ payee.firstname+' '+payee.lastname }}</h3>                                            
                     
                     </div>                
                 </div>                            
