@@ -16,6 +16,7 @@
                 <!-- Add the bg color to the header using any of the bg-* classes -->                
                 <div class="box-footer no-padding">
                     <ul class="nav nav-stacked">
+                    <li><a href="#" style="font-size:13px;">Student Name <span class="pull-right text-blue">{{ student.strFirstname + ' ' + student.strLastname + ' ' + student.strMiddlename }}</span></a></li>
                         <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
                         <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>                            
                     </ul>
