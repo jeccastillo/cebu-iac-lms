@@ -1179,7 +1179,7 @@ class Registrar extends CI_Controller {
                                 ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
                                 ->where(array('intStudentID'=>$id,'intAYID'=>$sem))                                
                                 ->get('tb_mas_registration')
-                                ->first_row();
+                                ->first_row('array');
 
         $data['shifted'] = $this->db->select('strProgramCode,strProgramDescription,tb_mas_curriculum.strName')
                                 ->join('tb_mas_curriculum','tb_mas_registration.shifted_curriculum = tb_mas_curriculum.intID')
