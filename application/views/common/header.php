@@ -440,6 +440,10 @@
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/view_all_students"><i class="ion ion-cash"></i>
                                 <span>Payments</span> </a></li>
+                        <li class="<?php echo (isset($page) && $page=="view_payees_cashier")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/view_payees_cashier"><i class="fa fa-users"></i>
+                                <span>NS Payees</span> </a></li>                                
+                                
                         <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i>
                                 <span>Collection Report</span></a></li>

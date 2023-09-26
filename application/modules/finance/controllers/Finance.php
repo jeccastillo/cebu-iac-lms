@@ -159,13 +159,30 @@ class Finance extends CI_Controller {
 
     public function view_payees(){
         
-        $this->data['page'] = "payee_setup";
-        $this->data['opentree'] = "finance_admin";
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($userlevel == 2 || ($userlevel == 6 && $role == 2)){
+            $this->data['page'] = "payee_setup";
+            $this->data['opentree'] = "finance_admin";
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("view_payees",$this->data);
+            $this->load->view("common/footer",$this->data);
+            $this->load->view("common/payee_conf",$this->data);
+        }
+
+    }
+
+    public function view_payees_cashier(){
+        
+        $this->data['page'] = "view_payees_cashier";
+        $this->data['opentree'] = "cashier";
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("view_payees",$this->data);
+        $this->load->view("payees_cashier_view",$this->data);
         $this->load->view("common/footer",$this->data);
-        $this->load->view("common/payee_conf",$this->data);
+        $this->load->view("common/payee_conf2",$this->data);
 
     }
 
