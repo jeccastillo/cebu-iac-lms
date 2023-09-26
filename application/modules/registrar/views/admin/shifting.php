@@ -27,10 +27,7 @@
             </div>
             <div class="box box-primary">
                 <div class="box-header">
-                    <h4>Shift Course</h4>
-                    <div class="pull-right" v-if="shifted">
-                        <button class="btn btn-danger" @click="revertShifting">Revert Shifting</button>
-                    </div>
+                    <h4>Shift Course</h4>                    
                 </div>
                 <form method="post" @submit.prevent="submitShifting">
                     <div class="box-body">
@@ -51,6 +48,7 @@
                     </div>
                     <div class="box-footer">
                         <button class="btn btn-primary" type="submit">Submit</button>
+                        <button v-if="shifted" class="btn btn-danger" @click="revertShifting">Revert Shifting</button>
                     </div>
                 </form>
             </div>
