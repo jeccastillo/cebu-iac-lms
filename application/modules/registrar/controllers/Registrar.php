@@ -1221,17 +1221,17 @@ class Registrar extends CI_Controller {
     function revert_shift_student(){
         $post = $this->input->post();
         $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID'=>$post['intRegistrationID']))->first_row('array');
-        if($this->db->where('intRegistrationID',$post['intRegistrationID'])->update('tb_mas_registration',$post)){            
-            $shift['intProgramID'] = $registration['current_program'];
-            $shift['intCurriculumID'] = $registration['current_curriculum'];
-            $this->db->where('intID',$post['intStudentID'])->update('tb_mas_users',$shift);
-            $data['success'] = true;
-            $data['message'] = "Successfully Reverted Shift";
-        }
-        else{
-            $data['success'] = false;
-            $data['message'] = "Failed";
-        }
+        
+        $this->db->where('intRegistrationID',$post['intRegistrationID'])
+                 ->update('tb_mas_registration',array('shifted_program'=>NULL,'shifted_curriculum'=>NULL));
+        
+        $shift['intProgramID'] = $registration['current_program'];
+        $shift['intCurriculumID'] = $registration['current_curriculum'];
+        $this->db->where('intID',$post['intStudentID'])->update('tb_mas_users',$shift);
+        $data['success'] = true;
+        $data['message'] = "Successfully Reverted Shift";
+        
+        
 
         echo json_encode($data);
     }
