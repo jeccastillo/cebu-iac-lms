@@ -145,7 +145,7 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
-                this.payee = data.data.payee;                                       
+                this.payee = data.data.payee;                                                      
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
                     this.request.cashier_id = this.cashier.user_id;                    
@@ -180,9 +180,9 @@ new Vue({
                         this.or_print.total_amount_due = payment.subtotal_order;
                         this.or_print.transaction_date = payment.updated_at;
                         this.or_print.remarks = payment.remarks;
-                        this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
-                        this.or_print.student_address = this.student.address;
-                        this.or_print.student_id = this.applicant_id;
+                        this.or_print.student_name =  this.payee.lastname+", "+this.payee.firstname+", "+this.payee.middlename;    
+                        this.or_print.student_address = this.payee.address;
+                        this.or_print.student_id = 0;
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;
