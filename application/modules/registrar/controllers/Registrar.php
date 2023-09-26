@@ -1164,6 +1164,23 @@ class Registrar extends CI_Controller {
         $this->load->view("common/footer",$this->data);            
     }
 
+    function shifting($id,$sem){
+        $this->data['page'] = "shifting";                
+        $this->data['sem'] = $sem;
+        $this->data['id'] = $id;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/shifting",$this->data);
+        $this->load->view("common/footer",$this->data);            
+    }
+
+    function shifting_data($id,$sem){
+        $data['registration'] = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem))->first_row();
+        $data['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$id))->first_row();
+        $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        echo json_encode($data);
+    }
+
     function get_registration_info($slug){
 
         $sem = $this->data_fetcher->get_active_sem();
