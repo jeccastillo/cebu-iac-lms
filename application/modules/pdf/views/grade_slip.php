@@ -60,10 +60,10 @@
                     <td width="20%">             
                         <font style="font-size: 8;">Student Number:</font>
                     </td>
-                    <td width="40%">             
+                    <td width="30%">             
                         <font style="font-size: 8;">Student Name:</font>
                     </td>
-                    <td width="40%">             
+                    <td width="50%">             
                         <font style="font-size: 8;">Course:</font>
                     </td>
                 </tr>
