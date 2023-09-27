@@ -111,13 +111,17 @@
                                             </tr>
                                             <tr>                                               
                                                 <th>Subject Code</th>
-                                                <th>Description</th>                                            
+                                                <th>Description</th> 
+                                                <th>Grade</th>
+                                                <th>Remarks</th>                                           
                                             </tr>
                                         </thead>
                                         <tbody>                                          
                                             <tr v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
-                                                <td>{{ item.strDescription }}</td>                                                                                                                                    
+                                                <td>{{ item.strDescription }}</td>   
+                                                <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
+                                                <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>                                                                                                                                 
                                             </tr>                                        
                                         </tbody>
                                     </table>
