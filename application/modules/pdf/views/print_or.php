@@ -128,8 +128,8 @@
             <?php
                 $text = $student_address;
 
-                $splitstring1 = substr($text, 0, 30);
-                $splitstring2 = substr($text, 30);
+                $splitstring1 = substr($text, 0, 40);
+                $splitstring2 = substr($text, 40);
                 
                 if (substr($splitstring1, 0, -1) != ' ' AND substr($splitstring2, 0, 1) != ' ')
                 {
@@ -137,7 +137,7 @@
                 }
                 else
                 {
-                    $middle = strrpos(substr($text, 0, 30), ' ') + 1;    
+                    $middle = strrpos(substr($text, 0, 40), ' ') + 1;    
                 }
                 
                 $string1 = substr($text, 0, $middle);  // "The Quick : Brown Fox Jumped "
