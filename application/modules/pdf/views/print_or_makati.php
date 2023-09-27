@@ -4,8 +4,8 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:38px;">
-        <td style=""><?php //echo $or_number; ?></td>
+    <tr style="line-height:38px;text-align:right">
+        <td style=""><?php echo $or_number; ?></td>
     </tr>
 </table>
 <table>
