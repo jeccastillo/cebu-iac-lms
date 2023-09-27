@@ -178,7 +178,7 @@
                         <button type="button" onclick="window.history.back()"
                             class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
                             name="button">Cancel</button>
-                        <a :href="redirect_link" style="opacity:0" target="_blank"
+                        <a :href="redirect_link" style="opacity:0"
                             id="payment_link">{{ redirect_link }}</a>
                     </div>
                 </div>
