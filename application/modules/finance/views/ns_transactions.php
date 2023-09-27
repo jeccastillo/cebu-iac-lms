@@ -126,7 +126,8 @@ new Vue({
             remarks: undefined,
             is_cash: undefined,
             cashier_id: undefined,
-            check_number: undefined,            
+            check_number: undefined,    
+            payee_id: "<?php echo $payee_id; ?>",        
         },
              
     },

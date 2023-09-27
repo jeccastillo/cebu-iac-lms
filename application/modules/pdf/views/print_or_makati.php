@@ -168,8 +168,8 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:17px;">
-                    <td style=""></td>
+                <tr style="line-height:15px;">
+                    <td style=""><?php echo $tin; ?></td>
                 </tr>
             </table>
             <table >
