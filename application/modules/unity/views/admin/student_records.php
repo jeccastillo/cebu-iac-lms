@@ -101,7 +101,43 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
-                        Tab 2
+                        <div v-for="item in curriculum_subjects" class="box box-success">                            
+                            <div class="box-body">
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Term</th>
+                                            <th>Subject Code</th>
+                                            <th>Description</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                          
+                                        <tr v-for="record in term.records" style="font-size: 13px;">
+                                            <td>{{ record.intYearLevel }}</td>
+                                            <td>{{ record.intSem }}</td>
+                                            <td>{{ record.strCode }}</td>
+                                            <td>{{ record.strDescription }}</td>
+                                            
+                                                                                        
+                                        </tr>
+                                        <tr style="font-size: 13px;">
+                                            <td></td>
+                                            <td align="right"><strong>Units Earned for Term:</strong></td>
+                                            <td>{{ term.units_earned }}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                        <tr style="font-size: 11px;">
+                                            <td></td>
+                                            <td align="right"><strong>Term GWA:</strong></td>
+                                            <td>{{ term.gwa }}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -135,6 +171,7 @@ new Vue({
         student:undefined,         
         records: [],         
         gwa: undefined,
+        curriculum_subjects: [],
         units: undefined,
     },
 
@@ -146,7 +183,8 @@ new Vue({
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
                     this.student = data.data.student;
-                    this.records = data.data.data;         
+                    this.records = data.data.data;        
+                    this.curriculum_subjects = data.data.curriculum_subjects; 
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;   
                 })
