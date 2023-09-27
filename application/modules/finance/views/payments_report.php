@@ -74,9 +74,7 @@
 <form id="print_or" method="post" action="<?php echo base_url(); ?>pdf/print_or" target="_blank">
     <input type="hidden" id="student_name" name="student_name" />
     <input type="hidden" id="campus" name="campus">
-    <input type="hidden" id="cashier_id" name="cashier_id" />
-    <input type="hidden" id="student_id" name="student_id" />
-    <input type="hidden" id="student_address" name="student_address" />
+    <input type="hidden" id="cashier_id" name="cashier_id" />        
     <input type="hidden" id="is_cash" name="is_cash" />
     <input type="hidden" id="check_number" name="check_number" />
     <input type="hidden" id="or_number" name="or_number" />

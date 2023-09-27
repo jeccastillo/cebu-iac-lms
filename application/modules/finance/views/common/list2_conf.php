@@ -118,21 +118,22 @@ $(document).ready(function() {
                         +'<li><a href="<?php echo base_url(); ?>finance/remove_or_print/'
                         + row.or_number
                         +'">Delete OR Print</a></li>'
-                        +'<li><a href="#" class="print-or" data-student-name="'
-                        + row.student_name.toUpperCase() +'" '
-                        +'data-slug = " " '
-                        +'data-cashier-id = "'+ row.cashier_id +'" '
-                        +'data-campus ="' + row.campus +'" '
-                        +'data-or-number = "'+ row.or_number +'" '
-                        +'data-description = "'+ row.description +'" '
-                        +'data-total-amount-due = "'+ row.total_amount_due +'" '
-                        +'data-transaction-date = "'+ row.updated_at +'" '
-                        +'data-remarks = "'+ row.remarks +'" '                        
-                        +'data-student-id = '+ row.applicant_id +'" '
-                        +'data-student-address = '+ row.student_address +'" '                                                
-                        +'data-is-cash = "'+ row.is_cash +'" '
-                        +'data-check-number = "'+ row.check_number +'" '
-                        +'">Print OR</a></li></ul></div>';
+                        // +'<li><a href="#" class="print-or" data-student-name="'
+                        // + row.student_name.toUpperCase() +'" '
+                        // +'data-slug = " " '
+                        // +'data-cashier-id = "'+ row.cashier_id +'" '
+                        // +'data-campus ="' + row.campus +'" '
+                        // +'data-or-number = "'+ row.or_number +'" '
+                        // +'data-description = "'+ row.description +'" '
+                        // +'data-total-amount-due = "'+ row.total_amount_due +'" '
+                        // +'data-transaction-date = "'+ row.updated_at +'" '
+                        // +'data-remarks = "'+ row.remarks +'" '                        
+                        // +'data-student-id = '+ row.applicant_id +'" '
+                        // +'data-student-address = '+ row.student_address +'" '                                                
+                        // +'data-is-cash = "'+ row.is_cash +'" '
+                        // +'data-check-number = "'+ row.check_number +'" '
+                        // +'">Print OR</a></li>'
+                        +'</ul></div>';
                 }
             },           
             {
