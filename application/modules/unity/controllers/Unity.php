@@ -1001,14 +1001,20 @@ class Unity extends CI_Controller {
             $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
             
             if($sem!=null){
-                 $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+                 $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
             }
             else
             {
-                $ret['active_sem'] = $this->data_fetcher->get_active_sem();
-                
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
             }
             
+            $data['change_grade'] = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode')
+                                             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
+                                             ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                                             ->where(array('tb_mas_student_grade_change.student_id'=>$id,'strAcademicYear'=>$ret['active_sem']['intID']))
+                                             ->get('tb_mas_student_grade_change')
+                                             ->result_array();
+                                             
             $ret['selected_ay'] = $ret['active_sem']['intID'];
             
         
@@ -1948,7 +1954,7 @@ class Unity extends CI_Controller {
         $data['active_sem'] = $active_sem;
 
         if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
-        {
+        {            
             
             $data['classlist'] = $clist;
             
