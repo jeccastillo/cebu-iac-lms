@@ -923,6 +923,8 @@ class Unity extends CI_Controller {
                                   ->get('tb_mas_registration')
                                   ->result_array();
 
+        $data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
+
         $terms = [];
         $total_units_earned = 0;
         $total_units_gwa = 0;
