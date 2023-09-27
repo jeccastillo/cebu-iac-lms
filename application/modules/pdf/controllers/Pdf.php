@@ -1827,8 +1827,8 @@ class Pdf extends CI_Controller {
 
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         
-        if(isset($post['payee_id']))
-            $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$post['payee_id']))->first_row('array');
+        if(isset($request['payee_id']))
+            $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$request['payee_id']))->first_row('array');
         else
             $payee = null;
                 
