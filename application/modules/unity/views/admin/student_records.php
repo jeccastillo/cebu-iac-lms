@@ -101,28 +101,33 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
-                        <div class="box box-success">                            
+                        <!-- <div class="box box-success">                            
                             <div class="box-body">
-                                <table class="table table-condensed table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Year</th>
-                                            <th>Term</th>
-                                            <th>Subject Code</th>
-                                            <th>Description</th>                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>                                          
-                                        <tr v-for="record in curriculum_subjects" style="font-size: 13px;">
-                                            <td>{{ stringifyNumber(record.intYearLevel) }}</td>
-                                            <td>{{ stringifyNumber(record.intSem) }}</td>
-                                            <td>{{ record.strCode }}</td>
-                                            <td>{{ record.strDescription }}</td>                                                                                                                                    
-                                        </tr>                                        
-                                    </tbody>
-                                </table>
+                                <div v-for="record in curriculum_subjects">
+                                    <table v-for="term in record" class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"></th>
+                                            </tr>
+                                            <tr>
+                                                <th>Year</th>
+                                                <th>Term</th>
+                                                <th>Subject Code</th>
+                                                <th>Description</th>                                            
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                          
+                                            <tr  style="font-size: 13px;">
+                                                <td>{{ stringifyNumber(record.intYearLevel) }}</td>
+                                                <td>{{ stringifyNumber(record.intSem) }}</td>
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strDescription }}</td>                                                                                                                                    
+                                            </tr>                                        
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div> 
+                        </div>  -->
                     </div>
                 </div>
             </div>
