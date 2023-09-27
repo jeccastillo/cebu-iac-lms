@@ -157,7 +157,7 @@
                 </tr>
             </table> -->
             <table >
-                <tr style="line-height:15px;">                    
+                <tr style="line-height:12px;">                    
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">TIN &nbsp;</span>
                         <?php echo $tin; ?>
