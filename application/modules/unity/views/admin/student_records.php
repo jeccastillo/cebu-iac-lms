@@ -123,7 +123,9 @@
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
                                                 <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>
-                                                <td>{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>                                                                                                                                 
+                                                <td v-if="item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
+                                                <td v-else>{{ (item.rec && item.rec.strRemarks == 'Passed')?'('+item.rec.strUnits+')':'---' }}</td>
+                                                <td></td>                                                                                                                                 
                                             </tr>                                                                                    
                                         </tbody>
                                     </table>
