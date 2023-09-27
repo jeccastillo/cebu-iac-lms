@@ -68,7 +68,7 @@
                                                 </span>
                                             </td>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
-                                            <td>{{ record.facultyName }}</td>
+                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>
                                                                                         
                                         </tr>
                                         <tr style="font-size: 13px;">
