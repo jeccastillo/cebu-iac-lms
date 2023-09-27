@@ -930,7 +930,7 @@ class Unity extends CI_Controller {
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
                      ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')  
-                     ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
+                     ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
                      ->get('tb_mas_classlist_student')
                      ->first_row();
                      
