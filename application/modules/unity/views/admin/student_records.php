@@ -117,7 +117,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr v-for="item in term.records" style="font-size: 13px;">                                                
+                                            <tr :style="item.rec?'background-color:#000099;':''" v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
