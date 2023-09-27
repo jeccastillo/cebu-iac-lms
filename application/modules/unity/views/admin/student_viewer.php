@@ -84,9 +84,11 @@
                     <ul class="nav nav-tabs">
                         <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
                         <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
+                        <li v-if="reg_status == 'Enrolled'" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_2" data-toggle="tab"><a href="#tab_3">Grade Changes</a></li>                        
                         <!-- <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                         -->
                         <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
-                        <li v-if="advanced_privilages2"><a :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a></li>                        
+                        <li v-if="advanced_privilages2"><a :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a></li>
+                        
                         <!-- <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li> -->
                         <!-- <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                     -->
                     </ul>
@@ -216,6 +218,34 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="reg_status == 'Enrolled'" :class="[(tab == 'tab_3') ? 'active' : '']" class="tab-pane" id="tab_3">
+                            <div class="box box-primary">
+                                <div class="box-body">                                    
+                                    <table class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Section</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Date Changed</th>
+                                                <th>Changed By</th>                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                          
+                                            <tr v-for="record in change_grade" style="font-size: 13px;">
+                                                <td>{{ record.strCode }}</td>
+                                                <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>                                                
+                                                <td>{{ record.from_grade }}</td>
+                                                <td>{{ record.to_grade }}</td>
+                                                <td>{{ record.date }}</td>                                                
+                                                <td>{{ record.changed_by }}</td>                                                     
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>                                                                       
+                                </div>
+                            </div>
+                        </div>
                         <div v-if="registration" :class="[(tab == 'tab_5') ? 'active' : '']" class="tab-pane" id="tab_5">
                             <div class="box box-primary">
                                 <div class="box-body">
@@ -332,7 +362,8 @@ new Vue({
         selected_ay: undefined,
         base_url: '<?php echo base_url(); ?>',   
         registration_status: 0,                   
-        loader_spinner: true,           
+        loader_spinner: true,  
+        change_grade: [],         
         total_units: 0,
         picture: undefined,
         lab_units: 0,    
@@ -368,6 +399,7 @@ new Vue({
                         else{
                             this.discount = {name:'none'};
                         }                               
+                        this.change_grade = data.data.change_grade;
                         this.deficiencies = data.data.deficiencies;
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;                        
