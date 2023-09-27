@@ -129,7 +129,7 @@ $(document).ready(function() {
                         +'data-transaction-date = "'+ row.updated_at +'" '
                         +'data-remarks = "'+ row.remarks +'" '                        
                         +'data-student-id = '+ row.applicant_id +'" '
-                        +'data-student-address = " " '                                                
+                        +'data-student-address = '+ row.student_address +'" '                                                
                         +'data-is-cash = "'+ row.is_cash +'" '
                         +'data-check-number = "'+ row.check_number +'" '
                         +'">Print OR</a></li></ul></div>';
