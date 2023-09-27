@@ -925,6 +925,10 @@ class Unity extends CI_Controller {
 
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
         $data['curriculum_subjects'] = [];
+        
+        $assessment_sum = 0;
+        $assessment_units = 0;
+        
         foreach($curicculum as $cs){
             $cs['rec'] = 
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa')
@@ -933,10 +937,20 @@ class Unity extends CI_Controller {
                      ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
                      ->get('tb_mas_classlist_student')
                      ->first_row();
+
+            if($cs['include_gwa']){
+                $assessment_units += $cs['rec']['strUnits'];   
+                $assessment_sum += $cs['rec']['floatFinalGrade'] * $cs['rec']['strUnits'];         
+            }
                      
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['sem'] = $cs['intSem'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['records'][] = $cs;
+        }
+        $assessment_gwa = 0;
+        if($assessment_units > 0){
+            $assessment_gwa = $assessment_sum/$assessment_units;
+            $assessment_gwa = round($assessment_gwa,2);
         }
 
         $terms = [];
@@ -977,6 +991,8 @@ class Unity extends CI_Controller {
         }
 
         $data['gwa'] = $gwa;
+        $data['assessment_gwa'] = $assessment_gwa;
+        $data['assessment_units'] = $assessment_units;
         $data['total_units_earned'] = $total_units_earned;
         $data['data'] = $terms;
 

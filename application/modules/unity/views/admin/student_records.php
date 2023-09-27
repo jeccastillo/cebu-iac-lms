@@ -122,13 +122,31 @@
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
                                                 <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>                                                                                                                                 
-                                            </tr>                                        
+                                            </tr>                                                                                    
                                         </tbody>
                                     </table>
                                     <hr />
                                 </div>
                             </div>
                         </div> 
+                        <div class="box box-success">                
+                            <div class="box-footer">
+                                <div class="row" style="font-weight:bold;">
+                                    <div class="col-sm-3 text-right">
+                                        Total Units Earned:
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ assessment_units }}
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        GWA
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ assessment_gwa }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -171,6 +189,8 @@ new Vue({
         gwa: undefined,
         curriculum_subjects: [],
         units: undefined,
+        assessment_gwa: undefined,  
+        assessment_units: undefined,      
     },
 
     mounted() {
@@ -184,7 +204,9 @@ new Vue({
                     this.records = data.data.data;        
                     this.curriculum_subjects = data.data.curriculum_subjects; 
                     this.gwa = data.data.gwa;
-                    this.units = data.data.total_units_earned;   
+                    this.units = data.data.total_units_earned;  
+                    this.assessment_gwa = data.data.assessment_gwa; 
+                    this.assessment_units = data.data.assessment_units;
                 })
                 .catch((error) => {
                     console.log(error);
