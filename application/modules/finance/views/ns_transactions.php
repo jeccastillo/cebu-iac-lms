@@ -84,6 +84,7 @@
             <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
             <input type="hidden" name="name" v-model="or_print.student_name" />       
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
+            <input type="hidden" name="payee_id" v-model="or_print.payee_id" />   
         </form>        
     </div><!---vue container--->
 </aside>
@@ -193,7 +194,7 @@ new Vue({
                         this.or_print.student_id = '';
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
-                        this.or_print.cashier_id = payment.cashier_id;
+                        this.or_print.cashier_id = payment.cashier_id;                        
                         this.$nextTick(() => {
                             this.$refs.print_or.submit();
                         });            
