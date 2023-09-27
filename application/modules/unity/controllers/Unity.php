@@ -928,7 +928,7 @@ class Unity extends CI_Controller {
         foreach($curicculum as $cs){
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']] = $cs['intYearLevel'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']] = $cs['intSem'];
-            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']][] = $cs;
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['records'][] = $cs;
         }
 
         $terms = [];

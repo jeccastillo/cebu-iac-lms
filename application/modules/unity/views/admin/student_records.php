@@ -115,7 +115,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr v-for="item in term" style="font-size: 13px;">                                                
+                                            <tr v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>                                                                                                                                    
                                             </tr>                                        
