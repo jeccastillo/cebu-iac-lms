@@ -101,33 +101,29 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
-                        <!-- <div class="box box-success">                            
+                        <div class="box box-success">                            
                             <div class="box-body">
                                 <div v-for="record in curriculum_subjects">
                                     <table v-for="term in record" class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
-                                                <th colspan="2"></th>
+                                                <th colspan="2">{{ stringifyNumber(term.intYearLevel) + ' Year ' + stringifyNumber(term.intSem) + ' Term' }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Year</th>
-                                                <th>Term</th>
+                                            <tr>                                               
                                                 <th>Subject Code</th>
                                                 <th>Description</th>                                            
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr  style="font-size: 13px;">
-                                                <td>{{ stringifyNumber(record.intYearLevel) }}</td>
-                                                <td>{{ stringifyNumber(record.intSem) }}</td>
-                                                <td>{{ record.strCode }}</td>
-                                                <td>{{ record.strDescription }}</td>                                                                                                                                    
+                                            <tr v-for="item in term" style="font-size: 13px;">                                                
+                                                <td>{{ item.strCode }}</td>
+                                                <td>{{ item.strDescription }}</td>                                                                                                                                    
                                             </tr>                                        
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>  -->
+                        </div> 
                     </div>
                 </div>
             </div>
