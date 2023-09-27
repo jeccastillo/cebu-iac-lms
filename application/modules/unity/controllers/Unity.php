@@ -1934,7 +1934,7 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function classlist_viewer_data($id,$showAll = 0){
+    public function classlist_viewer_data($id,$showAll = 0, $sid){
 
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $clist_sy_id = $clist['strAcademicYear'];
@@ -2001,7 +2001,7 @@ class Unity extends CI_Controller {
             else
                 $data['showall'] = false;
 
-            $students = $this->data_fetcher->getClassListStudents($id);
+            $students = $this->data_fetcher->getClassListStudents($id,$sid);
             
 
             $data['subject'] = $this->data_fetcher->getSubjectNoCurr($data['classlist']['intSubjectID']);
@@ -2075,11 +2075,12 @@ class Unity extends CI_Controller {
 
     }
 
-    public function classlist_viewer($id,$showAll = 0)
+    public function classlist_viewer($id,$showAll = 0, $student = 0)
     {
 
         
         $this->data['id'] = $id;
+        $this->data['student'] = $student;
         $this->data['showAll'] = $showAll;
         $this->load->view("common/header",$this->data);
         $this->load->view("faculty/classlist_viewer_v",$this->data);
