@@ -117,23 +117,8 @@
                                             <td>{{ record.intYearLevel }}</td>
                                             <td>{{ record.intSem }}</td>
                                             <td>{{ record.strCode }}</td>
-                                            <td>{{ record.strDescription }}</td>
-                                            
-                                                                                        
-                                        </tr>
-                                        <tr style="font-size: 13px;">
-                                            <td></td>
-                                            <td align="right"><strong>Units Earned for Term:</strong></td>
-                                            <td>{{ term.units_earned }}</td>
-                                            <td colspan="3"></td>
-                                        </tr>
-                                        <tr style="font-size: 11px;">
-                                            <td></td>
-                                            <td align="right"><strong>Term GWA:</strong></td>
-                                            <td>{{ term.gwa }}</td>
-                                            <td colspan="3"></td>
-                                        </tr>
-
+                                            <td>{{ record.strDescription }}</td>                                                                                                                                    
+                                        </tr>                                        
                                     </tbody>
                                 </table>
                             </div>
