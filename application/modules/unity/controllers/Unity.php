@@ -938,7 +938,7 @@ class Unity extends CI_Controller {
                      ->get('tb_mas_classlist_student')
                      ->first_row();
 
-            if($cs['rec'] && $cs['include_gwa']){
+            if($cs['rec'] && $cs['rec']['include_gwa']){
                 $assessment_units += $cs['rec']['strUnits'];   
                 $assessment_sum += $cs['rec']['floatFinalGrade'] * $cs['rec']['strUnits'];         
             }
