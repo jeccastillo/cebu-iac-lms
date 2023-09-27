@@ -107,13 +107,14 @@
                                     <table v-for="term in record" class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
-                                                <th colspan="4">{{ stringifyNumber(term.year) + ' Year ' + stringifyNumber(term.sem) + ' Term' }}</th>
+                                                <th colspan="5">{{ stringifyNumber(term.year) + ' Year ' + stringifyNumber(term.sem) + ' Term' }}</th>
                                             </tr>
                                             <tr>                                               
                                                 <th>Subject Code</th>
                                                 <th>Description</th> 
-                                                <th>Grade</th>
+                                                <th>Grade</th>                                                
                                                 <th>Remarks</th>                                           
+                                                <th>Units Earned</th>
                                             </tr>
                                         </thead>
                                         <tbody>                                          
@@ -121,7 +122,8 @@
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
-                                                <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>                                                                                                                                 
+                                                <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>
+                                                <td>{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>                                                                                                                                 
                                             </tr>                                                                                    
                                         </tbody>
                                     </table>
