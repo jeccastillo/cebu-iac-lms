@@ -28,7 +28,7 @@
                     </h3>                    
                 </div>
                 <div class="box-body">
-                    <table class="table table-striped">                        
+                    <table class="table table-bordered">                        
                         <thead>
                             <tr>
                                 <th v-if="is_super_admin"></th>                        
