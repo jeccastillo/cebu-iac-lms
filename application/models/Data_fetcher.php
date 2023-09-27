@@ -2950,13 +2950,9 @@ class Data_fetcher extends CI_Model {
                      ->result_array());
     }
     
-    function getClassListStudents($id,$sem = 0,$sid =0)
+    function getClassListStudents($id,$sem = 0)
     {
         $faculty_id = $this->session->userdata("intID");
-        
-
-        if($sid != 0)
-            $where["tb_mas_classlist_student.intStudentID"] = $sid;
         
         if($sem == 0){
             $where["intClassListID"] = $id;
