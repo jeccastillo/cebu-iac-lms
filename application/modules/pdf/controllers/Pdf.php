@@ -1794,10 +1794,10 @@ class Pdf extends CI_Controller {
                         ->get('tb_mas_printed_or')
                         ->first_row();
 
-        if($printed){
-            echo "This OR has already been printed";
-            return;
-        }
+        // if($printed){
+        //     echo "This OR has already been printed";
+        //     return;
+        // }
         
                 
         tcpdf();
