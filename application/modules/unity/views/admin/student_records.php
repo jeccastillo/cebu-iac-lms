@@ -34,7 +34,7 @@
                     <li><a href="#tab_2" data-toggle="tab">Assessment</a></li>                        
                 </ul>
                 <div class="tab-content">
-                    <div class="active" class="tab-pane" id="tab_1">
+                    <div class="tab-pane active" id="tab_1">
                         <div v-for="term in records" class="box box-success">
                             <div class="box-header">
                                 <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
