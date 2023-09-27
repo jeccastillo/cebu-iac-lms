@@ -101,6 +101,7 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
+                        Tab 2
                     </div>
                 </div>
             </div>
