@@ -53,14 +53,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>                                          
-                                        <tr v-for="record in term.records" style="font-size: 13px;">
+                                        <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
                                             <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                             <td>{{ record.strCode }}</td>
                                             <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
                                             <td v-else>({{ record.strUnits }})</td>
-                                            <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
-                                            <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
-                                            <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
+                                            <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                            <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                                                <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                    {{ record.v3 }}
+                                                </span>
+                                                <span v-else>
+                                                    NGS
+                                                </span>
+                                            </td>
+                                            <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.facultyName }}</td>
                                                                                         
                                         </tr>
