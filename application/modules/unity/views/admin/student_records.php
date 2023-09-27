@@ -101,7 +101,7 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
-                        <div v-for="item in curriculum_subjects" class="box box-success">                            
+                        <div class="box box-success">                            
                             <div class="box-body">
                                 <table class="table table-condensed table-bordered">
                                     <thead>
@@ -113,7 +113,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>                                          
-                                        <tr v-for="record in term.records" style="font-size: 13px;">
+                                        <tr v-for="record in curriculum_subjects" style="font-size: 13px;">
                                             <td>{{ record.intYearLevel }}</td>
                                             <td>{{ record.intSem }}</td>
                                             <td>{{ record.strCode }}</td>
