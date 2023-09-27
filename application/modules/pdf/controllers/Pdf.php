@@ -1850,7 +1850,10 @@ class Pdf extends CI_Controller {
         $this->data['tin'] = $payee?$payee['tin']:'';
         $pdf->SetTextColor(0,0,0);
 
-        if($this->data['campus'] == "Cebu")
+
+        if(isset($payee))
+            $html = $this->load->view("print_or_ns_payment",$this->data,true);
+        elseif($this->data['campus'] == "Cebu")
             $html = $this->load->view("print_or",$this->data,true);
         else            
             $html = $this->load->view("print_or_makati",$this->data,true);

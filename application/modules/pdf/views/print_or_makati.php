@@ -163,11 +163,13 @@
                 </tr>
             </table> -->
             <table >
-                <tr style="line-height:18px;">                    
-                    <td style="font-size:10px;text-align:left;">
-                        <span style="color:#fff;">TIN &nbsp;</span>
-                        <?php echo $tin; ?>
-                    </td>
+                <tr style="line-height:5px;">                    
+                    <td style="font-size:10px;text-align:left;"></td>
+                </tr>
+            </table>
+            <table >
+                <tr style="line-height:17px;">
+                    <td style=""></td>
                 </tr>
             </table>
             <table >
