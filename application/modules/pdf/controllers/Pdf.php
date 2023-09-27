@@ -1847,7 +1847,7 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  $request['transaction_date'];          
-        $this->data['tin'] = $payee?$payee->tin:'';
+        $this->data['tin'] = $payee?$payee['tin']:'';
         $pdf->SetTextColor(0,0,0);
 
         if($this->data['campus'] == "Cebu")
