@@ -128,8 +128,8 @@
             <?php
                 $text = $student_address;
 
-                $splitstring1 = substr($text, 0, 20);
-                $splitstring2 = substr($text, 20 / 2);
+                $splitstring1 = substr($text, 0, 30);
+                $splitstring2 = substr($text, 30);
                 
                 if (substr($splitstring1, 0, -1) != ' ' AND substr($splitstring2, 0, 1) != ' ')
                 {
@@ -137,7 +137,7 @@
                 }
                 else
                 {
-                    $middle = strrpos(substr($text, 0, 20), ' ') + 1;    
+                    $middle = strrpos(substr($text, 0, 30), ' ') + 1;    
                 }
                 
                 $string1 = substr($text, 0, $middle);  // "The Quick : Brown Fox Jumped "
@@ -146,9 +146,9 @@
             <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;">
-                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
-                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
-                </td>
+                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
+                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
+                    </td>
                 </tr>
             </table>
             <!-- <table >
