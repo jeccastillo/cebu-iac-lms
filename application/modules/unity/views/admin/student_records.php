@@ -107,7 +107,7 @@
                                     <table v-for="term in record" class="table table-condensed table-bordered">
                                         <thead>
                                             <tr>
-                                                <th colspan="2">{{ stringifyNumber(term.year) + ' Year ' + stringifyNumber(term.sem) + ' Term' }}</th>
+                                                <th colspan="4">{{ stringifyNumber(term.year) + ' Year ' + stringifyNumber(term.sem) + ' Term' }}</th>
                                             </tr>
                                             <tr>                                               
                                                 <th>Subject Code</th>
