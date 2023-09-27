@@ -1843,12 +1843,12 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  $request['transaction_date'];          
         
+        $pdf->SetTextColor(0,0,0);
         if($this->data['campus'] == "Cebu")
             $html = $this->load->view("print_or",$this->data,true);
-        else{            
-            $pdf->SetTextColor(0,0,0);
+        else            
             $html = $this->load->view("print_or_makati",$this->data,true);
-        }
+        
         //$html = $pdf->unhtmlentities($html);
 
         $this->data_poster->insert_or_print(
