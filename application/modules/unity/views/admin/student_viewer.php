@@ -184,7 +184,7 @@
                                         <tbody>                                          
                                             <tr v-for="record in records" style="font-size: 13px;">
                                                 <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
-                                                <td>{{ record.strCode }}</td>
+                                                <td><a :href="base_url + 'unity/classlist_viewer/' + record.classlistID">{{ record.strCode }}</a></td>
                                                 <td>{{ record.strUnits }}</td>
                                                 <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                                 <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
