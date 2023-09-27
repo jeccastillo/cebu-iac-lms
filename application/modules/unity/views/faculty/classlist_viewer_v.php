@@ -42,12 +42,12 @@
                             </tr>
                         </thead>
                         <tbody>                        
-                            <tr v-for="(student,index) in students" v-if="show_all || student.registered">                                    
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" v-if="is_super_admin"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
-                                <td :style="sid == student.intID?'background-color:#ccc;':''">{{ index + 1 }}</td>
-                                <td :style="sid == student.intID?'background-color:#ccc;':''"><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
-                                <td :style="sid == student.intID?'background-color:#ccc;':''">{{ student.strProgramCode }}</td>
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" v-if="student.registered">        
+                            <tr :style="sid == student.intID?'background-color:#ccc;':''" v-for="(student,index) in students" v-if="show_all || student.registered">                                    
+                                <td v-if="is_super_admin"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
+                                <td >{{ index + 1 }}</td>
+                                <td ><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
+                                <td >{{ student.strProgramCode }}</td>
+                                <td  v-if="student.registered">        
                                     <span v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin || classlist.intFinalized == 2">
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
@@ -58,8 +58,8 @@
                                         </option>                                        
                                     </select>                                    
                                 </td>                             
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" v-else></td>
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" v-if="student.registered">        
+                                <td  v-else></td>
+                                <td  v-if="student.registered">        
                                     <span v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 1 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end ))) && !is_super_admin">
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
@@ -70,9 +70,9 @@
                                         </option>                                        
                                     </select>                                    
                                 </td>                             
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" v-else></td>                                   
-                                <td :style="sid == student.intID?'background-color:#ccc;':''">{{ student.strRemarks }}</td>
-                                <td :style="sid == student.intID?'background-color:#ccc;':''" class="text-left">
+                                <td  v-else></td>                                   
+                                <td >{{ student.strRemarks }}</td>
+                                <td  class="text-left">
                                     {{ student.registered?'yes':'no' }}
                                 </td>
                             </tr>
