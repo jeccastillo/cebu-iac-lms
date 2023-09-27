@@ -84,7 +84,7 @@
                     <ul class="nav nav-tabs">
                         <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1" data-toggle="tab">Personal Information</a></li>
                         <li v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2" data-toggle="tab">Report of Grades</a></li>
-                        <li v-if="reg_status == 'Enrolled'" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_2" data-toggle="tab"><a href="#tab_3">Grade Changes</a></li>                        
+                        <li v-if="reg_status == 'Enrolled'" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Grade Changes</a></li>
                         <!-- <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                         -->
                         <li v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5" data-toggle="tab">Schedule</a></li>
                         <li v-if="advanced_privilages2"><a :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a></li>
