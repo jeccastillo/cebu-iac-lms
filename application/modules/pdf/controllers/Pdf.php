@@ -1831,6 +1831,9 @@ class Pdf extends CI_Controller {
             $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$request['payee_id']))->first_row('array');
         else
             $payee = null;
+
+        print_r($payee);
+        die();
                 
         $pdf->AddPage();        
         $this->data['student_name'] = strtoupper($request['student_name']);        
