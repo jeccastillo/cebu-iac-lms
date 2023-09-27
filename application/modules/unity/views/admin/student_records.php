@@ -114,8 +114,8 @@
                                     </thead>
                                     <tbody>                                          
                                         <tr v-for="record in curriculum_subjects" style="font-size: 13px;">
-                                            <td>{{ record.intYearLevel }}</td>
-                                            <td>{{ record.intSem }}</td>
+                                            <td>{{ stringifyNumber(record.intYearLevel) }}</td>
+                                            <td>{{ stringifyNumber(record.intSem) }}</td>
                                             <td>{{ record.strCode }}</td>
                                             <td>{{ record.strDescription }}</td>                                                                                                                                    
                                         </tr>                                        
@@ -140,6 +140,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
+var special = ['0th','1st', '2nd', '3rd', '4th', '5th'];
+
+function stringifyNumber(n) {
+  return special[n];
+  
+  
+}
 function inArray(needle, haystack) {
     var length = haystack.length;
     for(var i = 0; i < length; i++) {
