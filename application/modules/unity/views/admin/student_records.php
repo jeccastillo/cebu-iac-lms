@@ -28,70 +28,82 @@
             </div>                
         </div> 
         <div class="col-sm-12">
-            <div v-for="term in records" class="box box-success">
-                <div class="box-header">
-                    <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
-                </div>
-                <div class="box-body">
-                    <table class="table table-condensed table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Section Code</th>
-                                <th>Course Code</th>
-                                <th>Units</th>
-                                <th>Midterm</th>
-                                <th>Final</th>
-                                <th>Remarks</th>
-                                <th>Faculty</th>                                      
-                            </tr>
-                        </thead>
-                        <tbody>                                          
-                            <tr v-for="record in term.records" style="font-size: 13px;">
-                                <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
-                                <td>{{ record.strCode }}</td>
-                                <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
-                                <td v-else>({{ record.strUnits }})</td>
-                                <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
-                                <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
-                                <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
-                                <td>{{ record.facultyName }}</td>
-                                                                               
-                            </tr>
-                            <tr style="font-size: 13px;">
-                                <td></td>
-                                <td align="right"><strong>Units Earned for Term:</strong></td>
-                                <td>{{ term.units_earned }}</td>
-                                <td colspan="3"></td>
-                            </tr>
-                            <tr style="font-size: 11px;">
-                                <td></td>
-                                <td align="right"><strong>Term GWA:</strong></td>
-                                <td>{{ term.gwa }}</td>
-                                <td colspan="3"></td>
-                            </tr>
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_1" data-toggle="tab">Grades</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">Assessment</a></li>                        
+                </ul>
+                <div class="tab-content">
+                    <div class="active" class="tab-pane" id="tab_1">
+                        <div v-for="term in records" class="box box-success">
+                            <div class="box-header">
+                                <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Section Code</th>
+                                            <th>Course Code</th>
+                                            <th>Units</th>
+                                            <th>Midterm</th>
+                                            <th>Final</th>
+                                            <th>Remarks</th>
+                                            <th>Faculty</th>                                      
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                          
+                                        <tr v-for="record in term.records" style="font-size: 13px;">
+                                            <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                                            <td>{{ record.strCode }}</td>
+                                            <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
+                                            <td v-else>({{ record.strUnits }})</td>
+                                            <td>{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                            <td>{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
+                                            <td>{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
+                                            <td>{{ record.facultyName }}</td>
+                                                                                        
+                                        </tr>
+                                        <tr style="font-size: 13px;">
+                                            <td></td>
+                                            <td align="right"><strong>Units Earned for Term:</strong></td>
+                                            <td>{{ term.units_earned }}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                        <tr style="font-size: 11px;">
+                                            <td></td>
+                                            <td align="right"><strong>Term GWA:</strong></td>
+                                            <td>{{ term.gwa }}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
 
-                        </tbody>
-                    </table>
-                </div>
-            </div> 
-            <div class="box box-success">                
-                <div class="box-footer">
-                    <div class="row" style="font-weight:bold;">
-                        <div class="col-sm-3 text-right">
-                            Total Units Earned:
-                        </div>
-                        <div class="col-sm-3">
-                            {{ units }}
-                        </div>
-                        <div class="col-sm-3 text-right">
-                            GWA
-                        </div>
-                        <div class="col-sm-3">
-                            {{ gwa }}
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                        <div class="box box-success">                
+                            <div class="box-footer">
+                                <div class="row" style="font-weight:bold;">
+                                    <div class="col-sm-3 text-right">
+                                        Total Units Earned:
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ units }}
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        GWA
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ gwa }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="tab-pane" id="tab_2">
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
     
