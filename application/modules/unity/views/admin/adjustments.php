@@ -65,7 +65,7 @@
                         </li>
                         <li v-if="advanced_privilages">
                             <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">                            
-                                Assessment
+                                Grade Changes
                             </a>
                         </li>
                         
