@@ -188,7 +188,11 @@
                                                 <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                                 <td><a :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a></td>
                                                 <td>{{ record.strUnits }}</td>
-                                                <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                                <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                                                    <span :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                        {{ record.intFinalized >=1?record.v2:'NGS' }}
+                                                    </span>
+                                                </td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
                                                     <span :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                         {{ record.intFinalized >=2?record.v3:'NGS' }}
