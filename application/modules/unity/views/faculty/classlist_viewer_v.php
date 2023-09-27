@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody>                        
-                            <tr v-for="(student,index) in students">                                    
+                            <tr v-for="(student,index) in students" v-if="show_all || student.registered">                                    
                                 <td v-if="is_super_admin"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
