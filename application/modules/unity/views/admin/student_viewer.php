@@ -190,8 +190,11 @@
                                                 <td>{{ record.strUnits }}</td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
-                                                    <span :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
-                                                        {{ record.intFinalized >=2?record.v3:'NGS' }}
+                                                    <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                        {{ record.v3 }}
+                                                    </span>
+                                                    <span v-else>
+                                                        NGS
                                                     </span>
                                                 </td>
                                                 <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
