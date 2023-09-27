@@ -926,7 +926,7 @@ class Unity extends CI_Controller {
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
         $data['curriculum_subjects'] = [];
         foreach($curicculum as $cs){
-            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']] = $cs;
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']][] = $cs;
         }
 
         $terms = [];
