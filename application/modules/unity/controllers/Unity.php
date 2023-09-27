@@ -926,6 +926,14 @@ class Unity extends CI_Controller {
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
         $data['curriculum_subjects'] = [];
         foreach($curicculum as $cs){
+            $cs['rec'] = 
+            $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa')
+                     ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
+                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')  
+                     ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
+                     ->get('tb_mas_classlist_student')
+                     ->first_row();
+                     
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['sem'] = $cs['intSem'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['records'][] = $cs;
