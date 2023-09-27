@@ -189,7 +189,11 @@
                                                 <td><a :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a></td>
                                                 <td>{{ record.strUnits }}</td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
-                                                <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=2?record.v3:'NGS' }}</td>
+                                                <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                                                    <span :style="(record.strRemarks != 'Failed' && record.intFinalized == 2)?'color:#333;':'color:#990000;'">
+                                                        {{ record.intFinalized >=2?record.v3:'NGS' }}
+                                                    </span>
+                                                </td>
                                                 <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>     
                                                 <td>{{ record.facultyName }}</td>
                                             </tr>
