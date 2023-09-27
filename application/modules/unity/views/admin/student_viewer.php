@@ -184,7 +184,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr v-for="record in records" style="font-size: 13px;">
+                                            <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in records" style="font-size: 13px;">
                                                 <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                                 <td><a :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a></td>
                                                 <td>{{ record.strUnits }}</td>
