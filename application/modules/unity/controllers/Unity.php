@@ -2001,7 +2001,7 @@ class Unity extends CI_Controller {
             else
                 $data['showall'] = false;
 
-            $students = $this->data_fetcher->getClassListStudents($id,$sid);
+            $students = $this->data_fetcher->getClassListStudents($id,0,$sid);
             
 
             $data['subject'] = $this->data_fetcher->getSubjectNoCurr($data['classlist']['intSubjectID']);
@@ -2080,7 +2080,7 @@ class Unity extends CI_Controller {
 
         
         $this->data['id'] = $id;
-        $this->data['student'] = $student;
+        $this->data['sid'] = $student;
         $this->data['showAll'] = $showAll;
         $this->load->view("common/header",$this->data);
         $this->load->view("faculty/classlist_viewer_v",$this->data);

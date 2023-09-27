@@ -158,6 +158,7 @@ new Vue({
     data: {
         id: <?php echo $id; ?>,
         show_all: <?php echo $showAll; ?>,
+        sid: <?php echo $sid; ?>,
         base_url: '<?php echo base_url(); ?>',
         active_sem: undefined,
         cl: [],
@@ -190,7 +191,7 @@ new Vue({
 
         this.loader_spinner = true;
 
-        axios.get(base_url + 'unity/classlist_viewer_data/'+this.id+'/'+this.show_all)
+        axios.get(base_url + 'unity/classlist_viewer_data/'+this.id+'/'+this.show_all+'/'+this.sid)
         .then((data) => {
             this.active_sem = data.data.active_sem;
             this.cl = data.data.cl;
