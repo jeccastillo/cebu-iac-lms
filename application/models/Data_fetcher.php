@@ -2964,7 +2964,7 @@ class Data_fetcher extends CI_Model {
                      ->select("tb_mas_classlist_student.intCSID,intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
                      ->from("tb_mas_classlist_student")
                      //->group_by("intSubjectID")
-                     ->where()
+                     ->where($where)
                      ->join('tb_mas_users', 'tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
                      ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')                                                               
                      ->order_by('strLastName asc, strFirstname asc')
