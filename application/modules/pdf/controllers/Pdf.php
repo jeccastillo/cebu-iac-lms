@@ -1844,6 +1844,7 @@ class Pdf extends CI_Controller {
         $this->data['transaction_date'] =  $request['transaction_date'];          
         
         $pdf->SetTextColor(0,0,0);
+        
         if($this->data['campus'] == "Cebu")
             $html = $this->load->view("print_or",$this->data,true);
         else            
