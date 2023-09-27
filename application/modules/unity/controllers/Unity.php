@@ -2183,6 +2183,16 @@ class Unity extends CI_Controller {
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
+            if($clist['intFinalized'] == 2){
+                $cg['student_id'] = $item['intStudentID'];
+                $cg['from_grade'] = $item['floatFinalGrade'];
+                $cg['to_grade'] = $post['floatFinalGrade']; 
+                $cg['changed_by'] = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"];
+                $cg['date'] = date("Y-m-d H:i:s");
+                $cg['classlist_id'] = $item['intClassListID'];
+
+                $this->db->insert('tb_mas_student_grade_change',$cg);
+            }
             $data['message'] = "success";            
         }
         else{

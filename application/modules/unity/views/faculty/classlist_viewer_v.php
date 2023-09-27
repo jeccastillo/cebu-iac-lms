@@ -48,7 +48,7 @@
                                 <td :style="sid == student.intID?'background-color:#ccc;':''"><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
                                 <td :style="sid == student.intID?'background-color:#ccc;':''">{{ student.strProgramCode }}</td>
                                 <td :style="sid == student.intID?'background-color:#ccc;':''" v-if="student.registered">        
-                                    <span v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin">
+                                    <span v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin && classlist.intFinalized != 2">
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'midterm',student.intCSID)" class="form-control" >                              
@@ -219,6 +219,7 @@ new Vue({
     methods: {                
         updateGrade: function(event,period,csid){            
 
+            
             var type = 3;
             var formdata= new FormData();
             formdata.append("intCSID",csid);
@@ -233,21 +234,55 @@ new Vue({
             
 
             this.loader_spinner = true;
-            axios.post(base_url + 'unity/update_grade/'+type, formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {
-                this.loader_spinner = false;
+            if(this.classlist.intFinalized == 2){
                 Swal.fire({
-                    title: "Success",
-                    text: data.data.message,
-                    icon: "success"
-                }).then(function() {
-                    location.reload();
+                    title: 'Change Grade?',
+                    text: "Are you sure you want to change student grade?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        axios.post(base_url + 'unity/update_grade/'+type, formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        });
+                    
+                    }
+                    
+                });                
+            }
+            else{
+                axios.post(base_url + 'unity/update_grade/'+type, formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+                .then(data => {
+                    this.loader_spinner = false;
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
                 });
-            });
+            }
         },
         finalizePeriod: function(){
             var complete_grades = true;
