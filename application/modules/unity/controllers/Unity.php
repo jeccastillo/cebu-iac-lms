@@ -1012,6 +1012,7 @@ class Unity extends CI_Controller {
                                              ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
                                              ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                                              ->where(array('tb_mas_student_grade_change.student_id'=>$id,'strAcademicYear'=>$ret['active_sem']['intID']))
+                                             ->order_by('tb_mas_subjects.strCode','ASC')
                                              ->get('tb_mas_student_grade_change')
                                              ->result_array();
 
