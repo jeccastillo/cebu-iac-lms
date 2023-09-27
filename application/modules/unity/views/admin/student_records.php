@@ -1,6 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
+            Records
             <small>
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
                 <a class="btn btn-app" :href="base_url + 'pdf/transcript/' + student.intID"><i class="fa fa-print"></i>Print Transcript</a>                                       
