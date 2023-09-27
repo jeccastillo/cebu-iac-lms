@@ -190,7 +190,7 @@
                                                 <td>{{ record.strUnits }}</td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                                 <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
-                                                    <span :style="(record.strRemarks != 'Failed' && record.intFinalized == 2)?'color:#333;':'color:#990000;'">
+                                                    <span :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                         {{ record.intFinalized >=2?record.v3:'NGS' }}
                                                     </span>
                                                 </td>
