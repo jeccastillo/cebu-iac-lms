@@ -41,7 +41,7 @@
             </table>
             <table>
                 <tr style="font-size:10px;text-align:left;">
-                    <td style="height:40px;">&nbsp;</td>                    
+                    <td style="height:40px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
