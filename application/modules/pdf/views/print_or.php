@@ -32,18 +32,17 @@
                     <td>TEST</td>                    
                 </tr>
             </table>            
-            
-            <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
-                </tr>
-            </table>
             <table>
                 <tr style="font-size:10px;text-align:left;">
                     <td style="width:50%;height:40px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="width:50%"></td>
+                    <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
+                </tr>
+            </table>            
             <table>
                 <tr style="line-height:5px;">
                     <td style=""></td>
