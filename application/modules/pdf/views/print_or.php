@@ -33,6 +33,11 @@
                 </tr>
             </table>
             <table>
+                <tr style="font-size:10px;text-align:left;">
+                    <td style="width:50%;height:10px;color:#fff;">SPACE</td>                    
+                </tr>
+            </table>
+            <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:30%;font-size:8px;">Name:</td>
                     <td style="width:70%;border-bottom:1px solid #000;"></td>                  
@@ -46,7 +51,7 @@
             </table>                  
             <table>
                 <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:20px;color:#fff;">SPACE</td>                    
+                    <td style="width:50%;height:10px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
