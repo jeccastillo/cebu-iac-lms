@@ -34,7 +34,7 @@
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="height:40px;">TEST</td>                    
+                    <td>TEST</td>                    
                 </tr>
             </table>            
             
@@ -42,6 +42,11 @@
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
                     <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:40px;font-size:10px;text-align:left;">
+                    <td></td>                    
                 </tr>
             </table>
             <table>
