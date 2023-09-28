@@ -85,6 +85,7 @@
             <input type="hidden" name="name" v-model="or_print.student_name" />       
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
             <input type="hidden" name="payee_id" v-model="or_print.payee_id" />   
+            <input type="hidden" name="sem" v-model="or_print.sem" />
         </form>        
     </div><!---vue container--->
 </aside>
@@ -128,6 +129,7 @@ new Vue({
             is_cash: undefined,
             cashier_id: undefined,
             check_number: undefined,    
+            sem: undefined,
             payee_id: "<?php echo $payee_id; ?>",        
         },
              
@@ -195,6 +197,7 @@ new Vue({
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;                        
+                        this.or_print.sem = payment.sy_reference;
                         this.$nextTick(() => {
                             this.$refs.print_or.submit();
                         });            

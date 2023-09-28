@@ -255,6 +255,7 @@
             <input type="hidden" name="description" v-model="or_print.description" />
             <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
             <input type="hidden" name="name" v-model="or_print.student_name" />       
+            <input type="hidden" name="sem" v-model="or_print.sem" />       
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
         </form>
         <div class="modal fade" id="myModal" role="dialog">
@@ -345,7 +346,8 @@ new Vue({
             remarks: undefined,
             is_cash: undefined,
             cashier_id: undefined,
-            check_number: undefined,            
+            check_number: undefined,   
+            sem: undefined,         
         },
         or_update:{
             id: undefined,
@@ -442,6 +444,7 @@ new Vue({
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;
+                        this.or_print.sem = payment.sy_reference;
                         this.$nextTick(() => {
                             this.$refs.print_or.submit();
                         });            
