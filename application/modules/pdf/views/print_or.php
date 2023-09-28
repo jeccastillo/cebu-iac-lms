@@ -43,11 +43,6 @@
                     <td style="width:30%;font-size:8px;">Signature:</td>
                     <td style="width:70%;border-bottom:1px solid #000;"></td>                  
                 </tr>
-            </table>
-            <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td>TEST</td>                    
-                </tr>
             </table>            
             <table>
                 <tr style="font-size:10px;text-align:left;">
