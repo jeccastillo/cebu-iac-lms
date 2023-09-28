@@ -236,14 +236,7 @@
                 <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
-            </table>
-            <table >
-                <tr style="line-height:10px;">
-                    <td style="width:60%"></td>
-                    <td style="width:40%;font-size:8px;text-align:center;">                        
-                    </td>
-                </tr>
-            </table>
+            </table>            
             <table >
                 <tr style="line-height:5px;">
                     <td style=""></td>
