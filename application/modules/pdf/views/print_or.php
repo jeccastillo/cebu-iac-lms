@@ -43,10 +43,10 @@
                     <td style="width:30%;font-size:8px;">Signature:</td>
                     <td style="width:70%;border-bottom:1px solid #000;"></td>                  
                 </tr>
-            </table>            
+            </table>                  
             <table>
                 <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:16px;color:#fff;">SPACE</td>                    
+                    <td style="width:50%;height:40px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
