@@ -5,7 +5,7 @@
 </table>
 <table >
     <tr style="line-height:40px;">
-        <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
+        <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;"></td>
     </tr>
 </table>
 <table>
@@ -125,8 +125,8 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:30px;">
-                    <td style=""><?php //echo $or_number; ?></td>
+                <tr style="line-height:20px;">
+                    <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
                 </tr>
             </table>
             <table >
