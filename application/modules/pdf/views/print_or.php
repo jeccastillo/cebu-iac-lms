@@ -25,7 +25,7 @@
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
+                    <td style="width:50%"><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>
                 </tr>
             </table>
             <table>
@@ -36,7 +36,7 @@
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
+                    <td style="width:50%"></td>
                 </tr>
             </table>
             <table>
