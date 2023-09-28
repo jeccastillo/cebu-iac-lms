@@ -1878,14 +1878,14 @@ class Pdf extends CI_Controller {
         
         //$html = $pdf->unhtmlentities($html);
 
-        $this->data_poster->insert_or_print(
-            array(
-                "or_number"=>(string)$request['or_number'],
-                "date_printed"=>date("Y-m-d"),
-                "campus"=>$this->data['campus'],
-                "printed_by"=>$this->session->userdata('strFirstname')." ".$this->session->userdata('strLastname'),
-            )
-        );
+        // $this->data_poster->insert_or_print(
+        //     array(
+        //         "or_number"=>(string)$request['or_number'],
+        //         "date_printed"=>date("Y-m-d"),
+        //         "campus"=>$this->data['campus'],
+        //         "printed_by"=>$this->session->userdata('strFirstname')." ".$this->session->userdata('strLastname'),
+        //     )
+        // );
 
         $pdf->writeHTML($html, true, false, true, false, '');
 
