@@ -31,10 +31,27 @@
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td>TEST</td>                    
                 </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="width:30%;font-size:8px;">Name:</td>
+                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="width:30%;font-size:8px;">Signature:</td>
+                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td>TEST</td>                    
+                </tr>
             </table>            
             <table>
                 <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:40px;color:#fff;">SPACE</td>                    
+                    <td style="width:50%;height:16px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
@@ -117,7 +134,7 @@
                     <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
-            <table >
+            <table>
                 <tr style="line-height:15px;">
                     <td style="font-size:10px;text-align:left;">
                     <span style="color:#fff;">RECEIVED fr</span>

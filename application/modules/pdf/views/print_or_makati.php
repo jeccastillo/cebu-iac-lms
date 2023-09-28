@@ -4,8 +4,8 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:38px;text-align:right">
-        <td style=""><?php echo $or_number; ?></td>
+    <tr style="line-height:40px;">
+        <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
     </tr>
 </table>
 <table>
@@ -18,18 +18,31 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%;height:195px;font-size:8px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
+                    <td style="width:50%;font-size:8px;height:130px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                </tr>
+            </table>            
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>                    
+                </tr>
+            </table>     
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td>TEST</td>                    
+                </tr>
+            </table>            
+            <table>
+                <tr style="font-size:10px;text-align:left;">
+                    <td style="width:50%;height:40px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%"></td>
+                    <td style="width:50%"></td>
                     <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                 </tr>
-            </table>
+            </table>            
             <table>
                 <tr style="line-height:5px;">
                     <td style=""></td>
@@ -37,8 +50,7 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%"></td>
+                    <td style="width:50%"></td>
                     <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                 </tr>
             </table>
@@ -48,9 +60,8 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%"></td>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="width:50%"></td>
                     <td style="width:50%"><?php echo ($is_cash == 2 || $is_cash == 3)?"yes":""; ?></td>
                 </tr>
             </table>
@@ -60,9 +71,8 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%"></td>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="width:50%"></td>
                     <td style="width:50%"></td>
                 </tr>
             </table>
@@ -73,8 +83,7 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:3%"></td>
-                    <td style="width:47%"></td>
+                    <td style="width:50%"></td>
                     <td style="width:50%"><?php 
                         if($remarks == "Paynamics")
                             echo "Paynamics";
@@ -99,8 +108,8 @@
         </td>
         <td style="width:70%">
             <table>
-                <tr style="line-height:18px;">
-                    <td style="text-align:right;"><?php echo $or_number; ?></td>
+                <tr style="line-height:30px;">
+                    <td style=""><?php //echo $or_number; ?></td>
                 </tr>
             </table>
             <table >
@@ -108,21 +117,21 @@
                     <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
-            <table >
-                <tr style="line-height:10px;">
-                    <td style=""></td>
+            <table>
+                <tr style="line-height:15px;">
+                    <td style="font-size:10px;text-align:left;">
+                    <span style="color:#fff;">RECEIVED fr</span>
+                    <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                        <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                    <?php endif; ?>
+                    </td>
                 </tr>
             </table>
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
-                        <span style="color:#fff;">RECEIVED fr</span>                        
-                        <?php if($student_id != 'undefined' && $student_id != ""): ?>
-                        <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php echo $student_name; ?>                        
-                        <?php else: ?>
-                        <?php echo $student_name; ?>                        
-                        <?php endif; ?>
-                        
+                        <span style="color:#fff;">RECEIVED fr</span>
+                        <?php echo $student_name; ?>                                                                        
                     </td>
                 </tr>
             </table>
@@ -152,9 +161,9 @@
             <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:9px;text-align:left;">
-                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
-                    <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
-                </td>
+                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
+                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
+                    </td>
                 </tr>
             </table>
             <!-- <table >
@@ -168,7 +177,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:17px;">
+                <tr style="line-height:8px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -181,7 +190,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:8px;">
+                <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
             </table>
