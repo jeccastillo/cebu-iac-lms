@@ -118,7 +118,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:10px;">
+                <tr style="line-height:15px;">
                     <td style="font-size:10px;text-align:left;">
                     <span style="color:#fff;">RECEIVED fr</span>
                     <?php if($student_id != 'undefined' && $student_id != ''): ?>
