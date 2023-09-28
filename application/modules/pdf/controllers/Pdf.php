@@ -1834,8 +1834,8 @@ class Pdf extends CI_Controller {
             $payee = null;
 
         $type = "";
-        if($post['type']){
-            switch($post['type']){
+        if($request['type']){
+            switch($request['type']){
                 case 'college':
                     $type = "UG ".$request['description'];
                     break;
