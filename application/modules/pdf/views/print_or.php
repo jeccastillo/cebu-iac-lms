@@ -40,8 +40,8 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:40px;font-size:10px;text-align:left;">
-                    <td>&nbsp;</td>                    
+                <tr style="font-size:10px;text-align:left;">
+                    <td style="line-height:40px;">&nbsp;</td>                    
                 </tr>
             </table>
             <table>
