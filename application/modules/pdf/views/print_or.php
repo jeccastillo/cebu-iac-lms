@@ -18,14 +18,25 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:50%;height:195px;font-size:8px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
+                    <td style="width:50%;font-size:8px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>                    
+                </tr>
+            </table>     
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td style="height:170px;">TEST</td>                    
+                </tr>
+            </table>            
+            
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>
+                    <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                 </tr>
             </table>
             <table>
@@ -36,7 +47,7 @@
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
-                    <td style="width:50%"></td>
+                    <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                 </tr>
             </table>
             <table>
