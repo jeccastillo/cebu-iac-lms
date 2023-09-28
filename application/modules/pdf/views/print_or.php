@@ -41,7 +41,7 @@
             </table>
             <table>
                 <tr style="font-size:10px;text-align:left;">
-                    <td style="line-height:40px;">&nbsp;</td>                    
+                    <td style="height:40px;">&nbsp;</td>                    
                 </tr>
             </table>
             <table>
