@@ -29,7 +29,7 @@
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td>TEST</td>                    
+                    <td><?php echo $type; ?></td>                    
                 </tr>
             </table>
             <table>

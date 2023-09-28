@@ -1832,6 +1832,20 @@ class Pdf extends CI_Controller {
             $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$request['payee_id']))->first_row('array');
         else
             $payee = null;
+
+        $type = "";
+        if($post['type']){
+            switch($post['type']){
+                case 'college':
+                    $type = "UG ".$request['description'];
+                    break;
+                case 'shs':
+                    $type = "SHS ".$request['description'];
+                    break;
+                default:
+                    $type = "SHS ".$request['description'];                    
+            }
+        }
                 
         $pdf->AddPage();        
         $this->data['student_name'] = strtoupper($request['student_name']);        
@@ -1849,7 +1863,10 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  $request['transaction_date'];          
         $this->data['tin'] = $payee?$payee['tin']:'';
+        $this->data['type'] = $type;
         $pdf->SetTextColor(0,0,0);
+
+
 
 
         if(isset($payee))

@@ -368,7 +368,8 @@
         <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
         <input type="hidden" name="name" v-model="or_print.student_name" />       
         <input type="hidden" name="sem" v-model="or_print.sem" />       
-        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
+        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" /> 
+        <input type="hidden" name="type" v-model="or_print.type" />              
     </form>
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
@@ -435,6 +436,7 @@ new Vue({
             cashier_id: undefined,
             check_number: undefined,
             sem: undefined,
+            type: undefined,
         },
         request:{
             first_name: '',
@@ -528,7 +530,8 @@ new Vue({
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
-                        this.student = data.data.student;         
+                        this.student = data.data.student;  
+                        this.or_print.type = this.student.type;       
                         this.or_print.student_name = this.request.strFirstname + ' ' + this.request.strLastname;
                         this.slug = this.student.slug;
                         this.request.slug = this.slug;
