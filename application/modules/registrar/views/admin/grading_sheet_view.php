@@ -134,7 +134,7 @@
                         <tbody>
                             <tr v-for="(item,index) in results">
                                 <td>{{ index + 1 }}</td>
-                                <td><a target="_blank" :href="base_url + 'registrar/submitted_grades/' + item.intID">{{ item.strClassName + item.year + item.strSection + item.sub_section }}</a></td>
+                                <td><a target="_blank" :href="base_url + 'unity/classlist_viewer/' + item.intID">{{ item.strClassName + item.year + item.strSection + item.sub_section }}</a></td>
                                 <td>{{ item.strCode }}</td>
                                 <td>{{ item.strDescription }}</td>
                                 <td>{{ item.strLastname+" "+item.strFirstname }}</td>
