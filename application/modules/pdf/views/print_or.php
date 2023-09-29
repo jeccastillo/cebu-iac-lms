@@ -38,7 +38,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;">
+                <tr style="line-height:14px;font-size:10px;text-align:left;">
                     <td style="width:30%;font-size:9px;"><?php echo $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
                     <td style="width:70%;<?php echo $description == "Reservation Payment" ? 'border-bottom:1px solid #000;' : ''; ?>"></td>                  
                 </tr>
