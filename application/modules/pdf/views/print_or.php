@@ -44,8 +44,8 @@
                 </tr>
             </table>
             <table>
-                <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:2px;color:#fff;">SPACE</td>                    
+                <tr style="font-size:10px;line-height:2px;text-align:left;">
+                    <td style="width:50%;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
