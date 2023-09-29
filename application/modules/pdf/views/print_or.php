@@ -39,14 +39,14 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:30%;font-size:8px;">Name:</td>
-                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                    <td style="width:30%;font-size:8px;"><?php $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
+                    <td style="width:70%;<?php $description == "border-bottom:1px solid #000;" ? 'Name:' : ''; ?>"></td>                  
                 </tr>
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:30%;font-size:8px;">Signature:</td>
-                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                    <td style="width:30%;font-size:8px;"><?php $description == "Reservation Payment" ? 'Signature:' : ''; ?></td>
+                    <td style="width:70%;<?php $description == "border-bottom:1px solid #000;" ? 'Name:' : ''; ?>"></td>                  
                 </tr>
             </table>                  
             <table>
