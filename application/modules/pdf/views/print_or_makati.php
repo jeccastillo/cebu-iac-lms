@@ -39,14 +39,14 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:30%;font-size:8px;">Name:</td>
-                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                    <td style="width:30%;font-size:8px;"><?php $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
+                    <td style="width:70%;<?php $description == "border-bottom:1px solid #000;" ? 'Name:' : ''; ?>"></td>                  
                 </tr>
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:30%;font-size:8px;">Signature:</td>
-                    <td style="width:70%;border-bottom:1px solid #000;"></td>                  
+                    <td style="width:30%;font-size:8px;"><?php $description == "Reservation Payment" ? 'Signature:' : ''; ?></td>
+                    <td style="width:70%;<?php $description == "border-bottom:1px solid #000;" ? 'Name:' : ''; ?>"></td>                  
                 </tr>
             </table>                  
             <table>
@@ -130,7 +130,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:15px;">
+                <tr style="line-height:5px;">
                     <td></td>
                 </tr>
             </table>
@@ -224,11 +224,11 @@
                     </td>
                 </tr>
             </table>
-            <!-- <table >
-                <tr style="line-height:10px;">
+            <table >
+                <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
-            </table> -->
+            </table>
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
@@ -238,12 +238,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:5px;">
-                    <td style=""></td>
-                </tr>
-            </table>
-            <table >
-                <tr style="line-height:20px;">
+                <tr style="line-height:17px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;">                        
                     </td>
