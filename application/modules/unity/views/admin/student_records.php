@@ -4,7 +4,7 @@
             Records
             <small>
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
-                <a class="btn btn-app" :href="base_url + 'pdf/transcript/' + student.intID"><i class="fa fa-print"></i>Print Transcript</a>                                       
+                <a class="btn btn-app" :href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR</a>                                       
             </small>
         </h1>
         <hr />
@@ -162,7 +162,28 @@
             </div>
         </div>
     </div>
-    
+    <div class="modal fade" id="printTranscript" role="dialog">
+        <form @submit.prevent="printTOR" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Generate TOR</h4>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -226,7 +247,9 @@ new Vue({
     },
 
     methods: {      
-        
+        printTOR: function(){
+
+        }
     }
 
 })
