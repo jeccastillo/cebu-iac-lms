@@ -160,22 +160,22 @@ $footer ='
         </tr> 
         <tr>
             <td style="font-size:9px;">Prepared By</td>
-            <td colspan="2">'.$other_details['prepared_by'].'</td>                     
+            <td colspan="2"><b>'.$other_details['prepared_by'].'</b></td>                     
         </tr>
         <tr>
             <td style="line-height:10px;" colspan=6></td>         
         </tr> 
         <tr>
             <td style="font-size:9px;">Verified By</td>
-            <td colspan="2">'.$other_details['verified_by'].'</td>         
-            <td colspan="3" style="text-align:center">'.$other_details['registrar'].'</td>                       
+            <td colspan="2"><b>'.$other_details['verified_by'].'</b></td>         
+            <td colspan="3" style="text-align:center"><b>'.$other_details['registrar'].'</b></td>                       
         </tr>
         <tr>
             <td style="line-height:10px;" colspan=6></td>         
         </tr> 
         <tr>
             <td style="font-size:9px;">Date Issued</td>
-            <td colspan="2">'.$other_details['date_generated'].'</td>         
+            <td colspan="2"><b>'.$other_details['date_generated'].'</b></td>         
             <td colspan="3" style="text-align:center">Registrar</td>                       
         </tr>
           ';          
