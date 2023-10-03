@@ -559,9 +559,10 @@ class Pdf extends CI_Controller {
         $this->db->insert('tb_mas_tor_generated',$rec);
         $units_overall = 0;
         $gwa_overall = 0;
+        $total_records = 0;
         $rec['admission_date'] = $post['admission_date'];
         $rec['picture'] = $post['picture'];
-        $this->data['other_details'] = $rec;
+        
 
         foreach($post['included_terms'] as $term){
             $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
@@ -588,6 +589,9 @@ class Pdf extends CI_Controller {
                 $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
                 $record['schedule'] = $schedule;
                 $sc_ret[] = $record;
+                
+                if($record['intFinalized'] > 1)
+                    $total_records++;
             }                 
             if($total > 0)
                 $gwa =  round(($sum/$total),2);
@@ -606,6 +610,10 @@ class Pdf extends CI_Controller {
 
             $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
         }
+        
+        $rec['total_records'] = $total_records;
+
+        $this->data['other_details'] = $rec;
         $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
         $this->data['units_overall'] = $units_overall;        
         $this->data['student'] = $student;        
