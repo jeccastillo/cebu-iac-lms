@@ -554,6 +554,8 @@ class Pdf extends CI_Controller {
             'included_terms' => implode(",", $post['included_terms']),
             'student_id' => $post['student_id']            
         );
+
+        $this->db->insert('tb_mas_tor_generated',$rec);
     }
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
