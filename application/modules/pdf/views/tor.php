@@ -165,7 +165,7 @@ foreach($records as $record){
     $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
     $html .= '               
         <tr>                                           
-            <td colspan=6>             
+            <td colspan=5>             
                 <b>SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</b>
             </td>
         </tr> 
