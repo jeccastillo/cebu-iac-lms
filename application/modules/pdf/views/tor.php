@@ -166,7 +166,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
-$page_footer_margin = 350;
+$page_footer_margin = 550;
 $html .='<table>';
 $html.=$table_header_page;
 
