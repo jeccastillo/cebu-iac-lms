@@ -42,7 +42,10 @@
                     </td>
                     <td colspan="3">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
-                    </td>                                        
+                    </td>                    
+                    <td rowspan="8" colspan="2">
+                        <img src="'.$other_details['picture'].'" width="200px" />
+                    </td>                    
                 </tr>
                 <tr>                            
                     <td>             
@@ -116,10 +119,7 @@
                     <td><font style="font-size: 8;">NSTP Serial No.</font></td>
                     <td>
                         <font style="font-size: 8;">: '.$student['nstp_serial'].'</font>
-                    </td>   
-                    <td rowspan="8" colspan="2">
-                        <img src="'.$other_details['picture'].'" width="200px" />
-                    </td>                                 
+                    </td>                
                 </tr>
                      
            </table>
