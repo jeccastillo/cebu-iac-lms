@@ -56,6 +56,7 @@
                         <font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font>
                     </td>         
                     <td></td>             
+                    <td></td>  
                 </tr>
                 <tr>                            
                     <td>             
@@ -67,7 +68,8 @@
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
                     <td>
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
-                    </td>                
+                    </td>      
+                    <td></td>            
                 </tr>
                 <tr>                            
                     <td>             
