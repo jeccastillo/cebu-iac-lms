@@ -43,10 +43,10 @@
                     <td colspan="2">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>         
-                    <td width="15%"></td> 
+                    <td width="15%"></td>           
                     <td rowspan="8">
                         <img src="'.$other_details['picture'].'" width="200px" />
-                    </td>                               
+                    </td>                    
                 </tr>
                 <tr>                            
                     <td>             
@@ -67,7 +67,7 @@
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
                     <td>
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
-                    </td>                                                       
+                    </td>                
                 </tr>
                 <tr>                            
                     <td>             
@@ -86,7 +86,7 @@
                         <font style="font-size: 8;">Secondary School</font>
                     </td>
                     <td>             
-                        <font style="font-size: 8;">: </font>
+                        <font style="font-size: 8;">: '.$student['high_school'].'</font>
                     </td>    
                     <td><font style="font-size: 8;">ID No.</font></td>                
                     <td>
