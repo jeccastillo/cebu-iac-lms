@@ -519,9 +519,7 @@ class Pdf extends CI_Controller {
     }
 
     public function generate_tor(){
-        $post = $this->input->post();  
-        print_r($post);
-        die();      
+        $post = $this->input->post();        
         $student = $this->data_fetcher->getStudent($post['student_id']);
         $num_terms = count($post['included_terms']);
         switch($student['level']){
