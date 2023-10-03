@@ -200,7 +200,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
-$page_footer_margin = 520;
+$page_footer_margin = 530;
 $html .='<table>';
 $html.=$table_header_page;
 
