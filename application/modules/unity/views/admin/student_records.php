@@ -252,7 +252,8 @@ new Vue({
         curriculum_subjects: [],
         units: undefined,
         assessment_gwa: undefined,  
-        assessment_units: undefined,   
+        assessment_units: undefined, 
+        applicant_data: undefined,  
         tor:{
             date_issued: undefined,
             remarks: undefined,
@@ -260,7 +261,9 @@ new Vue({
             verified_by: undefined,
             registrar: undefined,
             included_terms: [],
-            student_id: '<?php echo $id; ?>',            
+            student_id: '<?php echo $id; ?>',
+            picture: undefined,            
+            admission_date: undefined,
         }   
     },
 
@@ -278,6 +281,18 @@ new Vue({
                     this.units = data.data.total_units_earned;  
                     this.assessment_gwa = data.data.assessment_gwa; 
                     this.assessment_units = data.data.assessment_units;
+                    axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+                    .then((data) => {
+                        this.applicant_data = data.data.data;
+                        for(i in this.applicant_data.uploaded_requirements){
+                                if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
+                                this.tor.picture = this.applicant_data.uploaded_requirements[i].path;
+                        }
+                        //this.tor.admission_date = this.applicant_data.uploaded_requirements[i].path;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
                 })
                 .catch((error) => {
                     console.log(error);
