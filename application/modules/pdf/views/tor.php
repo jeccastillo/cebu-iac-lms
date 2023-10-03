@@ -40,7 +40,7 @@
                     <td width="15%">             
                         <font style="font-size: 8;">Name</font>
                     </td>
-                    <td colspan="3" width="20%">             
+                    <td colspan="3">             
                         <font style="font-size: 8;">:'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>                    
                 </tr>
@@ -56,7 +56,7 @@
                     <td>             
                         <font style="font-size: 8;">Date of Birth</font>
                     </td>
-                    <td>             
+                    <td width="20%">             
                         <font style="font-size: 8;">:'.$student['dteBirthDate'].'</font>
                     </td>    
                     <td width="15%">Place of Birth</td>                
