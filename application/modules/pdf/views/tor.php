@@ -40,7 +40,7 @@
                     <td width="15%">             
                         <font style="font-size: 8;">Name</font>
                     </td>
-                    <td colspan="3">             
+                    <td colspan="2">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>                    
                     <td rowspan="8" colspan="2">
@@ -51,7 +51,7 @@
                     <td>             
                         <font style="font-size: 8;">Program Persued</font>
                     </td>
-                    <td colspan="3">             
+                    <td colspan="2">             
                         <font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font>
                     </td>                      
                 </tr>
