@@ -46,3 +46,6 @@ Swal.fire({
     },
     allowOutsideClick: () => !Swal.isLoading()
 });
+
+//Submit refs
+this.$refs.generate_tor.submit();
