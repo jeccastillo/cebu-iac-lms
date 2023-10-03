@@ -43,7 +43,7 @@
                     <td colspan="3">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>                    
-                    <td rowspan="8" witdh="30%">
+                    <td rowspan="8" colspan="2">
                         <img src="'.$other_details['picture'].'" width="200px" />
                     </td>                    
                 </tr>
@@ -53,8 +53,7 @@
                     </td>
                     <td colspan="3">             
                         <font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font>
-                    </td>  
-                    <td>Test</td>                  
+                    </td>                      
                 </tr>
                 <tr>                            
                     <td>             
