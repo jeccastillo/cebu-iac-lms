@@ -566,27 +566,18 @@ class Pdf extends CI_Controller {
             $sum = 0;       
             $total = 0; 
             $total_units = 0;
-            $this->data['period'] = $period;
-            if($period == "final"){
-                $this->data['period_label'] = "Final Grade";
-            }
-            else{
-                $this->data['period_label'] = "Midterm Grade";
-            }
+            
             
             foreach($records as $record)
             {
                 
-                if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
-                    $sum += (float)$record['v3'] * $record['strUnits'];
-                    $total += $record['strUnits'];                
-                }
-                if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
-                    $sum += (float)$record['v2'] * $record['strUnits'];                
-                    $total += $record['strUnits'];
-                }
+                
+                $sum += (float)$record['v3'] * $record['strUnits'];
+                $total += $record['strUnits'];                
+                
+                
 
-                if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
+                if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $record['intFinalized'] > 1){
                     $total_units += $record['strUnits'];
                 }
 
@@ -598,7 +589,7 @@ class Pdf extends CI_Controller {
                 $gwa =  round(($sum/$total),2);
 
 
-            $this->data['other_data'] = 
+            $other_data = 
             array(
                 'academic_standing' => null,
                 'total_units' => $total_units,
@@ -607,7 +598,7 @@ class Pdf extends CI_Controller {
 
             );
             
-            $this->data['records'][] = $sc_ret;                            
+            $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
         }
         print_r($this->data['records']);
 
