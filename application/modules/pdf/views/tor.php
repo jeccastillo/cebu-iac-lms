@@ -38,8 +38,7 @@
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>
                     <td colspan="4"></td>
-                    <td rowspan="8"></td>
-                    </td>
+                    <td rowspan="8"></td>                    
                 </tr>
                 <tr>                            
                     <td width="15%">             
