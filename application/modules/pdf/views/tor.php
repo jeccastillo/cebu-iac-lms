@@ -37,15 +37,18 @@
            ';
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                 <tr>
-                <td colspan="4">             
-                    <font style="font-size: 8;">Name</font>
+                <td width="15%">             
+                    <font style="font-size: 8;"></font>
+                </td>
+                <td width="55%" colspan="3">
+                    <font style="font-size: 8;"></font>
                 </td>                
                 <td width="30%" rowspan="9">
                     <img src="'.$other_details['picture'].'" width="200px" />
                 </td> 
                 </tr>
                 <tr>                            
-                    <td width="15%">             
+                    <td>             
                         <font style="font-size: 8;">Name</font>
                     </td>
                     <td width="55%" colspan="3">             
