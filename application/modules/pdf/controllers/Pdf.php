@@ -519,8 +519,7 @@ class Pdf extends CI_Controller {
     }
 
     public function generate_tor(){
-        $post = $this->input->post();
-        print_r($post);
+        $post = $this->input->post();        
         $student = $this->data_fetcher->getStudent($post['student_id']);
         $num_terms = count($post['included_terms']);
         switch($student['level']){
@@ -564,7 +563,7 @@ class Pdf extends CI_Controller {
 
         foreach($post['included_terms'] as $term){
             $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
-                    
+            $sem = $this->db->get_sem_by_id($term);                    
             $sc_ret = [];
             $gwa = 0;
             $sum = 0;       
@@ -595,10 +594,10 @@ class Pdf extends CI_Controller {
             $gwa_overall += $gwa;
             $other_data = 
             array(
-                'academic_standing' => null,
+                'term' => $sem,
                 'total_units' => $total_units,
                 'gwa' => $gwa,
-                'academic_standing' => null,
+                
 
             );
             
@@ -606,12 +605,9 @@ class Pdf extends CI_Controller {
             $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
         }
         $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
-        $this->data['units_overall'] = $units_overall;
-        echo $this->data['gwa_overall']."<br />";
-        echo $units_overall;
-        print_r($this->data['records']);
+        $this->data['units_overall'] = $units_overall;                
 
-        //$html = $this->load->view("tor",$this->data);
+        $html = $this->load->view("tor",$this->data);
     }
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
