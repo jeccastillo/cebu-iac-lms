@@ -522,7 +522,7 @@ class Pdf extends CI_Controller {
         $post = $this->input->post();
         print_r($post);
         $student = $this->data_fetcher->getStudent($post['student_id']);
-        
+        $num_terms = count($post['included_terms']);
         switch($student['level']){
             case 'shs':
                 $stype = 'shs';
@@ -559,11 +559,10 @@ class Pdf extends CI_Controller {
         $this->db->insert('tb_mas_tor_generated',$rec);
         $units_overall = 0;
         $gwa_overall = 0;
-        $num_terms = 0;
+        
         
 
         foreach($post['included_terms'] as $term){
-            $num_terms++;
             $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
                     
             $sc_ret = [];
@@ -608,7 +607,7 @@ class Pdf extends CI_Controller {
         }
         $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
         $this->data['units_overall'] = $units_overall;
-        echo $gwa_overall."<br />";
+        echo $this->data['gwa_overall']."<br />";
         echo $units_overall;
         print_r($this->data['records']);
 
