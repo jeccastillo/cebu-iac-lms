@@ -53,7 +53,8 @@
                     </td>
                     <td colspan="3">             
                         <font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font>
-                    </td>                    
+                    </td>  
+                    <td>Test</td>                  
                 </tr>
                 <tr>                            
                     <td>             
