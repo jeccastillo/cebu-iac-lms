@@ -65,7 +65,7 @@
                     <td>
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                     </td>    
-                    <td rowspan="6">
+                    <td>
                         <img src="'.$other_details['picture'].'" width="200px" />
                     </td>                                
                 </tr>
