@@ -39,7 +39,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <td rowspan="8">
-                        <img src="'.$other_details['picture'].'" width="200px" />
+                        <img src="'.$other_details['picture'].'" style="width:200px" />
                     </td>                    
                 </tr>
                 <tr>                            
