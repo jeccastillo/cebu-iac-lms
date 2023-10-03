@@ -556,6 +556,9 @@ class Pdf extends CI_Controller {
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
+        $units_overall = 0;
+        $gwa_overall = 0;
+        $num_terms = count($post['terms_included']);
         
 
         foreach($post['included_terms'] as $term){
@@ -587,7 +590,8 @@ class Pdf extends CI_Controller {
             if($total > 0)
                 $gwa =  round(($sum/$total),2);
 
-
+            $units_overall += $total_units;
+            $gwa_overall += $gwa;
             $other_data = 
             array(
                 'academic_standing' => null,
@@ -597,8 +601,13 @@ class Pdf extends CI_Controller {
 
             );
             
+
             $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
         }
+        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
+        $this->data['units_overall'] = $units_overall;
+        print_r($gwa_overall);
+        print_r($units_overall);
         print_r($this->data['records']);
 
         //$html = $this->load->view("tor",$this->data);
