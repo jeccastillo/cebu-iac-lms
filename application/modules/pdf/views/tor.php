@@ -36,6 +36,11 @@
             </table>
            ';
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+                <tr>
+                    <td colspan="4"></td>
+                    <td rowspan="8"></td>
+                    </td>
+                </tr>
                 <tr>                            
                     <td width="15%">             
                         <font style="font-size: 8;">Name</font>
@@ -56,11 +61,11 @@
                     <td>             
                         <font style="font-size: 8;">Date of Birth</font>
                     </td>
-                    <td width="25%">             
+                    <td width="20%">             
                         <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                     </td>    
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
-                    <td width="25%">
+                    <td width="20%">
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                     </td>                
                 </tr>
