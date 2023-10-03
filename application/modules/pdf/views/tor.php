@@ -137,7 +137,7 @@ $footer ='
         </tr>
         <tr>
             <td style="font-size:9px;">Remarks</td>
-            <td colspan="5"><p style="font-size:8px;">: '.$other_details['remarks'].'</p></td>                    
+            <td colspan="5"><p style="font-size:8px;">'.$other_details['remarks'].'</p></td>                    
         </tr>                                             
         <tr>
             <td style="font-size:9px;">Grading System</td>
