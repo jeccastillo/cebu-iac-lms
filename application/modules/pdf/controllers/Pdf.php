@@ -521,7 +521,7 @@ class Pdf extends CI_Controller {
     public function generate_tor(){
         $post = $this->input->post();
         print_r($post);
-        $student = $this->data_fetcher->getStudent($id);
+        $student = $this->data_fetcher->getStudent($post['student_id']);
         switch($student['level']){
             case 'shs':
                 $stype = 'shs';
@@ -547,7 +547,12 @@ class Pdf extends CI_Controller {
         array(
             'generated_by'=>$this->data['user']['strFirstname']." ".$this->data['user']['strLastname'],
             'term_id' => $sem['intID'],
-            
+            'date_generated' => $post['date_issued'],
+            'prepared_by' => $post['prepared_by'],
+            'verified_by' => $post['verified_by'],
+            'registrar' => $post['registrar'],
+            'included_terms' => implode(",", $post['included_terms']),
+            'student_id' => $post['student_id']            
         );
     }
     public function student_grade_slip($id,$sem,$period = "midterm"){
