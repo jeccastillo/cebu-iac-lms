@@ -176,27 +176,27 @@
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label>Date Issued</label>
-                            <input v-model="tor.date_issued" type="datetime-local" class="form-control">
+                            <input required v-model="tor.date_issued" type="datetime-local" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Remarks</label>
-                            <textarea v-model="tor.remarks" class="form-control"></textarea>
+                            <textarea required v-model="tor.remarks" class="form-control"></textarea>
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Prepared By</label>
-                            <input v-model="tor.prepared_by" type="text" class="form-control">
+                            <input required v-model="tor.prepared_by" type="text" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Verified By</label>
-                            <input v-model="tor.verified_by" type="text" class="form-control">
+                            <input required v-model="tor.verified_by" type="text" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Registrar</label>
-                            <input v-model="tor.verified_by" type="text" class="form-control">
+                            <input required v-model="tor.verified_by" type="text" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Included Terms</label>
-                            <select v-model="tor.included_terms" class="form-control">
+                            <select required multiple v-model="tor.included_terms" class="form-control">
                                 <option v-for="term in records" :value="term.reg.term_id">
                                 {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
                                 </option>
