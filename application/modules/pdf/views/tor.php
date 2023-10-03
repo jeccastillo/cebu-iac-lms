@@ -166,7 +166,7 @@ $footer ='
         </tr>
         <tr>
             <td style="font-size:9px;">Date Issued</td>
-            <td colspan="2">'.$other_details['date_issued'].'</td>         
+            <td colspan="2">'.$other_details['date_generated'].'</td>         
             <td colspan="3" style="text-align:center">Registrar</td>                       
         </tr>
           ';          
