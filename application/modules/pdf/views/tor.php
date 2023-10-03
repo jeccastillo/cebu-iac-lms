@@ -40,10 +40,9 @@
                     <td width="15%">             
                         <font style="font-size: 8;">Name</font>
                     </td>
-                    <td colspan="2">             
+                    <td colspan="3" width="55%">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
-                    </td>         
-                    <td width="15%"></td>           
+                    </td>                    
                     <td rowspan="8">
                         <img src="'.$other_details['picture'].'" width="200px" />
                     </td>                    
@@ -52,11 +51,9 @@
                     <td>             
                         <font style="font-size: 8;">Program Persued</font>
                     </td>
-                    <td colspan="2">             
+                    <td colspan="3" width="55%">             
                         <font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font>
-                    </td>         
-                    <td></td>             
-                    <td></td>  
+                    </td>                      
                 </tr>
                 <tr>                            
                     <td>             
@@ -66,10 +63,9 @@
                         <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                     </td>    
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
-                    <td>
+                    <td width="15%">
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
-                    </td>      
-                    <td></td>            
+                    </td>                
                 </tr>
                 <tr>                            
                     <td>             
