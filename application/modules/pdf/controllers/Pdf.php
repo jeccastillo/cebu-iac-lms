@@ -606,8 +606,8 @@ class Pdf extends CI_Controller {
         }
         $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
         $this->data['units_overall'] = $units_overall;
-        print_r($gwa_overall);
-        print_r($units_overall);
+        echo $gwa_overall."<br />";
+        echo $units_overall;
         print_r($this->data['records']);
 
         //$html = $this->load->view("tor",$this->data);
