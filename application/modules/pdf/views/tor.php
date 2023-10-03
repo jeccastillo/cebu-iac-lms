@@ -240,10 +240,17 @@ foreach($records as $record){
                 
                 $page++;
                 $page_ctr = 0;
+                $html .= '<tr>
+                            <td style="text-align:center;" colspan="6">------------------------------------------------------------ Continued on Page '.$page.' ------------------------------------------------------------</td>
+                        </tr>';
+                $html .= '<tr>
+                            <td style="line-height:'.$page_footer_margin.'px;" colspan="6"></td>         
+                        </tr>';
                 $html .= $footer;
                 $html .= '</table>';
-                $pdf->writeHTML($html, true, false, true, false, '');
+                $pdf->writeHTML($html, true, false, true, false, '');                
                 $pdf->AddPage();
+                $page_footer_margin = 520;
                 $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">                
                         <tr>
                             <td style="line-height:150px;" colspan=6></td>         
