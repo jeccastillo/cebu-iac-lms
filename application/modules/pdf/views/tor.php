@@ -12,7 +12,7 @@
             // Set font
             $this->SetFont('helvetica', 'I', 8);
             // Page number
-            $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().' of '.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+            $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().' of '.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
         }
     }
 
@@ -29,7 +29,7 @@
     $pdf->SetMargins(10, 5 , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->setFooterData(array(0,64,0), array(0,64,128));
+    $pdf->setFooterData();
     $pdf->SetFont('helvetica','',10);
     //$pdf->SetAutoPageBreak(TRUE, 6);
     
