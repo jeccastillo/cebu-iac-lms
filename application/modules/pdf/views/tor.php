@@ -86,7 +86,7 @@
                         <font style="font-size: 8;">Secondary School</font>
                     </td>
                     <td>             
-                        <font style="font-size: 8;">: '.$student['high_school'].'</font>
+                        <font style="font-size: 8;">: </font>
                     </td>    
                     <td><font style="font-size: 8;">ID No.</font></td>                
                     <td>
