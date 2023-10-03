@@ -136,15 +136,15 @@ $footer ='
             <td style="line-height:15px;" colspan=6></td>         
         </tr>
         <tr>
-            <td><font style="font-weight:bold;">Remarks</font></td>
+            <td>Remarks</font></td>
             <td colspan=5>
                 <p style="font-size:8px;">: '.$other_details['remarks'].'</p>      
             </td>                    
         </tr>                                             
         <tr>
-            <td><font style="font-weight:bold;">Grading System</font></td>
+            <td>Grading System</td>
             <td colspan=5>
-                <p style="font-size:8px;">: 1.00 (98-100) Excelent; 1.25 (95-97); 1.50 (92-94) Very Good; 1.75 (89-91); 2.00 (86-88); 2.25 (83-85);2.50 (80-82) Satisfactory; 2.75 (77-79) Fair; 3.00 (75-76); 5.00 (Below 75) Failed; OD (Officially Dropped); UD (Unofficially Dropped); FA (Failure due to Absences); IP (In Progress) for internship only; P (Passed); F (Failed); OW (Officially Withdrawn); UW (Unofficially Withdrawn); NGS (No Grade Submitted)			
+                <p style="font-size:8px;">1.00 (98-100) Excelent; 1.25 (95-97); 1.50 (92-94) Very Good; 1.75 (89-91); 2.00 (86-88); 2.25 (83-85);2.50 (80-82) Satisfactory; 2.75 (77-79) Fair; 3.00 (75-76); 5.00 (Below 75) Failed; OD (Officially Dropped); UD (Unofficially Dropped); FA (Failure due to Absences); IP (In Progress) for internship only; P (Passed); F (Failed); OW (Officially Withdrawn); UW (Unofficially Withdrawn); NGS (No Grade Submitted)			
                 </p>      
             </td>                    
         </tr>
@@ -175,10 +175,10 @@ foreach($records as $record){
         <tr>
             <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
             <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
-            <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
-            <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Grade</b></th>
+            <th style="width:10%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
+            <th style="width:10%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Grade</b></th>
             <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Completion</b></th>            
-            <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
+            <th style="width:10%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
         </tr>
         <tr>
             <td style="line-height:5px;" colspan=6></td>         
