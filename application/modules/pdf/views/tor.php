@@ -66,7 +66,7 @@
                         <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                     </td>    
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
-                    <td width="20%">
+                    <td width="15%">
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                     </td>                
                 </tr>
