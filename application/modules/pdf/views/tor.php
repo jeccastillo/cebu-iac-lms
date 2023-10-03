@@ -176,7 +176,7 @@ foreach($records as $record){
             <th style="width:10%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
         </tr>
         <tr>
-            <td style="line-height:5px;" colspan="6"></td>         
+            <td style="line-height:10px;" colspan="6"></td>         
         </tr>     
         ';
          
@@ -207,6 +207,9 @@ foreach($records as $record){
                     ';
             }
         }
+        $html .= '<tr>
+                    <td style="line-height:10px;" colspan="6"></td>         
+                 </tr>';
         
 }
 
