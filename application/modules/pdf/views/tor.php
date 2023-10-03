@@ -24,8 +24,7 @@
     $pdf->setPrintFooter(false);
     // Add a page
     // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage('P', 'LEGAL');            
-    
+    $pdf->AddPage('P', 'LEGAL');                
     $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
     $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
     
@@ -83,12 +82,13 @@
 
 foreach($records as $record){
     $active_sem = $record['other_data']['term'];
+    $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
     $html .= '       
         <br />
         <table v-if="enrolled" class="table table-bordered table-striped">
         <tr>                                           
             <td colspan=5>             
-                <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">SY '.$active_sem['sem']['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
             </td>
         </tr> 
         <tr>
