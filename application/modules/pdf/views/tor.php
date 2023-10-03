@@ -156,7 +156,7 @@ $footer ='
             </td>                    
         </tr>
         <tr>
-            <td style="line-height:10px;" colspan=6></td>         
+            <td style="line-height:20px;" colspan=6></td>         
         </tr> 
         <tr>
             <td style="font-size:9px;">Prepared By</td>
