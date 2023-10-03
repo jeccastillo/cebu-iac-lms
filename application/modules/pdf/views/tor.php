@@ -22,7 +22,7 @@
     //$pdf->SetFont('calibril_0', '', 10, '', 'false');
     
     $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
+    //$pdf->setPrintFooter(true);
     // Add a page
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage('P', 'LEGAL');                
