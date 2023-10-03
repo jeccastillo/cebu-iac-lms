@@ -194,6 +194,14 @@
                             <label>Registrar</label>
                             <input v-model="tor.verified_by" type="text" class="form-control">
                         </div>
+                        <div class="form-group col-sm-6">
+                            <label>Included Terms</label>
+                            <select v-model="tor.included_terms" class="form-control">
+                                <option v-for="term in records" :value="term.reg.term_id">
+                                {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
+                                </option>
+                            </select>
+                        </div>
 
                     </div>
                 </div>
@@ -250,6 +258,7 @@ new Vue({
             prepared_by: undefined,
             verified_by: undefined,
             registrar: undefined,
+            included_terms: [],
         }   
     },
 
