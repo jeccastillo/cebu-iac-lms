@@ -196,7 +196,7 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Included Terms</label>
-                            <select required multiple v-model="tor.included_terms[]" class="form-control">
+                            <select required multiple v-model="tor.included_terms" class="form-control">
                                 <option v-for="term in records" :value="term.reg.term_id">
                                 {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
                                 </option>
@@ -286,7 +286,7 @@ new Vue({
 
     methods: {      
         printTOR: function(){
-
+            console.log(this.tor);
         }
     }
 
