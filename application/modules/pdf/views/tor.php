@@ -210,11 +210,12 @@ foreach($records as $record){
         
 }
 $html .= '<tr>
-            <td style="line-height:'.$page_footer_margin.';" colspan="6"></td>         
-        </tr>';
-$html .= '<tr>
             <td style="text-align:center;" colspan="6">------------------------------------------------------------ Nothing Follows ------------------------------------------------------------</td>
         </tr>';
+$html .= '<tr>
+            <td style="line-height:'.$page_footer_margin.';" colspan="6"></td>         
+        </tr>';
+
 $html .= $footer;
 $html .="</table>";    
             
