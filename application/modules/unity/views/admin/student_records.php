@@ -173,7 +173,29 @@
                     <h4 class="modal-title">Generate TOR</h4>
                 </div>
                 <div class="modal-body">
-                    
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Date Issued</label>
+                            <input v-model="tor.date_issued" type="datetime-local" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Remarks</label>
+                            <textarea v-model="tor.remarks" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Prepared By</label>
+                            <input v-model="tor.prepared_by" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Verified By</label>
+                            <input v-model="tor.verified_by" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Registrar</label>
+                            <input v-model="tor.verified_by" type="text" class="form-control">
+                        </div>
+
+                    </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
@@ -221,7 +243,14 @@ new Vue({
         curriculum_subjects: [],
         units: undefined,
         assessment_gwa: undefined,  
-        assessment_units: undefined,      
+        assessment_units: undefined,   
+        tor:{
+            date_issued: undefined,
+            remarks: undefined,
+            prepared_by: undefined,
+            verified_by: undefined,
+            registrar: undefined,
+        }   
     },
 
     mounted() {
