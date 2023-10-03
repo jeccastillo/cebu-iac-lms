@@ -559,7 +559,8 @@ class Pdf extends CI_Controller {
         $this->db->insert('tb_mas_tor_generated',$rec);
         $units_overall = 0;
         $gwa_overall = 0;
-        
+        $rec['admission_date'] = $post['admission_date'];
+        $rec['picture'] = $post['picture'];
         $this->data['other_details'] = $rec;
 
         foreach($post['included_terms'] as $term){

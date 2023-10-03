@@ -175,6 +175,8 @@
                 <div class="modal-body">
                     <div class="row">
                         <input type="hidden" name="student_id" v-model="tor.student_id" />
+                        <input type="hidden" name="picture" v-model="tor.picture" />
+                        <input type="hidden" name="admission_date" v-model="tor.admission_date" />
                         <div class="form-group col-sm-6">
                             <label>Date Issued</label>
                             <input required name="date_issued" v-model="tor.date_issued" type="datetime-local" class="form-control">
@@ -288,7 +290,7 @@ new Vue({
                                 if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
                                 this.tor.picture = this.applicant_data.uploaded_requirements[i].path;
                         }
-                        //this.tor.admission_date = this.applicant_data.uploaded_requirements[i].path;
+                        this.tor.admission_date = this.applicant_data.date_enrolled;
                     })
                     .catch((error) => {
                         console.log(error);

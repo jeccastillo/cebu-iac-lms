@@ -38,7 +38,9 @@
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>
                     <td colspan="4"></td>
-                    <td rowspan="8"></td>                    
+                    <td rowspan="8">
+                        <img src="'.$other_details['picture'].'" width="100%" />
+                    </td>                    
                 </tr>
                 <tr>                            
                     <td width="15%">             
@@ -101,7 +103,7 @@
                     </td>                     
                     <td><font style="font-size: 8;">Date of Admission</font></td>                
                     <td>
-                        <font style="font-size: 8;">: </font>
+                        <font style="font-size: 8;">: '.$other_details['admission_date'].'</font>
                     </td>                
                 </tr>
                 <tr>                            
