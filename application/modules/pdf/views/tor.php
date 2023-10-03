@@ -44,7 +44,7 @@
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>         
                     <td width="15%"></td> 
-                    <td>
+                    <td rowspan="8">
                         <img src="'.$other_details['picture'].'" width="200px" />
                     </td>                               
                 </tr>
