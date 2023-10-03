@@ -166,7 +166,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
-$page_footer_margin = "350px";
+$page_footer_margin = 350;
 $html .='<table>';
 $html.=$table_header_page;
 
@@ -179,6 +179,7 @@ foreach($records as $record){
             <td style="font-size:9px;" colspan="6"><b>SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</b></td>
         </tr>                    
         ';
+        $page_footer_margin -= 15;
          
         foreach($record['records'] as $item){                
         
@@ -216,7 +217,7 @@ $html .= '<tr>
             <td style="text-align:center;" colspan="6">------------------------------------------------------------ Nothing Follows ------------------------------------------------------------</td>
         </tr>';
 $html .= '<tr>
-            <td style="line-height:'.$page_footer_margin.';" colspan="6"></td>         
+            <td style="line-height:'.$page_footer_margin.'px;" colspan="6"></td>         
         </tr>';
 
 $html .= $footer;
