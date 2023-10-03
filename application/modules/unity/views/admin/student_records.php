@@ -163,7 +163,7 @@
         </div>
     </div>
     <div class="modal fade" id="printTranscript" role="dialog">
-        <form @submit.prevent="printTOR" class="modal-dialog modal-lg">
+        <form ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/generate_tor'" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -259,6 +259,7 @@ new Vue({
             verified_by: undefined,
             registrar: undefined,
             included_terms: [],
+            student_id: '<?php echo $id; ?>',
         }   
     },
 
@@ -285,8 +286,24 @@ new Vue({
     },
 
     methods: {      
-        printTOR: function(){
-            console.log(this.tor);
+        printTOR: function(){   
+            Swal.fire({
+                title: 'Generate TOR?',
+                text: "Continue genrating TOR?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    this.$refs.generate_tor.$el.submit();                                                       
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });         
+            
         }
     }
 

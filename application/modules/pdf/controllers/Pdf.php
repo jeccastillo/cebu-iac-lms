@@ -517,6 +517,10 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
+    public function generate_tor(){
+        $post = $this->input->post();
+        print_r($post);
+    }
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
         $this->data['student'] = $this->data_fetcher->getStudent($id);
