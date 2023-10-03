@@ -78,13 +78,13 @@
     
 
 foreach($records as $record){
-
+    $active_sem = $record['other_data']['term'];
     $html .= '       
         <br />
         <table v-if="enrolled" class="table table-bordered table-striped">
         <tr>                                           
             <td colspan=5>             
-                <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">SY '.$sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">SY '.$active_sem['sem']['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
             </td>
         </tr> 
         <tr>
