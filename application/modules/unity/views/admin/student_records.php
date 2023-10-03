@@ -192,7 +192,7 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Registrar</label>
-                            <input required v-model="tor.verified_by" type="text" class="form-control">
+                            <input required v-model="tor.registrar" type="text" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Included Terms</label>
