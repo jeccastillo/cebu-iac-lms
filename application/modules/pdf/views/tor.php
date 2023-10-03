@@ -136,7 +136,7 @@ $footer ='
             <td style="line-height:15px;" colspan=6></td>         
         </tr>
         <tr>
-            <td>Remarks</font></td>
+            <td>Remarks</td>
             <td colspan=5>
                 <p style="font-size:8px;">: '.$other_details['remarks'].'</p>      
             </td>                    
