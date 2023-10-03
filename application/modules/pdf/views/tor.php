@@ -187,7 +187,7 @@ foreach($records as $record){
             if($item['intFinalized'] >= 2){
                 $ctr++;
                 $page_ctr++;
-            
+                $page_footer_margin -= 15;
                 $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
                 if($item['include_gwa'])
                     $units = number_format($item['strUnits'],1);
