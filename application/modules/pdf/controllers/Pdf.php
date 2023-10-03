@@ -605,7 +605,8 @@ class Pdf extends CI_Controller {
             $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
         }
         $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
-        $this->data['units_overall'] = $units_overall;                
+        $this->data['units_overall'] = $units_overall;        
+        $this->data['student'] = $student;        
 
         $html = $this->load->view("tor",$this->data);
     }
