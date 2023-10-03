@@ -552,14 +552,15 @@ class Pdf extends CI_Controller {
             'verified_by' => $post['verified_by'],
             'registrar' => $post['registrar'],
             'included_terms' => implode(",", $post['included_terms']),
-            'student_id' => $post['student_id']            
+            'student_id' => $post['student_id'],
+            'remarks' => $post['remarks'],         
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
         $units_overall = 0;
         $gwa_overall = 0;
         
-        
+        $this->data['other_details'] = $rec;
 
         foreach($post['included_terms'] as $term){
             $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                

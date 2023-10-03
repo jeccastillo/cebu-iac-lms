@@ -29,53 +29,96 @@
     $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
     
     // Set some content to print
-    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-                <tr>                             
-                    <td rowspan="3" width="20%">
-                        <img width="60px;" src="'.$seal.'" alt="seal" border="0">
-                    </td>
-                    <td width="80%">             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.</font>
-                    </td>
-                </tr>
-                <tr>                                                 
-                    <td width="80%">             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.$cm.'</font>
-                    </td>
-                </tr>
-                <tr>                                                 
-                    <td width="80%">             
-                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Transcript of Records</font>
-                    </td>
-                </tr>                
+    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">                
                 <tr>
-                    <td style="line-height:10px;" colspan=5></td>         
+                    <td style="line-height:100px;" colspan=5></td>         
                 </tr>        
             </table>
            ';
     $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
-                    <td width="20%">             
-                        <font style="font-size: 8;">Student Number:</font>
+                    <td width="15%">             
+                        <font style="font-size: 8;">Name</font>
                     </td>
-                    <td width="30%">             
-                        <font style="font-size: 8;">Student Name:</font>
-                    </td>
-                    <td width="50%">             
-                        <font style="font-size: 8;">Course:</font>
-                    </td>
+                    <td colspan="3" width="20%">             
+                        <font style="font-size: 8;">:'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+                    </td>                    
                 </tr>
                 <tr>                            
                     <td>             
-                        <font style="font-size: 8;">'.$student['strStudentNumber'].'</font>
+                        <font style="font-size: 8;">Program Persued</font>
+                    </td>
+                    <td colspan="3">             
+                        <font style="font-size: 8;">:'.trim($student['strProgramDescription']).'</font>
+                    </td>                    
+                </tr>
+                <tr>                            
+                    <td>             
+                        <font style="font-size: 8;">Date of Birth</font>
                     </td>
                     <td>             
-                        <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+                        <font style="font-size: 8;">:'.$student['dteBirthDate'].'</font>
+                    </td>    
+                    <td width="15%">Place of Birth</td>                
+                    <td width="20%">
+                        <font style="font-size: 8;">:'.$student['place_of_birth'].'</font>
+                    </td>                
+                </tr>
+                <tr>                            
+                    <td>             
+                        <font style="font-size: 8;">Citizenship</font>
                     </td>
                     <td>             
-                        <font style="font-size: 8;">'.trim($student['strProgramDescription']).'</font>
+                        <font style="font-size: 8;">:'.$student['strCitizenship'].'</font>
+                    </td>    
+                    <td>Gender</td>                
+                    <td>
+                        <font style="font-size: 8;">:'.$student['enumGender'].'</font>
+                    </td>                
+                </tr>
+                <tr>                            
+                    <td>             
+                        <font style="font-size: 8;">Secondary School</font>
                     </td>
-                </tr>        
+                    <td>             
+                        <font style="font-size: 8;">:'.$student['high_school'].'</font>
+                    </td>    
+                    <td>ID No.</td>                
+                    <td>
+                        <font style="font-size: 8;">:'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
+                    </td>                
+                </tr>
+                <tr>                            
+                    <td>             
+                        <font style="font-size: 8;">Tertiary School</font>
+                    </td>
+                    <td>             
+                        <font style="font-size: 8;">:'.$student['college'].'</font>
+                    </td>                     
+                    <td>Date of Admission</td>                
+                    <td>
+                        <font style="font-size: 8;">:</font>
+                    </td>                
+                </tr>
+                <tr>                            
+                    <td colspan="2">             
+                        <font style="font-size: 8;"></font>
+                    </td>
+                    <td>Date of Graduation</td>                
+                    <td>
+                        <font style="font-size: 8;">:'.$student['date_of_graduation'].'</font>
+                    </td>                
+                </tr>
+                <tr>                            
+                    <td colspan="2">             
+                        <font style="font-size: 8;"></font>
+                    </td>
+                    <td>NSTP Serial No.</td>                
+                    <td>
+                        <font style="font-size: 8;">:'.$student['nstp_serial'].'</font>
+                    </td>                
+                </tr>
+                     
            </table>
           ';
     

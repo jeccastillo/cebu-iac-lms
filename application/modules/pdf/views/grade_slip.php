@@ -69,7 +69,7 @@
                 </tr>
                 <tr>                            
                     <td>             
-                        <font style="font-size: 8;">'.$student['strStudentNumber'].'</font>
+                        <font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>
                     <td>             
                         <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
