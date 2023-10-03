@@ -556,6 +556,62 @@ class Pdf extends CI_Controller {
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
+        
+
+        foreach($post['included_terms'] as $term){
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$term);                
+                    
+            $sc_ret = [];
+            $gwa = 0;
+            $sum = 0;       
+            $total = 0; 
+            $total_units = 0;
+            $this->data['period'] = $period;
+            if($period == "final"){
+                $this->data['period_label'] = "Final Grade";
+            }
+            else{
+                $this->data['period_label'] = "Midterm Grade";
+            }
+            
+            foreach($records as $record)
+            {
+                
+                if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+                    $sum += (float)$record['v3'] * $record['strUnits'];
+                    $total += $record['strUnits'];                
+                }
+                if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+                    $sum += (float)$record['v2'] * $record['strUnits'];                
+                    $total += $record['strUnits'];
+                }
+
+                if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
+                    $total_units += $record['strUnits'];
+                }
+
+                $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
+                $record['schedule'] = $schedule;
+                $sc_ret[] = $record;
+            }                 
+            if($total > 0)
+                $gwa =  round(($sum/$total),2);
+
+
+            $this->data['other_data'] = 
+            array(
+                'academic_standing' => null,
+                'total_units' => $total_units,
+                'gwa' => $gwa,
+                'academic_standing' => null,
+
+            );
+            
+            $this->data['records'][] = $sc_ret;                            
+        }
+        print_r($this->data['records']);
+
+        //$html = $this->load->view("tor",$this->data);
     }
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
