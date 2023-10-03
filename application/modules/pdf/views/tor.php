@@ -140,13 +140,16 @@ $footer ='
             <td colspan="5"><p style="font-size:8px;">'.$other_details['remarks'].'</p></td>                    
         </tr> 
         <tr>
-            <td style="line-height:10px;" colspan=6></td>         
+            <td style="line-height:5px;" colspan=6></td>         
         </tr>                                            
         <tr>
             <td style="font-size:9px;">Grading System</td>
             <td colspan="5"><p style="font-size:8px;">1.00 (98-100) Excelent; 1.25 (95-97); 1.50 (92-94) Very Good; 1.75 (89-91); 2.00 (86-88); 2.25 (83-85);2.50 (80-82) Satisfactory; 2.75 (77-79) Fair; 3.00 (75-76); 5.00 (Below 75) Failed; OD (Officially Dropped); UD (Unofficially Dropped); FA (Failure due to Absences); IP (In Progress) for internship only; P (Passed); F (Failed); OW (Officially Withdrawn); UW (Unofficially Withdrawn); NGS (No Grade Submitted)</p>      
             </td>                    
         </tr>
+        <tr>
+            <td style="line-height:5px;" colspan=6></td>         
+        </tr>                       
         <tr>
             <td style="font-size:9px;">Note</td>
             <td colspan="5"><p style="font-size:8px;">This document is valid only when it bears the seal of the College and affixed with the original signature in ink. Any erasure or alteration made on this copy renders the whole document invalid.</p>      
