@@ -158,7 +158,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
-$html .='<table v-if="enrolled" class="table table-bordered table-striped">';
+$html .='<table>';
 
 foreach($records as $record){
     $active_sem = $record['other_data']['term'];
@@ -166,7 +166,7 @@ foreach($records as $record){
     $html .= '               
         <tr>                                           
             <td colspan=6>             
-                <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                <b>SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</b>
             </td>
         </tr> 
         <tr>
@@ -215,7 +215,11 @@ foreach($records as $record){
         
 }
 
-$html .= "<tr><td colspan=6>------------------------------------------------------------ Nothing Follows ------------------------------------------------------------</td></tr>";
+$html .= "<tr>
+            <td colspan=6>
+            ------------------------------------------------------------ Nothing Follows ------------------------------------------------------------
+            </td>
+        </tr>";
 $html .= $footer;
 $html .="</table>";    
             
