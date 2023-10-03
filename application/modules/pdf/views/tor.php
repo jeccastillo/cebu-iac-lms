@@ -39,7 +39,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <td rowspan="8">
-                        <img src="'.$other_details['picture'].'" width="100%" />
+                        <img src="'.$other_details['picture'].'" width="150px" />
                     </td>                    
                 </tr>
                 <tr>                            
@@ -62,11 +62,11 @@
                     <td>             
                         <font style="font-size: 8;">Date of Birth</font>
                     </td>
-                    <td width="20%">             
+                    <td width="25%">             
                         <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                     </td>    
                     <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
-                    <td width="20%">
+                    <td width="25%">
                         <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                     </td>                
                 </tr>
