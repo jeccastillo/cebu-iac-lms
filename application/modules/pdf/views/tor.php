@@ -40,7 +40,7 @@
                     <td width="70%">
                         <table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                             <tr>                            
-                                <td width="25%">             
+                                <td width="20%">             
                                     <font style="font-size: 8;">Name</font>
                                 </td>
                                 <td colspan="3">             
@@ -60,11 +60,11 @@
                                 <td>             
                                     <font style="font-size: 8;">Date of Birth</font>
                                 </td>
-                                <td width="25%">             
+                                <td width="30%">             
                                     <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                                 </td>    
-                                <td width="25%"><font style="font-size: 8;">Place of Birth</font></td>                
-                                <td width="25%">
+                                <td width="20%"><font style="font-size: 8;">Place of Birth</font></td>                
+                                <td width="30%">
                                     <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                                 </td>                
                             </tr>
