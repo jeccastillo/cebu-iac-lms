@@ -239,6 +239,7 @@ foreach($records as $record){
             if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
                 
                 $page++;
+                $page_ctr = 0;
                 $html .= $footer;
                 $html .= '</table>';
                 $pdf->writeHTML($html, true, false, true, false, '');
