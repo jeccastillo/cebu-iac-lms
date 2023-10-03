@@ -59,7 +59,7 @@
                     <td width="20%">             
                         <font style="font-size: 8;">:'.$student['dteBirthDate'].'</font>
                     </td>    
-                    <td width="15%">Place of Birth</td>                
+                    <td width="15%"><font style="font-size: 8;">Place of Birth</font></td>                
                     <td width="20%">
                         <font style="font-size: 8;">:'.$student['place_of_birth'].'</font>
                     </td>                
@@ -71,7 +71,7 @@
                     <td>             
                         <font style="font-size: 8;">:'.$student['strCitizenship'].'</font>
                     </td>    
-                    <td>Gender</td>                
+                    <td><font style="font-size: 8;">Gender</font></td>                
                     <td>
                         <font style="font-size: 8;">:'.$student['enumGender'].'</font>
                     </td>                
@@ -83,7 +83,7 @@
                     <td>             
                         <font style="font-size: 8;">:'.$student['high_school'].'</font>
                     </td>    
-                    <td>ID No.</td>                
+                    <td><font style="font-size: 8;">ID No.</font></td>                
                     <td>
                         <font style="font-size: 8;">:'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>                
@@ -95,7 +95,7 @@
                     <td>             
                         <font style="font-size: 8;">:'.$student['college'].'</font>
                     </td>                     
-                    <td>Date of Admission</td>                
+                    <td><font style="font-size: 8;">Date of Admission</font></td>                
                     <td>
                         <font style="font-size: 8;">:</font>
                     </td>                
@@ -104,7 +104,7 @@
                     <td colspan="2">             
                         <font style="font-size: 8;"></font>
                     </td>
-                    <td>Date of Graduation</td>                
+                    <td><font style="font-size: 8;">Date of Graduation</font></td>                
                     <td>
                         <font style="font-size: 8;">:'.$student['date_of_graduation'].'</font>
                     </td>                
@@ -113,7 +113,7 @@
                     <td colspan="2">             
                         <font style="font-size: 8;"></font>
                     </td>
-                    <td>NSTP Serial No.</td>                
+                    <td><font style="font-size: 8;">NSTP Serial No.</font></td>
                     <td>
                         <font style="font-size: 8;">:'.$student['nstp_serial'].'</font>
                     </td>                
