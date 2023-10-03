@@ -125,7 +125,7 @@
                         </table>
                     </td>
                     <td width="30%">                    
-                        <img src="'.$other_details['picture'].'" width="200px" />                    
+                        <img style="margin-top:-20px;" src="'.$other_details['picture'].'" width="200px" />                    
                     </td>
                 </tr>     
            </table>
