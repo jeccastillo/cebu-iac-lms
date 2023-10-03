@@ -25,8 +25,7 @@
     // Add a page
     // This method has several options, check the source code documentation for more information.
     $pdf->AddPage('P', 'LEGAL');            
-
-    $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
+    
     $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
     $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
     
@@ -38,6 +37,11 @@
                     </td>
                     <td width="80%">             
                         <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.</font>
+                    </td>
+                </tr>
+                <tr>                                                 
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.$cm.'</font>
                     </td>
                 </tr>
                 <tr>                                                 
