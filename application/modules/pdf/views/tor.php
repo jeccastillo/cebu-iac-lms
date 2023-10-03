@@ -40,7 +40,7 @@
                     <td width="15%">             
                         <font style="font-size: 8;">Name</font>
                     </td>
-                    <td colspan="2">             
+                    <td colspan="3">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>                    
                     <td rowspan="8" colspan="2">
