@@ -154,6 +154,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
+$page_footer_margin = "350px";
 $html .='<table>';
 
 foreach($records as $record){
@@ -208,7 +209,9 @@ foreach($records as $record){
                  </tr>';
         
 }
-
+$html .= '<tr>
+            <td style="line-height:'.$page_footer_margin.';" colspan="6"></td>         
+        </tr>';
 $html .= '<tr>
             <td style="text-align:center;" colspan="6">------------------------------------------------------------ Nothing Follows ------------------------------------------------------------</td>
         </tr>';
