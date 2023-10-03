@@ -298,7 +298,7 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    this.$refs.generate_tor.$el.submit();                                                       
+                    this.$refs.generate_tor.submit();                                                       
                     
                 },
                 allowOutsideClick: () => !Swal.isLoading()
