@@ -165,7 +165,7 @@ foreach($records as $record){
     $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
     $html .= '               
         <tr>                                           
-            <td style="font-size:9px;" colspan=6><b>SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</b></td>
+            <td style="font-size:9px;" colspan="6"><b>SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</b></td>
         </tr>        
         <tr>
             <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
@@ -176,7 +176,7 @@ foreach($records as $record){
             <th style="width:10%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
         </tr>
         <tr>
-            <td style="line-height:5px;" colspan=6></td>         
+            <td style="line-height:5px;" colspan="6"></td>         
         </tr>     
         ';
          
@@ -210,11 +210,9 @@ foreach($records as $record){
         
 }
 
-$html .= "<tr>
-            <td colspan=6>
-            ------------------------------------------------------------ Nothing Follows ------------------------------------------------------------
-            </td>
-        </tr>";
+$html .= '<tr>
+            <td colspan="6">------------------------------------------------------------ Nothing Follows ------------------------------------------------------------</td>
+        </tr>';
 $html .= $footer;
 $html .="</table>";    
             
