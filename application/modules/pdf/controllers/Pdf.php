@@ -558,7 +558,7 @@ class Pdf extends CI_Controller {
         $this->db->insert('tb_mas_tor_generated',$rec);
         $units_overall = 0;
         $gwa_overall = 0;
-        $num_terms = count($post['terms_included']);
+        $num_terms = count($post['included_terms']);
         
 
         foreach($post['included_terms'] as $term){
