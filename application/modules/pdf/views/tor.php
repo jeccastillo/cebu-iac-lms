@@ -14,6 +14,7 @@
     $pdf->SetMargins(10, 5 , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    $pdf->setFooterData(array(0,64,0), array(0,64,128));
     $pdf->SetFont('helvetica','',10);
     //$pdf->SetAutoPageBreak(TRUE, 6);
     
