@@ -60,11 +60,11 @@
                                 <td>             
                                     <font style="font-size: 8;">Date of Birth</font>
                                 </td>
-                                <td width="30%">             
+                                <td width="40%">             
                                     <font style="font-size: 8;">: '.$student['dteBirthDate'].'</font>
                                 </td>    
                                 <td width="20%"><font style="font-size: 8;">Place of Birth</font></td>                
-                                <td width="30%">
+                                <td width="20%">
                                     <font style="font-size: 8;">: '.$student['place_of_birth'].'</font>
                                 </td>                
                             </tr>
@@ -125,7 +125,7 @@
                         </table>
                     </td>
                     <td width="30%">                    
-                        <img style="margin-top:-20px;" src="'.$other_details['picture'].'" width="200px" />                    
+                        <img src="'.$other_details['picture'].'" width="200px" />                    
                     </td>
                 </tr>     
            </table>
