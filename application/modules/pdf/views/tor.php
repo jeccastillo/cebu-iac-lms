@@ -43,7 +43,7 @@
                     <td colspan="3">             
                         <font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
                     </td>                    
-                    <td rowspan="9" colspan="2" witdh="30%">
+                    <td rowspan="8" colspan="2" witdh="30%">
                         <img src="'.$other_details['picture'].'" width="200px" />
                     </td>                    
                 </tr>
