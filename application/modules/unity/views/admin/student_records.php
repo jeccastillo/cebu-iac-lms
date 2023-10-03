@@ -174,6 +174,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <input type="hidden" name="student_id" v-model="tor.student_id" />
                         <div class="form-group col-sm-6">
                             <label>Date Issued</label>
                             <input required name="date_issued" v-model="tor.date_issued" type="datetime-local" class="form-control">
@@ -259,7 +260,7 @@ new Vue({
             verified_by: undefined,
             registrar: undefined,
             included_terms: [],
-            student_id: '<?php echo $id; ?>',
+            student_id: '<?php echo $id; ?>',            
         }   
     },
 

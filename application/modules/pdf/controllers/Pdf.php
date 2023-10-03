@@ -27,6 +27,7 @@ class Pdf extends CI_Controller {
         $this->config->load('courses');
         
         $this->data['campus'] = $this->config->item('campus');
+        $this->data["user"] = $this->session->all_userdata();
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
@@ -520,6 +521,34 @@ class Pdf extends CI_Controller {
     public function generate_tor(){
         $post = $this->input->post();
         print_r($post);
+        $student = $this->data_fetcher->getStudent($id);
+        switch($student['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        if($stype == "shs")
+            $sem = $this->data_fetcher->get_active_sem_shs();
+        else
+            $sem = $this->data_fetcher->get_active_sem();
+
+        $rec =
+        array(
+            'generated_by'=>$this->data['user']['strFirstname']." ".$this->data['user']['strLastname'],
+            'term_id' => $sem['intID'],
+            
+        );
     }
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
