@@ -82,8 +82,7 @@
                             <label for="dteBirthDate">Birthdate</label>
                             <input type="date" name="dteBirthDate"
                                     value="<?php echo $student['dteBirthDate']; ?>"
-                                    class="form-control validate" id="dteBirthDate" />                                
-                            
+                                    class="form-control validate" id="dteBirthDate" />                                                            
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="nstp_serial">Place of Birth</label>
@@ -146,6 +145,11 @@
                             <input type="text" value="<?php echo $student['nstp_serial']; ?>" name="nstp_serial"
                                 class="form-control" id="nstp_serial" placeholder="Enter NSTP Number">
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="dteBirthDate">Graduation Date</label>
+                            <input type="date" name="date_of_graduation"
+                                    value="<?php echo $student['date_of_graduation']; ?>"
+                                    class="form-control validate" id="date_of_graduation" />  
                         
                         <!-- <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship: </label>
