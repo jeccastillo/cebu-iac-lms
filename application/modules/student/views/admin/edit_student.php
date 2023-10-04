@@ -80,11 +80,10 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="dteBirthDate">Birthdate</label>
-                            <div class="input-group">
-                                <input class="form-control" type="date" name="dteBirthDate"
+                            <input type="date" name="dteBirthDate"
                                     value="<?php echo $student['dteBirthDate']; ?>"
                                     class="form-control validate" id="dteBirthDate" />                                
-                            </div>
+                            
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="nstp_serial">Place of Birth</label>
