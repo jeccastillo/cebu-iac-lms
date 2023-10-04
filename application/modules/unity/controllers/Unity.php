@@ -924,7 +924,7 @@ class Unity extends CI_Controller {
                                   ->result_array();
 
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
-        $data['all_subjects'] = $cuicculum;
+        $data['all_subjects'] = $curicculum;
         $data['curriculum_subjects'] = [];
         
         $assessment_sum = 0;
