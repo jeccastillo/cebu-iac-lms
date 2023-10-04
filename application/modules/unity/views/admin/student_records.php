@@ -226,7 +226,7 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Generate TOR</h4>
+                    <h4 class="modal-title">Credit Subject</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">                        
@@ -238,7 +238,10 @@
                             <label>Descriptive Title</label>
                             <textarea required  v-model="add_credits.descriptive_title" class="form-control"></textarea>
                         </div>
-                        
+                        <div class="form-group col-sm-6">
+                            <label>Units</label>
+                            <input required v-model="add_credits.course_code" type="number" step="0.25" class="form-control">
+                        </div> 
                         <div class="form-group col-sm-6">
                             <label>Equivalent Subject</label>
                             <select v-model="add_credits.equivalent_subject" class="form-control">
