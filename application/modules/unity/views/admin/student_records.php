@@ -5,6 +5,7 @@
             <small>
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR</a>                                       
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
             </small>
         </h1>
         <hr />
@@ -163,7 +164,7 @@
         </div>
     </div>
     <div class="modal fade" id="printTranscript" role="dialog">
-        <form ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/generate_tor'" class="modal-dialog modal-lg">
+        <form target="_blank" ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/generate_tor'" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -217,6 +218,45 @@
 
         </form>
     </div>
+    <div class="modal fade" id="creditSubjects" role="dialog">
+        <form ref="credit_subjects" @submit.prevent="creditSubject" method="post"  class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Generate TOR</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">                        
+                        <div class="form-group col-sm-6">
+                            <label>Course Code</label>
+                            <input required v-model="add_credits.course_code" type="text" class="form-control">
+                        </div>                       
+                        <div class="form-group col-sm-6">
+                            <label>Descriptive Title</label>
+                            <textarea required  v-model="add_credits.descriptive_title" class="form-control"></textarea>
+                        </div>
+                        
+                        <div class="form-group col-sm-6">
+                            <label>Equivalent Subject</label>
+                            <select v-model="add_credits.equivalent_subject" class="form-control">
+                                
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -252,6 +292,7 @@ new Vue({
         records: [],         
         gwa: undefined,
         curriculum_subjects: [],
+        subjects: [],
         units: undefined,
         assessment_gwa: undefined,  
         assessment_units: undefined, 
@@ -266,7 +307,18 @@ new Vue({
             student_id: '<?php echo $id; ?>',
             picture: undefined,            
             admission_date: undefined,
-        }   
+        },
+        add_credits:{
+            course_code: undefined,
+            descriptive_title: undefined,
+            units: undefined,
+            grade: undefined,
+            completion: undefined,
+            term: undefined,
+            school_year: undefined,
+            student_id: '<?php echo $id; ?>',
+            equivalent_subject: undefined,
+        }
     },
 
     mounted() {
@@ -278,6 +330,7 @@ new Vue({
                 .then((data) => {                                          
                     this.student = data.data.student;
                     this.records = data.data.data;        
+                    this.subjects = data.data.all_subjects;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;  
@@ -322,6 +375,51 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });         
             
+        }
+        creditSubject: function(){
+            Swal.fire({
+                title: 'Add Credits?',
+                text: "Continue adding credits?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.add_credits)) {
+                        formdata.append(key,value);
+                    }
+                    return axios
+                    .post(base_url + 'unity/add_credit',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });         
         }
     }
 
