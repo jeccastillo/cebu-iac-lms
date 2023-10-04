@@ -333,11 +333,11 @@ new Vue({
             descriptive_title: undefined,
             units: undefined,
             grade: undefined,
-            completion: undefined,
+            completion: '',
             term: undefined,
             school_year: undefined,
             student_id: '<?php echo $id; ?>',
-            equivalent_subject: undefined,
+            equivalent_subject: 0,
         }
     },
 
