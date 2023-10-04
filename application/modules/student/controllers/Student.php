@@ -363,6 +363,9 @@ class Student extends CI_Controller {
     {
         $post = $this->input->post();
         $post['dteBirthDate'] = date("Y-m-d",strtotime($post['dteBirthDate']));
+        if($post['date_of_graduation'] == ''){
+            unset($post['date_of_graduation']);
+        }
         
         //print_r($post);
         $config['upload_path'] = './assets/photos';

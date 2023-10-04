@@ -151,6 +151,8 @@
                                     value="<?php echo $student['date_of_graduation']; ?>"
                                     class="form-control validate" id="date_of_graduation" />  
                         </div>
+                        
+                        
                         <!-- <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship: </label>
                             <select class="form-control" name="enumScholarship">
@@ -171,6 +173,8 @@
                     </div-->
                         
                     </div>
+                    <hr />
+                    <h4>Other Details</h4>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Mother's Maiden Name</label>
