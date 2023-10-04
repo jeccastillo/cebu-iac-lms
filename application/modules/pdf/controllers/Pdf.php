@@ -572,7 +572,7 @@ class Pdf extends CI_Controller {
                     
         foreach($terms_in_credited as $term_credited){
 
-            $credited = $this->db->where(array('student_id'=>$post['student_id'],'term'=>$term_credited['term'],'schoo_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+            $credited = $this->db->where(array('student_id'=>$post['student_id'],'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
                                 ->order_by('course_code','asc')                                
                                 ->get('tb_mas_credited')
                                 ->result_array();
@@ -582,7 +582,7 @@ class Pdf extends CI_Controller {
                 'school' => $term_credited['completion'],
                 'school_year' => $term_credited['school_year'],
             );     
-                                       
+
             $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
 
         }   
