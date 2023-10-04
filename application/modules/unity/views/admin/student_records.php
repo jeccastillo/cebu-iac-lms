@@ -33,6 +33,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_1" data-toggle="tab">Grades</a></li>
                     <li><a href="#tab_2" data-toggle="tab">Curriculum Evaluation</a></li>                        
+                    <li><a href="#tab_3" data-toggle="tab">Credited Subjects</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
@@ -158,6 +159,39 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-pane" id="tab_3">
+                        <div v-for="term in credited_subjects" class="box box-success">
+                            <div class="box-header">
+                                <h4>{{ term.other_data.school + " " + term.other_data.school_year + ", " + term.other_data.term }}</h4>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>                                            
+                                            <th>Course Code</th>
+                                            <th>Course Description</th>
+                                            <th>Units</th>                                            
+                                            <th>Grade</th>
+                                            <th>Date Added</th>
+                                            <th>Added By</th>                                      
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                          
+                                        <tr v-for="record in term.records" style="font-size: 13px;">
+                                            <td>{{ record.course_code  }}</td>
+                                            <td>{{ record.descriptive_title }}</td>                                            
+                                            <td>({{ record.units.toFixed(1) }})</td>
+                                            <td>{{ record.grade }}</td> 
+                                            <td>{{ record.date_added }}</td>                                                                                         
+                                            <td>{{ record.added_by }}</td>
+                                            <td></td>
+                                        </tr>                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                          
                     </div>
                 </div>
             </div>
@@ -317,6 +351,7 @@ new Vue({
         assessment_gwa: undefined,  
         assessment_units: undefined, 
         applicant_data: undefined,  
+        credited_subjects: [],
         tor:{
             date_issued: undefined,
             remarks: undefined,
@@ -349,6 +384,7 @@ new Vue({
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
                     this.student = data.data.student;
+                    this.credited_subjects =  data.data.credited_subjects;
                     this.records = data.data.data;        
                     this.subjects = data.data.all_subjects;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
