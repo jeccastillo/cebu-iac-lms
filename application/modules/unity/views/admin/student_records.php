@@ -250,7 +250,7 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit" class="btn btn-primary">Generate</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
