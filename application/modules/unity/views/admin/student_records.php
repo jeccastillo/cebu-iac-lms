@@ -255,6 +255,10 @@
                             <input placeholder="Ex. First Trimester" v-model="add_credits.term" type="text" max="50" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
+                            <label>School Year</label>
+                            <input placeholder="Ex. 2023-2024" v-model="add_credits.school_year" type="text" max="50" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
                             <label>Equivalent Subject</label>
                             <select v-model="add_credits.equivalent_subject" class="form-control">
                                 <option v-for="item in subjects" :value="item.intID">
@@ -262,7 +266,6 @@
                                 </option>
                             </select>
                         </div>
-
                     </div>
                 </div>
                 <div class=" modal-footer">

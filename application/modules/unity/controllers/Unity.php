@@ -905,6 +905,22 @@ class Unity extends CI_Controller {
             
     }
 
+    public function add_credit(){
+        $post = $this->input->post();
+        $post['added_by'] = $this->data['user']['strFirstname']." ".$this->data['user']['strLastname'];
+        $post['date_added'] = date("Y-m-d");
+        if($this->db->insert('tb_mas_credited',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully credited subject";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Oops something went wrong.";
+        }
+
+        echo json_encode($data);
+    }
+
     public function student_records($id){
         
         $this->data['id'] = $id;
