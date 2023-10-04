@@ -188,7 +188,7 @@
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
                                             <td>{{ record.strCode }}</td>
-                                            <td></td>
+                                            <td><button class="btn btn-danger" @click="deleteCredited(record.id)">Delete</button></td>
                                         </tr>                                        
                                     </tbody>
                                 </table>
@@ -478,6 +478,49 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });         
+        },
+        deleteCredited: function(id){
+            Swal.fire({
+                title: 'Delete Credited Subject?',
+                text: "Continue Deleting This Subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('id',id);
+                    return axios
+                    .post(base_url + 'unity/delete_credited',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         }
     }
 
