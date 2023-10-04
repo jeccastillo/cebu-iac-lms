@@ -231,20 +231,28 @@
                 <div class="modal-body">
                     <div class="row">                        
                         <div class="form-group col-sm-6">
-                            <label>Course Code</label>
+                            <label>Course Code *</label>
                             <input required v-model="add_credits.course_code" type="text" class="form-control">
                         </div>                       
                         <div class="form-group col-sm-6">
-                            <label>Descriptive Title</label>
+                            <label>Descriptive Title *</label>
                             <textarea required  v-model="add_credits.descriptive_title" class="form-control"></textarea>
                         </div>
                         <div class="form-group col-sm-6">
-                            <label>Units</label>
+                            <label>Units *</label>
                             <input required v-model="add_credits.units" type="number" step="0.25" class="form-control">
                         </div> 
                         <div class="form-group col-sm-6">
-                            <label>Grade</label>
+                            <label>Grade *</label>
                             <input required v-model="add_credits.grade" type="text" max="25" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Completion</label>
+                            <input v-model="add_credits.completion" type="text" max="50" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Term</label>
+                            <input placeholder="Ex. First Trimester" v-model="add_credits.term" type="text" max="50" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Equivalent Subject</label>
