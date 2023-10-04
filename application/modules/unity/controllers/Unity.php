@@ -974,6 +974,32 @@ class Unity extends CI_Controller {
         $total_units_earned = 0;
         $total_units_gwa = 0;
         $gwa = 0;
+
+        $credited_subjects = [];
+
+        $terms_in_credited = $this->db->where(array('student_id'=>$id))
+                                      ->order_by('school_year asc, term asc')
+                                      ->group_by(array('school_year','term','completion'))
+                                      ->get('tb_mas_credited')
+                                      ->result_array();
+                    
+        foreach($terms_in_credited as $term_credited){
+
+            $credited = $this->db->where(array('student_id'=>$id,'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+                                ->order_by('course_code','asc')                                
+                                ->get('tb_mas_credited')
+                                ->result_array();
+            
+            $credited_data = array(
+                'term' => $term_credited['term'],
+                'school' => $term_credited['completion'],
+                'school_year' => $term_credited['school_year'],
+            );     
+
+            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+        }
+
+
         //Check Curriculum for units earned
         foreach($registrations as $reg){
             $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
@@ -1011,6 +1037,7 @@ class Unity extends CI_Controller {
         $data['assessment_gwa'] = $assessment_gwa;
         $data['assessment_units'] = $assessment_units;
         $data['total_units_earned'] = $total_units_earned;
+        $data['credited_subjects'] = $credited_subjects;
         $data['data'] = $terms;
 
         echo json_encode($data);
