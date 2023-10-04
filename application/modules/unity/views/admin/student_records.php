@@ -247,7 +247,7 @@
                             <input required v-model="add_credits.grade" type="text" max="25" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
-                            <label>Completion</label>
+                            <label>School *</label>
                             <input v-model="add_credits.completion" type="text" max="50" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">

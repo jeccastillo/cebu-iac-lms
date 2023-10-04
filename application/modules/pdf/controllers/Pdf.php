@@ -562,6 +562,32 @@ class Pdf extends CI_Controller {
         $total_records = 0;
         $rec['admission_date'] = $post['admission_date'];
         $rec['picture'] = $post['picture'];
+        $credited_subjects = [];
+
+        $terms_in_credited = $this->db->where(array('student_id'=>$post['student_id']))
+                                      ->order_by('school_year asc, term asc')
+                                      ->group_by(array('school_year','term','completion'))
+                                      ->get('tb_mas_credited')
+                                      ->result_array();
+                    
+        foreach($terms_in_credited as $term_credited){
+
+            $credited = $this->db->where(array('student_id'=>$post['student_id'],'term'=>$term_credited['term'],'schoo_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+                                ->order_by('course_code','asc')                                
+                                ->get('tb_mas_credited')
+                                ->result_array();
+            
+            $credited_data = array(
+                'term' => $term_credited['term'],
+                'school' => $term_credited['completion'],
+                'school_year' => $term_credited['school_year'],
+            );     
+                                       
+            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+
+        }   
+        
+        $this->data['credited_subjects'] = $credited_subjects;
         
 
         foreach($post['included_terms'] as $term){
@@ -585,9 +611,7 @@ class Pdf extends CI_Controller {
                 if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $record['intFinalized'] > 1){
                     $total_units += $record['strUnits'];
                 }
-
-                $schedule = $this->data_fetcher->getScheduleByCodeNew($record['classlistID']);                                                  
-                $record['schedule'] = $schedule;
+                
                 $sc_ret[] = $record;
                 
                 if($record['intFinalized'] > 1)

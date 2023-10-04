@@ -193,6 +193,61 @@ $page_footer_margin = 520;
 $html .='<table>';
 $html.=$table_header_page;
 
+foreach($credited_subjects as $record_credited){
+    $html .= '
+        <tr>                                           
+            <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school'].'</b></td>
+        </tr>';
+        $page_footer_margin -= 15;
+    $html .= '
+        <tr>                                           
+            <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school_year'].', '.$record_credited['other_data']['term'].'</b></td>
+        </tr>                    
+        ';
+        $page_footer_margin -= 15;
+    foreach($record_credited['records'] as $item){ 
+        
+        $html .= '            
+        <tr>
+            <td style="font-size:8px;">'.$item['course_code'].'</td>
+            <td style="font-size:8px;">'.$item['descriptive_title'].'</td>
+            <td style="font-size:8px;text-align:center;">('.number_format($item['units'], 2, '.', '').')</td>
+            <td style="font-size:8px;text-align:center;">'.$item['grade'].'</td>
+            <td style="font-size:8px;text-align:center;"></td>                        
+            <td style="font-size:8px;text-align:center;">('.number_format($item['units'], 2, '.', '').')</td>
+        </tr>            
+        ';
+
+        if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
+                
+            $page++;
+            $page_ctr = 0;
+            $html .= '<tr>
+                        <td style="text-align:center;" colspan="6">------------------------------------------------------------ Continued on Page '.$page.' ------------------------------------------------------------</td>
+                    </tr>';
+            $html .= '<tr>
+                        <td style="line-height:'.$page_footer_margin.'px;" colspan="6"></td>         
+                    </tr>';
+            $html .= $footer;
+            $html .= '</table>';
+            $pdf->writeHTML($html, true, false, true, false, '');                
+            $pdf->AddPage();
+            $page_footer_margin = 520;
+            $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">                
+                    <tr>
+                        <td style="line-height:150px;" colspan=6></td>         
+                    </tr>        
+                </table>
+            ';
+            $html .= $header_page;
+            $html .='<table>';
+            $html.=$table_header_page;
+
+        }
+    }
+
+}
+
 foreach($records as $record){
 
     $active_sem = $record['other_data']['term'];
