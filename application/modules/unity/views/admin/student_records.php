@@ -187,7 +187,7 @@
                                             <td>{{ record.grade }}</td> 
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
-                                            <td>{{ record.equivalent_subject }}</td>
+                                            <td>{{ record.strCode }}</td>
                                             <td></td>
                                         </tr>                                        
                                     </tbody>
