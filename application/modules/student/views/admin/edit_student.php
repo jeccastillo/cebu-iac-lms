@@ -81,7 +81,7 @@
                         <div class="form-group col-xs-6">
                             <label for="dteBirthDate">Birthdate</label>
                             <div class="input-group">
-                                <input type="date" name="dteBirthDate"
+                                <input class="form-control" type="date" name="dteBirthDate"
                                     value="<?php echo $student['dteBirthDate']; ?>"
                                     class="form-control validate" id="dteBirthDate" />                                
                             </div>
