@@ -88,7 +88,7 @@
                         <div class="form-group col-xs-6">
                             <label for="nstp_serial">Place of Birth</label>
                             <input type="text" value="<?php echo $student['place_of_birth']; ?>" name="place_of_birth"
-                                class="form-control" id="place_of_birth" placeholder="Enter Contact Number">
+                                class="form-control" id="place_of_birth" placeholder="Enter Place of Birth">
                         </div>
 
                         <div class="form-group col-xs-6">
@@ -144,7 +144,7 @@
                         <div class="form-group col-xs-6">
                             <label for="nstp_serial">NSTP Serial Number</label>
                             <input type="text" value="<?php echo $student['nstp_serial']; ?>" name="nstp_serial"
-                                class="form-control" id="nstp_serial" placeholder="Enter Contact Number">
+                                class="form-control" id="nstp_serial" placeholder="Enter NSTP Number">
                         </div>
                         
                         <!-- <div class="form-group col-xs-6">
