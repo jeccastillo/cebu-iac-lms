@@ -923,7 +923,7 @@ class Unity extends CI_Controller {
 
     public function delete_credited(){
         $post = $this->input->post();
-        $credited = $this->db->get_where('tb_mas_credited',array('id'=>$id))->first_row();
+        $credited = $this->db->get_where('tb_mas_credited',array('id'=>$post['id']))->first_row();
         if($this->db->where('id',$post['id'])->delete('tb_mas_credited')){
             $data['success'] = true;
             $data['message'] = "Successfully deleted credited subject";
