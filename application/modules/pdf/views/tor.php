@@ -192,13 +192,15 @@ $firstpage = true;
 $page_footer_margin = 520;
 $html .='<table>';
 $html.=$table_header_page;
-
-foreach($credited_subjects as $record_credited){
-    $html .= '
-        <tr>                                           
-            <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school'].'</b></td>
-        </tr>';
-        $page_footer_margin -= 15;
+$prev_school = "";
+foreach($credited_subjects as $record_credited){    
+    if($prev_school != $record_credited['other_data']['school']){
+        $html .= '
+            <tr>                                           
+                <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school'].'</b></td>
+            </tr>';
+            $page_footer_margin -= 15;
+    }
     $html .= '
         <tr>                                           
             <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school_year'].', '.$record_credited['other_data']['term'].'</b></td>
@@ -247,6 +249,7 @@ foreach($credited_subjects as $record_credited){
 
         }
     }
+    $prev_school = $record_credited['other_data']['school'];
 
 }
 
