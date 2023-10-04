@@ -240,8 +240,12 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Units</label>
-                            <input required v-model="add_credits.course_code" type="number" step="0.25" class="form-control">
+                            <input required v-model="add_credits.units" type="number" step="0.25" class="form-control">
                         </div> 
+                        <div class="form-group col-sm-6">
+                            <label>Grade</label>
+                            <input required v-model="add_credits.grade" type="text" max="25" class="form-control">
+                        </div>
                         <div class="form-group col-sm-6">
                             <label>Equivalent Subject</label>
                             <select v-model="add_credits.equivalent_subject" class="form-control">
