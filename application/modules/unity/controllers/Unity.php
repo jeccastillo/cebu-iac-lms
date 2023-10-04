@@ -985,7 +985,9 @@ class Unity extends CI_Controller {
                     
         foreach($terms_in_credited as $term_credited){
 
-            $credited = $this->db->where(array('student_id'=>$id,'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+            $credited = $this->db->select('tb_mas_credited.*,strCourseCode,intID')
+                                ->join('tb_mas_subjects','tb_mas_credited.equivalent_subject = tb_mas_subjects.intID','left')
+                                ->where(array('student_id'=>$id,'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
                                 ->order_by('course_code','asc')                                
                                 ->get('tb_mas_credited')
                                 ->result_array();

@@ -174,7 +174,8 @@
                                             <th>Units</th>                                            
                                             <th>Grade</th>
                                             <th>Date Added</th>
-                                            <th>Added By</th>                                      
+                                            <th>Added By</th>
+                                            <th>Equivalent Subject</th>                                      
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -186,6 +187,7 @@
                                             <td>{{ record.grade }}</td> 
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
+                                            <td>{{ record.equivalent_subject }}</td>
                                             <td></td>
                                         </tr>                                        
                                     </tbody>
