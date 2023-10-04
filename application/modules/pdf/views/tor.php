@@ -206,7 +206,9 @@ foreach($credited_subjects as $record_credited){
         ';
         $page_footer_margin -= 15;
     foreach($record_credited['records'] as $item){ 
-        
+        $ctr++;
+        $page_ctr++;
+        $page_footer_margin -= 15;
         $html .= '            
         <tr>
             <td style="font-size:8px;">'.$item['course_code'].'</td>
