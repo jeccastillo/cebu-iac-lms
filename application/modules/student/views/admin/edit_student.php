@@ -79,15 +79,19 @@
                                 class="form-control" id="strEmail" placeholder="Enter Email Address">
                         </div>
                         <div class="form-group col-xs-6">
-                            <label for="dteBirthDate">Birthday</label>
+                            <label for="dteBirthDate">Birthdate</label>
                             <div class="input-group date">
-                                <input type="text" name="dteBirthDate"
-                                    value="<?php echo date("m/d/Y",strtotime($student['dteBirthDate'])); ?>"
-                                    class="form-control validate" id="dteBirthDate" placeholder="Enter Birthday">
-                                <span class="input-group-addon"><span
-                                        class="glyphicon glyphicon-calendar"></span></span>
+                                <input type="date" name="dteBirthDate"
+                                    value="<?php echo $student['dteBirthDate']; ?>"
+                                    class="form-control validate" id="dteBirthDate" />                                
                             </div>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="nstp_serial">Place of Birth</label>
+                            <input type="text" value="<?php echo $student['place_of_birth']; ?>" name="place_of_birth"
+                                class="form-control" id="place_of_birth" placeholder="Enter Contact Number">
+                        </div>
+
                         <div class="form-group col-xs-6">
                             <label for="strMobileNumber">Contact Number</label>
                             <input type="text" value="<?php echo $student['strMobileNumber']; ?>" name="strMobileNumber"
@@ -138,6 +142,12 @@
                             </select>
 
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label for="nstp_serial">NSTP Serial Number</label>
+                            <input type="text" value="<?php echo $student['nstp_serial']; ?>" name="nstp_serial"
+                                class="form-control" id="nstp_serial" placeholder="Enter Contact Number">
+                        </div>
+                        
                         <!-- <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship: </label>
                             <select class="form-control" name="enumScholarship">
@@ -156,19 +166,7 @@
                         </select>
                         
                     </div-->
-                        <div class="form-group col-xs-6">
-                            <label for="srtPicture">Upload Picture</label>
-                            <?php if($student['strPicture'] != "" ): ?>
-                            <img class="img-responsive" src="<?php echo $student_pics.$student['strPicture']; ?>"
-                                width="30%" height="30%" />
-                            <input type="file" name="strPicture" />
-                            <?php else: ?>
-                            <i class="icon ion-android-social-user"></i>
-                            <input type="file" name="strPicture" />
-                            <?php endif; ?>
-
-
-                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
