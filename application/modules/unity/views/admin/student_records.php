@@ -182,7 +182,7 @@
                                         <tr v-for="record in term.records" style="font-size: 13px;">
                                             <td>{{ record.course_code  }}</td>
                                             <td>{{ record.descriptive_title }}</td>                                            
-                                            <td>({{ record.units.toFixed(1) }})</td>
+                                            <td>({{ parseInt(record.units).toFixed(1) }})</td>
                                             <td>{{ record.grade }}</td> 
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
