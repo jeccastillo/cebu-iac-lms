@@ -921,6 +921,22 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function delete_credited(){
+        $post = $this->input->post();
+        $credited = $this->db->get_where('tb_mas_credited',array('id'=>$id))->first_row();
+        if($this->db->where('id',$post['id'])->delete('tb_mas_credited')){
+            $data['success'] = true;
+            $data['message'] = "Successfully deleted credited subject";
+            $this->data_poster->log_action('Credited','Deleted a Credited Subject '.$credited->course_code.' for student with id '.$credited->student_id,'red');
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Oops something went wrong.";
+        }
+
+        echo json_encode($data);
+    }
+
     public function student_records($id){
         
         $this->data['id'] = $id;
