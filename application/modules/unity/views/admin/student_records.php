@@ -242,7 +242,9 @@
                         <div class="form-group col-sm-6">
                             <label>Equivalent Subject</label>
                             <select v-model="add_credits.equivalent_subject" class="form-control">
-                                
+                                <option v-for="item in subjects" :value="item.intID">
+                                    {{ item.strCode + " "  + item.strDescription }}
+                                </option>
                             </select>
                         </div>
 
