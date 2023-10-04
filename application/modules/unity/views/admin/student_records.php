@@ -375,7 +375,7 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });         
             
-        }
+        },
         creditSubject: function(){
             Swal.fire({
                 title: 'Add Credits?',
