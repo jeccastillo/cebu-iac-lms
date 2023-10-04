@@ -150,7 +150,7 @@
                             <input type="date" name="date_of_graduation"
                                     value="<?php echo $student['date_of_graduation']; ?>"
                                     class="form-control validate" id="date_of_graduation" />  
-                        
+                        </div>
                         <!-- <div class="form-group col-xs-6">
                             <label for="enumScholarship">Scholarship: </label>
                             <select class="form-control" name="enumScholarship">
