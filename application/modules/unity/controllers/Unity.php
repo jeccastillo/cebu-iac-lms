@@ -973,7 +973,7 @@ class Unity extends CI_Controller {
                      ->get('tb_mas_classlist_student')
                      ->first_row('array');
             
-            $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('subject_id'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
+            $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
             
             if($cs['rec'] && $cs['rec']['include_gwa']){
                 $assessment_units += $cs['rec']['strUnits'];   
