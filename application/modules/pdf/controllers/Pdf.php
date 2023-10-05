@@ -557,6 +557,122 @@ class Pdf extends CI_Controller {
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
+
+        $units_overall = 0;
+        $gwa_overall = 0;
+        $total_records = 0;
+        $rec['admission_date'] = $post['admission_date'];
+        $rec['picture'] = $post['picture'];
+        $credited_subjects = [];
+
+        $terms_in_credited = $this->db->where(array('student_id'=>$post['student_id']))
+                                      ->order_by('school_year asc, term asc')
+                                      ->group_by(array('school_year','term','completion'))
+                                      ->get('tb_mas_credited')
+                                      ->result_array();
+                    
+        foreach($terms_in_credited as $term_credited){
+
+            $credited = $this->db->where(array('student_id'=>$post['student_id'],'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+                                ->order_by('course_code','asc')                                
+                                ->get('tb_mas_credited')
+                                ->result_array();
+            
+            $credited_data = array(
+                'term' => $term_credited['term'],
+                'school' => $term_credited['completion'],
+                'school_year' => $term_credited['school_year'],
+            );     
+
+            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+
+        }   
+        
+        $this->data['credited_subjects'] = $credited_subjects;
+        
+
+        foreach($post['included_terms'] as $term){
+            $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
+            $sem = $this->data_fetcher->get_sem_by_id($term);                    
+            $sc_ret = [];
+            $gwa = 0;
+            $sum = 0;       
+            $total = 0; 
+            $total_units = 0;
+            
+            
+            foreach($records as $record)
+            {
+                
+                if($record['include_gwa'] && $record['v3'] && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+                    $sum += (float)$record['v3'] * $record['strUnits'];
+                    $total += $record['strUnits'];                
+                }
+
+                if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $record['intFinalized'] > 1){
+                    $total_units += $record['strUnits'];
+                }
+                
+                $sc_ret[] = $record;
+                
+                if($record['intFinalized'] > 1)
+                    $total_records++;
+            }                 
+            if($total > 0)
+                $gwa =  round(($sum/$total),2);
+
+            $units_overall += $total_units;
+            $gwa_overall += $gwa;
+            $other_data = 
+            array(
+                'term' => $sem,
+                'total_units' => $total_units,
+                'gwa' => $gwa,
+                
+
+            );
+            
+
+            $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
+        }
+        
+        $rec['total_records'] = $total_records;
+
+        $this->data['other_details'] = $rec;
+        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
+        $this->data['units_overall'] = $units_overall;        
+        $this->data['student'] = $student;        
+
+        $html = $this->load->view("tor",$this->data);
+    }
+
+    public function reprint_tor($id){
+        
+        $post = $this->db->get_where('tb_mas_tor_generated',array('id'=>$id))->first_row('array');
+        $post['included_terms'] = explode(",",$post['included_terms']);
+        $student = $this->data_fetcher->getStudent($post['student_id']);
+        $num_terms = count($post['included_terms']);
+        switch($student['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        if($stype == "shs")
+            $sem = $this->data_fetcher->get_active_sem_shs();
+        else
+            $sem = $this->data_fetcher->get_active_sem();
+               
         
         $units_overall = 0;
         $gwa_overall = 0;
