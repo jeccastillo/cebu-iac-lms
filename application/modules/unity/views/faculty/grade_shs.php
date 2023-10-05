@@ -1,0 +1,44 @@
+<table class="table table-striped" style="font-size: .8em;">
+    <thead>
+        <tr>
+            <th colspan="2" class="text-center">Grading System for SHS</th>
+        </tr>                                        
+    </thead>
+    <tbody>
+        <tr>
+            <td>1.00</td>
+            <td>98-100</td>
+        </tr>
+        <tr>
+            <td>1.25</td>
+        </tr>
+        <tr>
+            <td>1.50</td>
+        </tr>
+        <tr>
+            <td>1.75</td>
+        </tr>                   
+        <tr>
+            <td>2.00</td>
+        </tr>
+        <tr>
+            <td>2.25</td>
+        </tr>
+        <tr>
+            <td>2.50</td>
+        </tr>
+        <tr>
+            <td>2.75</td>
+        </tr>
+        <tr>
+            <td>3.00</td>
+        </tr>
+        <tr>
+            <td>5.00</td>
+        </tr>                                                                                    
+        <tr>
+            <td>OW</td>
+            <td>Officially Withdrawn</td>
+        </tr>
+    </tbody>
+</table>

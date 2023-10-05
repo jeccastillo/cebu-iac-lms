@@ -89,10 +89,10 @@
                                 </select>
                             </div>
                         <div class="form-group col-xs-6">
-                                <label for="intYearLevel">Major Subject</label>
+                                <label for="intYearLevel">Subject Type</label>
                                 <select class="form-control" name="intMajor" id="intMajor" >
-                                    <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">No</option>
-                                    <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                    <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">College</option>
+                                    <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">SHS</option>
                                 </select>
                             </div>
                         <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6',$subject['strDepartment']); ?>

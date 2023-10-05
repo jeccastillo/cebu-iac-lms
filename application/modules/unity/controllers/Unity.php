@@ -2122,7 +2122,11 @@ class Unity extends CI_Controller {
                                                     ->order_by('value','ASC')
                                                     ->get('tb_mas_grading_item')
                                                     ->result_array();
-            
+
+            if($clist['intMajor'] == 0)
+                $data['legend'] = $this->load->view('faculty/grade_college',true);
+            else
+                $data['legend'] = $this->load->view('faculty/grade_shs',true);
             
             if(!$data['subject']['grading_system_id_midterm']) 
                 $data['grading_items_midterm'] = $data['grading_items'];                                                
@@ -2138,7 +2142,7 @@ class Unity extends CI_Controller {
                                                 ->order_by('value','ASC')
                                                 ->get('tb_mas_grading_item')
                                                 ->result_array();                  
-            }
+            }            
 
                             
             $st = [];
