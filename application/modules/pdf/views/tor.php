@@ -100,7 +100,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="30%"><img src="'.$other_details['picture'].'" width="200px" /></td>
+                    <td width="30%"></td>
                 </tr>     
            </table>
           ';
@@ -189,7 +189,7 @@ $page = 1;
 $ctr = 0;
 $page_ctr = 0;
 $firstpage = true;
-$page_footer_margin = 390;
+$page_footer_margin = 450;
 $html .='<table>';
 $html.=$table_header_page;
 $prev_school = "";
