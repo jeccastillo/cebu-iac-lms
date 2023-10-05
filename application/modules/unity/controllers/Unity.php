@@ -958,6 +958,8 @@ class Unity extends CI_Controller {
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
         $data['all_subjects'] = $curicculum;
         $data['curriculum_subjects'] = [];
+
+        $data['generated_tor'] = $this->db->get_where('tb_mas_tor_generated',array('student_id'=>$id))->result_array();
         
         $assessment_sum = 0;
         $assessment_units = 0;

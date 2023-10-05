@@ -557,6 +557,7 @@ class Pdf extends CI_Controller {
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
+        
         $units_overall = 0;
         $gwa_overall = 0;
         $total_records = 0;
