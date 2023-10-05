@@ -1731,32 +1731,29 @@ class Registrar extends CI_Controller {
     public function cut_off_registration($sem){
         $post = $this->input->post();
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
-        if($post['date'] == date("Y-m-d")){
-            $classlists = $this->db->get_where('tb_mas_classlist',array('strAcademicYear'=>$sem))->result_array();
-            foreach($classlists as $classlist){
-                $students = $this->db
-                                ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG')
-                                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID','left')
-                                ->where(array('intClassListID'=>$classlist['intID']))                            
-                                ->get('tb_mas_classlist_student')
-                                ->result_array();
-                foreach($students as $student){                    
-                    if($student['intROG'] == "0"){
-                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID']))                    
-                                ->delete('tb_mas_classlist_student');            
-                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
-                                ->delete('tb_mas_registration');                                            
-                    }
+        
+        $classlists = $this->db->get_where('tb_mas_classlist',array('strAcademicYear'=>$sem))->result_array();
+        foreach($classlists as $classlist){
+            $students = $this->db
+                            ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG')
+                            ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID','left')
+                            ->where(array('intClassListID'=>$classlist['intID']))                            
+                            ->get('tb_mas_classlist_student')
+                            ->result_array();
+            foreach($students as $student){                    
+                if($student['intROG'] == "0"){
+                    $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID'],'date_added <='=>$post['date']))                    
+                            ->delete('tb_mas_classlist_student');            
+                    
+                    //$this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
+                            //->delete('tb_mas_registration');                                            
                 }
             }
-            $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
-            $data['success'] = true;
-            $data['message'] = "Successfully Cut off Registration";
         }
-        else{
-            $data['success'] = false;
-            $data['message'] = "Update Failed input valid date";
-        }
+        $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
+        $data['success'] = true;
+        $data['message'] = "Successfully Cut off Registration";
+    
 
         echo json_encode($data);
 

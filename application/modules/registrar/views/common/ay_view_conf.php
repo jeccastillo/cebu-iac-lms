@@ -14,9 +14,9 @@
                 preConfirm: (login) => {       
                     Swal.fire({
                         title: 'Cut Off Registration',
-                        text: "Are you absolutely sure you want continue with cut off? Enter today's date in yyyy-mm-dd format.",                            
+                        text: "Are you absolutely sure you want continue with cut off? Enter enlistment cut off date.",                            
                         showCancelButton: true,
-                        input:"text",
+                        input:"date",
                         confirmButtonText: "Yes",
                         imageWidth: 100,
                         icon: "question",
