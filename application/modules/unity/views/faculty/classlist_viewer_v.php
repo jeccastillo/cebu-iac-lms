@@ -115,6 +115,10 @@
                                     <td>{{ grading_item.value }}</td>
                                     <td>{{ grading_item.remarks }}</td>
                                 </tr>
+                                <tr>
+                                    <td>OW</td>
+                                    <td>Officially Withdrawn</td>
+                                </tr>
                             </tbody>
                         </table>                      
                     </div>
