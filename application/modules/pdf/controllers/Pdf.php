@@ -648,6 +648,8 @@ class Pdf extends CI_Controller {
 
     public function reprint_tor($id){
         $data_post = $this->input->get();
+        if($data_post['picture'] == "undefined")
+            unset($data_post['picture']);
         $post = $this->db->get_where('tb_mas_tor_generated',array('id'=>$id))->first_row('array');
         $post['included_terms'] = explode(",",$post['included_terms']);
         $student = $this->data_fetcher->getStudent($post['student_id']);
