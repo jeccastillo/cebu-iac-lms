@@ -102,7 +102,7 @@
                         <hr />
                         <div class="row">
                             <div class="col-md-4">
-                                <table class="table table-striped">
+                                <table class="table table-striped" style="font-size: .8em;">
                                     <thead>
                                         <tr>
                                             <th colspan="2" class="text-center">Grading System Reference</th>
