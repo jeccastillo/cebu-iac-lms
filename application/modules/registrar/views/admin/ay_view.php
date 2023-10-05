@@ -24,13 +24,7 @@
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">                                        
                                     <label for="cutoff">Date for Registration Cut Off:</label>
-                                    <select id="cutoff" class="form-control">                                        
-                                        <?php foreach($academic_years as $ay): ?>
-                                        <option value="<?php echo $ay['intID']; ?>">
-                                            <?php echo $ay['term_student_type']." ".$ay['enumSem']." ".$ay['term_label']." ".$ay['strYearStart']."-".$ay['strYearEnd']; ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="date" id="cutoff" class="form-control" />
                                     <hr />
                                     <table id="ay-table" class="table">
                                         <thead><tr>
