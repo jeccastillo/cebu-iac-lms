@@ -647,7 +647,7 @@ class Pdf extends CI_Controller {
     }
 
     public function reprint_tor($id){
-        
+        $data_post = $this->input->post();
         $post = $this->db->get_where('tb_mas_tor_generated',array('id'=>$id))->first_row('array');
         $post['included_terms'] = explode(",",$post['included_terms']);
         $student = $this->data_fetcher->getStudent($post['student_id']);
@@ -676,9 +676,9 @@ class Pdf extends CI_Controller {
         
         $units_overall = 0;
         $gwa_overall = 0;
-        $total_records = 0;
-        $rec['admission_date'] = $post['admission_date'];
-        $rec['picture'] = $post['picture'];
+        $total_records = 0;        
+        $post['picture'] = $data_post['picture'];
+        $post['admission_date'] = $data_post['admission_date'];
         $credited_subjects = [];
 
         $terms_in_credited = $this->db->where(array('student_id'=>$post['student_id']))

@@ -222,7 +222,7 @@
                                             <td>{{ item.verified_by  }}</td>
                                             <td>{{ item.registrar  }}</td>
                                             <td>{{ item.included_terms  }}</td>                                            
-                                            <td><a :href="base_url +'pdf/reprint_tor/' + item.id" target="_blank" class="btn btn-success">Re-print</a></td>
+                                            <td><a :href="base_url +'pdf/reprint_tor/' + item.id +'?picture=' + tor.picture + '&admission_date=' + tor.admission_date" target="_blank" class="btn btn-success">Re-print</a></td>
                                         </tr>                                        
                                     </tbody>
                                 </table>
