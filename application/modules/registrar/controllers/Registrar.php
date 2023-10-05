@@ -1633,7 +1633,8 @@ class Registrar extends CI_Controller {
                 foreach($records as $record){
                     $data =[
                         'floatMidtermGrade' => "OW",
-                        'floatFinalGrade' => "OW"
+                        'floatFinalGrade' => "OW",
+                        'strRemarks' => "Officaly Withdrawn"
                     ];
                     
                     $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
