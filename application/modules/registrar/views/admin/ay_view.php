@@ -22,7 +22,16 @@
                                         
                                     </div>
                                 </div><!-- /.box-header -->
-                                <div class="box-body table-responsive">
+                                <div class="box-body table-responsive">                                        
+                                    <label for="cutoff">Date for Registration Cut Off:</label>
+                                    <select id="cutoff" class="form-control">                                        
+                                        <?php foreach($academic_years as $ay): ?>
+                                        <option value="<?php echo $ay['intID']; ?>">
+                                            <?php echo $ay['term_student_type']." ".$ay['enumSem']." ".$ay['term_label']." ".$ay['strYearStart']."-".$ay['strYearEnd']; ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <hr />
                                     <table id="ay-table" class="table">
                                         <thead><tr>
                                             <th>Term/Sem</th>
@@ -50,9 +59,9 @@
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li><a href="<?php echo base_url() ?>registrar/edit_ay/<?php echo $ay['intID']; ?>"><i class="fi-widget"></i> Edit</a></li>
                                   <li><a href="<?php echo base_url() ?>registrar/ay_viewer/<?php echo $ay['intID']; ?>"><i class="fi-results"></i> View</a></li>
-                                <li>
-                                    <a href="#" class="cut-off-registration" rel="<?php echo $ay['intID']; ?>">Registration Cut-off</a>                        
-                                </li>
+                                    <li>
+                                        <a href="#" class="cut-off-registration" rel="<?php echo $ay['intID']; ?>">Registration Cut-off</a>                        
+                                    </li>
                                   <li> <a href="#" class="trash-sy-record" rel="<?php echo $ay['intID']; ?>"><i class="fi-trash"></i> Delete</a></li>
                                                     </ul>
                                                     

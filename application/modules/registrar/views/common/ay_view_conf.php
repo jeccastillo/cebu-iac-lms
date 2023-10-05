@@ -13,45 +13,45 @@
             showLoaderOnConfirm: true,
                 preConfirm: (login) => {       
                     Swal.fire({
-                        title: 'Cut Off Registration',                        
-                        html:'Are you absolutely sure you want continue with cut off?<hr /><div class="form-group"><label>Enter Enlistment Cut-off Date</label></div><input type="date" id="cutoff" class="form-control" autofocus></div>',
-                        showCancelButton: true,                        
-                        confirmButtonText: "Continue",
+                        title: 'Cut Off Registration',
+                        text: "Are you absolutely sure you want continue with cut off? Enter enlistment cut off date.",                            
+                        showCancelButton: true,
+                        input:"text",
+                        confirmButtonText: "Yes",
                         imageWidth: 100,
                         icon: "question",
                         cancelButtonText: "No, cancel!",
                         showCloseButton: true,
                         showLoaderOnConfirm: true,
                         preConfirm: (inputValue) => {  
-                            console.log($('#cutoff').val());
-
-                            // var sem = $(this).attr('rel');
-                            // var data = {'date':inputValue};
-                            // $.ajax({
-                            //     'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
-                            //     'method':'post',
-                            //     'data':data,
-                            //     'dataType':'json',
-                            //     'success':function(ret){
-                            //         if(ret.success){
-                            //             Swal.fire({
-                            //                 title: "Success",
-                            //                 text: ret.message,
-                            //                 icon: "success"
-                            //             }).then(function() {
-                            //                 location.reload();
-                            //             });      
-                            //         }
-                            //         else{
-                            //             Swal.fire({
-                            //                 title: "Failed",
-                            //                 text: ret.message,
-                            //                 icon: "error"
-                            //             }).then(function() {                                            
-                            //             });      
-                            //         }                                    
-                            //     }
-                            // });
+                            var sem = $(this).attr('rel');
+                            var cutoff = $('#cutoff').val();
+                            var data = {'date':inputValue,'cutoff':cutoff};
+                            $.ajax({
+                                'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
+                                'method':'post',
+                                'data':data,
+                                'dataType':'json',
+                                'success':function(ret){
+                                    if(ret.success){
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: ret.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });      
+                                    }
+                                    else{
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: ret.message,
+                                            icon: "error"
+                                        }).then(function() {                                            
+                                        });      
+                                    }                                    
+                                }
+                            });
                         }
                     });
                 }
