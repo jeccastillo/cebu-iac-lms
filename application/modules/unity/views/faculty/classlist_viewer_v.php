@@ -100,27 +100,31 @@
                             </div>
                         </div>  
                         <hr />
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th colspan="2" class="text-center">Grading System Reference</th>
-                                </tr>
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="grading_item in grading_items">
-                                    <td>{{ grading_item.value }}</td>
-                                    <td>{{ grading_item.remarks }}</td>
-                                </tr>
-                                <tr>
-                                    <td>OW</td>
-                                    <td>Officially Withdrawn</td>
-                                </tr>
-                            </tbody>
-                        </table>                      
+                        <div class="row">
+                            <div class="col-md-4">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2" class="text-center">Grading System Reference</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Grade</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="grading_item in grading_items">
+                                            <td>{{ grading_item.value }}</td>
+                                            <td>{{ grading_item.remarks }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OW</td>
+                                            <td>Officially Withdrawn</td>
+                                        </tr>
+                                    </tbody>
+                                </table>                  
+                            </div>
+                        </div>    
                     </div>
                 </div>
             </div>
