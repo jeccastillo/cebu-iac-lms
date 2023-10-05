@@ -180,6 +180,7 @@ new Vue({
         cdate: undefined,
         label: 'Submit',
         disable_submit: true,
+        legend: undefined,
 
     },
 
@@ -200,6 +201,7 @@ new Vue({
         axios.get(base_url + 'unity/classlist_viewer_data/'+this.id+'/'+this.show_all+'/'+this.sid)
         .then((data) => {
             this.active_sem = data.data.active_sem;
+            this.legend = data.data.legend;
             this.cl = data.data.cl;
             this.classlist = data.data.classlist;
             this.grading_items =  data.data.grading_items;
