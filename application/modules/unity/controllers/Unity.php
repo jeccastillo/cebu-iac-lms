@@ -966,13 +966,15 @@ class Unity extends CI_Controller {
         
         foreach($curicculum as $cs){
             $cs['rec'] = 
-            $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa')
+            $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_credited.id as credited_id')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
-                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')  
+                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
                      ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
                      ->get('tb_mas_classlist_student')
                      ->first_row('array');
-
+            
+            $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('subject_id'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
+            
             if($cs['rec'] && $cs['rec']['include_gwa']){
                 $assessment_units += $cs['rec']['strUnits'];   
                 $assessment_sum += $cs['rec']['floatFinalGrade'] * $cs['rec']['strUnits'];         
