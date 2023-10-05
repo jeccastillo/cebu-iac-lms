@@ -674,11 +674,23 @@ class Pdf extends CI_Controller {
             $sem = $this->data_fetcher->get_active_sem();
                
         
+        $rec =
+        array(
+            'generated_by'=>$this->data['user']['strFirstname']." ".$this->data['user']['strLastname'],
+            'term_id' => $sem['intID'],
+            'date_generated' => $post['date_issued'],
+            'prepared_by' => $post['prepared_by'],
+            'verified_by' => $post['verified_by'],
+            'registrar' => $post['registrar'],
+            'included_terms' => implode(",", $post['included_terms']),
+            'student_id' => $post['student_id'],
+            'remarks' => $post['remarks'],         
+        );
         $units_overall = 0;
         $gwa_overall = 0;
         $total_records = 0;        
-        $post['picture'] = $data_post['picture'];
-        $post['admission_date'] = $data_post['admission_date'];
+        $rec['picture'] = $data_post['picture'];
+        $rec['admission_date'] = $data_post['admission_date'];
         $credited_subjects = [];
 
         $terms_in_credited = $this->db->where(array('student_id'=>$post['student_id']))
