@@ -2124,9 +2124,9 @@ class Unity extends CI_Controller {
                                                     ->result_array();
 
             if($clist['intMajor'] == 0)
-                $data['legend'] = $this->load->view('faculty/grade_college',true);
+                $data['legend'] = $this->load->view('faculty/grade_college',false);
             else
-                $data['legend'] = $this->load->view('faculty/grade_shs',true);
+                $data['legend'] = $this->load->view('faculty/grade_shs',false);
             
             if(!$data['subject']['grading_system_id_midterm']) 
                 $data['grading_items_midterm'] = $data['grading_items'];                                                
