@@ -34,6 +34,7 @@
                     <li class="active"><a href="#tab_1" data-toggle="tab">Grades</a></li>
                     <li><a href="#tab_2" data-toggle="tab">Curriculum Evaluation</a></li>                        
                     <li><a href="#tab_3" data-toggle="tab">Credited Subjects</a></li>
+                    <li><a href="#tab_4" data-toggle="tab">Generated Transcripts</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
