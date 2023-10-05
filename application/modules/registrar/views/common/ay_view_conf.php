@@ -14,7 +14,7 @@
                 preConfirm: (login) => {       
                     Swal.fire({
                         title: 'Cut Off Registration',                        
-                        html:'Are you absolutely sure you want continue with cut off?<hr /><div class="form-group"><label>Enter Enlistment Cut-off Date</label></div><input type="date" id="cut-off" class="form-control" autofocus></div>',
+                        html:'Are you absolutely sure you want continue with cut off?<hr /><div class="form-group"><label>Enter Enlistment Cut-off Date</label></div><input type="date" id="cutoff" class="form-control" autofocus></div>',
                         showCancelButton: true,                        
                         confirmButtonText: "Continue",
                         imageWidth: 100,
@@ -23,7 +23,7 @@
                         showCloseButton: true,
                         showLoaderOnConfirm: true,
                         preConfirm: (inputValue) => {  
-                            console.log($('#cut-off').val());
+                            console.log($('#cutoff').val());
 
                             // var sem = $(this).attr('rel');
                             // var data = {'date':inputValue};
