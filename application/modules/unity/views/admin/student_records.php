@@ -133,8 +133,10 @@
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
                                                 <td v-else>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
-                                                <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>
-                                                <td v-if="item.rec && item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
+                                                <td v-if="item.equivalent">Credited from: {{ item.equivalent.course_code }} School: {{ item.equivalent.completion }}</td>
+                                                <td v-else>{{ item.rec?item.rec.strRemarks:'---' }}</td>
+                                                <td v-if="item.equivalent">({{ parseInt(item.equivalent.units).toFixed(1) }})</td>
+                                                <td v-else-if="item.rec && item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
                                                 <td v-else>{{ (item.rec && item.rec.strRemarks == 'Passed')?'('+item.rec.strUnits+')':'---' }}</td>                                                                                                                                                                               
                                             </tr>                                                                                    
                                         </tbody>
