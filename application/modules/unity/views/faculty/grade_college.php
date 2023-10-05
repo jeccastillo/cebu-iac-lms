@@ -1,7 +1,7 @@
 <table class="table table-striped" style="font-size: .8em;">
     <thead>
         <tr>
-            <th colspan="2" class="text-center">Grading System for College</th>
+            <th colspan="3" class="text-center">Grading System for College</th>
         </tr>                                        
     </thead>
     <tbody>
