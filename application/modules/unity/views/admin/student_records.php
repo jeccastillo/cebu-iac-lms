@@ -128,10 +128,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr :style="item.rec?'background-color:#009000;color:#f2f2f2':''" v-for="item in term.records" style="font-size: 13px;">                                                
+                                            <tr :style="(item.rec || item.equivalent)?'background-color:#009000;color:#f2f2f2':''" v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>   
-                                                <td>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
+                                                <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
+                                                <td v-else>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
                                                 <td>{{ item.rec?item.rec.strRemarks:'---' }}</td>
                                                 <td v-if="item.rec && item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
                                                 <td v-else>{{ (item.rec && item.rec.strRemarks == 'Passed')?'('+item.rec.strUnits+')':'---' }}</td>                                                                                                                                                                               
