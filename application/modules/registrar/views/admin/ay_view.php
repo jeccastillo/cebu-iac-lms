@@ -24,7 +24,7 @@
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">                                        
                                     <label for="cutoff">Date for Registration Cut Off:</label>
-                                    <input type="date" id="cutoff" class="form-control" />
+                                    <input type="date" value="<?php echo date("Y-m-d"); ?>" id="cutoff" class="form-control" />
                                     <hr />
                                     <table id="ay-table" class="table">
                                         <thead><tr>
