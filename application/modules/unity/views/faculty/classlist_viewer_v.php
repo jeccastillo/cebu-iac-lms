@@ -98,7 +98,25 @@
                                     Unfinalize
                                 </a>
                             </div>
-                        </div>                        
+                        </div>  
+                        <hr />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="text-center">Grading System Reference</th>
+                                </tr>
+                                <tr>
+                                    <th>Grade</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="grading_item in grading_items">
+                                    <td>{{ grading_item.value }}</td>
+                                    <td>{{ grading_item.remarks }}</td>
+                                </tr>
+                            </tbody>
+                        </table>                      
                     </div>
                 </div>
             </div>
