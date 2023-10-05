@@ -101,8 +101,8 @@
                         </div>  
                         <hr />
                         <div class="row">
-                            <div class="col-md-4">
-                                                  
+                            <div v-html="legend" class="col-md-4">
+                                          
                             </div>
                         </div>    
                     </div>
