@@ -296,7 +296,7 @@ foreach($records as $record){
                     ';
             }
 
-            if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
+            if(($page_ctr == 15 && $page == 1) || $page_ctr == 20){
                 
                 $page++;
                 $page_ctr = 0;
