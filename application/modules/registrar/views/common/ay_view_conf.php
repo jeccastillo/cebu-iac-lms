@@ -15,7 +15,7 @@
                     Swal.fire({
                         title: 'Cut Off Registration',
                         text: "Are you absolutely sure you want continue with cut off? Enter enlistment cut off date.",                            
-                        html:'<input type="date" class="form-control" autofocus>'
+                        html:'<input type="date" class="form-control" autofocus>',
                         showCancelButton: true,                        
                         confirmButtonText: "Yes",
                         imageWidth: 100,
