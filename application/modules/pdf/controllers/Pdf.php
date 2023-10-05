@@ -678,7 +678,7 @@ class Pdf extends CI_Controller {
         array(
             'generated_by'=>$this->data['user']['strFirstname']." ".$this->data['user']['strLastname'],
             'term_id' => $sem['intID'],
-            'date_generated' => $post['date_issued'],
+            'date_generated' => $post['date_generated'],
             'prepared_by' => $post['prepared_by'],
             'verified_by' => $post['verified_by'],
             'registrar' => $post['registrar'],
