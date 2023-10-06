@@ -124,7 +124,10 @@
                     <td width="20%">
                         <img src="'.$other_details['picture'].'" witdh="200px" />
                     </td>
-                </tr>     
+                </tr>  
+                <tr>
+                    <td style="line-height:5px;" colspan=2></td>         
+                </tr>   
            </table>
           ';
 
