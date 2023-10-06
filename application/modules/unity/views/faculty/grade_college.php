@@ -68,12 +68,12 @@
         <tr>
             <td>P</td>
             <td>Passed</td>
-            <td>(Applicable for INTERNSHIP only)</td>
+            <td>(Applicable for EUTENICS only)</td>
         </tr>
         <tr>
             <td>F</td>
             <td>Failed</td>
-            <td>(Applicable for INTERNSHIP only)</td>
+            <td>(Applicable for EUTENICS only)</td>
         </tr>
         <tr>
             <td>IP</td>
