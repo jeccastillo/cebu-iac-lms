@@ -60,9 +60,15 @@
                                 <td colspan="3"><font style="font-size: 8;">: '.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
                                 
                             </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
+                            </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Program Persued</font></td>
                                 <td colspan="3"><font style="font-size: 8;">: '.trim($student['strProgramDescription']).'</font></td>                      
+                            </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Date of Birth</font></td>
@@ -70,11 +76,17 @@
                                 <td width="20%"><font style="font-size: 8;">Place of Birth</font></td>                
                                 <td width="20%"><font style="font-size: 8;">: '.$student['place_of_birth'].'</font></td>                
                             </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
+                            </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Citizenship</font></td>
                                 <td><font style="font-size: 8;">: '.$student['strCitizenship'].'</font></td>    
                                 <td><font style="font-size: 8;">Gender</font></td>                
                                 <td><font style="font-size: 8;">: '.$student['enumGender'].'</font></td>                
+                            </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Secondary School</font></td>
@@ -82,16 +94,25 @@
                                 <td><font style="font-size: 8;">ID No.</font></td>                
                                 <td><font style="font-size: 8;">: '.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font></td>                
                             </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
+                            </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Tertiary School</font></td>
                                 <td><font style="font-size: 8;">: '.$student['college'].'</font></td>                     
                                 <td><font style="font-size: 8;">Date of Admission</font></td>                
                                 <td><font style="font-size: 8;">: '.$other_details['admission_date'].'</font></td>                
                             </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
+                            </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
                                 <td><font style="font-size: 8;">: '.$student['date_of_graduation'].'</font></td>                
+                            </tr>
+                            <tr>
+                                <td style="line-height:1px;" colspan=2></td>         
                             </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
