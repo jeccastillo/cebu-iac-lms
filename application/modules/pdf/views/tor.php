@@ -100,7 +100,9 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="30%"></td>
+                    <td width="30%">
+                        <img src="'.$other_details['picture'].'" witdh="200px" />
+                    </td>
                 </tr>     
            </table>
           ';
