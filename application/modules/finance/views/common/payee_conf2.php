@@ -25,15 +25,13 @@
             "ordering": false,
             "autoWidth": false,
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_ns_payee/",
-            "aoColumnDefs":[      
-                <?php if($user['special_role'] >= 1): ?>
+            "aoColumnDefs":[                      
                 {
                     "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/ns_transactions/'+row[0]+'">Payments</a>'; }
-                },          
-                <?php endif; ?>
+                },   
                 {
                     "aTargets":[0],
                     "bVisible": false 
