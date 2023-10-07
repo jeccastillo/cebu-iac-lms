@@ -44,7 +44,7 @@
 
 
                             <div class="in_choice">
-                                <input type="radio" v-model="c.is_selected" value="1"
+                                <input style="margin-right:25px" type="radio" v-model="c.is_selected" value="1"
                                     @click="updateChoices(q.choices, index, q_index)" :name="'question-' + q_index"
                                     required class="radioBtn">
                                 <label for="choice1" class="choices_label"> {{c.choice}} </label>
