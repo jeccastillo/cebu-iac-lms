@@ -130,7 +130,7 @@ class Unity extends CI_Controller {
             $this->data['title'] ="Logs";
             
             $this->data['cat'] = $cat;
-            
+            $cat = url_decode($cat);
             $this->data['logs'] = $this->data_fetcher->fetch_logs($start,$end,$cat);
         
             $this->load->view("common/header",$this->data);
