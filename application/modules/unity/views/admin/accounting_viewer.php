@@ -175,6 +175,7 @@
 new Vue({
     el: '#vue-container',
     data: {
+        sem: <?php echo $sem; ?>,
         payments:[],       
         other_payments:[], 
         tuition: {},
@@ -240,7 +241,7 @@ new Vue({
                 }
                 this.loader_spinner = false;
 
-                axios.get(api_url + 'finance/reservation/' + this.slug)
+                axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                 .then((data) => {
                     this.reservation_payment = data.data.data;    
                     this.application_payment = data.data.application;
