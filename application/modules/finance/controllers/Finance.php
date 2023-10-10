@@ -203,6 +203,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();
         $payments = explode(",",$post['payments']);
         $data = array('syid' => $post['sy_reference']);
+        print_r($payments);
         foreach($payments as $payment){            
             $this->db->where('or_number',$payment)
                      ->update('tb_mas_student_ledger',$data);
