@@ -338,7 +338,18 @@
                                                 <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="(payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
-                                        </tr>                                                                           
+                                        </tr>  
+                                        <tr>
+                                            <td class="text-green" colspan="8">
+                                            Do with selected: 
+                                            <select class="form-control"  v-model="switch_term">
+                                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                                            </select>
+                                            <button class="btn btn-primary">
+                                                        Switch to Term
+                                            </button>
+                                            </td>
+                                        </tr>                                                                         
                                         <tr>
                                             <td class="text-green" colspan="8">
                                             amount paid: P{{ amount_paid_formatted }}                                           
@@ -422,6 +433,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
         slug: undefined,
+        switch_term: undefined,
         student:{},    
         cashier: undefined,     
         user_level: undefined, 
