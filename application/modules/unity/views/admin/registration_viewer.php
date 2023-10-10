@@ -420,6 +420,7 @@ new Vue({
         id: '<?php echo $id; ?>',    
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
+        selected_items: [],
         slug: undefined,
         student:{},    
         cashier: undefined,     
@@ -664,7 +665,7 @@ new Vue({
             this.or_update.total_amount_due = amount;
         },        
         setValue: function(value,type,ctr){
-            
+            console.log(selected_items);
             if(ctr == 0){
                 if(this.installments[ctr] != 0){
                     this.amount_to_pay = value;
