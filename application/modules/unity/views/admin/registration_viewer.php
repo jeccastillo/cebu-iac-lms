@@ -664,8 +664,7 @@ new Vue({
             this.or_update_description = desc;
             this.or_update.total_amount_due = amount;
         },        
-        setValue: function(value,type,ctr){
-            console.log(this.selected_items);
+        setValue: function(value,type,ctr){            
             if(ctr == 0){
                 if(this.installments[ctr] != 0){
                     this.amount_to_pay = value;
