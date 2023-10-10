@@ -227,7 +227,12 @@
                                             <th>Status</th>
                                             <th>Date Updated</th>
                                             <th>Actions</th>
-                                        </tr>     
+                                        </tr>                                             
+                                        <tr>
+                                            <th colspan="8">
+                                            Other Payments:
+                                            </th>
+                                        </tr>  
                                         <tr v-if="application_payment">
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
@@ -274,11 +279,6 @@
                                                 <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th colspan="8">
-                                            Other Payments:
-                                            </th>
-                                        </tr>  
                                         <tr v-for="payment in other_payments">
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
