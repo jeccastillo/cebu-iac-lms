@@ -340,7 +340,7 @@
                                             </td>
                                         </tr>  
                                         <tr>
-                                            <td class="text-right" colspan="1">
+                                            <td class="text-right" colspan="2">
                                                 Do with selected: 
                                             </td>
                                             <td colspan="3">
@@ -350,7 +350,7 @@
                                             </td>
                                             <td colspan="6">
                                                 <button class="btn btn-primary">
-                                                            Switch to Term
+                                                            Forward Selected
                                                 </button>
                                             </td>
                                         </tr>                                                                         
