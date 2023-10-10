@@ -199,6 +199,19 @@ class Finance extends CI_Controller {
 
     }
 
+    public function transfer_ledger_update(){
+        $post = $this->input->post();
+        $data = array('syid' => $post['sy_reference']);
+        foreach($post['payments'] as $payment){            
+            $this->db->where('or_number',$payment)
+                     ->update('tb_mas_student_ledger',$data);
+        }
+
+        $ret['success'] = true;
+        $ret['message'] = "Updated";
+
+        echo json_encode($ret);
+    }
     public function student_ledger_data($id,$sem){
                 
         $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');

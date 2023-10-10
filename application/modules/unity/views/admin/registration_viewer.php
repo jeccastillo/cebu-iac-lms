@@ -235,7 +235,7 @@
                                             </th>
                                         </tr>  
                                         <tr v-if="application_payment">
-                                            <td><input type="checkbox" :value="application_payment.id" v-model="selected_items" /></td>
+                                            <td><input type="checkbox" :value="application_payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
                                             <td>{{ application_payment.check_number }}</td>
@@ -259,7 +259,7 @@
                                             </td>
                                         </tr>                                        
                                         <tr v-for="payment in other_payments">
-                                            <td><input type="checkbox" :value="payment.id" v-model="selected_items" /></td>
+                                            <td><input type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -290,7 +290,7 @@
                                             </th>
                                         </tr>
                                         <tr v-if="reservation_payment">
-                                            <td><input type="checkbox" :value="reservation_payment.id" v-model="selected_items" /></td>
+                                            <td><input type="checkbox" :value="reservation_payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
                                             <td>{{ reservation_payment.check_number }}</td>
@@ -314,7 +314,7 @@
                                             </td>
                                         </tr> 
                                         <tr v-for="payment in payments">
-                                            <td><input type="checkbox" :value="payment.id" v-model="selected_items" /></td>
+                                            <td><input type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -704,8 +704,8 @@ new Vue({
                                     if(data.data.success){
                                         const pay_length = this.payments_paid.length - 1;
                                         var formdata= new FormData();
-                                        formdata.append('payments',this.payments.length);                                        
-                                                                                                                       
+                                        formdata.append('payments',this.selected_items);                                        
+                                        formdata.append('sy_reference',this.selected_items);                                                                                                                        
                                         axios.post(base_url + 'finance/transfer_ledger_update', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
