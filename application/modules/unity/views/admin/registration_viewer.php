@@ -710,7 +710,7 @@ new Vue({
                                     }
                                     })
                                     .then(function(data){
-                                        //location.reload();
+                                        location.reload();
                                     })
                                     
                                 })
