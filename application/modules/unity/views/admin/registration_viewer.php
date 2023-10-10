@@ -340,15 +340,15 @@
                                             </td>
                                         </tr>  
                                         <tr>
-                                            <td class="text-right" colspan="3">
+                                            <td class="text-right" colspan="1">
                                                 Do with selected: 
                                             </td>
-                                            <td colspan="4">
+                                            <td colspan="3">
                                                 <select class="form-control"  v-model="switch_term">
                                                     <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                                                 </select>
                                             </td>
-                                            <td colspan="3">
+                                            <td colspan="6">
                                                 <button class="btn btn-primary">
                                                             Switch to Term
                                                 </button>
