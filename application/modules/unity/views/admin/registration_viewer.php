@@ -235,7 +235,7 @@
                                             </th>
                                         </tr>  
                                         <tr v-if="application_payment">
-                                            <td><input type="checkbox" :value="application_payment.or_number" v-model="selected_items" /></td>
+                                            <td></td>
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
                                             <td>{{ application_payment.check_number }}</td>
@@ -290,7 +290,7 @@
                                             </th>
                                         </tr>
                                         <tr v-if="reservation_payment">
-                                            <td><input type="checkbox" :value="reservation_payment.or_number" v-model="selected_items" /></td>
+                                            <td></td>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
                                             <td>{{ reservation_payment.check_number }}</td>
