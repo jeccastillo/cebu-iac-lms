@@ -689,7 +689,7 @@ new Vue({
                         text: "Please check at least one item",
                         icon: "success"
                     });  
-                else if
+                else
                     Swal.fire({
                         title: "Warning",
                         text: "Select a term to for transfer",
