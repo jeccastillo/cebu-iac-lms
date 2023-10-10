@@ -180,8 +180,11 @@ $(document).ready(function() {
                         return mode;
                     }
                     if(row.remarks){
+                        console.log(row.remarks);
                         if(row.remarks == "Paynamics")
                             return row.request_id;
+                        else
+                            return row.remarks;
                     }
                     
                 }
