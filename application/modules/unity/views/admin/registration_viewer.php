@@ -218,7 +218,8 @@
                                 <div class="box-body">                                    
                                     <table class="table table-bordered table-striped">
                                         <tr>
-                                            <th>OR Number</th>
+                                            <th></th>
+                                            <th>OR Number</th>                                            
                                             <th>Payment Type</th>
                                             <th>Reference No.</th>
                                             <th>Amount Paid</th>
@@ -227,13 +228,14 @@
                                             <th>Status</th>
                                             <th>Date Updated</th>
                                             <th>Actions</th>
-                                        </tr>                                             
+                                        </tr>                                                                                    
                                         <tr>
                                             <th colspan="8">
                                             Other Payments:
                                             </th>
                                         </tr>  
                                         <tr v-if="application_payment">
+                                            <td><input type="checkbox" value="application_payment.id" v-model="selected_items" /></td>
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
                                             <td>{{ application_payment.check_number }}</td>
@@ -255,31 +257,9 @@
                                                 </button>
                                                 <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
-                                        </tr>
-                                        <tr v-if="reservation_payment">
-                                            <td>{{ reservation_payment.or_number }}</td>
-                                            <td>{{ reservation_payment.description }}</td>
-                                            <td>{{ reservation_payment.check_number }}</td>
-                                            <td>{{ reservation_payment.subtotal_order }}</td>
-                                            <td>{{ reservation_payment.charges }}</td>
-                                            <td>{{ reservation_payment.total_amount_due }}</td>
-                                            <td>{{ reservation_payment.status }}</td>                                            
-                                            <td>{{ reservation_payment.updated_at }}</td>
-                                            <td>                                                
-                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
-                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)" 
-                                                        data-target="#myModal" class="btn btn-primary">
-                                                        Update OR
-                                                </button>
-                                                <button v-if="reservation_payment.or_number && cashier"                                             
-                                                        @click="printOR(reservation_payment)" 
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                </button>
-                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
-                                            </td>
-                                        </tr>
+                                        </tr>                                        
                                         <tr v-for="payment in other_payments">
+                                            <td><input type="checkbox" value="payment.id" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -309,7 +289,32 @@
                                             Tuition Payments:
                                             </th>
                                         </tr>
+                                        <tr v-if="reservation_payment">
+                                            <td><input type="checkbox" value="reservation_payment.id" v-model="selected_items" /></td>
+                                            <td>{{ reservation_payment.or_number }}</td>
+                                            <td>{{ reservation_payment.description }}</td>
+                                            <td>{{ reservation_payment.check_number }}</td>
+                                            <td>{{ reservation_payment.subtotal_order }}</td>
+                                            <td>{{ reservation_payment.charges }}</td>
+                                            <td>{{ reservation_payment.total_amount_due }}</td>
+                                            <td>{{ reservation_payment.status }}</td>                                            
+                                            <td>{{ reservation_payment.updated_at }}</td>
+                                            <td>                                                
+                                                <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
+                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)" 
+                                                        data-target="#myModal" class="btn btn-primary">
+                                                        Update OR
+                                                </button>
+                                                <button v-if="reservation_payment.or_number && cashier"                                             
+                                                        @click="printOR(reservation_payment)" 
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                </button>
+                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                            </td>
+                                        </tr> 
                                         <tr v-for="payment in payments">
+                                            <td><input type="checkbox" value="payment.id" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
