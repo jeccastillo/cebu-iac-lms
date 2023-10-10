@@ -173,12 +173,17 @@ $(document).ready(function() {
                                 mode = "Debit Card";
                                 break;  
                             case 4:     
-                                mode = row.request_id;
+                                mode = "Online";
                                 break;                   
 
                         }
+                        return mode;
                     }
-                    return mode;
+                    if(row.remarks){
+                        if(row.remarks == "Paynamics")
+                            return row.request_id;
+                    }
+                    
                 }
             },
             {
