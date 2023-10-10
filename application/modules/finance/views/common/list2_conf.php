@@ -178,9 +178,14 @@ $(document).ready(function() {
 
                         }
                         return mode;
-                    }
-                    if(row.remarks){
-                        console.log(row.remarks);
+                    }                   
+                    
+                }
+            },
+            {
+                "aTargets": [11],                                
+                "mRender": function(data, type, row, meta) {                                        
+                    if(row.remarks){             
                         if(row.remarks == "Paynamics")
                             return row.request_id;
                         else
