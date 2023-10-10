@@ -349,7 +349,7 @@
                                                 </select>
                                             </td>
                                             <td colspan="6">
-                                                <button class="btn btn-primary">
+                                                <button @click="forwardSelected" class="btn btn-primary">
                                                             Forward Selected
                                                 </button>
                                             </td>
@@ -675,6 +675,31 @@ new Vue({
     },
 
     methods: {      
+        forwardSelected: function(){
+            if(this.switch_term && this.selected_items.length > 0){
+                var data = {
+                        'selected': this.selected_items,
+                        'sy_reference': this.switch_term,
+                    };
+                    
+            }else{
+                if(this.selected_items.length == 0)
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Please check at least one item",
+                        icon: "success"
+                    });  
+                else if{
+                    Swal.fire({
+                        title: "Warning",
+                        text: "Select a term to for transfer",
+                        icon: "success"
+                    });
+                }                
+            }
+                
+            
+        },
         prepUpdate: function(id,desc,amount){
             this.or_update.id = id;
             this.or_update_description = desc;
