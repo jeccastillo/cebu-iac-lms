@@ -511,7 +511,7 @@
                                 <span>OR Assignment</span> </a></li>
                         <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded Terms</a>
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded Payments</a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
