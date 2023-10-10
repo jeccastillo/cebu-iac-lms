@@ -703,7 +703,7 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     var formdata= new FormData();
                                     formdata.append('payments',this.selected_items);                                        
-                                    formdata.append('sy_reference',this.selected_items);                                                                                                                        
+                                    formdata.append('sy_reference',this.switch_term);                                                                                                                        
                                     axios.post(base_url + 'finance/transfer_ledger_update', formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
