@@ -681,6 +681,42 @@ new Vue({
                         'selected': this.selected_items,
                         'sy_reference': this.switch_term,
                     };
+                let url = api_url + 'finance/transfer_payment';                    
+                Swal.fire({
+                title: 'Continue with the transfer',
+                text: "Are you sure you want to transfer the payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+
+                        return axios.post(url, data, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;                                    
+                                    if(data.data.success){
+                                        const pay_length = this.payments_paid.length - 1;
+                                        var formdata= new FormData();
+                                        formdata.append('payments',this.payments.length);                                        
+                                                                                                                       
+                                        axios.post(base_url + 'finance/transfer_ledger_update', formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                        })
+                                        .then(function(data){
+                                        })
+                                    }
+                                })
+                            }
+                 });
                     
             }else{
                 if(this.selected_items.length == 0)
