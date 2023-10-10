@@ -173,7 +173,7 @@ $(document).ready(function() {
                                 mode = "Debit Card";
                                 break;  
                             case 4:     
-                                mode = "Online";
+                                mode = row.request_id;
                                 break;                   
 
                         }
