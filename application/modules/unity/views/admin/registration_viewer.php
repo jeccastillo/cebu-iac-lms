@@ -582,7 +582,7 @@ new Vue({
                                 }                                
                             }                        
 
-                            axios.get(api_url + 'finance/reservation/' + this.slug)
+                            axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
                                 this.application_payment = data.data.application;
