@@ -123,7 +123,7 @@ class Unity extends CI_Controller {
     
     public function logs($start=null,$end=null, $cat=null)
     {
-        if($this->is_super_admin() || ($this->is_accounting() && ($cat == "Cashier" || url_decode($cat) == "Payment Term Forwarded")) || $this->is_registrar())
+        if($this->is_super_admin() || ($this->is_accounting() && ($cat == "Cashier" || $cat == "Payment%20Term%20Forwarded")) || $this->is_registrar())
         {
             $this->data['page'] = "logs";
             $this->data['opentree'] = "admin";
