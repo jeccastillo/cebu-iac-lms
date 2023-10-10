@@ -701,19 +701,18 @@ new Vue({
                                 })
                                 .then(data => {
                                     this.loader_spinner = false;                                    
-                                    if(data.data.success){
-                                        const pay_length = this.payments_paid.length - 1;
-                                        var formdata= new FormData();
-                                        formdata.append('payments',this.selected_items);                                        
-                                        formdata.append('sy_reference',this.selected_items);                                                                                                                        
-                                        axios.post(base_url + 'finance/transfer_ledger_update', formdata, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                        })
-                                        .then(function(data){
-                                        })
+                                    var formdata= new FormData();
+                                    formdata.append('payments',this.selected_items);                                        
+                                    formdata.append('sy_reference',this.selected_items);                                                                                                                        
+                                    axios.post(base_url + 'finance/transfer_ledger_update', formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
                                     }
+                                    })
+                                    .then(function(data){
+                                        location.reload();
+                                    })
+                                    
                                 })
                             }
                  });
