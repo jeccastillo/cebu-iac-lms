@@ -207,10 +207,12 @@
                 <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?>
                 <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
                 <li class="header">Admissions</li>
+                <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
                 <li class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>"><a
                         href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i class="fa fa-calendar"></i>
                         <span>Edit Application Dates</span> </a>
                 </li>
+                <?php endif; ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
                     <a href="#">
                         <i class="ion ion-email"></i> <span>Student Applicants</span>
@@ -481,7 +483,7 @@
                         </li>
                         <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/edit_ay/"><i class="ion"></i>
-                                <span>Edit Installment Dates</span> </a>
+                                <span>Edit Dates</span> </a>
                         </li>
                     </ul>
                 </li>
