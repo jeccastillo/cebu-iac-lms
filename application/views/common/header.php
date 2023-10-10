@@ -509,6 +509,15 @@
                         <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/cashier" style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a></li>
+                        <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded Terms</a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
+                        </li>
+<!--                        
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#" style="margin-left: 10px;"><i class="ion"></i>
                                 <span>Delete & Cancel Receipt</span> </a>
@@ -516,7 +525,7 @@
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#" style="margin-left: 10px;"><i class="ion"></i>
                                 <span>Overwrite Payment</span> </a>
-                        </li>
+                        </li> -->
 
                     </ul>
                 </li>
