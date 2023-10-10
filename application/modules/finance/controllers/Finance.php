@@ -202,9 +202,12 @@ class Finance extends CI_Controller {
     public function transfer_ledger_update(){
         $post = $this->input->post();
         $payments = explode(",",$post['payments']);
-        $data = array('syid' => $post['sy_reference']);
-        print_r($payments);
-        foreach($payments as $payment){            
+        $data = array('syid' => $post['sy_reference']);        
+        $sy_to = $this->db->get_where('tb_mas_sy',array('intID'=>$post['sy_reference']))->first_row(); 
+        foreach($payments as $payment){                        
+            $payment_data = $this->db->get_where('tb_mas_student_ledger',array('or_number'=>$payment))->first_row();
+            $sy_from = $this->db->get_where('tb_mas_sy',array('intID'=>$payment_data->syid))->first_row(); 
+            $this->data_poster->log_action('Payment Term Forwarded','Forwarded OR '.$payment_data->or_number." from  Term".$sy_from->term_student_type." ".$sy_from->enumSem." ".$sy_from->term_label." ".$sy_from->strYearStart."-".$sy_from->strYearEnd." to Term ".$sy_to->term_student_type." ".$sy_to->enumSem." ".$sy_to->term_label." ".$sy_to->strYearStart."-".$sy_to->strYearEnd,'green');
             $this->db->where('or_number',$payment)
                      ->update('tb_mas_student_ledger',$data);
         }
