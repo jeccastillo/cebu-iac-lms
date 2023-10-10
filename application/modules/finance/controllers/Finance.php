@@ -201,9 +201,9 @@ class Finance extends CI_Controller {
 
     public function transfer_ledger_update(){
         $post = $this->input->post();
-        $post['payments'] = explode(",",$post['payments']);
+        $payments = explode(",",$post['payments']);
         $data = array('syid' => $post['sy_reference']);
-        foreach($post['payments'] as $payment){            
+        foreach($payments as $payment){            
             $this->db->where('or_number',$payment)
                      ->update('tb_mas_student_ledger',$data);
         }
