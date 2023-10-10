@@ -340,23 +340,27 @@
                                             </td>
                                         </tr>  
                                         <tr>
-                                            <td class="text-green" colspan="8">
-                                            Do with selected: 
-                                            <select class="form-control"  v-model="switch_term">
-                                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
-                                            </select>
-                                            <button class="btn btn-primary">
-                                                        Switch to Term
-                                            </button>
+                                            <td class="text-right" colspan="3">
+                                                Do with selected: 
+                                            </td>
+                                            <td colspan="4">
+                                                <select class="form-control"  v-model="switch_term">
+                                                    <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                                                </select>
+                                            </td>
+                                            <td colspan="3">
+                                                <button class="btn btn-primary">
+                                                            Switch to Term
+                                                </button>
                                             </td>
                                         </tr>                                                                         
                                         <tr>
-                                            <td class="text-green" colspan="8">
+                                            <td class="text-green" colspan="10">
                                             amount paid: P{{ amount_paid_formatted }}                                           
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-green" colspan="8">                                            
+                                            <td class="text-green" colspan="10">                                            
                                             remaining balance: P{{ remaining_amount_formatted }}
                                             </td>
                                         </tr>
