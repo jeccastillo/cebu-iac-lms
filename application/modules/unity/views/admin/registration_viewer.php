@@ -259,7 +259,7 @@
                                             </td>
                                         </tr>                                        
                                         <tr v-for="payment in other_payments">
-                                            <td><input type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
+                                            <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -314,7 +314,7 @@
                                             </td>
                                         </tr> 
                                         <tr v-for="payment in payments">
-                                            <td><input type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
+                                            <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -339,7 +339,7 @@
                                                 <button v-if="(payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>  
-                                        <tr>
+                                        <tr v-if="user.special_role > 1">
                                             <td class="text-right" colspan="2">
                                                 Do with selected: 
                                             </td>
