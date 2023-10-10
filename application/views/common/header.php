@@ -482,7 +482,7 @@
                                 <span>Order Detailed Report</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="ion"></i>
+                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="fa fa-calendar"></i>
                                 <span>Edit Dates</span> </a>
                         </li>
                     </ul>
