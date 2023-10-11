@@ -130,6 +130,16 @@ class Unity extends CI_Controller {
                 $this->data['opentree'] = "students";
                 $this->data['title'] ="Logs for Student Status";
             }
+            elseif($cat == "Payment%20Term%20Forwarded"){
+                $this->data['page'] = "logs_forwarded";
+                $this->data['opentree'] = "finance_admin";
+                $this->data['title'] ="Logs for Forwarded Payment";
+            }
+            elseif($cat == "Cashier"){
+                $this->data['page'] = "logs_cashier";
+                $this->data['opentree'] = "finance_admin";
+                $this->data['title'] ="Logs for Cashier Setup";
+            }
             else{
                 $this->data['page'] = "logs";
                 $this->data['opentree'] = "admin";
