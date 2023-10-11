@@ -146,7 +146,7 @@ $(document).ready(function() {
         dtable.fnDraw(false);
     })
 
-    $("#select-term-leads").on('change', function(e){
+    $("#select-term-reserved").on('change', function(e){
         const term = $(this).val();
         document.location = "<?php echo base_url()."admissionsV1/view_reserved_leads/"; ?>"+term;
     });
