@@ -168,8 +168,7 @@
                                 <option <?php echo ($student['student_status'] == "active")?'selected':''; ?> value="active">Active</option>
                                 <option <?php echo ($student['student_status'] == "loa")?'selected':''; ?> value="loa">LOA</option>
                                 <option <?php echo ($student['student_status'] == "awol")?'selected':''; ?> value="awol">AWOL</option>
-                            </select>
-                        
+                            </select>                        
                         </div>
                         
                     </div>

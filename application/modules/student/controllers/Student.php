@@ -362,7 +362,7 @@ class Student extends CI_Controller {
     public function edit_submit_student()
     {
         $post = $this->input->post();
-        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['intID']))->first_row();
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['intID']))->first_row('array');
         $post['dteBirthDate'] = date("Y-m-d",strtotime($post['dteBirthDate']));
         if($post['date_of_graduation'] == ''){
             unset($post['date_of_graduation']);
