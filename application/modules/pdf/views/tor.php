@@ -190,7 +190,7 @@
                 </tr> 
                 <tr>
                     <td style="font-size:9px;">Date Issued</td>
-                    <td colspan="2" style="font-size:9px;"><b>'.$other_details['date_generated'].'</b></td>         
+                    <td colspan="2" style="font-size:9px;"><b>'.date("Y-m-d H:i:s",strtotime($other_details['date_generated'])).'</b></td>         
                     <td colspan="3" style="text-align:center;font-size:9px;">Registrar</td>                       
                 </tr>
                 ';          
