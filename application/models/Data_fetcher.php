@@ -2173,7 +2173,7 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
 
-        return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem);
+        return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
         
     }
 
@@ -2216,7 +2216,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id)
     {
 
         $tuition = 0;
@@ -2242,7 +2242,7 @@ class Data_fetcher extends CI_Model {
         $scholar = null;
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
 
-        $tuition_year = $this->db->where('intID',$student['intTuitionYear'])->get('tb_mas_tuition_year')->first_row('array');
+        $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);        
 
         if($discount == 0)
