@@ -983,7 +983,7 @@ class Unity extends CI_Controller {
                             $grade = 5;
                         break;
                         default:
-                            $grade = $record['v3'];
+                            $grade = $temp_rec['floatFinalGrade'];
                     }         
                     $grade = $temp_rec['floatFinalGrade'];
     
