@@ -362,6 +362,7 @@ class Student extends CI_Controller {
     public function edit_submit_student()
     {
         $post = $this->input->post();
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['intID']))->first_row();
         $post['dteBirthDate'] = date("Y-m-d",strtotime($post['dteBirthDate']));
         if($post['date_of_graduation'] == ''){
             unset($post['date_of_graduation']);
@@ -381,6 +382,10 @@ class Student extends CI_Controller {
             $post['strPass'] = password_hash($post['strPass'], PASSWORD_DEFAULT);
         else
             unset($post['strPass']);
+
+        if($post['student_status'] != $student['student_status']){
+            $this->data_poster->log_action('Leave of Abscences','Updated Status of '.$post['strFirstname']." ".$post['strLastname']." to ".$post['student_status'],'green');
+        }
 
 		if ( ! $this->upload->do_upload("strPicture"))
 		{

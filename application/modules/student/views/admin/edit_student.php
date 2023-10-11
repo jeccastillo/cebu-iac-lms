@@ -162,15 +162,15 @@
                                 <?php endforeach; ?>
                             </select>
                         </div> -->
-                        <!--div class="form-group col-xs-6">
-                        <label for="enumEnrolledStatus">Student Status</label>
-                        <select class="form-control" name="enumEnrolledStatus" >
-                            <option <?php echo ($student['enumEnrolledStatus'] == "enrolled")?'selected':''; ?> value="enrolled">Enrolled</option>
-                            <option <?php echo ($student['enumEnrolledStatus'] == "dismissed")?'selected':''; ?> value="dismissed">Dismissed</option>
-                            <option <?php echo ($student['enumEnrolledStatus'] == "inactive")?'selected':''; ?> value="inactive">Inactive</option>
-                        </select>
+                        <div class="form-group col-xs-6">
+                            <label for="student_status">Status</label>
+                            <select class="form-control" name="student_status" >
+                                <option <?php echo ($student['student_status'] == "active")?'selected':''; ?> value="active">Active</option>
+                                <option <?php echo ($student['student_status'] == "loa")?'selected':''; ?> value="loa">LOA</option>
+                                <option <?php echo ($student['student_status'] == "awol")?'selected':''; ?> value="awol">AWOL</option>
+                            </select>
                         
-                    </div-->
+                        </div>
                         
                     </div>
                     <hr />
