@@ -113,10 +113,17 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
-    public function view_reserved_leads()
+    public function view_reserved_leads($term = 0)
     {
         if($this->faculty_logged_in())
         {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);                  
+            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
             $this->data['page'] = "view_reserved";
             $this->data['opentree'] = "leads";
             //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));

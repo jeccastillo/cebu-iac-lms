@@ -14,11 +14,18 @@
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
-        </div>
+        </div>        
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">Reserved List</h3>
-
+                <hr />
+                <div class="pull-right">
+                    <select id="select-term-reserved" class="form-control" >
+                        <?php foreach($sy as $s): ?>
+                            <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
