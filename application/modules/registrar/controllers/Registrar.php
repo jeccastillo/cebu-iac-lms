@@ -896,6 +896,7 @@ class Registrar extends CI_Controller {
             $reg['type_of_class'] = $post['type_of_class'];
             $reg['current_program'] =$student['intProgramID'];
             $reg['current_curriculum'] =$student['intCurriculumID'];
+            $reg['tuition_year'] = $student['intTuitionYear'];
             $s = $this->data_fetcher->get_sem_by_id($data['ayid']);
             $data['message'] = "Congratulations, you have been registered for ".$s['enumSem']." Term S.Y. ".$s['strYearStart']."-".$s['strYearEnd'];
             $data['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$student['slug'];
@@ -1049,7 +1050,7 @@ class Registrar extends CI_Controller {
                 $reg['intAYID'] = $post['strAcademicYear'];
                 $reg['intYearLevel'] = $post['intYearLevel'];
                 $reg['date_enlisted'] = date("Y-m-d H:i:s");
-                $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
+                $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];                
 
                 if($post['enumStudentType']=="cross")
                     $st = "Cross Registered From ".$post['strFrom'];
