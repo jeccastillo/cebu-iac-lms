@@ -36,7 +36,7 @@
                                 })
                             }
                             else{                                                
-                                var data = {'date':inputValue,'cutoff':cutoff,'cutoff_end':cutoff_end};
+                                var data = {'date':inputValue,'cutoff':cutoff_start,'cutoff_end':cutoff_end};
                                 console.log(data);
                                 $.ajax({
                                     'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
