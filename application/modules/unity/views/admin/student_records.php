@@ -35,6 +35,7 @@
                     <li><a href="#tab_2" data-toggle="tab">Curriculum Evaluation</a></li>                        
                     <li><a href="#tab_3" data-toggle="tab">Credited Subjects</a></li>
                     <li><a href="#tab_4" data-toggle="tab">Generated Transcripts</a></li>
+                    <li><a href="#tab_5" data-toggle="tab">Change Grades</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
@@ -232,6 +233,38 @@
                             </div>
                         </div>                          
                     </div>
+                    <div class="tab-pane" id="tab_5">
+                    <div class="box box-primary">
+                            <div class="box-body">                                    
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Term/Sem</th>
+                                            <th>SY</th>
+                                            <th>Subject</th>
+                                            <th>Section</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Date Changed</th>
+                                            <th>Changed By</th>                                                
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                          
+                                        <tr v-for="record in change_grades" style="font-size: 13px;">
+                                            <td>{{ record.enumSem }}</td>
+                                            <td>{{ record.strYearStart + '-' + record.strYearEnd }}</td>
+                                            <td>{{ record.strCode }}</td>
+                                            <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>                                                
+                                            <td>{{ record.from_grade }}</td>
+                                            <td>{{ record.to_grade }}</td>
+                                            <td>{{ record.date }}</td>                                                
+                                            <td>{{ record.changed_by }}</td>                                                     
+                                        </tr>                                            
+                                    </tbody>
+                                </table>                                                                       
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -391,6 +424,7 @@ new Vue({
         assessment_units: undefined, 
         applicant_data: undefined,  
         credited_subjects: [],
+        change_grades: [],
         generated_tor:[],
         tor:{
             date_issued: undefined,
@@ -425,6 +459,7 @@ new Vue({
                 .then((data) => {                                          
                     this.student = data.data.student;
                     this.generated_tor =  data.data.generated_tor;
+                    this.change_grades = data.data.change_grades;
                     this.credited_subjects =  data.data.credited_subjects;
                     this.records = data.data.data;        
                     this.subjects = data.data.all_subjects;
