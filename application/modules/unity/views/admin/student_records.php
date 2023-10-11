@@ -35,7 +35,7 @@
                     <li><a href="#tab_2" data-toggle="tab">Curriculum Evaluation</a></li>                        
                     <li><a href="#tab_3" data-toggle="tab">Credited Subjects</a></li>
                     <li><a href="#tab_4" data-toggle="tab">Generated Transcripts</a></li>
-                    <li><a href="#tab_5" data-toggle="tab">Change Grades</a></li>
+                    <li><a href="#tab_5" data-toggle="tab">Change of Grades</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
