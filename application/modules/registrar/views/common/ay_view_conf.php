@@ -1,43 +1,43 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $(".cut-off-registration").click(function(e){
-           
-            Swal.fire({
-            title: 'Cut Off Registration',
-            text: "Are you sure you want continue with cut off?",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            imageWidth: 100,
-            icon: "question",
-            cancelButtonText: "No, cancel!",
-            showCloseButton: true,
-            showLoaderOnConfirm: true,
-                preConfirm: (login) => {       
-                    Swal.fire({
-                        title: 'Cut Off Registration',
-                        text: "Are you absolutely sure you want continue with cut off? Enter today's date in yyyy-mm-dd format.",                            
-                        showCancelButton: true,
-                        input:"text",
-                        confirmButtonText: "Yes",
-                        imageWidth: 100,
-                        icon: "question",
-                        cancelButtonText: "No, cancel!",
-                        showCloseButton: true,
-                        showLoaderOnConfirm: true,
-                        preConfirm: (inputValue) => {  
-                            var sem = $(this).attr('rel');     
-                            var cutoff_start = $('#cutoff').val();
-                            var cutoff_end = $('#cutoffend').val();
-                            if(cutoff_end < cutoff_start){
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: "start can not be greater than end",
-                                    icon: "error"
-                                })
-                            }
-                            else{                                                
+            var cutoff_start = $('#cutoff').val();
+            var cutoff_end = $('#cutoffend').val();
+            if(cutoff_end < cutoff_start){
+                Swal.fire({
+                    title: "Failed",
+                    text: "start can not be greater than end",
+                    icon: "error"
+                })
+            }
+            else
+                Swal.fire({
+                title: 'Cut Off Registration',
+                text: "Are you sure you want continue with cut off?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {       
+                        Swal.fire({
+                            title: 'Cut Off Registration',
+                            text: "Are you absolutely sure you want continue with cut off? Enter today's date in yyyy-mm-dd format.",                            
+                            showCancelButton: true,
+                            input:"text",
+                            confirmButtonText: "Yes",
+                            imageWidth: 100,
+                            icon: "question",
+                            cancelButtonText: "No, cancel!",
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: (inputValue) => {  
+                                var sem = $(this).attr('rel');     
+                                var cutoff_start = $('#cutoff').val();
+                                var cutoff_end = $('#cutoffend').val();                       
                                 var data = {'date':inputValue,'cutoff':cutoff_start,'cutoff_end':cutoff_end};
-                                console.log(data);
                                 $.ajax({
                                     'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
                                     'method':'post',
@@ -64,10 +64,9 @@
                                     }
                                 });
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
         });
         
         
