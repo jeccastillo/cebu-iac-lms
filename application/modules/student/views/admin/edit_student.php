@@ -155,8 +155,7 @@
                         
                         <div class="form-group col-xs-6">
                             <label for="enumScholarship">Tuition Year Selected: </label>
-                            <select class="form-control" name="intTuitionYear">
-                                <option value="0">None</option>
+                            <select class="form-control" name="intTuitionYear">                                
                                 <?php foreach($tuition_years as $ty): ?>                                
                                 <option <?php echo ($student['intTuitionYear'] == $ty['intID'])?'selected':''; ?> value="<?php echo $ty['intID']; ?>"><?php echo $ty['year']; ?></option>
                                 <?php endforeach; ?>
