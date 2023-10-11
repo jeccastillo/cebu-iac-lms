@@ -1005,7 +1005,7 @@ class Unity extends CI_Controller {
             $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
             if(!isset($cs['rec'])){
                 if($cs['equivalent'])
-                    $cs['rec']['bg'] = "#009900";               
+                    $cs['rec']['bg'] = "#00A000";               
             }
             
                      
