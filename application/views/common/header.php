@@ -515,11 +515,11 @@
                         <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/cashier" style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a></li>
-                        <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="logs_forwarded")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded Payments</a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="logs_cashier")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
                         </li>
