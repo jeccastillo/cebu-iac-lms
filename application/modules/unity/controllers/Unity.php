@@ -979,11 +979,11 @@ class Unity extends CI_Controller {
                     switch($temp_rec['floatFinalGrade']){
                         case 'FA':
                             $grade = 5;
-                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['bg'] = "#009900";
                         break;
                         case 'UD':
                             $grade = 5;
-                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['bg'] = "#99000";
                         break;
                         default:
                             $grade = $temp_rec['floatFinalGrade'];
@@ -1004,7 +1004,12 @@ class Unity extends CI_Controller {
             }
 
             $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
-            
+            if(!isset($cs['rec'])){
+                if($cs['equivalent'])
+                    $cs['rec']['bg'] = "#009900";
+                else 
+                    $cs['rec']['bg'] = "#f2f2f2";
+            }
             
                      
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
@@ -1039,19 +1044,13 @@ class Unity extends CI_Controller {
                                 ->get('tb_mas_credited')
                                 ->result_array();
             
-            $ret_credited = [];                                
-            foreach($credited as $cred){
-                $cred['rec']['bg'] = "#009900";
-                $ret_credited = $cred;
-            }
-
             $credited_data = array(
                 'term' => $term_credited['term'],
                 'school' => $term_credited['completion'],
                 'school_year' => $term_credited['school_year'],
             );     
 
-            $credited_subjects[] = array('records'=>$ret_credited,'other_data'=>$credited_data);
+            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
         }
 
 
