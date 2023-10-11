@@ -963,6 +963,7 @@ class Unity extends CI_Controller {
         
         $assessment_sum = 0;
         $assessment_units = 0;
+        $assessment_units_earned = 0;
         
         foreach($curicculum as $cs){
             $recs = 
@@ -992,6 +993,7 @@ class Unity extends CI_Controller {
                 }
                 if($temp_rec['strRemarks'] == "Passed"){
                     $cs['rec'] = $temp_rec;
+                    $assessment_units_earned += $temp_rec['strUnits'];
                     break;
                 }
                 else
@@ -1089,7 +1091,7 @@ class Unity extends CI_Controller {
 
         $data['gwa'] = $gwa;
         $data['assessment_gwa'] = $assessment_gwa;
-        $data['assessment_units'] = $assessment_units;
+        $data['assessment_units'] = $assessment_units_earned;
         $data['total_units_earned'] = $total_units_earned;
         $data['credited_subjects'] = $credited_subjects;
         $data['data'] = $terms;
