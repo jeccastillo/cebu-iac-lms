@@ -988,8 +988,7 @@ class Unity extends CI_Controller {
                         default:
                             $grade = $temp_rec['floatFinalGrade'];
                             $temp_rec['bg'] = "#009900";
-                    }         
-                    $grade = $temp_rec['floatFinalGrade'];
+                    }                             
     
                     $assessment_units += $temp_rec['strUnits'];   
                     $assessment_sum += $grade * $temp_rec['strUnits'];         
