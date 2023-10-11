@@ -72,9 +72,9 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Date of Birth</font></td>
-                                <td width="40%"><font style="font-size: 8;">: '.$student['dteBirthDate'].'</font></td>    
+                                <td width="30%"><font style="font-size: 8;">: '.$student['dteBirthDate'].'</font></td>    
                                 <td width="20%"><font style="font-size: 8;">Place of Birth</font></td>                
-                                <td width="20%"><font style="font-size: 8;">: '.$student['place_of_birth'].'</font></td>                
+                                <td width="30%"><font style="font-size: 8;">: '.$student['place_of_birth'].'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
