@@ -18,7 +18,9 @@
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">Reserved List</h3>
-                <hr />
+                                
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive">
                 <div class="pull-right form-group">
                     <label>Term Filter</label>
                     <select id="select-term-reserved" class="form-control" >
@@ -27,8 +29,7 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div><!-- /.box-header -->
-            <div class="box-body table-responsive">
+                <hr />
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>
