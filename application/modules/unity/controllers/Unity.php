@@ -1039,6 +1039,12 @@ class Unity extends CI_Controller {
                                 ->get('tb_mas_credited')
                                 ->result_array();
             
+            $ret_credited = [];                                
+            foreach($credited as $cred){
+                $cred['rec']['bg'] = "#009900";
+                $ret_credited = $cred;
+            }
+            
             $credited_data = array(
                 'term' => $term_credited['term'],
                 'school' => $term_credited['completion'],
