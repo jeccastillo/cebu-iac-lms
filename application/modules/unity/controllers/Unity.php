@@ -976,8 +976,13 @@ class Unity extends CI_Controller {
             $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
             
             if($cs['rec'] && $cs['rec']['include_gwa']){
+                if($cs['rec']['floatFinalGrade'] == "FA")
+                    $grade = 5;
+                else
+                    $grade = $cs['rec']['floatFinalGrade'];
+
                 $assessment_units += $cs['rec']['strUnits'];   
-                $assessment_sum += $cs['rec']['floatFinalGrade'] * $cs['rec']['strUnits'];         
+                $assessment_sum += $grade * $cs['rec']['strUnits'];         
             }
                      
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
