@@ -125,9 +125,17 @@ class Unity extends CI_Controller {
     {
         if($this->is_super_admin() || ($this->is_accounting() && ($cat == "Cashier" || $cat == "Payment%20Term%20Forwarded")) || $this->is_registrar())
         {
-            $this->data['page'] = "logs";
-            $this->data['opentree'] = "admin";
-            $this->data['title'] ="Logs";
+            if($cat == "Leave%20of%20Abscences"){
+                $this->data['page'] = "loa_logs";
+                $this->data['opentree'] = "students";
+                $this->data['title'] ="Logs for Student Status";
+            }
+            else{
+                $this->data['page'] = "logs";
+                $this->data['opentree'] = "admin";
+                $this->data['title'] ="Logs";
+            }
+            
             
             $this->data['cat'] = $cat;
             $cat = urldecode($cat);
