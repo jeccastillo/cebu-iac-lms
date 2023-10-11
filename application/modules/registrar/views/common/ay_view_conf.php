@@ -3,7 +3,7 @@
         $(".cut-off-registration").click(function(e){
             var cutoff_start = $('#cutoff').val();
             var cutoff_end = $('#cutoffend').val();
-            if(cutoff_end > cutoff_start){
+            if(cutoff_end < cutoff_start){
                 Swal.fire({
                     title: "Failed",
                     text: "start can not be greater than end",
