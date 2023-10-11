@@ -25,8 +25,9 @@
                         showLoaderOnConfirm: true,
                         preConfirm: (inputValue) => {  
                             var sem = $(this).attr('rel');
-                            var cutoff = $('#cutoff').val();
-                            var data = {'date':inputValue,'cutoff':cutoff};
+                            var cutoff_start = $('#cutoff').val();
+                            var cutoff_end = $('#cutoffend').val();
+                            var data = {'date':inputValue,'cutoff':cutoff,'cutoff_end':cutoff_end};
                             $.ajax({
                                 'url':'<?php echo base_url(); ?>registrar/cut_off_registration/'+sem,
                                 'method':'post',

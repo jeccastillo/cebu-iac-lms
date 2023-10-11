@@ -1742,7 +1742,7 @@ class Registrar extends CI_Controller {
                                 ->result_array();
                 foreach($students as $student){                    
                     if($student['intROG'] == "0"){
-                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID'],'date_added <='=>$post['cutoff']))                    
+                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID'],'date_added >='=>$post['cutoff'],'date_added <='=>$post['cutoff_end']))                    
                         ->delete('tb_mas_classlist_student');            
                 
                         //$this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    

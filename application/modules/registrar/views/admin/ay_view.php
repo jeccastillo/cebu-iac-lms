@@ -23,8 +23,16 @@
                                     </div>
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">                                        
-                                    <label for="cutoff">Date for Registration Cut Off:</label>
-                                    <input type="date" value="<?php echo date("Y-m-d"); ?>" id="cutoff" class="form-control" />
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="cutoff">Start Date Registration Cut Off:</label>  
+                                            <input type="date" value="<?php echo date("Y-m-d"); ?>" id="cutoff" class="form-control" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="cutoff">End Date for Registration Cut Off:</label>  
+                                            <input type="date" value="<?php echo date("Y-m-d"); ?>" id="cutoffend" class="form-control" />
+                                        </div>
+                                    </div>
                                     <hr />
                                     <table id="ay-table" class="table">
                                         <thead><tr>
