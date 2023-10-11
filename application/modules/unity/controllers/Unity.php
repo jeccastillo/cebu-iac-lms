@@ -979,11 +979,11 @@ class Unity extends CI_Controller {
                     switch($temp_rec['floatFinalGrade']){
                         case 'FA':
                             $grade = 5;
-                            $temp_rec['bg'] = "#009900";
+                            $temp_rec['bg'] = "#990000";
                         break;
                         case 'UD':
                             $grade = 5;
-                            $temp_rec['bg'] = "#99000";
+                            $temp_rec['bg'] = "#990000";
                         break;
                         default:
                             $grade = $temp_rec['floatFinalGrade'];
