@@ -300,10 +300,14 @@
                         <li class="<?php echo (isset($page) && $page=="add_student")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>student/add_student" style="margin-left: 10px;"><i
                                     class="ion ion-android-person-add"></i> Add a Student Record</a></li>
+                        <li class="<?php echo (isset($page) && $page=="loa_logs")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>unity/logs/null/null/Leave%20of%20Abscences" style="margin-left: 10px;"><i
+                                    class="fa fa-file"></i> LOA Logs</a></li>
                         <?php endif; ?>
                         <li class="<?php echo (isset($page) && $page=="view_students")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>student/view_all_students" style="margin-left: 10px;"><i
                                     class="ion ion-eye"></i> View Students</a></li>
+                                                            
                         <!--                            <li class="<?php echo (isset($page) && $page=="view_students2")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_students2" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students' Pass</a></li> -->
 
 
