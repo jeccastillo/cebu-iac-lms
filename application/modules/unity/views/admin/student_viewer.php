@@ -63,6 +63,7 @@
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
                             <li><a href="#" style="font-size:13px;">Student Number <span class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a></li>
+                            <li><a href="#" style="font-size:13px;">Status <span class="pull-right text-blue">{{ student.student_status }}</span></a></li>                            
                             <li><a href="#" style="font-size:13px;">Curriculum <span class="pull-right text-blue">{{ student.strName }}</span></a></li>                            
                             <li><a style="font-size:13px;" href="#">Registration Status <span class="pull-right">{{ reg_status }}</span></a></li>
                             <li><a @click.prevent="resetStatus()" href="#"><i class="ion ion-android-close"></i> Reset Status</a> </li>
