@@ -965,25 +965,42 @@ class Unity extends CI_Controller {
         $assessment_units = 0;
         
         foreach($curicculum as $cs){
-            $cs['rec'] = 
+            $recs = 
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
                      ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
-                     ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks'=>'Passed'))
+                     ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
                      ->get('tb_mas_classlist_student')
-                     ->first_row('array');
+                     ->result_array();
             
+            foreach($recs as $temp_rec){
+                if($temp_rec && $temp_rec['include_gwa']){                
+                    switch($temp_rec['floatFinalGrade']){
+                        case 'FA':
+                            $grade = 5;
+                        break;
+                        case 'UD':
+                            $grade = 5;
+                        break;
+                        default:
+                            $grade = $record['v3'];
+                    }         
+                    $grade = $temp_rec['floatFinalGrade'];
+    
+                    $assessment_units += $temp_rec['strUnits'];   
+                    $assessment_sum += $grade * $temp_rec['strUnits'];         
+                }
+                if($temp_rec['strRemarks'] == "Passed"){
+                    $cs['rec'] = $temp_rec;
+                    break;
+                }
+                else
+                    $cs['rec'] = $temp_rec;
+            }
+
             $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
             
-            if($cs['rec'] && $cs['rec']['include_gwa']){
-                if($cs['rec']['floatFinalGrade'] == "FA")
-                    $grade = 5;
-                else
-                    $grade = $cs['rec']['floatFinalGrade'];
-
-                $assessment_units += $cs['rec']['strUnits'];   
-                $assessment_sum += $grade * $cs['rec']['strUnits'];         
-            }
+            
                      
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['sem'] = $cs['intSem'];
