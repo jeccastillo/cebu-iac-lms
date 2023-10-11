@@ -53,7 +53,7 @@
            ';
     $header_first_page = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                    
-                    <td width="80%">
+                    <td width="70%">
                         <table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                             <tr>                            
                                 <td width="20%"><font style="font-size: 8;">Name</font></td>
@@ -121,7 +121,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td width="20%">
+                    <td width="30%">
                         <img src="'.$other_details['picture'].'" witdh="200px" />
                     </td>
                 </tr>  
