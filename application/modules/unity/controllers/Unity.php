@@ -1037,7 +1037,7 @@ class Unity extends CI_Controller {
             foreach($records as $record){
                 if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
                     $units_earned += $record['strUnits'];
-                if($record['intFinalized'] == 2 && $record['include_gwa']){
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
                     switch($record['v3']){
                         case 'FA':
                             $v3 = 5;
