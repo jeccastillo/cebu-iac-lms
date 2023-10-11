@@ -982,6 +982,15 @@ class Unity extends CI_Controller {
         $assessment_sum = 0;
         $assessment_units = 0;
         $assessment_units_earned = 0;
+
+        $change_grade = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode,enumSem,term_label,term_student_type,strYearStart,strYearEnd')
+            ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->join('tb_mas_sy','tb_mas_classlist.strAcademicYear = tb_mas_sy.intID')
+            ->where(array('tb_mas_student_grade_change.student_id'=>$id))            
+            ->order_by('strYearStart asc, enumSem asc')
+            ->get('tb_mas_student_grade_change')
+            ->result_array();
         
         foreach($curicculum as $cs){
             $recs = 
@@ -1113,6 +1122,7 @@ class Unity extends CI_Controller {
         }
 
         $data['gwa'] = $gwa;
+        $data['change_grades'] = $change_grade;
         $data['assessment_gwa'] = $assessment_gwa;
         $data['assessment_units'] = $assessment_units_earned;
         $data['total_units_earned'] = $total_units_earned;
