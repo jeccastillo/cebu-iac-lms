@@ -122,7 +122,7 @@
                         </table>
                     </td>
                     <td width="20%">
-                        <img src="'.$other_details['picture'].'" witdh="200px" />
+                        <img src="'.$other_details['picture'].'" witdh="192px" />
                     </td>
                 </tr>  
                 <tr>
