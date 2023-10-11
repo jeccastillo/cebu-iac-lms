@@ -1044,14 +1044,14 @@ class Unity extends CI_Controller {
                 $cred['rec']['bg'] = "#009900";
                 $ret_credited = $cred;
             }
-            
+
             $credited_data = array(
                 'term' => $term_credited['term'],
                 'school' => $term_credited['completion'],
                 'school_year' => $term_credited['school_year'],
             );     
 
-            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+            $credited_subjects[] = array('records'=>$ret_credited,'other_data'=>$credited_data);
         }
 
 
