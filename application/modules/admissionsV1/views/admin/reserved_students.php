@@ -29,7 +29,7 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <hr />
+                <hr style="clear:both" />
                 <table id="subjects-table" class="table table-hover table-bordered">
                     <thead>
                         <tr>
