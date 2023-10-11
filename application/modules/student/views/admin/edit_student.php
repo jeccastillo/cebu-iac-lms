@@ -153,15 +153,15 @@
                         </div>
                         
                         
-                        <!-- <div class="form-group col-xs-6">
-                            <label for="enumScholarship">Scholarship: </label>
-                            <select class="form-control" name="enumScholarship">
+                        <div class="form-group col-xs-6">
+                            <label for="enumScholarship">Tuition Year Selected: </label>
+                            <select class="form-control" name="intTuitionYear">
                                 <option value="0">None</option>
-                                <?php foreach($scholarships as $scholarship): ?>                                
-                                <option <?php echo ($student['enumScholarship'] == $scholarship['intID'])?'selected':''; ?> value="<?php echo $scholarship['intID']; ?>"><?php echo $scholarship['name']; ?></option>
+                                <?php foreach($tuition_years as $ty): ?>                                
+                                <option <?php echo ($student['intTuitionYear'] == $ty['intID'])?'selected':''; ?> value="<?php echo $ty['intID']; ?>"><?php echo $ty['year']; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="form-group col-xs-6">
                             <label for="student_status">Status</label>
                             <select class="form-control" name="student_status" >

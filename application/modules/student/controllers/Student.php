@@ -102,6 +102,7 @@ class Student extends CI_Controller {
             $this->data['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('deduction_type'=>'scholarship'))->result_array();
             $this->data['discounts'] = $this->db->get_where('tb_mas_scholarships',array('deduction_type'=>'discount'))->result_array();
             $this->data['block_sections'] = $this->data_fetcher->fetch_table('tb_mas_block_sections');
+            $this->data['tuition_years'] = $this->data_fetcher->fetch_table('tb_mas_tuition_year');
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_student",$this->data);
