@@ -96,13 +96,13 @@
                             <div class="box-footer">
                                 <div class="row" style="font-weight:bold;">
                                     <div class="col-sm-3 text-right">
-                                        Total Units Earned:
+                                        Cummulative Units Earned:
                                     </div>
                                     <div class="col-sm-3">
                                         {{ units }}
                                     </div>
                                     <div class="col-sm-3 text-right">
-                                        GWA
+                                        Cummulative GWA
                                     </div>
                                     <div class="col-sm-3">
                                         {{ gwa }}
