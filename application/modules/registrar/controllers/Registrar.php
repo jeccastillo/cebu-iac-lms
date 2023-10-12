@@ -1265,7 +1265,7 @@ class Registrar extends CI_Controller {
             $post['subjects_loaded'] = array();
         }
         $student = $this->db->get_where('tb_mas_users',array("intID"=>$post['studentID']))->first_row('array');
-        $tuition = $this->data_fetcher->getTuitionSubjects($post['stype'],$this->data['unit_fee'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$post['scholarship'],$post['subjects_loaded'],$post['studentID'],$student['tuition_year']);
+        $tuition = $this->data_fetcher->getTuitionSubjects($post['stype'],$this->data['unit_fee'],$this->data['misc_fee'],$this->data['lab_fee'],$this->data['athletic'],$this->data['id_fee'],$this->data['srf'],$this->data['sfdf'],$this->data['csg'],$post['scholarship'],$post['subjects_loaded'],$post['studentID'],$student['intTuitionYear']);
        
         
         $ret ='<div class="box box-solid">
