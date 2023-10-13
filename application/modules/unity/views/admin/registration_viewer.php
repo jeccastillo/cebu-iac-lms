@@ -518,7 +518,10 @@ new Vue({
         reg_status: undefined,        
         loader_spinner: true, 
         installments: [],    
-        installment_dates:[],                   
+        installment_dates:[],  
+        user:{
+            special_role: 0,
+        },                 
     },
 
     mounted() {
