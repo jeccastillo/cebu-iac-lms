@@ -91,7 +91,7 @@ class Tuitionyear extends CI_Controller {
     public function add_tuition_year()
     {        
         $special_role = $this->session->userdata('special_role');        
-        if($special_role < 2)
+        if($special_role < 1)
             redirect(base_url()."unity/faculty_dashboard");
 
         $this->data['page'] = "tuitionyear";
@@ -179,7 +179,7 @@ class Tuitionyear extends CI_Controller {
     public function view_tuition_years(){
 
         $special_role = $this->session->userdata('special_role');        
-        if($special_role < 2)
+        if($special_role < 1)
             redirect(base_url()."unity/faculty_dashboard");
         
         $this->data['page'] = "tuitionyear_view";
