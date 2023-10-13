@@ -492,7 +492,7 @@
                     </ul>
                 </li>
                 <?php endif; ?>
-                <?php if(($user['special_role'] >= 2 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
+                <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
@@ -507,7 +507,8 @@
                         <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
-                        </li>                        
+                        </li>                 
+                        <?php if($user['special_role'] >= 2): ?>       
                         <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/view_payees" style="margin-left: 10px;"><i class="fa fa-users"></i>
                                 <span>Payee Set-up</span> </a>
@@ -523,6 +524,7 @@
                                 href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
                         </li>
+                        <?php endif; ?>
 <!--                        
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
                                 href="#" style="margin-left: 10px;"><i class="ion"></i>
