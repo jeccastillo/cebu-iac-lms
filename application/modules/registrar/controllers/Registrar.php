@@ -2085,20 +2085,16 @@ class Registrar extends CI_Controller {
     
     public function view_all_ay()
     {
-        if($this->faculty_logged_in())
-        {
-            $this->data['page'] = "view_academic_year";
-            $this->data['opentree'] = "registrar";
-            $this->data['academic_years'] = $this->data_fetcher->fetch_table('tb_mas_sy',array('strYearStart','desc'),20);
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/ay_view",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/ay_view_conf",$this->data);             
-            //print_r($this->data['classlist']);
+        
+        $this->data['page'] = "view_academic_year";
+        $this->data['opentree'] = "registrar";
+        $this->data['academic_years'] = $this->data_fetcher->fetch_table('tb_mas_sy',array('strYearStart','desc'),20);
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/ay_view",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        $this->load->view("common/ay_view_conf",$this->data);             
+        //print_r($this->data['classlist']);
             
-        }
-        else
-            redirect(base_url()."unity");  
     }
     
     
