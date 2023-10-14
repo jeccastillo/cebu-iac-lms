@@ -2331,18 +2331,18 @@ class Data_fetcher extends CI_Model {
             $tuition_units[$class['strCode']] = $class['strTuitionUnits'];
             
             //Checks if subject is NSTP nstp fee is different from normal fee                                
-            if($class['isNSTP']){
-                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-                ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
+            // if($class['isNSTP']){
+            //     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+            //     ->get('tb_mas_tuition_year_misc')->first_row('array');
+            //     $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
-                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
-                $tuition_units[$class['strCode']."NSTP"] = $class['strTuitionUnits'];
-            }
-            else{
+            //     $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+            //     $tuition_units[$class['strCode']."NSTP"] = $class['strTuitionUnits'];
+            // }
+            // else{
                 $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                 $tuition_units[$class['strCode']] = $class['strTuitionUnits'];
-            }
+            //}
             
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
