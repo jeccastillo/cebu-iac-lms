@@ -2317,7 +2317,6 @@ class Data_fetcher extends CI_Model {
             }
         }
 
-        $tuition_units = [];
 
         foreach($subjects as $sid)
         {                  
@@ -2326,23 +2325,18 @@ class Data_fetcher extends CI_Model {
                                 ->from("tb_mas_subjects")
                                 ->where(array("intID"=>$sid))
                                 ->get()
-                                ->result_array());      
-                                
-            $tuition_units[$class['strCode']] = $class['strTuitionUnits'];
+                                ->result_array());                       
             
             //Checks if subject is NSTP nstp fee is different from normal fee                                
-            // if($class['isNSTP']){
-            //     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-            //     ->get('tb_mas_tuition_year_misc')->first_row('array');
-            //     $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
+            if($class['isNSTP']){
+                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+                ->get('tb_mas_tuition_year_misc')->first_row('array');
+                $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
-            //     $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
-            //     $tuition_units[$class['strCode']."NSTP"] = $class['strTuitionUnits'];
-            // }
-            // else{
+                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+            }
+            else
                 $tuition += intval($class['strTuitionUnits'])*$unit_fee;
-                $tuition_units[$class['strCode']] = $class['strTuitionUnits'];
-            //}
             
             if($class['strLabClassification'] != "none"){
                 $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
@@ -2664,7 +2658,7 @@ class Data_fetcher extends CI_Model {
         
 
         
-        $data['tuition_units'] = $tuition_units;
+    
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
