@@ -2317,6 +2317,7 @@ class Data_fetcher extends CI_Model {
             }
         }
 
+        $tuition_units = [];
 
         foreach($subjects as $sid)
         {                  
@@ -2325,7 +2326,9 @@ class Data_fetcher extends CI_Model {
                                 ->from("tb_mas_subjects")
                                 ->where(array("intID"=>$sid))
                                 ->get()
-                                ->result_array());                       
+                                ->result_array());      
+                                
+            $tuition_units[$class['strCode']] = $class['strTuitionUnits'];
             
             //Checks if subject is NSTP nstp fee is different from normal fee                                
             if($class['isNSTP']){
@@ -2658,7 +2661,7 @@ class Data_fetcher extends CI_Model {
         
 
         
-    
+        $data['tuition_units'] = $tuition_units;
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
