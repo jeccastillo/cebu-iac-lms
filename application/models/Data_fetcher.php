@@ -2333,7 +2333,7 @@ class Data_fetcher extends CI_Model {
                 ->get('tb_mas_tuition_year_misc')->first_row('array');
                 $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
-                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+                $tuition += $nstp_fee;
             }
             else
                 $tuition += intval($class['strTuitionUnits'])*$unit_fee;
