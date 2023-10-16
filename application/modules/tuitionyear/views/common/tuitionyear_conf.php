@@ -13,7 +13,7 @@
                     "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/'+row[0]+'">Edit/View</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="'+base_url+'tuitionyear/set_default/1/'+row[0]+'" rel="'+row[0]+'">Set as Default for College</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/'+row[0]+'">Edit/View</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>tuitionyear/set_default/1/'+row[0]+'" rel="'+row[0]+'">Set as Default for College</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
