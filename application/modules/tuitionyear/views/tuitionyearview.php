@@ -29,7 +29,8 @@
                             <th>PPU Online</th>
                             <th>PPU Hyflex</th>
                             <th>PPU Hybrid</th>   
-                            <th>Default</th>                         
+                            <th>Default College</th>                         
+                            <th>Default SHS</th>                         
                             <th>Actions</th>
 
                         </tr>

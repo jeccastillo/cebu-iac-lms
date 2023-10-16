@@ -10,7 +10,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_tuition_year",
             "aoColumnDefs":[
                 {
-                    "aTargets":[7],
+                    "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/'+row[0]+'">Edit/View</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }

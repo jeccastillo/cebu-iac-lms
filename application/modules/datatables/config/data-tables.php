@@ -7,7 +7,7 @@ $config['tb_mas_scholarships_columns'] = array('tb_mas_scholarships.intID','name
 $config['tb_mas_scholarships_index'] = "intID";
 
 
-$config['tb_mas_tuition_year_columns'] = array('intID','year','pricePerUnit','pricePerUnitOnline','pricePerUnitHybrid','pricePerUnitHyflex','isDefault');
+$config['tb_mas_tuition_year_columns'] = array('intID','year','pricePerUnit','pricePerUnitOnline','pricePerUnitHybrid','pricePerUnitHyflex','isDefault','isDefaultShs');
 $config['tb_mas_tuition_year_index'] = "intID";
 
 $config['tb_mas_classrooms_columns'] = array("intID","strRoomCode","description","enumType");
