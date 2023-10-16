@@ -22,35 +22,8 @@ class Tuitionyear extends CI_Controller {
 		
         
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";
-        
-        //echo $docroot;
-        
-        switch ($_SERVER['DOCUMENT_ROOT'])
-        {
-            CASE '/home/cityco9/public_html/unity':
-                $this->docroot = "/home/cityco9/public_html/unity";                
-                break;
-            
-            CASE '/home/cityco9/public_html/portal':
-                $this->docroot = "/home/cityco9/public_html/portal";                
-                break;
+               
                 
-            CASE '/home/cityco9/public_html/dev':
-                $this->docroot = "/home/cityco9/public_html/dev";                
-                break;
-            
-            CASE '/var/www/html':
-                $this->docroot = "/var/www/html/cctUnityTesting";                
-                break;
-            
-            CASE 'C:/xampp/htdocs':
-                $this->docroot = "C:/xampp/htdocs/cctunity";                
-                break;
-            
-        }
-        
-        
-        $this->data['student_pics'] = "https://portal.citycollegeoftagaytay.edu.ph/assets/photos/";
         $this->data['temp_pics'] = base_url()."assets/temp/";
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
@@ -86,6 +59,17 @@ class Tuitionyear extends CI_Controller {
         $this->config_all();
         
         
+    }
+
+    public function set_default($type,$id){
+        $field = $type == 1 ? "isDefault" : "isDefaultShs";
+        $data[$field] = 0;
+        $this->db->update('tb_mas_tuition_year',$data);
+        $data[$field] = 1;
+        $this->db->where('intID',$id)
+                 ->update('tb_mas_tuition_year',$data);
+
+        redirect(base_url()."tuitionyear/view_tuition_years");
     }
 
     public function add_tuition_year()
