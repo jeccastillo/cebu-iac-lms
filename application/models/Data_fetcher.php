@@ -53,6 +53,18 @@ class Data_fetcher extends CI_Model {
         return $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row('array');        
         
     }
+
+    function getDefaultTuitionYearIDShs()
+    {
+        $tuition = $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row('array');        
+        return $tuition['intID'];
+    }
+    
+    function getDefaultTuitionYearShs()
+    {
+        return $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row('array');        
+        
+    }
     
     function getCourseCode($id)
     {

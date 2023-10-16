@@ -170,7 +170,9 @@ class AdmissionsV1 extends CI_Controller {
             $post['strStudentNumber'] = $tempNum;
             $post['strAcademicStanding'] = "regular";
             $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID'])?$this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']):'1';
-            $post['intTuitionYear'] = $this->data_fetcher->getDefaultTuitionYearID();
+            
+            $post['intTuitionYear'] = (get_stype($post['type']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
+            //IF SHS
             $this->data_poster->post_data('tb_mas_users',$post);
         }
         else{
