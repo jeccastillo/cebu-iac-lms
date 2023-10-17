@@ -99,6 +99,10 @@
                         <option <?php echo ($faculty['intUserLevel'] == 5)?'selected':'' ?> value="5">Admissions Officer</option>
                         <option <?php echo ($faculty['intUserLevel'] == 6)?'selected':'' ?> value="6">Finance</option>
                         <option <?php echo ($faculty['intUserLevel'] == 7)?'selected':'' ?> value="7">OSAS</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 8)?'selected':'' ?> value="8">Library</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 9)?'selected':'' ?> value="9">Discipline</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 10)?'selected':'' ?> value="10">Clinic</option>
+                        <option <?php echo ($faculty['intUserLevel'] == 11)?'selected':'' ?> value="11">IT</option>                        
                     </select>
                 </div>   
                 <div class="form-group col-xs-6">
