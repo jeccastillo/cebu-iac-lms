@@ -885,7 +885,7 @@ class Unity extends CI_Controller {
         
         $post = $this->input->post();              
         $post['subjects_loaded'] =  explode(',', $post['subjects_loaded']);
-        $sem = $this->data_fetcher->get_active_sem();        
+        $sem = $post['sem'];
         $student = $this->db->get_where('tb_mas_users',array("intID"=>$post['studentID']))->first_row('array');
         $data['tuition'] = $this->data_fetcher->getTuitionSubjects($post['stype'],0,0,$post['subjects_loaded'],$post['studentID'],$post['type_of_class'],$sem['intID'],$student['intTuitionYear']);
         $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);                

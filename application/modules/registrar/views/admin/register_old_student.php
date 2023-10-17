@@ -281,6 +281,7 @@ new Vue({
                         formdata.append("scholarship",this.request.enumScholarship);    
                         formdata.append("stype",this.request.enumStudentType);   
                         formdata.append("type_of_class",this.request.type_of_class);   
+                        formdata.append("sem",this.sem);
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
