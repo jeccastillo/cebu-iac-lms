@@ -367,7 +367,7 @@ new Vue({
 
     methods: {      
         changeTerm: function(event){
-             document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value;
+             document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value + '/' + this.student_id;
         },
         updateScStatus: function(event,id){
 
