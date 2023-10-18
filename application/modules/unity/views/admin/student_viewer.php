@@ -569,7 +569,7 @@ new Vue({
                     title: 'Warning',
                     text: 'Failed to generate due to deficiencies',
                     cancelButtonText:'Close',
-                    footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">Deficiencies</a>'
+                    footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>'
                 })                
             }
             else
