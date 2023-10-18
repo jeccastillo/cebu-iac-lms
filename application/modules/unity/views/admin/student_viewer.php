@@ -10,7 +10,7 @@
                     <!-- <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                      -->
-                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3) && deficiencies.length == 0" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID + '/35'">
+                    <a  target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" class="btn btn-app" href="#" @click.prevent="printRF">
                         <i class="ion ion-printer"></i>RF No Header
                     </a>                     
                     <a v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)" class="btn btn-app" :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
@@ -376,7 +376,8 @@ new Vue({
         picture: undefined,
         lab_units: 0,    
         gpa: 0,        
-        assessment: '',         
+        assessment: '',   
+        deficency_msg: '',      
     },
 
     mounted() {
@@ -559,6 +560,30 @@ new Vue({
                     icon: "success"
                 });
 
+        },
+        printRF: function(){
+            var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +'/'+ this.applicant_data.id +'/'+ this.active_sem.intID + '/35';
+            if(this.deficiencies.length > 0){
+                this.deficency_msg = "Deficiencies:";
+                for(i in this.deficiencies){
+                    
+                    
+                    this.deficiency_msg += " " + this.deficiencies[i].detail + " Dept: " + this.deficiencies[i].department;
+                    if(i != (this.deficiencies.length - 1))
+                        this.deficiency_msg += " , ";
+                }
+                Swal.fire({
+                    title: "Failed to generate due to deficiencies",
+                    text: 'Incomplete Data',
+                    icon: "error"
+                });
+            }
+            else
+                window.open(
+                    url,
+                    '_blank' // <- This is what makes it open in a new window.
+                );
+            
         },
         updateGradStatus: function(){
             
