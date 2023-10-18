@@ -69,7 +69,7 @@
                     </tbody>
                 </table>
                 <hr />
-                <a target="_blank" :href="base_url + 'pdf/student_grade_slip/'+id+'/'+sem" class="btn btn-app"><i class="fa fa-print"></i> Print Midterm</a>
+                <a target="_blank" href="#" @click.prevent="printGradeSlip(midterm)" class="btn btn-app"><i class="fa fa-print"></i> Print Midterm</a>
                 <a target="_blank" :href="base_url + 'pdf/student_grade_slip/'+id+'/'+sem+'/final'" class="btn btn-app"><i class="fa fa-print"></i> Print Final</a>
             </div>        
         </div>
@@ -123,6 +123,28 @@ new Vue({
             document.location = base_url + 'registrar/student_grade_slip/'+this.id+'/'+event.target.value;
 
         },
+        printGradeSlip: function(type){    
+            if(type == "midterm")
+                var url = base_url + 'pdf/student_grade_slip/'+this.id+'/'+this.sem;
+            else
+                var url = base_url + 'pdf/student_grade_slip/'+this.id+'/'+this.sem+'/final';
+            
+            if(this.deficiencies.length > 0){                                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Warning',
+                    text: 'Failed to generate due to deficiencies',
+                    cancelButtonText:'Close',
+                    footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>'
+                })                
+            }
+            else
+                window.open(
+                    url,
+                    '_blank' // <- This is what makes it open in a new window.
+                );
+                    
+        }
                                        
     }
 

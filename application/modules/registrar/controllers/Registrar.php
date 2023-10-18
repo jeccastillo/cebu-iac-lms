@@ -289,6 +289,8 @@ class Registrar extends CI_Controller {
         $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
 
         $ret['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();
+        $ret['deficiencies'] = $this->db
+                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active'))->result_array();
                 
         $sc_ret = [];
         foreach($records as $record)
