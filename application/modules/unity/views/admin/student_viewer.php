@@ -568,7 +568,7 @@ new Vue({
                 for(i in this.deficiencies){
                     
                     
-                    this.deficiency_msg += " " + this.deficiencies[i].detail + " Dept: " + this.deficiencies[i].department;
+                    this.deficiency_msg += " " + this.deficiencies[i].details + " Dept: " + this.deficiencies[i].department;
                     if(i != (this.deficiencies.length - 1))
                         this.deficiency_msg += " , ";
                 }
