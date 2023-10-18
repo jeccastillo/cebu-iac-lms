@@ -567,7 +567,8 @@ new Vue({
                 Swal.fire({
                     icon: 'error',
                     title: 'Failed to generate due to deficiencies',
-                    text: 'Click on the button below to view deficiencies!',
+                    text: 'Click on the deficiencies link to view them!',
+                    cancelButtonText:'Close',
                     footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">Deficiencies</a>'
                 })                
             }
