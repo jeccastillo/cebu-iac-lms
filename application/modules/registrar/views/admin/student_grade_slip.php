@@ -95,7 +95,8 @@ new Vue({
         student: undefined,      
         registration: undefined,      
         terms: [],     
-        records:[],                 
+        records:[],   
+        deficiencies: [],              
     },
 
     mounted() {
@@ -108,7 +109,8 @@ new Vue({
                   this.student = data.data.student;
                   this.registration = data.data.registration;
                   this.terms = data.data.sy;   
-                  this.records = data.data.class_data;                
+                  this.records = data.data.class_data;   
+                  this.deficiencies = data.data.deficiencies;             
                 })
             .catch((error) => {
                 console.log(error);
