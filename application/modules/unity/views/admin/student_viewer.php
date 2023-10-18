@@ -574,7 +574,7 @@ new Vue({
                 }
                 Swal.fire({
                     title: "Failed to generate due to deficiencies",
-                    text: 'Incomplete Data',
+                    text: this.deficiency_msg,
                     icon: "error"
                 });
             }
