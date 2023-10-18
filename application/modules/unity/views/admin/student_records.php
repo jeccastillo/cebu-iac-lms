@@ -418,6 +418,7 @@ new Vue({
         records: [],         
         gwa: undefined,
         curriculum_subjects: [],
+        deficiencies: [],
         subjects: [],
         units: undefined,
         assessment_gwa: undefined,  
@@ -463,6 +464,7 @@ new Vue({
                     this.credited_subjects =  data.data.credited_subjects;
                     this.records = data.data.data;        
                     this.subjects = data.data.all_subjects;
+                    this.deficiencies = data.data.deficiencies;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;  
@@ -501,13 +503,23 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    this.$refs.generate_tor.submit();                                                       
+                    if(this.deficiencies.length > 0){                                
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Warning',
+                            text: 'Failed to generate due to deficiencies',
+                            cancelButtonText:'Close',
+                            footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>'
+                        })                
+                    }
+                    else
+                        this.$refs.generate_tor.submit();                                                       
                     
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });         
             
-        },
+        },        
         creditSubject: function(){
             Swal.fire({
                 title: 'Add Credits?',

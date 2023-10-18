@@ -976,6 +976,8 @@ class Unity extends CI_Controller {
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
         $data['all_subjects'] = $curicculum;
         $data['curriculum_subjects'] = [];
+        $data['deficiencies'] = $this->db
+                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active'))->result_array();
 
         $data['generated_tor'] = $this->db->get_where('tb_mas_tor_generated',array('student_id'=>$id))->result_array();
         
