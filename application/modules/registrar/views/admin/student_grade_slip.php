@@ -69,8 +69,8 @@
                     </tbody>
                 </table>
                 <hr />
-                <a target="_blank" href="#" @click.prevent="printGradeSlip(midterm)" class="btn btn-app"><i class="fa fa-print"></i> Print Midterm</a>
-                <a target="_blank" :href="base_url + 'pdf/student_grade_slip/'+id+'/'+sem+'/final'" class="btn btn-app"><i class="fa fa-print"></i> Print Final</a>
+                <a target="_blank" href="#" @click.prevent="printGradeSlip('midterm')" class="btn btn-app"><i class="fa fa-print"></i> Print Midterm</a>
+                <a target="_blank" href="#" @click.prevent="printGradeSlip('final')" class="btn btn-app"><i class="fa fa-print"></i> Print Final</a>
             </div>        
         </div>
     </div>
