@@ -564,10 +564,8 @@ new Vue({
         printRF: function(){
             var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +'/'+ this.applicant_data.id +'/'+ this.active_sem.intID + '/35';
             if(this.deficiencies.length > 0){
-                this.deficency_msg = "Deficiencies:";
-                for(i in this.deficiencies){
-                    
-                    
+                this.deficency_msg = "Deficiencies: ";
+                for(i in this.deficiencies){                                        
                     this.deficiency_msg += " " + this.deficiencies[i].details + " Dept: " + this.deficiencies[i].department;
                     if(i != (this.deficiencies.length - 1))
                         this.deficiency_msg += " , ";
