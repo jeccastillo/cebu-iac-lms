@@ -377,7 +377,8 @@ new Vue({
         lab_units: 0,    
         gpa: 0,        
         assessment: '',   
-        deficency_msg: '',      
+        deficency_msg: '',  
+        deficiencies: [],    
     },
 
     mounted() {
@@ -390,6 +391,7 @@ new Vue({
                     console.log(data);
                     if(data.data.success){                                                                                                                   
                         this.student = data.data.student;
+                        this.deficiencies = data.data.deficiencies;
                         if(data.data.scholarship.length > 0){
                             var sch = "";
                             for(i in data.data.scholarship)
