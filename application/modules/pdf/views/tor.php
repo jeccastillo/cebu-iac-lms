@@ -114,11 +114,10 @@
                                 <td><font style="font-size: 8;">'.$other_details['admission_date'].'</font></td>                
                             </tr>
                             <tr>
-                                <td style="line-height:1px;" colspan=5></td>         
+                                <td style="line-height:1px;" colspan=2></td>         
                             </tr>
                             <tr>                            
-                                <td colspan="2"><font style="font-size: 8;"></font></td>
-                                <td width="1%" style="text-align:center"></td>
+                                <td colspan="2"><font style="font-size: 8;"></font></td>                                
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
                                 <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['date_of_graduation'].'</font></td>                
@@ -128,7 +127,6 @@
                             </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
-                                <td width="1%" style="text-align:center"></td>
                                 <td><font style="font-size: 8;">NSTP Serial No.</font></td>
                                 <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['nstp_serial'].'</font></td>                
