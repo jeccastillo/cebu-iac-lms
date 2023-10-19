@@ -120,7 +120,7 @@
                                 <td colspan="3"><font style="font-size: 8;"></font></td>                                
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.$student['date_of_graduation'].'</font></td>                
+                                <td><font style="font-size: 8;">'.($student['date_of_graduation']!="" || $student['date_of_graduation']!=null?$student['date_of_graduation']:"XXXXXXXX").'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
