@@ -89,7 +89,7 @@
                                 <td><font style="font-size: 8;">'.$student['strCitizenship'].'</font></td>    
                                 <td><font style="font-size: 8;">Gender</font></td>             
                                 <td width="1%" style="text-align:center">:</td>   
-                                <td><font style="font-size: 8;">'.capitalize($student['enumGender']).'</font></td>                
+                                <td><font style="font-size: 8;">'.ucfirst($student['enumGender']).'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
