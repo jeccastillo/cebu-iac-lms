@@ -347,6 +347,7 @@ new Vue({
         applicant_data:{},
         active_sem: {},
         sections: [],
+        balance: 0,
         records: [],
         other_data: undefined,
         reg_status: '',
@@ -410,6 +411,7 @@ new Vue({
                         }                               
                         this.change_grade = data.data.change_grade;
                         this.deficiencies = data.data.deficiencies;
+                        this.balance = data.data.balancel;
                         this.user_level = data.data.user_level;
                         this.registration = data.data.registration;                        
                         this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
@@ -563,7 +565,7 @@ new Vue({
         },
         printRF: function(){
             var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +'/'+ this.applicant_data.id +'/'+ this.active_sem.intID + '/35';
-            if(this.deficiencies.length > 0){     
+            if(this.deficiencies.length > 0 || this.balance > 0){                                
                 Swal.fire({
                     title: 'Warning',
                     text: "This student has active deficiencies",

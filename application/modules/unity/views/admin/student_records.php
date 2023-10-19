@@ -422,6 +422,7 @@ new Vue({
         subjects: [],
         units: undefined,
         assessment_gwa: undefined,  
+        balance: 0,
         assessment_units: undefined, 
         applicant_data: undefined,  
         credited_subjects: [],
@@ -463,6 +464,7 @@ new Vue({
                     this.change_grades = data.data.change_grades;
                     this.credited_subjects =  data.data.credited_subjects;
                     this.records = data.data.data;        
+                    this.balance = data.data.balance;
                     this.subjects = data.data.all_subjects;
                     this.deficiencies = data.data.deficiencies;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
@@ -503,7 +505,7 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                        if(this.deficiencies.length > 0){                                
+                        if(this.deficiencies.length > 0 || balance > 0){                                
                             Swal.fire({
                                 title: 'Warning',
                                 text: "This student has active deficiencies",

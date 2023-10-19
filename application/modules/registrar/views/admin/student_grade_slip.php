@@ -96,7 +96,8 @@ new Vue({
         registration: undefined,      
         terms: [],     
         records:[],   
-        deficiencies: [],              
+        deficiencies: [],      
+        balance: 0,        
     },
 
     mounted() {
@@ -110,6 +111,7 @@ new Vue({
                   this.registration = data.data.registration;
                   this.terms = data.data.sy;   
                   this.records = data.data.class_data;   
+                  this.balance = data.data.balance;
                   this.deficiencies = data.data.deficiencies;             
                 })
             .catch((error) => {
@@ -131,7 +133,7 @@ new Vue({
             else
                 var url = base_url + 'pdf/student_grade_slip/'+this.id+'/'+this.sem+'/final';
             
-            if(this.deficiencies.length > 0){                                
+            if(this.deficiencies.length > 0 || this.balance > 0){                                
                 Swal.fire({
                     title: 'Warning',
                     text: "This student has active deficiencies",
