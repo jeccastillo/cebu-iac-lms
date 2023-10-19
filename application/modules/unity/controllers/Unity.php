@@ -2217,14 +2217,27 @@ class Unity extends CI_Controller {
             $st = [];
             
             
+            $pre_req = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$clist['intSubjectID']))->result_array();
+            
+            $passed_pre_req = true;
+            
             foreach($students as $student)
             { 
+                foreach($pre_req as $req){
+                    $passed = $this->db->select('tb_mas_classlist_student.intCSID')
+                    ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')         
+                    ->where(array('intSubjectID'=>$req['intPrerequisiteID'],'strRemarks'=>'Passed'))
+                    ->result_array();
+                    if(empty($passed))
+                        $passed_pre_req = false;
+                             
+                }
                 $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
                 $st[] = $student;                    
                 
             }
             $data['students'] = $st;
-
+            $data['pre_req_passed'] = $passed_pre_req;
             
             $data['label'] = "Submit"; 
             if ($data['classlist']['intFinalized'] == 0) {
