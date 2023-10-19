@@ -563,14 +563,22 @@ new Vue({
         },
         printRF: function(){
             var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +'/'+ this.applicant_data.id +'/'+ this.active_sem.intID + '/35';
-            if(this.deficiencies.length > 0){                                
+            if(this.deficiencies.length > 0){     
                 Swal.fire({
-                    icon: 'error',
                     title: 'Warning',
-                    text: 'Failed to generate due to deficiencies',
-                    cancelButtonText:'Close',
-                    footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>'
-                })                
+                    text: "This student has active deficiencies",
+                    showCancelButton: true,
+                    confirmButtonText: "Continue Printing Anyway?",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>',
+                    preConfirm: (login) => {  
+                        document.location = url;
+                    }
+                });           
             }
             else
                 window.open(

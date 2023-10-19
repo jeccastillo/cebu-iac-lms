@@ -503,14 +503,22 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    if(this.deficiencies.length > 0){                                
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Warning',
-                            text: 'Failed to generate due to deficiencies',
-                            cancelButtonText:'Close',
-                            footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>'
-                        })                
+                        if(this.deficiencies.length > 0){                                
+                            Swal.fire({
+                                title: 'Warning',
+                                text: "This student has active deficiencies",
+                                showCancelButton: true,
+                                confirmButtonText: "Continue Printing Anyway?",
+                                imageWidth: 100,
+                                icon: "question",
+                                cancelButtonText: "No, cancel!",
+                                showCloseButton: true,
+                                showLoaderOnConfirm: true,
+                                footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>',
+                                preConfirm: (login) => {  
+                                    this.$refs.generate_tor.submit();  
+                                }
+                            })                                                         
                     }
                     else
                         this.$refs.generate_tor.submit();                                                       
