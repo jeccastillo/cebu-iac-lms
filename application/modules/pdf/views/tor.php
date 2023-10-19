@@ -129,7 +129,7 @@
                                 <td colspan="3"><font style="font-size: 8;"></font></td>
                                 <td><font style="font-size: 8;">NSTP Serial No.</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.$student['nstp_serial'].'</font></td>                
+                                <td><font style="font-size: 8;">'.($student['nstp_serial']!="" || $student['nstp_serial']!=null?$student['nstp_serial']:"XXXXXXXX").'</font></td>                                                 
                             </tr>
                         </table>
                     </td>
