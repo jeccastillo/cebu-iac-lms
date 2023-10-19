@@ -2232,11 +2232,12 @@ class Unity extends CI_Controller {
                         $passed_pre_req = false;
                              
                 }
+                $student['pre_req_passed'] = $passed_pre_req;
                 $student['registered'] = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
                 $st[] = $student;                    
                 
             }
-            $st['pre_req_passed'] = $passed_pre_req;
+            
             $data['students'] = $st;
             
             
