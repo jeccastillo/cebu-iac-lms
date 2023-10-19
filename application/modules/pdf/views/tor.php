@@ -56,7 +56,8 @@
                     <td width="80%">
                         <table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                             <tr>                            
-                                <td width="20%"><font style="font-size: 8;"><div style="float:left">Name</div> <div style="float:right;text-align:right">:</div><div style="clear:both"></div></font></td>
+                                <td width="19%"><font style="font-size: 8;">Name</font></td>
+                                <td width="1%" style="text-align:right">:</td>
                                 <td colspan="3"><font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
                                 
                             </tr>
