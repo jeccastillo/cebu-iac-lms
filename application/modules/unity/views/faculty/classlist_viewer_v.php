@@ -39,7 +39,7 @@
                                 <th>FINAL GRADE</th>
                                 <th>Remarks</th>                                
                                 <th>Enrolled</th>
-                                <th>Passed Prerequisites</th>
+                                <th v-if="pre_req.length > 0">Passed Prerequisites</th>
                             </tr>
                         </thead>
                         <tbody>                        
@@ -76,6 +76,7 @@
                                 <td  class="text-left">
                                     {{ student.registered?'yes':'no' }}
                                 </td>
+                                <td v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
                             </tr>
                         </tbody>                        
                     </table>
