@@ -39,7 +39,7 @@
                                 <th>FINAL GRADE</th>
                                 <th>Remarks</th>                                
                                 <th>Enrolled</th>
-                                <th v-if="pre_req.length > 0">Passed Prerequisites</th>
+                                <th v-if="pre_req.length > 0">Passed Pre-requisite(s)</th>
                             </tr>
                         </thead>
                         <tbody>                        
