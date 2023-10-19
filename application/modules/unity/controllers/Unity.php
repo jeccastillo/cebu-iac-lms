@@ -1168,7 +1168,7 @@ class Unity extends CI_Controller {
                $id = $post['studentID'];
 			
             //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
-            $data['balance'] = $this->data_fetcher->getStudentBalance($id);
+            $ret['balance'] = $this->data_fetcher->getStudentBalance($id);
             $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
             
             if($sem!=null){
