@@ -2236,8 +2236,9 @@ class Unity extends CI_Controller {
                 $st[] = $student;                    
                 
             }
+            $st['pre_req_passed'] = $passed_pre_req;
             $data['students'] = $st;
-            $data['pre_req_passed'] = $passed_pre_req;
+            
             
             $data['label'] = "Submit"; 
             if ($data['classlist']['intFinalized'] == 0) {
