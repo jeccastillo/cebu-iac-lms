@@ -973,7 +973,7 @@ class Unity extends CI_Controller {
                                   ->get('tb_mas_registration')
                                   ->result_array();
 
-        $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);
+        $curicculum = $this->data_fetcher->getSubjectsInCurriculumAlphabetical($data['student']['intCurriculumID']);
         $data['all_subjects'] = $curicculum;
         $data['curriculum_subjects'] = [];
         $data['deficiencies'] = $this->db
