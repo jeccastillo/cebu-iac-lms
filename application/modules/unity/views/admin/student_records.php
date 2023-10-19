@@ -121,10 +121,10 @@
                                                 <th colspan="5">{{ stringifyNumber(term.year) + ' Year ' + stringifyNumber(term.sem) + ' Term' }}</th>
                                             </tr>
                                             <tr>                                               
-                                                <th width="15%">Subject Code</th>
+                                                <th width="10%">Subject Code</th>
                                                 <th width="35%">Description</th> 
                                                 <th width="10%">Grade</th>                                                
-                                                <th width="30%">Remarks</th>                                           
+                                                <th width="35%">Remarks</th>                                           
                                                 <th width="10%">Units Earned</th>
                                             </tr>
                                         </thead>
