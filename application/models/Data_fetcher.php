@@ -2988,6 +2988,12 @@ class Data_fetcher extends CI_Model {
         ->get()
         ->result_array();
 
+        $balance = 0;
+        foreach($ledger as $item)
+            $balance += floatval($item['amount']); 
+
+        return $balance;
+
     }
     function getClassListStudents($id,$sem = 0)
     {
