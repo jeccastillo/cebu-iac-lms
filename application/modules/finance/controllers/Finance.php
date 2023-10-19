@@ -217,6 +217,7 @@ class Finance extends CI_Controller {
 
         echo json_encode($ret);
     }
+    
     public function student_ledger_data($id,$sem){
                 
         $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');

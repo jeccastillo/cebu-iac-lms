@@ -514,7 +514,7 @@ new Vue({
                                 cancelButtonText: "No, cancel!",
                                 showCloseButton: true,
                                 showLoaderOnConfirm: true,
-                                footer: '<a href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>',
+                                footer: '<a target="_blank" href="'+base_url + 'deficiencies/student_deficiencies/' + this.student.intID+'">View Deficiencies</a>',
                                 preConfirm: (login) => {  
                                     this.$refs.generate_tor.submit();  
                                 }

@@ -2962,11 +2962,23 @@ class Data_fetcher extends CI_Model {
                      ->result_array());
     }
     
+    function getStudentBalance($id){
+        
+        $today = date('Y-m-d');
+        $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+        ->from('tb_mas_student_ledger')
+        ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+        ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+        ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+        ->where(array('student_id'=>$id,'start_of_classes >='=> $today ))        
+        ->get()
+        ->result_array();
+
+    }
     function getClassListStudents($id,$sem = 0)
     {
         $faculty_id = $this->session->userdata("intID");
-        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row('array');
-        $pre_req = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$classlist['intSubjectID']))->result_array();
+        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row('array');        
         
         if($sem == 0){
             $where["intClassListID"] = $id;
