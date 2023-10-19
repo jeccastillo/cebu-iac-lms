@@ -66,6 +66,7 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Program Persued</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td colspan="3"><font style="font-size: 8;">'.trim($student['strProgramDescription']).'</font></td>                      
                             </tr>
                             <tr>
@@ -73,8 +74,10 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Date of Birth</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td width="30%"><font style="font-size: 8;">'.$student['dteBirthDate'].'</font></td>    
-                                <td width="20%"><font style="font-size: 8;">Place of Birth</font></td>                
+                                <td width="19%"><font style="font-size: 8;">Place of Birth</font></td>      
+                                <td width="1%" style="text-align:center">:</td>          
                                 <td width="30%"><font style="font-size: 8;">'.$student['place_of_birth'].'</font></td>                
                             </tr>
                             <tr>
@@ -82,8 +85,10 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Citizenship</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['strCitizenship'].'</font></td>    
-                                <td><font style="font-size: 8;">Gender</font></td>                
+                                <td><font style="font-size: 8;">Gender</font></td>             
+                                <td width="1%" style="text-align:center">:</td>   
                                 <td><font style="font-size: 8;">'.$student['enumGender'].'</font></td>                
                             </tr>
                             <tr>
@@ -91,8 +96,10 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Secondary School</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['high_school'].'</font></td>    
-                                <td><font style="font-size: 8;">ID No.</font></td>                
+                                <td><font style="font-size: 8;">ID No.</font></td>     
+                                <td width="1%" style="text-align:center">:</td>           
                                 <td><font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font></td>                
                             </tr>
                             <tr>
@@ -100,8 +107,10 @@
                             </tr>
                             <tr>                            
                                 <td><font style="font-size: 8;">Tertiary School</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['college'].'</font></td>                     
-                                <td><font style="font-size: 8;">Date of Admission</font></td>                
+                                <td><font style="font-size: 8;">Date of Admission</font></td>   
+                                <td width="1%" style="text-align:center">:</td>             
                                 <td><font style="font-size: 8;">'.$other_details['admission_date'].'</font></td>                
                             </tr>
                             <tr>
@@ -109,7 +118,9 @@
                             </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
+                                <td width="1%" style="text-align:center"></td>
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
+                                <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['date_of_graduation'].'</font></td>                
                             </tr>
                             <tr>
@@ -117,7 +128,9 @@
                             </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
+                                <td width="1%" style="text-align:center"></td>
                                 <td><font style="font-size: 8;">NSTP Serial No.</font></td>
+                                <td width="1%" style="text-align:center">:</td>
                                 <td><font style="font-size: 8;">'.$student['nstp_serial'].'</font></td>                
                             </tr>
                         </table>
