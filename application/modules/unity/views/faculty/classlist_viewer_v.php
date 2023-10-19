@@ -36,9 +36,10 @@
                                 <th>Name</th>
                                 <th>Program</th>                                
                                 <th>MIDTERM GRADE</th>
-                                <th>FINAL GRADE</th>                                                                                        
-                                <th>Remarks</th>
+                                <th>FINAL GRADE</th>
+                                <th>Remarks</th>                                
                                 <th>Enrolled</th>
+                                <th>Passed Prerequisites</th>
                             </tr>
                         </thead>
                         <tbody>                        
@@ -173,6 +174,7 @@ new Vue({
         classlist:undefined,
         grading_items: [],
         grading_items_midterm:[],
+        pre_req: undefined,
         is_admin: false,
         is_registrar: false,
         is_super_admin: false,
@@ -213,6 +215,7 @@ new Vue({
             this.students = data.data.students;
             this.subject = data.data.subject;            
             this.label = data.data.label;
+            this.pre_req =  data.data.pre_req;
             this.disable_submit = data.data.disable_submit;
             
         })
