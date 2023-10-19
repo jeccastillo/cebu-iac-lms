@@ -346,7 +346,7 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Units *</label>
-                            <input required v-model="add_credits.units" type="number" step="0.25" class="form-control">
+                            <input required v-model="add_credits.units" type="number" step="0.5" class="form-control">
                         </div> 
                         <div class="form-group col-sm-6">
                             <label>Grade *</label>
