@@ -963,7 +963,7 @@ class Unity extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function student_records_data($id){
+    public function student_records_data($id,$curriculum = 0){
 
         $data['student'] = $this->data_fetcher->getStudent($id);
         $registrations = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id')
@@ -973,9 +973,11 @@ class Unity extends CI_Controller {
                                   ->get('tb_mas_registration')
                                   ->result_array();
 
-        $curicculum = $this->data_fetcher->getSubjectsInCurriculumAlphabetical($data['student']['intCurriculumID']);
-        $data['all_subjects'] = $curicculum;
+
+        $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);        
+        $data['all_subjects'] = $this->data_fetcher->getSubjectsInCurriculumAlphabetical($data['student']['intCurriculumID']);
         $data['curriculum_subjects'] = [];
+        
         $data['deficiencies'] = $this->db
                 ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active'))->result_array();
 
