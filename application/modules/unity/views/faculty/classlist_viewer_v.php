@@ -76,7 +76,7 @@
                                 <td  class="text-left">
                                     {{ student.registered?'yes':'no' }}
                                 </td>
-                                <td v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
+                                <td :style="student.pre_req_passed?'color:#009000':'color:#900000'" v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
                             </tr>
                         </tbody>                        
                     </table>
