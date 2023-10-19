@@ -284,7 +284,7 @@ class Registrar extends CI_Controller {
         else
             $ret['active_sem'] = $this->data_fetcher->get_active_sem();
 
-        $data['balance'] = $this->data_fetcher->getStudentBalance($id);
+        $ret['balance'] = $this->data_fetcher->getStudentBalance($id);
 
         $ret['selected_ay'] = $ret['active_sem']['intID'];
 
