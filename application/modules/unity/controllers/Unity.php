@@ -2227,6 +2227,7 @@ class Unity extends CI_Controller {
                     $passed = $this->db->select('tb_mas_classlist_student.intCSID')
                     ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')         
                     ->where(array('intSubjectID'=>$req['intPrerequisiteID'],'strRemarks'=>'Passed'))
+                    ->get()
                     ->result_array();
                     if(empty($passed))
                         $passed_pre_req = false;
