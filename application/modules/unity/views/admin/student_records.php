@@ -174,14 +174,14 @@
                                 <table class="table table-condensed table-bordered">
                                     <thead>
                                         <tr>                                            
-                                            <th>Course Code</th>
-                                            <th>Course Description</th>
-                                            <th>Units</th>                                            
-                                            <th>Grade</th>
-                                            <th>Date Added</th>
-                                            <th>Added By</th>
-                                            <th>Equivalent Subject</th>                                      
-                                            <th>Actions</th>
+                                            <th width="10%">Course Code</th>
+                                            <th width="30%">Course Description</th>
+                                            <th width="5%">Units</th>                                            
+                                            <th width="5%">Grade</th>
+                                            <th width="10%">Date Added</th>
+                                            <th width="20%">Added By</th>
+                                            <th width="10%">Equivalent Subject</th>                                      
+                                            <th width="10%">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>                                          
