@@ -114,7 +114,7 @@
                                 <td><font style="font-size: 8;">'.$other_details['admission_date'].'</font></td>                
                             </tr>
                             <tr>
-                                <td style="line-height:1px;" colspan=2></td>         
+                                <td style="line-height:1px;" colspan=5></td>         
                             </tr>
                             <tr>                            
                                 <td colspan="2"><font style="font-size: 8;"></font></td>
