@@ -619,7 +619,7 @@ class Pdf extends CI_Controller {
                     $total_records++;
             }                 
             if($total > 0)
-                $gwa =  round(($sum/$total),2);
+                $gwa =  round(($sum/$total),3);
 
             $units_overall += $total_units;
             $gwa_overall += $gwa;
@@ -639,7 +639,7 @@ class Pdf extends CI_Controller {
         $rec['total_records'] = $total_records;
 
         $this->data['other_details'] = $rec;
-        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
+        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),3);
         $this->data['units_overall'] = $units_overall;        
         $this->data['student'] = $student;        
 
@@ -749,7 +749,7 @@ class Pdf extends CI_Controller {
                     $total_records++;
             }                 
             if($total > 0)
-                $gwa =  round(($sum/$total),2);
+                $gwa =  round(($sum/$total),3);
 
             $units_overall += $total_units;
             $gwa_overall += $gwa;
@@ -769,7 +769,7 @@ class Pdf extends CI_Controller {
         $rec['total_records'] = $total_records;
 
         $this->data['other_details'] = $rec;
-        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),2);
+        $this->data['gwa_overall'] = round(($gwa_overall/$num_terms),3);
         $this->data['units_overall'] = $units_overall;        
         $this->data['student'] = $student;        
 
@@ -841,7 +841,7 @@ class Pdf extends CI_Controller {
             $sc_ret[] = $record;
         }                 
         if($total > 0)
-            $gwa =  round(($sum/$total),2);
+            $gwa =  round(($sum/$total),3);
 
 
         $this->data['other_data'] = 
