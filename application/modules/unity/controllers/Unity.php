@@ -2154,7 +2154,7 @@ class Unity extends CI_Controller {
                 $ext = $this->db->get_where('tb_mas_sy_grading_extension_faculty',array('classlist_id'=>$clist['intID'],'grading_extension_id'=>$mx['id']))
                                                         ->first_row('array');            
                 
-                if($ext && $mx['date'] > $this->data['classlist']['midterm_end'])                                                        
+                if($ext && $mx['date'] > $data['classlist']['midterm_end'])                                                        
                     $data['classlist']['midterm_end']  = $mx['date'];
             }
             
