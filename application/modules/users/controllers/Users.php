@@ -66,7 +66,7 @@ class Users extends CI_Controller {
             $data['message'] =  "Success";
         } elseif($authentication == 2) {
             $data['success'] = false;
-            $data['message'] = "Too many login attempts for this user account locked please contact SMS admin";            
+            $data['message'] = "Too many failed login attempts for this user account locked please contact SMS admin";            
         }
         else{
             $data['success'] = false;
