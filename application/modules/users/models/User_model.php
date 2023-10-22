@@ -9,8 +9,7 @@
 		
 		public function authenticate($username,$password,$table)
 		{
-           
-            
+                       
 			$user = $this->db->get_where($table,array('strUsername'=>$username,'isActive'=>1))->result_array();
 			
 			$user = current($user);
@@ -22,11 +21,16 @@
 			else
 			{			
 				$auth_data = $this->db->get_where($table, array('strUsername'=>$username), 1)->first_row();
+				if($auth_data->login_attempts >= 3){
+					return false;
+				}
+
 				//if($user['strCMSUserPassword'] == md5($password))
 				if(password_verify($password,$user['strPass']))
 				{		
                     
                     $data = array('intIsOnline'=>date("H:i:s"));
+					$data['login_attempts'] = 0;
         
                     $this->db
                          ->where('intID',$user['intID'])
@@ -44,6 +48,11 @@
 				}
 				else
 				{
+					$data['login_attempts'] = $auth_data->login_attempts + 1;
+					$this->db
+                         ->where('intID',$user['intID'])
+                         ->update('tb_mas_faculty',$data);
+
 					return false;
 				}
 			}
