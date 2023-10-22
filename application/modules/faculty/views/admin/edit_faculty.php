@@ -47,6 +47,10 @@
                         <input value ="<?php echo $faculty['strMobileNumber']; ?>" type="number" name="strMobileNumber" class="form-control" id="strMobileNumber" placeholder="Enter Contact Number" >
                 </div>
                 <div class="form-group col-xs-6">
+                        <label for="login_attempts">Failed Login Attempts</label>
+                        <input value ="<?php echo $faculty['login_attempts']; ?>" type="number" name="login_attempts" class="form-control" id="login_attempts" />
+                </div>
+                <div class="form-group col-xs-6">
                         <label>Address</label>
                         <textarea  class="form-control" name="strAddress" rows="3" placeholder="Enter Address"><?php echo $faculty['strAddress']?></textarea>
                     </div>
