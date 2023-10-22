@@ -16,13 +16,13 @@
             
 			if(empty($user))
 			{
-				return false;
+				return 0;
 			}
 			else
 			{			
 				$auth_data = $this->db->get_where($table, array('strUsername'=>$username), 1)->first_row();
 				if($auth_data->login_attempts >= 3){
-					return false;
+					return 2;
 				}
 
 				//if($user['strCMSUserPassword'] == md5($password))
@@ -44,7 +44,7 @@
                     else
                         $this->session->set_userdata('faculty_logged', true);    
 					
-					return true;									
+					return 1;									
 				}
 				else
 				{
@@ -53,7 +53,7 @@
                          ->where('intID',$user['intID'])
                          ->update('tb_mas_faculty',$data);
 
-					return false;
+					return 0;
 				}
 			}
 			

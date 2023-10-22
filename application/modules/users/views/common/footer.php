@@ -87,12 +87,12 @@
 			         },
                 type:'post',
                 success: function(response){
-				if(response.message=="1")
+				if(response.success)
                     document.location="<?php echo base_url()?>unity";
                 else
                     Swal.fire({
 						title: "error",
-						text: 'Invalid Login',
+						text: response.message,
 						icon: "error"
 					}).then(function() {
 						

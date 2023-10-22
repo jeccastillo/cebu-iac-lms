@@ -57,15 +57,20 @@ class Users extends CI_Controller {
             // Create User Object If Logged In Correctly
         } else {
 
-            $authentication = false;
+            $authentication = 0;
         }
 
         // This can be simplified a LOOOT!
-        if ($authentication) {
-            $data['message'] =  "1";
-        } else {
-
-            $data['message'] = "0";
+        if ($authentication == 1) {
+            $data['success'] = true;
+            $data['message'] =  "Success";
+        } elseif($authentication == 2) {
+            $data['success'] = false;
+            $data['message'] = "Too many login attempts for this user account locked please contact SMS admin";            
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Wrong username or password";
         }
         
         echo json_encode($data);
