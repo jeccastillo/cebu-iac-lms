@@ -89,7 +89,7 @@
                         <button v-if="reg_status == 'Enrolled'" data-toggle="modal" data-target="#withdrawStudentModal" class="btn btn-danger btn-lg">
                                 Withdraw
                         </button>
-                        <a :href="base_url + 'pdf/adjustments/'+ id + '/' + sem" v-if="reg_status == 'Enrolled'" class="btn btn-primary btn-lg">
+                        <a target="_blank" :href="base_url + 'pdf/adjustments/'+ id + '/' + sem" v-if="reg_status == 'Enrolled'" class="btn btn-primary btn-lg">
                                 Print Adjustments
                         </a>
                         <hr />
