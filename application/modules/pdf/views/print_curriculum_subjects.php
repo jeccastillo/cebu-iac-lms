@@ -29,6 +29,9 @@
                 <th style="width:15%">Lab Units</th>
                 <th style="width:15%">Total Units</th>                
             </tr>
+            <tr style="line-height:10px">
+                <th colspan="2"></th>
+            </tr>
         </thead>
         <tbody>
             
