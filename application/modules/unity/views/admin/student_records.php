@@ -44,7 +44,8 @@
                                 <div class="row">
                                     <div class="col-sm-3">School Year: <span style="font-weight:400;">{{ term.reg.strYearStart + "-" + term.reg.strYearEnd }}</span></div>
                                     <div class="col-sm-3">Term: <span style="font-weight:400;">{{term.reg.enumSem + " " + term.reg.term_label}}</span></div>
-                                    <div v-if="term.reg.intROG" class="col-sm-3">Enrollment Status: {{ term.reg.intROG }}</div>                                
+                                    <div v-if="term.reg.intROG" class="col-sm-3">Enrollment Status: {{ term.reg.intROG > 0 ? 'Enrolled' : 'Enlisted' }}</div>
+                                    <div v-else class="col-sm-3">Enrollment Status:</div>                                
                                     <div class="col-sm-3">Course: <span style="font-weight:400;">{{ term.reg.strProgramCode }}</span></div>
                                 </div>                                
                                 <h5></h5>
