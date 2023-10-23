@@ -13,7 +13,7 @@
                     "aTargets":[3],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/edit_curriculum/'+row[0]+'">Edit/View</a></li><li><a href="<?php echo base_url(); ?>unity/generate_classlists/'+row[0]+'">Generate Sections</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/edit_curriculum/'+row[0]+'">Edit/View</a></li><li><a target="_blank" href="<?php echo base_url(); ?>pdf/print_curriculum_subjects/'+row[0]+'">Print Curriculum</a></li><li><a href="<?php echo base_url(); ?>unity/generate_classlists/'+row[0]+'">Generate Sections</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
