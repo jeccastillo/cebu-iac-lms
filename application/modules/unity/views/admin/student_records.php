@@ -39,7 +39,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
-                        <div v-for="term in records" class="box box-success">
+                        <div v-for="term in records" :class="term.reg.intROG ? 'box box-success' : 'box box-default'">
                             <div class="box-header">
                                 <div class="row">
                                     <div class="col-sm-3">School Year: <span style="font-weight:400;">{{ term.reg.strYearStart + "-" + term.reg.strYearEnd }}</span></div>
