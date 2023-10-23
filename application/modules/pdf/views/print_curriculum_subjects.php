@@ -23,11 +23,11 @@
                 <th colspan="2"></th>
             </tr>
             <tr style="font-size:11px;line-height:12px;">
-                <th style="width:20%">Course Code</th>
-                <th style="width:50%">Course Description</th>
-                <th style="width:10%">Lecture Units</th>
-                <th style="width:10%">Lab Units</th>
-                <th style="width:10%">Total Units</th>                
+                <th style="width:15%">Course Code</th>
+                <th style="width:40%">Course Description</th>
+                <th style="width:15%">Lect Units</th>
+                <th style="width:15%">Lab Units</th>
+                <th style="width:15%">Total Units</th>                
             </tr>
         </thead>
         <tbody>
