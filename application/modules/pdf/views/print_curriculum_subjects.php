@@ -9,7 +9,8 @@
     //echo $prev_year_sem."<br />";
     ?>
     <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']): ?>
-    
+    <h3 style="text-align:center;"><?php echo $item['strName']; ?></h3>
+    <hr />
     <table>
         <thead>
             <tr style="line-height:15px">
