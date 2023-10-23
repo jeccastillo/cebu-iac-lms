@@ -505,7 +505,7 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
                         </li>    
                         <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="fa fa-calendar"></i>
+                                href="<?php echo base_url() ?>finance/edit_ay/" style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                                 <span>Edit Dates</span> </a>
                         </li>             
                         <?php if($user['special_role'] >= 2): ?>       
