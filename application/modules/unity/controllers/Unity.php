@@ -1049,7 +1049,7 @@ class Unity extends CI_Controller {
         $assessment_gwa = 0;
         if($assessment_units > 0){
             $assessment_gwa = $assessment_sum/$assessment_units;
-            $assessment_gwa = round($assessment_gwa,3);
+            $assessment_gwa = number_format(round($assessment_gwa,3),3);
         }
 
         $terms = [];
@@ -1115,7 +1115,7 @@ class Unity extends CI_Controller {
             $term_gwa = 0;
             if($total > 0){
                 $term_gwa = $sum_grades/$total;
-                $term_gwa = round($term_gwa,3);
+                $term_gwa = number_format(round($term_gwa,3),3);
             }
             $gwa += $sum_grades;
             $total_units_gwa += $total;
@@ -1124,7 +1124,7 @@ class Unity extends CI_Controller {
 
         if($total_units_gwa > 0){
             $gwa = $gwa/$total_units_gwa;
-            $gwa = round($gwa,3);
+            $gwa = number_format(round($gwa,3),3);
         }
 
         $data['gwa'] = $gwa;
