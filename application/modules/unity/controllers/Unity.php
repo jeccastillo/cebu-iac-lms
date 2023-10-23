@@ -985,7 +985,10 @@ class Unity extends CI_Controller {
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
                                   ->first_row('array');
-            $registrations[] = $registration;                   
+            if($registration)                                  
+                $registrations[] = $registration;                   
+            else
+                $registration[] = $trm;
         }
 
         $data['balance'] = $this->data_fetcher->getStudentBalance($id);
