@@ -1106,7 +1106,8 @@ class Unity extends CI_Controller {
 
         //Check Curriculum for units earned
         foreach($registrations as $reg){
-            $records = $this->data_fetcher->getClassListStudentsSt($id,$reg['intAYID']); 
+            $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid); 
             $units = 0;
             $sum_grades = 0;
             $units_earned = 0;
