@@ -10,10 +10,10 @@
     ?>
     <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']): ?>
     
-    <table class="table table-striped">
+    <table>
         <thead>
             <tr>
-                <th colspan="2">
+                <th style="" colspan="2">
                     <?php echo switch_num($s['intYearLevel'])." Year | ".switch_num($s['intSem'])." Term"; ?>
                     
                 </th>
