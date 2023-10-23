@@ -18,7 +18,7 @@
                     
                 </th>
             </tr>
-            <tr style="font-size:9px;line-height:12px;">
+            <tr style="font-size:11px;line-height:12px;">
                 <th>Course Code</th>
                 <th>Course Description</th>
                 <th>Lecture Units</th>
@@ -33,7 +33,7 @@
             $prev_year_sem = $s['intYearLevel'].'_'.$s['intSem'];
             endif; ?>
             
-    <tr>
+    <tr style="font-size:10px;line-height:12px;">
         <td><?php echo $s['strCode']; ?></td>
         <td><?php echo $s['strDescription']; ?></td>
         <td><?php echo $s['intLectHours']; ?></td>
