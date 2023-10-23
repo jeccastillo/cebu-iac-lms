@@ -1,7 +1,7 @@
 <h4 style="text-align:center">Adjustments</h4>
 <p><?php $student['strFirstname']." ".$student['strLastname']; ?></p>
 <hr />
-<table class="table table-condensed table-bordered">
+<table style="font-size:10px;" class="table table-condensed table-bordered">
     <thead>
         <tr>
             <th width='15%'>Subject</th>
