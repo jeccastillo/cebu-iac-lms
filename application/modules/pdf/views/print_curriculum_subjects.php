@@ -38,24 +38,12 @@
         <td><?php echo $s['strDescription']; ?></td>
         <td><?php echo $s['intLectHours']; ?></td>
         <td><?php echo $s['intLab']; ?></td>
-        <td><?php echo $s['strUnits']; ?></td>
-        <td>
-            <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-curriculum" href="#">Remove</a>
-        </td>
+        <td><?php echo $s['strUnits']; ?></td>      
             </tr>
-            <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):
-            
-            ?>
-<!--
-            <tr>
-                <td colspan="3">Units <?php echo $unitsPerSem; ?></td>
-            </tr>
--->
-            <?php
+            <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):            
             $unitsPerSem = 0;
-            endif; ?>
-<?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem'] || count($curriculum_subjects) == $i+1): ?>   
-    
+            endif;
+            if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem'] || count($curriculum_subjects) == $i+1): ?>       
     <tr>
         <th><?php echo "TOTAL UNITS : " .  $totalUnits; ?></th>
     </tr>
