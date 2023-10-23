@@ -749,6 +749,13 @@ class Data_fetcher extends CI_Model {
         
     }
 
+    function get_all_past_terms($type){
+        return $this->db->where(array('term_student_type'=>$type,'start_of_classes <=' => date("Y-m-d")))
+                        ->order_by("strYearStart ASC, enumSem ASC")
+                        ->get('tb_mas_sy')
+                        ->result_array();
+    }
+
     function get_active_sem_shs()
     {
         $current_term = $this->db->get_where('tb_mas_system_settings',array('setting_name'=>'shs_default_term'))->first_row();

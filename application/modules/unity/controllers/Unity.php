@@ -966,13 +966,27 @@ class Unity extends CI_Controller {
     public function student_records_data($id,$curriculum = 0){
 
         $data['student'] = $this->data_fetcher->getStudent($id);
-        $registrations = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id, strProgramCode')
+        
+        $all_terms = $this->data_fetcher->get_all_past_terms(get_stype($data['student']['level']));
+
+        if(get_stype($data['student']['level']) == "college")
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_active_sem_shs();
+
+        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$active_sem['intID']);
+
+        $registrations = [];
+        foreach($all_terms as $trm){
+            $registration = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id, strProgramCode')
                                   ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
                                   ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_registration.current_program')
-                                  ->where(array('intStudentID'=>$id))
+                                  ->where(array('intStudentID'=>$id,'intAYID'=>$trm['intID']))
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
-                                  ->result_array();
+                                  ->first_row();
+            $registrations[] = $registration;                   
+        }
 
         $data['balance'] = $this->data_fetcher->getStudentBalance($id);
 
