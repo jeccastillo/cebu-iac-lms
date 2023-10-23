@@ -34,7 +34,7 @@
             endif; ?>
             
     <tr>
-        <td><a target="_blank" href="<?php echo base_url(); ?>subject/subject_viewer/<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></a></td>
+        <td><?php echo $s['strCode']; ?></td>
         <td><?php echo $s['strDescription']; ?></td>
         <td><?php echo $s['intLectHours']; ?></td>
         <td><?php echo $s['intLab']; ?></td>
