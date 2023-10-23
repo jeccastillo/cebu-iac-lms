@@ -1,5 +1,5 @@
 <h4 style="text-align:center">Adjustments</h4>
-<p><?php $student['strFirstname']." ".$student['strLastname']; ?></p>
+<h5><?php $student['strFirstname']." ".$student['strLastname']; ?></h5>
 <hr />
 <table style="font-size:11px;" class="table table-condensed table-bordered">
     <thead>
