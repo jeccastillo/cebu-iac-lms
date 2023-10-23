@@ -484,11 +484,7 @@
                         <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>"><a
                                 href="#"><i class="ion"></i>
                                 <span>Order Detailed Report</span> </a>
-                        </li>
-                        <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="fa fa-calendar"></i>
-                                <span>Edit Dates</span> </a>
-                        </li>
+                        </li>                        
                     </ul>
                 </li>
                 <?php endif; ?>
@@ -507,7 +503,11 @@
                         <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
-                        </li>                 
+                        </li>    
+                        <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/edit_ay/"><i class="fa fa-calendar"></i>
+                                <span>Edit Dates</span> </a>
+                        </li>             
                         <?php if($user['special_role'] >= 2): ?>       
                         <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/view_payees" style="margin-left: 10px;"><i class="fa fa-users"></i>
