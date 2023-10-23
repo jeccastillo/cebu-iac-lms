@@ -15,7 +15,7 @@
     </thead>
     <tbody> 
         <?php foreach($adjustments as $adj): ?>                                         
-        <tr style="font-size: 13px;">
+        <tr style="font-size: 10px;">
             <td width='15%'><?php echo $adj['strCode']; ?></td>
             <td width='15%'><?php echo $adj['adjustment_type']; ?></td>
             <td width='10%'><?php echo $adj['from_subject']; ?></td>                                                                                                
