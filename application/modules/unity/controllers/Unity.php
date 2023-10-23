@@ -1028,11 +1028,11 @@ class Unity extends CI_Controller {
                      ->result_array();
             
             foreach($recs as $temp_rec){
-                $temp_rec['current'] = false;
+                $current = false;
                 foreach($data['current_records'] as $current_rec){
                     if($temp_rec['strCode'] == $current_rec['strCode']){
                         $temp_rec['floatFinalGrade'] = $current_rec['v3'];
-                        $temp_rec['current'] = true;
+                        $current = true;
                         break;
                     }
                 }
@@ -1054,6 +1054,9 @@ class Unity extends CI_Controller {
                     $assessment_units += $temp_rec['strUnits'];   
                     $assessment_sum += $grade * $temp_rec['strUnits'];         
                 }
+                if($current)
+                    $temp_rec['bg'] = "#000099";
+                
                 if($temp_rec['strRemarks'] == "Passed"){
                     $cs['rec'] = $temp_rec;
                     $assessment_units_earned += $temp_rec['strUnits'];
