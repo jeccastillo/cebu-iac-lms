@@ -12,6 +12,9 @@
     
     <table>
         <thead>
+            <tr style="line-height:15px">
+                <th colspan="2"></th>
+            </tr>
             <tr>
                 <th colspan="2"><?php echo switch_num($s['intYearLevel'])." Year | ".switch_num($s['intSem'])." Term"; ?>                    
                 </th>
