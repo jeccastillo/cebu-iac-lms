@@ -985,7 +985,7 @@ class Unity extends CI_Controller {
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
                                   ->first_row('array');
-            if($registration)                                  
+            if(isset($registration))                                  
                 $registrations[] = $registration;                   
             else
                 $registration[] = $trm;
