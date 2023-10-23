@@ -1453,8 +1453,67 @@ class Pdf extends CI_Controller {
 
     }
 
-    function print_curriculum_subjects($id){        
+    function adjustments($id,$sem){
         
+        $this->data['adjustments'] = $this->db
+                                    ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
+                                    ->from('tb_mas_classlist_student_adjustment_log')  
+                                    ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')                                     
+                                    ->join('tb_mas_faculty', 'tb_mas_classlist_student_adjustment_log.adjusted_by = tb_mas_faculty.intID')                                     
+                                    ->where(array('student_id'=>$id,'syid'=>$sem))
+                                    ->order_by('tb_mas_classlist_student_adjustment_log.date','asc')
+                                    ->get()
+                                    ->result_array();
+
+        $this->data['student'] = $this->data_fetcher->getStudent($id);   
+        
+        //print_r($this->data['spouse']);
+        tcpdf();
+        // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Curriculum");
+        
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+        //font setting
+        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
+        // set default font subsetting mode
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        // Add a page
+        
+        $pdf->AddPage();
+        $html = $this->load->view('adjustments',$this->data,true);
+        //$html = $pdf->unhtmlentities($html);
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+            
+            
+        
+        $pdf->Output("adjustments.pdf", 'I');
+
+    }
+
+    function print_curriculum_subjects($id){        
+
         $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);        
         $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($id);
          //print_r($this->data['spouse']);
