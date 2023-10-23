@@ -1041,22 +1041,26 @@ class Unity extends CI_Controller {
                         case 'FA':
                             $grade = 5;
                             $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
                         break;
                         case 'UD':
                             $grade = 5;
                             $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
                         break;
                         default:
                             $grade = $temp_rec['floatFinalGrade'];
                             $temp_rec['bg'] = "#009000";
+                            $temp_rec['color'] = "#f2f2f2";
                     }                             
     
                     $assessment_units += $temp_rec['strUnits'];   
                     $assessment_sum += $grade * $temp_rec['strUnits'];         
                 }
-                if($current)
+                if($current){
                     $temp_rec['bg'] = "#ADD8E6";
-                
+                    $temp_rec['color'] = "#333";
+                }
                 if($temp_rec['strRemarks'] == "Passed"){
                     $cs['rec'] = $temp_rec;
                     $assessment_units_earned += $temp_rec['strUnits'];
