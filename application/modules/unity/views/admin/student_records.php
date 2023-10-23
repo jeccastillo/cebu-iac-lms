@@ -42,6 +42,7 @@
                         <div v-for="term in records" class="box box-success">
                             <div class="box-header">
                                 <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
+                                <h5>Course: {{ term.reg.strProgramCode }}</h5>
                             </div>
                             <div class="box-body">
                                 <table class="table table-condensed table-bordered">
