@@ -204,11 +204,13 @@
                 ASSESSMENT SUMMARY                                
             </div>
         </div>
+        <hr />
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">FULL PAYMENT</div>
             <div class="col-sm-4">INSTALLMENT</div>            
         </div>
+        <hr />
         <div class="row">
             <div class="col-sm-4">Tuition Fee</div>
             <div class="col-sm-4"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,',') ?></div>
