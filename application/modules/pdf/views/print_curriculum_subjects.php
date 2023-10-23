@@ -16,6 +16,9 @@
                 <th colspan="2"><?php echo switch_num($s['intYearLevel'])." Year | ".switch_num($s['intSem'])." Term"; ?>                    
                 </th>
             </tr>
+            <tr style="line-height:10px">
+                <th colspan="2"></th>
+            </tr>
             <tr style="font-size:11px;line-height:12px;">
                 <th>Course Code</th>
                 <th>Course Description</th>
