@@ -1055,7 +1055,7 @@ class Unity extends CI_Controller {
                     $assessment_sum += $grade * $temp_rec['strUnits'];         
                 }
                 if($current)
-                    $temp_rec['bg'] = "#000099";
+                    $temp_rec['bg'] = "#ADD8E6";
                 
                 if($temp_rec['strRemarks'] == "Passed"){
                     $cs['rec'] = $temp_rec;
