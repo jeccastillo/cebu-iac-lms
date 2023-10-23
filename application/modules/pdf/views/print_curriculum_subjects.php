@@ -41,10 +41,10 @@
             
     <tr style="font-size:10px;line-height:12px;">
         <td style="width:15%"><?php echo $s['strCode']; ?></td>
-        <td style="width:50%"><?php echo $s['strDescription']; ?></td>
-        <td style="width:10%"><?php echo $s['intLectHours']; ?></td>
-        <td style="width:10%"><?php echo $s['intLab']; ?></td>
-        <td style="width:15%"><?php echo $s['strUnits']; ?></td>      
+        <td style="width:50%;"><?php echo $s['strDescription']; ?></td>
+        <td style="width:10%;text-align:center;"><?php echo $s['intLectHours']; ?></td>
+        <td style="width:10%;text-align:center;"><?php echo $s['intLab']; ?></td>
+        <td style="width:15%;text-align:center;"><?php echo $s['strUnits']; ?></td>      
             </tr>
             <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):            
             $unitsPerSem = 0;
