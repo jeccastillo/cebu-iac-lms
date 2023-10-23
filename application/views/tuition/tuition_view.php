@@ -199,6 +199,35 @@
                 <div class="col-sm-6 text-green"><?php echo number_format($tuition['total_other'], 2, '.' ,','); ?></div>
             </div>
         <hr />
+        <tr>
+            <td colspan="3" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
+        </tr>
+        <tr>
+            <td width="85px"></td>
+            <td width="70px" style="text-decoration:underline;">FULL PAYMENT</td>
+            <td width="70px" style="text-decoration:underline;">INSTALLMENT</td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">Tuition Fee</td>
+            <td style="text-align:right;"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,',') ?></td>
+            <td style="text-align:right;"><?php echo number_format($tuition['tuition_installment_before_discount'], 2, '.' ,',') ?></td>
+        </tr>
+        <tr>
+            <td>Laboratory</td>
+            <td style="text-align:right;"><?php echo number_format($tuition['lab_before_discount'], 2, '.' ,',') ?></td>
+            <td style="text-align:right;"><?php echo number_format($tuition['lab_installment_before_discount'], 2, '.' ,',') ?></td>
+        </tr>
+        <tr>
+            <td>Miscellaneous</td>
+            <td style="text-align:right;"><?php echo number_format($tuition['misc_before_discount'], 2, '.' ,',') ?></td>
+            <td style="text-align:right;"><?php echo number_format($tuition['misc_before_discount'], 2, '.' ,',') ?></td>
+        </tr>
+        <tr>
+            <td>Other Fees</td>
+            <td style="text-align:right;"><?php echo number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') ?></td>
+            <td style="text-align:right;"><?php echo number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') ?></td>
+        </tr>
+        <hr />
         <?php if($tuition['total_discount'] > 0 || $tuition['total_discount_dc'] > 0): ?>
             <div class="row">
                 <div class="col-sm-6">Total Matriculation before discount:</div>
