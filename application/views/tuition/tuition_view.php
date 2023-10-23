@@ -236,6 +236,7 @@
             <div class="row">
                 <div class="col-sm-4">Total Matriculation before discount:</div>
                 <div class="col-sm-4 text-green"><?php echo number_format($tuition['total_before_deductions'], 2, '.' ,','); ?></div>
+                <div class="col-sm-4 text-green"><?php echo number_format($tuition['ti_before_deductions'], 2, '.' ,','); ?></div>
             </div>    
         <?php endif; ?>
         <?php if($tuition['total_discount'] > 0): ?>
