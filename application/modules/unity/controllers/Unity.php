@@ -984,7 +984,7 @@ class Unity extends CI_Controller {
                                   ->where(array('intStudentID'=>$id,'intAYID'=>$trm['intID']))
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
-                                  ->first_row();
+                                  ->first_row('array');
             $registrations[] = $registration;                   
         }
 
