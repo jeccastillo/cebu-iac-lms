@@ -18,10 +18,10 @@
         <tr style="font-size: 10px;">
             <td width='15%'><?php echo $adj['strCode']; ?></td>
             <td width='15%'><?php echo $adj['adjustment_type']; ?></td>
-            <td width='10%'><?php echo $adj['from_subject']; ?></td>                                                                                                
-            <td width='10%'><?php echo $adj['to_subject']; ?></td>
+            <td width='5%'><?php echo $adj['from_subject']; ?></td>                                                                                                
+            <td width='5%'><?php echo $adj['to_subject']; ?></td>
             <td width='15%'><?php echo $adj['strLastname']." ".$adj['strFirstname']; ?></td>
-            <td width='20%'><?php echo $adj['remarks']; ?></td>
+            <td width='30%'><?php echo $adj['remarks']; ?></td>
             <td width='15%'><?php echo $adj['date']; ?></td>                                                                                                                                                                                                  
         </tr>                                         
         <?php endforeach; ?>   
