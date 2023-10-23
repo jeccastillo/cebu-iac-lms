@@ -212,7 +212,7 @@
         <div class="row">
             <div class="col-sm-4">Tuition Fee</div>
             <div class="col-sm-4"><?php echo number_format($tuition['tuition_before_discount'], 2, '.' ,',') ?></div>
-            <div class="col-sm-4"><?php echo number_format($tuition['ti_before_deductions'], 2, '.' ,',') ?></div>                        
+            <div class="col-sm-4"><?php echo number_format($tuition['tuition_before_discount_dc'], 2, '.' ,',') ?></div>                        
         </div>
         <div class="row">
             <div class="col-sm-4">Laboratory</div>
