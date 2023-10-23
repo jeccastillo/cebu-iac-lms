@@ -3,14 +3,17 @@
     $i = 0;
     $unitsPerSem = 0;
     $totalUnits = 0;
+    ?>
+    <h3 style="text-align:center;"><?php echo $item['strName']; ?></h3>
+    <hr />
+    <?php
     foreach($curriculum_subjects as $s): 
         $totalUnits += $s['strUnits'];
         $unitsPerSem += $s['strUnits'];
     //echo $prev_year_sem."<br />";
     ?>
     <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']): ?>
-    <h3 style="text-align:center;"><?php echo $item['strName']; ?></h3>
-    <hr />
+    
     <table>
         <thead>
             <tr style="line-height:15px">
