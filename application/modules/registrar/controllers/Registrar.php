@@ -874,6 +874,18 @@ class Registrar extends CI_Controller {
         }
 
     }
+
+    public function sync_program_registration(){
+        $students = $this->db->get('tb_mas_users')->result_array();
+        foreach($students as $student){
+            $data = array(
+                'current_program' => $student['intProgramID'],
+                'current_curriculum' => $student['intCurriculumID']
+            );
+
+            $this->db->where('intStudentID',$student['intID'])->update('tb_mas_registration',$data);
+        }
+    }
     
     public function submit_registration_old2()
     {
@@ -896,7 +908,7 @@ class Registrar extends CI_Controller {
             $reg['enumRegistrationStatus'] = $post['enumRegistrationStatus'];
             $reg['enumScholarship'] = $post['enumScholarship'];        
             $reg['enumStudentType'] = $post['enumStudentType'];
-            $reg['intYearLevel'] = $post['intYearLevel'];
+            $reg['intYearLevel'] = $post['intYearLevel'];            
             $reg['type_of_class'] = $post['type_of_class'];
             $reg['current_program'] =$student['intProgramID'];
             $reg['current_curriculum'] =$student['intCurriculumID'];
