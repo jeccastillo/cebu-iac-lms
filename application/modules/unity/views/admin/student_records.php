@@ -41,8 +41,13 @@
                     <div class="tab-pane active" id="tab_1">
                         <div v-for="term in records" class="box box-success">
                             <div class="box-header">
-                                <h4>{{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}</h4>
-                                <h5>Course: {{ term.reg.strProgramCode }}</h5>
+                                <div class="row">
+                                    <div class="col-sm-3">School Year: {{ term.reg.strYearStart + "-" + term.reg.strYearEnd }}</div>
+                                    <div class="col-sm-3">Term: {{term.reg.enumSem + " " + term.reg.term_label}}</div>
+                                    <div class="col-sm-3">Enrollment Status: </div>                                
+                                    <div class="col-sm-3">Course: {{ term.reg.strProgramCode }}</div>
+                                </div>                                
+                                <h5></h5>
                             </div>
                             <div class="box-body">
                                 <table class="table table-condensed table-bordered">
