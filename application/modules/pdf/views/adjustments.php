@@ -1,15 +1,15 @@
 <h4 style="text-align:center">Adjustments</h4>
-<h5><?php echo $student['strFirstname']." ".$student['strLastname']; ?></h5>
+<h5><?php echo $student['strFirstname'].", ".$student['strLastname']; ?></h5>
 <hr />
 <table style="font-size:11px;" class="table table-condensed table-bordered">
     <thead>
         <tr>
             <th width='15%'>Subject</th>
             <th width='15%'>Adjustment</th>
-            <th width='10%'>Removed</th>                                                
-            <th width='10%'>Added</th>  
+            <th width='5%'>Removed</th>                                                
+            <th width='5%'>Added</th>  
             <th width='15%'>Adjusted By</th> 
-            <th width='20%'>Remarks</th>                                 
+            <th width='30%'>Remarks</th>                                 
             <th width='15%'>Date</th>
         </tr>
     </thead>
