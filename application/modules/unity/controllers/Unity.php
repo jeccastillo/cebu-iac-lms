@@ -986,7 +986,10 @@ class Unity extends CI_Controller {
                                   ->get('tb_mas_registration')
                                   ->first_row('array');
           
-            $registrations[] = $registration;                   
+            if(!isset($registration))
+                $registrations[] = $trm;
+            else    
+                $registrations[] = $registration;                   
           
         }
 
