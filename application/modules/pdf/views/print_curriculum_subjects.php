@@ -24,9 +24,9 @@
             </tr>
             <tr style="font-size:11px;line-height:12px;">
                 <th style="width:15%">Course Code</th>
-                <th style="width:40%">Course Description</th>
-                <th style="width:15%">Lect Units</th>
-                <th style="width:15%">Lab Units</th>
+                <th style="width:50%">Course Description</th>
+                <th style="width:10%">Lect Units</th>
+                <th style="width:10%">Lab Units</th>
                 <th style="width:15%">Total Units</th>                
             </tr>
             <tr style="line-height:10px">
@@ -41,9 +41,9 @@
             
     <tr style="font-size:10px;line-height:12px;">
         <td style="width:15%"><?php echo $s['strCode']; ?></td>
-        <td style="width:40%"><?php echo $s['strDescription']; ?></td>
-        <td style="width:15%"><?php echo $s['intLectHours']; ?></td>
-        <td style="width:15%"><?php echo $s['intLab']; ?></td>
+        <td style="width:50%"><?php echo $s['strDescription']; ?></td>
+        <td style="width:10%"><?php echo $s['intLectHours']; ?></td>
+        <td style="width:10%"><?php echo $s['intLab']; ?></td>
         <td style="width:15%"><?php echo $s['strUnits']; ?></td>      
             </tr>
             <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):            
