@@ -1,19 +1,22 @@
 <aside class="right-side" id="vue-container">
-    <section class="content-header">       
+    <section class="content-header">     
+    <h1>
+        My Ledger
+        <small>view your current balance</small>
+    </h1>  
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Portal</a></li>
-            <li class="active">Student Ledger</li>
+            <li><a href="<?php echo base_url() ?>portal/dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Ledger</li>
         </ol>
     </section>
     <div class="content">
         <section class="section section_port relative">                 
-        
             <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                     <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
-                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4>                   
+                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">My Ledger</h3>                    
+                    
                 </div>                
             </div>  
             <div class="box box-primary">
