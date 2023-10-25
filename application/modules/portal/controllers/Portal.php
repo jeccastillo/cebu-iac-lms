@@ -81,8 +81,9 @@ class Portal extends CI_Controller {
             redirect(base_url()."users/student_login");
 	}
 
-    public function ledger($id,$sem = 0){
+    public function ledger($sem = 0){
 
+        $id = $this->session->userdata('intID');
         $this->data['id'] = $id;        
         $this->data['sem'] = $sem;
         $this->data['page'] = "view_all_students";
