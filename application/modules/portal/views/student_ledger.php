@@ -1,17 +1,5 @@
 <aside class="right-side" id="vue-container">
-    <section class="content-header">
-        <h1>            
-            <small>
-                <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
-                <div class="pull-right">
-                    <p>Select Term Filter</p>
-                    <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
-                        <option value=0>All</option>
-                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
-                    </select>
-                </div>
-            </small>
-        </h1>
+    <section class="content-header">       
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Portal</a></li>
             <li class="active">Student Ledger</li>
