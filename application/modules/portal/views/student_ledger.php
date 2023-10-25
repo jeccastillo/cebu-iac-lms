@@ -10,15 +10,7 @@
         </ol>
     </section>
     <div class="content">
-        <section class="section section_port relative">                 
-            <div class="box box-widget widget-user-2">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-red">
-                    <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">My Ledger</h3>                    
-                    
-                </div>                
-            </div>  
+        <section class="section section_port relative">                             
             <div class="box box-primary">
                 <div class="box-header">Tuition</div>
                 <div class="box-body">
