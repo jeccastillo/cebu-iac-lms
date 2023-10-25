@@ -103,7 +103,7 @@
                     <p>view your balance ledger</p>
                 </div>
                 <div class="icon">
-                <i class="fa fa-cash"></i>
+                <i class="fa fa-book"></i>
                 </div>
                 <a href="<?php echo base_url(); ?>portal/ledger" class="small-box-footer">
                 View Ledger <i class="fa fa-arrow-circle-right"></i>

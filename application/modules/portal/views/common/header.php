@@ -128,7 +128,7 @@
                         <li class="<?php echo (isset($page) && $page=="schedule")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/schedule"><i class="fa fa-calendar"></i> <span>Schedule</span></a></li>
                     </ul>
                     <ul class="sidebar-menu">
-                        <li class="<?php echo (isset($page) && $page=="ledger")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/ledger"><i class="fa fa-cash"></i> <span>View Balance</span></a></li>
+                        <li class="<?php echo (isset($page) && $page=="ledger")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/ledger"><i class="fa fa-book"></i> <span>View Balance</span></a></li>
                     </ul>
                     <!-- <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="accounting_summary")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/accounting_summary"><i class="ion ion-calculator"></i> <span>Accounting</span></a></li>
