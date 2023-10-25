@@ -37,7 +37,7 @@
                 <div class="box-tools pull-right">
                     <select id="select-sem-admin" class="form-control input-sm" >
                         <?php foreach($sy as $s): ?>
-                            <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                            <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
