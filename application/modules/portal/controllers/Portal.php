@@ -119,7 +119,8 @@ class Portal extends CI_Controller {
     public function ledger($sem = 0){
 
         $id = $this->session->userdata('intID');
-        $this->data['id'] = $id;        
+        $this->data['id'] = $id;     
+        $this->data['page']="ledger";   
         $this->data['sem'] = $sem;
         $this->data['page'] = "view_all_students";
         $this->data['opentree'] = "finance_student_account";
