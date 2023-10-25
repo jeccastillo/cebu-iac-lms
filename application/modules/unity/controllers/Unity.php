@@ -2419,7 +2419,7 @@ class Unity extends CI_Controller {
 
             if($clist['intFinalized'] == 2){
                 $cg['student_id'] = $item['intStudentID'];
-                $cg['from_grade'] = $item['floatFinalGrade'];
+                $cg['from_grade'] = $item['floatFinalGrade']?$item['floatFinalGrade']:'NGS';
                 $cg['to_grade'] = $post['floatFinalGrade']; 
                 $cg['changed_by'] = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"];
                 $cg['date'] = date("Y-m-d H:i:s");
