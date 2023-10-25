@@ -50,7 +50,7 @@
         <td style="width:10%;text-align:center;"><?php echo $s['intLectHours']; ?></td>
         <td style="width:10%;text-align:center;"><?php echo $s['intLab']; ?></td>
         <td style="width:10%;text-align:center;"><?php echo $s['strUnits']; ?></td>      
-        <td style="width:20%;text-align:center;">
+        <td style="width:20%;">
             <?php
             $i = 0;
             foreach($s['prereq'] as $pre){ 
