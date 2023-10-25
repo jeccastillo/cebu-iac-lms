@@ -170,7 +170,7 @@ new Vue({
         this.request.date = localDatetime;
 
         axios
-            .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
+            .get(base_url + 'portal/student_ledger_data/' + this.id + '/' + this.sem, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
