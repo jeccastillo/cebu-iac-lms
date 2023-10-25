@@ -80,6 +80,19 @@ class Portal extends CI_Controller {
         else
             redirect(base_url()."users/student_login");
 	}
+
+    public function ledger($id,$sem = 0){
+
+        $this->data['id'] = $id;        
+        $this->data['sem'] = $sem;
+        $this->data['page'] = "view_all_students";
+        $this->data['opentree'] = "finance_student_account";
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("student_ledger",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
 	
     public function select_sem($sem,$page)
     {
