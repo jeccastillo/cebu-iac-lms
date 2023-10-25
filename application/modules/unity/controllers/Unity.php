@@ -2419,7 +2419,7 @@ class Unity extends CI_Controller {
 
             if($clist['intFinalized'] == 1 && $term == 2){
                 $cg['student_id'] = $item['intStudentID'];
-                $cg['from_grade'] = "MIDTERM: ".$item['floatMidtermGrade']?$item['floatMidtermGrade']:'NGS';
+                $cg['from_grade'] = $item['floatMidtermGrade']?"MIDTERM: ".$item['floatMidtermGrade']:"MIDTERM: NGS";
                 $cg['to_grade'] = $post['floatMidtermGrade']; 
                 $cg['changed_by'] = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"];
                 $cg['date'] = date("Y-m-d H:i:s");
@@ -2429,7 +2429,7 @@ class Unity extends CI_Controller {
             }
             if($clist['intFinalized'] == 2 && $term == 3){
                 $cg['student_id'] = $item['intStudentID'];
-                $cg['from_grade'] = "FINAL: ".$item['floatFinalGrade']?$item['floatFinalGrade']:'NGS';
+                $cg['from_grade'] = $item['floatFinalGrade']?"FINAL: ".$item['floatFinalGrade']:"FINAL: NGS";
                 $cg['to_grade'] = $post['floatFinalGrade']; 
                 $cg['changed_by'] = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"];
                 $cg['date'] = date("Y-m-d H:i:s");
