@@ -32,7 +32,7 @@
                 <th style="width:10%">Lect Units</th>
                 <th style="width:10%">Lab Units</th>                
                 <th style="width:10%">Total Units</th>
-                <th style="width:20%">Pre Requisites</th>                
+                <th style="width:20%">Pre-Requisites</th>                
             </tr>
             <tr style="line-height:10px">
                 <th colspan="2"></th>
