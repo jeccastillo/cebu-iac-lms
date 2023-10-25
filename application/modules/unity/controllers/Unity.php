@@ -2417,7 +2417,7 @@ class Unity extends CI_Controller {
             $post['date_added'] = date("Y-m-d H:i:s");
             $this->data_poster->update_classlist('tb_mas_classlist_student',$post,$post['intCSID']);
 
-            if($clist['intFinalized'] == 1 && $term == 2){
+            if($clist['intFinalized'] == 1 && $term == 2 && $this->is_registrar()){
                 $cg['student_id'] = $item['intStudentID'];
                 $cg['from_grade'] = $item['floatMidtermGrade']?"MIDTERM: ".$item['floatMidtermGrade']:"MIDTERM: NGS";
                 $cg['to_grade'] = $post['floatMidtermGrade']; 
@@ -2427,7 +2427,7 @@ class Unity extends CI_Controller {
 
                 $this->db->insert('tb_mas_student_grade_change',$cg);
             }
-            if($clist['intFinalized'] == 2 && $term == 3){
+            if($clist['intFinalized'] == 2 && $term == 3 && $this->is_registrar()){
                 $cg['student_id'] = $item['intStudentID'];
                 $cg['from_grade'] = $item['floatFinalGrade']?"FINAL: ".$item['floatFinalGrade']:"FINAL: NGS";
                 $cg['to_grade'] = $post['floatFinalGrade']; 
