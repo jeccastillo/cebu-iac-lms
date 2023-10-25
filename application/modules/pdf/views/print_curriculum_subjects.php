@@ -28,10 +28,11 @@
             </tr>
             <tr style="font-size:11px;line-height:12px;">
                 <th style="width:15%">Course Code</th>
-                <th style="width:50%">Course Description</th>
+                <th style="width:35%">Course Description</th>
                 <th style="width:10%">Lect Units</th>
-                <th style="width:10%">Lab Units</th>
-                <th style="width:15%">Total Units</th>                
+                <th style="width:10%">Lab Units</th>                
+                <th style="width:10%">Total Units</th>
+                <th style="width:20%">Pre Requisites</th>                
             </tr>
             <tr style="line-height:10px">
                 <th colspan="2"></th>
@@ -45,11 +46,21 @@
             
     <tr style="font-size:10px;line-height:12px;">
         <td style="width:15%"><?php echo $s['strCode']; ?></td>
-        <td style="width:50%;"><?php echo $s['strDescription']; ?></td>
+        <td style="width:35%;"><?php echo $s['strDescription']; ?></td>
         <td style="width:10%;text-align:center;"><?php echo $s['intLectHours']; ?></td>
         <td style="width:10%;text-align:center;"><?php echo $s['intLab']; ?></td>
-        <td style="width:15%;text-align:center;"><?php echo $s['strUnits']; ?></td>      
-            </tr>
+        <td style="width:10%;text-align:center;"><?php echo $s['strUnits']; ?></td>      
+        <td style="width:20%;text-align:center;">
+            <?php
+            $i = 0;
+            foreach($s['prereq'] as $pre){ 
+                if($i != 0)
+                    echo ", ";
+                    echo $pre['strCode']; 
+            }
+            ?>
+        </td>      
+    </tr>
             <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):            
             $unitsPerSem = 0;
             endif;
