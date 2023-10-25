@@ -44,7 +44,7 @@
             $prev_year_sem = $s['intYearLevel'].'_'.$s['intSem'];
             endif; ?>
             
-    <tr style="font-size:10px;line-height:12px;">
+    <tr style="font-size:9px;line-height:12px;">
         <td style="width:15%"><?php echo $s['strCode']; ?></td>
         <td style="width:35%;"><?php echo $s['strDescription']; ?></td>
         <td style="width:10%;text-align:center;"><?php echo $s['intLectHours']; ?></td>
