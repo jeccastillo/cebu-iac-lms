@@ -967,7 +967,7 @@ class Unity extends CI_Controller {
 
         $data['student'] = $this->data_fetcher->getStudent($id);
         
-        $all_terms = $this->data_fetcher->get_all_past_terms(get_stype($data['student']['level']));
+        
 
         if(get_stype($data['student']['level']) == "college")
             $active_sem = $this->data_fetcher->get_active_sem();
@@ -992,6 +992,11 @@ class Unity extends CI_Controller {
                 $registrations[] = $registration;                   
           
         }
+
+        if(!empty($registrations))
+            $all_terms = $this->data_fetcher->get_all_past_terms(get_stype($data['student']['level'],$registrations[0]['strYearStart'],$registrations[0]['enumSem']));
+        else
+            $all_terms = [];
 
         $data['balance'] = $this->data_fetcher->getStudentBalance($id);
 

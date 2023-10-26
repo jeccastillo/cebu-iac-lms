@@ -749,8 +749,8 @@ class Data_fetcher extends CI_Model {
         
     }
 
-    function get_all_past_terms($type){
-        return $this->db->where(array('term_student_type'=>$type,'start_of_classes <=' => date("Y-m-d")))
+    function get_all_past_terms($type,$year,$term){
+        return $this->db->where(array('term_student_type'=>$type,'start_of_classes <=' => date("Y-m-d"),'enumSem >='=>$term,'strYearStart >='=>$year))
                         ->order_by("strYearStart ASC, enumSem ASC")
                         ->get('tb_mas_sy')
                         ->result_array();
