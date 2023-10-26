@@ -973,8 +973,7 @@ class Unity extends CI_Controller {
                                 ->order_by("strYearStart ASC, enumSem ASC")
                                 ->get('tb_mas_registration')
                                 ->first_row('array');
-
-        print_r($first_registration);
+        
         if(isset($first_registration['strYearStart']))
             $all_terms = $this->data_fetcher->get_all_past_terms(get_stype($data['student']['level']),$first_registration['strYearStart'],$first_registration['enumSem']);
         else
