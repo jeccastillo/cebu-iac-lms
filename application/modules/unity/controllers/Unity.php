@@ -1001,7 +1001,7 @@ class Unity extends CI_Controller {
         $data['curriculum_subjects'] = [];
         
         $data['deficiencies'] = $this->db
-                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active'))->result_array();
+                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
 
         $data['generated_tor'] = $this->db->get_where('tb_mas_tor_generated',array('student_id'=>$id))->result_array();
         
