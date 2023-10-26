@@ -172,8 +172,7 @@ class Deficiencies extends CI_Controller {
     }
 
     public function temp_resolve_deficiency(){
-        $post = $this->input->post();
-        $post['date_resolved'] = date("Y-m-d H:i:s");        
+        $post = $this->input->post();                
         if($this->db->where('id',$post['id'])->update('tb_mas_student_deficiencies',$post)){
             $data['success'] = true;
             $data['message'] = "Successfully Resolved Deficiency";

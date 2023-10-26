@@ -249,7 +249,7 @@ new Vue({
                 preConfirm: (inputData) => {
                     var formdata= new FormData();
                     formdata.append('id',id);     
-                    formdata.append('temporary_resolve_date',this.temporary_resolve_date);                       
+                    formdata.append('temporary_resolve_date',this.temp_resolve_date);                       
                     return axios
                         .post('<?php echo base_url(); ?>deficiencies/temp_resolve_deficiency',formdata, {
                                 headers: {
