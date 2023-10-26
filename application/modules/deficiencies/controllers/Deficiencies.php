@@ -82,7 +82,7 @@ class Deficiencies extends CI_Controller {
         else
         $ret['active_sem'] = $this->data_fetcher->get_active_sem();
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
-
+        $ret['user'] = $this->data["user"];
         $ret['student'] =  $this->data_fetcher->getStudent($id);
         $ret['department'] = switch_user_level($this->session->userdata('intUserLevel'));
         $ret['name'] = $this->session->userdata('strFirstname')." ".$this->session->userdata('strLastname');

@@ -69,7 +69,8 @@
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status }}</td>
                             <td v-if="item.department == request.department && item.status != 'resolved'">
-                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a>
+                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a>                                
+                                <a v-if="user.intUserLevel == 2 || user.intUserLevel == 3" href="#" data-toggle="modal" data-target="#temporaryResolve" @click.prevent="setResolveID(item.id)">Resolve</a>
                             </td>
                             <td v-else></td>
                         </tr>
@@ -79,7 +80,33 @@
         </div>
         
     </div>
-  
+    <div class="modal fade" id="temporaryResolve" role="dialog">
+        <form ref="temp_resolve" @submit.prevent="tempResolveDeficiency" method="post"  class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Credit Subject</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">                        
+                        <div class="form-group col-sm-6">
+                            <label>Enter End Date of Temporary Reslution for this deficiency</label>
+                            <input required v-model="temp_resolve_date" type="date" class="form-control">
+                        </div>                                               
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -100,6 +127,9 @@ new Vue({
         active_sem: undefined,      
         deficiencies:[],              
         terms: [],    
+        temp_resolve_id: undefined,
+        temp_resolve_date: undefined,
+        user: undefined,
         student: {
             strStudentNumber:'aaa-aaaa-aaa'
         },
@@ -132,6 +162,7 @@ new Vue({
                     this.request.department = data.data.department;
                     this.request.added_by = data.data.name;
                     this.request.syid = this.sem;
+                    this.user = data.data.user;
                 })
             .catch((error) => {
                 console.log(error);
@@ -144,6 +175,9 @@ new Vue({
     methods: {      
         selectTerm: function(event){
             document.location = base_url + 'deficiencies/student_deficiencies/'+this.student.intID+'/'+event.target.value;
+
+        },
+        setResolveID: function(id){
 
         },
         submitDeficiency: function(){            
@@ -189,6 +223,54 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
+        },
+        tempResolveDeficiency: function(){
+            var id = this.temp_resolve_id;
+            console.log(id);
+            Swal.fire({                
+                title: 'Temporary Resolve Deficiency?',
+                text: "Continue resolving deficiency? Once resolved you can not change the status back to active.",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (inputData) => {
+                    var formdata= new FormData();
+                    formdata.append('id',id);                                                                                  
+                    formdata.append('resolved_by',this.request.added_by);   
+                    formdata.append('status','resolved');  
+                    formdata.append('temp_date','inputData');                       
+                    return axios
+                        .post('<?php echo base_url(); ?>deficiencies/temp_resolve_deficiency',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
         },
         resolveDeficiency: function(id){
             Swal.fire({
