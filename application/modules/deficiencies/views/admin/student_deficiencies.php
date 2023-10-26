@@ -52,7 +52,7 @@
                             <th>Added By</th>
                             <th>Date Resolved</th>
                             <th>Resolved By</th>
-                            <th>Status</th> 
+                            <th>Status</th>                             
                             <th>Actions</th>                                                       
                         </tr>
                     </thead>
@@ -170,7 +170,7 @@ new Vue({
                         if(this.deficiencies[i].temporary_resolve_date){                            
                             const date2 = new Date(this.deficiencies[i].temporary_resolve_date);                            
                             if(date1.getTime() < date2.getTime()){                                
-                                this.deficiencies[i].status = "Temporarily Resolved";
+                                this.deficiencies[i].status = "Temporarily Resolved until " + this.deficiencies[i].temporary_resolve_date;
                             }
                         }
                     }
