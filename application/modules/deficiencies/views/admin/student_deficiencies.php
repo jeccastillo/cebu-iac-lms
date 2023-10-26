@@ -67,7 +67,7 @@
                             <td>{{ item.added_by }}</td>
                             <td>{{ item.date_resolved }}</td>
                             <td>{{ item.resolved_by }}</td>
-                            <td>{{ item.status }}</td>
+                            <td>{{ item.status  }}</td>
                             <td v-if="item.department == request.department && item.status != 'resolved'">
                                 <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> <a v-if="user.intUserLevel == 2 || user.intUserLevel == 3" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temp Resolve</a>
                             </td>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">                        
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-12">
                             <label>Enter End Date of Temporary Reslution for this deficiency</label>
                             <input required v-model="temp_resolve_date" type="date" class="form-control">
                         </div>                                               
@@ -239,10 +239,8 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (inputData) => {
                     var formdata= new FormData();
-                    formdata.append('id',id);                                                                                  
-                    formdata.append('resolved_by',this.request.added_by);   
-                    formdata.append('status','resolved');  
-                    formdata.append('temp_date','inputData');                       
+                    formdata.append('id',id);     
+                    formdata.append('temporary_resolve_date','inputData');                       
                     return axios
                         .post('<?php echo base_url(); ?>deficiencies/temp_resolve_deficiency',formdata, {
                                 headers: {
