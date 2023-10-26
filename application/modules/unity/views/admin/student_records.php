@@ -519,7 +519,7 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                        if(this.deficiencies.length > 0 || balance > 0){                                
+                        if(this.deficiencies.length > 0 || this.balance > 0){                                
                             Swal.fire({
                                 title: 'Warning',
                                 text: "This student has active deficiencies",
