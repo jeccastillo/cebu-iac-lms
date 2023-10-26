@@ -3570,6 +3570,7 @@ class Excel extends CI_Controller {
                     break;                   
 
             }
+            $remarks = $d->remarks == "Paynamics" ? $d->request_id : $d->remarks;
 
             $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A'.$i, $d->updated_at)
@@ -3578,7 +3579,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
                     ->setCellValue('E'.$i, $d->description)
                     ->setCellValue('F'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
-                    ->setCellValue('G'.$i, $d->remarks)
+                    ->setCellValue('G'.$i, $remarks)
                     ->setCellValue('M'.$i, '=SUM(H'.$i.':L'.$i.')');
                                                        
             $i++;
