@@ -165,11 +165,12 @@ new Vue({
                     const date1 = new Date();
 
                     for(i in this.deficiencies){
-                        if(this.deficiencies[i].temporary_resolve_date){
-                            console.log(this.deficiencies[i].temporary_resolve_date);
+                        if(this.deficiencies[i].temporary_resolve_date){                            
                             const date2 = new Date("this.deficiencies[i].temporary_resolve_date");
-                            if(date1.getTime() < date2.getTime())
+                            if(date1.getTime() < date2.getTime()){
+                                console.log(this.deficiencies[i].temporary_resolve_date);
                                 this.deficiencies[i].status = "Temporarily Resolved";
+                            }
                         }
                     }
                 })
