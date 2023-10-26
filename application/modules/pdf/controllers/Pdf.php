@@ -688,6 +688,7 @@ class Pdf extends CI_Controller {
             'included_terms' => implode(",", $post['included_terms']),
             'student_id' => $post['student_id'],
             'remarks' => $post['remarks'],         
+            'signatory_label'=> $post['signatory_label'],
         );
         $units_overall = 0;
         $gwa_overall = 0;
