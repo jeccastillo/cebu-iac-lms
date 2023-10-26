@@ -69,8 +69,8 @@
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status }}</td>
                             <td v-if="item.department == request.department && item.status != 'resolved'">
-                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a>                                
-                                <a v-if="user.intUserLevel == 2 || user.intUserLevel == 3" href="#" data-toggle="modal" data-target="#temporaryResolve" @click.prevent="setResolveID(item.id)">Resolve</a>
+                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a><br />
+                                <a v-if="user.intUserLevel == 2 || user.intUserLevel == 3" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temporary Resolve</a>
                             </td>
                             <td v-else></td>
                         </tr>
@@ -178,7 +178,8 @@ new Vue({
 
         },
         setResolveID: function(id){
-
+            this.temp_resolve_id = id;
+            console.log(this.temp_resolve_id);
         },
         submitDeficiency: function(){            
             Swal.fire({
