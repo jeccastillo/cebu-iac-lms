@@ -220,7 +220,8 @@
                                             <th>Date Issued</th>
                                             <th>Prepared By</th>                                            
                                             <th>Verified By</th>                                            
-                                            <th>Registrar</th>
+                                            <th>Registrar/Signatory</th>
+                                            <th>Signatory Label</th>
                                             <th>Terms (ID)</th>                                      
                                             <th>Actions</th>
                                         </tr>
@@ -232,6 +233,7 @@
                                             <td>{{ item.prepared_by  }}</td>
                                             <td>{{ item.verified_by  }}</td>
                                             <td>{{ item.registrar  }}</td>
+                                            <td>{{ item.signatory_label ? item.signatory_label : 'Registrar' }}</td>
                                             <td>{{ item.included_terms  }}</td>                                            
                                             <td><a :href="base_url +'pdf/reprint_tor/' + item.id +'?picture=' + tor.picture + '&admission_date=' + tor.admission_date" target="_blank" class="btn btn-success">Re-print</a></td>
                                         </tr>                                        
