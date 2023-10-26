@@ -26,7 +26,7 @@
     $pdf->SetTitle("Enrollment Summary");
     
     // set margins
-    $pdf->SetMargins(10, 5 , 10);
+    $pdf->SetMargins(15, 5 , 10);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->setFooterData();
