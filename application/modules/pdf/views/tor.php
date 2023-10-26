@@ -157,7 +157,7 @@
                       </tr>                                                                                 
                     </table>
     ';
-    $signatory_label = $other_details['signatory_label']?$other_details['signatory_label']:'Registrar';
+    $signatory_label = isset($other_details['signatory_label'])?$other_details['signatory_label']:'Registrar';
 
         $footer ='
                 <tr>
