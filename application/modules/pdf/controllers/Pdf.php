@@ -554,6 +554,7 @@ class Pdf extends CI_Controller {
             'included_terms' => implode(",", $post['included_terms']),
             'student_id' => $post['student_id'],
             'remarks' => $post['remarks'],         
+            'signatory_label' => $post['signatory_label'], 
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);

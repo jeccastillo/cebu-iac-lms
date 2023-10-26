@@ -308,9 +308,13 @@
                             <input required name="verified_by" v-model="tor.verified_by" type="text" class="form-control">
                         </div>
                         <div class="form-group col-sm-6">
-                            <label>Registrar</label>
+                            <label>Registrar/Signatory</label>
                             <input required name="registrar" v-model="tor.registrar" type="text" class="form-control">
                         </div>
+                        <div class="form-group col-sm-6">
+                            <label>Signatory (Leave blank for Registrar)</label>
+                            <input name="signatory_label" v-model="tor.signatory_label" type="text" class="form-control">
+                        </div>                        
                         <div class="form-group col-sm-6">
                             <label>Included Terms</label>
                             <select name="included_terms[]" required multiple v-model="tor.included_terms" class="form-control">
@@ -445,6 +449,7 @@ new Vue({
             student_id: '<?php echo $id; ?>',
             picture: undefined,            
             admission_date: undefined,
+            signatory_label: undefined,
         },
         add_credits:{
             course_code: undefined,
