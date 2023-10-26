@@ -1250,7 +1250,7 @@ class Unity extends CI_Controller {
 
 
             $ret['deficiencies'] = $this->db
-                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active'))->result_array();
+            ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
             
             
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
