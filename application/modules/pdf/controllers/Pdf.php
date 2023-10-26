@@ -1514,8 +1514,19 @@ class Pdf extends CI_Controller {
 
     function print_curriculum_subjects($id){        
 
-        $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);        
-        $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($id);
+        $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);   
+        $this->data['curriculum_subjects'] =  [];     
+        $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
+        foreach($curriculum as $subject){
+            $subject['prereq'] = 
+                    $this->db->select('tb_mas_subjects.*')
+                     ->from('tb_mas_prerequisites')
+                     ->join('tb_mas_subjects', 'tb_mas_prerequisites.intPrerequisiteID = tb_mas_subjects.intID')
+                     ->where('intSubjectID',$subject['intSubjectID'])
+                     ->get()
+                     ->result_array();
+            $this->data['curriculum_subjects'][] = $subject;
+        }
          //print_r($this->data['spouse']);
         tcpdf();
         // create new PDF document

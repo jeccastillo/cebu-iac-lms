@@ -95,6 +95,21 @@
                 </a>
           </div>
         </div>
+        <div class="col-md-4 col-sm-8 col-xs-12">
+           
+            <div class="small-box bg-gray">
+                <div class="inner">
+                <h3>My Balance</h3>
+                    <p>view your balance ledger</p>
+                </div>
+                <div class="icon">
+                <i class="fa fa-book"></i>
+                </div>
+                <a href="<?php echo base_url(); ?>portal/ledger" class="small-box-footer">
+                View Ledger <i class="fa fa-arrow-circle-right"></i>
+                </a>
+          </div>
+        </div>
 
 
         <!-- <div class="col-md-4 col-sm-8 col-xs-12">
