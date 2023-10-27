@@ -261,7 +261,7 @@ foreach($credited_subjects as $record_credited){
         </tr>            
         ';
 
-        if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
+        if(($page_ctr == 30 && $page == 1) || $page_ctr == 35){
                 
             $page++;
             $page_ctr = 0;
