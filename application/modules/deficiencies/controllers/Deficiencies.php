@@ -142,6 +142,7 @@ class Deficiencies extends CI_Controller {
     public function add_deficiency(){
         $post = $this->input->post();
         $post['date_added'] = date("Y-m-d");
+        $post['temporary_resolve_date'] = date('d.m.Y',strtotime("-1 days"));
         if($this->db->insert('tb_mas_student_deficiencies',$post)){
             $data['success'] = true;
             $data['message'] = "Successfully Added Deficiency";
