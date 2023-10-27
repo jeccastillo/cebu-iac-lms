@@ -145,7 +145,7 @@
                         <?php else: ?>
                             <td>Not Yet Available</td>
                         <?php endif; ?>    
-                        <?php if($record['intFinalized'] >= 2 && $active_sem['viewing_final_start'] <= date("Y-m-d") && $active_sem['viewing_final_end'] > date("Y-m-d")): ?>                                
+                        <?php if($record['intFinalized'] >= 2 && $active_sem['viewing_final_start'] <= date("Y-m-d") && $active_sem['viewing_final_end'] > date("Y-m-d") && count($deficiencies) == 0): ?>                                
                             <td><strong><?php echo $record['v3']; ?></strong></td>
                         <?php else: ?>
                             <td>Not Yet Available</td>

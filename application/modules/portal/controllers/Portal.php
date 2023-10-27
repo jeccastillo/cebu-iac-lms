@@ -253,7 +253,8 @@ class Portal extends CI_Controller {
             $this->data['grades'] = $grades;
             $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
             $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
-
+            $this->data['deficiencies'] = $this->db
+            ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
             $this->load->view('common/header',$this->data);
             $this->load->view('content',$this->data);
             $this->load->view('common/footer',$this->data);
