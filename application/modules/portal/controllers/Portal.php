@@ -53,7 +53,7 @@ class Portal extends CI_Controller {
         $this->data['selected_ay'] = $this->session->userdata('active_sem');
 
         $this->data['deficiencies_count'] = $this->db
-        ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();                    
+        ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->num_rows();                    
     }
     
     function clear_cache()
