@@ -1362,14 +1362,14 @@ class Data_fetcher extends CI_Model {
         $ret =  $this->db
                      ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName, tb_mas_block_sections.name as block')
                      ->from('tb_mas_users')
-                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+                     ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID','left')
                      ->join('tb_mas_block_sections','tb_mas_block_sections.intID = tb_mas_users.preferedSection','left')   
-                     ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID')
+                     ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID','left')
                      ->where(array('tb_mas_users.'.$field => $id))
                      ->get()
                      ->first_row('array');
 
-                     print_r($ret);
+                     
                      if($ret){
                         $ret['dteBirthDate'] = date("M j, Y",strtotime($ret['dteBirthDate']));                             
                         $ret['dteCreated'] = isset($ret['dteCreated']) ? date("M j, Y",strtotime($ret['dteCreated'])): null;
