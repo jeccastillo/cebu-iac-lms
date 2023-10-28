@@ -1269,8 +1269,7 @@ class Unity extends CI_Controller {
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             
             
-            $ret['student'] = $this->data_fetcher->getStudent($id);
-            print_r($ret['student']);
+            $ret['student'] = $this->data_fetcher->getStudent($id);            
             
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
