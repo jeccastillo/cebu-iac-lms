@@ -2200,7 +2200,7 @@ class Datatables extends CI_Controller {
         }
         if($table == 'tb_mas_curriculum')
         {
-            $join = "JOIN tb_mas_programs ON tb_mas_programs.intProgramID = tb_mas_curriculum.intProgramID ";
+            $join = "LEFT JOIN tb_mas_programs ON tb_mas_programs.intProgramID = tb_mas_curriculum.intProgramID ";
         }
         if($table == 'tb_mas_block_sections')
         {
