@@ -1208,8 +1208,7 @@ class Unity extends CI_Controller {
     public function student_viewer_data($id=0,$sem = null,$tab = null){
 
         if($this->faculty_logged_in())
-        {
-            echo $id;
+        {            
             $post = $this->input->post();
             $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
              
@@ -1271,6 +1270,7 @@ class Unity extends CI_Controller {
             
             
             $ret['student'] = $this->data_fetcher->getStudent($id);
+            print_r($ret['student']);
             
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
