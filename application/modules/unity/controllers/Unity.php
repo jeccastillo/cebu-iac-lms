@@ -2410,6 +2410,43 @@ class Unity extends CI_Controller {
         $this->load->view("common/comply_conf",$this->data); 
 
     }
+    
+    public function duplicate_curriculum(){
+        if($this->is_admin() || $this->is_registrar())
+        {
+            $post = $this->input->post();
+            $id = $post['id'];
+            $curriculum = $this->db->get_where('tb_mas_curriculum',array('intID'=>$id))->first_row();
+            $subjects = $this->db->get_where('tb_mas_curriculum_subject',array('intCurriculumID'=>$id))->result_array();
+
+            $curriculum_new = [
+                'strName' => $curriculum->strName."(1)",
+                'intProgramID' => $curriculum->intProgramID,
+                'active' => 1
+            ];
+
+            $this->db->insert('tb_mas_curriculum',$curriculum_new);
+            $new_id = $this->db->insert_id();
+            foreach($subjects as $subject){
+                $subject_insert = [
+                    'intSubjectID' => $subject['intSubjectID'],
+                    'intCurriculumID' => $new_id,
+                    'intYearLevel' => $subject['intYearLevel'],
+                    'intSem'=> $subject['intSem'],
+                ];
+                $this->db->insert('tb_mas_curriculum_subject',$subject_insert);
+            }
+
+            $data['success'] = true;
+            $data['message'] = "Duplicated";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Access Denied";
+        }
+        echo json_encode($data);
+    }
+
     public function update_grade($term = 1)
     {
          $active_sem = $this->data_fetcher->get_active_sem();
