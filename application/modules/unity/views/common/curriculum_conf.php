@@ -67,6 +67,15 @@
                         showCloseButton: true,
                         showLoaderOnConfirm: true,
                         preConfirm: (login) => {
+                            Swal.fire({
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Please wait a moment',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();
                             $(".loading-img").show();
                                 var id = $(this).attr('rel');                        
                                 var data = {'id':id};
