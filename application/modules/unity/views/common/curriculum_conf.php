@@ -57,8 +57,8 @@
 
                 $(".duplicate-curriculum").click(function(e){
                     Swal.fire({
-                        title: 'Add Credits?',
-                        text: "Continue adding credits?",
+                        title: 'Duplicate Curriculum?',
+                        text: "Continue with duplicate?",
                         showCancelButton: true,
                         confirmButtonText: "Yes",
                         imageWidth: 100,
@@ -79,7 +79,7 @@
                                         if(ret.success){
                                             Swal.fire({
                                                 title: "Success",
-                                                text: data.data.message,
+                                                text: ret.message,
                                                 icon: "success"
                                             }).then(function() {
                                                 location.reload();
@@ -89,7 +89,7 @@
                                         {
                                             Swal.fire({
                                                 title: "Failed",
-                                                text: data.data.message,
+                                                text: ret.message,
                                                 icon: "error"
                                             });
                                         }                
