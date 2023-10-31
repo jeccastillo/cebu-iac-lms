@@ -99,10 +99,8 @@
                             allowOutsideClick: () => !Swal.isLoading()
                         }); 
                 
-                }),
-                
-            },
-        
+                    });                
+                },
            });
 
 </script>
