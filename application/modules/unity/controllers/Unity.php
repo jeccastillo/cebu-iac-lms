@@ -1039,9 +1039,7 @@ class Unity extends CI_Controller {
                      ->get('tb_mas_classlist_student')
                      ->result_array();            
             foreach($recs as $temp_rec){
-                $current = false;
-                $temp_rec['bg'] = "#fff";
-                $temp_rec['color'] = "#333";
+                $current = false;                
                 foreach($data['current_records'] as $current_rec){
                     if($temp_rec['strCode'] == $current_rec['strCode']){
                         $temp_rec['floatFinalGrade'] = $current_rec['v3'];
