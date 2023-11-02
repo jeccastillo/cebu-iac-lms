@@ -1581,17 +1581,18 @@ class Excel extends CI_Controller {
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
-        
+                
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(60);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);       
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);       
         
-
+        $objPHPExcel->getActiveSheet()->getStyle('F9:F'.$i)
+        ->getAlignment()->setWrapText(true);
 
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
