@@ -1035,10 +1035,9 @@ class Unity extends CI_Controller {
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
                      ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
-                     ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
+                     ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
                      ->get('tb_mas_classlist_student')
-                     ->result_array();
-            print_r($recs);
+                     ->result_array();            
             foreach($recs as $temp_rec){
                 $current = false;
                 $temp_rec['bg'] = "#fff";
