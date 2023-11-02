@@ -1541,7 +1541,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:G3")->applyFromArray($style);
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:G4")->applyFromArray($style_right);
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:G5")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:G6")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:G6")->applyFromArray($style);        
 
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
@@ -1579,8 +1579,6 @@ class Excel extends CI_Controller {
             
             $i++;
         }
-        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
-        // ->getAlignment()->setWrapText(true);
                 
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
@@ -1588,7 +1586,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);       
         
         $objPHPExcel->getActiveSheet()->getStyle('F9:F'.$i)
