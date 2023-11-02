@@ -90,7 +90,10 @@
                                 Withdraw
                         </button>
                         <a target="_blank" :href="base_url + 'pdf/adjustments/'+ id + '/' + sem" v-if="reg_status == 'Enrolled'" class="btn btn-primary btn-lg">
-                                Print Adjustments
+                                Print PDF
+                        </a>
+                        <a target="_blank" :href="base_url + 'excel/adjustments/'+ id + '/' + sem" v-if="reg_status == 'Enrolled'" class="btn btn-primary btn-lg">
+                                Export Excel
                         </a>
                         <hr />
                         <table class="table table-condensed table-bordered">
