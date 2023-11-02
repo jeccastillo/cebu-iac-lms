@@ -1472,6 +1472,155 @@ class Excel extends CI_Controller {
         
         
     }
+
+    function adjustments($id,$sem){
+        
+        $adjustments = $this->db
+                                    ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
+                                    ->from('tb_mas_classlist_student_adjustment_log')  
+                                    ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')                                     
+                                    ->join('tb_mas_faculty', 'tb_mas_classlist_student_adjustment_log.adjusted_by = tb_mas_faculty.intID')                                     
+                                    ->where(array('student_id'=>$id,'syid'=>$sem))
+                                    ->order_by('tb_mas_classlist_student_adjustment_log.date','asc')
+                                    ->get()
+                                    ->result_array();
+
+        $student = $this->data_fetcher->getStudent($id); 
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        // Add some data
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        
+        
+        
+        //HEADER
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A3', 'SECTION ADJUSTMENTS');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', date("M j, Y h:i a"));
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "STUDENT: ".strtoupper($student['strLastname']).", ".strtoupper($student['strFirstname']));
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:G2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:G3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:G4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:G5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:G6');
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $style_right = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            )
+        );
+        $style_left = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+            )
+        );        
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:G2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:G5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:G2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:G3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:G4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:G5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:G6")->applyFromArray($style);
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Student List")
+                                     ->setSubject("Student List Download")
+                                     ->setDescription("Student List Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Student List");
+
+        
+        // Add some datat
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A8', 'Subject')
+                    ->setCellValue('B8', 'Adjustment')
+                    ->setCellValue('C8', 'Removed')
+                    ->setCellValue('D8', 'Added')
+                    ->setCellValue('E8', 'Adjusted By')
+                    ->setCellValue('F8', 'Remarks')
+                    ->setCellValue('G8', 'Date');
+                    
+        $i = 9;
+        foreach($adjustments as $adj)
+        {
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $adj['strCode'])
+                    ->setCellValue('B'.$i, $adj['adjustment_type'])
+                    ->setCellValue('C'.$i, $adj['from_subject'])
+                    ->setCellValue('D'.$i, $adj['to_subject'])
+                    ->setCellValue('E'.$i, $adj['strLastname']." ".$adj['strFirstname'])
+                    ->setCellValue('F'.$i, $adj['remarks'])
+                    ->setCellValue('G'.$i, $adj['date']);                                                                                                                                             
+                                
+            
+            $i++;
+        }
+        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
+        // ->getAlignment()->setWrapText(true);
+        
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);       
+        
+
+        // Rename worksheet
+        if($course!=0 && $year!=0)
+            $objPHPExcel->getActiveSheet()->setTitle($student['strProgramCode'], "-", $student['intStudentYear']);
+        else
+            $objPHPExcel->getActiveSheet()->setTitle('Students');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="student_grades'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
+    }
     
     public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0, $neo = 0)
     {
