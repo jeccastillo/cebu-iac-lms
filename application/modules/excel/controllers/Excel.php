@@ -1476,16 +1476,17 @@ class Excel extends CI_Controller {
     function adjustments($id,$sem){
         
         $adjustments = $this->db
-                                    ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
-                                    ->from('tb_mas_classlist_student_adjustment_log')  
-                                    ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')                                     
-                                    ->join('tb_mas_faculty', 'tb_mas_classlist_student_adjustment_log.adjusted_by = tb_mas_faculty.intID')                                     
-                                    ->where(array('student_id'=>$id,'syid'=>$sem))
-                                    ->order_by('tb_mas_classlist_student_adjustment_log.date','asc')
-                                    ->get()
-                                    ->result_array();
+                            ->select('tb_mas_classlist_student_adjustment_log.*, strCode, strFirstname, strLastname')
+                            ->from('tb_mas_classlist_student_adjustment_log')  
+                            ->join('tb_mas_subjects', 'tb_mas_classlist_student_adjustment_log.classlist_student_id = tb_mas_subjects.intID')                                     
+                            ->join('tb_mas_faculty', 'tb_mas_classlist_student_adjustment_log.adjusted_by = tb_mas_faculty.intID')                                     
+                            ->where(array('student_id'=>$id,'syid'=>$sem))
+                            ->order_by('tb_mas_classlist_student_adjustment_log.date','asc')
+                            ->get()
+                            ->result_array();
 
         $student = $this->data_fetcher->getStudent($id); 
+        $date = date("Y-m-d H:i:s");
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -1591,11 +1592,6 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);       
         
 
-        // Rename worksheet
-        if($course!=0 && $year!=0)
-            $objPHPExcel->getActiveSheet()->setTitle($student['strProgramCode'], "-", $student['intStudentYear']);
-        else
-            $objPHPExcel->getActiveSheet()->setTitle('Students');
 
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -1606,7 +1602,7 @@ class Excel extends CI_Controller {
  
          // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-         header('Content-Disposition: attachment;filename="student_grades'.$date.'.xls"');
+         header('Content-Disposition: attachment;filename="adjustments'.$date.'.xls"');
          header('Cache-Control: max-age=0');
          // If you're serving to IE 9, then the following may be needed
          header('Cache-Control: max-age=1');
