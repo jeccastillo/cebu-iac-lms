@@ -1038,7 +1038,7 @@ class Unity extends CI_Controller {
                      ->where(array('tb_mas_classlist.intFinalized'=>2,'tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
                      ->get('tb_mas_classlist_student')
                      ->result_array();
-            
+            print_r($recs);
             foreach($recs as $temp_rec){
                 $current = false;
                 $temp_rec['bg'] = "#fff";
