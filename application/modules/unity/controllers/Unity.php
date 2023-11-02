@@ -984,7 +984,7 @@ class Unity extends CI_Controller {
         else
             $active_sem = $this->data_fetcher->get_active_sem_shs();
 
-        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$active_sem['intID']);
+        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$active_sem['intID']);        
 
         $registrations = [];
         foreach($all_terms as $trm){
@@ -1041,6 +1041,8 @@ class Unity extends CI_Controller {
             
             foreach($recs as $temp_rec){
                 $current = false;
+                $temp_rec['bg'] = "#fff";
+                $temp_rec['color'] = "#333";
                 foreach($data['current_records'] as $current_rec){
                     if($temp_rec['strCode'] == $current_rec['strCode']){
                         $temp_rec['floatFinalGrade'] = $current_rec['v3'];
