@@ -217,11 +217,11 @@ new Vue({
                     
 
                      //this.loader_spinner = true;
-                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug + '/' + this.sem)
+                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug)
                     .then((data) => {
                         this.applicant_data = data.data.data;
                         for(i in this.applicant_data.payments){
-                            if(this.applicant_data.payments[i].description == "Reservation Payment"){
+                            if(this.applicant_data.payments[i].description == "Reservation Payment" && this.applicant_data.payments[i].sy_reference == this.sem){
                                 this.reservation_payment_amount = this.applicant_data.payments[i].subtotal_order;
                                 this.reservation_or_number = this.applicant_data.payments[i].or_number;
                             }
