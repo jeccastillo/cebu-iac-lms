@@ -217,7 +217,7 @@ new Vue({
                     
 
                      //this.loader_spinner = true;
-                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug)
+                    axios.get(api_url + 'admissions/student-info/' + this.student_data.slug + '/' + this.sem)
                     .then((data) => {
                         this.applicant_data = data.data.data;
                         for(i in this.applicant_data.payments){
