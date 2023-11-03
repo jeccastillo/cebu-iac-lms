@@ -116,12 +116,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                        <input type="text"
-                            v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'"
-                            class="form-control" v-model="request.email" @blur="updateField('email',$event)" />
-                        <p v-else class="text-muted">
-                            {{request.email}}
-                        </p>
+                        <input type="text" class="form-control" v-model="request.email" @blur="updateField('email',$event)" />                        
                         <hr>
                     </div>
 
