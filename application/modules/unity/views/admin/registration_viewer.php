@@ -438,7 +438,9 @@ new Vue({
         selected_items: [],
         slug: undefined,
         switch_term: undefined,
-        student:{},    
+        student:{
+            strStudentNumber: '000',
+        },    
         cashier: undefined,     
         user_level: undefined, 
         user: undefined,
