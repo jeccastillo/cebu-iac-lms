@@ -191,6 +191,29 @@ class Subject extends CI_Controller {
         
         echo json_encode($data);
     }
+
+    public function submit_eq_subject(){
+        $post = $this->input->post();
+        $subject = $post['intSubjectID'];
+        $this->data_poster->delete_eq_subject($subject);
+        
+        if(isset($post['subj']))
+        {
+            
+
+            foreach($post['subj'] as $subj)
+            {
+                $data['intEquivalentID'] = $subj;
+                $data['intSubjectID'] = $subject;
+                $this->data_poster->post_data('tb_mas_equivalents',$data);
+            }
+         
+        }
+        
+        $data['message'] = "Success";
+        
+        echo json_encode($data);
+    }
     
     public function submit_days_subject()
     {

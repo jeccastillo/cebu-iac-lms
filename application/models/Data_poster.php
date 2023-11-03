@@ -346,7 +346,11 @@ class Data_poster extends CI_Model {
 			->where('intSubjectID',$subject)
 			->delete('tb_mas_prerequisites');
 	}
-    
+    function delete_eq_subject($subject){
+        $this->db
+			->where('intSubjectID',$subject)
+			->delete('tb_mas_equivalents');
+    }
     function delete_days_subject($subject)
 	{
 		$this->db
