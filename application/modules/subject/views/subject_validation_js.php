@@ -170,6 +170,62 @@
                 
                 
         });
+
+        $("#save-eq").click(function(e){
+           e.preventDefault();
+            var subj = Array();
+            $('#eq-selected option').each(function(i, selected){ 
+                subj[i] = $(selected).val();
+            });
+            
+            
+            var sid = $("#intID").val();
+            
+            data = {'intSubjectID':sid,'subj':subj};
+           
+                $.ajax({
+                    'url':'<?php echo base_url(); ?>subject/submit_eq_subject/',
+                    'method':'post',
+                    'data':data,
+                    'dataType':'json',
+                    'success':function(ret){
+                       alert("saved"); 
+                    }
+                });
+           
+        });
+        
+        $("#load-eq").click(function(e){ 
+                e.preventDefault();
+                $('#eq-selector :selected').each(function(i, selected){ 
+                    itemVal = $(selected).val(); 
+                    itemText = $(selected).text();
+                    $("#eq-selected").append($('<option>', { 
+                                    value: itemVal,
+                                    text : itemText
+                                }));
+                        $("#eq-selector option[value='"+itemVal+"']").remove();
+                    
+                });
+                
+                
+        });
+        
+        $("#unload-eq").click(function(e){ 
+                e.preventDefault();
+                $('#eq-selected :selected').each(function(i, selected){ 
+                    itemVal = $(selected).val(); 
+                    itemText = $(selected).text();
+                    $("#eq-selector").prepend($('<option>', { 
+                                    value: itemVal,
+                                    text : itemText
+                                }));
+                        $("#eq-selected option[value='"+itemVal+"']").remove();
+                    
+                });
+                
+                
+        });
         
         $("#save-days").click(function(e){
            e.preventDefault();

@@ -134,7 +134,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <h4>Select Equivalent Subjects</h4>
-                    <select style="height:300px" class="form-control select2" id="prereq-selector" multiple>
+                    <select style="height:300px" class="form-control select2" id="eq-selector" multiple>
                         <?php foreach($all_eq as $pre): ?>
                             <option value="<?php echo $pre['intID']; ?>"><?php echo $pre['strCode'].' '.$pre['strDescription']; ?></option>
                         <?php endforeach; ?>
