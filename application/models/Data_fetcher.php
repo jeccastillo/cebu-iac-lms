@@ -316,10 +316,44 @@ class Data_fetcher extends CI_Model {
         //echo $this->db->last_query();
         return $subjects;
     }
+
+    function getPrereqEq($id,$type=null)
+    {
+        $bucket = "SELECT tb_mas_subjects.* FROM tb_mas_subjects WHERE intID IN (SELECT intEquivalentID from tb_mas_equivalents WHERE intSubjectID = ".$id.")";  
+        
+        if($type!=null)
+            $bucket .= " AND enumType = '".$type."' ";
+        
+        $bucket .= "ORDER BY strCode ASC"; 
+        
+        $subjects = $this->db
+             ->query($bucket)
+             ->result_array();
+        
+        //echo $this->db->last_query();
+        return $subjects;
+    }
     
     function getSubjectsNotSelected($id,$type=null)
     {
         $bucket = "SELECT tb_mas_subjects.* FROM tb_mas_subjects WHERE intID NOT IN (SELECT intPrerequisiteID from tb_mas_prerequisites WHERE intSubjectID = ".$id.")";  
+        
+        if($type!=null)
+            $bucket .= " AND enumType = '".$type."' ";
+        
+        $bucket .= "ORDER BY strCode ASC"; 
+        
+        $subjects = $this->db
+             ->query($bucket)
+             ->result_array();
+        
+        //echo $this->db->last_query();
+        return $subjects;
+    }
+
+    function getSubjectsNotSelectedEquivalent($id,$type=null)
+    {
+        $bucket = "SELECT tb_mas_subjects.* FROM tb_mas_subjects WHERE intID NOT IN (SELECT intEquivalentID from tb_mas_equivalents WHERE intSubjectID = ".$id.")";  
         
         if($type!=null)
             $bucket .= " AND enumType = '".$type."' ";

@@ -152,6 +152,31 @@
             </div>
             <div class="row">
                 <div class="col-md-5">
+                    <h4>Select Equivalent Subjects</h4>
+                    <select style="height:300px" class="form-control select2" id="prereq-selector" multiple>
+                        <?php foreach($all_eq as $pre): ?>
+                            <option value="<?php echo $pre['intID']; ?>"><?php echo $pre['strCode'].' '.$pre['strDescription']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <br /><br />
+                    <a href="#" id="load-eq" class="btn btn-default  btn-flat btn-block">Load <i class="ion ion-arrow-right-c"></i> </a>
+                    <a href="#" id="unload-eq" class="btn btn-default  btn-flat btn-block"><i class="ion ion-arrow-left-c"></i> Remove</a>
+                    <a href="#" id="save-eq" class="btn btn-default  btn-flat btn-block">Save</a>
+
+                </div>
+                <div class="col-md-5">
+                    <h4>Equivalent Subjects</h4>
+                    <select style="height:100px" class="form-control" id="eq-selected" multiple>
+                        <?php foreach($selected_eq as $eq): ?>
+                            <option value="<?php echo $eq['intID']; ?>"><?php echo $eq['strCode']." ".$eq['strDescription']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-5">
                     <h4>Select Schema</h4>
                     <select style="height:150px" class="form-control" id="days-selector" multiple>
                         <?php foreach($days as $val): ?>
@@ -199,7 +224,7 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
+            </div> -->
             <?php endif; ?>
        
         </div>

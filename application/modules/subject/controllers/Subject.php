@@ -96,11 +96,13 @@ class Subject extends CI_Controller {
         $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
         
         $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
+        $eq = $this->data_fetcher->getSubjectsNotSelectedEquivalent($id);
         
         $this->data['rooms'] = $this->data_fetcher->getRoomsNotSelected($id);
         $this->data['selected_rooms'] = $this->data_fetcher->getRoomsSelected($id);
         
         $this->data['selected_prereq'] = $this->data_fetcher->getPrereq($id);
+        $this->data['selected_eq'] = $this->data_fetcher->getPrereqEq($id);
         
         $days = array("1 2 3 4 5 6","1 3","1 3 5","3 5","2 4","2 4 6");
         $selected_days = $this->data_fetcher->getSelectedDays($id);
@@ -120,7 +122,7 @@ class Subject extends CI_Controller {
         
         
         $this->data['prereq'] = $prereq;
-        
+        $this->data['all_eq'] = $eq;
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_subject",$this->data);
         $this->load->view("common/footer",$this->data); 
