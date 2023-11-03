@@ -2458,8 +2458,10 @@ class Unity extends CI_Controller {
            
             if($term == 3)
                 $data['eq'] = $post['floatFinalGrade'];                                                            
-            elseif($term == 2)
+            elseif($term == 2){
                 $data['eq'] = $post['floatMidtermGrade'];                                
+                unset($post['strRemarks']);
+            }
                                     
            
             $post['date_added'] = date("Y-m-d H:i:s");
