@@ -81,8 +81,7 @@
                                 <option value="0">No</option>
                                 <option selected value="1">Yes</option>
                             </select>
-                        </div> 
-                        <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6'); ?>
+                        </div>                         
                        <div class="form-group col-xs-12">
                             <label>Description</label>
                             <textarea class="form-control" name="strDescription" rows="3" placeholder="Enter Description"></textarea>

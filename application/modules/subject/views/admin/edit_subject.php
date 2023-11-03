@@ -94,26 +94,7 @@
                                     <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">College</option>
                                     <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">SHS</option>
                                 </select>
-                            </div>
-                        <?php echo cms_dropdown('strDepartment','Department',$dpt,'col-sm-6',$subject['strDepartment']); ?>
-                            <div class="form-group col-xs-6">
-                                <label for="intEquivalentID1">Equivalent Subject 1</label>
-                                <select class="form-control select2" name="intEquivalentID1">
-                                    <option value="0">None</option>
-                                    <?php foreach($subjects as $s1): ?>
-                                        <option <?php echo ($subject['intEquivalentID1'] == $s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="form-group col-xs-6">
-                                <label for="intEquivalentID2">Equivalent Subject 2</label>
-                                <select class="form-control select2" name="intEquivalentID2">
-                                    <option <?php echo ($subject['intEquivalentID2']==0)?'selected':''; ?> value="0">None</option>
-                                    <?php foreach($subjects as $s1): ?>
-                                        <option <?php echo ($subject['intEquivalentID2']==$s1['intID'])?'selected':''; ?> value="<?php echo $s1['intID']; ?>"><?php echo $s1['strCode'].' '.$s1['strDescription']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                            </div>                        
                             <div class="form-group col-xs-6">
                                 <label>Description</label>
                                 <textarea class="form-control"  name="strDescription" rows="3" placeholder="Enter Description"><?php echo $subject['strDescription']; ?></textarea>
