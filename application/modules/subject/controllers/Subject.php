@@ -94,6 +94,7 @@ class Subject extends CI_Controller {
         $this->data['dpt'] = $dpt;
         $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);
         $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
+        $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         
         $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
         $eq = $this->data_fetcher->getSubjectsNotSelectedEquivalent($id);
