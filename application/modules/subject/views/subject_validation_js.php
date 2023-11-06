@@ -137,8 +137,7 @@
         });
 
         $(".remove-prereq").click(function(e){
-           e.preventDefault();            
-            
+           e.preventDefault();                        
             var id = $(this).attr('rel');
             
             data = {'id':id};
