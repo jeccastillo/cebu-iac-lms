@@ -753,7 +753,7 @@ class Datatables extends CI_Controller {
                                 ->select('tb_mas_classlist_student.intCSID')                                
                                 ->from('tb_mas_classlist_student')
                                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                                ->where(array('intClassListID'=>$aRow->intID,'intROG >'=>0))
+                                ->where(array('intClassListID'=>$aRow->intID,'intROG >'=>1))
                                 ->get()
                                 ->num_rows();
             $slots_taken_enlisted = $this->db
