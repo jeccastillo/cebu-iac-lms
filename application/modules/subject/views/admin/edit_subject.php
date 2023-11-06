@@ -122,7 +122,7 @@
                         <select class="form-control select2" id="program-selector">
                             <option value="">None</option>
                             <?php foreach($programs as $prog): ?>                                
-                                <option value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode'].' '.$pre['strProgramDescription']; ?></option>
+                                <option value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode'].' '.$prog['strProgramDescription']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
