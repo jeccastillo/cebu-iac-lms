@@ -194,6 +194,19 @@ class Subject extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function delete_prereq()
+    {
+        $post = $this->input->post();        
+        if(isset($post['id']))
+        {                        
+            $this->db->delete('tb_mas_prerequisites',array('intID'=>$post['id']));            
+        }
+        
+        $data['message'] = "Success";
+        
+        echo json_encode($data);
+    }
+
     public function submit_eq_subject(){
         $post = $this->input->post();
         $subject = $post['intSubjectID'];
