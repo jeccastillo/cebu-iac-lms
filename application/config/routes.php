@@ -40,7 +40,7 @@
 
 $route['default_controller'] = "site";
 // $route['default_controller'] = "unity";
-$route['404_override'] = '';
+$route['404_override'] = 'my404';
 $route['login'] = "users/login";
 
 
