@@ -135,6 +135,26 @@
                 });
            
         });
+
+        $(".remove-prereq").click(function(e){
+           e.preventDefault();            
+            
+            var id = $(this).attr('rel');
+            
+            data = {'id':id};
+           
+                $.ajax({
+                    'url':'<?php echo base_url(); ?>subject/delete_prereq/',
+                    'method':'post',
+                    'data':data,
+                    'dataType':'json',
+                    'success':function(ret){                       
+                       location.reload();
+                    }
+                });
+           
+        });
+        
         
         $("#load-prereq").click(function(e){ 
                 e.preventDefault();
