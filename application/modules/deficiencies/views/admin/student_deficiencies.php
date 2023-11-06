@@ -94,7 +94,7 @@
                 <div class="modal-body">
                     <div class="row">                        
                         <div class="form-group col-sm-12">
-                            <label>Enter End Date of Temporary Reslution for this deficiency</label>
+                            <label>Enter End Date of Temporary Resolution for this deficiency</label>
                             <input required v-model="temp_resolve_date" type="date" class="form-control">
                         </div>                                               
                     </div>
