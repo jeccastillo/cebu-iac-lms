@@ -102,7 +102,15 @@ class Subject extends CI_Controller {
         $this->data['rooms'] = $this->data_fetcher->getRoomsNotSelected($id);
         $this->data['selected_rooms'] = $this->data_fetcher->getRoomsSelected($id);
         
-        $this->data['selected_prereq'] = $this->data_fetcher->getPrereq($id);
+        $prereq_s = $this->data_fetcher->getPrereq($id);
+        $pre_ret = [];
+        foreach($prereq_s as $pre){
+            $pre['program'] = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$pre['program']))->first_row();
+            $pre_ret[] = $pre;
+        }
+
+        $this->data['selected_prereq'] = $pre_ret;
+
         $this->data['selected_eq'] = $this->data_fetcher->getPrereqEq($id);
         
         $days = array("1 2 3 4 5 6","1 3","1 3 5","3 5","2 4","2 4 6");

@@ -106,8 +106,41 @@
                 <div style="clear:both"></div>
             </form>
             <?php if($userlevel != 6): ?>
+
+                <h4>Select Prerequisites and Program</h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Pre-requisite</label>
+                        <select class="form-control select2" id="prereq-selector">
+                            <?php foreach($prereq as $pre): ?>
+                                <option value="<?php echo $pre['intID']; ?>"><?php echo $pre['strCode'].' '.$pre['strDescription']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Program</label>
+                        <select class="form-control select2" id="prereq-selector">
+                            <option value="">None</option>
+                            <?php foreach($programs as $prog): ?>                                
+                                <option value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode'].' '.$pre['strProgramDescription']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                       <th>Subject</th>
+                       <th>Program</th>
+                    </tr>
+                    <?php foreach($selected_prereq as $pre): ?>
+                        <tr>
+                            <td><?php echo $pre['strCode']." ".$pre['strDescription']; ?></td>
+                            <td><?php echo $pre['program']?$pre['program']['strProgramCode']:"Not Specified"; ?></td>
+                        </tr>                        
+                    <?php endforeach; ?>
+                </table>
             <!---Put table here and field to add prerequisite with program id make program optional-->
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-5">
                     <h4>Select Prerequisites</h4>
                     <select style="height:300px" class="form-control select2" id="prereq-selector" multiple>
@@ -131,7 +164,8 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
+            </div> -->
+
             <div class="row">
                 <div class="col-md-5">
                     <h4>Select Equivalent Subjects</h4>
