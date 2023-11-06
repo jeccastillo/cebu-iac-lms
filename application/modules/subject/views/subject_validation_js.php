@@ -129,8 +129,8 @@
                     'method':'post',
                     'data':data,
                     'dataType':'json',
-                    'success':function(ret){
-                       alert("saved"); 
+                    'success':function(ret){                       
+                       location.reload();
                     }
                 });
            
