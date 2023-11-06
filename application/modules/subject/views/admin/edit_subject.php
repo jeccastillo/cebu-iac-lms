@@ -140,7 +140,7 @@
                         <tr>
                             <td><?php echo $pre['strCode']." ".$pre['strDescription']; ?></td>
                             <td><?php echo $pre['program']?$pre['program']['strProgramCode']:"Not Specified"; ?></td>
-                            <td><a href="#" class="btn btn-danger" class="remove-prereq" rel="<?php echo $pre['prereq_subject_id']; ?>">Remove</a></td>
+                            <td><a href="#" class="btn btn-danger remove-prereq" rel="<?php echo $pre['prereq_subject_id']; ?>">Remove</a></td>
                         </tr>                        
                     <?php endforeach; ?>
                 </table>
