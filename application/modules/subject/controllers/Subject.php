@@ -105,7 +105,7 @@ class Subject extends CI_Controller {
         $prereq_s = $this->data_fetcher->getPrereq($id);
         $pre_ret = [];
         foreach($prereq_s as $pre){
-            $pre['program'] = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$pre['program']))->first_row();
+            $pre['program'] = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$pre['program']))->first_row('array');
             $pre_ret[] = $pre;
         }
 
