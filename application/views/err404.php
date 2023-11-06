@@ -40,7 +40,8 @@
 </head>
 <body>
     <div class="text-center">
-        <p style="margin-top:20%;font-weight:700;font-size:1.2em;">OOPS! PAGE NOT FOUND!</p>
+        <p style="margin-top:20%;font-weight:700;font-size:1.2em;">OOPS! PAGE NOT FOUND</p>
         <h1 style="font-size:8em;">404</h1>
+        <p style="margin-top:20%;font-weight:700;font-size:1.2em;">SORRY, THE PAGE YOU REQUESTED COULD NOT BE FOUND</p>
     </div>
 </body>
