@@ -180,20 +180,13 @@ class Subject extends CI_Controller {
     public function submit_prereq_subject()
     {
         $post = $this->input->post();
-        $subject = $post['intSubjectID'];
-        $this->data_poster->delete_prereq_subject($subject);
-        
-        if(isset($post['subj']))
-        {
-            
-
-            foreach($post['subj'] as $subj)
-            {
-                $data['intPrerequisiteID'] = $subj;
-                $data['intSubjectID'] = $subject;
-                $this->data_poster->post_data('tb_mas_prerequisites',$data);
-            }
-         
+        $subject = $post['intSubjectID'];                
+        if(isset($post['intSubjectID']))
+        {            
+            $data['program'] = $post['program'];
+            $data['intPrerequisiteID'] = $post['intPrerequisiteID'];
+            $data['intSubjectID'] = $subject;
+            $this->data_poster->post_data('tb_mas_prerequisites',$data);            
         }
         
         $data['message'] = "Success";

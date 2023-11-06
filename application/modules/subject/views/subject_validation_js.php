@@ -116,16 +116,13 @@
         });
         
         $("#save-prereq").click(function(e){
-           e.preventDefault();
-            var subj = Array();
-            $('#prereq-selected option').each(function(i, selected){ 
-                subj[i] = $(selected).val();
-            });
-            
+           e.preventDefault();            
             
             var sid = $("#intID").val();
+            var subj = $("#prereq-selector").val();
+            var program = $("#program-selector").val();
             
-            data = {'intSubjectID':sid,'subj':subj};
+            data = {'intSubjectID':sid,'intPrerequisiteID':subj,'program':program};
            
                 $.ajax({
                     'url':'<?php echo base_url(); ?>subject/submit_prereq_subject/',

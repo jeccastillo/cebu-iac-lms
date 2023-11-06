@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label>Program</label>
-                        <select class="form-control select2" id="prereq-selector">
+                        <select class="form-control select2" id="program-selector">
                             <option value="">None</option>
                             <?php foreach($programs as $prog): ?>                                
                                 <option value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode'].' '.$pre['strProgramDescription']; ?></option>
@@ -127,6 +127,9 @@
                         </select>
                     </div>
                 </div>
+                <hr />
+                <a href="#" id="save-prereq" class="btn btn-default  btn-flat btn-block">Save</a>
+                <hr />
                 <table class="table table-striped table-bordered">
                     <tr>
                        <th>Subject</th>
