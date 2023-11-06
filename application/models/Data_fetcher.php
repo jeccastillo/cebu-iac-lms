@@ -302,7 +302,7 @@ class Data_fetcher extends CI_Model {
     
     function getPrereq($id,$type=null)
     {
-        $bucket = "SELECT tb_mas_subjects.*, program FROM tb_mas_subjects JOIN tb_mas_prerequisites ON tb_mas_subjects.intID = tb_mas_prerequisites.intPrerequisiteID  WHERE tb_mas_subjects.intID = ".$id." ";  
+        $bucket = "SELECT tb_mas_subjects.*, program FROM tb_mas_subjects JOIN tb_mas_prerequisites ON tb_mas_subjects.intID = tb_mas_prerequisites.intPrerequisiteID  WHERE tb_mas_prerequisites.intSubjectID = ".$id." ";  
         
         if($type!=null)
             $bucket .= " AND enumType = '".$type."' ";
