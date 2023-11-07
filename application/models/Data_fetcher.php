@@ -2222,7 +2222,6 @@ class Data_fetcher extends CI_Model {
     function getTuition($id,$sem,$sch = 0,$discount = 0)
     {
         
-
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                  
 
@@ -2308,7 +2307,9 @@ class Data_fetcher extends CI_Model {
         $scholarship_discount = 0;
         $discounted_price = 0;        
         $scholar = null;
+        
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
+        $stype = get_stype($student['level']);
 
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);        
@@ -2385,44 +2386,48 @@ class Data_fetcher extends CI_Model {
             }
         }
 
+        if($stype == "college"){
+            foreach($subjects as $sid)
+            {                  
+                $class =  current($this->db
+                                    ->select("*")
+                                    ->from("tb_mas_subjects")
+                                    ->where(array("intID"=>$sid))
+                                    ->get()
+                                    ->result_array());                       
+                
+                //Checks if subject is NSTP nstp fee is different from normal fee                                
+                if($class['isNSTP']){
+                    $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
+                    $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
-        foreach($subjects as $sid)
-        {                  
-            $class =  current($this->db
-                                ->select("*")
-                                ->from("tb_mas_subjects")
-                                ->where(array("intID"=>$sid))
-                                ->get()
-                                ->result_array());                       
-            
-            //Checks if subject is NSTP nstp fee is different from normal fee                                
-            if($class['isNSTP']){
-                $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-                ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
+                    $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
+                }
+                else
+                    $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+                
+                if($class['strLabClassification'] != "none"){
+                    $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
+                                                ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
+                    $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
+                    $total_lab += $lab_list[$class['strCode']];
+                }
+                
+                if($class['isThesisSubject']){                
+                    $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
+                    $thesis_fee = getExtraFee($thesis, $class_type, 'misc');                                
+                }
 
-                $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
-            }
-            else
-                $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+                if($class['isInternshipSubject']){                
+                    $hasInternship = true;
+                }
             
-            if($class['strLabClassification'] != "none"){
-                $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
-                                            ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
-                $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
-                $total_lab += $lab_list[$class['strCode']];
             }
-            
-            if($class['isThesisSubject']){                
-                $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
-                ->get('tb_mas_tuition_year_misc')->first_row('array');
-                $thesis_fee = getExtraFee($thesis, $class_type, 'misc');                                
-            }
-
-            if($class['isInternshipSubject']){                
-                $hasInternship = true;
-            }
-           
+        }
+        else{
+            $tuition = $unit_fee;
         }
 
         foreach($misc as $m){            
