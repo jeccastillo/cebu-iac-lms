@@ -134,6 +134,7 @@
                             <th>Lecture Units</th>
                             <th>Lab Units</th>
                             <th>Total Units</th>
+                            <th>Pre-requisites</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -149,6 +150,18 @@
                     <td><?php echo $s['intLectHours']; ?></td>
                     <td><?php echo $s['intLab']; ?></td>
                     <td><?php echo $s['strUnits']; ?></td>
+                    <td style="width:20%;">
+                        <?php
+                        $i = 0;
+                        foreach($s['prereq'] as $pre){ 
+                            if($i != 0)
+                                echo ", ";
+                                echo $pre['strCode']; 
+                            
+                            $i++;
+                        }
+                        ?>
+                    </td>
                     <td>
                         <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-curriculum" href="#">Remove</a>
                     </td>
