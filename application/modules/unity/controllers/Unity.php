@@ -2279,7 +2279,7 @@ class Unity extends CI_Controller {
                 $currc = $this->data_fetcher->getItem('tb_mas_curriculum',$student['intCurriculumID']);
 
                 foreach($prereq_array as $prereq_item){
-                    if(!isset($prereq_item['program']) || $prereq_item['program'] == 0 || $prereq_item['program'] == $clist['intSubjectID'])
+                    if(!isset($prereq_item['program']) || $prereq_item['program'] == 0 || $prereq_item['program'] == $student['intCurriculumID'])
                         $pre_req[] =  $prereq_item;
                 }
 
