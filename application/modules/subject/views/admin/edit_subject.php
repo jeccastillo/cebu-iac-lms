@@ -133,13 +133,13 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                        <th>Subject</th>
-                       <th>Curriculum</th>
+                       <th>Program</th>
                        <th>Actions</th>
                     </tr>
                     <?php foreach($selected_prereq as $pre): ?>
                         <tr>
-                            <td><?php echo $pre['strName']; ?></td>
-                            <td><?php echo $pre['program']?$pre['program']['strProgramCode']:"Not Specified"; ?></td>
+                            <td><?php echo $pre['strCode']." ".$pre['strDescription']; ?></td>
+                            <td><?php echo $pre['program']?$pre['program']['strName']:"Not Specified"; ?></td>
                             <td><a href="#" class="btn btn-danger remove-prereq" rel="<?php echo $pre['prereq_subject_id']; ?>">Remove</a></td>
                         </tr>                        
                     <?php endforeach; ?>
