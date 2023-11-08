@@ -141,13 +141,14 @@ class Subject extends CI_Controller {
         
     }
 
-    public function edit_prerequisite($id)
+    public function edit_prerequisite($id,$curriculum)
     {
         
         
         $dpt = array(); 
         foreach($this->data['department_config'] as $dept)
         $dpt[$dept] = $dept;
+        $this->data['curriculum_id'] = $curriculum;
 
         $this->data['userlevel'] = $this->session->userdata('intUserLevel');
         

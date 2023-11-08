@@ -32,7 +32,7 @@
                         <select class="form-control select2" id="program-selector">
                             <option value="">None</option>
                             <?php foreach($programs as $prog): ?>                                
-                                <option value="<?php echo $prog['intID']; ?>"><?php echo $prog['strName']; ?></option>
+                                <option <?php echo $prog['intID'] == $curriculum_id ? 'selected' : ''; ?> value="<?php echo $prog['intID']; ?>"><?php echo $prog['strName']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

@@ -162,7 +162,7 @@
                         }
                         ?>
                         <br />
-                        <a style="font-size:.8em;" target="_blank" href="<?php echo base_url(); ?>subject/edit_prerequisite/<?php echo $s['intSubjectID']; ?>">[add/edit]</a>
+                        <a style="font-size:.8em;" target="_blank" href="<?php echo base_url(); ?>subject/edit_prerequisite/<?php echo $s['intSubjectID']."/".$item['intID']; ?>">[add/edit]</a>
                     </td>
                     <td>
                         <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-curriculum" href="#">Remove</a>
