@@ -1519,7 +1519,7 @@ class Pdf extends CI_Controller {
         $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);   
         $this->data['curriculum_subjects'] =  [];     
         $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
-        $subject['prereq'] = [];
+        
         foreach($curriculum as $subject){
             $prereq_array = 
                     $this->db->select('tb_mas_subjects.*')
@@ -1528,7 +1528,7 @@ class Pdf extends CI_Controller {
                      ->where('intSubjectID',$subject['intSubjectID'])
                      ->get()
                      ->result_array();
-            
+            $subject['prereq'] = [];    
             foreach($prereq_array as $prereq){
                 if(!isset($prereq['program']) || $prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intProgramID'])
                     $subject['prereq'][] =  $prereq;
