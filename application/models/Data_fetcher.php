@@ -3050,7 +3050,7 @@ class Data_fetcher extends CI_Model {
         if($sem == 0){
             $where["intClassListID"] = $id;
             return  $this->db
-                     ->select("tb_mas_classlist_student.intCSID,intID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
+                     ->select("tb_mas_classlist_student.intCSID,intID, intCurriculumID, strFirstname,strMiddlename,strLastname,strStudentNumber, strGSuiteEmail, tb_mas_classlist_student.floatFinalGrade,floatPrelimGrade,floatMidtermGrade,floatFinalsGrade,enumStatus,strRemarks, strUnits,strProgramCode,date_added")
                      ->from("tb_mas_classlist_student")
                      //->group_by("intSubjectID")
                      ->where($where)
