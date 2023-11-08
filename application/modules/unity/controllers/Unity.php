@@ -2268,12 +2268,21 @@ class Unity extends CI_Controller {
             $st = [];
             
             
-            $pre_req = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$clist['intSubjectID']))->result_array();
+
+            $prereq_array = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$clist['intSubjectID']))->result_array();
             
             $passed_pre_req = true;
             
             foreach($students as $student)
             { 
+                $pre_req = [];
+                $currc = $this->data_fetcher->getItem('tb_mas_curriculum',$student['intCurriculumID']);
+
+                foreach($prereq_array as $prereq_item){
+                    if(!isset($prereq_item['program']) || $prereq_item['program'] == 0 || $prereq_item['program'] == $clist['intSubjectID'])
+                        $pre_req[] =  $prereq_item;
+                }
+
                 foreach($pre_req as $req){
                     $passed = $this->db->select('tb_mas_classlist_student.intCSID')
                     ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')         
