@@ -1519,7 +1519,7 @@ class Pdf extends CI_Controller {
         $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);   
         $this->data['curriculum_subjects'] =  [];     
         $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
-        
+        $subject['prereq'] = [];
         foreach($curriculum as $subject){
             $prereq_array = 
                     $this->db->select('tb_mas_subjects.*')
