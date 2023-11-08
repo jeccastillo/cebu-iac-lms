@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <hr />
-                <div class="text-center">
+                <div class="text-right">
                     <a href="#" id="save-prereq" class="btn btn-default  btn-flat">Save</a>
                 </div>
                 <hr />
