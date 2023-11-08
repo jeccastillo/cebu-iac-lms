@@ -1719,7 +1719,25 @@ class Unity extends CI_Controller {
             $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
             $this->data['subjects'] = $this->data_fetcher->getSubjectsNotInCurriculum($id);
-            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculum($id);
+            $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
+            $this->data['curriculum_subjects'] = [];
+             
+            foreach($curriculum as $subject){
+                $prereq_array = 
+                        $this->db->select('tb_mas_subjects.*')
+                         ->from('tb_mas_prerequisites')
+                         ->join('tb_mas_subjects', 'tb_mas_prerequisites.intPrerequisiteID = tb_mas_subjects.intID')
+                         ->where('intSubjectID',$subject['intSubjectID'])
+                         ->get()
+                         ->result_array();
+                $subject['prereq'] = [];    
+                foreach($prereq_array as $prereq){
+                    if(!isset($prereq['program']) || $prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intID'])
+                        $subject['prereq'][] =  $prereq;
+                }       
+    
+                $this->data['curriculum_subjects'][] = $subject;
+            }  
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_curriculum",$this->data);
