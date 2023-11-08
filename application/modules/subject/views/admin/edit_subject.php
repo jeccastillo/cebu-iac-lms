@@ -107,7 +107,7 @@
             </form>
             <?php if($userlevel != 6): ?>
 
-                <h4>Select Prerequisites and Program</h4>
+                <h4>Select Prerequisites and Curriculum</h4>
                 <div class="row">
                     <div class="col-sm-6">
                         <label>Pre-requisite</label>
