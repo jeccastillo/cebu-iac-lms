@@ -9,7 +9,7 @@
                         <li class="active">Edit Pre-requisites <?php echo $subject['strCode']; ?></li>
                     </ol>
                 </section>
-<div class="content">
+<div class="container">
     <div class="span10 box box-primary">
         <div class="box-header">
                 <h3 class="box-title">Edit Pre-requisites <?php echo $subject['strCode']; ?></h3>
