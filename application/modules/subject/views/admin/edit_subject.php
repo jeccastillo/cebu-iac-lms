@@ -133,7 +133,7 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                        <th>Subject</th>
-                       <th>Program</th>
+                       <th>Curriculum</th>
                        <th>Actions</th>
                     </tr>
                     <?php foreach($selected_prereq as $pre): ?>
