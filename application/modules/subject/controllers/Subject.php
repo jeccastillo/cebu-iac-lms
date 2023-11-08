@@ -94,7 +94,7 @@ class Subject extends CI_Controller {
         $this->data['dpt'] = $dpt;
         $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);
         $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
-        $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+        $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
         
         $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
         $eq = $this->data_fetcher->getSubjectsNotSelectedEquivalent($id);
@@ -105,7 +105,7 @@ class Subject extends CI_Controller {
         $prereq_s = $this->data_fetcher->getPrereq($id);
         $pre_ret = [];
         foreach($prereq_s as $pre){
-            $pre['program'] = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$pre['program']))->first_row('array');
+            $pre['program'] = $this->db->get_where('tb_mas_curriculum',array('intID'=>$pre['program']))->first_row('array');
             $pre_ret[] = $pre;
         }
 

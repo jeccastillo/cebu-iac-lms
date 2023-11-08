@@ -118,11 +118,11 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Program</label>
+                        <label>Curriculum</label>
                         <select class="form-control select2" id="program-selector">
                             <option value="">None</option>
                             <?php foreach($programs as $prog): ?>                                
-                                <option value="<?php echo $prog['intProgramID']; ?>"><?php echo $prog['strProgramCode'].' '.$prog['strProgramDescription']; ?></option>
+                                <option value="<?php echo $prog['intID']; ?>"><?php echo $prog['strName']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -133,12 +133,12 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                        <th>Subject</th>
-                       <th>Program</th>
+                       <th>Curriculum</th>
                        <th>Actions</th>
                     </tr>
                     <?php foreach($selected_prereq as $pre): ?>
                         <tr>
-                            <td><?php echo $pre['strCode']." ".$pre['strDescription']; ?></td>
+                            <td><?php echo $pre['strName']; ?></td>
                             <td><?php echo $pre['program']?$pre['program']['strProgramCode']:"Not Specified"; ?></td>
                             <td><a href="#" class="btn btn-danger remove-prereq" rel="<?php echo $pre['prereq_subject_id']; ?>">Remove</a></td>
                         </tr>                        
