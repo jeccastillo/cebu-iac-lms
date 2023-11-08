@@ -140,6 +140,49 @@ class Subject extends CI_Controller {
                 
         
     }
+
+    public function edit_prerequisite($id)
+    {
+        
+        
+        $dpt = array(); 
+        foreach($this->data['department_config'] as $dept)
+        $dpt[$dept] = $dept;
+
+        $this->data['userlevel'] = $this->session->userdata('intUserLevel');
+        
+        
+        $this->data['dpt'] = $dpt;
+        $this->data['subject'] = $this->data_fetcher->getSubjectPlain($id);        
+        $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_curriculum');
+        
+        $prereq = $this->data_fetcher->getSubjectsNotSelected($id);
+        $eq = $this->data_fetcher->getSubjectsNotSelectedEquivalent($id);                
+        
+        $prereq_s = $this->data_fetcher->getPrereq($id);
+        $pre_ret = [];
+        foreach($prereq_s as $pre){
+            $pre['program'] = $this->db->get_where('tb_mas_curriculum',array('intID'=>$pre['program']))->first_row('array');
+            $pre_ret[] = $pre;
+        }
+
+        $this->data['selected_prereq'] = $pre_ret;
+
+        $this->data['selected_eq'] = $this->data_fetcher->getPrereqEq($id);
+               
+        $this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        
+        
+        
+        $this->data['prereq'] = $prereq;
+        $this->data['all_eq'] = $eq;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/edit_prerequisite",$this->data);
+        $this->load->view("common/footer",$this->data);         
+        // print_r($this->data['classlists']);
+                
+        
+    }
     
     public function submit_subject()
     {

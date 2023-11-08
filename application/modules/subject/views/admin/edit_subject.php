@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <hr />
-                <a href="#" id="save-prereq" class="btn btn-default  btn-flat btn-block">Save</a>
+                <a href="#" id="save-prereq" class="btn btn-default  btn-flat">Save</a>
                 <hr />
                 <table class="table table-striped table-bordered">
                     <tr>
