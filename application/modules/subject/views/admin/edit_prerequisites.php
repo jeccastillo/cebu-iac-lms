@@ -38,8 +38,8 @@
                     </div>
                 </div>
                 <hr />
-                <div class="text-right">
-                    <a href="#" id="save-prereq" class="btn btn-default  btn-flat">Save</a>
+                <div>
+                    <a href="#" id="save-prereq" class="btn btn-default  btn-flat btn-block">Save</a>
                 </div>
                 <hr />
                 <table class="table table-striped table-bordered">
