@@ -14,7 +14,7 @@
         <div class="box-header">
                 <h3 class="box-title">Edit Pre-requisites <?php echo $subject['strCode']; ?></h3>
         </div>
-                   
+        <div class="box-body">
             <?php if($userlevel != 6): ?>
 
                 <h4>Select Prerequisites and Program</h4>
@@ -38,7 +38,9 @@
                     </div>
                 </div>
                 <hr />
-                <a href="#" id="save-prereq" class="btn btn-default  btn-flat">Save</a>
+                <div class="text-center">
+                    <a href="#" id="save-prereq" class="btn btn-default  btn-flat">Save</a>
+                </div>
                 <hr />
                 <table class="table table-striped table-bordered">
                     <tr>
@@ -57,4 +59,6 @@
             <?php endif; ?>
        
         </div>
+    </div>
+</div>
 </aside>
