@@ -12,7 +12,7 @@
 <div class="container">
     <div class="span10 box box-primary">
         <div class="box-header">
-                <h3 class="box-title">Edit Pre-requisites <?php echo $subject['strCode']; ?></h3>
+                <h3 class="box-title">Edit Pre-requisites for <strong><?php echo $subject['strCode']." ".$subject['strDescription']; ?></strong></h3>
         </div>
         <div class="box-body">
             <?php if($userlevel != 6): ?>
