@@ -474,7 +474,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/view_all_students"><i class="fa fa-file"></i>
+                                href="<?php echo base_url() ?>finance/view_all_students_ledger"><i class="fa fa-file"></i>
                                 <span>Student Ledger</span> </a>
                         </li>
                         <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a href="#"><i
@@ -580,7 +580,7 @@
                     </ul>
                 </li>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="classroom")?'active':''; ?>">
-                    <a href="#">
+                    <a href="#">view_all_students_ledger
                         <i class="fa fa-circle text-green"></i> <span>Classrooms</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>

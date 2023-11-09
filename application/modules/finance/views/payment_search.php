@@ -44,9 +44,6 @@
                             <th>Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
-                            <?php if($user['special_role'] >= 1): ?>  
-                            <th>Ledger</th>                         
-                            <?php endif; ?> 
                         </tr>                        
                         <tr class="search">
                             <td>id</td>
@@ -54,10 +51,7 @@
                             <td>Student Number</td>
                             <td>Last Name</td>
                             <td>Program</td>
-                            <td>Year Level</td>                       
-                            <?php if($user['special_role'] >= 1): ?>  
-                            <td>Ledger</td>                           
-                            <?php endif; ?>    
+                            <td>Year Level</td>                                                   
                         </tr>
                     </thead>                    
                     <tbody></tbody>

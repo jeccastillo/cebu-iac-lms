@@ -25,7 +25,15 @@
             "ordering": false,
             "autoWidth": false,
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/null/null/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem; ?>",
-            "aoColumnDefs":[                      
+            "aoColumnDefs":[    
+                <?php if($user['special_role'] >= 1): ?>
+                {
+                    "aTargets":[2],
+                    "mData": null,
+                    "bSortable":false,
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/student_ledger/'+row[0]+'">'+row[2]+'</a>'; }
+                },          
+                <?php endif; ?>                  
                 {
                     "aTargets":[0],
                     "bVisible": false 

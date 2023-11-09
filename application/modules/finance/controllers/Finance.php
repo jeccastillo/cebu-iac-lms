@@ -521,6 +521,53 @@ class Finance extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    public function view_all_students_ledger($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0)
+    {
+        if($this->faculty_logged_in())
+        {            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+
+            if($sem == 0){
+                $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+                $sem = $this->data['active_sem']['intID'];
+            }
+           // $this->data['offset'] = $offset;
+            
+            //$students = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
+           // $this->data['registered'] = count($students);
+            
+            /*if($search == null)
+                $this->data['students'] = $this->data_fetcher->fetch_students('tb_mas_users',array('strLastName','asc'),20,null,$offset);
+            else {
+              //put code for search algorithm
+                $this->data['students'] = $this->data_fetcher->search_for_students();
+            */
+            $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
+            $this->data['course'] = $course;
+            $this->data['postreg'] = $regular;
+            $this->data['postyear'] = $year;
+            $this->data['gender'] = $gender;
+            $this->data['graduate'] = $graduate;
+            $this->data['scholarship'] = $scholarship;
+            $this->data['registered'] = $registered;
+            $this->data['sem'] = $sem;
+            
+            $this->load->view("common/header",$this->data);
+            $this->load->view("payment_search",$this->data);
+            $this->load->view("common/footer",$this->data);
+            
+            
+            $this->load->view("common/ledger_table_conf",$this->data);
+
+            
+            //print_r($this->data['classlist']);
+            
+        }
+        else
+            redirect(base_url()."unity");  
+    }
     
     public function check_or_printed($or){
         
