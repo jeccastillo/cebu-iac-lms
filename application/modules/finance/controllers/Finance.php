@@ -528,6 +528,8 @@ class Finance extends CI_Controller {
         {            
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+            $this->data['page'] = "view_all_students";
+            $this->data['opentree'] = "finance_student_account";
 
             if($sem == 0){
                 $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
