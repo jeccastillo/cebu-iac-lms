@@ -70,7 +70,7 @@
                             <td>{{ item.date_resolved }}</td>
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status  }}</td>
-                            <td v-if="item.department == request.department && item.status != 'resolved'">
+                            <td v-if="item.department == request.department && item.status != 'resolved' || user.intUserLevel == 2">
                                 <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> <a v-if="user.intUserLevel == 2 || user.intUserLevel == 3" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temp Resolve</a>
                             </td>
                             <td v-else></td>
