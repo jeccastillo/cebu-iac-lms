@@ -3031,7 +3031,7 @@ class Data_fetcher extends CI_Model {
         ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
         ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
         ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-        ->where(array('student_id'=>$id,'start_of_classes <'=> $today ))        
+        ->where(array('student_id'=>$id,'start_of_classes <'=> $today, 'is_disabled' => 0 ))        
         ->get()
         ->result_array();
 
