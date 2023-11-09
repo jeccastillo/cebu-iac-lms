@@ -1223,7 +1223,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
+                    $row[] = strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2]);
                 }
                 else if ( $aColumns[$i] == "strStudentNumber")
                 {
