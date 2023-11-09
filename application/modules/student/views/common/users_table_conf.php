@@ -59,6 +59,12 @@
                     "aTargets":[1],
                     "bVisible": false 
                 },
+                {
+                    "aTargets":[3],
+                    "mData": null,
+                    "bSortable":false,
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/student_ledger/'+row[0]+'">'+row[3]+'</a>'; }
+                },
             ],
             "aaSorting": [[3,'asc']],
             "fnDrawCallback": function () {  
