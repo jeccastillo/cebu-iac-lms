@@ -1223,7 +1223,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2]);
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
                 }
                 else if ( $aColumns[$i] == "strStudentNumber")
                 {
@@ -2285,7 +2285,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
+                    $row[] = strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2]);
                 }
                 else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
                 {
