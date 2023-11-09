@@ -834,7 +834,7 @@ class Pdf extends CI_Controller {
                 $total += $record['strUnits'];
             }
 
-            if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
+            if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $record['intFinalized'] > 1){
                 $total_units += $record['strUnits'];
             }
 
