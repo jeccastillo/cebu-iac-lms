@@ -580,7 +580,7 @@
                     </ul>
                 </li>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="classroom")?'active':''; ?>">
-                    <a href="#">view_all_students_ledger
+                    <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Classrooms</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
