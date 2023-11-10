@@ -2223,7 +2223,7 @@ class Data_fetcher extends CI_Model {
     {
         
         
-        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                  
+        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                          
 
         $classes =  $this->db
                             ->select("tb_mas_subjects.intID as subjectID")
@@ -2310,6 +2310,8 @@ class Data_fetcher extends CI_Model {
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $stype = get_stype($student['level']);
+        echo $stype;
+        die();
 
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         $unit_fee = getUnitPrice($tuition_year,$class_type);        
