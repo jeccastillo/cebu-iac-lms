@@ -39,10 +39,10 @@
                     "bVisible": false 
                 },
                 {
-                    "aTargets":[3],
+                    "aTargets":[1],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/payee/'+row[0]+'">'+row[3]+'</a>'; }
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/payee/'+row[0]+'">'+row[1]+'</a>'; }
                 },
             ],
             "aaSorting": [[3,'asc']],
