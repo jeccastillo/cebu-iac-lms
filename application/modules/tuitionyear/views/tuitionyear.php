@@ -96,14 +96,14 @@
                     
                     <hr />
                     <p>Add new Tuition for Track</p>
-                    <form @submit.prevent="addExtra('track','Track',track)">    
-                    <div class="form-group col-sm-3">
+                    <form @submit.prevent="addExtra('track','Track',track)">                                
+                        <div class="row">                     
+                            <div class="form-group col-sm-3">
                                 <label for="year">Track</label>
                                 <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
                                     <option v-for="item in shs_programs" value="item.strProgramCode">{{ item.strProgramCode }}</option>                                    
                                 </select>
                             </div>   
-                        <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
                                 <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
