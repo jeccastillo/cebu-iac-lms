@@ -28,7 +28,7 @@
             "aoColumnDefs":[      
                 <?php if($user['special_role'] >= 1): ?>
                 {
-                    "aTargets":[8],
+                    "aTargets":[7],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/payee/'+row[0]+'">Edit Payee</a> | <a href="<?php echo base_url(); ?>finance/ns_transactions/'+row[0]+'">Payments</a>'; }
@@ -37,6 +37,12 @@
                 {
                     "aTargets":[0],
                     "bVisible": false 
+                },
+                {
+                    "aTargets":[1],
+                    "mData": null,
+                    "bSortable":false,
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>finance/payee/'+row[0]+'">'+row[1]+'</a>'; }
                 },
             ],
             "aaSorting": [[3,'asc']],
