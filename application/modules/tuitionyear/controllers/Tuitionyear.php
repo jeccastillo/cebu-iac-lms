@@ -120,7 +120,11 @@ class Tuitionyear extends CI_Controller {
 
     public function delete_type(){
         $post = $this->input->post();
-        $this->data_poster->deleteItem('tb_mas_tuition_year_'.$post['type'],$post['id'],'intID');
+        if($post['type'] != "track")
+            $this->data_poster->deleteItem('tb_mas_tuition_year_'.$post['type'],$post['id'],'intID');
+        else
+            $this->data_poster->deleteItem('tb_mas_tuition_year_'.$post['type'],$post['id'],'id');
+        
         $this->data_poster->log_action('Tuition Year '.$post['type'],'Deleted Tuition'.$post['type'].' : '.$post['id'],'red');
 
         $data['success'] = true;

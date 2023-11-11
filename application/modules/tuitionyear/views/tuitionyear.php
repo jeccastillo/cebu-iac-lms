@@ -413,7 +413,7 @@ new Vue({
         },
         deleteItem: function(type,miscId){
             Swal.fire({
-                title: 'Delete Miscellaneous',
+                title: 'Delete Item',
                 text: "Continue deleting entry?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
