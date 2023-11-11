@@ -81,7 +81,7 @@ class Tuitionyear extends CI_Controller {
         $this->data['page'] = "tuitionyear";
         $this->data['opentree'] = "finance_admin";
         $this->data['defaultYear'] = $this->data_fetcher->getDefaultTuitionYearID();
-        $this->data['formAction'] = base_url()."tuitionyear/submit_form";
+        $this->data['formAction'] = base_url()."tuitionyear/submit_form";    
         $this->load->view("common/header",$this->data);
         $this->load->view("tuitionyear",$this->data);
         $this->load->view("common/footer",$this->data);                                  
@@ -90,9 +90,19 @@ class Tuitionyear extends CI_Controller {
 
     public function tuition_info($id){
 
-        $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
-        $data['data']['misc'] = $this->data_fetcher->getTuitionExtra('misc',$id);
-        $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
+        if($id != 0){
+            $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
+            $data['data']['misc'] = $this->data_fetcher->getTuitionExtra('misc',$id);
+            $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
+        }
+        else{
+            $data['data'] = [];
+            $data['data']['misc'] = [];
+            $data['data']['lab_fees'] = [];
+        }
+
+        $data['shs_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'shs'))->result_array();
+
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
         echo json_encode($data);

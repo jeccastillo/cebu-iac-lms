@@ -264,19 +264,19 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
-        if(this.id != 0){
+       
         
-            this.header_title = 'Edit Tuition Year';
-            //this.loader_spinner = true;
-            axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
-                .then((data) => {                    
-                    this.request = data.data.data;                    
-                    //this.loader_spinner = false;
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        }
+        this.header_title = 'Edit Tuition Year';
+        //this.loader_spinner = true;
+        axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
+            .then((data) => {                    
+                this.request = data.data.data;                    
+                //this.loader_spinner = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+       
 
     },
 
