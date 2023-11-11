@@ -94,6 +94,7 @@ class Tuitionyear extends CI_Controller {
             $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
             $data['data']['misc'] = $this->data_fetcher->getTuitionExtra('misc',$id);
             $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
+            $data['data']['track'] = $this->data_fetcher->getTuitionTrack($id);
         }
         else{
             $data['data'] = [];

@@ -68,6 +68,68 @@
                         </div>
                     </form>
                     <hr />
+                    <h3>Tuition per Track (FOR SHS ONLY)</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Track</th>
+                                <th>Regular</th>
+                                <th>Online</th>
+                                <th>Hyflex</th>
+                                <th>Hybrid</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in request.track">
+                                <td>{{ item.strProgramCode + ' ' + item.strProgramDescription }}</td>
+                                <td>{{ item.tuition_amount }}</td>
+                                <td>{{ item.tuition_amount_online }}</td>
+                                <td>{{ item.tuition_amount_hyflex }}</td>
+                                <td>{{ item.tuition_amount_hybrid }}</td>
+                                <td>{{ item.type }}</td>
+                                <td><a href="#" @click.prevent.stop="deleteItem('track',item.id)">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <hr />
+                    <p>Add new Tuition for Track</p>
+                    <form @submit.prevent="addExtra('track','Track',track)">    
+                    <div class="form-group col-sm-3">
+                                <label for="year">Track</label>
+                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
+                                    <option v-for="item in shs_programs" value="item.strProgramCode">{{ item.strProgramCode }}</option>                                    
+                                </select>
+                            </div>   
+                        <div class="row">                     
+                            <div class="form-group col-sm-3">
+                                <label for="year">Regular Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Online Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_online'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hyflex Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hyflex'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hybrid Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hybrid'>
+                            </div>                                                                                                
+                        </div>
+                        
+                        <div class="row">    
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <hr />
                     <h3>Miscellaneous Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -93,6 +155,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    
                     <hr />
                     <p>Add new Miscellaneous Item</p>
                     <form @submit.prevent="addExtra('misc','Miscellaneous',misc)">    
@@ -247,6 +310,13 @@ new Vue({
             miscHyflex: undefined,  
             type: 'regular',    
         },
+        track: {
+            track_id: undefined,
+            tuition_amount: undefined,            
+            tuition_amount_hybrid: undefined,
+            tuition_amount_online: undefined,
+            tuition_amount_hyflex: undefined,                 
+        },
         lab: {
             name: undefined,
             labRegular: undefined,
@@ -301,7 +371,11 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append("tuitionYearID",this.id);                    
+                    if(type != "track")
+                        formdata.append("tuitionYearID",this.id);                    
+                    else
+                        formdata.append("tuitionyear_id",this.id);                    
+
                     for(const [key,value] of Object.entries(data)){                   
                         formdata.append(key,value);
                     }
