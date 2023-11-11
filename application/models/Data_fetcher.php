@@ -2207,6 +2207,7 @@ class Data_fetcher extends CI_Model {
                         ->from('tb_mas_tuition_year_track')
                         ->join('tb_mas_programs', 'tb_mas_programs.intProgramID = tb_mas_tuition_year_track.track_id')
                         ->where(array('tuitionyear_id'=>$id))
+                        ->get()
                         ->result_array();
     }
 
