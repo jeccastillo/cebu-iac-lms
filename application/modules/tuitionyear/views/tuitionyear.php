@@ -289,6 +289,7 @@ new Vue({
     data: {
         id: <?php echo $this->uri->segment('3'); ?>,
         header_title: 'Add Tuition Year',
+        shs_programs: [],
         request: {
             year: undefined,
             pricePerUnit: undefined,            
@@ -340,7 +341,8 @@ new Vue({
         //this.loader_spinner = true;
         axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
             .then((data) => {                    
-                this.request = data.data.data;                    
+                this.request = data.data.data;    
+                this.shs_programs = data.data.shs_programs;                
                 //this.loader_spinner = false;
             })
             .catch((error) => {
