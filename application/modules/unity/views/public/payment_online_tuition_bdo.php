@@ -29,7 +29,8 @@
             vertical-align: top;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.7.min.js"></script>    
+    <script src="https://code.jquery.com/jquery-1.7.min.js"></script>  
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>  
 </head>
 <body>
 <form id="payment_form" action="payment_confirmation.php" method="post">
@@ -45,7 +46,7 @@
         <div id="paymentDetailsSection" class="section">
             <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
             <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
-            <span>amount:</span><input type="text" name="amount" size="25"><br/>
+            <span>amount:</span><input type="hidden" name="amount"><br/>
             <span>currency:</span><input type="text" name="currency" size="25"><br/>
         </div>
     </fieldset>
@@ -59,8 +60,15 @@
             'url':'<?php echo base_url(); ?>unity/online_payment_data/<?php echo $id ?>/<?php echo $sem; ?>',
             'method':'get',            
             'dataType':'json',
-            'success':function(data){
-                console.log(data.data);
+            'success':function(data){          
+                $.ajax({
+                    'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
+                    'method':'get',            
+                    'dataType':'json',
+                    'success':function(data){
+                        console.log(data.data);
+                    }
+                });
             }
         });
     });
