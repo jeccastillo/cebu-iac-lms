@@ -663,7 +663,10 @@ class Unity extends CI_Controller {
         $data['sem'] = $active_sem['intID'];
         $data['id'] = $student['intID'];
         $data['slug'] = $id;
+        
+        $this->load->view("public/header",$this->data);
         $this->load->view("public/payment_online_tuition_bdo",$data);
+        $this->load->view("public/footer",$this->data); 
         
     }  
     
