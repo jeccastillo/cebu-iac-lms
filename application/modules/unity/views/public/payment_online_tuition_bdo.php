@@ -57,6 +57,24 @@
     var payments = [];
     var remaining_amount = 0;
     var amount_paid = 0;
+    var reservation_payment = 0;
+    var application_payment = 0;
+    var remaining_amount_formatted = 0;
+    var amount_paid_formatted = 0;
+    var tuition_data = {};
+    var registration = {};
+    var student = {};
+    var slug = undefined;
+    var registration_status = undefined;
+    var reg_status = undefined;
+    var payment_type = undefined;
+    var payments = [];
+    var tuition = 0;
+    var has_down = false;
+    var item_details = {
+        price: 0,
+        hey: this.desc
+    };
 
     $(function () {
         payment_form = $('form').attr('id');
@@ -65,28 +83,81 @@
             'url':'<?php echo base_url(); ?>unity/online_payment_data/<?php echo $id ?>/<?php echo $sem; ?>',
             'method':'get',            
             'dataType':'json',
-            'success':function(data){ 
-                if(data.success){         
+            'success':function(data){                 
+                if(data.success){     
+                    payments = data.data;
+                    tuition_data = data.tuition_data;
+                    registration = data.registration;            
+                    registration_status = data.registration.intROG;
+                    reg_status = data.reg_status;
+                    student = data.student;         
+                    slug = student.slug;                           
+                    advanced_privilages = data.advanced_privilages;       
+                    tuition = data.tuition;
+                    payment_type = registration.paymentType;
+                    remaining_amount = data.tuition_data.total;
+                    if(payment_type == "partial")                       
+                        remaining_amount = data.tuition_data.total_installment;
+
                     $.ajax({
                         'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
                         'method':'get',            
                         'dataType':'json',
-                        'success':function(data){
-                            var payments = data.data;
+                        'success':function(data){                            
                             for(i in payments){
                                 if(payments[i].status == "Paid"){                              
                                     remaining_amount = remaining_amount - payments[i].subtotal_order;
                                     amount_paid = amount_paid + payments[i].subtotal_order;                                    
                                 }
-                            }      
-                            
-                            $("#amount").val(remaining_amount);
+                            }                                                              
 
                             $.ajax({
                                 'url':api_url + 'finance/reservation/<?php echo $slug ?>/<?php echo $sem; ?>',
                                 'method':'get',            
                                 'dataType':'json',
-                                'success':function(data){                      
+                                'success':function(data){   
+                                    reservation_payment = data.data;    
+                                    application_payment = data.application;
+                                    
+                                    if(reservation_payment.status == "Paid" && data.student_sy == <?php echo $sem; ?>){
+                                            remaining_amount = remaining_amount - reservation_payment.subtotal_order;                                                                                            
+                                            amount_paid = amount_paid + reservation_payment.subtotal_order;                                        
+                                    }                                
+                                    remaining_amount = (remaining_amount < 0.02) ? 0 : remaining_amount;
+                                    remaining_amount = Math.round(remaining_amount * 100) / 100;
+                                    remaining_amount_formatted = remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    amount_paid_formatted = amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
+                                    item_details.price = remaining_amount;                                                                          
+
+                                    let down_payment = (tuition_data.down_payment <= amount_paid) ? 0 : ( tuition_data.down_payment - amount_paid );
+                                    
+                                    if(registration.downpayment == 1 || down_payment == 0){
+                                        has_down = true;
+                                        
+                                        //installment amounts                                                                    
+                                        var temp = (tuition_data.installment_fee * 5) - parseFloat(remaining_amount);
+                                        
+                                        for(i=0; i < 5; i++){
+                                            if(tuition_data.installment_fee > temp){
+                                                val = this.tuition_data.installment_fee - temp;                                            
+                                                item_details.price = val;
+                                                break;
+                                            }     
+                                            else{
+                                                temp = temp - tuition_data.installment_fee;
+                                            }                                                                       
+                                        }
+                                        
+                                        
+                                    }
+                                    else if(payment_type == "partial"){
+                                        
+                                        item_details.price = down_payment;
+                                    }                            
+                                    else{
+                                        
+                                        item_details.price = remaining_amount;
+                                    }                         
                                     $.ajax({
                                     'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
                                     'method':'get',            
@@ -96,7 +167,8 @@
                                             'url':api_url + 'admissions/student-info/<?php echo $slug ?>',
                                             'method':'get',            
                                             'dataType':'json',
-                                            'success':function(data){                                                
+                                            'success':function(data){ 
+                                                $("#amount").val(remaining_amount);                                               
                                             }
                                         });
                                     }
