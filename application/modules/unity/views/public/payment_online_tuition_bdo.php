@@ -1,7 +1,34 @@
 <html>
 <head>
     <title>Secure Acceptance - Payment Form</title>
-    <link rel="stylesheet" type="text/css" href="payment.css"/>
+    <style>
+        a {
+            font-size: 1.0em;
+            text-decoration: none;
+        }
+
+        input[type=submit] {
+            margin-top: 10px;
+        }
+
+        span {
+            font-weight: bold;
+            width: 350px;
+            display: inline-block;
+        }
+
+        .fieldName {
+            width: 400px;
+            font-weight: bold;
+            vertical-align: top;
+        }
+
+        .fieldValue {
+            width: 400px;
+            font-weight: normal;
+            vertical-align: top;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-1.7.min.js"></script>    
 </head>
 <body>
