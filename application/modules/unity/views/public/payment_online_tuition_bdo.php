@@ -26,98 +26,29 @@
                     <div class="tab-pane active" id="tab1">    
                         <div class="box box-solid">
                             <div class="box-header">
-                                <h4 class="box-title">PAY ONLINE</h4>
+                                <h4 class="box-title">BDO PAY</h4>
                             </div>
                             <div class="box-body">                                   
                                 <hr />
-                                <form @submit.prevent="submitPayment">                                                                                               
-                                    <!-- <div class="form-group">
-                                        <label>Select Payment Type</label>
-                                        <select @change="selectDescription" class="form-control" v-model="payment_type">
-                                            <option value="Tuition Full">Tuition Full</option>
-                                            <option v-if="has_down" value="Tuition Partial">Tuition Partial</option>
-                                            <option v-else value="Tuition Down Payment">Tuition Down Payment</option>
-                                                                            
-                                        </select>
-                                    </div>     
-                                                                                                -->
-                                    <input type="hidden" value="Tuition Fee" v-model="desc" />                                                                                            
-                                    <div>
-                                        <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
-                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                            <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
-                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                                style="display:flex; align-itenms:center;">
-                                                <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
-                                            </div>
+                                <form id="payment_form" action="payment_confirmation.php" method="post">
+                                    <input type="hidden" name="access_key" value="<REPLACE WITH ACCESS KEY>">
+                                    <input type="hidden" name="profile_id" value="<REPLACE WITH PROFILE ID>">
+                                    <input type="hidden" name="transaction_uuid" value="<?php echo uniqid() ?>">
+                                    <input type="hidden" name="signed_field_names" value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency">
+                                    <input type="hidden" name="unsigned_field_names">
+                                    <input type="hidden" name="signed_date_time" value="<?php echo gmdate("Y-m-d\TH:i:s\Z"); ?>">
+                                    <input type="hidden" name="locale" value="en">
+                                    <fieldset>
+                                        <legend>Payment Details</legend>
+                                        <div id="paymentDetailsSection" class="section">
+                                            <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
+                                            <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
+                                            <span>amount:</span><input type="text" name="amount" size="25"><br/>
+                                            <span>currency:</span><input type="text" name="currency" size="25"><br/>
                                         </div>
-
-                                        <hr>
-                                        <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
-                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                            <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
-                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                                style="display:flex; align-itenms:center;">
-                                                <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
-                                            </div>
-                                        </div>                
-
-                                        <hr>
-
-                                        <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                                            <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
-
-                                            <table class="table" style="width:100%">
-                                                <tbody>
-                                                    <tr v-if="item">
-                                                        <td> {{ desc }}
-                                                        </td>
-                                                        <td>₱ {{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>Gateway Fee <span class="font-weight-bold"
-                                                                v-if="selected_mode_of_payment.type == 'percentage'">(
-                                                                {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                                                Php
-                                                                25.00 whichever is higher )</span> </td>
-                                                        <td v-if="selected_mode_of_payment">
-                                                            <span>
-                                                                ₱ {{ new_charge.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                                                class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                                            <span class="font-weight-bold">₱
-                                                                {{ total_price_cart_with_charge_es }}</span>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <div class="text-right mt-3">
-                                                <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
-                                                <div v-else>
-                                                    <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                                        class="btn btn-primary"
-                                                        name="button">Submit 
-                                                    </button>
-                                                    <button type="button" disabled v-else
-                                                        class="btn btn-default"
-                                                        name="button">Submit</button>
-                                                    <button type="button" onclick="window.history.back()"
-                                                        class="btn btn-default"
-                                                        name="button">Cancel</button>
-                                                    <a :href="redirect_link" style="opacity:0" 
-                                                        id="payment_link">{{ redirect_link }}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    </fieldset>
+                                    <input type="submit" id="submit" name="submit" value="Submit"/>                                    
+                                </form>
                                 </div>
                             </div>
                         </div>
