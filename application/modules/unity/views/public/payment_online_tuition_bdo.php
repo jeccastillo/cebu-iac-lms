@@ -43,8 +43,7 @@
                                         <div id="paymentDetailsSection" class="section">
                                             <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
                                             <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
-                                            <span>amount:</span>{{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}<input type="hidden" v-model="item_details.price" name="amount" size="25"><br/>
-                                            <span>currency:</span><input type="text" name="currency" size="25"><br/>
+                                            <span>amount:</span>{{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}<input type="hidden" v-model="item_details.price" name="amount" size="25"><br/>                                            
                                         </div>
                                     </fieldset>
                                     <input type="submit" id="submit" name="submit" value="Submit"/>                                    
@@ -202,6 +201,7 @@ new Vue({
         },
         item_details: {
             price: 0,
+            currency: 'PHP'
             hey: this.desc
         },                                             
         registration: {},
