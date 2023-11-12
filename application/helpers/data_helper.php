@@ -70,6 +70,9 @@ if (!function_exists('getUnitPrice')) {
             case 'hybrid':
                 $ret = $ty['pricePerUnitHybrid'];
                 break;
+            default:
+                $ret = $ty['pricePerUnit'];
+
         }
         return $ret;
     }
@@ -89,6 +92,8 @@ if (!function_exists('getExtraFee')) {
             case 'hybrid':
                 $ret = $entry[$pretext.'Hybrid'];
                 break;
+            default:
+                $ret = $entry[$pretext.'Regular'];
         }
         return $ret;
     }

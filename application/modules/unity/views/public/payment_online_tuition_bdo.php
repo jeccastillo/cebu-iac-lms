@@ -59,8 +59,8 @@
             'url':'<?php echo base_url(); ?>unity/online_payment_data/<?php echo $id ?>/<?php echo $sem; ?>',
             'method':'get',            
             'dataType':'json',
-            'success':function(ret){
-                console.log(ret.data);
+            'success':function(data){
+                console.log(data.data);
             }
         });
     });
