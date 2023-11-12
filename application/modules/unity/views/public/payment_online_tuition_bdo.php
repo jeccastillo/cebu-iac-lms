@@ -46,7 +46,7 @@
         <div id="paymentDetailsSection" class="section">
             <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
             <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
-            <span>amount:</span><input type="hidden" id="amount" name="amount"><br/>
+            <span>amount:</span><span id="amount_text"></span><input type="hidden" id="amount" name="amount"><br/>
             <span>currency:</span><input type="text" name="currency" size="25"><br/>
         </div>
     </fieldset>
@@ -75,6 +75,7 @@
         price: 0,
         hey: this.desc
     };
+    var student_api_data = {};
 
     $(function () {
         payment_form = $('form').attr('id');
@@ -168,7 +169,9 @@
                                             'method':'get',            
                                             'dataType':'json',
                                             'success':function(data){ 
-                                                $("#amount").val(remaining_amount);                                               
+                                                student_api_data = data.data;
+                                                $("#amount").val(remaining_amount);  
+                                                $("#amount_text").val(remaining_amount_formatted);
                                             }
                                         });
                                     }
