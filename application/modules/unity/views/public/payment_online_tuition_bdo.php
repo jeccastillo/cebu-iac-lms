@@ -201,7 +201,7 @@ new Vue({
         },
         item_details: {
             price: 0,
-            currency: 'PHP'
+            currency: 'PHP',
             hey: this.desc
         },                                             
         registration: {},
