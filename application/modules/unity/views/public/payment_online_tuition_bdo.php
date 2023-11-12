@@ -63,7 +63,7 @@
             'data':data,
             'dataType':'json',
             'success':function(data){
-                echo json_encode(data.data);
+                console.log(data.data);
             }
         });
     });
