@@ -49,8 +49,7 @@
             <span>currency:</span><input type="text" name="currency" size="25"><br/>
         </div>
     </fieldset>
-    <input type="submit" id="submit" name="submit" value="Submit"/>
-    <script type="text/javascript" src="payment_form.js"></script>
+    <input type="submit" id="submit" name="submit" value="Submit"/>    
 </form>
 <script type="text/javascript">
     $(function () {
