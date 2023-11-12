@@ -282,7 +282,7 @@ new Vue({
             axios.get(this.base_url + 'unity/online_payment_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){                                                                                           
-                        this.registration = data.data.registration;            
+                        this.registration = data.data.registration;                                    
                         this.registration_status = data.data.registration.intROG;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;         
