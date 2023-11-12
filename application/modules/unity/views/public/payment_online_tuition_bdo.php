@@ -171,7 +171,7 @@
                                             'success':function(data){ 
                                                 student_api_data = data.data;
                                                 $("#amount").val(remaining_amount);  
-                                                $("#amount_text").val(remaining_amount_formatted);
+                                                $("#amount_text").html(remaining_amount_formatted);
                                             }
                                         });
                                     }
