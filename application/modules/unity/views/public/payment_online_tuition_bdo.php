@@ -61,7 +61,7 @@
             'method':'get',            
             'dataType':'json',
             'success':function(data){ 
-                if(data.data.success){         
+                if(data.success){         
                     $.ajax({
                         'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
                         'method':'get',            
