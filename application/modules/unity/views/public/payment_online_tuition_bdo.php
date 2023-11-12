@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Secure Acceptance - Payment Form</title>
     <style>
@@ -53,7 +52,6 @@
     <input type="submit" id="submit" name="submit" value="Submit"/>
     <script type="text/javascript" src="payment_form.js"></script>
 </form>
-</body>
 <script type="text/javascript">
     $(function () {
         payment_form = $('form').attr('id');
@@ -233,4 +231,5 @@
 
 
 </script>
+</body>
 </html>
