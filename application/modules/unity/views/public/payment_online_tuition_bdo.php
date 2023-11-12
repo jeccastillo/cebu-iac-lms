@@ -46,13 +46,18 @@
         <div id="paymentDetailsSection" class="section">
             <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
             <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
-            <span>amount:</span><input type="hidden" name="amount"><br/>
+            <span>amount:</span><input type="hidden" id="amount" name="amount"><br/>
             <span>currency:</span><input type="text" name="currency" size="25"><br/>
         </div>
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Submit"/>    
 </form>
-<script type="text/javascript">
+<script type="text/javascript">    
+    
+    var payments = [];
+    var remaining_amount = 0;
+    var amount_paid = 0;
+
     $(function () {
         payment_form = $('form').attr('id');
         addLinkToSetDefaults();
@@ -67,7 +72,37 @@
                         'method':'get',            
                         'dataType':'json',
                         'success':function(data){
-                            console.log(data.data);
+                            var payments = data.data;
+                            for(i in payments){
+                                if(payments[i].status == "Paid"){                              
+                                    remaining_amount = remaining_amount - payments[i].subtotal_order;
+                                    amount_paid = amount_paid + payments[i].subtotal_order;                                    
+                                }
+                            }      
+                            
+                            $("#amount").val(remaining_amount);
+
+                            $.ajax({
+                                'url':api_url + 'finance/reservation/<?php echo $slug ?>/<?php echo $sem; ?>',
+                                'method':'get',            
+                                'dataType':'json',
+                                'success':function(data){                      
+                                    $.ajax({
+                                    'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
+                                    'method':'get',            
+                                    'dataType':'json',
+                                    'success':function(data){
+                                        $.ajax({
+                                            'url':api_url + 'admissions/student-info/<?php echo $slug ?>',
+                                            'method':'get',            
+                                            'dataType':'json',
+                                            'success':function(data){                                                
+                                            }
+                                        });
+                                    }
+                                });
+                                }
+                            });
                         }
                     });
                 }
