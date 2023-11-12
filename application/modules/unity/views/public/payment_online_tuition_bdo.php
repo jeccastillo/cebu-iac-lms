@@ -60,15 +60,17 @@
             'url':'<?php echo base_url(); ?>unity/online_payment_data/<?php echo $id ?>/<?php echo $sem; ?>',
             'method':'get',            
             'dataType':'json',
-            'success':function(data){          
-                $.ajax({
-                    'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
-                    'method':'get',            
-                    'dataType':'json',
-                    'success':function(data){
-                        console.log(data.data);
-                    }
-                });
+            'success':function(data){ 
+                if(data.data.success){         
+                    $.ajax({
+                        'url':api_url + 'finance/transactions/<?php echo $slug ?>/<?php echo $sem; ?>',
+                        'method':'get',            
+                        'dataType':'json',
+                        'success':function(data){
+                            console.log(data.data);
+                        }
+                    });
+                }
             }
         });
     });
