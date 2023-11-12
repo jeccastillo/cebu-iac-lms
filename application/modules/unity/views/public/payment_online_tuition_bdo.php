@@ -48,8 +48,7 @@
                                         </div>
                                     </fieldset>
                                     <input type="submit" id="submit" name="submit" value="Submit"/>                                    
-                                </form>
-                                </div>
+                                </form>                            
                             </div>
                         </div>
                     </div>
