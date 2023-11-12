@@ -645,7 +645,7 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($id, 'slug');            
         $data['selected_ay'] = $active_sem['intID'];
         $data['id'] = $student['intID'];
-        $data['slug'] = $id;
+        
 
         $this->load->view("public/header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
@@ -662,7 +662,7 @@ class Unity extends CI_Controller {
         $student = $this->data_fetcher->getStudent($id, 'slug');            
         $data['sem'] = $active_sem['intID'];
         $data['id'] = $student['intID'];
-
+        $data['slug'] = $id;
         $this->load->view("public/payment_online_tuition_bdo",$data);
         
     }  
