@@ -91,6 +91,7 @@ new Vue({
         enrolled: undefined,        
         programs: undefined,        
         all_enrolled: 0,
+        sy: [],
                       
     },
 
@@ -101,10 +102,11 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'registrar/enrollment_summary_data/')
                 .then((data) => {  
-                   this.enrolled = data.data.data;
-                   for(i in this.enrolled){
+                    this.sy = data.data.sy;
+                    this.enrolled = data.data.data;
+                    for(i in this.enrolled){
                         this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
-                   }
+                    }
                    
                 })
             .catch((error) => {
