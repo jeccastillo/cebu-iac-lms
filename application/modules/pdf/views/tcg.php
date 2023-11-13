@@ -198,10 +198,29 @@ foreach($credited_subjects as $record_credited){
             $html .='<table>';
             $html.=$table_header_page;
 
-        }
+        }        
     }
     $prev_school = $record_credited['other_data']['school'];
-
+    if($prev_school != $record_credited['other_data']['school']){
+        $html .= '
+        <tr>
+            <td style="font-size:8px;"></td>
+            <td style="font-size:8px;"></td>
+            <td style="font-size:8px;text-align:right;">Term GWA</td>
+            <td style="font-size:8px;text-align:center;">0.000</td>
+            <td style="font-size:8px;text-align:center;"></td>                        
+            <td style="font-size:8px;text-align:center;"></td>
+        </tr>
+        <tr>
+            <td style="font-size:8px;"></td>
+            <td style="font-size:8px;"></td>
+            <td style="font-size:8px;text-align:right;">Cumulative GWA</td>
+            <td style="font-size:8px;text-align:center;">0.000</td>
+            <td style="font-size:8px;text-align:center;"></td>                        
+            <td style="font-size:8px;text-align:center;"></td>
+        </tr>';
+        $page_footer_margin -= 30;
+    }
 }
 
 foreach($records as $record){
