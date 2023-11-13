@@ -217,6 +217,8 @@ foreach($credited_subjects as $record_credited){
         <td style="font-size:8px;text-align:center;"></td>                        
         <td style="font-size:8px;text-align:center;"></td>
     </tr>';
+    $ctr+=2;
+    $page_ctr+=2;
     $page_footer_margin -= 30;
     $prev_school = $record_credited['other_data']['school'];  
     
