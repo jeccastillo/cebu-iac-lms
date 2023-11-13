@@ -170,7 +170,7 @@ foreach($credited_subjects as $record_credited){
         </tr>            
         ';
 
-        if($page_ctr == 40){
+        if($page_ctr == 35){
                 
             $page++;
             $page_ctr = 0;
