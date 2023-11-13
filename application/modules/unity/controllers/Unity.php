@@ -1751,14 +1751,12 @@ class Unity extends CI_Controller {
                          ->result_array();
                 $subject['prereq'] = [];    
                 foreach($prereq_array as $prereq){
-                    if(!isset($prereq['program']) || $prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intID'])
+                    if($prereq['program'] == $this->data['item']['intID'])
                         $subject['prereq'][] =  $prereq;                
                 }       
     
                 $this->data['curriculum_subjects'][] = $subject;
-            }  
-
-            print_r($this->data['curriculum_subjects']);
+            }   
 
             
             $this->load->view("common/header",$this->data);
