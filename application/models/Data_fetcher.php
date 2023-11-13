@@ -2469,7 +2469,7 @@ class Data_fetcher extends CI_Model {
             }
         }
         if($hasInternship){
-            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'track_id' => 'internship'))
+            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
             ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($internship as $m){            
