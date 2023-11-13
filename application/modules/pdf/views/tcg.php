@@ -78,10 +78,7 @@
                             </tr>
                                                       
                         </table>
-                    </td>
-                    <td width="20%">
-                        <img src="'.$other_details['picture'].'" witdh="192px" height="192px" />
-                    </td>
+                    </td>                    
                 </tr>  
                 <tr>
                     <td style="line-height:5px;" colspan=2></td>         
