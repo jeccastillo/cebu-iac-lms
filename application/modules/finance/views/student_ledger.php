@@ -187,7 +187,8 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
-        ledger: [],        
+        ledger: [],       
+        term_balances: [], 
         other: [],
         finance: undefined, 
         student: {
@@ -244,9 +245,16 @@ new Vue({
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
-                                  
+                var current_sy_id = 0;
 
+                if(ledger_temp.length > 0)
+                    current_sy_id = ledger_temp[0].syid;
+
+                var term_balance = 0;
                 for(i in ledger_temp){
+                    if(ledger_temp[i].syid != current_sy_id){
+                        term_balance = 0;
+                    }
                     if(ledger_temp[i].is_disabled == 0){
                         this.running_balance += Number(ledger_temp[i].amount);                         
                         ledger_temp[i].muted = "";
@@ -258,6 +266,7 @@ new Vue({
                     ledger_temp[i]['balance'] =  this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     
                     this.ledger.push(ledger_temp[i]);
+                    current_sy_id = ledger_temp[i].syid;
                 }
                 this.running_balance = this.running_balance.toFixed(2);
 
