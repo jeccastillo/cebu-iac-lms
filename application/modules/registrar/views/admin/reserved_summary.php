@@ -99,7 +99,7 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',
-        current_sem: '<?php echo $active_sem['intID']; ?>',
+        current_sem: '<?php echo $sem; ?>',
         reserved: undefined,
         enrolled: undefined, 
         reservation: undefined,       
