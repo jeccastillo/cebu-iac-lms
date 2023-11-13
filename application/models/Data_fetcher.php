@@ -2436,7 +2436,30 @@ class Data_fetcher extends CI_Model {
             }
         }
         else{
-            $tuition = $unit_fee;
+            //$tuition = $unit_fee;
+            $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'type' => $student['intProgramID']))
+            ->get('tb_mas_tuition_year_track')->first_row('array');
+
+            if($shs_rate)
+                switch($class_type){
+                    case 'regular':
+                        $tuiton = $shs_rate['tuition_amount'];
+                    break;
+                    case 'online':
+                        $tuiton = $shs_rate['tuition_amount_online'];
+                    break;
+                    case 'hybrid':
+                        $tuiton = $shs_rate['tuition_amount_hybrid'];
+                    break;
+                    case 'hyflex':
+                        $tuiton = $shs_rate['tuition_amount_hyflex'];
+                    break;
+                    default:
+                        $tuiton = $shs_rate['tuition_amount'];
+                    
+                }
+
+
         }
 
         foreach($misc as $m){            
@@ -2446,7 +2469,7 @@ class Data_fetcher extends CI_Model {
             }
         }
         if($hasInternship){
-            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
+            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'track_id' => 'internship'))
             ->get('tb_mas_tuition_year_misc')->result_array();
 
             foreach($internship as $m){            
