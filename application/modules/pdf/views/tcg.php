@@ -57,27 +57,27 @@
                <br />
                 <table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                     <tr>                            
-                        <td width="14%"><font style="font-size: 8;">Name</font></td>
+                        <td width="14%"><font style="font-size: 9;">Name</font></td>
                         <td width="1%" style="text-align:center">:</td>
-                        <td width="60%"><font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
-                        <td width="9%"><font style="font-size: 8;">ID No</font></td>
+                        <td width="60%"><font style="font-size: 9;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
+                        <td width="9%"><font style="font-size: 9;">ID No</font></td>
                         <td width="1%" style="text-align:center">:</td>
-                        <td width="15%"><font style="font-size: 8;">'.$student['strStudentNumber'].'</font></td>                                                    
+                        <td width="15%"><font style="font-size: 9;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font></td>                                                    
                     </tr>
                     <tr>
                         <td style="line-height:1px;" colspan=2></td>         
                     </tr>
                     <tr>                            
-                        <td><font style="font-size: 8;">Program Persued</font></td>
+                        <td><font style="font-size: 9;">Program Persued</font></td>
                         <td style="text-align:center">:</td>
-                        <td><font style="font-size: 8;">'.trim($student['strProgramDescription']).'</font></td>                     
+                        <td><font style="font-size: 9;">'.trim($student['strProgramDescription']).'</font></td>                     
                         <td></td> 
                         <td></td> 
                         <td></td> 
                     </tr>
                                                 
                 </table>
-                   
+                <br />
           ';
 
        
