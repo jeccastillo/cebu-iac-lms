@@ -652,7 +652,7 @@ class Registrar extends CI_Controller {
         }
 
 
-
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
         $data['programs'] = $programs;
         $ret = [];        
@@ -779,8 +779,7 @@ class Registrar extends CI_Controller {
         else{
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
             $this->data['sem'] = $active_sem['intID'];
-        }
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        }        
         $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$this->data['sem'];
         $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$this->data['sem'];
 
