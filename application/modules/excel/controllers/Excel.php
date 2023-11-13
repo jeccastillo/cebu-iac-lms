@@ -1340,11 +1340,11 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A6', "LIST OF STUDENT GRADES");
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:K2');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:K3');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:K4');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:K5');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:K6');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:L2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:L3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:L4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:L5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:L6');
         $style = array(
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -1360,13 +1360,13 @@ class Excel extends CI_Controller {
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
             )
         );        
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:K2")->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:K5")->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:K2")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:K3")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:K4")->applyFromArray($style_right);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:K5")->applyFromArray($style);
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:K6")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:L2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:L5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:L2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:L3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:L4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:L5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:L6")->applyFromArray($style);
 
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
@@ -1388,9 +1388,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('F8', 'Room')
                     ->setCellValue('G8', 'Day')
                     ->setCellValue('H8', 'Time')
-                    ->setCellValue('I8', 'Grade')
-                    ->setCellValue('J8', 'Professor')
-                    ->setCellValue('K8', 'Date Enrolled');
+                    ->setCellValue('I8', 'Midterm Grade')
+                    ->setCellValue('J8', 'Final Grade')
+                    ->setCellValue('K8', 'Professor')
+                    ->setCellValue('L8', 'Date Enrolled');
                     
         $i = 9;
         $count = 1;
@@ -1413,9 +1414,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('F'.$i, $cl['sched_room'])
                     ->setCellValue('G'.$i, $cl['sched_day'])
                     ->setCellValue('H'.$i, $cl['sched_time'])
-                    ->setCellValue('I'.$i, $cl['v3'])
-                    ->setCellValue('J'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
-                    ->setCellValue('K'.$i, date("M j, Y",strtotime($student['dteRegistered'])));                                                                                                                                                
+                    ->setCellValue('I'.$i, $cl['v2'])
+                    ->setCellValue('J'.$i, $cl['v3'])
+                    ->setCellValue('K'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
+                    ->setCellValue('L'.$i, date("M j, Y",strtotime($student['dteRegistered'])));                                                                                                                                                
                     
             
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
@@ -1436,8 +1438,9 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);        
         
 
         // Rename worksheet
