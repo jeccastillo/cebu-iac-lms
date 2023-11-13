@@ -100,7 +100,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'registrar/enrollment_summary_data/')
+            axios.get(this.base_url + 'registrar/enrollment_summary_data/' + this.current_sem)
                 .then((data) => {  
                     this.sy = data.data.sy;
                     this.enrolled = data.data.data;
