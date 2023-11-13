@@ -53,8 +53,11 @@
            ';
     $header_page = '
                 <div style="text-align:center;font-size: 10;">OFFICE OF THE REGISTRAR<br /><strong>COPY OF GRADES</strong></div>                    
-               <br />
-               <br />
+                <table>
+                    <tr>
+                        <td style="line-height:15px;" colspan=6></td>         
+                    </tr>
+                </table>
                 <table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">                                
                     <tr>                            
                         <td width="14%"><font style="font-size: 9;">Name</font></td>
