@@ -23,6 +23,12 @@
     <div class="content">        
         <h4>Reserved</h4>
         <div>
+            <div class="form-group pull-right">
+                <label>Term Select</label>
+                <select v-model="current_sem" @change="changeTermSelected($event)" class="form-control" >
+                    <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
+                </select>   
+            </div>
             <table v-if="reserved" class="table table-bordered table-striped">
                 <tr>
                     <th>Program</th>
@@ -100,6 +106,7 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $sem; ?>',
+        sy: [],
         reserved: undefined,
         enrolled: undefined, 
         reservation: undefined,       
@@ -121,12 +128,13 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'registrar/enrollment_summary_data/')
                 .then((data) => {  
-                   this.enrolled = data.data.data;
-                   for(i in this.enrolled){
+                    this.sy = data.data.sy;
+                    this.enrolled = data.data.data;
+                    for(i in this.enrolled){
                         this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
-                   }                   
-                   this.programs = data.data.programs;
-                   axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem+'&campus=<?php echo $campus; ?>')
+                    }                   
+                    this.programs = data.data.programs;
+                    axios.get(api_url + 'admissions/applications/stats?current_sem='+this.current_sem+'&campus=<?php echo $campus; ?>')
                     .then((data) => {  
                         this.reserved = data.data;                         
                         for(i in this.reserved){       
@@ -176,7 +184,10 @@ new Vue({
                 this.$refs.pdfform.submit();
             else
                 this.$refs.excelform.submit();
-        }
+        },
+        changeTermSelected: function(event){
+            document.location = this.base_url + "registrar/reservation_summary/" + event.target.value;
+        }, 
                                        
     }
 
