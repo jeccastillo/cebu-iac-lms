@@ -224,7 +224,14 @@ foreach($credited_subjects as $record_credited){
     
 }
 
+$cummulative_gwa = 0.000;
+$total_grades_sum = 0;
+$total_units = 0;
 foreach($records as $record){
+    
+    $term_gwa = 0.000;
+    $grades_sum = 0;
+    $term_units = 0;
 
     $active_sem = $record['other_data']['term'];
     $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
@@ -241,15 +248,32 @@ foreach($records as $record){
         $page_footer_margin -= 15;
          
         foreach($record['records'] as $item){                
-        
+            
        
             if($item['intFinalized'] >= 2){
                 $ctr++;
                 $page_ctr++;
                 $page_footer_margin -= 15;
                 $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
-                if($item['include_gwa'])
+                if($item['include_gwa']){
                     $units = number_format($item['strUnits'],1);
+                    $term_units += $item['strUnits'];
+                    $total_units += $item['strUnits'];
+
+                    switch($item['floatFinalGrade']){
+                        case 'FA':
+                            $grade = 5;
+                        break;
+                        case 'UD':
+                            $grade = 5;                    
+                        break;
+                        default:
+                            $grade = $temp_rec['floatFinalGrade'];                    
+                    }                             
+                            
+                    $grades_sum += $grade * $item['strUnits'];
+                    $total_grades_sum += $grade * $item['strUnits'];
+                }
                 else{
                     $units = "(".number_format($item['strUnits'],1).")";
                     $units_earned = "(".$units_earned.")";
@@ -294,7 +318,33 @@ foreach($records as $record){
 
             }
             
-        }        
+        }
+        if($term_units > 0){
+            $term_gwa = $grades_sum/$term_units;
+            $term_gwa = number_format(round($term_gwa,3),3);
+        }
+        if($total_units > 0){
+            $cummulative_gwa = $total_grades_sum/$total_units;
+            $cummulative_gwa = number_format(round($cummulative_gwa,3),3);
+        }
+        $html .= '
+        <tr>
+            <td style="font-size:8px;"></td>
+            <td colspan=2 style="font-size:8px;text-align:right">Term GWA</td>
+            <td style="font-size:8px;text-align:center;">'.$term_gwa.'</td>
+            <td style="font-size:8px;text-align:center;"></td>                        
+            <td style="font-size:8px;text-align:center;"></td>
+        </tr>
+        <tr>
+            <td style="font-size:8px;"></td>
+            <td colspan=2 style="font-size:8px;text-align:right">Cumulative GWA</td>        
+            <td style="font-size:8px;text-align:center;">'.$cummulative_gwa.'</td>
+            <td style="font-size:8px;text-align:center;"></td>                        
+            <td style="font-size:8px;text-align:center;"></td>
+        </tr>';
+        $ctr+=2;
+        $page_ctr+=2;
+        $page_footer_margin -= 30;        
         
 }
 $html .= '<tr>
