@@ -1758,8 +1758,8 @@ class Unity extends CI_Controller {
                 $this->data['curriculum_subjects'][] = $subject;
             }  
 
-            print_r($subject['prereq']);
-            
+            print_r($this->data['curriculum_subjects']);
+
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_curriculum",$this->data);
