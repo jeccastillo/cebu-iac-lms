@@ -555,6 +555,7 @@ class Pdf extends CI_Controller {
             'student_id' => $post['student_id'],
             'remarks' => $post['remarks'],         
             'signatory_label' => $post['signatory_label'], 
+            'type' => $post['type'],
         );
 
         $this->db->insert('tb_mas_tor_generated',$rec);
@@ -644,7 +645,10 @@ class Pdf extends CI_Controller {
         $this->data['units_overall'] = $units_overall;        
         $this->data['student'] = $student;        
 
-        $html = $this->load->view("tor",$this->data);
+        if($post['type'] == 'tor')
+            $html = $this->load->view("tor",$this->data);
+        else
+            $html = $this->load->view("tor",$this->data);
     }
 
     public function reprint_tor($id){
@@ -689,6 +693,7 @@ class Pdf extends CI_Controller {
             'student_id' => $post['student_id'],
             'remarks' => $post['remarks'],         
             'signatory_label'=> $post['signatory_label'],
+            'type' => $post['type'],
         );
         $units_overall = 0;
         $gwa_overall = 0;
@@ -775,8 +780,14 @@ class Pdf extends CI_Controller {
         $this->data['units_overall'] = $units_overall;        
         $this->data['student'] = $student;        
 
-        $html = $this->load->view("tor",$this->data);
+        if($post['type'] == 'tor')
+            $html = $this->load->view("tor",$this->data);
+        else
+            $html = $this->load->view("tor",$this->data);
     }
+
+    
+
     public function student_grade_slip($id,$sem,$period = "midterm"){
                         
         $this->data['student'] = $this->data_fetcher->getStudent($id);

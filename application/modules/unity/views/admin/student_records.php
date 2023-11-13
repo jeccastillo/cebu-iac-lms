@@ -210,7 +210,7 @@
                     <div class="tab-pane" id="tab_4">
                         <div class="box box-success">
                             <div class="box-header">
-                                <h4>Transcripts Generated</h4>
+                                <h4>TOR/Copy of Grades Generated</h4>
                             </div>
                             <div class="box-body">
                                 <table class="table table-condensed table-bordered">
@@ -222,7 +222,8 @@
                                             <th>Verified By</th>                                            
                                             <th>Registrar/Signatory</th>
                                             <th>Signatory Label</th>
-                                            <th>Terms (ID)</th>                                      
+                                            <th>Terms (ID)</th>   
+                                            <th>Type</th>                                   
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -234,7 +235,8 @@
                                             <td>{{ item.verified_by  }}</td>
                                             <td>{{ item.registrar  }}</td>
                                             <td>{{ item.signatory_label ? item.signatory_label : 'Registrar' }}</td>
-                                            <td>{{ item.included_terms  }}</td>                                            
+                                            <td>{{ item.included_terms  }}</td>
+                                            <td>{{ item.type  }}</td>                                            
                                             <td><a :href="base_url +'pdf/reprint_tor/' + item.id +'?picture=' + tor.picture + '&admission_date=' + tor.admission_date" target="_blank" class="btn btn-success">Re-print</a></td>
                                         </tr>                                        
                                     </tbody>
@@ -316,7 +318,14 @@
                         <div class="form-group col-sm-6">
                             <label>Signatory (Leave blank for Registrar)</label>
                             <input name="signatory_label" v-model="tor.signatory_label" type="text" class="form-control">
-                        </div>                        
+                        </div>      
+                        <div class="form-group col-sm-6">
+                            <label>Type</label>
+                            <select name="included_terms[]" required multiple v-model="tor.type" class="form-control">
+                                <option value="tor">Transcript</option>
+                                <option value="copy of grades">Copy of Grades</option>
+                            </select>
+                        </div>                  
                         <div class="form-group col-sm-6">
                             <label>Included Terms</label>
                             <select name="included_terms[]" required multiple v-model="tor.included_terms" class="form-control">
@@ -452,6 +461,7 @@ new Vue({
             picture: undefined,            
             admission_date: undefined,
             signatory_label: undefined,
+            type: 'tor',
         },
         add_credits:{
             course_code: undefined,
