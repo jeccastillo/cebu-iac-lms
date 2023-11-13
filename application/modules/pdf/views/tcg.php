@@ -101,14 +101,9 @@
                 </tr>
                 <tr>
                     <td style="line-height:5px;" colspan=6></td>         
-                </tr>                       
+                </tr>                                                     
                 <tr>
-                    <td style="font-size:9px;">Note</td>
-                    <td colspan="5"><p style="font-size:8px;">This document is valid only when it bears the seal of the College and affixed with the original signature in ink. Any erasure or alteration made on this copy renders the whole document invalid.</p>      
-                    </td>                    
-                </tr>               
-                <tr>
-                    <td style="line-height:30px;" colspan=6></td>         
+                    <td style="line-height:50px;" colspan=6></td>         
                 </tr> 
                 <tr>
                     <td style="font-size:9px;"></td>
