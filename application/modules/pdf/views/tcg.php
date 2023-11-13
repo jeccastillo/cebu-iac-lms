@@ -319,14 +319,15 @@ foreach($records as $record){
             }
             
         }
-        if($term_units > 0){
-            $term_gwa = $grades_sum/$term_units;
-            $term_gwa = number_format(round($term_gwa,3),3);
-        }
-        if($total_units > 0){
+        if($term_units > 0)
+            $term_gwa = $grades_sum/$term_units;                
+        
+        $term_gwa = number_format(round($term_gwa,3),3);
+        
+        if($total_units > 0)
             $cummulative_gwa = $total_grades_sum/$total_units;
-            $cummulative_gwa = number_format(round($cummulative_gwa,3),3);
-        }
+                    
+        $cummulative_gwa = number_format(round($cummulative_gwa,3),3);
         $html .= '
         <tr>
             <td style="font-size:8px;"></td>
