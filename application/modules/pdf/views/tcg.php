@@ -147,27 +147,7 @@ $prev_school = "";
 $cred_ctr = 0;
 $sch_ctr = 0;
 foreach($credited_subjects as $record_credited){    
-    if($prev_school != $record_credited['other_data']['school']){
-        if($cred_ctr != 0){
-            $html .= '
-            <tr>
-                <td style="font-size:8px;"></td>
-                <td style="font-size:8px;"></td>
-                <td style="font-size:8px;text-align:right;">Term GWA</td>
-                <td style="font-size:8px;text-align:center;">0.000</td>
-                <td style="font-size:8px;text-align:center;"></td>                        
-                <td style="font-size:8px;text-align:center;"></td>
-            </tr>
-            <tr>
-                <td style="font-size:8px;"></td>
-                <td style="font-size:8px;"></td>
-                <td style="font-size:8px;text-align:right;">Cumulative GWA</td>
-                <td style="font-size:8px;text-align:center;">0.000</td>
-                <td style="font-size:8px;text-align:center;"></td>                        
-                <td style="font-size:8px;text-align:center;"></td>
-            </tr>';
-            $page_footer_margin -= 30;
-        }
+    if($prev_school != $record_credited['other_data']['school']){       
         $html .= '
             <tr>                                           
                 <td style="font-size:9px;" colspan="6"><b>'.$record_credited['other_data']['school'].'</b></td>
@@ -222,8 +202,24 @@ foreach($credited_subjects as $record_credited){
 
         }        
     }
+    $html .= '
+    <tr>
+        <td style="font-size:8px;"></td>
+        <td colspan=2 style="font-size:8px;text-align:right">Term GWA</td>
+        <td style="font-size:8px;text-align:center;">0.000</td>
+        <td style="font-size:8px;text-align:center;"></td>                        
+        <td style="font-size:8px;text-align:center;"></td>
+    </tr>
+    <tr>
+        <td style="font-size:8px;"></td>
+        <td colspan=2 style="font-size:8px;text-align:right">Cumulative GWA</td>        
+        <td style="font-size:8px;text-align:center;">0.000</td>
+        <td style="font-size:8px;text-align:center;"></td>                        
+        <td style="font-size:8px;text-align:center;"></td>
+    </tr>';
+    $page_footer_margin -= 30;
     $prev_school = $record_credited['other_data']['school'];  
-    $cred_ctr++;  
+    
 }
 
 foreach($records as $record){
