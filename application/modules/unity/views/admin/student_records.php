@@ -321,7 +321,7 @@
                         </div>      
                         <div class="form-group col-sm-6">
                             <label>Type</label>
-                            <select name="included_terms[]" required multiple v-model="tor.type" class="form-control">
+                            <select required v-model="tor.type" class="form-control">
                                 <option value="tor">Transcript</option>
                                 <option value="copy of grades">Copy of Grades</option>
                             </select>
