@@ -16,6 +16,12 @@
     <div class="content">                
         <h4>Officially Enrolled</h4>
         <div>
+            <div class="form-group pull-right">
+                <label>Term Select</label>
+                <select v-model="current_sem" @change="changeTermSelected($event)" class="form-control" >
+                    <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
+                </select>   
+            </div>
             <table v-if="enrolled" class="table table-bordered table-striped">
                 <tr>
                     <th>Program</th>
@@ -81,7 +87,7 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',
-        current_sem: '<?php echo $active_sem['intID']; ?>',        
+        current_sem: '<?php echo $sem; ?>',        
         enrolled: undefined,        
         programs: undefined,        
         all_enrolled: 0,
@@ -110,7 +116,9 @@ new Vue({
     },
 
     methods: {      
-       
+        changeTermSelected: function(event){
+            document.location = this.base_url + "registrar/enrollment_summary/" + event.target.value;
+        }, 
                                        
     }
 
