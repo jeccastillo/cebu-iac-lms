@@ -1760,6 +1760,7 @@ class Unity extends CI_Controller {
 
             print_r($subject['prereq']);
             
+            
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_curriculum",$this->data);
             $this->load->view("common/footer",$this->data); 
