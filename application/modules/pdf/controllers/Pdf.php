@@ -648,7 +648,7 @@ class Pdf extends CI_Controller {
         if($post['type'] == 'tor')
             $html = $this->load->view("tor",$this->data);
         else
-            $html = $this->load->view("tor",$this->data);
+            $html = $this->load->view("tcg",$this->data);
     }
 
     public function reprint_tor($id){
@@ -783,7 +783,7 @@ class Pdf extends CI_Controller {
         if($post['type'] == 'tor')
             $html = $this->load->view("tor",$this->data);
         else
-            $html = $this->load->view("tor",$this->data);
+            $html = $this->load->view("tcg",$this->data);
     }
 
     
