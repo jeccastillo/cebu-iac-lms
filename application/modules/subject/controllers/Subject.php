@@ -179,7 +179,8 @@ class Subject extends CI_Controller {
         $this->data['all_eq'] = $eq;
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/edit_prerequisites",$this->data);
-        $this->load->view("common/footer",$this->data);         
+        $this->load->view("common/footer",$this->data);   
+        $this->load->view("subject_validation_js",$this->data);      
         // print_r($this->data['classlists']);
                 
         
