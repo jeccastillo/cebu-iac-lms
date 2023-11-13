@@ -15,6 +15,7 @@
                 <h3 class="box-title">Edit Pre-requisites for <strong><?php echo $subject['strCode']." ".$subject['strDescription']; ?></strong></h3>
         </div>
         <div class="box-body">
+            <input type="hidden" name="intID"  id="intID" value="<?php echo $subject['intID']; ?>">
             <?php if($userlevel != 6): ?>
 
                 <h4>Select Prerequisites</h4>
