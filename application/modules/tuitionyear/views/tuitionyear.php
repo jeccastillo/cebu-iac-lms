@@ -51,14 +51,7 @@
                             <div class="form-group col-sm-6">
                                 <label for="year">Fixed Down Payment for Installment (if blank or set to 0 to choose percent down payment)</label>
                                 <input step="any" type="number" class="form-control" placeholder="Enter Fixed Value" v-model='request.installmentFixed'>
-                            </div>                                   
-                            <div v-if="id != 0 && default_year != id" class="form-group col-xs-6">
-                                <label for="isDefault">Default Tuition</label>
-                                <select v-model="request.isDefault" class="form-control" name="isDefault" id="isDefault" >
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>                       
+                            </div>                                                                                    
                         </div>
                         
                         <div class="row">    
@@ -325,7 +318,7 @@ new Vue({
             labOnline: undefined,
             labHyflex: undefined,      
         },
-        default_year: <?php echo $defaultYear; ?>,
+        default_year: 0,
         update_text: "Tuition Year",
         loader_spinner: true,                        
     },
