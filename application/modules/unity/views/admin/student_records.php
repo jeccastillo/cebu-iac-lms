@@ -288,7 +288,7 @@
                 <div class="modal-header">
                     <!-- modal header  -->
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Generate TOR</h4>
+                    <h4 class="modal-title">Generate Transcript/Copy of Grades</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -321,7 +321,7 @@
                         </div>      
                         <div class="form-group col-sm-6">
                             <label>Type</label>
-                            <select required v-model="tor.type" class="form-control">
+                            <select name="type" required v-model="tor.type" class="form-control">
                                 <option value="tor">Transcript</option>
                                 <option value="copy of grades">Copy of Grades</option>
                             </select>
@@ -519,8 +519,8 @@ new Vue({
     methods: {      
         printTOR: function(){   
             Swal.fire({
-                title: 'Generate TOR?',
-                text: "Continue genrating TOR?",
+                title: 'Generate Document?',
+                text: "Continue genrating "+this.tor.type+"?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
