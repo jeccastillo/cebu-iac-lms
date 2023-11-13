@@ -23,7 +23,7 @@
 
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetTitle("Enrollment Summary");
+    $pdf->SetTitle("Copy of Grades");
     
     // set margins
     $pdf->SetMargins(10, 10 , 10);
