@@ -232,8 +232,9 @@ class Finance extends CI_Controller {
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
                     ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
                     ->where($where_tuition)        
+                    ->order_by("strYearStart asc, enumSem asc")
                     ->get()
                     ->result_array();
 
