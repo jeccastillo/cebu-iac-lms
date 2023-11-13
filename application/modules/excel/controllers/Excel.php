@@ -1421,6 +1421,8 @@ class Excel extends CI_Controller {
                     
             
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
+                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
+                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
                     $count++;
                     $i++;
             }
