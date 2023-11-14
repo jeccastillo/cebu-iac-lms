@@ -2459,9 +2459,10 @@ class Data_fetcher extends CI_Model {
                     
                 }                
 
+                echo $tuiton;
         }
-        echo $tuition;
         
+
         foreach($misc as $m){            
             if($stype != 'new' || $m['name'] != 'ID Validation' ){
                 $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
