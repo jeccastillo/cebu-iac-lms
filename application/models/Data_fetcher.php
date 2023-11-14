@@ -2443,19 +2443,19 @@ class Data_fetcher extends CI_Model {
             if($shs_rate)
                 switch($class_type){
                     case 'regular':
-                        $tuiton = $shs_rate['tuition_amount'];
+                        $tuition = $shs_rate['tuition_amount'];
                     break;
                     case 'online':
-                        $tuiton = $shs_rate['tuition_amount_online'];
+                        $tuition = $shs_rate['tuition_amount_online'];
                     break;
                     case 'hybrid':
-                        $tuiton = $shs_rate['tuition_amount_hybrid'];
+                        $tuition = $shs_rate['tuition_amount_hybrid'];
                     break;
                     case 'hyflex':
-                        $tuiton = $shs_rate['tuition_amount_hyflex'];
+                        $tuition = $shs_rate['tuition_amount_hyflex'];
                     break;
                     default:
-                        $tuiton = $shs_rate['tuition_amount'];
+                        $tuition = $shs_rate['tuition_amount'];
                     
                 }                                 
                     
