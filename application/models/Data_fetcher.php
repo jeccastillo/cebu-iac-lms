@@ -2623,7 +2623,7 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        echo $tuiton;
+        
         $discount_grand_total = 0;
         $discount_installment_grand_total = 0;
         $total_discount = [];
@@ -2766,7 +2766,7 @@ class Data_fetcher extends CI_Model {
         }
 
             
-        
+        echo $tuiton;
     
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
