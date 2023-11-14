@@ -2764,9 +2764,7 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-
-            
-        echo $tuiton;
+                    
     
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
