@@ -2760,7 +2760,7 @@ class Data_fetcher extends CI_Model {
         }
 
         
-
+        echo $tuition;
         
     
         $data['lab_discount'] = $lab_scholarship;
@@ -2774,8 +2774,7 @@ class Data_fetcher extends CI_Model {
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition_discount_dc'] = $tuition_discount; 
-        $data['tuition'] = $tuition;
-        echo $data['tuition'];
+        $data['tuition'] = $tuition;        
         $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc_discount'] = $misc_scholarship;
