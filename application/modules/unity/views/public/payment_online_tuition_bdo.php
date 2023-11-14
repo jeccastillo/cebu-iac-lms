@@ -37,12 +37,12 @@
                                     <input type="hidden" name="signed_field_names" value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency">
                                     <input type="hidden" name="unsigned_field_names">
                                     <input type="hidden" name="signed_date_time" value="<?php echo gmdate("Y-m-d\TH:i:s\Z"); ?>">
+                                    <input type="hidden" value="sale" name="transaction_type" size="25"><br/><!-- set to sale -->
                                     <input type="hidden" name="locale" value="en">
                                     <fieldset>
                                         <legend>Payment Details</legend>
-                                        <div id="paymentDetailsSection" class="section">
-                                            <span>transaction_type:</span><input type="text" name="transaction_type" size="25"><br/>
-                                            <span>reference_number:</span><input type="text" name="reference_number" size="25"><br/>
+                                        <div id="paymentDetailsSection" class="section">                                            
+                                            <input type="text" name="reference_number" size="25"><br/><!-- Generate Reference Number -->
                                             <span>amount:</span>{{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}<input type="hidden" v-model="item_details.price" name="amount" size="25"><br/>                                            
                                         </div>
                                     </fieldset>
@@ -134,6 +134,27 @@
         </div>        
     </div>
 </div>
+<!---
+Additional Fields:
+
+bill_to_forename=Joe
+bill_to_surname=Smith
+bill_to_email=joesmith@example.com
+bill_to_address_line1=1 My Apartment
+bill_to_address_city=Mountain View
+bill_to_address_postal_code=94043
+bill_to_address_state=CA
+bill_to_address_country=US
+
+Required Fields:
+signature -> 
+
+Merchant-generated Base64
+signature. This is generated
+using the signing method for the
+access_key field supplied.
+
+-->
 
 <script src="https://code.jquery.com/jquery-1.7.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
