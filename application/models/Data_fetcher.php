@@ -2461,7 +2461,7 @@ class Data_fetcher extends CI_Model {
 
                 
         }
-        echo $tuiton;
+        
 
         foreach($misc as $m){            
             if($stype != 'new' || $m['name'] != 'ID Validation' ){
@@ -2469,6 +2469,7 @@ class Data_fetcher extends CI_Model {
                 $total_misc += $misc_list[$m['name']];
             }
         }
+        echo $tuiton;
         if($hasInternship){
             $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
             ->get('tb_mas_tuition_year_misc')->result_array();
