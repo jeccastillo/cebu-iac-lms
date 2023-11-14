@@ -2459,9 +2459,9 @@ class Data_fetcher extends CI_Model {
                     
                 }                
 
-                echo $tuiton;
+                
         }
-        
+        echo $tuiton;
 
         foreach($misc as $m){            
             if($stype != 'new' || $m['name'] != 'ID Validation' ){
