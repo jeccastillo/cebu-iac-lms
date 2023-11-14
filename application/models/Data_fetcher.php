@@ -2479,7 +2479,7 @@ class Data_fetcher extends CI_Model {
                 $total_internship_fee += $internship_fee_list[$m['name']];
             }                  
         }
-        echo $tuiton;
+        
         
         
         $scholarship_grand_total = 0;
@@ -2494,6 +2494,7 @@ class Data_fetcher extends CI_Model {
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
+        echo $tuiton;
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
