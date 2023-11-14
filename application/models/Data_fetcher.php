@@ -2440,7 +2440,7 @@ class Data_fetcher extends CI_Model {
             $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
             ->get('tb_mas_tuition_year_track')->first_row('array');
             
-            if($shs_rate)
+            if(!empty($shs_rate))
                 switch($class_type){
                     case 'regular':
                         $tuiton = $shs_rate['tuition_amount'];
