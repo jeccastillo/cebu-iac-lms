@@ -2457,8 +2457,8 @@ class Data_fetcher extends CI_Model {
                     default:
                         $tuiton = $shs_rate['tuition_amount'];
                     
-                }                
-                echo $tuition;                
+                }                                            
+                echo $shs_rate['tuition_amount'];    
         }
         
 
