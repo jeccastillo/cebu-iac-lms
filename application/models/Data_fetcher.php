@@ -2494,7 +2494,7 @@ class Data_fetcher extends CI_Model {
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
-        echo $tuiton;
+        
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
@@ -2623,7 +2623,7 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-
+        echo $tuiton;
         $discount_grand_total = 0;
         $discount_installment_grand_total = 0;
         $total_discount = [];
