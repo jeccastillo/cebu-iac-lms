@@ -43,7 +43,7 @@
                 
                 <div class="box-tools pull-right">
                     <select v-model="sem_student" @change="changeTermSelected" class="form-control" >
-                        <option v-for="s in sy" :value="s.intID">{{s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
+                        <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                     </select>                   
                 </div>
                 <div style="clear:both"></div>
