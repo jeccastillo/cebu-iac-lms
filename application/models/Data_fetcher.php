@@ -2457,8 +2457,7 @@ class Data_fetcher extends CI_Model {
                     default:
                         $tuiton = $shs_rate['tuition_amount'];
                     
-                }
-                echo $tuiton;
+                }                
 
         }
 
@@ -2776,6 +2775,7 @@ class Data_fetcher extends CI_Model {
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition_discount_dc'] = $tuition_discount; 
         $data['tuition'] = $tuition;
+        echo $data['tuition'];
         $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc_discount'] = $misc_scholarship;
