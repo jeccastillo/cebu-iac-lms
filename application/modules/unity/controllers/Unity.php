@@ -1237,13 +1237,7 @@ class Unity extends CI_Controller {
             $ret['balance'] = $this->data_fetcher->getStudentBalance($id);
             $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
             
-            if($sem!=null){
-                 $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
-            }
-            else
-            {
-                $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
-            }
+            
             
             $ret['change_grade'] = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode')
                                              ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
@@ -1253,7 +1247,7 @@ class Unity extends CI_Controller {
                                              ->get('tb_mas_student_grade_change')
                                              ->result_array();
 
-            $ret['selected_ay'] = $ret['active_sem']['intID'];
+            
             
         
             $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
@@ -1296,6 +1290,17 @@ class Unity extends CI_Controller {
             $ret['sy'] = $this->db
                               ->where('term_student_type',$student_type)
                               ->get('tb_mas_sy');
+
+            if($sem!=null){
+                $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
+            }
+            else
+            {
+                if($student_type == "college")
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
+                else
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
+            }
             
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
