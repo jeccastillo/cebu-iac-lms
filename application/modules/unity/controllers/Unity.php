@@ -1238,14 +1238,7 @@ class Unity extends CI_Controller {
             $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
             
             
-            
-            $ret['change_grade'] = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode')
-                                             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
-                                             ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
-                                             ->where(array('tb_mas_student_grade_change.student_id'=>$id,'strAcademicYear'=>$ret['active_sem']['intID']))
-                                             ->order_by('tb_mas_subjects.strCode','ASC')
-                                             ->get('tb_mas_student_grade_change')
-                                             ->result_array();
+                    
 
             
             
@@ -1276,9 +1269,7 @@ class Unity extends CI_Controller {
             $ret['deficiencies'] = $this->db
             ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
             
-            
-            $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
-            $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
+           
             
             
             $ret['student'] = $this->data_fetcher->getStudent($id); 
@@ -1302,6 +1293,18 @@ class Unity extends CI_Controller {
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
             }
             
+            $ret['change_grade'] = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode')
+                                             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
+                                             ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                                             ->where(array('tb_mas_student_grade_change.student_id'=>$id,'strAcademicYear'=>$ret['active_sem']['intID']))
+                                             ->order_by('tb_mas_subjects.strCode','ASC')
+                                             ->get('tb_mas_student_grade_change')
+                                             ->result_array();
+
+ 
+            $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+            $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);                                             
+
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
                                             ->join('tb_mas_student_discount','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')  
