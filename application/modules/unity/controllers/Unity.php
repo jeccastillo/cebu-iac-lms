@@ -1236,13 +1236,30 @@ class Unity extends CI_Controller {
             //$this->data['sy'] = $this->data_fetcher->getSemStudent($id);
             $ret['balance'] = $this->data_fetcher->getStudentBalance($id);
             $this->data['upload_errors'] = $this->session->flashdata('upload_errors');
+                                   
             
             
-                    
+            $ret['student'] = $this->data_fetcher->getStudent($id); 
+            
+            if(!$ret['student'])
+                $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
 
-            
-            
-        
+            $student_type = get_stype($ret['student']['level']);
+            $ret['sy'] = $this->db
+                              ->where('term_student_type',$student_type)
+                              ->get('tb_mas_sy');
+
+            if($sem!=null){
+                $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
+            }
+            else
+            {
+                if($student_type == "college")
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
+                else
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
+            }
+
             $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
             $sc_ret = [];
             foreach($records as $record)
@@ -1268,30 +1285,6 @@ class Unity extends CI_Controller {
 
             $ret['deficiencies'] = $this->db
             ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
-            
-           
-            
-            
-            $ret['student'] = $this->data_fetcher->getStudent($id); 
-            
-            if(!$ret['student'])
-                $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
-
-            $student_type = get_stype($ret['student']['level']);
-            $ret['sy'] = $this->db
-                              ->where('term_student_type',$student_type)
-                              ->get('tb_mas_sy');
-
-            if($sem!=null){
-                $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
-            }
-            else
-            {
-                if($student_type == "college")
-                    $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
-                else
-                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
-            }
             
             $ret['change_grade'] = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode')
                                              ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
