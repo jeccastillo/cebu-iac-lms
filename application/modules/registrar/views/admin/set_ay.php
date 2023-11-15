@@ -43,7 +43,7 @@
                     <label>Choose Sem to activate (SHS)</label>
                     <select class="form-control" name="currentshs">
                         <?php foreach($sy_shs as $s): ?>
-                            <option <?php echo ($current == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
+                            <option <?php echo ($current_shs == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -51,7 +51,7 @@
                     <label>Choose Default Sem for Application/Enrollment (SHS)</label>
                     <select class="form-control" name="applicationshs">
                         <?php foreach($sy_shs as $s): ?>
-                            <option <?php echo ($application == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
+                            <option <?php echo ($application_shs == $s['intID'])?'selected':''; ?>  value="<?php echo $s['intID'] ?>"><?php echo $s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd'];  ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

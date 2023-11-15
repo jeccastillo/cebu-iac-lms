@@ -1963,8 +1963,12 @@ class Registrar extends CI_Controller {
             $this->data['sy_shs'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'shs'))->result_array();
             $current = $this->data_fetcher->get_active_sem();
             $this->data['current'] = $current['intID'];
+            $current_shs = $this->data_fetcher->get_active_sem_shs();
+            $this->data['current_shs'] = $current_shs['intID'];
             $application = $this->data_fetcher->get_processing_sem();
             $this->data['application'] = $application['intID'];
+            $application_shs = $this->data_fetcher->get_processing_sem_shs();
+            $this->data['application_shs'] = $application_shs['intID'];
             $this->data['page'] = "set_ay";
             $this->data['opentree'] = "registrar";
             //print_r($this->data['classlist']);
