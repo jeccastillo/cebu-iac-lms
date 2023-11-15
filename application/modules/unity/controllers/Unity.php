@@ -1228,7 +1228,7 @@ class Unity extends CI_Controller {
         if($this->faculty_logged_in())
         {            
             $post = $this->input->post();
-            $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            
              
             if(!empty($post))
                $id = $post['studentID'];
@@ -1287,7 +1287,15 @@ class Unity extends CI_Controller {
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             
             
-            $ret['student'] = $this->data_fetcher->getStudent($id);            
+            $ret['student'] = $this->data_fetcher->getStudent($id); 
+            
+            if(!$ret['student'])
+                $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
+
+            $student_type = get_stype($ret['student']['level']);
+            $ret['sy'] = $this->db
+                              ->where('term_student_type',$student_type)
+                              ->get('tb_mas_sy');
             
             $ret['scholarship'] = $this->db->select('tb_mas_scholarships.*')
                                             ->where(array("student_id" => $ret['student']['intID'],"syid"=>$ret['selected_ay'],"deduction_type"=>"scholarship"))
@@ -1304,8 +1312,7 @@ class Unity extends CI_Controller {
                                             ->result_array();
             
 
-            if(!$ret['student'])
-                $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
+            
             //per faculty info			
             
             $ret['grades'] = $this->data_fetcher->assessCurriculumDept($ret['student']['intID'],$ret['student']['intCurriculumID']);
@@ -1535,8 +1542,16 @@ class Unity extends CI_Controller {
         }
         else
         {
-            $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+            $student = $this->data_fetcher->getStudent($id); 
             
+            if(!$student)
+                $student = $this->data_fetcher->getStudent($id, 'slug');
+
+            $student_type = get_stype($student['level']);    
+            if($student_type == "college")        
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+            else
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
         }
         
         if(!empty($post))
