@@ -60,7 +60,8 @@
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="intYearLevel">Default Curriculum</label>
-                        <select class="form-control" name="default_curriculum" id="default_curriculum">
+                        <select required class="form-control" name="default_curriculum" id="default_curriculum">
+                            <option value="">Select Curriculum</option>
                             <?php foreach ($curriculum as $cur): ?>
                             <option <?php echo ($item['default_curriculum'] == $cur['intID'])?'selected':''; ?>
                                 value="<?php echo $cur['intID']; ?>"><?php echo $cur['strName']; ?></option>
