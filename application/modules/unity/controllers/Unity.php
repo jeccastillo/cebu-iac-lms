@@ -1260,6 +1260,8 @@ class Unity extends CI_Controller {
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
             }
 
+            $ret['selected_ay'] = $ret['active_sem']['intID'];
+
             $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
             $sc_ret = [];
             foreach($records as $record)
