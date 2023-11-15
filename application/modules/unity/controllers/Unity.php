@@ -1247,7 +1247,8 @@ class Unity extends CI_Controller {
             $student_type = get_stype($ret['student']['level']);
             $ret['sy'] = $this->db
                               ->where('term_student_type',$student_type)
-                              ->get('tb_mas_sy');
+                              ->get('tb_mas_sy')
+                              ->result_array();
 
             if($sem!=null){
                 $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);                 
