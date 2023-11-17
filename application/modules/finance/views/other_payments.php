@@ -53,7 +53,8 @@
                                                 <option value="Refund from Supplier">Refund from Supplier</option>
                                                 <option value="Accounts Receivable Others">Accounts Receivable Others</option>    
                                                 <option value="Other Revenue">Other Revenue</option>     
-                                                <option value="EHT SCHOLARSHIP FOR iACADEMY CEBU">EHT SCHOLARSHIP FOR iACADEMY CEBU</option>                                       
+                                                <option value="EHT SCHOLARSHIP FOR iACADEMY CEBU">EHT SCHOLARSHIP FOR iACADEMY CEBU</option>   
+                                                <option value="Library Sales">Library Sales</option>
                                             </select>                                            
                                         </div>
                                     </div>
