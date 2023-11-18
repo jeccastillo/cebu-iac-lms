@@ -9,7 +9,59 @@
         <hr />
     </section>
         <hr />
-    
+    <div class="content">  
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4>{{ student.strLastname + " " + student.strFirstname }}</h4>
+                <h5>{{ student.strStudentNumber.replace(/-/g, "") }}</h5>
+            </div>
+            <div class="box-body">
+                <div class="row" style="margin-bottom:10px">                    
+                    <div class="col-sm-4">
+                        <label>Select Term</label>
+                        <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                            <option v-for="term in terms" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                        </select>
+                    </div>
+                </div>                
+                <hr />
+                <h4>Add Deficiency</h4>
+                <form method="post" @submit.prevent="submitDeficiency">
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>Deficiency Details</label>
+                            <input type="text" required class="form-control" v-model="request.details">                                                                        
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label>Remarks</label>
+                            <textarea required class="form-control" v-model="request.remarks"></textarea>
+                        </div>
+                    </div>  
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <hr />
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Term</th>
+                            <th>Deficiency</th>
+                            <th>Department</th>
+                            <th>Remarks</th>
+                            <th>Date Added</th>
+                            <th>Added By</th>
+                            <th>Date Resolved</th>
+                            <th>Resolved By</th>
+                            <th>Status</th>                             
+                            <th>Actions</th>                                                       
+                        </tr>
+                    </thead>
+                    
+                </table>                              
+            </div>        
+        </div>
+        
+    </div>
     <div class="modal fade" id="temporaryResolve" role="dialog">
         <form ref="temp_resolve" @submit.prevent="tempResolveDeficiency" method="post"  class="modal-dialog modal-lg">
 
