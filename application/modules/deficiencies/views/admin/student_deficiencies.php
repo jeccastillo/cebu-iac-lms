@@ -62,7 +62,15 @@
                         </tr>
                         <tr v-else v-for="item in deficiencies">
                             <td>{{ item.enumSem + " " + item.term_label + " " + item.strYearStart + "-" + item.strYearEnd}}</td>
-                            
+                            <td>{{ item.details }}</td>
+                            <td>{{ item.department }}</td>
+                            <td>{{ item.remarks }}</td>
+                            <td>{{ item.date_added }}</td>
+                            <td>{{ item.added_by }}</td>
+                            <td>{{ item.date_resolved }}</td>
+                            <td>{{ item.resolved_by }}</td>
+                            <td>{{ item.status  }}</td>
+                           
                         </tr>
                     </tbody>
                 </table>                              
