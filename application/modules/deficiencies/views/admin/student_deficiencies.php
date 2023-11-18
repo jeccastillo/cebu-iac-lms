@@ -56,7 +56,15 @@
                             <th>Actions</th>                                                       
                         </tr>
                     </thead>
-                    
+                    <tbody>
+                        <tr v-if="deficiencies.length == 0">
+                            <td colspan='8'>No Deficiencies for this term</td>
+                        </tr>
+                        <tr v-else v-for="item in deficiencies">
+                            <td>{{ item.enumSem + " " + item.term_label + " " + item.strYearStart + "-" + item.strYearEnd}}</td>
+                            
+                        </tr>
+                    </tbody>
                 </table>                              
             </div>        
         </div>
