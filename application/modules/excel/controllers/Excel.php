@@ -3572,7 +3572,7 @@ class Excel extends CI_Controller {
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
-            $d->mobile_number = str_replace('-', ' ', $d->mobile_number);
+            $d->mobile_number = str_replace(' ', '', $d->mobile_number);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, strtoupper($d->last_name))
