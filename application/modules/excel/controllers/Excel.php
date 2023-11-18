@@ -3552,11 +3552,18 @@ class Excel extends CI_Controller {
                     ->setCellValue('K1', 'School')
                     ->setCellValue('L1', 'Father')
                     ->setCellValue('M1', 'Contact #')
-                    ->setCellValue('N1', 'Mother')
-                    ->setCellValue('O1', 'Contact #')
-                    ->setCellValue('P1', 'Guardian')
-                    ->setCellValue('Q1', 'Contact #')
-                    ->setCellValue('R1', 'Date');
+                    ->setCellValue('N1', 'Email')
+                    ->setCellValue('O1', 'Mother')
+                    ->setCellValue('P1', 'Contact #')
+                    ->setCellValue('Q1', 'Email')                    
+                    ->setCellValue('R1', 'Guardian')
+                    ->setCellValue('S1', 'Contact #')
+                    ->setCellValue('T1', 'Email')
+                    ->setCellValue('U1', 'Date')
+                    ->setCellValue('V1', 'Source')
+                    ->setCellValue('W1', 'Company(SD)')
+                    ->setCellValue('X1', 'Position(SD)')
+                    ->setCellValue('Y1', 'Degree(SD)');
                     
         
         $i = 2;
@@ -3565,6 +3572,7 @@ class Excel extends CI_Controller {
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
+            $d->mobile_number = str_replace('-', ' ', $d->mobile_number);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, strtoupper($d->last_name))
@@ -3580,11 +3588,21 @@ class Excel extends CI_Controller {
                     ->setCellValue('K'.$i, $d->school)
                     ->setCellValue('L'.$i, $d->father_name)
                     ->setCellValue('M'.$i, $d->father_contact)
-                    ->setCellValue('N'.$i, $d->mother_name)
-                    ->setCellValue('O'.$i, $d->mother_contact)
-                    ->setCellValue('P'.$i, $d->guardian_name)
-                    ->setCellValue('Q'.$i, $d->guardian_contact)
-                    ->setCellValue('R'.$i, $d->datestamp);
+                    ->setCellValue('N'.$i, $d->father_email)
+                    ->setCellValue('O'.$i, $d->mother_name)
+                    ->setCellValue('P'.$i, $d->mother_contact)
+                    ->setCellValue('Q'.$i, $d->mother_email)
+                    ->setCellValue('R'.$i, $d->guardian_name)
+                    ->setCellValue('S'.$i, $d->guardian_contact)
+                    ->setCellValue('T'.$i, $d->guardian_email)                    
+                    ->setCellValue('U'.$i, $d->datestamp)
+                    ->setCellValue('V'.$i, $d->source)
+                    ->setCellValue('W'.$i, $d->sd_company)
+                    ->setCellValue('X'.$i, $d->sd_position)
+                    ->setCellValue('Y'.$i, $d->sd_degree);
+                    
+                    
+                    
                                                        
             $i++;
         }
@@ -3607,6 +3625,13 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(50);
         
                 
          
