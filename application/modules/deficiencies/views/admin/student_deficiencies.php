@@ -70,7 +70,10 @@
                             <td>{{ item.date_resolved }}</td>
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status  }}</td>
-                           
+                            <td v-if="item.department == request.department && item.status != 'resolved' || user.intUserLevel == 2">
+                                Test
+                            </td>
+                            <td v-else></td>
                         </tr>
                     </tbody>
                 </table>                              
