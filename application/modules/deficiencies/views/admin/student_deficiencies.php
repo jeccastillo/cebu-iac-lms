@@ -71,7 +71,7 @@
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status  }}</td>
                             <td v-if="item.department == request.department && item.status != 'resolved' || user.intUserLevel == 2">
-                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> <a v-if="user.intUserLevel == 2 || user.special_role == 2 ||" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temp Resolve</a>
+                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> <a v-if="user.intUserLevel == 2 || user.special_role == 2" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temp Resolve</a>
                             </td>
                             <td v-else></td>
                         </tr>
