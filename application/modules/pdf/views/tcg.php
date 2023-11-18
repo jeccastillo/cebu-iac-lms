@@ -260,7 +260,7 @@ foreach($records as $record){
                     $term_units += $item['strUnits'];
                     $total_units += $item['strUnits'];
 
-                    switch($item['floatFinalGrade']){
+                    switch($item['v3']){
                         case 'FA':
                             $grade = 5;
                         break;
@@ -268,7 +268,7 @@ foreach($records as $record){
                             $grade = 5;                    
                         break;
                         default:
-                            $grade = $temp_rec['floatFinalGrade'];                    
+                            $grade = $item['v3'];                    
                     }                             
                             
                     $grades_sum += $grade * $item['strUnits'];
