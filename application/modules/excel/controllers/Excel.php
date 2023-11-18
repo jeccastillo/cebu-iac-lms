@@ -3574,6 +3574,20 @@ class Excel extends CI_Controller {
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
             $d->mobile_number = str_replace(' ', '', $d->mobile_number);
 
+            $d->father_contact = str_replace('(+63)', '0', $d->father_contact);
+            $d->father_contact = str_replace('-', '', $d->father_contact);
+            $d->father_contact = str_replace(' ', '', $d->father_contact);
+
+
+            $d->mother_contact = str_replace('(+63)', '0', $d->mother_contact);
+            $d->mother_contact = str_replace('-', '', $d->mother_contact);
+            $d->mother_contact = str_replace(' ', '', $d->mother_contact);
+
+
+            $d->guardian_contact = str_replace('(+63)', '0', $d->guardian_contact);
+            $d->guardian_contact = str_replace('-', '', $d->guardian_contact);
+            $d->guardian_contact = str_replace(' ', '', $d->guardian_contact);
+
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, strtoupper($d->last_name))
                     ->setCellValue('B'.$i, strtoupper($d->first_name))
