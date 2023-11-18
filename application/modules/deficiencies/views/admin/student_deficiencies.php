@@ -71,7 +71,7 @@
                             <td>{{ item.resolved_by }}</td>
                             <td>{{ item.status  }}</td>
                             <td v-if="item.department == request.department && item.status != 'resolved' || user.intUserLevel == 2">
-                                Test
+                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> 
                             </td>
                             <td v-else></td>
                         </tr>
