@@ -317,10 +317,10 @@ new Vue({
         bdo_pay:{
             charge: 0,
             id: 99,
-            is_nonbank: true,
+            is_nonbank: false,
             name: "BDO PAY",
             pchannel: "bdo_pay",
-            pmethod: "onlinebanktransfer",
+            pmethod: "onlinebanktransfer",            
             type: "none"
         }         
     },
@@ -587,7 +587,11 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        } else {}
+                        }
+                        if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
+                            var newWindow = window.open();
+                            newWindow.document.write(data.data.response);
+                        }
                     } else {
                         Swal.fire(
                             'Failed!',
