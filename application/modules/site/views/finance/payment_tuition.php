@@ -61,10 +61,10 @@
                     </div>
                     <h5 class="my-3">BDO PAY</h5>
                     <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                        <div style="border:1px solid #000"
+                        <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
                             class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                             style="display:flex; align-itenms:center;">
-                            <img class="img-fluid d-block mx-auto" width="51px" :src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
+                            
                         </div>
                     </div>   
                 </div>
