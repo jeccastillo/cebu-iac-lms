@@ -607,7 +607,7 @@ new Vue({
                         }
                         if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
                             this.request_bdo = data.data.response;
-                            this.$refs.bdo_form.submit();
+                            //this.$refs.bdo_form.submit();
                         }
                     } else {
                         Swal.fire(
