@@ -30,9 +30,9 @@
                             </div>
                             <div class="box-body">                                   
                                 <hr />
-                                <form id="payment_form" action="payment_confirmation.php" method="post">
-                                    <input type="hidden" name="access_key" value="<REPLACE WITH ACCESS KEY>">
-                                    <input type="hidden" name="profile_id" value="<REPLACE WITH PROFILE ID>">
+                                <form id="payment_form"  @submit.prevent="submitPayment" method="post">
+                                    <input type="hidden" name="access_key" value="6ec0f0930c3b36698d52428a5aed80d1">
+                                    <input type="hidden" name="profile_id" value="4AC27C6B-C708-484E-92F5-C2352F335211">
                                     <input type="hidden" name="transaction_uuid" value="<?php echo uniqid() ?>">
                                     <input type="hidden" name="signed_field_names" value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency">
                                     <input type="hidden" name="unsigned_field_names">
@@ -41,8 +41,7 @@
                                     <input type="hidden" name="locale" value="en">
                                     <fieldset>
                                         <legend>Payment Details</legend>
-                                        <div id="paymentDetailsSection" class="section">                                            
-                                            <input type="text" name="reference_number" size="25"><br/><!-- Generate Reference Number -->
+                                        <div id="paymentDetailsSection" class="section">                                                                                        
                                             <span>amount:</span>{{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}<input type="hidden" v-model="item_details.price" name="amount" size="25"><br/>                                            
                                         </div>
                                     </fieldset>
