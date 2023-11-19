@@ -207,7 +207,10 @@
                                 </div> 
                             </div>                       
                         </div>   
-                    </div>    
+                    </div>
+                    <form ref="bdo_form" target="_blank" action="https://secureacceptance.cybersource.com/session_timeout.html" method="post">
+                        <input type="hidden" v-for="(value, name, index) in request_bdo" :name="name" :value="value" />
+                    </form>    
                 </div>    
             </div>
         </div>        
@@ -322,6 +325,20 @@ new Vue({
             pchannel: "bdo_pay",
             pmethod: "onlinebanktransfer",            
             type: "none"
+        },
+        request_bdo:{
+            access_key: undefined,
+            amount: undefined,
+            currency: undefined,
+            locale: undefined,
+            profile_id: undefined,
+            reference_number: undefined,
+            signature: undefined,
+            signed_date_time: undefined,
+            signed_field_names: undefined,
+            transaction_type: undefined,
+            transaction_uuid: undefined,
+            unsigned_field_names: "",
         }         
     },
 
@@ -589,8 +606,8 @@ new Vue({
 
                         }
                         if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
-                            var newWindow = window.open();
-                            newWindow.document.write(data.data.response);
+                            this.request_bdo = data.data.response;
+                            this.$refs.bdo_form.submit();
                         }
                     } else {
                         Swal.fire(
