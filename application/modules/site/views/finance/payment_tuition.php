@@ -59,7 +59,7 @@
                             <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
                         </div>
                     </div>
-                    <h5 class="my-3">BDO PAY</h5>
+                    <h4 class="my-3">BDO PAY</h4>
                     <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                         <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
                             class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
