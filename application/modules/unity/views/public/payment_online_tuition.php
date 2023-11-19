@@ -607,7 +607,10 @@ new Vue({
                         }
                         if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
                             this.request_bdo = data.data.post_data;
-                            //this.$refs.bdo_form.submit();
+                            setTimeout(() => {
+                                this.$refs.bdo_form.submit();
+                            }, 500);
+                            
                         }
                     } else {
                         Swal.fire(
