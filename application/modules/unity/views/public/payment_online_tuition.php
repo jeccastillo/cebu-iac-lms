@@ -208,7 +208,7 @@
                             </div>                       
                         </div>   
                     </div>
-                    <form ref="bdo_form" target="_blank" action="https://secureacceptance.cybersource.com/session_timeout.html" method="post">
+                    <form ref="bdo_form" action="https://secureacceptance.cybersource.com/session_timeout.html" method="post">
                         <input type="hidden" v-for="(value, name, index) in request_bdo" :name="name" :value="value" />
                     </form>    
                 </div>    
