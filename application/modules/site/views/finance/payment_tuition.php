@@ -210,7 +210,7 @@ new Vue({
             is_nonbank: true,
             name: "BDO PAY",
             pchannel: "bdo_pay",
-            pmethod: "onlinebanktransfer",
+            pmethod: "bdo_pay",
             type: "none"
         }
     },
