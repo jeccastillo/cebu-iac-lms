@@ -73,7 +73,7 @@
                                         </div>                
 
                                         <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                                            <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+                                            <h5 class="mb-3"><strong>Breakdown</strong></h5>
 
                                             <table class="table" style="width:100%">
                                                 <tbody>
