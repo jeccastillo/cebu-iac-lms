@@ -292,13 +292,17 @@
                 <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 0)  || $user['intUserLevel'] == 2): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="academics_students")?'active':''; ?>">
                     <a href="#">
-                        <i class="fa fa-circle"></i> <span>Students</span>
+                        <i class="fa fa-circle"></i> <span>Academics</span>
                         <i class="fa pull-right fa-angle-left"></i>
                     </a>
                     <ul class="treeview-menu">                    
                         <li class="<?php echo (isset($page) && $page=="students")?'active':''; ?>">
                         <a href="<?php echo base_url()."academics/view_all_students" ?>"><i class="fa fa-user"></i>
                             View Students</a>
+                        </li>
+                        <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
+                        <a href="<?php echo base_url()."academics/view_classlist_archive_admin" ?>"><i class="fa fa-user"></i>
+                            Slot Monitoring</a>
                         </li>
                     </ul>
                 </li>

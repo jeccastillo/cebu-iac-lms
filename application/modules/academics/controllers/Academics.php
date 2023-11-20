@@ -424,61 +424,101 @@ class Academics extends CI_Controller {
     
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
-              
-        $post = $this->input->post();
-        $this->data['id'] = $id;
-        $this->data['sem'] = $sem;
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            $post = $this->input->post();
+            $this->data['id'] = $id;
+            $this->data['sem'] = $sem;
 
-        if($sem!=null){
-            $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-        }
-        else
-        {
-            $student = $this->data_fetcher->getStudent($id); 
-            
-            if(!$student)
-                $student = $this->data_fetcher->getStudent($id, 'slug');
-
-            $student_type = get_stype($student['level']);    
-            if($student_type == "college")        
-                $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+            if($sem!=null){
+                $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+            }
             else
-                $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
-        }
-        
-        if(!empty($post))
-            $id = $post['studentID'];
-        
-        if($tab!=null)
-            $this->data['tab'] = $tab;
-        else
-            $this->data['tab'] = "tab_1";
-                    
-        
-        
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        
-        if(!$this->data['student'])
-            $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
-        //per faculty info                        
+            {
+                $student = $this->data_fetcher->getStudent($id); 
+                
+                if(!$student)
+                    $student = $this->data_fetcher->getStudent($id, 'slug');
 
-        $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
-        
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/student_viewer",$this->data);
-        $this->load->view("common/footer",$this->data);        
+                $student_type = get_stype($student['level']);    
+                if($student_type == "college")        
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+                else
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+            }
+            
+            if(!empty($post))
+                $id = $post['studentID'];
+            
+            if($tab!=null)
+                $this->data['tab'] = $tab;
+            else
+                $this->data['tab'] = "tab_1";
+                        
+            
+            
+            $this->data['student'] = $this->data_fetcher->getStudent($id);
+            
+            if(!$this->data['student'])
+                $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+            //per faculty info                        
+
+            $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
+            
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/student_viewer",$this->data);
+            $this->load->view("common/footer",$this->data);        
         // print_r($this->data['classlists']);
+        }
+        else
+            redirect(base_url()."unity");
             
         
         
     }
 
+    public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0)
+    {
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            
+            $active_sem = $this->data_fetcher->get_active_sem();
+            if($sem!=null)
+                $this->data['selected_ay'] = $sem;
+            else
+                $this->data['selected_ay'] = $active_sem['intID'];
+            
+            $this->data['program'] = $program;
+            $this->data['dissolved'] = $dissolved;
+            $this->data['has_faculty'] = $has_faculty;
+           
+            $this->data['page'] = "classlist_archive";
+            $this->data['opentree'] = "classlist_archive";
+            // $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/classlist_view_admin",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/classlist_view_conf",$this->data); 
+            //print_r($this->data['classlist']);
+            
+        }
+        else
+            redirect(base_url()."unity");   
+    
+    }
+
     public function student_records($id){
         
-        $this->data['id'] = $id;
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/student_records",$this->data);
-        $this->load->view("common/footer",$this->data); 
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            $this->data['id'] = $id;
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/student_records",$this->data);
+            $this->load->view("common/footer",$this->data); 
+        }
+        else
+            redirect(base_url()."unity");
     }
 
     public function student_records_data($id,$curriculum = 0){

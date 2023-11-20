@@ -2117,7 +2117,6 @@ class Unity extends CI_Controller {
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/classlist_view_admin",$this->data);
             $this->load->view("common/footer",$this->data); 
-            //ajax
             $this->load->view("common/classlist_view_conf",$this->data); 
             //print_r($this->data['classlist']);
             
