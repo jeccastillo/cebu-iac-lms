@@ -516,13 +516,11 @@ new Vue({
 
             this.new_charge = new_charge;
 
-            console.log("total_single_format", this.total_single_format);
-            console.log("new_charge", this.new_charge);
-
             let title = this.desc;
             //Remove after Testing
             this.item_details.price = 10.00;
-
+            this.total_single_format = 10.00;
+            //=--------------------------
             this.payload = {
                 "description": title,
                 "order_items": [{
