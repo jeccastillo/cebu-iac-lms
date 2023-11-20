@@ -520,6 +520,8 @@ new Vue({
             console.log("new_charge", this.new_charge);
 
             let title = this.desc;
+            //Remove after Testing
+            this.item_details.price = 10.00;
 
             this.payload = {
                 "description": title,
