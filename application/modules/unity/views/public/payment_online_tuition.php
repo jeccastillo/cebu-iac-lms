@@ -367,6 +367,7 @@ new Vue({
             bill_to_address_country: undefined,
             bill_to_email: undefined,
             bill_to_surname: undefined,
+            bill_to_forename: undefined,
         }        
     },
 
