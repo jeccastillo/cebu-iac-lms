@@ -105,6 +105,7 @@ class Academics extends CI_Controller {
             $this->data['scholarship'] = $scholarship;
             $this->data['registered'] = $registered;
             $this->data['sem'] = $sem;
+            $this->data['level'] = $level;
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/all_students",$this->data);
