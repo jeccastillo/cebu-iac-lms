@@ -919,8 +919,8 @@ class Excel extends CI_Controller {
             $i++;
             
         }
-        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
-        // ->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('H9:I'.count($students))
+        ->getAlignment()->setWrapText(true);
         
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
@@ -950,7 +950,7 @@ class Excel extends CI_Controller {
  
          // Redirect output to a client’s web browser (Excel2007)
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-         header('Content-Disposition: attachment;filename="deficiencies'.$date.'.xls"');
+         header('Content-Disposition: attachment;filename="deficiencies'.date("ymdhis").'.xls"');
          header('Cache-Control: max-age=0');
          // If you're serving to IE 9, then the following may be needed
          header('Cache-Control: max-age=1');
