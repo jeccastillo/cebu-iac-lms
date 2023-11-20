@@ -110,9 +110,6 @@ class Academics extends CI_Controller {
             $this->load->view("admin/all_students",$this->data);
             $this->load->view("common/footer",$this->data);
             $this->load->view("common/all_students_conf",$this->data);
-            
-            
-            $this->load->view("common/users_table_conf",$this->data);
 
             
             //print_r($this->data['classlist']);
