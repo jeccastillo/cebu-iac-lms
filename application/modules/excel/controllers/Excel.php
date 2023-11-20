@@ -816,7 +816,11 @@ class Excel extends CI_Controller {
                     ->get('tb_mas_student_deficiencies')
                     ->result_array();
 
-        $date = date("M j, Y h:i a");                                
+        $date = date("M j, Y h:i a");  
+        
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
         //HEADER
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
