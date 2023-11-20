@@ -71,7 +71,20 @@
                                                 <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
                                             </div>
                                         </div>                
-
+                                        <hr />
+                                        <div v-if="selected_mode_of_payment.pchannel = 'bdo_pay'" class="md:w-1/2 w-full">
+                                            <div class="mb-6">
+                                                <div class="md:w-5/5">                                                    
+                                                    <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                                                        Billing Address <span class="text-red-500">*</span>
+                                                    </label>
+                                                    <input
+                                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                                        type="text" required v-model="request.first_name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
                                         <div class="d-flex flex-wrap my-5" style="margin-top:50px">
                                             <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
 
