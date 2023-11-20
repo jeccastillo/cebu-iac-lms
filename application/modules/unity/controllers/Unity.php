@@ -2378,10 +2378,12 @@ class Unity extends CI_Controller {
 
             }                                        
                                  
-                                    
-            echo json_encode($data);   
+            $data['success'] = true;                       
+               
         }
-                                
+        else
+            $data['success'] = false;
+        echo json_encode($data);                    
 
     }
 
@@ -2418,8 +2420,7 @@ class Unity extends CI_Controller {
         }
         else
         {
-            $data['message'] = "failed";
-            
+            $data['message'] = "failed";            
         }
         echo json_encode($data);
     }

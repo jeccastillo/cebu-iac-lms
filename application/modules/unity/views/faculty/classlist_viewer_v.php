@@ -203,21 +203,26 @@ new Vue({
 
         axios.get(base_url + 'unity/classlist_viewer_data/'+this.id+'/'+this.show_all+'/'+this.sid)
         .then((data) => {
-            this.active_sem = data.data.active_sem;
-            this.legend = data.data.legend;
-            this.cl = data.data.cl;
-            this.classlist = data.data.classlist;
-            this.grading_items =  data.data.grading_items;
-            this.grading_items_midterm =  data.data.grading_items_midterm;
-            this.is_admin = data.data.is_admin;
-            this.is_registrar = data.data.is_registrar;
-            this.is_super_admin = data.data.is_super_admin;
-            this.show_all = data.data.showall;
-            this.students = data.data.students;
-            this.subject = data.data.subject;            
-            this.label = data.data.label;
-            this.pre_req =  data.data.pre_req;
-            this.disable_submit = data.data.disable_submit;
+            if(data.data.success){
+                this.active_sem = data.data.active_sem;
+                this.legend = data.data.legend;
+                this.cl = data.data.cl;
+                this.classlist = data.data.classlist;
+                this.grading_items =  data.data.grading_items;
+                this.grading_items_midterm =  data.data.grading_items_midterm;
+                this.is_admin = data.data.is_admin;
+                this.is_registrar = data.data.is_registrar;
+                this.is_super_admin = data.data.is_super_admin;
+                this.show_all = data.data.showall;
+                this.students = data.data.students;
+                this.subject = data.data.subject;            
+                this.label = data.data.label;
+                this.pre_req =  data.data.pre_req;
+                this.disable_submit = data.data.disable_submit;
+            }
+            else{
+                document.location = base_url + 'unity';
+            }
             
         })
         .catch((error) => {
