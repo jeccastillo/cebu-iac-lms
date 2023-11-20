@@ -289,6 +289,21 @@
                     </ul>
                 </li>
                 <?php endif; ?>
+                <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 0)  || $user['intUserLevel'] == 2): ?>
+                <li class="treeview <?php echo (isset($opentree) && $opentree=="academics_students")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-circle"></i> <span>Students</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">                    
+                        <li class="<?php echo (isset($page) && $page=="students")?'active':''; ?>">
+                        <a href="<?php echo base_url()."department/view_all_students" ?>"><i class="fa fa-user"></i>
+                            View Students</a>
+                        </li>
+                    </ul>
+                </li>
+                <?php endif; ?>
+                
                 <?php if(in_array($user['intUserLevel'],array(2,3,7)) ): ?>
                 <li class="treeview <?php echo (isset($opentree) && $opentree=="students")?'active':''; ?>">
                     <a href="#">
