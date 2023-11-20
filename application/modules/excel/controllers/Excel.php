@@ -820,7 +820,7 @@ class Excel extends CI_Controller {
         
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
-        
+
         //HEADER
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
@@ -902,10 +902,18 @@ class Excel extends CI_Controller {
                     ->setCellValue('F'.$i, date("M j, Y",strtotime($student['date_added'])))
                     ->setCellValue('G'.$i, $student['status'])
                     ->setCellValue('H'.$i, $student['remarks'])
-                    ->setCellValue('I'.$i, $student['added_by'])
-                    ->setCellValue('J'.$i, date("M j, Y",strtotime($student['date_resolved'])))
-                    ->setCellValue('K'.$i, $student['resolved_by'])
-                    ->setCellValue('L'.$i, date("M j, Y",strtotime($student['temporary_resolve_date'])));
+                    ->setCellValue('I'.$i, $student['added_by']);
+                
+                if($student['date_resolved'])
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('J'.$i, date("M j, Y",strtotime($student['date_resolved'])));
+                
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('K'.$i, $student['resolved_by']);
+
+                if($student['temporary_resolve_date'])
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('L'.$i, date("M j, Y",strtotime($student['temporary_resolve_date'])));
                                             
             $count++;
             $i++;
