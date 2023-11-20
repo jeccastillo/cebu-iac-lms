@@ -339,6 +339,11 @@ new Vue({
             transaction_type: undefined,
             transaction_uuid: undefined,
             unsigned_field_names: "",
+            bill_address1: undefined,
+            bill_city: undefined,
+            bill_country: undefined,
+            customer_email: undefined,
+            customer_lastname: undefined,
         }         
     },
 
