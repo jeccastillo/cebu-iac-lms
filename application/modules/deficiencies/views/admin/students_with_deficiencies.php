@@ -2,7 +2,8 @@
     <section class="content-header">
         <h1>
             Student Deficiencies
-            <small>                
+            <small>          
+                <a class="btn btn-app" :href="base_url + 'excel/deficiency_report_data/' + sem"><i class="fa fa-file"></i>Download Excel</a>                       
             </small>
         </h1>     
     </section>

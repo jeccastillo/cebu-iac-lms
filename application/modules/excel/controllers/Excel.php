@@ -800,6 +800,162 @@ class Excel extends CI_Controller {
 
     }
 
+    public function deficiency_report_data($sem){
+
+        if($sem != 0)
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        else
+            $active_sem = $this->data_fetcher->get_active_sem();
+        
+       
+        $students = $this->db
+                    ->select('tb_mas_student_deficiencies.*,strFirstname,strLastname,strStudentNumber,strMiddlename')
+                    ->join('tb_mas_users','tb_mas_student_deficiencies.student_id = tb_mas_users.intID')
+                    ->where(array('syid'=>$active_sem['intID']))
+                    ->order_by('strLastname asc,strFirstname asc')                    
+                    ->get('tb_mas_student_deficiencies')
+                    ->result_array();
+
+        $date = date("M j, Y h:i a");                                
+        //HEADER
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A3', '');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', $date);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "LIST OF STUDENT DEFICIENCIES");
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:M2');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:M3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:M4');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:M5');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:M6');
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $style_right = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            )
+        );
+        $style_left = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+            )
+        );        
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:L2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:L5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:L2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:L3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:L4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:L5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:L6")->applyFromArray($style);
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Student Deficiency List")
+                                     ->setSubject("Student Deficiency List Download")
+                                     ->setDescription("Student Deficiency List Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Student Deficiency List");
+
+        
+        // Add some datat
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A8', '#')
+                    ->setCellValue('B8', 'Student Number')
+                    ->setCellValue('C8', 'Student Name')
+                    ->setCellValue('D8', 'Details')
+                    ->setCellValue('E8', 'Department')
+                    ->setCellValue('F8', 'Date Added')
+                    ->setCellValue('G8', 'Status')
+                    ->setCellValue('H8', 'Remarks')
+                    ->setCellValue('I8', 'Added By')
+                    ->setCellValue('J8', 'Date Resolved')
+                    ->setCellValue('K8', 'Resolved By')
+                    ->setCellValue('L8', 'Temporary Resolve Date');
+                    
+                    
+        $i = 9;
+        $count = 1;
+        foreach($students as $student)
+        {
+            
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $count.".")
+                    ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
+                    ->setCellValue('D'.$i, $student['details'])
+                    ->setCellValue('E'.$i, $student['department'])
+                    ->setCellValue('F'.$i, date("M j, Y",strtotime($student['date_added'])))
+                    ->setCellValue('G'.$i, $student['status'])
+                    ->setCellValue('H'.$i, $student['remarks'])
+                    ->setCellValue('I'.$i, $student['added_by'])
+                    ->setCellValue('J'.$i, date("M j, Y",strtotime($student['date_resolved'])))
+                    ->setCellValue('K'.$i, $student['resolved_by'])
+                    ->setCellValue('L'.$i, date("M j, Y",strtotime($student['temporary_resolve_date'])));
+                                            
+            $count++;
+            $i++;
+            
+        }
+        // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
+        // ->getAlignment()->setWrapText(true);
+        
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+        
+        
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Deficiencies');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="deficiencies'.$date.'.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;          
+        
+        
+    }
+
     public function ched_enrollment_list($course = 0, $year=0,$gender = 0,$sem=0, $type='college'){
 
         if($sem == 0 )
