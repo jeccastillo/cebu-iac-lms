@@ -520,6 +520,7 @@ new Vue({
             //Remove after Testing
             this.item_details.price = 10.00;
             this.total_single_format = 10.00;
+            this.total_single = 10.00;
             //=--------------------------
             this.payload = {
                 "description": title,
