@@ -3,7 +3,7 @@
         <h1>
             Records
             <small>
-                <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a>                                 
+                <a class="btn btn-app" :href="base_url + 'academics/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a>                                 
             </small>
         </h1>
         <hr />
