@@ -613,6 +613,11 @@ new Vue({
             })
             Swal.showLoading();
 
+            if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
+                this.payload.address = this.request_bdo.bill_address1;
+                this.payload.city = this.request_bdo.bill_city;
+            }
+
             axios
                 .post(api_url + 'payments', this.payload, {
                     headers: {
