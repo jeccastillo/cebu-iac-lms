@@ -80,7 +80,17 @@
                                                     </label>
                                                     <input
                                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                                        type="text" required v-model="request.first_name">
+                                                        type="text" required v-model="request_bdo.bill_address1">
+                                                </div>
+                                            </div>
+                                            <div class="mb-6">
+                                                <div class="md:w-5/5">                                                    
+                                                    <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                                                        Billing City <span class="text-red-500">*</span>
+                                                    </label>
+                                                    <input
+                                                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                                        type="text" required v-model="request_bdo.bill_city">
                                                 </div>
                                             </div>
                                         </div>
@@ -625,10 +635,19 @@ new Vue({
 
                         }
                         if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
-                            this.request_bdo = data.data.post_data;
-                            setTimeout(() => {
-                                this.$refs.bdo_form.submit();
-                            }, 500);
+                            if(this.request_bdo.bill_address1 && request_bdo.bill_city){
+                                this.request_bdo = data.data.post_data;
+                                setTimeout(() => {
+                                    this.$refs.bdo_form.submit();
+                                }, 500);
+                            }
+                            else{
+                                Swal.fire(
+                                    'Failed!',
+                                    'Please fill in required fields',
+                                    'error'
+                                )
+                            }
                             
                         }
                     } else {
