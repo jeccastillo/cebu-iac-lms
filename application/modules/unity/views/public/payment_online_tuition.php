@@ -80,7 +80,7 @@
                                                     </label>
                                                     <input
                                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                                        type="text" required v-model="request_bdo.bill_address1">
+                                                        type="text" required v-model="request_bdo.bill_to_address_line1">
                                                 </div>
                                             </div>
                                             <div class="mb-6">
@@ -90,7 +90,7 @@
                                                     </label>
                                                     <input
                                                         class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                                        type="text" required v-model="request_bdo.bill_city">
+                                                        type="text" required v-model="request_bdo.bill_to_address_city">
                                                 </div>
                                             </div>
                                         </div>
@@ -362,12 +362,12 @@ new Vue({
             transaction_type: undefined,
             transaction_uuid: undefined,
             unsigned_field_names: "",
-            bill_address1: undefined,
-            bill_city: undefined,
-            bill_country: undefined,
-            customer_email: undefined,
-            customer_lastname: undefined,
-        }         
+            bill_to_address_line1: undefined,
+            bill_to_address_city: undefined,
+            bill_to_address_country: undefined,
+            bill_to_email: undefined,
+            bill_to_surname: undefined,
+        }        
     },
 
     mounted() {
@@ -577,7 +577,6 @@ new Vue({
                 "student_information_id": this.student_api_data.id
             }
 
-
             // console.log(this.payload)
 
         },
@@ -614,8 +613,8 @@ new Vue({
             Swal.showLoading();
 
             if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
-                this.payload.address = this.request_bdo.bill_address1;
-                this.payload.city = this.request_bdo.bill_city;
+                this.payload.address = this.request_bdo.bill_to_address_line1;
+                this.payload.city = this.request_bdo.bill_to_address_city;
             }
 
             axios
