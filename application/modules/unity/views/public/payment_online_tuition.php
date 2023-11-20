@@ -639,21 +639,11 @@ new Vue({
                             }, 500);
 
                         }
-                        if(this.selected_mode_of_payment.pchannel == "bdo_pay"){
-                            if(this.request_bdo.bill_address1 && request_bdo.bill_city){
-                                this.request_bdo = data.data.post_data;
-                                setTimeout(() => {
-                                    this.$refs.bdo_form.submit();
-                                }, 500);
-                            }
-                            else{
-                                Swal.fire(
-                                    'Failed!',
-                                    'Please fill in required fields',
-                                    'error'
-                                )
-                            }
-                            
+                        if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
+                            this.request_bdo = data.data.post_data;
+                            setTimeout(() => {
+                                this.$refs.bdo_form.submit();
+                            }, 500);                        
                         }
                     } else {
                         Swal.fire(
