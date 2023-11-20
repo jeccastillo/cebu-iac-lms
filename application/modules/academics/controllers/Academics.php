@@ -72,7 +72,7 @@ class Academics extends CI_Controller {
 	}
            
 
-    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0)
+    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0,$level=0)
     {
         if($this->data["user"]["special_role"] >= 1)
         {            
