@@ -297,7 +297,7 @@
                     </a>
                     <ul class="treeview-menu">                    
                         <li class="<?php echo (isset($page) && $page=="students")?'active':''; ?>">
-                        <a href="<?php echo base_url()."department/view_all_students" ?>"><i class="fa fa-user"></i>
+                        <a href="<?php echo base_url()."academics/view_all_students" ?>"><i class="fa fa-user"></i>
                             View Students</a>
                         </li>
                     </ul>
