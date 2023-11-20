@@ -120,7 +120,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         }
                         else {
                                 foreach($records as $record) {
-                                    $units = ($record['strUnits'] == 0)?'('.$record['intLectHours'].')':$record['strUnits'];
+                                    $units = $record['strUnits'];
                                     $desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
                                     $html.='<tr style="color: #333;">
                                             <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
