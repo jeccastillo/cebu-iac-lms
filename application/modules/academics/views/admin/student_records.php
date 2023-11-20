@@ -183,8 +183,7 @@
                                             <th width="5%">Grade</th>
                                             <th width="10%">Date Added</th>
                                             <th width="20%">Added By</th>
-                                            <th width="10%">Equivalent Subject</th>                                      
-                                            <th width="10%">Actions</th>
+                                            <th width="10%">Equivalent Subject</th>                                                                                  
                                         </tr>
                                     </thead>
                                     <tbody>                                          
@@ -195,8 +194,7 @@
                                             <td>{{ record.grade }}</td> 
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
-                                            <td>{{ record.strCode }}</td>
-                                            <td><button class="btn btn-danger" @click="deleteCredited(record.id)">Delete</button></td>
+                                            <td>{{ record.strCode }}</td>                                            
                                         </tr>                                        
                                     </tbody>
                                 </table>
