@@ -522,7 +522,7 @@ new Vue({
             this.new_charge = new_charge;
 
             let title = this.desc;
-            Remove after Testing
+            //Remove after Testing
             this.item_details.price = 10.00;
             this.total_single_format = 10.00;
             this.total_single = 10.00;
