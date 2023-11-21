@@ -1149,8 +1149,10 @@ class Unity extends CI_Controller {
                 'school' => $term_credited['completion'],
                 'school_year' => $term_credited['school_year'],
             );     
+            
+            foreach($cr as $credited)
+                $credited_units += $cr['units'];
 
-            $credited_units += $credited['units'];
             $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
             
         }
