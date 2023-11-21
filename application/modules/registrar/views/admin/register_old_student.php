@@ -337,7 +337,7 @@ new Vue({
                         .then(data => {                            
                             if (data.data.success) {
                                 let student_link = data.data.student_link;
-                                if(this.enumStudentType == "new"){
+                                if(this.request.enumStudentType == "new"){
                                     let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;                                    
                                     let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
                                     
