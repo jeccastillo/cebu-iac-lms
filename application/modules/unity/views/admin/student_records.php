@@ -168,20 +168,20 @@
                                     <div class="col-sm-1">
                                         {{ assessment_gwa }}
                                     </div>
-                                    <div class="col-sm-1 text-right">
-                                        Total:
+                                    <div class="col-sm-2 text-right">
+                                        Total in Curriculum:
                                     </div>
                                     <div class="col-sm-1">
                                         {{ curriculum_units }}
                                     </div>
-                                    <div class="col-sm-2 text-right">
+                                    <div class="col-sm-1 text-right">
                                         Units Left:
                                     </div>
                                     <div class="col-sm-1">
                                         {{ units_left }}
                                     </div>
                                     <div class="col-sm-1 text-right">
-                                        Credited
+                                        Units Credited:
                                     </div>
                                     <div class="col-sm-1">
                                         {{ credited_units }}
