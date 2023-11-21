@@ -201,7 +201,7 @@
                                             <td>{{ record.added_by }}</td>
                                             <td>{{ record.strCode }}</td>
                                             <td>
-                                                <button class="btn btn-default" href="#" @click="prepareCredited(record)" data-toggle="modal" data-target="#editCreditSubjects" ><i class="fa fa-plus"></i>Edit</a>
+                                                <button class="btn btn-default" href="#" @click="prepareCredited(record)" data-toggle="modal" data-target="#editCreditSubjects" >Edit</a>&nbsp;
                                                 <button class="btn btn-danger" @click="deleteCredited(record.id)">Delete</button>
                                             </td>
                                         </tr>                                        
