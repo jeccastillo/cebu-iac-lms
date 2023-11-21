@@ -5,7 +5,7 @@
             <h1>
                 <small>                    
                     <a class="btn btn-app" :href="base_url + 'academics/view_all_students'" ><i class="ion ion-arrow-left-a"></i>All Students</a>                                         
-                    <a class="btn btn-app" :href="base_url + 'academics/student_records/' + '/' + student.intID"><i class="fa fa-user"></i>Records</a> 
+                    <a class="btn btn-app" :href="base_url + 'academics/student_records/' + student.intID"><i class="fa fa-user"></i>Records</a> 
                     <!-- <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
                         <i class="ion ion-printer"></i>RF Print
                     </a>                      -->                   
