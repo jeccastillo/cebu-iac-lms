@@ -1854,6 +1854,8 @@ class Registrar extends CI_Controller {
             $data['success'] = false;
             $data['message'] = "Failed to update";
         }
+
+        echo json_encode($data);
     }
 
     public function get_sections($subject,$sem){
