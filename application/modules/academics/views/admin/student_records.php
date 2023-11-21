@@ -123,7 +123,7 @@
                                         {{ units_left }}
                                     </div>
                                     <div class="col-sm-1 text-right">
-                                        Units Credited:
+                                        Transferee Units:
                                     </div>
                                     <div class="col-sm-1">
                                         {{ credited_units }}
