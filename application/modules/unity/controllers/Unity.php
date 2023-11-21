@@ -1039,6 +1039,8 @@ class Unity extends CI_Controller {
         $assessment_sum = 0;
         $assessment_units = 0;
         $assessment_units_earned = 0;
+        $credited_units = 0;
+        $curriculum_units = 0;        
 
         $change_grade = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode,enumSem,term_label,term_student_type,strYearStart,strYearEnd')
             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
@@ -1050,6 +1052,9 @@ class Unity extends CI_Controller {
             ->result_array();
         
         foreach($curicculum as $cs){
+            if($cs['include_gwa'])
+                $curriculum_units += $cs['strUnits'];
+
             $recs = 
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
@@ -1145,7 +1150,9 @@ class Unity extends CI_Controller {
                 'school_year' => $term_credited['school_year'],
             );     
 
+            $credited_units += $credited['units'];
             $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+            
         }
 
 
@@ -1199,6 +1206,9 @@ class Unity extends CI_Controller {
         $data['assessment_units'] = $assessment_units_earned;
         $data['total_units_earned'] = $total_units_earned;
         $data['credited_subjects'] = $credited_subjects;
+        $data['credited_units'] = $credited_units;
+        $data['curriculum_units'] = $curriculum_units;
+        $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
 
         echo json_encode($data);

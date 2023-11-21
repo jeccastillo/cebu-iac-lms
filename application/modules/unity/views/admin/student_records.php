@@ -156,17 +156,35 @@
                         <div class="box box-success">                
                             <div class="box-footer">
                                 <div class="row" style="font-weight:bold;">
-                                    <div class="col-sm-3 text-right">
+                                    <div class="col-sm-2 text-right">
                                         Total Units Earned:
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-1">
                                         {{ assessment_units }}
                                     </div>
-                                    <div class="col-sm-3 text-right">
-                                        GWA
+                                    <div class="col-sm-1 text-right">
+                                        GWA:
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-1">
                                         {{ assessment_gwa }}
+                                    </div>
+                                    <div class="col-sm-1 text-right">
+                                        Total:
+                                    </div>
+                                    <div class="col-sm-1">
+                                        {{ curriculum_units }}
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        Units Left:
+                                    </div>
+                                    <div class="col-sm-1">
+                                        {{ units_left }}
+                                    </div>
+                                    <div class="col-sm-1 text-right">
+                                        Credited
+                                    </div>
+                                    <div class="col-sm-1">
+                                        {{ credited_units }}
                                     </div>
                                 </div>
                             </div>
@@ -512,6 +530,9 @@ new Vue({
         credited_subjects: [],
         change_grades: [],
         generated_tor:[],
+        credited_units: 0,
+        curriculum_units: 0,
+        units_left: 0,        
         tor:{
             date_issued: undefined,
             remarks: undefined,
@@ -558,6 +579,9 @@ new Vue({
             axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
                 .then((data) => {                                          
                     this.student = data.data.student;
+                    this.credited_units = data.data.credited_units;
+                    this.curriculum_units = data.data.curriculum_units;
+                    this.units_left = data.data.units_left;
                     this.generated_tor =  data.data.generated_tor;
                     this.change_grades = data.data.change_grades;
                     this.credited_subjects =  data.data.credited_subjects;
