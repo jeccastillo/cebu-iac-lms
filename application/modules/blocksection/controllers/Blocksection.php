@@ -50,9 +50,9 @@ class Blocksection extends CI_Controller {
     }
     
     public function block_section($id = 0)
-    {
-        if($this->is_admin())
-        {               
+    {        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
             $this->data['id'] = $id;
             $this->data['page'] = "add_blocksection";
             $this->data['opentree'] = "registrar";
@@ -60,10 +60,10 @@ class Blocksection extends CI_Controller {
             $this->load->view("block_section",$this->data);
             $this->load->view("common/footer",$this->data);             
             //print_r($this->data['classlist']);
-            
         }
         else
             redirect(base_url()."unity");  
+       
     }
 
     public function block_section_data($id){
