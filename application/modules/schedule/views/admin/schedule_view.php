@@ -37,7 +37,10 @@
                         <tr>
                             <th>id</th>
                             <th>Subject</th>
-                            <th>Section</th>
+                            <th>Section Name</th>
+                            <th>Section #</th>
+                            <th>Section Year</th>
+                            <th>Sub-Section</th>
                             <th>Block</th>
                             <th>Day</th>
                             <th>Start</th>
@@ -52,7 +55,10 @@
                     <tr>
                         <th>id</th>
                         <th>Subject</th>
-                        <th>Section</th>
+                        <th>Section Name</th>
+                        <th>Section #</th>
+                        <th>Section Year</th>
+                        <th>Sub-Section</th>
                         <th>Block</th>
                         <th>Day</th>
                         <th>Start</th>

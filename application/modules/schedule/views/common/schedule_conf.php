@@ -26,7 +26,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_room_schedule/null/null/0/0/0/0/0/0/0/<?php echo $sem; ?>/<?php echo $section; ?>",
             "aoColumnDefs":[
                 {
-                    "aTargets":[9],
+                    "aTargets":[12],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>schedule/edit_schedule/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }

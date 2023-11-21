@@ -26,7 +26,7 @@ $config['tb_mas_users_index'] = "intID";
 $config['tb_mas_ns_payee_columns'] = array("id","id_number","lastname","firstname","middlename","tin","address","contact_number");
 $config['tb_mas_ns_payee_index'] = "id";
 
-$config['tb_mas_room_schedule_columns'] = array("intRoomSchedID","strCode","strSection","name","strDay","dteStart","dteEnd","enumClassType","strRoomCode");
+$config['tb_mas_room_schedule_columns'] = array("intRoomSchedID","strCode","strClassName","year","strSection","sub_section","name","strDay","dteStart","dteEnd","enumClassType","strRoomCode");
 $config['tb_mas_room_schedule_index'] = "intRoomSchedID";
 
 
