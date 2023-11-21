@@ -38,8 +38,8 @@
                             <th>id</th>
                             <th>Subject</th>
                             <th>Section Name</th>
-                            <th>Section #</th>
                             <th>Section Year</th>
+                            <th>Section #</th>                            
                             <th>Sub-Section</th>
                             <th>Block</th>
                             <th>Day</th>
@@ -56,8 +56,8 @@
                         <th>id</th>
                         <th>Subject</th>
                         <th>Section Name</th>
-                        <th>Section #</th>
                         <th>Section Year</th>
+                        <th>Section #</th>                        
                         <th>Sub-Section</th>
                         <th>Block</th>
                         <th>Day</th>
