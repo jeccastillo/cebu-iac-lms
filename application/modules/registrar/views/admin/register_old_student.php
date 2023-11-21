@@ -62,6 +62,7 @@
                                     <option value="new">New</option>
                                     <option value="continuing">Continuing</option>
                                     <option value="shiftee">Shiftee</option>                                    
+                                    <option value="returning">Returning</option>
                                 </select>
                                 <br />       
                                 <label for="intYearLevel">Year Level</label>
