@@ -200,7 +200,10 @@
                                             <td>{{ record.date_added }}</td>                                                                                         
                                             <td>{{ record.added_by }}</td>
                                             <td>{{ record.strCode }}</td>
-                                            <td><button class="btn btn-danger" @click="deleteCredited(record.id)">Delete</button></td>
+                                            <td>
+                                                <button class="btn btn-default" href="#" @click="prepareCredited(record)" data-toggle="modal" data-target="#editCreditSubjects" ><i class="fa fa-plus"></i>Edit</a>
+                                                <button class="btn btn-danger" @click="deleteCredited(record.id)">Delete</button>
+                                            </td>
                                         </tr>                                        
                                     </tbody>
                                 </table>
@@ -405,6 +408,65 @@
 
         </form>
     </div>
+    <div class="modal fade" id="editCreditSubjects" role="dialog">
+        <form ref="edit_credit_subjects" @submit.prevent="updateCredited" method="post"  class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Credited Subject</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">                        
+                        <div class="form-group col-sm-6">
+                            <label>Course Code *</label>
+                            <input required v-model="edit_credits.course_code" type="text" class="form-control">
+                        </div>                       
+                        <div class="form-group col-sm-6">
+                            <label>Descriptive Title *</label>
+                            <textarea required  v-model="edit_credits.descriptive_title" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Units *</label>
+                            <input required v-model="edit_credits.units" type="number" step="0.5" class="form-control">
+                        </div> 
+                        <div class="form-group col-sm-6">
+                            <label>Grade *</label>
+                            <input required v-model="edit_credits.grade" type="text" max="25" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>School *</label>
+                            <input v-model="edit_credits.completion" type="text" max="50" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Term</label>
+                            <input placeholder="Ex. First Trimester" v-model="edit_credits.term" type="text" max="50" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>School Year</label>
+                            <input placeholder="Ex. 2023-2024" v-model="edit_credits.school_year" type="text" max="50" class="form-control">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Equivalent Subject</label>
+                            <select v-model="edit_credits.equivalent_subject" class="form-control">
+                                <option v-for="item in subjects" :value="item.intSubjectID">
+                                    {{ item.strCode + " "  + item.strDescription }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -473,7 +535,19 @@ new Vue({
             school_year: undefined,
             student_id: '<?php echo $id; ?>',
             equivalent_subject: 0,
+        },
+        edit_credits:{
+            id: undefined,
+            course_code: undefined,
+            descriptive_title: undefined,
+            units: undefined,
+            grade: undefined,
+            completion: '',
+            term: undefined,
+            school_year: undefined,            
+            equivalent_subject: undefined,
         }
+
     },
 
     mounted() {
@@ -553,7 +627,18 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });         
             
-        },        
+        },    
+        prepareCredited: function(record){
+            this.edit_credits.id = record.id;
+            this.edit_credits.course_code = record.course_code;
+            this.edit_credits.descriptive_title = record.descriptive_title;
+            this.edit_credits.units = record.units;
+            this.edit_credits.grade = record.grade;
+            this.edit_credits.completion = record.completion;
+            this.edit_credits.term = record.term;
+            this.edit_credits.school_year = record.school_year;
+            this.edit_credits.equivalent_subject = record.equivalent_subject;
+        },    
         creditSubject: function(){
             Swal.fire({
                 title: 'Add Credits?',
@@ -641,6 +726,51 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
+        },
+        updateCredited: function(){
+            Swal.fire({
+                title: 'Edit credited subject?',
+                text: "Continue with update?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.edit_credits)) {
+                        formdata.append(key,value);
+                    }                    
+                    return axios
+                    .post(base_url + 'registrar/edit_credited_subject',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {                        
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+            
         }
     }
 

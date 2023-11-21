@@ -1842,6 +1842,20 @@ class Registrar extends CI_Controller {
             
     }
 
+    public function edit_credited_subject(){
+        $post = $this->input->post();
+        if($this->db->where('id',$post['id'])
+                 ->update('tb_mas_credited',$post))
+        {
+            $data['success'] = true;
+            $data['message'] = "Credited Subject successfully updated";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Failed to update";
+        }
+    }
+
     public function get_sections($subject,$sem){
         
         $sc = [];
