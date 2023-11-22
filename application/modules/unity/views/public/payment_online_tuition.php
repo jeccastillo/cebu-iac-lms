@@ -549,7 +549,7 @@ new Vue({
                 "student_information_id": this.student_api_data.id
             }
 
-            // console.log(this.payload)
+            console.log(this.payload)
 
         },
         submitPayment: function() {
