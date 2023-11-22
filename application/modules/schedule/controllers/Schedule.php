@@ -335,7 +335,7 @@ class Schedule extends CI_Controller {
         
         if(!empty($conflict)){
              $this->data['suggested'] = $this->suggestSchedule($post['strScheduleCode'],$post['intSem'],$post['enumClassType']);
-             $this->data['alert'] = 'Conflict schedule with '.$conflict[0]['strCode']." ".$conflict[0]['strSection'];
+             $this->data['alert'] = 'Conflict schedule with '.$conflict[0]['strCode']." ".$conflict[0]['strClassName']." ".$conflict[0]['year'].$conflict[0]['strSection']." ".$conflict[0]['sub_section'];
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_schedule_suggestions",$this->data);
@@ -345,7 +345,7 @@ class Schedule extends CI_Controller {
         else if(!empty($sconflict))
         {
             $this->data['suggested'] = $this->suggestSchedule($post['strScheduleCode'],$post['intSem'],$post['enumClassType']);
-            $this->data['alert'] = 'Section conflict in section schedule with '.$sconflict[0]['strCode']." ".$sconflict[0]['strSection'];
+            $this->data['alert'] = 'Section conflict in section schedule with '.$sconflict[0]['strCode']." ".$sconflict[0]['strClassName']." ".$sconflict[0]['year'].$sconflict[0]['strSection']." ".$sconflict[0]['sub_section'];
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_schedule_suggestions",$this->data);
@@ -356,6 +356,9 @@ class Schedule extends CI_Controller {
         {
             $this->data['suggested'] = $this->suggestSchedule($post['strScheduleCode'],$post['intSem'],$post['enumClassType']);
             $this->data['alert'] = 'Conflict with faculty Schedule';
+            foreach($fconflict as $conf){
+                $this->data['alert'] .= '<br />Conflict with section schedule with '.$conf['strCode']." ".$conf['strClassName']." ".$conf['year'].$conflict[0]['strSection']." ".$conf['sub_section'];
+            }
             
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_schedule_suggestions",$this->data);

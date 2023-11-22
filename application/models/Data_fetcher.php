@@ -3900,7 +3900,7 @@ class Data_fetcher extends CI_Model {
         $res = array();
         
         if($post['intRoomID'] != 99999){ //IF room is TBA
-            $query ="SELECT intRoomSchedID,strCode,strSection
+            $query ="SELECT intRoomSchedID,strCode,strSection,year,strClassName,sub_section
                     FROM tb_mas_room_schedule
                     JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode
                     JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID
@@ -3943,7 +3943,7 @@ class Data_fetcher extends CI_Model {
     
     function section_conflict($post,$id=null,$section,$sem,$d=null)
     {
-        $query ="SELECT intRoomSchedID,strCode,strSection
+        $query ="SELECT intRoomSchedID,strCode,strSection,year,strClassName,sub_section
                 FROM tb_mas_room_schedule
                 JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode
                 JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID
@@ -3979,7 +3979,7 @@ class Data_fetcher extends CI_Model {
     
     function faculty_conflict($post,$id=null,$faculty_id,$sem,$d=null)
     {
-        $query ="SELECT intRoomSchedID,strCode,strSection
+        $query ="SELECT intRoomSchedID,strCode,strSection,year,strClassName,sub_section
                 FROM tb_mas_room_schedule
                 JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode
                 JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID
