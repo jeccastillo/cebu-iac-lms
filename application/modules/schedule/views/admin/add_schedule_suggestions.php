@@ -18,7 +18,7 @@
             <div class="alert alert-danger <?php echo ($alert == "" )?'hide':''; ?>  alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <h4><i class="icon fa fa-ban"></i> Alert!</h4>
-                <?php echo $alert; ?> See Suggested Time slots Below
+                <?php echo $alert; ?>
             </div>
             <a href="<?php echo base_url(); ?>schedule/add_schedule" class="btn btn-flat btn-primary">Set Manual Schedule</a>
         </div>
