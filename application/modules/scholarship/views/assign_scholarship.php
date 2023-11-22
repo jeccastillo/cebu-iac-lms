@@ -299,7 +299,7 @@ new Vue({
                                 }                                
                             }                        
 
-                            axios.get(api_url + 'finance/reservation/' + this.student.slug)
+                            axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                             .then((data) => {
                                 this.reservation_payment = data.data.data;    
                                 this.application_payment = data.data.application;
