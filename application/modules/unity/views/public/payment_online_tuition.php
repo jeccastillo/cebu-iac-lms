@@ -605,7 +605,7 @@ new Vue({
                             }, 500);
 
                         }
-                        if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
+                        else if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
                             this.request_bdo = data.data.post_data;
                             setTimeout(() => {
                                 this.$refs.bdo_form.submit();
