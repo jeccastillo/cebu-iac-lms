@@ -103,16 +103,38 @@
                             <div class="box-footer">
                                 <div class="row" style="font-weight:bold;">
                                     <div class="col-sm-3 text-right">
-                                        Cummulative Units Earned:
+                                        Actual Total Units Earned:
                                     </div>
                                     <div class="col-sm-3">
                                         {{ units }}
                                     </div>
                                     <div class="col-sm-3 text-right">
-                                        Cummulative GWA
+                                        CGWA
                                     </div>
                                     <div class="col-sm-3">
                                         {{ gwa }}
+                                    </div>
+                                </div>
+                                <div class="row" style="font-weight:bold;">
+                                    <div class="col-sm-3 text-right">
+                                        Academic Units:
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ curriculum_units }}
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        Non Academic Units
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ curriculum_units_na }}
+                                    </div>
+                                </div>
+                                <div class="row" style="font-weight:bold;">
+                                    <div class="col-sm-3 text-right">
+                                        Credited Transferee Units:
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ credited_units }}
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +203,7 @@
                                         {{ units_left }}
                                     </div>
                                     <div class="col-sm-1 text-right">
-                                        Transferee Units:
+                                        Credited Transferee Units:
                                     </div>
                                     <div class="col-sm-1">
                                         {{ credited_units }}
@@ -532,6 +554,7 @@ new Vue({
         generated_tor:[],
         credited_units: 0,
         curriculum_units: 0,
+        curriculum_units_na: 0,
         units_left: 0,        
         tor:{
             date_issued: undefined,
@@ -581,6 +604,7 @@ new Vue({
                     this.student = data.data.student;
                     this.credited_units = data.data.credited_units;
                     this.curriculum_units = data.data.curriculum_units;
+                    this.curriculum_units_na = data.data.curriculum_units_na;                    
                     this.units_left = data.data.units_left;
                     this.generated_tor =  data.data.generated_tor;
                     this.change_grades = data.data.change_grades;

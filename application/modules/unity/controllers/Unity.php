@@ -1040,7 +1040,8 @@ class Unity extends CI_Controller {
         $assessment_units = 0;
         $assessment_units_earned = 0;
         $credited_units = 0;
-        $curriculum_units = 0;        
+        $curriculum_units = 0;     
+        $curriculum_units_na = 0;   
 
         $change_grade = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode,enumSem,term_label,term_student_type,strYearStart,strYearEnd')
             ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
@@ -1054,6 +1055,8 @@ class Unity extends CI_Controller {
         foreach($curicculum as $cs){
             if($cs['include_gwa'])
                 $curriculum_units += $cs['strUnits'];
+            else
+                $curriculum_units_na += $cs['strUnits'];
 
             $recs = 
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
@@ -1210,6 +1213,7 @@ class Unity extends CI_Controller {
         $data['credited_subjects'] = $credited_subjects;
         $data['credited_units'] = $credited_units;
         $data['curriculum_units'] = $curriculum_units;
+        $data['curriculum_units_na'] = $curriculum_units_na;        
         $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
 
