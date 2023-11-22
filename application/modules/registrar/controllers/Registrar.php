@@ -1754,14 +1754,14 @@ class Registrar extends CI_Controller {
             $classlists = $this->db->get_where('tb_mas_classlist',array('strAcademicYear'=>$sem))->result_array();
             foreach($classlists as $classlist){
                 $students = $this->db
-                                ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG')
+                                ->select('tb_mas_classlist_student.*,tb_mas_registration.intROG,tb_mas_registration.date_enlisted')
                                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID','left')
                                 ->where(array('intClassListID'=>$classlist['intID']))                            
                                 ->get('tb_mas_classlist_student')
                                 ->result_array();
                 foreach($students as $student){                    
-                    if($student['intROG'] == "0"){
-                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intClassListID'=>$classlist['intID'],'date_added >='=>$post['cutoff'],'date_added <='=>$post['cutoff_end']))                    
+                    if($student['intROG'] == "0" && $student['date_enlisted'] >= $post['cutoff'] && $student['date_enlisted'] <= $post['cutoff_end']){
+                        $this->db->where(array('intCSID'=>$student['intCSID']))                    
                         ->delete('tb_mas_classlist_student');            
                 
                         //$this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
