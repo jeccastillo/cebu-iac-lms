@@ -612,6 +612,16 @@ new Vue({
                                 this.$refs.bdo_form.submit();
                             }, 500);                        
                         }
+                        else {
+                            Swal.fire({
+                                title: "Payment is Pending",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                window.location = "https://iacademy.edu.ph";
+                            });
+
+                        }
                     } else {
                         Swal.fire(
                             'Failed!',
