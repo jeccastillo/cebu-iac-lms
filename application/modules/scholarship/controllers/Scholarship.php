@@ -109,7 +109,7 @@ class Scholarship extends CI_Controller {
         $ret['registration'] = $this->data_fetcher->getRegistrationInfo($student,$sem);
         
         if($ret['registration']){
-            $data['tuition'] = $this->data_fetcher->getTuition($student,$sem,$ret['registration']['enumScholarship']);
+            $data['tuition'] = $this->data_fetcher->getTuition($student,$sem);
             $ret['tuition_data'] = $data['tuition'];
             $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);         
         }
