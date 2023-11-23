@@ -167,8 +167,9 @@ class Portal extends CI_Controller {
             $this->data['home'] = true;
             $this->data['body_class'] = "homepage";
             $this->load->view('common/header',$this->data);
-            $this->load->view('student_dashboard',$this->data);
+            $this->load->view('student_dashboard',$this->data);            
             $this->load->view('common/footer',$this->data);
+            $this->load->view('common/student_dashboard_conf',$this->data);
         }
         
         else
