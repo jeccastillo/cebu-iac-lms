@@ -647,7 +647,7 @@ class Unity extends CI_Controller {
         $data['id'] = $student['intID'];
         
 
-        $this->load->view("public/header",$this->data);
+        $this->load->view("public/tuition_payment_header",$this->data);
         $this->load->view("public/payment_online_tuition",$data);
         $this->load->view("public/footer",$this->data);         
     }  
