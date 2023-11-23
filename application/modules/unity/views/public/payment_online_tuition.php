@@ -372,7 +372,7 @@ new Vue({
                 this.loadData();
 
                 $(function() {
-                    $(".box_mode_payment").click(function() {
+                    $(".box_mode_payment").on('click',function() {
                         $(".box_mode_payment").removeClass("active");
                         $(this).addClass("active");
                     })
