@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(e){
-        <?php if($deficiencies_count > 1): ?>
+        <?php if($deficiencies_count >= 1): ?>
             Swal.fire({
                 title: 'You have <?php echo $deficiencies_count; ?> deficiencies',
                 text: "View Deficiencies?",
