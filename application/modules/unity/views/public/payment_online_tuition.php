@@ -47,6 +47,7 @@
                                         <hr />
                                         <div v-if="student_api_data.campus == 'Makati'">
                                             <h5 class="my-3">BDO PAY</h5>
+                                            <hr />  
                                             <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                                                 <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
                                                     class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
