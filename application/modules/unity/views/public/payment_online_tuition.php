@@ -442,8 +442,7 @@ new Vue({
                                 let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                                 
                                 if(this.registration.downpayment == 1 || down_payment == 0){
-                                    this.has_down = true;
-                                    console.log(this.tuition_data.installment_fee);
+                                    this.has_down = true;                                    
                                     //installment amounts                                                                    
                                     var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                                     console.log(temp);
@@ -547,9 +546,7 @@ new Vue({
                 "mode_of_release": null,
                 "mailing_fee": 0,
                 "student_information_id": this.student_api_data.id
-            }
-
-            console.log(this.payload)
+            }            
 
         },
         submitPayment: function() {
