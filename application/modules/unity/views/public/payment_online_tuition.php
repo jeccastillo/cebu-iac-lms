@@ -42,7 +42,9 @@
                                     </div>     
                                                                                                 -->
                                     <input type="hidden" value="Tuition Fee" v-model="desc" />                                                                                            
-                                    <div>                                    
+                                    <div>          
+                                        <h3>Select Mode of Payment</h3>                          
+                                        <hr />
                                         <div v-if="student_api_data.campus == 'Makati'">
                                             <h5 class="my-3">BDO PAY</h5>
                                             <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -56,7 +58,7 @@
                                         <hr />
                                         <h5>PAYNAMICS</h5>
                                         <hr />
-                                        <h5 class="my-3">Select Mode of Payment ( Banks )</h5>
+                                        <h5 class="my-3">Banks</h5>
                                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                                             <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
                                                 class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
@@ -66,7 +68,7 @@
                                         </div>
 
                                         <hr>
-                                        <h5 class="my-3">Select Mode of Payment ( Non-Banks )</h5>
+                                        <h5 class="my-3">Non-Banks</h5>
                                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                                             <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
                                                 class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
