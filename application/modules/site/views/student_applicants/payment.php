@@ -130,8 +130,19 @@
                         </div>
                     </div>
                 </div>
-
-                <hr>
+                <hr />
+                <div v-if="payment_type == 'admissions_student_payment_reservation'">
+                    <h5 class="my-3">BDO PAY</h5>
+                    <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                        <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
+                            class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                            style="display:flex; align-itenms:center;">
+                            <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
+                        </div>
+                    </div>                                                        
+                </div>
+                <hr />
+                
 
                 <div class="d-flex flex-wrap my-5" style="margin-top:50px">
                     <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
@@ -197,6 +208,9 @@
                 <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable
                         and non-transferrable</i></p>
 
+        </form>
+        <form ref="bdo_form" action="https://secureacceptance.cybersource.com/pay" method="post">
+            <input type="hidden" v-for="(value, name, index) in request_bdo" :name="name" :value="value" />
         </form>
     </div>
 </section>
@@ -273,6 +287,35 @@ new Vue({
         total_price_cart_with_charge: 0,
         payload: {},
         slug: "<?php echo $this->uri->segment('3'); ?>",
+        bdo_pay:{
+            charge: 0,
+            id: 99,
+            is_nonbank: false,
+            name: "BDO PAY",
+            pchannel: "bdo_pay",
+            pmethod: "onlinebanktransfer",            
+            type: "none"
+        },
+        request_bdo:{
+            access_key: undefined,
+            amount: undefined,
+            currency: undefined,
+            locale: undefined,
+            profile_id: undefined,
+            reference_number: undefined,
+            signature: undefined,
+            signed_date_time: undefined,
+            signed_field_names: undefined,
+            transaction_type: undefined,
+            transaction_uuid: undefined,
+            unsigned_field_names: "",
+            bill_to_address_line1: undefined,
+            bill_to_address_city: undefined,
+            bill_to_address_country: undefined,
+            bill_to_email: undefined,
+            bill_to_surname: undefined,
+            bill_to_forename: undefined,
+        } 
     },
     mounted() {
 
@@ -432,7 +475,13 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        } else {
+                        } 
+                        else if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
+                            this.request_bdo = data.data.post_data;
+                            setTimeout(() => {
+                                this.$refs.bdo_form.submit();
+                            }, 500);                        
+                        }else {
                             Swal.fire({
                                 title: "Payment is Pending",
                                 text: data.data.message,
