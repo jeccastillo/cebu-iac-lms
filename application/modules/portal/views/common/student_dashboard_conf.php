@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
     $(document).ready(function(e){
         <?php if($deficiencies_count > 1): ?>
             Swal.fire({
