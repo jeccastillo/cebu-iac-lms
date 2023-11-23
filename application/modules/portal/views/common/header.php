@@ -40,6 +40,11 @@
         <![endif]-->
 
 </head>
+<style>
+.swal2-popup {
+font-size: 1.6rem !important;
+}
+</style>
     <body class="sidebar-mini skin-blue-light">
         <header class="main-header">
             <!-- Logo -->
