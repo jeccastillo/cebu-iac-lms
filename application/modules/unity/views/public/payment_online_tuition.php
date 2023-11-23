@@ -370,12 +370,6 @@ new Vue({
                 this.payment_modes = _.filter(data.data.data, item => item.is_nonbank != true);
                 this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                                
                 this.loadData();
-
-                
-                $(".box_mode_payment").click(function() {
-                    $(".box_mode_payment").removeClass("active");
-                    $(this).addClass("active");
-                })
                 
             })
             .catch((e) => {
@@ -471,6 +465,12 @@ new Vue({
                                 .then((data) => {
                                     this.student_api_data = data.data.data;
                                     Swal.close();
+                                    $(function() {
+                                        $(".box_mode_payment").click(function() {
+                                            $(".box_mode_payment").removeClass("active");
+                                            $(this).addClass("active");
+                                        })
+                                    })
                                 })
                                 .catch((error) => {
                                     console.log(error);
