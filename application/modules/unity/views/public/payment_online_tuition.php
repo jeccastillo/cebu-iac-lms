@@ -371,12 +371,12 @@ new Vue({
                 this.payment_modes_nonbanks = _.filter(data.data.data, item => item.is_nonbank == true);                                
                 this.loadData();
 
-                $(function() {
-                    $(".box_mode_payment").on('click',function() {
-                        $(".box_mode_payment").removeClass("active");
-                        $(this).addClass("active");
-                    })
+                
+                $(".box_mode_payment").click(function() {
+                    $(".box_mode_payment").removeClass("active");
+                    $(this).addClass("active");
                 })
+                
             })
             .catch((e) => {
                 console.log("error");
