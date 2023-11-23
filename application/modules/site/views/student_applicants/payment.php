@@ -113,7 +113,7 @@
                 <div>
                     <h3>Select Mode of Payment</h3>                          
                     <hr />
-                    <div v-if="payment_type == 'admissions_student_payment_reservation' && student.campus == 'Makati'">
+                    <div v-if="payment_type == 'admissions_student_payment_reservation'">
                         <h5 class="my-3">BDO PAY</h5>
                         <hr />  
                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">

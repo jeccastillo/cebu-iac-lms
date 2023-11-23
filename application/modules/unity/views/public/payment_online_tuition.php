@@ -45,7 +45,7 @@
                                     <div>          
                                         <h3>Select Mode of Payment</h3>                          
                                         <hr />
-                                        <div v-if="student_api_data.campus == 'Makati'">
+                                        <div>
                                             <h5 class="my-3">BDO PAY</h5>
                                             <hr />  
                                             <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
