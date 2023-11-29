@@ -94,7 +94,7 @@
                             <div class="form-group col-sm-3">
                                 <label for="year">Select Track</label>
                                 <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
-                                    <option v-for="item in shs_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
+                                    <option v-for="item in shs_programs" :value="item.intProgramID">{{ item.strProgramCode + item.strProgramDescription }}</option>                                    
                                 </select>
                             </div>   
                             <div class="form-group col-sm-3">
@@ -156,7 +156,7 @@
                             <div class="form-group col-sm-3">
                                 <label for="year">Select Program</label>
                                 <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='program.track_id'>
-                                    <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
+                                    <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode + item.strProgramDescription }}</option>                                    
                                 </select>
                             </div>   
                             <div class="form-group col-sm-3">
