@@ -375,7 +375,10 @@ new Vue({
             this.student = data.data.data;
             this.request.slug = this.slug;   
             this.or_print.type = this.student.type;
-            this.payments = this.student.payments;  
+            for(i in this.student.payments){
+                if(this.student.sy_reference == this.student.payments[i].sy_reference)
+                    this.payments.push(this.student.payments[i]);
+            }             
             console.log(this.payments);          
             this.request.first_name = this.student.first_name;
             this.request.middle_name = this.student.middle_name;
