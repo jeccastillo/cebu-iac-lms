@@ -4,15 +4,15 @@
                         Subject Offering
                         <small>
                             <?php if($dissolved == 0): ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/1" ?>" ><i class="fa fa-list"></i> Show Dissolved</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."academics/view_classlist_archive_admin/".$selected_ay."/".$program."/1" ?>" ><i class="fa fa-list"></i> Show Dissolved</a>
                             <?php else: ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"><i class="fa fa-list"></i> Show Non Dissolved</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."academics/view_classlist_archive_admin/".$selected_ay."/".$program."/0" ?>"><i class="fa fa-list"></i> Show Non Dissolved</a>
                             <?php endif; ?>                                                       
 
                         </small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="<?php echo base_url(); ?>unity/view_classlist"><i class="ion ion-ios7-locked"></i> Admin</a></li>
+                        <li><a href="<?php echo base_url(); ?>academics/view_classlist"><i class="ion ion-ios7-locked"></i> Admin</a></li>
                         <li class="active">Subject Offering</li>
                     </ol>
                 </section>
@@ -29,7 +29,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title"><?php echo ($dissolved == 0)?'Classlists/Subjects Offered':'Dissolved Sections'; ?></h3>                
                 <div class="box-tools pull-right">
-                    <select id="select-sem-admin" class="form-control input-sm" >
+                    <select id="select-sem-admin-ac" class="form-control input-sm" >
                         <?php foreach($sy as $s): ?>
                             <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$term_type." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                         <?php endforeach; ?>

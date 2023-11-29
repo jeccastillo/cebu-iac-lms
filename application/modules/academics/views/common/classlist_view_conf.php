@@ -140,6 +140,13 @@
             } );
         } );
         
+        $("#select-sem-admin-ac").change(function(e) {
+            document.location = "<?php echo base_url(); ?>academics/view_classlist_archive_admin/" + $(this)
+                .val();
+
+        });
     });
+
+    
 
 </script>
