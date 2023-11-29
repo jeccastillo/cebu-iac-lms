@@ -2347,8 +2347,7 @@ class Data_fetcher extends CI_Model {
                     $unit_fee = $unit_rate['tuition_amount'];
                 
             }  
-        }
-        echo $unit_fee;
+        }        
             
 
 
