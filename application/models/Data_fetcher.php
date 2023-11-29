@@ -2456,6 +2456,8 @@ class Data_fetcher extends CI_Model {
                 if($class['isInternshipSubject']){                
                     $hasInternship = true;
                 }
+
+                echo $tuition;
             
             }
         }
@@ -2484,7 +2486,7 @@ class Data_fetcher extends CI_Model {
                 }                                 
                     
         }
-        echo $tuition;
+        
         
 
         foreach($misc as $m){            
