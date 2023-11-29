@@ -444,12 +444,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
-            </table>               
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
-                </tr>
-            </table>               
+            </table>                  
                           
         ';
 
