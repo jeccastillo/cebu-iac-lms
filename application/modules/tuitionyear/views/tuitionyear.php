@@ -144,7 +144,7 @@
                                 <td>{{ item.tuition_amount_hyflex }}</td>
                                 <td>{{ item.tuition_amount_hybrid }}</td>
                                 <td>{{ item.type }}</td>
-                                <td><a href="#" @click.prevent.stop="deleteItem('track',item.id)">Delete</a></td>
+                                <td><a href="#" @click.prevent.stop="deleteItem('program',item.id)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
