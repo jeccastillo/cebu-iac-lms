@@ -407,15 +407,15 @@ new Vue({
                 console.log(error);
             })  
             
-            for(i in this.student.payments){
-                if(this.student.payments[i].status == "Refunded")
-                        this.refunded_payments.push(this.student.payments[i]);
-                else if(this.student.payments[i].status == "Paid"){
-                    if(this.student.payments[i].description == "Application Payment"){                     
-                            this.application_payment = this.student.payments[i];                    
+            for(i in this.payments){
+                if(this.payments[i].status == "Refunded")
+                        this.refunded_payments.push(this.payments[i]);
+                else if(this.payments[i].status == "Paid"){
+                    if(this.payments[i].description == "Application Payment"){                     
+                            this.application_payment = this.payments[i];                    
                     }
-                    if(this.student.payments[i].description == "Reservation Payment"){                        
-                        this.reservation_payment = this.student.payments[i];                    
+                    if(this.payments[i].description == "Reservation Payment"){                        
+                        this.reservation_payment = this.payments[i];                    
                     }
                 }
             }
