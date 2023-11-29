@@ -2457,8 +2457,7 @@ class Data_fetcher extends CI_Model {
                     $hasInternship = true;
                 }                
             
-            }
-            echo $tuition;
+            }            
         }
         else{
             //$tuition = $unit_fee;
