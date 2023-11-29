@@ -424,7 +424,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
                 <tr>
-                    <td width="264px" style= "font-size:9;">Note: Class schedule is subject to change</td>
+                    <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
             </table>
@@ -435,7 +435,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
                 <tr>
-                    <td colspan="2" style="font-size:9;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
+                    <td colspan="2" style="font-size:8;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
