@@ -2322,35 +2322,6 @@ class Data_fetcher extends CI_Model {
     
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         
-        
-
-        $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
-            ->get('tb_mas_tuition_year_program')->first_row('array');
-        
-        if(!$unit_rate)
-            $unit_fee = getUnitPrice($tuition_year,$class_type);        
-        else{
-            switch($class_type){
-                case 'regular':
-                    $unit_fee = $unit_rate['tuition_amount'];
-                break;
-                case 'online':
-                    $unit_fee = $unit_rate['tuition_amount_online'];
-                break;
-                case 'hybrid':
-                    $unit_fee = $unit_rate['tuition_amount_hybrid'];
-                break;
-                case 'hyflex':
-                    $unit_fee = $unit_rate['tuition_amount_hyflex'];
-                break;
-                default:
-                    $unit_fee = $unit_rate['tuition_amount'];
-                
-            }  
-        }        
-            
-
-
         if($discount == 0)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'discount','tb_mas_student_discount.status'=>'applied'))
@@ -2422,6 +2393,31 @@ class Data_fetcher extends CI_Model {
                 $total_foreign += $foreign_fee_list['International Student Fee'];
             }
         }
+
+        $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
+            ->get('tb_mas_tuition_year_program')->first_row('array');
+        
+        if(!$unit_rate)
+            $unit_fee = getUnitPrice($tuition_year,$class_type);        
+        else{
+            switch($class_type){
+                case 'regular':
+                    $unit_fee = $unit_rate['tuition_amount'];
+                break;
+                case 'online':
+                    $unit_fee = $unit_rate['tuition_amount_online'];
+                break;
+                case 'hybrid':
+                    $unit_fee = $unit_rate['tuition_amount_hybrid'];
+                break;
+                case 'hyflex':
+                    $unit_fee = $unit_rate['tuition_amount_hyflex'];
+                break;
+                default:
+                    $unit_fee = $unit_rate['tuition_amount'];
+                
+            }  
+        }       
 
         if($level == "college"){
             foreach($subjects as $sid)
