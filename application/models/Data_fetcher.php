@@ -2455,11 +2455,10 @@ class Data_fetcher extends CI_Model {
 
                 if($class['isInternshipSubject']){                
                     $hasInternship = true;
-                }
-
-                echo $tuition;
+                }                
             
             }
+            echo $tuition;
         }
         else{
             //$tuition = $unit_fee;
