@@ -2484,6 +2484,7 @@ class Data_fetcher extends CI_Model {
                 }                                 
                     
         }
+        echo $tuition;
         
 
         foreach($misc as $m){            
