@@ -123,6 +123,67 @@
                     </form>
                     <hr />
                     <hr />
+                    <h3>Tuition per Program (FOR College ONLY)</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Track</th>
+                                <th>Regular</th>
+                                <th>Online</th>
+                                <th>Hyflex</th>
+                                <th>Hybrid</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in request.track">
+                                <td>{{ item.strProgramCode + ' ' + item.strProgramDescription }}</td>
+                                <td>{{ item.tuition_amount }}</td>
+                                <td>{{ item.tuition_amount_online }}</td>
+                                <td>{{ item.tuition_amount_hyflex }}</td>
+                                <td>{{ item.tuition_amount_hybrid }}</td>
+                                <td>{{ item.type }}</td>
+                                <td><a href="#" @click.prevent.stop="deleteItem('track',item.id)">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <hr />
+                    <p>Add new Tuition for Program</p>
+                    <form @submit.prevent="addExtra('track','Track',track)">                                
+                        <div class="row">                     
+                            <div class="form-group col-sm-3">
+                                <label for="year">Track</label>
+                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
+                                    <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
+                                </select>
+                            </div>   
+                            <div class="form-group col-sm-3">
+                                <label for="year">Regular Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Online Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_online'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hyflex Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hyflex'>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="year">Hybrid Fee</label>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hybrid'>
+                            </div>                                                                                                
+                        </div>
+                        
+                        <div class="row">    
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
                     <h3>Miscellaneous Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -283,6 +344,7 @@ new Vue({
         id: <?php echo $this->uri->segment('3'); ?>,
         header_title: 'Add Tuition Year',
         shs_programs: [],
+        college_programs: [],
         request: {
             year: undefined,
             pricePerUnit: undefined,            
@@ -336,6 +398,7 @@ new Vue({
             .then((data) => {                    
                 this.request = data.data.data;    
                 this.shs_programs = data.data.shs_programs;                
+                this.college_programs = data.data.college_programs;
                 //this.loader_spinner = false;
             })
             .catch((error) => {

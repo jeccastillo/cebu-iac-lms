@@ -94,7 +94,8 @@ class Tuitionyear extends CI_Controller {
             $data['data'] = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
             $data['data']['misc'] = $this->data_fetcher->getTuitionExtra('misc',$id);
             $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
-            $data['data']['track'] = $this->data_fetcher->getTuitionTrack($id);
+            $data['data']['track'] = $this->data_fetcher->getTuitionTrack($id,'track');
+            $data['data']['prg'] = $this->data_fetcher->getTuitionTrack($id,'program');
         }
         else{
             $data['data'] = [];
@@ -103,7 +104,7 @@ class Tuitionyear extends CI_Controller {
         }
 
         $data['shs_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'shs'))->result_array();
-
+        $data['college_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'college'))->result_array();
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
         echo json_encode($data);
