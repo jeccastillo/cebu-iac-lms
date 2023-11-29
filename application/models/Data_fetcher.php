@@ -2205,7 +2205,7 @@ class Data_fetcher extends CI_Model {
     function getTuitionTrack($id,$label){
         return $this->db->select('tb_mas_programs.*,tb_mas_tuition_year_track.id,tuition_amount,tuition_amount_online,tuition_amount_hybrid,tuition_amount_hyflex')
                         ->from('tb_mas_tuition_year_'.$label)
-                        ->join('tb_mas_programs', 'tb_mas_programs.intProgramID = tb_mas_tuition_year_track.track_id')
+                        ->join('tb_mas_programs', 'tb_mas_programs.intProgramID = tb_mas_tuition_year_'.$label.'.track_id')
                         ->where(array('tuitionyear_id'=>$id))
                         ->get()
                         ->result_array();
