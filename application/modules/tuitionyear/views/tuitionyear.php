@@ -137,7 +137,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in request.track">
+                            <tr v-for="item in request.program">
                                 <td>{{ item.strProgramCode + ' ' + item.strProgramDescription }}</td>
                                 <td>{{ item.tuition_amount }}</td>
                                 <td>{{ item.tuition_amount_online }}</td>
@@ -155,25 +155,25 @@
                         <div class="row">                     
                             <div class="form-group col-sm-3">
                                 <label for="year">Select Program</label>
-                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
+                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='program.track_id'>
                                     <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
                                 </select>
                             </div>   
                             <div class="form-group col-sm-3">
                                 <label for="year">Regular Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Online Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_online'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_online'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hyflex Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hyflex'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hyflex'>
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="year">Hybrid Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hybrid'>
+                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hybrid'>
                             </div>                                                                                                
                         </div>
                         
@@ -367,6 +367,13 @@ new Vue({
             type: 'regular',    
         },
         track: {
+            track_id: undefined,
+            tuition_amount: undefined,            
+            tuition_amount_hybrid: undefined,
+            tuition_amount_online: undefined,
+            tuition_amount_hyflex: undefined,                 
+        },
+        program: {
             track_id: undefined,
             tuition_amount: undefined,            
             tuition_amount_hybrid: undefined,
