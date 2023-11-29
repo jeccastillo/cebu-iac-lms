@@ -422,30 +422,30 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
                 <tr>
                     <td width="264px" style= "font-size:9;">Note: Class schedule is subject to change</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
             </table> 
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>               
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
@@ -453,7 +453,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                           
         ';
 
-        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
         <tr>
             <td>Policy on School Charges and Refund of Fees<br /><br />
                 Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
@@ -470,7 +470,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </td>
         </tr>                                              
     </table> 
-    <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+    <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
