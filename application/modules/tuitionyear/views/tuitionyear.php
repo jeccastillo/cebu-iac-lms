@@ -92,7 +92,7 @@
                     <form @submit.prevent="addExtra('track','Track',track)">                                
                         <div class="row">                     
                             <div class="form-group col-sm-3">
-                                <label for="year">Track</label>
+                                <label for="year">Select Track</label>
                                 <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
                                     <option v-for="item in shs_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
                                 </select>
@@ -151,10 +151,10 @@
                     
                     <hr />
                     <p>Add new Tuition for Program</p>
-                    <form @submit.prevent="addExtra('track','Track',track)">                                
+                    <form @submit.prevent="addExtra('program','Program',program)">                                
                         <div class="row">                     
                             <div class="form-group col-sm-3">
-                                <label for="year">Track</label>
+                                <label for="year">Select Program</label>
                                 <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
                                     <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode }}</option>                                    
                                 </select>
@@ -429,7 +429,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    if(type != "track")
+                    if(type != "track" && type != "program")
                         formdata.append("tuitionYearID",this.id);                    
                     else
                         formdata.append("tuitionyear_id",this.id);                    
