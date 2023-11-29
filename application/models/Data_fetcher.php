@@ -2326,8 +2326,7 @@ class Data_fetcher extends CI_Model {
 
         $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
             ->get('tb_mas_tuition_year_program')->first_row('array');
-
-        echo $unit_rate['tuition_amount']."<br />";
+        
         if(!$unit_rate)
             $unit_fee = getUnitPrice($tuition_year,$class_type);        
         else{
@@ -2349,6 +2348,7 @@ class Data_fetcher extends CI_Model {
                 
             }  
         }
+        echo $unit_fee;
             
 
 
