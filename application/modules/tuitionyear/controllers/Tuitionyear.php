@@ -95,7 +95,7 @@ class Tuitionyear extends CI_Controller {
             $data['data']['misc'] = $this->data_fetcher->getTuitionExtra('misc',$id);
             $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
             $data['data']['track'] = $this->data_fetcher->getTuitionTrack($id,'track');
-            $data['data']['prg'] = $this->data_fetcher->getTuitionTrack($id,'program');
+            $data['data']['program'] = $this->data_fetcher->getTuitionTrack($id,'program');
         }
         else{
             $data['data'] = [];
