@@ -2321,7 +2321,35 @@ class Data_fetcher extends CI_Model {
         $level = get_stype($student['level']);
     
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
-        $unit_fee = getUnitPrice($tuition_year,$class_type);        
+        
+        
+
+        $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
+            ->get('tb_mas_tuition_year_program')->first_row('array');
+
+        if(!$unit_rate)
+            $unit_fee = getUnitPrice($tuition_year,$class_type);        
+        else{
+            switch($class_type){
+                case 'regular':
+                    $unit_fee = $unit_rate['tuition_amount'];
+                break;
+                case 'online':
+                    $unit_fee = $unit_rate['tuition_amount_online'];
+                break;
+                case 'hybrid':
+                    $unit_fee = $unit_rate['tuition_amount_hybrid'];
+                break;
+                case 'hyflex':
+                    $unit_fee = $unit_rate['tuition_amount_hyflex'];
+                break;
+                default:
+                    $unit_fee = $unit_rate['tuition_amount'];
+                
+            }  
+        }
+            
+
 
         if($discount == 0)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
