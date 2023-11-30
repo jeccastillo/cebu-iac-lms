@@ -1533,10 +1533,10 @@ class Pdf extends CI_Controller {
         $this->data['item'] = $this->data_fetcher->getItem('tb_mas_curriculum',$id);   
         $this->data['curriculum_subjects'] =  [];     
         $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
-        
+
         foreach($curriculum as $subject){
             $prereq_array = 
-                    $this->db->select('tb_mas_subjects.*')
+                    $this->db->select('tb_mas_subjects.*,tb_mas_prerequisites.program')
                      ->from('tb_mas_prerequisites')
                      ->join('tb_mas_subjects', 'tb_mas_prerequisites.intPrerequisiteID = tb_mas_subjects.intID')
                      ->where('intSubjectID',$subject['intSubjectID'])
@@ -1544,14 +1544,12 @@ class Pdf extends CI_Controller {
                      ->result_array();
             $subject['prereq'] = [];    
             foreach($prereq_array as $prereq){
-                if(isset($prereq['program']) && ($prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intID'] || $prereq['program'] == NULL))
-                    $subject['prereq'][] =  $prereq;
-            }                          
+                    if(isset($prereq['program']) && ($prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intID'] || $prereq['program'] == NULL))
+                        $subject['prereq'][] =  $prereq;     
+            }       
 
             $this->data['curriculum_subjects'][] = $subject;
         }
-
-        
         
          //print_r($this->data['spouse']);
         tcpdf();
