@@ -151,7 +151,11 @@
                                                     </div>
                                                     <div class="form-group">                                                                                                        
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="text" required class="form-control" v-model="amount_to_pay" />
+                                                        <input v-if="payment_type == 'full'" type="text" required class="form-control" v-model="amount_to_pay" />
+                                                        <div v-else >
+                                                            <input type="hidden" required v-model="amount_to_pay" />
+                                                            {{ amount_to_pay }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             <div class="col-sm-4" v-if="cashier">
