@@ -187,7 +187,7 @@
                                                 <table class="table table-striped" v-if="payment_type == 'full'">
                                                     <tr>
                                                         <td>Full Tuition</td>
-                                                        <td><a href="#" @click="setValue(tuition_data.total,'full')">{{ remaining_amount }}</a></td>
+                                                        <td><a href="#" @click="setValue(remaining_amount,'full')">{{ remaining_amount }}</a></td>
                                                     </tr> 
                                                 </table>
                                                 <table class="table table-striped" v-else>
