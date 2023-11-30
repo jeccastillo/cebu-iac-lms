@@ -614,7 +614,7 @@ new Vue({
                                 this.reservation_payment = data.data.data;    
                                 this.application_payment = data.data.application;
                                 
-                                if(this.reservation_payment.status == "Paid" && reservation_payment.sy_reference == this.sem){
+                                if(this.reservation_payment.status == "Paid" && this.reservation_payment.sy_reference == this.sem){
                                         this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
                                         this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
                                         this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
