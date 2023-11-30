@@ -436,7 +436,7 @@ class Finance extends CI_Controller {
                     ->delete('tb_mas_student_ledger');
         
                 $amount = 0;
-                if($post['paymentType'] == "full")
+                if($post['payment_type'] == "full")
                     $amount = $tuition_data['total_before_deductions'];
                 else
                     $amount = $tuition_data['ti_before_deductions'];
