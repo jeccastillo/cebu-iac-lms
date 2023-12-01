@@ -5,7 +5,7 @@
     //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $mt = 10;
+    $mt = 15;
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetTitle($student['strLastname'] . ", " . $student['strFirstname'] . ', ' . substr($student['strMiddlename'], 0,1). ".-". $student['strProgramCode']);
@@ -191,9 +191,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="540px">                                
                 <tr>
                     <td width="240px">
-                        <table cellpadding="0"  style="color:#333; font-size:8;">
+                        <table cellpadding="0"  style="color:#333; font-size:7;">
                             <tr>
-                                <td colspan="3" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
+                                <td colspan="3" style= "font-size:8; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
                             </tr>
                             <tr>
                                 <td width="85px"></td>
@@ -229,7 +229,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
+                                    <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
                                 </tr>';
                 endif;
                     if(!empty($tuition['scholarship'])):
@@ -310,9 +310,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </table>
                     </td>
                     <td width="150px">                                
-                        <table style="color:#333; font-size:8; ">
+                        <table style="color:#333; font-size:7; ">
                             <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
+                                <td colspan="2" style= "font-size:8; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
                             </tr>
                         ';
                         
@@ -335,16 +335,16 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         '</table>  
                     </td>
                     <td width="130px">
-                        <table style="color:#333; font-size:8;">                            
+                        <table style="color:#333; font-size:7;">                            
                             <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
+                                <td colspan="2" style= "font-size:8; font-weight:bold;">OTHER FEES DETAIL</td>
                                 
                             </tr>';
 
                     if($tuition['new_student'] != 0){
 
                         $html.='<tr>
-                        <td colspan="2" style= "font-size:8;">NEW STUDENT FEES</td></tr>';
+                        <td colspan="2" style= "font-size:7;">NEW STUDENT FEES</td></tr>';
                     
                         foreach($tuition['new_student_list'] as $key=>$val){
         
@@ -365,7 +365,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <td width="60px" style="text-align:right;"></td>
                         </tr>
                         <tr>
-                        <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
+                        <td colspan="2" style= "font-size:7;">FOREIGN STUDENT FEES</td></tr>';
                     
                         foreach($tuition['foreign_fee_list'] as $key=>$val){
         
