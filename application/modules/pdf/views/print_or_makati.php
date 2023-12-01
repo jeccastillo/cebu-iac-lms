@@ -24,7 +24,7 @@
             </table>            
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td><?php echo "SY ".$term['enumSem']." ".$term['term_label']; ?></td>                    
+                    <td><?php echo $term['enumSem']." ".$term['term_label']; ?></td>                    
                 </tr>
             </table>
             <table>
