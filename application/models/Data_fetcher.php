@@ -2488,7 +2488,7 @@ class Data_fetcher extends CI_Model {
         
 
         foreach($misc as $m){            
-            if($stype != 'new' || trim($m['name']) != 'ID Validation' ){
+            if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){
                 $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                 $total_misc += $misc_list[$m['name']];
             }
