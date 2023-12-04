@@ -81,7 +81,18 @@
                                 <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
                             </tr>
                         </tbody>
-                    </table>                     
+                    </table>   
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select class="form-control" v-model="selected_term">
+                                <option v-for="term in terms" :value="term.intID">{{ term.enumSem + ' ' + term.term_label + ' ' + term.strYearStart + '-' + term.strYearEnd }}</option>
+                            </select>
+                            
+                        </div>    
+                        <div class="col-sm-6">
+                        </div>    
+                    </div>                  
                 </div>
             </div>
             
@@ -112,6 +123,7 @@ new Vue({
         ledger: [],        
         other: [],
         finance: undefined, 
+        terms: [],
         student: {
             strFirstname:'',
             strLastname:'',
@@ -162,6 +174,7 @@ new Vue({
             .then((data) => {
                 ledger_temp = data.data.ledger;
                 other_temp = data.data.other;
+                this.terms = data.data.ledger_group_term;
                 this.finance = data.data.user;
                 this.student = data.data.student;
                 this.sy = data.data.sy;

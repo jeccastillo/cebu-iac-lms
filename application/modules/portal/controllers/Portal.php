@@ -81,6 +81,9 @@ class Portal extends CI_Controller {
                 
         $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');
         $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        $student_type = get_stype($student['level']);
+        $where_tuition['term_student_type'] =  $student_type;
 
         if($sem != 0){
             $where_tuition['syid'] = $sem;
@@ -117,7 +120,7 @@ class Portal extends CI_Controller {
         
 
         
-        $data['student'] = $this->data_fetcher->getStudent($id);        
+                
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $sem = $this->data_fetcher->get_active_sem();  
         $data['active_sem'] = $sem['intID'];
