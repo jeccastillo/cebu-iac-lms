@@ -553,7 +553,7 @@ class Unity extends CI_Controller {
 
         $data['campus'] =  $this->data['campus'];
 
-        echo $data['campus'];
+        print_r($data);
 
         if($sem!=null)
             $data['selected_ay'] = $sem;
