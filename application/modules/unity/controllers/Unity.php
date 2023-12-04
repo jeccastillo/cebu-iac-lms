@@ -496,7 +496,7 @@ class Unity extends CI_Controller {
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             $role = $this->session->userdata('special_role');
             $ret['finance_manager_privilages'] = ($role == 2)?true:false;    
-            $ret['campus'] = $this->data['campus'];        
+               
             
             //--------TUITION-------------------------------------------------------------------
             
@@ -552,6 +552,8 @@ class Unity extends CI_Controller {
         $active_sem = $this->data_fetcher->get_active_sem();        
 
         $data['campus'] =  $this->data['campus'];
+
+        echo $data['campus'];
 
         if($sem!=null)
             $data['selected_ay'] = $sem;
