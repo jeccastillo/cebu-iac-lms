@@ -85,12 +85,14 @@
                     <hr />                    
                     <div class="row">
                         <div class="col-sm-6">
+                            <label>Select Term for Tuition Payment</label>
                             <select class="form-control" v-model="selected_term">
                                 <option v-for="term in terms" :value="term.intID">{{ term.enumSem + ' ' + term.term_label + ' ' + term.strYearStart + '-' + term.strYearEnd }}</option>
                             </select>
                             
                         </div>    
                         <div class="col-sm-6">
+                            <a class="btn btn-primary" :href="base_url + 'unity/student_tuition_payment/' + student.slug + '/' + selected_term">Pay Tuition</a>
                         </div>    
                     </div>                  
                 </div>
