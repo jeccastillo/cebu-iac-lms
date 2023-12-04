@@ -234,6 +234,9 @@
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">as full/partial payment of &nbsp;</span>
                         <?php echo $description; ?>
+                        <?php if(trim($description) == "Tuition Fee") 
+                                    echo " ".$remarks;
+                        ?>
                     </td>
                 </tr>
             </table>
