@@ -32,6 +32,10 @@
                         <label for="midterm_start">End of Application Period</label>
                         <input type="datetime-local" name="endOfApplicationPeriod" value="<?php echo $item['endOfApplicationPeriod']; ?>" class="form-control" />                         
                 </div>
+                <div class="form-group col-xs-12 col-lg-4">
+                        <label for="midterm_start">Deadline for Submission of Requirements</label>
+                        <input type="datetime-local" name="end_of_submission" value="<?php echo $item['end_of_submission']; ?>" class="form-control" />                         
+                </div>
                 <div class="form-group col-xs-12">
                     <input type="submit" value="update" class="btn btn-default  btn-flat">
                 </div>
