@@ -123,6 +123,7 @@ new Vue({
         ledger: [],        
         other: [],
         finance: undefined, 
+        selected_term: undefined,
         terms: [],
         student: {
             strFirstname:'',
