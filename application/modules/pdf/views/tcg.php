@@ -281,12 +281,12 @@ foreach($records as $record){
                 
                 $html .= '            
                     <tr>
-                        <td style="font-size:8px;">'.$item['strCode'].'</td>
-                        <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                        <td style="font-size:8px;text-align:center;">'.$units.'</td>
-                        <td style="font-size:8px;text-align:center;">'.$item['v3'].'</td>
-                        <td style="font-size:8px;text-align:center;"></td>                        
-                        <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
+                        <td style="font-size:9px;">'.$item['strCode'].'</td>
+                        <td style="font-size:9px;">'.$item['strDescription'].'</td>
+                        <td style="font-size:9px;text-align:center;">'.$units.'</td>
+                        <td style="font-size:9px;text-align:center;">'.$item['v3'].'</td>
+                        <td style="font-size:9px;text-align:center;"></td>                        
+                        <td style="font-size:9px;text-align:center;">'.$units_earned.'</td>
                     </tr>            
                     ';
             }
