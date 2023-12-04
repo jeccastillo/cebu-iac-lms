@@ -94,9 +94,8 @@
                     </div>           
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Deadline for Submission of Requirements</label>
-                        <input type="date" name="final_exam_end" value="<?php echo $item['end_of_submission']; ?>" class="form-control" />                         
-                    </div>            
-                           
+                        <input type="date" name="end_of_submission" value="<?php echo $item['end_of_submission']; ?>" class="form-control" />                         
+                    </div>                                       
                 </div>
                 <hr />
                 <h3>Grading Period Setup</h3>

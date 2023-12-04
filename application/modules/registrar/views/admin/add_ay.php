@@ -79,7 +79,7 @@
                     </div>           
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Deadline for Submission of Requirements</label>
-                        <input type="date" name="final_exam_end" class="form-control" />                         
+                        <input type="date" name="end_of_submission" class="form-control" />                         
                     </div>                                       
                 </div> 
                 <div class="row">
