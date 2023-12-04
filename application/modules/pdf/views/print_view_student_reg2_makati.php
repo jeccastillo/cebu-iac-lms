@@ -100,7 +100,7 @@ $html .= '
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:8;" width="528" >
+$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:7;" width="528" >
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
@@ -121,7 +121,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         else {
                                 foreach($records as $record) {
                                     $units = $record['strUnits'];
-                                    $desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
+                                    //$desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
+                                    $desc = $record['strDescription'];
                                     $html.='<tr style="color: #333;">
                                             <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
                                             <td width="198px" align ="left"> '.$desc. '</td>
@@ -140,7 +141,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                                     $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>                                            
                                             ';
-                                            $html.= '<td width="120px" style="font-size:8px;">';                                            
+                                            $html.= '<td width="120px" style="font-size:7px;">';                                            
                                                 if(isset($record['schedule'][0]['strDay']))
                                                     $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
@@ -448,7 +449,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                           
         ';
 
-        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="528px">        
         <tr>
             <td>Policy on School Charges and Refund of Fees<br />
                 Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
