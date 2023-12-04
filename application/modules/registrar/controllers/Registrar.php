@@ -1764,8 +1764,8 @@ class Registrar extends CI_Controller {
                         $this->db->where(array('intCSID'=>$student['intCSID']))                    
                         ->delete('tb_mas_classlist_student');            
                 
-                        //$this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
-                        //->delete('tb_mas_registration');                                                                                   
+                        $this->db->where(array('intStudentID'=>$student['intStudentID'],'intAYID'=>$classlist['strAcademicYear']))                    
+                        ->delete('tb_mas_registration');                                                                                   
                     }
                 }
             }
