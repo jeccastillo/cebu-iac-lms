@@ -90,7 +90,7 @@
                                 <option v-for="term in terms" :value="term.intID">{{ term.enumSem + ' ' + term.term_label + ' ' + term.strYearStart + '-' + term.strYearEnd }}</option>
                             </select>
                             <hr />
-                            <a class="btn btn-primary" :href="base_url + 'unity/student_tuition_payment/' + student.slug + '/' + selected_term">Pay Tuition</a>
+                            <a target="_blank" class="btn btn-primary" :href="base_url + 'unity/student_tuition_payment/' + student.slug + '/' + selected_term">Pay Tuition</a>
                         </div>      
                     </div>                  
                 </div>
