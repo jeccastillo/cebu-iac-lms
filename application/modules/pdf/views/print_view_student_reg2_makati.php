@@ -141,7 +141,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                                     $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>                                            
                                             ';
-                                            $html.= '<td width="120px" style="font-size:7px;">';                                            
+                                            $html.= '<td width="120px" style="font-size:8px;">';                                            
                                                 if(isset($record['schedule'][0]['strDay']))
                                                     $html.= $record['schedule'][0]['strRoomCode'];
                                             $html.= '</td>
