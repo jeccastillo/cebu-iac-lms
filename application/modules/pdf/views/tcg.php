@@ -166,12 +166,12 @@ foreach($credited_subjects as $record_credited){
         $page_footer_margin -= 15;
         $html .= '            
         <tr>
-            <td style="font-size:8px;">'.$item['course_code'].'</td>
-            <td style="font-size:8px;">'.$item['descriptive_title'].'</td>
-            <td style="font-size:8px;text-align:center;">('.number_format($item['units'], 1, '.', '').')</td>
-            <td style="font-size:8px;text-align:center;">'.$item['grade'].'</td>
-            <td style="font-size:8px;text-align:center;"></td>                        
-            <td style="font-size:8px;text-align:center;">('.number_format($item['units'], 1, '.', '').')</td>
+            <td style="font-size:9px;">'.$item['course_code'].'</td>
+            <td style="font-size:9px;">'.$item['descriptive_title'].'</td>
+            <td style="font-size:9px;text-align:center;">('.number_format($item['units'], 1, '.', '').')</td>
+            <td style="font-size:9px;text-align:center;">'.$item['grade'].'</td>
+            <td style="font-size:9px;text-align:center;"></td>                        
+            <td style="font-size:9px;text-align:center;">('.number_format($item['units'], 1, '.', '').')</td>
         </tr>            
         ';
 
