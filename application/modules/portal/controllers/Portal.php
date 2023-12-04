@@ -96,6 +96,16 @@ class Portal extends CI_Controller {
                     ->get()
                     ->result_array();
 
+        $data['ledger_group_term'] = $this->db->select('tb_mas_sy.*')        
+                    ->from('tb_mas_student_ledger')
+                    ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                    ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                    ->where($where_tuition)        
+                    ->group_by('tb_mas_sy.intID')
+                    ->get()
+                    ->result_array();
+
         $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
@@ -104,6 +114,9 @@ class Portal extends CI_Controller {
             ->get()
             ->result_array();
 
+        
+
+        
         $data['student'] = $this->data_fetcher->getStudent($id);        
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $sem = $this->data_fetcher->get_active_sem();  
