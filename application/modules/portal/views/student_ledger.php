@@ -82,7 +82,7 @@
                             </tr>
                         </tbody>
                     </table>   
-                    <hr />
+                    <hr />                    
                     <div class="row">
                         <div class="col-sm-6">
                             <select class="form-control" v-model="selected_term">
@@ -176,6 +176,8 @@ new Vue({
                 ledger_temp = data.data.ledger;
                 other_temp = data.data.other;
                 this.terms = data.data.ledger_group_term;
+                if(this.terms.length > 0)
+                    this.selected_term = this.terms[0].intID;
                 this.finance = data.data.user;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
