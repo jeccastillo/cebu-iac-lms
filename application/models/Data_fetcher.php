@@ -2330,6 +2330,7 @@ class Data_fetcher extends CI_Model {
         $discounted_price = 0;        
         $scholar = null;
         $total_assessment_installment_temp = 0;
+        $total_assessment = 0;
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
