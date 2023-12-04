@@ -1167,6 +1167,81 @@ class Data_fetcher extends CI_Model {
             
                      
     }
+    //enrolled student
+    function getEnrolledStudents($course = 0,$regular= 0, $year=0,$gender = 0,$scholarship=0,$registered=0,$sem=0,$type=0)
+    {
+        
+        $select = "tb_mas_users.*,strProgramCode, strMajor, short_name, name as blockName, strProgramDescription,tb_mas_registration.intYearLevel,dteRegistered, tb_mas_curriculum.strName as curriculumName, type_of_class";
+
+        $this->db
+            ->select($select)
+            ->from('tb_mas_users')
+            ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
+            ->join('tb_mas_block_sections','tb_mas_users.blockSection = tb_mas_block_sections.intID','left')
+            ->join('tb_mas_curriculum','tb_mas_users.intCurriculumID = tb_mas_curriculum.intID','left')
+            ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID','left')
+            ->order_by('strLastname','asc');
+        if($sem!=0){            
+            $this->db->where(array('tb_mas_registration.intAYID'=>$sem));
+            if($year!=0) {
+                $this->db->where('tb_mas_registration.intYearLevel',$year);
+            }
+        }
+        //enrolled only
+        $this->db->where('tb_mas_registration.intROG', 1);
+        if($course!=0)
+            $this->db->where('tb_mas_users.intProgramID',$course);
+        if($type!=0){
+            switch($type){
+                case 1:
+                    $this->db->where('tb_mas_users.student_type',"freshman");
+                break;
+                case 2:
+                    $this->db->where('tb_mas_users.student_type',"transferee");
+                break;
+                case 3:
+                    $this->db->where('tb_mas_users.student_type',"foreign");
+                break;
+                case 4:
+                    $this->db->where('tb_mas_users.student_type',"second degree");
+                break;                        
+
+            }
+        }
+        if($regular!=0)
+           if($regular == 1)
+                $this->db->where('strAcademicStanding','regular');
+            else if ($regular == 2)
+                $this->db->where('strAcademicStanding','irregular');
+            else
+                $this->db->where('strAcademicStanding','new');
+        
+        if($gender!=0)
+           if($gender == 1)
+                $this->db->where('enumGender','male');
+            else
+                $this->db->where('enumGender','female');
+
+        
+        if($scholarship!=0)
+            if($scholarship == 1)
+                $this->db->where('enumScholarship','paying');
+            elseif($scholarship == 2)
+                $this->db->where('enumScholarship','resident scholar');
+            elseif($scholarship == 3)
+                    $this->db->where('enumScholarship','7th district');
+            elseif($scholarship == 4)
+                    $this->db->where('enumScholarship','DILG scholar');
+            elseif($scholarship == 5)
+                    $this->db->where('enumScholarship','FREE HIGHER EDUCATION PROGRAM (R.A. 10931)');
+        
+        return $this->db
+                ->get()
+                ->result_array();
+            
+            
+                        
+    }
     function getStudentsNew($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0, $studNumStart=0, $studNumEnd=0)
     {
         

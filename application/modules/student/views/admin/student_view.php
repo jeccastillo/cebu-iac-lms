@@ -27,6 +27,7 @@
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
                             <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Students Data Report</a></li>                                                  
                             <li><a href="<?php echo base_url() ?>excel/download_student_grades/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Student Grades</a></li>                                                                           
+                            <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Enrolled Students</a></li>                                                                           
                       </ul>
                     </div>
               </div>
