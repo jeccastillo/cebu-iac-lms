@@ -11,7 +11,7 @@
     $pdf->SetTitle($student['strLastname'] . ", " . $student['strFirstname'] . ', ' . substr($student['strMiddlename'], 0,1). ".-". $student['strProgramCode']);
     
     // set margins
-    $pdf->SetMargins(10, $mt , 10);
+    $pdf->SetMargins(5, $mt , 5);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->SetFont('helvetica','',10);
@@ -100,7 +100,7 @@ $html .= '
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:7;" width="528" >
+$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:8;" width="528" >
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
