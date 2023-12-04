@@ -551,7 +551,7 @@ class Unity extends CI_Controller {
         
         $active_sem = $this->data_fetcher->get_active_sem();        
 
-        $data['campus'] =  $this->config->item('campus');
+        $data['campus'] =  $this->data['campus'];
 
         print_r($data);
 

@@ -21,6 +21,7 @@ $config['srf'] = 1700;
 $config['sfdf'] = 1350;
 $config['csg']['student_handbook'] = 70;
 $config['csg']['student_publication'] = 105; 
+$config['campus'] = "Cebu";
 
 /* Form Configuration */
 
