@@ -516,6 +516,19 @@ class Data_fetcher extends CI_Model {
                     ->get()
                     ->num_rows();
     }
+
+    function countRemainingSlotsClasslist($id)
+    {
+        $students = $this->db
+                    ->select('intCSID')
+                    ->from('tb_mas_classlist_student')
+                    ->where('intClassListID',$id)
+                    ->get()
+                    ->num_rows();
+
+        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row();
+        return $classlist->slots - $students;
+    }
     
     function getSubjectsInCurriculum($id)
     {
