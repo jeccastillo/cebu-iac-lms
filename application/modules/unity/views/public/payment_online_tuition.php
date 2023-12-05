@@ -585,7 +585,7 @@ new Vue({
                 })
             }
 
-        }     
+        },     
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
