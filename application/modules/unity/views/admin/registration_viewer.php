@@ -151,7 +151,7 @@
                                                     </div>
                                                     <div class="form-group">                                                                                                        
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="number" step="0.1" required class="form-control" v-model="amount_to_pay" />
+                                                        <input type="number" step="0.01" required class="form-control" v-model="amount_to_pay" />
                                                     </div>
                                                 </div>
                                             <div class="col-sm-4" v-if="cashier">
