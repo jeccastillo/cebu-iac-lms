@@ -1,5 +1,5 @@
 <div id="registration-container">    
-    <div class="container">       
+    <div>       
         <div class="content">                        
             <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
                 Stud No :{{ student.strStudentNumber }}
@@ -135,7 +135,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label>Select Type:</label>  
-                                            <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="description_other = ''; amount_to_pay = 0 " v-model="payment_type" class="form-control">
+                                            <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="computePayment($event)" v-model="payment_type" class="form-control">
                                                 <option value="full">Full Payment</option>
                                                 <option value="partial">Installment</option>
                                             </select>
@@ -146,17 +146,17 @@
                                             <table class="table table-striped" v-if="payment_type == 'full'">
                                                 <tr>
                                                     <td>Full Tuition</td>
-                                                    <td><a href="#" @click="setValue(remaining_amount,'full')">{{ remaining_amount }}</a></td>
+                                                    <td>{{ remaining_amount }}</td>
                                                 </tr> 
                                             </table>
                                             <table class="table table-striped" v-else>
                                                 <tr>
                                                     <td>Down Payment</td>
-                                                    <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a></td>                                                        
+                                                    <td v-if="registration.downpayment == 0">{{ tuition_data.down_payment }}</td>                                                        
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
-                                                    <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
+                                                    <td>{{ inst }}</td>
                                                 </tr>
                                             </table>                                                
                                         </div> 
@@ -449,124 +449,9 @@ new Vue({
                             
                             
                             this.other_payments = data.data.other;
-                                   
+                            this.computePayment(); 
                                                          
-                            if(this.registration.enumStudentType == "new"){
-                                axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
-                                .then((data) => {
-                                    this.reservation_payment = data.data.data;    
-                                    this.application_payment = data.data.application;
-                                    
-                                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
-                                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
-                                    }                                
-                                    this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
-                                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                    this.item_details.price = this.remaining_amount;
-                                    this.loader_spinner = false;
-
-                                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                                    
-                                    if(this.registration.downpayment == 1 || down_payment == 0){
-                                        this.has_down = true;                                    
-                                        //installment amounts                                                                    
-                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                        console.log(temp);
-                                        for(i=0; i < 5; i++){
-                                            if(this.tuition_data.installment_fee > temp){
-                                                val = this.tuition_data.installment_fee - temp;                                            
-                                                this.item_details.price = val;
-                                                break;
-                                            }     
-                                            else{
-                                                temp = temp - this.tuition_data.installment_fee;
-                                            }                                                                       
-                                        }
-                                        
-                                        
-                                    }
-                                    else if(this.payment_type == "partial"){
-                                        
-                                        this.item_details.price = down_payment;
-                                    }                            
-                                    else{
-                                        
-                                        this.item_details.price = this.remaining_amount;
-                                    }      
-                                    axios.get(api_url + 'admissions/student-info/' + this.slug)
-                                    .then((data) => {
-                                        this.student_api_data = data.data.data;
-                                        Swal.close();
-                                        $(function() {
-                                            $(".box_mode_payment").click(function() {
-                                                $(".box_mode_payment").removeClass("active");
-                                                $(this).addClass("active");
-                                            })
-                                        })
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                    })
-                                    
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                })
-                            }
-                            else{
-                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
-                                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                    this.item_details.price = this.remaining_amount;
-                                    this.loader_spinner = false;
-
-                                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                                    
-                                    if(this.registration.downpayment == 1 || down_payment == 0){
-                                        this.has_down = true;                                    
-                                        //installment amounts                                                                    
-                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                        console.log(temp);
-                                        for(i=0; i < 5; i++){
-                                            if(this.tuition_data.installment_fee > temp){
-                                                val = this.tuition_data.installment_fee - temp;                                            
-                                                this.item_details.price = val;
-                                                break;
-                                            }     
-                                            else{
-                                                temp = temp - this.tuition_data.installment_fee;
-                                            }                                                                       
-                                        }
-                                        
-                                        
-                                    }
-                                    else if(this.payment_type == "partial"){
-                                        
-                                        this.item_details.price = down_payment;
-                                    }                            
-                                    else{
-                                        
-                                        this.item_details.price = this.remaining_amount;
-                                    } 
-                                axios.get(api_url + 'admissions/student-info/' + this.slug)
-                                .then((data) => {
-                                    this.student_api_data = data.data.data;
-                                    Swal.close();
-                                    $(function() {
-                                        $(".box_mode_payment").click(function() {
-                                            $(".box_mode_payment").removeClass("active");
-                                            $(this).addClass("active");
-                                        })
-                                    })
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                })
-                            }
+                            
                         })
                         .catch((error) => {
                             console.log(error);
@@ -580,7 +465,127 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
-        },        
+        },   
+        computePayment: function(event){
+            type = event.target.value;
+            if(this.registration.enumStudentType == "new"){
+                axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
+                .then((data) => {
+                    this.reservation_payment = data.data.data;    
+                    this.application_payment = data.data.application;
+                    
+                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
+                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
+                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
+                    }                                
+                    this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
+                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
+                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
+                    this.item_details.price = this.remaining_amount;
+                    this.loader_spinner = false;
+
+                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                    
+                    if(this.registration.downpayment == 1 || down_payment == 0){
+                        this.has_down = true;                                    
+                        //installment amounts                                                                    
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                        console.log(temp);
+                        for(i=0; i < 5; i++){
+                            if(this.tuition_data.installment_fee > temp){
+                                val = this.tuition_data.installment_fee - temp;                                            
+                                this.item_details.price = val;
+                                break;
+                            }     
+                            else{
+                                temp = temp - this.tuition_data.installment_fee;
+                            }                                                                       
+                        }
+                        
+                        
+                    }
+                    else if(this.payment_type == "partial" || type == "partial"){
+                        
+                        this.item_details.price = down_payment;
+                    }                            
+                    else{
+                        
+                        this.item_details.price = this.remaining_amount;
+                    }      
+                    axios.get(api_url + 'admissions/student-info/' + this.slug)
+                    .then((data) => {
+                        this.student_api_data = data.data.data;
+                        Swal.close();
+                        $(function() {
+                            $(".box_mode_payment").click(function() {
+                                $(".box_mode_payment").removeClass("active");
+                                $(this).addClass("active");
+                            })
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            }
+            else{
+                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
+                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
+                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
+                    this.item_details.price = this.remaining_amount;
+                    this.loader_spinner = false;
+
+                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                    
+                    if(this.registration.downpayment == 1 || down_payment == 0){
+                        this.has_down = true;                                    
+                        //installment amounts                                                                    
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                        console.log(temp);
+                        for(i=0; i < 5; i++){
+                            if(this.tuition_data.installment_fee > temp){
+                                val = this.tuition_data.installment_fee - temp;                                            
+                                this.item_details.price = val;
+                                break;
+                            }     
+                            else{
+                                temp = temp - this.tuition_data.installment_fee;
+                            }                                                                       
+                        }
+                        
+                        
+                    }
+                    else if(this.payment_type == "partial" || type == "partial"){
+                        
+                        this.item_details.price = down_payment;
+                    }                            
+                    else{
+                        
+                        this.item_details.price = this.remaining_amount;
+                    } 
+                axios.get(api_url + 'admissions/student-info/' + this.slug)
+                .then((data) => {
+                    this.student_api_data = data.data.data;
+                    Swal.close();
+                    $(function() {
+                        $(".box_mode_payment").click(function() {
+                            $(".box_mode_payment").removeClass("active");
+                            $(this).addClass("active");
+                        })
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            }
+
+        }     
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
