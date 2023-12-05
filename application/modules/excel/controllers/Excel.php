@@ -1764,55 +1764,60 @@ class Excel extends CI_Controller {
         foreach($students as $student)
         {
 
-            // Add some datat
-            $oldPass_unhash = pw_unhash($student['strPass']);
-            //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
 
             if ($isAll) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A'.$i, $count.".")
-                            ->setCellValue('B'.$i, $student['strFirstname'])
-                            ->setCellValue('C'.$i, $student['strLastname'])
-                            ->setCellValue('D'.$i, $student['intID'])
-                            ->setCellValue('E'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
-                            ->setCellValue('F'.$i, $student['strEmail'])
-                            ->setCellValue('G'.$i, $student['father'])
-                            ->setCellValue('H'.$i, $student['father_email'])
-                            ->setCellValue('I'.$i, $student['mother'])
-                            ->setCellValue('J'.$i, $student['mother_email']);
+                                ->setCellValue('A'.$i, $count.".")
+                                ->setCellValue('B'.$i, $student['strFirstname'])
+                                ->setCellValue('C'.$i, $student['strLastname'])
+                                ->setCellValue('D'.$i, $student['intID'])
+                                ->setCellValue('E'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                                ->setCellValue('F'.$i, $student['strEmail'])
+                                ->setCellValue('G'.$i, $student['father'])
+                                ->setCellValue('H'.$i, $student['father_email'])
+                                ->setCellValue('I'.$i, $student['mother'])
+                                ->setCellValue('J'.$i, $student['mother_email']);
             } else {
-                $courseCode = '';
-                if ($level == '1' || $level == '2') {
-                    $courseCode = $this->data_fetcher->getCourseCode($course);
-                    $semDetails = $this->data_fetcher->get_sem_by_id($sem);
+                $classlists = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+                foreach($classlists as $cl)
+                {
+                        $courseCode = '';
+                        if ($level == '1' || $level == '2') {
+                            // $courseCode = $this->data_fetcher->getCourseCode($course);
+                            // print_r($courseCode);
+                            // exit;
+                            $semDetails = $this->data_fetcher->get_sem_by_id($sem);
 
-                    $startYear = substr($semDetails['strYearStart'], -2);
-                    $endYear = substr($semDetails['strYearEnd'], -2);
-                    $termYer = $semDetails['enumSem'].'Term-'.'SY'.$startYear.'-'.$endYear;
-                    // print_r($semDetails['enumSem']);
-                    // exit;
-                    //check is UG = 2 or SHS = 1
-                    if ($level == '1') {
-                        $courseCode = 'SHS-CEBU'.$courseCode.'-'.$termYer;
-                    } else if ($level == '2') {
-                        $courseCode = 'UG-CEBU'.$courseCode.'-'.$termYer;
-                    }
+                            $startYear = substr($semDetails['strYearStart'], -2);
+                            $endYear = substr($semDetails['strYearEnd'], -2);
+                            $termYer = $semDetails['enumSem'].'Term-'.'SY'.$startYear.'-'.$endYear;
+                            $subject = $this->data_fetcher->getClasslistDetails($cl['intClassListID']);
+                            // print_r($subject);
+                            // exit;
+                            //check is UG = 2 or SHS = 1
+                            if ($level == '1') {
+                                $courseCode = 'SHS-CEBU-'.$subject->strClassName.'-'.$termYer;
+                            } else if ($level == '2') {
+                                $courseCode = 'UG-CEBU-'.$subject->strClassName.'-'.$termYer;
+                            }
+                        }
+                        
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                    ->setCellValue('A'.$i, $count.".")
+                                    ->setCellValue('B'.$i, $courseCode)
+                                    // ->setCellValue('B'.$i, $courseCode)
+                                    // ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                                    ->setCellValue('C'.$i, $student['strEmail']);
+
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
+                        $count++;
+                        $i++;
                 }
-                
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A'.$i, $count.".")
-                            ->setCellValue('B'.$i, $courseCode)
-                            // ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
-                            ->setCellValue('C'.$i, $student['strEmail']);
             }
-
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
-                $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
-                $count++;
-                $i++;
-            }
+        }
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
