@@ -467,7 +467,10 @@ new Vue({
                 })
         },   
         computePayment: function(event){
-            type = event.target.value;
+            if(event)
+                type = event.target.value;
+            else
+                type = null;
             if(this.registration.enumStudentType == "new"){
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                 .then((data) => {
