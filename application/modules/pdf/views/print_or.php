@@ -131,6 +131,8 @@
             </table>
         </td>
         <td style="width:70%">
+            <br />
+            <br />
             <table>
                 <tr style="line-height:20px;">
                     <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
@@ -200,11 +202,11 @@
                     <td style=""></td>
                 </tr>
             </table> -->
-            <table >
+            <!-- <table >
                 <tr style="line-height:5px;">                    
                     <td style="font-size:10px;text-align:left;"></td>
                 </tr>
-            </table>
+            </table> -->
             <table >
                 <tr style="line-height:15px;">
                     <td style=""></td>
