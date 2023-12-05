@@ -94,7 +94,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:20px;">
+                <tr style="line-height:25px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -243,7 +243,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:20px;">
+                <tr style="line-height:24px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;">                        
                     </td>
@@ -328,7 +328,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:40px;">
+                <tr style="line-height:50px;">
                     <td style=""></td>
                 </tr>
             </table>
