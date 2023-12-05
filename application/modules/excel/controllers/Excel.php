@@ -1653,6 +1653,208 @@ class Excel extends CI_Controller {
         
     }
 
+    //enrolled students in neo
+    public function download_enrolled_students_neo($course = 0,$regular= 0, $year=0,$gender = 0,$scholarship=0,$registered=0,$sem = 0, $isAll = 0, $level=0) {
+
+        // echo $level;
+        // exit;
+        $students = $this->data_fetcher->getEnrolledStudents($course,$regular,$year,$gender,$scholarship,$registered,$sem);
+        $date = date("Y-m-d H:i:s");
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        // Add some data
+        if($sem!=0){
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        }
+        else
+        {
+            $active_sem = $this->data_fetcher->get_active_sem();
+
+        }
+        
+        //HEADER
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', date("M j, Y h:i a"));
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A5', $active_sem['enumSem'].' Term, AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                                        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A6', "LIST OF ENROLLED STUDENTS");
+
+        if ($isAll) {
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:J2');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:J3');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:J4');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:J5');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:J6');
+        } else {
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:F2');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:F3');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:F4');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:F5');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:F6');
+        }
+        
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $style_right = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            )
+        );
+        $style_left = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+            )
+        );        
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:N2")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:N5")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A2:N2")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A3:N3")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A4:N4")->applyFromArray($style_right);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:N5")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:N6")->applyFromArray($style);
+
+         // Set document properties
+         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                    ->setLastModifiedBy("Jec Castillo")
+                    ->setTitle("Enrolled Students in Neo")
+                    ->setSubject("Enrolled Students in Neo")
+                    ->setDescription("Enrolled Students in Neo Download.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Enrolled Students in Neo");
+
+        if ($isAll) {
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A8', '#')
+            ->setCellValue('B8', 'First Name')
+            ->setCellValue('C8', 'Last Name')
+            ->setCellValue('D8', 'UserID')
+            ->setCellValue('E8', 'StudentID')
+            ->setCellValue('F8', 'Student IACADEMY Email')
+            ->setCellValue('G8', 'Parent 1(Father  Name)') //father frist name not available
+            // ->setCellValue('H8', 'Parent 1 (Lastname)') //not available only full name of father
+            ->setCellValue('H8', 'Father Email')
+            ->setCellValue('I8', 'Mother')
+            ->setCellValue('J8', 'Mother Email');
+        } else {
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A8', '#')
+                    ->setCellValue('B8', 'Course Code')
+                    ->setCellValue('C8', 'Student iACADEMY Email');
+        }
+                    
+        $i = 9;
+        $count = 1;
+        foreach($students as $student)
+        {
+
+
+            if ($isAll) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                                ->setCellValue('A'.$i, $count.".")
+                                ->setCellValue('B'.$i, $student['strFirstname'])
+                                ->setCellValue('C'.$i, $student['strLastname'])
+                                ->setCellValue('D'.$i, $student['intID'])
+                                ->setCellValue('E'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                                ->setCellValue('F'.$i, $student['strEmail'])
+                                ->setCellValue('G'.$i, $student['father'])
+                                ->setCellValue('H'.$i, $student['father_email'])
+                                ->setCellValue('I'.$i, $student['mother'])
+                                ->setCellValue('J'.$i, $student['mother_email']);
+            } else {
+                $classlists = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+                foreach($classlists as $cl)
+                {
+                        $courseCode = '';
+                        if ($level == '1' || $level == '2') {
+                            // $courseCode = $this->data_fetcher->getCourseCode($course);
+                            // print_r($courseCode);
+                            // exit;
+                            $semDetails = $this->data_fetcher->get_sem_by_id($sem);
+
+                            $startYear = substr($semDetails['strYearStart'], -2);
+                            $endYear = substr($semDetails['strYearEnd'], -2);
+                            $termYer = $semDetails['enumSem'].'Term-'.'SY'.$startYear.'-'.$endYear;
+                            $subject = $this->data_fetcher->getClasslistDetails($cl['intClassListID']);
+                            // print_r($subject);
+                            // exit;
+                            //check is UG = 2 or SHS = 1
+                            if ($level == '1') {
+                                $courseCode = 'SHS-CEBU-'.$subject->strClassName.'-'.$termYer;
+                            } else if ($level == '2') {
+                                $courseCode = 'UG-CEBU-'.$subject->strClassName.'-'.$termYer;
+                            }
+                        }
+                        
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                    ->setCellValue('A'.$i, $count.".")
+                                    ->setCellValue('B'.$i, $courseCode)
+                                    // ->setCellValue('B'.$i, $courseCode)
+                                    // ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                                    ->setCellValue('C'.$i, $student['strEmail']);
+
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
+                        $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
+                        $count++;
+                        $i++;
+                }
+            }
+        }
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+    
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+ 
+         // Redirect output to a client’s web browser (Excel2007)
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+         header('Content-Disposition: attachment;filename="enrolled_students.xls"');
+         header('Cache-Control: max-age=0');
+         // If you're serving to IE 9, then the following may be needed
+         header('Cache-Control: max-age=1');
+ 
+         // If you're serving to IE over SSL, then the following may be needed
+         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+         header ('Pragma: public'); // HTTP/1.0
+ 
+         
+         $objWriter->save('php://output');
+         exit;
+        
+    }
+
     function adjustments($id,$sem){
         
         $adjustments = $this->db

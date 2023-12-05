@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:40px;">
+    <tr style="line-height:50px;">
         <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;"></td>
     </tr>
 </table>
@@ -94,7 +94,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:5px;">
+                <tr style="line-height:20px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -199,13 +199,15 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:15px;">
+                <tr style="line-height:10px;">
                     <td style=""></td>
                 </tr>
             </table>
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
+                        <br />
+                        <br />
                         <span style="color:#fff;">the amount of pesos &nbsp;</span>
                         <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                     </td>
@@ -234,11 +236,14 @@
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">as full/partial payment of &nbsp;</span>
                         <?php echo $description; ?>
+                        <?php if(trim($description) == "Tuition Fee") 
+                                    echo " ".$remarks;
+                        ?>
                     </td>
                 </tr>
             </table>
             <table >
-                <tr style="line-height:17px;">
+                <tr style="line-height:14px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:center;">                        
                     </td>
@@ -258,7 +263,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:10px;">
+                <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
             </table>
@@ -323,7 +328,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:40px;">
+                <tr style="line-height:30px;">
                     <td style=""></td>
                 </tr>
             </table>

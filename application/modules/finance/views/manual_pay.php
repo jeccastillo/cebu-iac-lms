@@ -132,6 +132,7 @@
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
                                     <th>Reference No.</th>
+                                    <th>Request ID</th>
                                     <th>Amount Paid</th>
                                     <th>Online Payment Charge</th>
                                     <th>Total Due</th>
@@ -145,6 +146,7 @@
                                     <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ refunded.cashier_id }}</a></td>
                                     <td>{{ refunded.description }}</td>
                                     <td>{{ refunded.check_number }}</td>
+                                    <td>{{ refunded.request_id }}</td>
                                     <td>{{ refunded.subtotal_order }}</td>
                                     <td>{{ refunded.charges }}</td>
                                     <td>{{ refunded.total_amount_due }}</td>
@@ -217,6 +219,7 @@
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
                                     <td>{{ payment.description }}</td>
                                     <td>{{ payment.check_number }}</td>
+                                    <td>{{ payment.request_id }}</td>
                                     <td>{{ payment.subtotal_order }}</td>
                                     <td>{{ payment.charges }}</td>
                                     <td>{{ payment.total_amount_due }}</td>

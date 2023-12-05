@@ -495,7 +495,8 @@ class Unity extends CI_Controller {
             // $ret['payment'] = $pay;
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             $role = $this->session->userdata('special_role');
-            $ret['finance_manager_privilages'] = ($role == 2)?true:false;            
+            $ret['finance_manager_privilages'] = ($role == 2)?true:false;    
+               
             
             //--------TUITION-------------------------------------------------------------------
             
@@ -512,7 +513,13 @@ class Unity extends CI_Controller {
 
     public function online_payment_data($id,$sem){
         
-        $active_sem = $this->data_fetcher->get_active_sem();
+
+        $ret['student'] = $this->data_fetcher->getStudent($id);
+
+        if(get_stype($ret['student']['level']) == "college")
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_active_sem_shs();
 
         if($sem!=null)
             $ret['selected_ay'] = $sem;
@@ -523,7 +530,7 @@ class Unity extends CI_Controller {
         $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
         $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);            
 
-        $ret['student'] = $this->data_fetcher->getStudent($id);
+        
         $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
         $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
         $pay =  array();
@@ -3023,7 +3030,7 @@ class Unity extends CI_Controller {
             $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID']);            
             foreach($classlists as $classlist){
                 $classlist_temp = $classlist;
-                $classlist_temp['numCount'] = $this->data_fetcher->countStudentsInClasslist($classlist['intID']);                
+                $classlist_temp['numCount'] = $this->data_fetcher->countRemainingSlotsClasslist($classlist['intID']);                
                 if($classlist_temp['numCount'] < $classlist['slots'])
                     $cst[] = $classlist_temp;
             }

@@ -4,7 +4,7 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:40px;">
+    <tr style="line-height:50px;">
         <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;"></td>
     </tr>
 </table>
@@ -24,17 +24,17 @@
             </table>            
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td><?php echo $term['enumSem']." ".$term['term_label']; ?></td>                    
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>                    
                 </tr>
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo $type; ?></td>                    
-                </tr>
-            </table>
-            <table>
-                <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:10px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
@@ -59,6 +59,8 @@
                     <td style="width:50%;height:28px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
+            <br />
+            <br />
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
@@ -129,6 +131,8 @@
             </table>
         </td>
         <td style="width:70%">
+            <br />
+            <br />
             <table>
                 <tr style="line-height:20px;">
                     <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
@@ -199,7 +203,7 @@
                 </tr>
             </table> -->
             <table >
-                <tr style="line-height:5px;">                    
+                <tr style="line-height:3px;">                    
                     <td style="font-size:10px;text-align:left;"></td>
                 </tr>
             </table>

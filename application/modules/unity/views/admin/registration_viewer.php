@@ -151,7 +151,7 @@
                                                     </div>
                                                     <div class="form-group">                                                                                                        
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="text" required class="form-control" v-model="amount_to_pay" />
+                                                        <input type="number" step="0.01" required class="form-control" v-model="amount_to_pay" />
                                                     </div>
                                                 </div>
                                             <div class="col-sm-4" v-if="cashier">
@@ -544,7 +544,7 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment3);
                         this.installment_dates.push(data.data.active_sem.installment4);
                         this.installment_dates.push(data.data.active_sem.installment5);                        
-
+                        console.log(this.request.student_campus);
                         
                         if(data.data.registration){         
                             this.registration = data.data.registration;

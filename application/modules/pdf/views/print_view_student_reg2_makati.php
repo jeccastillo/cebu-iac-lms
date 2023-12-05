@@ -11,7 +11,7 @@
     $pdf->SetTitle($student['strLastname'] . ", " . $student['strFirstname'] . ', ' . substr($student['strMiddlename'], 0,1). ".-". $student['strProgramCode']);
     
     // set margins
-    $pdf->SetMargins(10, $mt , 10);
+    $pdf->SetMargins(5, $mt , 5);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->SetFont('helvetica','',10);
@@ -70,7 +70,7 @@
 $html .= '   
     </table>
      <br />
-    <table border="0" cellpadding="0" style="color:#333; font-size:8;" width="528px">     
+    <table border="0" cellpadding="0" style="color:#333; font-size:8;" width="570px">     
      <tr>
       <td width="80px" >&nbsp;</td>
       <td width="250px">&nbsp;</td>
@@ -100,11 +100,11 @@ $html .= '
         <td>&nbsp;</td>
      </tr>
     </table> '; 
-$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:8;" width="528" >
+$html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; font-size:8;" width="600" >
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
-            <td width="198px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
+            <td width="240px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
@@ -121,10 +121,11 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         else {
                                 foreach($records as $record) {
                                     $units = $record['strUnits'];
-                                    $desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
+                                    //$desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
+                                    $desc = $record['strDescription'];
                                     $html.='<tr style="color: #333;">
                                             <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
-                                            <td width="198px" align ="left"> '.$desc. '</td>
+                                            <td width="240px" align ="left"> '.$desc. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
@@ -177,13 +178,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                          
         $html.='
-        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
             <tr>
                 <td colspan="2" style= "font-size:8; line-height:1.5; border-top:1px solid #333;"></td>                
             </tr>
         </table>
         
-        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
             
         </table>
         ';
@@ -309,7 +310,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </tr>
                         </table>
                     </td>
-                    <td width="150px">                                
+                    <td width="180px">                                
                         <table style="color:#333; font-size:7; ">
                             <tr>
                                 <td colspan="2" style= "font-size:8; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
@@ -321,7 +322,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
-                                        <td width="80px">'.$key.'</td>
+                                        <td width="110px">'.$key.'</td>
                                         <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
@@ -388,18 +389,18 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     </td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
                 <tr>
                     <td width="120px" style= "font-size:9;">Official Receipt Number/date</td>
                     <td width="120px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
                 <tr>
                     <td width="264px" style= "font-size:9;">Enrollment Confirmed by:</td>
                     <td width="264px" style= "font-size:9;"></td>            
@@ -417,30 +418,30 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td style= "font-size:9; text-align:center">Registrar</td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
                 <tr>
                     <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
             </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
                 <tr>
                     <td colspan="2" style="font-size:8;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
                     I understand that the school has to collect my personal data and I allow the school to process all my information and all
                     purposes related to this.</td>
                 </tr>
             </table> 
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
                 <tr>
                     <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
                 </tr>
@@ -448,7 +449,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                           
         ';
 
-        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="570px">        
         <tr>
             <td>Policy on School Charges and Refund of Fees<br />
                 Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
@@ -465,7 +466,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </td>
         </tr>                                              
     </table> 
-    <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="528px">        
+    <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
