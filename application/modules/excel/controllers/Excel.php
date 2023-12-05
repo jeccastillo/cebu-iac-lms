@@ -1654,7 +1654,10 @@ class Excel extends CI_Controller {
     }
 
     //enrolled students in neo
-    public function download_enrolled_students_neo($course = 0,$regular= 0, $year=0,$gender = 0,$scholarship=0,$registered=0,$sem = 0){
+    public function download_enrolled_students_neo($course = 0,$regular= 0, $year=0,$gender = 0,$scholarship=0,$registered=0,$sem = 0, $isAll = 0, $level=0) {
+
+        // echo $level;
+        // exit;
         $students = $this->data_fetcher->getEnrolledStudents($course,$regular,$year,$gender,$scholarship,$registered,$sem);
         $date = date("Y-m-d H:i:s");
         
@@ -1690,11 +1693,20 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A6', "LIST OF ENROLLED STUDENTS");
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:N2');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:N3');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:N4');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:N5');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:N6');
+        if ($isAll) {
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:J2');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:J3');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:J4');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:J5');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:J6');
+        } else {
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:F2');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:F3');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:F4');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:F5');
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:F6');
+        }
+        
         $style = array(
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -1718,28 +1730,34 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A5:N5")->applyFromArray($style);
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("A6:N6")->applyFromArray($style);
 
-        // Set document properties
-        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
-                                     ->setLastModifiedBy("Jec Castillo")
-                                     ->setTitle("Enrolled Students in Neo")
-                                     ->setSubject("Enrolled Students in Neo")
-                                     ->setDescription("Enrolled Students in Neo Download.")
-                                     ->setKeywords("office 2007 openxml php")
-                                     ->setCategory("Enrolled Students in Neo");
+         // Set document properties
+         $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                    ->setLastModifiedBy("Jec Castillo")
+                    ->setTitle("Enrolled Students in Neo")
+                    ->setSubject("Enrolled Students in Neo")
+                    ->setDescription("Enrolled Students in Neo Download.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Enrolled Students in Neo");
 
-        
-        $objPHPExcel->setActiveSheetIndex(0)
+        if ($isAll) {
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A8', '#')
+            ->setCellValue('B8', 'First Name')
+            ->setCellValue('C8', 'Last Name')
+            ->setCellValue('D8', 'UserID')
+            ->setCellValue('E8', 'StudentID')
+            ->setCellValue('F8', 'Student IACADEMY Email')
+            ->setCellValue('G8', 'Parent 1(Father  Name)') //father frist name not available
+            // ->setCellValue('H8', 'Parent 1 (Lastname)') //not available only full name of father
+            ->setCellValue('H8', 'Father Email')
+            ->setCellValue('I8', 'Mother')
+            ->setCellValue('J8', 'Mother Email');
+        } else {
+            $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A8', '#')
-                    ->setCellValue('B8', 'First Name')
-                    ->setCellValue('C8', 'Last Name')
-                    ->setCellValue('D8', 'UserID')
-                    ->setCellValue('E8', 'StudentID')
-                    ->setCellValue('F8', 'Student iacademy Email')
-                    ->setCellValue('G8', 'Parent 1(Father  Name)') //father frist name not available
-                    // ->setCellValue('H8', 'Parent 1 (Lastname)') //not available only full name of father
-                    ->setCellValue('H8', 'Father Email')
-                    ->setCellValue('I8', 'Mother')
-                    ->setCellValue('J8', 'Mother Email');
+                    ->setCellValue('B8', 'Course Code')
+                    ->setCellValue('C8', 'Student iACADEMY Email');
+        }
                     
         $i = 9;
         $count = 1;
@@ -1750,25 +1768,50 @@ class Excel extends CI_Controller {
             $oldPass_unhash = pw_unhash($student['strPass']);
             //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
 
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $count.".")
-                    ->setCellValue('B'.$i, $student['strFirstname'])
-                    ->setCellValue('C'.$i, $student['strLastname'])
-                    ->setCellValue('D'.$i, $student['intID'])
-                    ->setCellValue('E'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
-                    ->setCellValue('F'.$i, $student['strEmail'])
-                    ->setCellValue('G'.$i, $student['father'])
-                    ->setCellValue('H'.$i, $student['father_email'])
-                    ->setCellValue('I'.$i, $student['mother'])
-                    ->setCellValue('J'.$i, $student['mother_email']);
-                    
-            
-                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
-                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
-                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
-                    $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
-                    $count++;
-                    $i++;
+            if ($isAll) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A'.$i, $count.".")
+                            ->setCellValue('B'.$i, $student['strFirstname'])
+                            ->setCellValue('C'.$i, $student['strLastname'])
+                            ->setCellValue('D'.$i, $student['intID'])
+                            ->setCellValue('E'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                            ->setCellValue('F'.$i, $student['strEmail'])
+                            ->setCellValue('G'.$i, $student['father'])
+                            ->setCellValue('H'.$i, $student['father_email'])
+                            ->setCellValue('I'.$i, $student['mother'])
+                            ->setCellValue('J'.$i, $student['mother_email']);
+            } else {
+                $courseCode = '';
+                if ($level == '1' || $level == '2') {
+                    $courseCode = $this->data_fetcher->getCourseCode($course);
+                    $semDetails = $this->data_fetcher->get_sem_by_id($sem);
+
+                    $startYear = substr($semDetails['strYearStart'], -2);
+                    $endYear = substr($semDetails['strYearEnd'], -2);
+                    $termYer = $semDetails['enumSem'].'Term-'.'SY'.$startYear.'-'.$endYear;
+                    // print_r($semDetails['enumSem']);
+                    // exit;
+                    //check is UG = 2 or SHS = 1
+                    if ($level == '1') {
+                        $courseCode = 'SHS-CEBU'.$courseCode.'-'.$termYer;
+                    } else if ($level == '2') {
+                        $courseCode = 'UG-CEBU'.$courseCode.'-'.$termYer;
+                    }
+                }
+                
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A'.$i, $count.".")
+                            ->setCellValue('B'.$i, $courseCode)
+                            // ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                            ->setCellValue('C'.$i, $student['strEmail']);
+            }
+
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
+                $count++;
+                $i++;
             }
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
@@ -1781,10 +1824,6 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);        
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(10);        
     
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -1808,7 +1847,6 @@ class Excel extends CI_Controller {
          
          $objWriter->save('php://output');
          exit;
-        
         
     }
 

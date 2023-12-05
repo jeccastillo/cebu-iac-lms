@@ -27,7 +27,8 @@
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
                             <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Students Data Report</a></li>                                                  
                             <li><a href="<?php echo base_url() ?>excel/download_student_grades/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Student Grades</a></li>                                                                           
-                            <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Enrolled Students</a></li>                                                                           
+                            <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem.'/'.'1'.'/'.$level; ?>" class="text-muted">Enrolled Students</a></li>                                                                           
+                            <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem.'/'.'0'.'/'.$level; ?>" class="text-muted">Enrolled Per Course</a></li>                                                                           
                       </ul>
                     </div>
               </div>
@@ -53,7 +54,7 @@
                             <option <?php echo ($postreg == 1)?'selected':''; ?> value="1">regular</option>
                             <option <?php echo ($postreg == 2)?'selected':''; ?> value="2">irregular</option>
                             <option <?php echo ($postreg == 3)?'selected':''; ?> value="3">new student</option>
-                        </select>
+                        </select>gi
                     </div>
                     <div class="col-sm-4">
                         <label for="intYearLevel">By Year Level:</label>
