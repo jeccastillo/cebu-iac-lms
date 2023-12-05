@@ -134,14 +134,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>Select Type:</label>  
-                                            <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="computePayment($event)" v-model="payment_type" class="form-control">
-                                                <option value="full">Full Payment</option>
-                                                <option value="partial">Installment</option>
-                                            </select>
-                                            <div v-else>
-                                                {{ payment_type }}
-                                            </div>
+                                            <label>Payment Type:</label>  
+                                            {{ payment_type }}                                            
                                             <hr />
                                             <table class="table table-striped" v-if="payment_type == 'full'">
                                                 <tr>
@@ -467,10 +461,6 @@ new Vue({
                 })
         },   
         computePayment: function(event){
-            if(event)
-                type = event.target.value;
-            else
-                type = null;
             if(this.registration.enumStudentType == "new"){
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                 .then((data) => {
@@ -508,7 +498,7 @@ new Vue({
                         
                         
                     }
-                    else if(this.payment_type == "partial" || type == "partial"){
+                    else if(this.payment_type == "partial"){
                         
                         this.item_details.price = down_payment;
                     }                            
@@ -564,7 +554,7 @@ new Vue({
                         
                         
                     }
-                    else if(this.payment_type == "partial" || type == "partial"){
+                    else if(this.payment_type == "partial"){
                         
                         this.item_details.price = down_payment;
                     }                            
