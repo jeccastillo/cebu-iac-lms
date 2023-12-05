@@ -24,17 +24,17 @@
             </table>            
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
+                    <td><?php echo $term['enumSem']." ".$term['term_label']; ?></td>                    
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']; ?></td>                    
                 </tr>
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo $type; ?></td>                    
-                </tr>
-            </table>
-            <table>
-                <tr style="font-size:10px;text-align:left;">
-                    <td style="width:50%;height:10px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
@@ -59,6 +59,7 @@
                     <td style="width:50%;height:28px;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
+            <br />
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
