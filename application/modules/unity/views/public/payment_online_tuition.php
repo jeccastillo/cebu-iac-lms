@@ -1,5 +1,5 @@
 <div id="registration-container">    
-    <div>       
+    <div class="container">       
         <div class="content">                        
             <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
                 Stud No :{{ student.strStudentNumber }}
@@ -43,7 +43,7 @@
                                                                                                 -->
                                     <input type="hidden" value="Tuition Fee" v-model="desc" />                                                                                            
                                     <div class="row">
-                                        <div class="col-md-6">          
+                                        <div class="col-md-8">          
                                             <h3>Select Mode of Payment</h3>                          
                                             <hr />
                                             <div>
@@ -133,7 +133,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label>Select Type:</label>  
                                             <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="computePayment($event)" v-model="payment_type" class="form-control">
                                                 <option value="full">Full Payment</option>
