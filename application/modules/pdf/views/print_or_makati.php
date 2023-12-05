@@ -94,7 +94,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:30px;">
+                <tr style="line-height:20px;">
                     <td style=""></td>
                 </tr>
             </table>
