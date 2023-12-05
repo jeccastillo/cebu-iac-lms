@@ -215,8 +215,6 @@
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
-                        <br />
-                        <br />
                         <span style="color:#fff;">the amount of pesos &nbsp;</span>
                         <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                     </td>
