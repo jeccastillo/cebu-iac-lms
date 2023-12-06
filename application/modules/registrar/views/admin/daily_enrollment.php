@@ -107,6 +107,7 @@ new Vue({
         totals_post: undefined,
         full_total: 0,
         totals: undefined,
+        sy: [],
                       
     },
 
