@@ -344,6 +344,7 @@ new Vue({
         total_price_from_cart: 0,
         total_price_cart_with_charge_es: 0,
         total_price_cart_with_charge: 0,
+        installment_dates:[],
         payload: {},         
         installments:[], 
         bdo_pay:{
@@ -425,6 +426,11 @@ new Vue({
                         this.tuition_data = data.data.tuition_data;          
                         this.payment_type = this.registration.paymentType;
                         this.remaining_amount = data.data.tuition_data.total;
+                        this.installment_dates.push(data.data.active_sem.installment1);
+                        this.installment_dates.push(data.data.active_sem.installment2);
+                        this.installment_dates.push(data.data.active_sem.installment3);
+                        this.installment_dates.push(data.data.active_sem.installment4);
+                        this.installment_dates.push(data.data.active_sem.installment5);
                         if(this.payment_type == "partial")                       
                             this.remaining_amount = data.data.tuition_data.total_installment;
                                       
