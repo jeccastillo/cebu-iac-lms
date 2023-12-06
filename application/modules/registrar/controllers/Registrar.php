@@ -765,7 +765,7 @@ class Registrar extends CI_Controller {
                             
         $ret['totals'] = $totals;
         $ret['data'] = $data;
-
+        $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         echo json_encode($ret);
 
     }

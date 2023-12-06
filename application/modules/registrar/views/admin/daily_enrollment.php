@@ -39,6 +39,12 @@
                 <i class="fa fa-caret-down"></i>
             </button>
         </div>
+        <div class="form-group pull-right">
+                <label>Term Select</label>
+                <select v-model="current_sem" @change="changeTermSelected($event)" class="form-control" >
+                    <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
+                </select>   
+        </div>
         <table class="table table-bordered table-striped">
             <thead style="position: sticky;top: 0" class="thead-dark">
                 <tr>
@@ -121,6 +127,7 @@ new Vue({
 
                         this.dates = data.data.data;
                         this.totals = data.data.totals;
+                        this.sy = data.data.sy;
                         for(i in this.dates){
                             this.full_total += this.dates[i].total;
                             this.data_post.push(this.dates[i]);
@@ -148,7 +155,10 @@ new Vue({
                 this.$refs.pdfform.submit();
             else
                 this.$refs.excelform.submit();
-        }
+        },
+        changeTermSelected: function(event){
+            document.location = this.base_url + "registrar/daily_enrollment_report/<?php echo ($start!=0)?$start:date("Y-m-d"); ?>/<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>" + event.target.value;
+        },
                                        
     }
 
