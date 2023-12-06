@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-sm-6 form-group">
                             <label>Group Name</label>
-                            <textarea required class="form-control" v-model="request.group_name"></textarea>
+                            <input type="text" required class="form-control" v-model="request.group_name" />
                         </div>
                     </div>  
                     <hr />
