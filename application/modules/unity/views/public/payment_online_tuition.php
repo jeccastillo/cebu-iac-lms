@@ -489,7 +489,7 @@ new Vue({
                     if(this.registration.downpayment == 1 || down_payment == 0){
                         this.has_down = true;                                    
                         //installment amounts                                                                    
-                        var temp = (this.tuition_data.total_installment) - parseFloat(this.remaining_amount);
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                         console.log(temp);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
@@ -533,7 +533,7 @@ new Vue({
                 })
             }
             else{
-                    this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
+                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
                     this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
                     this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
@@ -545,7 +545,7 @@ new Vue({
                     if(this.registration.downpayment == 1 || down_payment == 0){
                         this.has_down = true;                                    
                         //installment amounts                                                                    
-                        var temp = (this.tuition_data.total_installment) - parseFloat(this.remaining_amount);
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                         console.log(temp);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
@@ -562,7 +562,8 @@ new Vue({
                         
                         
                     }
-                    else if(this.payment_type == "partial"){                        
+                    else if(this.payment_type == "partial"){
+z                        
                         this.item_details.price = down_payment;
                         for(i=0; i < 5; i++)
                                 this.installments.push(this.tuition_data.installment_fee);
