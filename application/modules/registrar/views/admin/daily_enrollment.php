@@ -157,7 +157,7 @@ new Vue({
                 this.$refs.excelform.submit();
         },
         changeTermSelected: function(event){
-            document.location = this.base_url + "registrar/daily_enrollment_report/<?php echo ($start!=0)?$start:date("Y-m-d"); ?>/<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>" + event.target.value;
+            document.location = this.base_url + "registrar/daily_enrollment_report/<?php echo ($start!=0)?$start:date("Y-m-d"); ?>/<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>/" + event.target.value;
         },
                                        
     }
