@@ -146,7 +146,8 @@
                                             <table class="table table-striped" v-else>
                                                 <tr>
                                                     <td>Down Payment</td>
-                                                    <td v-if="registration.downpayment == 0">{{ tuition_data.down_payment }}</td>                                                        
+                                                    <td v-if="registration.downpayment == 0 && down_payment != 0">{{ tuition_data.down_payment }}</td>                                                        
+                                                    <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
@@ -297,6 +298,7 @@ new Vue({
         student_api_data: {},
         desc: 'Tuition Fee',
         payment_modes: [],
+        down_payment: 0,
         mode_of_releases: [],
         area_delivery: [],
         city_delivery: [],
@@ -485,6 +487,7 @@ new Vue({
                     this.loader_spinner = false;
 
                     let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                    this.down_payment = down_payment;
                     
                     if(this.registration.downpayment == 1 || down_payment == 0){
                         this.has_down = true;                                    
