@@ -68,11 +68,10 @@ class Group extends CI_Controller {
 
     }
 
-    public function group_data(){
-        $post = $this->input->post();
-        $ret['group'] = $this->db->get_where('tb_mas_user_group',array('id' => $post['id']))->first_row();
-        $ret['group_access'] = $this->db->get_where('tb_mas_user_group_access',array('group_id' => $post['id']))->result_array();
-        $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $post['id']))->result_array();
+    public function group_data($id){        
+        $ret['group'] = $this->db->get_where('tb_mas_user_group',array('id' => $id))->first_row();
+        $ret['group_access'] = $this->db->get_where('tb_mas_user_group_access',array('group_id' => $id))->result_array();
+        $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $id))->result_array();
         echo json_encode($ret);
     }
 
