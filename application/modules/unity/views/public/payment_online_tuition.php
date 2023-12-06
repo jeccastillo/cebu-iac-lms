@@ -150,7 +150,7 @@
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
-                                                    <td>{{ inst }}</td>
+                                                    <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
                                             </table>                                                
                                         </div> 
