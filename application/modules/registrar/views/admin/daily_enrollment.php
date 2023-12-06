@@ -96,6 +96,7 @@
 <?php else: ?>
     var query_str = 'admissions/applications/enapps?current_sem=<?php echo $active_sem['intID']; ?>';
 <?php endif; ?>
+var current_sem  = <?php echo $active_sem['intID']; ?>;
 new Vue({
     el: '#registration-container',
     data: {                    
@@ -179,7 +180,7 @@ $(document).ready(function(){
         endDate: moment()
     },
     function(start, end) {
-        document.location = base_url + 'registrar/daily_enrollment_report/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD')+'/' + this.current_sem;
+        document.location = base_url + 'registrar/daily_enrollment_report/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD')+'/' + current_sem;
         
     }
     );  
