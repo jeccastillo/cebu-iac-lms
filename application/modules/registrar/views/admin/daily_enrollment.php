@@ -39,12 +39,12 @@
                 <i class="fa fa-caret-down"></i>
             </button>
         </div>
-        <div class="form-group pull-right">
+        <!-- <div class="form-group pull-right">
                 <label>Term Select</label>
                 <select v-model="current_sem" @change="changeTermSelected($event)" class="form-control" >
                     <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                 </select>   
-        </div>
+        </div> -->
         <table class="table table-bordered table-striped">
             <thead style="position: sticky;top: 0" class="thead-dark">
                 <tr>
