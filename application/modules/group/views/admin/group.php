@@ -96,10 +96,12 @@ new Vue({
                 
             //this.loader_spinner = true;
             axios.get(this.base_url + 'group/group_data/'+this.id)
-                .then((data) => {                                      
-                    this.request = data.data.group;
-                    this.group_access = data.data.group_access;
-                    this.group_users = data.data.group_users;                                        
+                .then((data) => {  
+                    if(data.data.group){
+                        this.request = data.data.group;
+                        this.group_access = data.data.group_access;
+                        this.group_users = data.data.group_users;                                        
+                    }
                 })
             .catch((error) => {
                 console.log(error);
