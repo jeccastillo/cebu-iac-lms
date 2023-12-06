@@ -489,12 +489,15 @@ new Vue({
                             if(this.tuition_data.installment_fee > temp){
                                 val = this.tuition_data.installment_fee - temp;                                            
                                 this.item_details.price = val;
+                                this.installments.push(val);
                                 break;
                             }     
                             else{
                                 temp = temp - this.tuition_data.installment_fee;
+                                this.installments.push(0);
                             }                                                                       
-                        }
+                        }                       
+                                    
                         
                         
                     }
@@ -502,9 +505,10 @@ new Vue({
                         
                         this.item_details.price = down_payment;
                     }                            
-                    else{
-                        
+                    else{                        
                         this.item_details.price = this.remaining_amount;
+                        for(i=0; i < 5; i++)
+                                        this.installments.push(this.tuition_data.installment_fee); 
                     }      
                     axios.get(api_url + 'admissions/student-info/' + this.slug)
                     .then((data) => {
