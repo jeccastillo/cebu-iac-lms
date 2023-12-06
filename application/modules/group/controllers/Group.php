@@ -55,7 +55,7 @@ class Group extends CI_Controller {
     }
     
    
-    public function group($id = 0){
+    public function add_group($id = 0){
 
         $this->data['id'] = $id;        
         $this->data['opentree'] = "admin";
