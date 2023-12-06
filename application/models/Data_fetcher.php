@@ -2970,7 +2970,7 @@ class Data_fetcher extends CI_Model {
         }
 
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
-        $data['installment_fee'] = round($data['installment_fee'],2);
+        $data['installment_fee'] = $data['installment_fee'];
 
         $data['if_before_deductions'] = ($data['ti_before_deductions'] - $data['dp_before_deductions'])/5;
         $data['if_before_deductions'] = round($data['if_before_deductions'],2);
