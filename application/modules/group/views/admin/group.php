@@ -1,10 +1,7 @@
 <aside class="right-side" id="registration-container">    
 <section class="content-header">
         <h1>
-            Student Deficiencies
-            <small>
-                <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a>                                                 
-            </small>
+            User Group
         </h1>
         <hr />
     </section>
