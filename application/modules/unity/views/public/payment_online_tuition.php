@@ -493,7 +493,8 @@ new Vue({
                         console.log(temp);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
-                                val = this.tuition_data.installment_fee - temp;                                            
+                                val = this.tuition_data.installment_fee - temp;    
+                                val = Math.round(val*100)/100;                                        
                                 this.item_details.price = val;
                                 this.installments.push(val);
                                 break;
@@ -550,7 +551,8 @@ new Vue({
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
                                 val = this.tuition_data.installment_fee - temp;                                            
-                                this.item_details.price = val;
+                                val = Math.round(val*100)/100;
+                                this.item_details.price = val;                                
                                 this.installments.push(val);
                                 break;
                             }     
