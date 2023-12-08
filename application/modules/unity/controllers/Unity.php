@@ -3032,7 +3032,7 @@ class Unity extends CI_Controller {
             foreach($classlists as $classlist){
                 $classlist_temp = $classlist;
                 $classlist_temp['numCount'] = $this->data_fetcher->countRemainingSlotsClasslist($classlist['intID']);                
-                if($classlist_temp['numCount'] == 0)
+                if($classlist_temp['numCount'] != 0)
                     $cst[] = $classlist_temp;
             }
             $subj['classlists'] = $cst;
