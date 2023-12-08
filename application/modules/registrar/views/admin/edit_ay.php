@@ -209,6 +209,16 @@
                         </td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php foreach($final_extensions as $item): ?>
+                    <tr>
+                        <td><?php echo $item['type']; ?></td>
+                        <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
+                        <td>
+                            <button class="delete-extension btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>
+                            <a class="btn btn-success" href="<?php echo base_url().'registrar/view_extension/'.$item['id']; ?>">View</a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </table> 
             </div>            
         </form>    
