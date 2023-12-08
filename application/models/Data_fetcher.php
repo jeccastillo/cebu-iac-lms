@@ -3373,7 +3373,7 @@ class Data_fetcher extends CI_Model {
 
         $ret = [];        
                
-        print_r($this->db->get_where('tb_mas_classlist_student',array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))->result_array());
+        print_r($this->db->get_where('tb_mas_classlist',array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))->result_array());
         $cl =  $this->db
                     ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa")                                        
                     ->from("tb_mas_classlist_student")            
