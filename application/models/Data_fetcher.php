@@ -1024,7 +1024,6 @@ class Data_fetcher extends CI_Model {
             $ret[] = $classlist;
         }
 
-        print_r($ret);
         return $ret;
     }
     
