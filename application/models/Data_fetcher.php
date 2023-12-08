@@ -3396,7 +3396,7 @@ class Data_fetcher extends CI_Model {
                     ->get()
                     ->result_array();
 
-        print_r($cl);
+        
         foreach($cl as $c){
                 $c['adjustments'] = $this->db->where(array('classlist_student_id'=> $c['subjectID'],'syid'=>$classlist,'student_id'=>$id))                                          
                                           ->order_by('date','desc')
