@@ -543,8 +543,7 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment2);
                         this.installment_dates.push(data.data.active_sem.installment3);
                         this.installment_dates.push(data.data.active_sem.installment4);
-                        this.installment_dates.push(data.data.active_sem.installment5);                        
-                        console.log(this.request.student_campus);
+                        this.installment_dates.push(data.data.active_sem.installment5);                                                
                         
                         if(data.data.registration){         
                             this.registration = data.data.registration;

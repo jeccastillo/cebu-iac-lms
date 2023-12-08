@@ -737,25 +737,25 @@ class Registrar extends CI_Controller {
 
 
             $data[$app->date_enrolled]['total'] += 1;
-
-            switch($d->student_type){
-                case 'freshman':
-                    $data[$app->date_enrolled]['freshman'] += 1;
-                    $totals['freshman'] += 1;
-                    break;
-                case 'transferee':
-                    $data[$app->date_enrolled]['transferee'] += 1;
-                    $totals['transferee'] += 1;
-                    break;
-                case 'second degree':
-                    $data[$app->date_enrolled]['second'] += 1;
-                    $totals['second'] += 1;
-                    break;               
-                default:
-                    $data[$app->date_enrolled]['freshman'] += 1;
-                    $totals['freshman'] += 1;
-                    
-            }
+            if(isset($d))
+                switch($d->student_type){
+                    case 'freshman':
+                        $data[$app->date_enrolled]['freshman'] += 1;
+                        $totals['freshman'] += 1;
+                        break;
+                    case 'transferee':
+                        $data[$app->date_enrolled]['transferee'] += 1;
+                        $totals['transferee'] += 1;
+                        break;
+                    case 'second degree':
+                        $data[$app->date_enrolled]['second'] += 1;
+                        $totals['second'] += 1;
+                        break;               
+                    default:
+                        $data[$app->date_enrolled]['freshman'] += 1;
+                        $totals['freshman'] += 1;
+                        
+                }
         }
                        
         // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
@@ -765,7 +765,7 @@ class Registrar extends CI_Controller {
                             
         $ret['totals'] = $totals;
         $ret['data'] = $data;
-
+        $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         echo json_encode($ret);
 
     }

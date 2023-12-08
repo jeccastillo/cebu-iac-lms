@@ -651,6 +651,7 @@ class Unity extends CI_Controller {
 
         $student = $this->data_fetcher->getStudent($id, 'slug');            
         $data['selected_ay'] = $active_sem['intID'];
+        $ret['active_sem'] = $active_sem;      
         $data['id'] = $student['intID'];
         
 
