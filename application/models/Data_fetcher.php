@@ -3377,8 +3377,7 @@ class Data_fetcher extends CI_Model {
                     ->select("tb_mas_classlist_student.*")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
-                    ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
-                    ->order_by('strCode','asc')   
+                    ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')                    
                     ->get()
                     ->result_array();
 
