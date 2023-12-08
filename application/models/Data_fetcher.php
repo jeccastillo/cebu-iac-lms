@@ -1007,7 +1007,7 @@ class Data_fetcher extends CI_Model {
         $classlists = $this->db
                     ->select('tb_mas_classlist.*')
                     ->from('tb_mas_classlist')                    
-                    ->where(array('intSubjectID'=>$subject_id,'strAcademicYear'=>$sem))                   
+                    ->where(array('intSubjectID'=>$subject_id,'strSection !='=>'','strAcademicYear'=>$sem))                   
                     ->get()
                     ->result_array();
 
@@ -1024,6 +1024,7 @@ class Data_fetcher extends CI_Model {
             $ret[] = $classlist;
         }
 
+        print_r($ret);
         return $ret;
     }
     
