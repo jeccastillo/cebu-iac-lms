@@ -743,7 +743,7 @@ class Registrar extends CI_Controller {
             if(isset($d)){
                 $st = current($d);
                 if(count($d) > 0){                    
-                    switch($st->student_type){
+                    switch($st['student_type']){
                         case 'freshman':
                             $data[$app->date_enrolled]['freshman'] += 1;
                             $totals['freshman'] += 1;
@@ -763,7 +763,7 @@ class Registrar extends CI_Controller {
                     }
                 }
                 else{
-                    $data[date("Y-m-d",strtotime($st->dteRegistered))]['continuing'] += 1;
+                    $data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
                     $totals['continuing'] += 1;
                 }
             }
