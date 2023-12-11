@@ -939,10 +939,10 @@ new Vue({
 
         customSubmit: function(type, title, text, data, url, redirect) {
             Swal.fire({
-            title: 'iACADEMY CEBU CAMPUS',
-            text: "You are applying for iACADEMY CEBU Campus are you sure you want to continue?",
+            title: 'iACADEMY CEBU CAMPUS',            
             html: `
-                click <a href='https://sms-makati.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Main (Makati Campus)
+                You are applying for iACADEMY CEBU Campus are you sure you want to continue? <br />
+                click <a style='color:#000099' href='https://sms-makati.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Main (Makati Campus)
             `,
             showCancelButton: true,
             confirmButtonText: "Yes",
