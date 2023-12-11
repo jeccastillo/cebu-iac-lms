@@ -939,7 +939,7 @@ new Vue({
 
         customSubmit: function(type, title, text, data, url, redirect) {
             Swal.fire({
-            title: 'Continue submitting application',
+            title: 'iACADEMY CEBU CAMPUS',
             text: "You are applying for iACADEMY CEBU Campus are you sure you want to continue?",
             showCancelButton: true,
             confirmButtonText: "Yes",
