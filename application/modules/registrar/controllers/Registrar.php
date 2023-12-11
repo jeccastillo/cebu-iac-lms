@@ -741,8 +741,9 @@ class Registrar extends CI_Controller {
                      ->result_array();            
 
 
-            $data[$app->date_enrolled]['total'] += 1;
+            
             if(isset($d)){
+                $data[$app->date_enrolled]['total'] += 1;
                 $st = current($d);
                 if(count($d) < 2){                    
                     switch($st['student_type']){
