@@ -100,7 +100,7 @@ class Group extends CI_Controller {
         
         $ret['functions'] = $this->db->select('tb_mas_user_group_function.*,tb_mas_user_group_access.rw')
         ->from('tb_mas_user_group_function')
-        ->join('tb_mas_user_group_access','tb_mas_user_group_access.group_id = tb_mas_user_group_function.group_id','left')        
+        ->join('tb_mas_user_group_access','tb_mas_user_group_access.function_id = tb_mas_user_group_function.id AND AND tb_mas_user_group_access.group_id = '.$id,'left')        
         ->get()
         ->result_array();
 
