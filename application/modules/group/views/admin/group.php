@@ -27,6 +27,14 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <hr />
+                <div v-for="fn in functions" class="container-fluid">
+                    <div class="checkbox">
+                        <label>
+                            <input data-toggle="toggle" type="checkbox">
+                            Toggle test
+                        </label>
+                    </div>
+                </div>
                 <!-- <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
