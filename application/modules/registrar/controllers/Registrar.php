@@ -727,8 +727,6 @@ class Registrar extends CI_Controller {
                 'date' => date("M j, Y", strtotime($date))
             ]; 
         
-
-        
             $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
                     ->from('tb_mas_registration')
                     ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
@@ -739,8 +737,7 @@ class Registrar extends CI_Controller {
                     ->group_by('intStudentID')
                     ->get()
                     ->result_array();  
-                    
-            print_r($enrollment);
+                                
             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
