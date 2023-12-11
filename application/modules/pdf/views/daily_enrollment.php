@@ -45,10 +45,11 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="width:50%;font-size:9px;">Date</th>
+         <th style="width:40%;font-size:9px;">Date</th>
          <th style="width:10%;font-size:9px;">Freshman</th>
          <th style="width:10%;font-size:9px;">Transferee</th>         
          <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Continuing</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
@@ -72,6 +73,9 @@ $html .= '
                     '.$item->second.'
                 </td>
                 <td style="font-size:8px;">
+                    '.$item->continuing.'
+                </td>
+                <td style="font-size:8px;">
                     '.$item->total.'
                 </td>
             </tr>
@@ -89,6 +93,7 @@ $html .= '
          <td>'.$totals->freshman.'</td>
          <td>'.$totals->transferee.'</td>
          <td>'.$totals->second.'</td>
+         <td>'.$totals->continuing.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
