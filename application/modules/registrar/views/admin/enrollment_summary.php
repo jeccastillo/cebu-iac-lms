@@ -61,6 +61,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><strong>{{ all_enrolled }}</strong></td>
                 </tr>
             </table>
@@ -109,7 +110,7 @@ new Vue({
                     this.sy = data.data.sy;
                     this.enrolled = data.data.data;
                     for(i in this.enrolled){
-                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee;
+                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee + this.enrolled[i].enrolled_continuing;
                     }
                    
                 })
