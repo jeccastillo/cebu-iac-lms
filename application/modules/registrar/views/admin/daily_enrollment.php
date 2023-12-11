@@ -118,40 +118,35 @@ new Vue({
 
     mounted() {
 
-        axios.get(api_url + query_str)
-            .then((data) => {       
-                var formdata= new FormData();
-                formdata.append('applicant_data', JSON.stringify(data.data.data)); 
-                formdata.append('start','<?php echo ($start!=0)?$start:date("Y-m-d"); ?>');                       
-                formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
-                axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                    })
-                    .then((data) => {  
-
-                        this.dates = data.data.data;
-                        this.totals = data.data.totals;
-                        this.sy = data.data.sy;
-                        for(i in this.dates){
-                            this.full_total += this.dates[i].total;
-                            this.data_post.push(this.dates[i]);
-                        }
-                        this.data_post = JSON.stringify(this.data_post);
-                        this.full_total_post = JSON.stringify(this.full_total);
-                        this.totals_post = JSON.stringify(this.totals);
-                    
-                    })
-                .catch((error) => {
-                    console.log(error);
-                    
-                });
+          
+        var formdata= new FormData();
+        formdata.append('sy',this.current_sem)        
+        formdata.append('start','<?php echo ($start!=0)?$start:date("Y-m-d"); ?>');                       
+        formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
+        axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            }
             })
-            .catch((error) => {
-                console.log(error);
-            });
-        
+            .then((data) => {  
+
+                this.dates = data.data.data;
+                this.totals = data.data.totals;
+                this.sy = data.data.sy;
+                for(i in this.dates){
+                    this.full_total += this.dates[i].total;
+                    this.data_post.push(this.dates[i]);
+                }
+                this.data_post = JSON.stringify(this.data_post);
+                this.full_total_post = JSON.stringify(this.full_total);
+                this.totals_post = JSON.stringify(this.totals);
+            
+            })
+        .catch((error) => {
+            console.log(error);
+            
+        });
+            
 
     },
 

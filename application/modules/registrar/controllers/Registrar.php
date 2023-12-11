@@ -699,7 +699,7 @@ class Registrar extends CI_Controller {
 
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
-        $active_sem = $this->data_fetcher->get_active_sem();
+        $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);
         $app_data = json_decode($post['applicant_data']);
         $enrolled = [];
         
@@ -739,7 +739,7 @@ class Registrar extends CI_Controller {
                     ->order_by('intRegistrationID','desc')
                     ->group_by('intStudentID')
                     ->get()
-                    ->result_array();                        
+                    ->result_array();                       
             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
