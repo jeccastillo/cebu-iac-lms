@@ -938,66 +938,78 @@ new Vue({
         },
 
         customSubmit: function(type, title, text, data, url, redirect) {
-
-            this.loading_spinner = true;
-            if (this.request.mobile_number.length < 18) {
-                this.loading_spinner = false;
-                Swal.fire(
-                    'Failed!',
-                    "Please fill in mobile number",
-                    'warning'
-                )
-            } else {
-                if (this.request.health_concerns.includes("Others")) {
-                    const hasOther = this.request.health_concerns.indexOf("Others");
-                    this.request.health_concerns.splice(
-                        hasOther,
-                        1,
-                        this.request.health_concern_other
-                    );
-                }
-
-
-                this.request.health_concern = this.request.health_concerns.join(
-                    ", "
-                );
-                
-                this.request.address = this.address.hns+", "+this.address.brgy_subd+", "+this.address.city_town+", "+this.address.province+", "+this.address.zipcode;
-
-                axios
-                    .post(api_url + url, data, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
+            Swal.fire({
+            title: 'Continue submitting application',
+            text: "You are applying for iACADEMY CEBU Campus are you sure you want to continue?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            imageWidth: 100,
+            icon: "question",
+            cancelButtonText: "No, cancel!",
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    this.loading_spinner = true;
+                    if (this.request.mobile_number.length < 18) {
+                        this.loading_spinner = false;
+                        Swal.fire(
+                            'Failed!',
+                            "Please fill in mobile number",
+                            'warning'
+                        )
+                    } else {
+                        if (this.request.health_concerns.includes("Others")) {
+                            const hasOther = this.request.health_concerns.indexOf("Others");
+                            this.request.health_concerns.splice(
+                                hasOther,
+                                1,
+                                this.request.health_concern_other
+                            );
                         }
-                    })
-                    .then(data => {
-                        this.is_done = true;
 
-                        if (data.data.success) {
 
-                            this.loading_spinner = false;
-                            var ret = data.data.data;
+                        this.request.health_concern = this.request.health_concerns.join(
+                            ", "
+                        );
+                        
+                        this.request.address = this.address.hns+", "+this.address.brgy_subd+", "+this.address.city_town+", "+this.address.province+", "+this.address.zipcode;
 
-                            Swal.fire({
-                                title: "SUCCESS",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.href =
-                                    "<?php echo base_url(); ?>site/initial_requirements/" + ret
-                                    .slug;
+                        axios
+                            .post(api_url + url, data, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.is_done = true;
+
+                                if (data.data.success) {
+
+                                    this.loading_spinner = false;
+                                    var ret = data.data.data;
+
+                                    Swal.fire({
+                                        title: "SUCCESS",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.href =
+                                            "<?php echo base_url(); ?>site/initial_requirements/" + ret
+                                            .slug;
+                                    });
+
+                                } else {
+                                    this.loading_spinner = false;
+                                    Swal.fire(
+                                        'Failed!',
+                                        data.data.message,
+                                        'error'
+                                    )
+                                }
                             });
-
-                        } else {
-                            this.loading_spinner = false;
-                            Swal.fire(
-                                'Failed!',
-                                data.data.message,
-                                'error'
-                            )
-                        }
-                    });
-            }
+                    }
+                }
+            })
         },
     },
 });
