@@ -28,10 +28,18 @@
                 </form>
                 <hr />
                 <div v-for="fn in group_functions">
+                    {{ fn.name }}
+                    <hr />
                     <div class="checkbox">
                         <label>
                             <input role="switch" type="checkbox">
-                            {{ fn.name }}
+                            Read
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input role="switch" type="checkbox">
+                            Write
                         </label>
                     </div>
                 </div>
