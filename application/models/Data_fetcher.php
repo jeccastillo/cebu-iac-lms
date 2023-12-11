@@ -1110,15 +1110,22 @@ class Data_fetcher extends CI_Model {
             switch($type){
                 case 1:
                     $this->db->where('tb_mas_users.student_type',"freshman");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                 break;
                 case 2:
                     $this->db->where('tb_mas_users.student_type',"transferee");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                 break;
                 case 3:
                     $this->db->where('tb_mas_users.student_type',"foreign");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                 break;
                 case 4:
                     $this->db->where('tb_mas_users.student_type',"second degree");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
+                break;
+                case 5:
+                    $this->db->where('tb_mas_registration.enumStudentType',"continuing");
                 break;                        
 
             }

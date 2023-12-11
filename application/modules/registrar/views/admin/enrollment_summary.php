@@ -29,6 +29,7 @@
                     <th>Transferee</th>
                     <th>Foreign</th>
                     <th>Second Degree</th>
+                    <th>Continuing</th>
                     <th>Total</th>
                 </tr>
                 <tr v-for="item in enrolled">
@@ -48,7 +49,10 @@
                         {{ item.enrolled_second }}
                     </td>
                     <td>
-                        {{ item.enrolled_freshman + item.enrolled_transferee + item.enrolled_foreign + item.enrolled_second }}
+                        {{ item.enrolled_continuing }}
+                    </td>
+                    <td>
+                        {{ item.enrolled_freshman + item.enrolled_transferee + item.enrolled_foreign + item.enrolled_second + item.enrolled_continuing }}
                     </td>
                 </tr>
                 <tr>
