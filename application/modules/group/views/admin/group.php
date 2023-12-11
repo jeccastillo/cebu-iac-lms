@@ -135,8 +135,7 @@ new Vue({
     el: '#registration-container',
     data: {                    
         base_url: '<?php echo base_url(); ?>',       
-        id: '<?php echo $id; ?>',        
-        group_access:[],
+        id: '<?php echo $id; ?>',                
         group_users:[],
         group_functions:[],
         request:{
@@ -158,8 +157,7 @@ new Vue({
             axios.get(this.base_url + 'group/group_data/'+this.id)
                 .then((data) => {  
                     if(data.data.group){
-                        this.request = data.data.group;
-                        this.group_access = data.data.group_access;
+                        this.request = data.data.group;                        
                         this.group_users = data.data.group_users;   
                         this.group_functions = data.data.functions;                                     
                     }
