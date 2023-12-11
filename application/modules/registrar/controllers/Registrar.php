@@ -738,10 +738,7 @@ class Registrar extends CI_Controller {
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->order_by('intRegistrationID','desc')
                      ->get()
-                     ->result_array();
-
-
-            print_r($d);
+                     ->result_array();            
 
 
             $data[$app->date_enrolled]['total'] += 1;
