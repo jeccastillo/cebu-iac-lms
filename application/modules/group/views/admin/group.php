@@ -31,7 +31,7 @@
                     <div class="checkbox">
                         <label>
                             <input data-toggle="toggle" type="checkbox">
-                            Toggle test
+                            {{ fn.name }}
                         </label>
                     </div>
                 </div>
