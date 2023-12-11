@@ -34,6 +34,7 @@
         <hr />
     <div class="content"> 
         <div class="input-group pull-right">
+            <label>Date Range</label><br />
             <button class="btn btn-default pull-right" id="daterange-btn-admissions">
                 <i class="fa fa-calendar"></i> Choose Date Range
                 <i class="fa fa-caret-down"></i>
