@@ -1024,64 +1024,78 @@ new Vue({
 
         customSubmit: function(type, title, text, data, url, redirect) {
 
-
-            this.loading_spinner = true;
-            if (this.request.mobile_number.length < 18) {
-                this.loading_spinner = false;
-                Swal.fire(
-                    'Failed!',
-                    "Please fill in mobile number",
-                    'warning'
-                )
-            } else {
-                if (this.request.health_concerns.includes("Others")) {
-                    const hasOther = this.request.health_concerns.indexOf("Others");
-                    this.request.health_concerns.splice(
-                        hasOther,
-                        1,
-                        this.request.health_concern_other
-                    );
-                }
-
-
-                this.request.health_concern = this.request.health_concerns.join(
-                    ", "
-                );
-
-                axios
-                    .post(api_url + url, data, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
+            Swal.fire({
+            title: 'iACADEMY MAKATI CAMPUS',            
+            html: `
+                You are applying for iACADEMY MAKATI Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
+            `,
+            showCancelButton: true,
+            confirmButtonText: "Submit Application",
+            imageWidth: 100,
+            icon: "question",
+            cancelButtonText: "No, cancel!",
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    this.loading_spinner = true;
+                    if (this.request.mobile_number.length < 18) {
+                        this.loading_spinner = false;
+                        Swal.fire(
+                            'Failed!',
+                            "Please fill in mobile number",
+                            'warning'
+                        )
+                    } else {
+                        if (this.request.health_concerns.includes("Others")) {
+                            const hasOther = this.request.health_concerns.indexOf("Others");
+                            this.request.health_concerns.splice(
+                                hasOther,
+                                1,
+                                this.request.health_concern_other
+                            );
                         }
-                    })
-                    .then(data => {
-                        this.is_done = true;
 
-                        if (data.data.success) {
 
-                            this.loading_spinner = false;
-                            var ret = data.data.data;
+                        this.request.health_concern = this.request.health_concerns.join(
+                            ", "
+                        );
 
-                            Swal.fire({
-                                title: "SUCCESS",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.href =
-                                    "<?php echo base_url(); ?>site/initial_requirements/" + ret
-                                    .slug;
+                        axios
+                            .post(api_url + url, data, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.is_done = true;
+
+                                if (data.data.success) {
+
+                                    this.loading_spinner = false;
+                                    var ret = data.data.data;
+
+                                    Swal.fire({
+                                        title: "SUCCESS",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.href =
+                                            "<?php echo base_url(); ?>site/initial_requirements/" + ret
+                                            .slug;
+                                    });
+
+                                } else {
+                                    this.loading_spinner = false;
+                                    Swal.fire(
+                                        'Failed!',
+                                        data.data.message,
+                                        'error'
+                                    )
+                                }
                             });
-
-                        } else {
-                            this.loading_spinner = false;
-                            Swal.fire(
-                                'Failed!',
-                                data.data.message,
-                                'error'
-                            )
-                        }
-                    });
-            }
+                    }
+                }
+            })
         },
     },
 });
