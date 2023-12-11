@@ -727,14 +727,15 @@ class Registrar extends CI_Controller {
                 'total' => 0,
                 'date' => date("M j, Y", strtotime($date))
             ]; 
-        }
+        
 
-        foreach($app_data as $app){
+        
             $d = $this->db->select('tb_mas_users.*, type_of_class, dteRegistered')
                      ->from('tb_mas_users')
                      ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
                      ->where('intROG >=',1)
+                     ->where('date(dteRegistered)', $date)
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->order_by('intRegistrationID','desc')
                      ->get()
