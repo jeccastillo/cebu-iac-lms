@@ -709,15 +709,16 @@ class Registrar extends CI_Controller {
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($begin, $interval, $end);
 
+        $totals = [
+            'freshman' => 0,
+            'transferee' => 0,
+            'second' => 0,
+            'continuing' => 0,
+        ];
+        
         foreach ($period as $dt) {
             //echo $dt->format("l Y-m-d H:i:s\n");
-            $date = $dt->format("Y-m-d");
-            $totals = [
-                'freshman' => 0,
-                'transferee' => 0,
-                'second' => 0,
-                'continuing' => 0,
-            ];
+            $date = $dt->format("Y-m-d");           
             $data[$date] = [
                 'freshman' => 0,
                 'transferee' => 0,
