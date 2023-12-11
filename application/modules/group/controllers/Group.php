@@ -102,6 +102,7 @@ class Group extends CI_Controller {
         ->from('tb_mas_user_group_function')
         ->join('tb_mas_user_group_access','tb_mas_user_group_access.group_id = tb_mas_user_group_access.group_id','left')
         ->where(array('tb_mas_user_group_access.group_id' => $id))
+        ->get()
         ->result_array();
 
         $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $id))->result_array();
