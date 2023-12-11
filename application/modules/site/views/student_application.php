@@ -941,6 +941,9 @@ new Vue({
             Swal.fire({
             title: 'iACADEMY CEBU CAMPUS',
             text: "You are applying for iACADEMY CEBU Campus are you sure you want to continue?",
+            html: `
+                click <a href='https://sms-makati.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Main (Makati Campus)
+            `,
             showCancelButton: true,
             confirmButtonText: "Yes",
             imageWidth: 100,
