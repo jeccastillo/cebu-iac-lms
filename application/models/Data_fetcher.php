@@ -2229,9 +2229,14 @@ class Data_fetcher extends CI_Model {
             return "C".$year.'-'.$term.'-000';
     }
 
-    function getMaxCurrentStudentNumberMain($sem){
+    function getMaxCurrentStudentNumberMain($sem,$type){
         $term = switch_num_rev_search($sem['enumSem']);
-        $year = $sem['strYearStart'];        
+        
+        if($type == "college")
+            $year = $sem['strYearStart'];        
+        else
+            $year = $sem['strYearStart']."SHA";
+                
         $res = $this->db->where(array(
             'strStudentNumber LIKE' => $year.'-'.$term.'%'
         ))
@@ -2262,7 +2267,7 @@ class Data_fetcher extends CI_Model {
     }
     
 
-    public function generateNewStudentNumber($campus,$sem = 0){
+    public function generateNewStudentNumber($campus,$sem = 0,$type="college"){
         if($sem == 0)
             $sem = $this->get_processing_sem();
         else
@@ -2270,8 +2275,9 @@ class Data_fetcher extends CI_Model {
         
         if($campus == "Cebu")
             $studentNum = $this->getMaxCurrentStudentNumber($sem);
-        else
-            $studentNum = $this->getMaxCurrentStudentNumberMain($sem);
+        else{
+            $studentNum = $this->getMaxCurrentStudentNumberMain($sem,$type);
+        }
 
         $newStudentNumber =  preg_replace_callback( "|(\d+)(?!.*\d)|", "increment_student_number", $studentNum);
                 
