@@ -68,7 +68,35 @@ class Group extends CI_Controller {
 
     }
 
+    public function view_all_groups(){
+
+        $this->data['id'] = $id;        
+        $this->data['opentree'] = "admin";
+        $this->data['page'] = "group";              
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/group_view",$this->data);
+        $this->load->view("common/footer",$this->data);
+                
+
+    }
+
+    public function add_function(){
+        $post = $this->input->post();
+        if($this->db->insert('tb_mas_user_group_function',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully added function";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Oops something went wrong.";
+        }
+
+        echo json_encode($data);
+
+    }
+
     public function group_data($id){        
+        $ret['functions'] = $this->db->get('tb_mas_user_group_function')->result_array();
         $ret['group'] = $this->db->get_where('tb_mas_user_group',array('id' => $id))->first_row();
         $ret['group_access'] = $this->db->get_where('tb_mas_user_group_access',array('group_id' => $id))->result_array();
         $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $id))->result_array();

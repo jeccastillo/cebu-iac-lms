@@ -1,7 +1,10 @@
 <aside class="right-side" id="registration-container">    
-<section class="content-header">
+    <section class="content-header">
         <h1>
             User Group
+            <small>                
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#addFunction" ><i class="fa fa-plus"></i>Add Function</a>                
+            </small>
         </h1>
         <hr />
     </section>
@@ -64,7 +67,37 @@
         </div>
         
     </div>
-    
+    <div class="modal fade" id="addFunction" role="dialog">
+        <form ref="add_function" @submit.prevent="addFunction" method="post"  class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Function</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">                        
+                        <div class="form-group col-sm-6">
+                            <label>Name</label>
+                            <input required v-model="add_function.name" type="text" class="form-control">
+                        </div>                       
+                        <div class="form-group col-sm-6">
+                            <label>Serial</label>
+                            <textarea required  v-model="add_function.serial" class="form-control"></textarea>
+                        </div>                        
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -83,10 +116,15 @@ new Vue({
         id: '<?php echo $id; ?>',        
         group_access:[],
         group_users:[],
+        functions:[],
         request:{
             id: '<?php echo $id; ?>',
             group_name: undefined,            
-        }  
+        },
+        add_function:{
+            name: undefined,
+            serial: undefined,
+        }
         
     },
 
@@ -100,7 +138,8 @@ new Vue({
                     if(data.data.group){
                         this.request = data.data.group;
                         this.group_access = data.data.group_access;
-                        this.group_users = data.data.group_users;                                        
+                        this.group_users = data.data.group_users;   
+                        this.functions = data.data.functions;                                     
                     }
                 })
             .catch((error) => {
@@ -155,6 +194,51 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         },
+        addFunction: function(){
+            Swal.fire({
+                title: 'Add Function?',
+                text: "Continue adding function?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.add_function)) {
+                        formdata.append(key,value);
+                    }
+                    return axios
+                    .post(base_url + 'group/add_function',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });    
+        }
         
        
                                        
