@@ -733,6 +733,7 @@ class Registrar extends CI_Controller {
                      ->from('tb_mas_users')
                      ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
+                     ->where('intROG >=',1)
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
                      ->order_by('intRegistrationID','desc')
                      ->get()
