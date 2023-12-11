@@ -27,7 +27,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <hr />
-                <div v-for="fn in functions">
+                <div v-for="fn in group_functions">
                     {{fn.name}}
                     <!-- <div class="checkbox">
                         <label>
@@ -125,7 +125,7 @@ new Vue({
         id: '<?php echo $id; ?>',        
         group_access:[],
         group_users:[],
-        functions:[],
+        group_functions:[],
         request:{
             id: '<?php echo $id; ?>',
             group_name: undefined,            
@@ -148,7 +148,7 @@ new Vue({
                         this.request = data.data.group;
                         this.group_access = data.data.group_access;
                         this.group_users = data.data.group_users;   
-                        this.functions = data.data.functions;                                     
+                        this.group_functions = data.data.functions;                                     
                     }
                 })
             .catch((error) => {
