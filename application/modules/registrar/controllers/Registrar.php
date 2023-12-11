@@ -730,46 +730,46 @@ class Registrar extends CI_Controller {
         
 
         
-            $d = $this->db->select('tb_mas_users.*, type_of_class, dteRegistered')
-                     ->from('tb_mas_users')
-                     ->where('slug',$app->slug)                     
-                     ->where('intAYID',$active_sem['intID'])
-                     ->where('intROG >=',1)
-                     ->where('date(dteRegistered)', $date)
-                     ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
-                     ->order_by('intRegistrationID','desc')
-                     ->get()
-                     ->result_array();            
+            $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
+                    ->from('tb_mas_registration')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                    ->where('intAYID',$active_sem['intID'])
+                    ->where('intROG >=',1)
+                    ->where('date(dteRegistered)', $date)                     
+                    ->order_by('intRegistrationID','desc')
+                    ->group_by('intStudentID')
+                    ->get()
+                    ->result_array();            
 
 
             
-            if(isset($d)){
-                $data[$app->date_enrolled]['total'] += 1;
-                $st = current($d);
-                if(count($d) < 2){                    
+            foreach($enrollment as $st){
+                $data[$date]['total'] += 1;                
+                
+                if($st['enumStudentType'] == "continuing")
+                {
+                    $data[$date]['continuing'] += 1;
+                    $totals['continuing'] += 1;
+                }
+                else
                     switch($st['student_type']){
                         case 'freshman':
-                            $data[$app->date_enrolled]['freshman'] += 1;
+                            $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
                             break;
                         case 'transferee':
-                            $data[$app->date_enrolled]['transferee'] += 1;
+                            $data[$date]['transferee'] += 1;
                             $totals['transferee'] += 1;
                             break;
                         case 'second degree':
-                            $data[$app->date_enrolled]['second'] += 1;
+                            $data[$date]['second'] += 1;
                             $totals['second'] += 1;
                             break;                        
                         default:
-                            $data[$app->date_enrolled]['freshman'] += 1;
+                            $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
                             
-                    }
-                }
-                else{
-                    $data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
-                    $totals['continuing'] += 1;
-                }
+                    }                                
             }
         }
                        
