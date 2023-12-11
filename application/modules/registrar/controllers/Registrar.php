@@ -699,8 +699,7 @@ class Registrar extends CI_Controller {
 
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
-        $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);
-        $app_data = json_decode($post['applicant_data']);
+        $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);        
         $enrolled = [];
         
         $begin = new DateTime($post['start']);
