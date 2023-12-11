@@ -738,7 +738,9 @@ class Registrar extends CI_Controller {
                     ->order_by('intRegistrationID','desc')
                     ->group_by('intStudentID')
                     ->get()
-                    ->result_array();                       
+                    ->result_array();  
+                    
+            print_r($enrollment);
             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
