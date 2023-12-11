@@ -30,7 +30,7 @@
                 <div v-for="fn in group_functions">
                     <div class="checkbox">
                         <label>
-                            <input data-toggle="toggle" type="checkbox">
+                            <input role="switch" type="checkbox">
                             {{ fn.name }}
                         </label>
                     </div>
