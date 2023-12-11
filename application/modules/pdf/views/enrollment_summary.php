@@ -45,11 +45,12 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="width:50%;font-size:9px;">Program</th>
+         <th style="width:40%;font-size:9px;">Program</th>
          <th style="width:10%;font-size:9px;">Freshman</th>
          <th style="width:10%;font-size:9px;">Transferee</th>
          <th style="width:10%;font-size:9px;">Foreign</th>
          <th style="width:10%;font-size:9px;">SD</th>
+         <th style="width:10%;font-size:9px;">Continuing</th>
          <th style="width:10%;font-size:9px;">Total</th>
      </tr>
      <tr style="line-height:10px;">
@@ -60,7 +61,7 @@ $html .= '
      $all_enrolled = 0;
     foreach($enrollment as $item){        
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'];
+        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'];
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
@@ -77,7 +78,10 @@ $html .= '
                     '.$item['enrolled_second'].'
                 </td>
                 <td style="font-size:8px;">
-                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second']).'
+                    '.$item['enrolled_continuing'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing']).'
                 </td>
             </tr>
             <tr style="line-height:5px;">
@@ -90,6 +94,7 @@ $html .= '
         <th style="border-top:1px solid #333;" colspan="6"></th>
     </tr>
     <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
