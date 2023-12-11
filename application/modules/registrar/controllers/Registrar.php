@@ -741,6 +741,9 @@ class Registrar extends CI_Controller {
                      ->result_array();
 
 
+            print_r($d);
+
+
             $data[$app->date_enrolled]['total'] += 1;
             if(isset($d)){
                 $st = current($d);
