@@ -3466,6 +3466,7 @@ class Excel extends CI_Controller {
             $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,1));
             $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,3));
             $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,4));
+            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,5));
              
             $enrollment[] = $program; 
         }
@@ -3506,7 +3507,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C3', 'Transferee')
                     ->setCellValue('D3', 'Foreign')
                     ->setCellValue('E3', 'Second Degree')
-                    ->setCellValue('F3', 'Total');
+                    ->setCellValue('F3', 'Continuing')
+                    ->setCellValue('G3', 'Total');
                             
         $i = 4;
 
@@ -3514,7 +3516,7 @@ class Excel extends CI_Controller {
         
         foreach($enrollment as $item){
             $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-            $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'];
+            $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'];
                     
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, trim($item['strProgramDescription']))
@@ -3522,7 +3524,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, $item['enrolled_transferee'])
                     ->setCellValue('D'.$i, $item['enrolled_foreign'])
                     ->setCellValue('E'.$i, $item['enrolled_second'])
-                    ->setCellValue('F'.$i, '=SUM(B'.$i.':E'.$i.')');                                                
+                    ->setCellValue('F'.$i, $item['enrolled_continuing'])
+                    ->setCellValue('G'.$i, '=SUM(B'.$i.':F'.$i.')');                                                
                              
         
             $i++;
@@ -3530,11 +3533,11 @@ class Excel extends CI_Controller {
         }
 
         $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('E'.$i, "TOTAL")
-                    ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')');                    
+                    ->setCellValue('F'.$i, "TOTAL")
+                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')');                    
         
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:F3')->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('G'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:G3')->getFont()->setBold( true );
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -3542,6 +3545,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         
                 
          
