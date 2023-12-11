@@ -730,7 +730,7 @@ class Registrar extends CI_Controller {
         }
 
         foreach($app_data as $app){
-            $d = $this->db->select('tb_mas_users.*, type_of_class')
+            $d = $this->db->select('tb_mas_users.*, type_of_class, dteRegistered')
                      ->from('tb_mas_users')
                      ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
@@ -765,7 +765,7 @@ class Registrar extends CI_Controller {
                     }
                 }
                 else{
-                    //$data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
+                    $data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
                     $totals['continuing'] += 1;
                 }
             }
