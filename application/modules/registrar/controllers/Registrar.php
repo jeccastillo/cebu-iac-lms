@@ -715,7 +715,7 @@ class Registrar extends CI_Controller {
             'second' => 0,
             'continuing' => 0,
         ];
-        
+
         foreach ($period as $dt) {
             //echo $dt->format("l Y-m-d H:i:s\n");
             $date = $dt->format("Y-m-d");           
@@ -765,7 +765,7 @@ class Registrar extends CI_Controller {
                     }
                 }
                 else{
-                    $data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
+                    //$data[date("Y-m-d",strtotime($st['dteRegistered']))]['continuing'] += 1;
                     $totals['continuing'] += 1;
                 }
             }
