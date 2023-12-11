@@ -28,13 +28,12 @@
                 </form>
                 <hr />
                 <div v-for="fn in group_functions">
-                    {{ fn.name }}
-                    <!-- <div class="checkbox">
+                    <div class="checkbox">
                         <label>
                             <input data-toggle="toggle" type="checkbox">
                             {{ fn.name }}
                         </label>
-                    </div> -->
+                    </div>
                 </div>
                 <!-- <table class="table table-bordered table-striped">
                     <thead>
