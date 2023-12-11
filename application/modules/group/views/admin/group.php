@@ -27,20 +27,22 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <hr />
-                <div v-for="fn in group_functions">
-                    {{ fn.name }}
-                    <hr />
-                    <div class="checkbox">
-                        <label>
-                            <input role="switch" type="checkbox">
-                            Read
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input role="switch" type="checkbox">
-                            Write
-                        </label>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3" v-for="fn in group_functions">
+                        {{ fn.name }}
+                        <hr />
+                        <div class="checkbox">
+                            <label>
+                                <input role="switch" type="checkbox">
+                                Read
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input role="switch" type="checkbox">
+                                Write
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <!-- <table class="table table-bordered table-striped">
