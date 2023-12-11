@@ -741,7 +741,7 @@ class Registrar extends CI_Controller {
                     ->get()
                     ->result_array();            
 
-
+            print_r($enrollment);
             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
