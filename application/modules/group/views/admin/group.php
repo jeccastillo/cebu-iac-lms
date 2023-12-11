@@ -28,7 +28,7 @@
                 </form>
                 <hr />
                 <div v-for="fn in group_functions">
-                    {{fn.name}}
+                    {{ fn.name }}
                     <!-- <div class="checkbox">
                         <label>
                             <input data-toggle="toggle" type="checkbox">
@@ -94,7 +94,7 @@
                         </div>                       
                         <div class="form-group col-sm-6">
                             <label>Serial</label>
-                            <textarea required  v-model="add_function.serial" class="form-control"></textarea>
+                            <input type="text" v-model="add_function.serial" class="form-control" />
                         </div>                        
                     </div>
                 </div>
