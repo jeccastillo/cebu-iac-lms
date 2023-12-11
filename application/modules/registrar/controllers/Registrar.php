@@ -716,11 +716,13 @@ class Registrar extends CI_Controller {
                 'freshman' => 0,
                 'transferee' => 0,
                 'second' => 0,
+                'continuing' => 0,
             ];
             $data[$date] = [
                 'freshman' => 0,
                 'transferee' => 0,
-                'second' => 0,                
+                'second' => 0, 
+                'continuing' => 0,               
                 'total' => 0,
                 'date' => date("M j, Y", strtotime($date))
             ]; 
@@ -732,30 +734,39 @@ class Registrar extends CI_Controller {
                      ->where('slug',$app->slug)                     
                      ->where('intAYID',$active_sem['intID'])
                      ->join('tb_mas_registration','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                     ->order_by('intRegistrationID','desc')
                      ->get()
-                     ->first_row();
+                     ->result_array();
 
 
             $data[$app->date_enrolled]['total'] += 1;
-            if(isset($d))
-                switch($d->student_type){
-                    case 'freshman':
-                        $data[$app->date_enrolled]['freshman'] += 1;
-                        $totals['freshman'] += 1;
-                        break;
-                    case 'transferee':
-                        $data[$app->date_enrolled]['transferee'] += 1;
-                        $totals['transferee'] += 1;
-                        break;
-                    case 'second degree':
-                        $data[$app->date_enrolled]['second'] += 1;
-                        $totals['second'] += 1;
-                        break;               
-                    default:
-                        $data[$app->date_enrolled]['freshman'] += 1;
-                        $totals['freshman'] += 1;
-                        
+            if(isset($d)){
+                $st = current($d);
+                if(count($d) > 0){                    
+                    switch($st->student_type){
+                        case 'freshman':
+                            $data[$app->date_enrolled]['freshman'] += 1;
+                            $totals['freshman'] += 1;
+                            break;
+                        case 'transferee':
+                            $data[$app->date_enrolled]['transferee'] += 1;
+                            $totals['transferee'] += 1;
+                            break;
+                        case 'second degree':
+                            $data[$app->date_enrolled]['second'] += 1;
+                            $totals['second'] += 1;
+                            break;                        
+                        default:
+                            $data[$app->date_enrolled]['freshman'] += 1;
+                            $totals['freshman'] += 1;
+                            
+                    }
                 }
+                else{
+                    $data[date("Y-m-d",strtotime($st->dteRegistered))]['continuing'] += 1;
+                    $totals['continuing'] += 1;
+                }
+            }
         }
                        
         // $program['regular'] = count($this->data_fetcher->getStudentsByTypeOfClass('regular'));
