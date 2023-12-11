@@ -85,7 +85,7 @@ $html .= '
                 </td>
             </tr>
             <tr style="line-height:5px;">
-                <th colspan="6"></th>
+                <th colspan="7"></th>
             </tr>
             ';
     }
