@@ -114,6 +114,10 @@ class Group extends CI_Controller {
                 $fn['write'] = 0;
             }
             elseif($fn['rw'] == 2){
+                $fn['read'] = 0;
+                $fn['write'] = 1;
+            }
+            elseif($fn['rw'] == 3){
                 $fn['read'] = 1;
                 $fn['write'] = 1;
             }
@@ -131,7 +135,34 @@ class Group extends CI_Controller {
     }
 
     public function submit_group(){
-        $post = $this->input->post();                      
+        $post = $this->input->post();      
+        $group_functions = json_decode($post['group_functions']);
+        unset($post['group_functions']);    
+        foreach($group_functions as $gf){
+            if($gf['read'] || $gf['write']){
+                $group_access = $this->db
+                                     ->get_where('tb_mas_user_group_access',array('group_id'=>$post['id'],'function_id'=>$gf['id']))
+                                     ->first_row();
+                
+                if($gf['read'] && $gf['write'])
+                    $rw = 3;                
+                elseif($gf['read'])
+                    $rw = 1;
+                elseif($gf['write'])
+                    $rw = 2;
+
+                $data = array(
+                    'group_id' => $post['id'],
+                    'function_id' => $gf['id'],
+                    'rw' => $rw
+                );
+
+                if($group_access)
+                    $this->db->where('id',$group_access->id)->update('tb_mas_user_group_access',$data);
+                else
+                    $this->insert('tb_mas_user_group_access',$data);
+            }
+        }
         if($post['id'] == 0)
             if($this->db->insert('tb_mas_user_group',$post)){
                 $data['success'] = true;
