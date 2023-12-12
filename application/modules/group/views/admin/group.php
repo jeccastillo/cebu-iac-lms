@@ -28,20 +28,20 @@
                 </form>
                 <hr />
                 <div class="row">
-                    <div class="col-sm-4 col-md-3" v-for="fn in group_functions">
+                    <div class="col-sm-4 col-md-3" v-for="(fn,index) in group_functions">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 {{ fn.name }}
                                 <hr />
                                 <div class="checkbox">
                                     <label>
-                                        <input role="switch" type="checkbox">
+                                        <input v-model="group_functions[index].read" role="switch" type="checkbox">
                                         Read
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input role="switch" type="checkbox">
+                                        <input v-model="group_functions[index].write" role="switch" type="checkbox">
                                         Write
                                     </label>
                                 </div>
