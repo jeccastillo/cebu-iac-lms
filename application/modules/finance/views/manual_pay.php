@@ -239,7 +239,11 @@
                                         </button>
                                     </td>                                    
                                 </tr>                                                                                                                                    
-                            </table>                               
+                            </table>       
+                            <hr />
+                            <div v-if="sms_account">
+                                <a class="btn btn-primary" :href="base_url+'unity/registration_viewer/'+sms_account.intID">View SMS Account Data</a>
+                            </div>                        
                         </div><!---box body--->
                     </div><!---box--->                      
                 </div><!---column--->
@@ -314,6 +318,7 @@ new Vue({
         uploaded_requirements: false,
         refunded_payments: [],    
         amount_to_pay: 0,
+        sms_account: undefined,
         description_other: '', 
         cashier: undefined,
         request:{
@@ -397,6 +402,7 @@ new Vue({
                 this.request.sy_reference = data.data.current_sem;
                 this.or_update.sy_reference = data.data.current_sem;   
                 this.user = data.data.user;  
+                this.sms_account = data.data.data;
                 this.or_update.student_campus = this.request.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){
