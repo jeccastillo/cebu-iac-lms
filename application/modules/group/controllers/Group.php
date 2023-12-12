@@ -106,7 +106,7 @@ class Group extends CI_Controller {
         ->get()
         ->result_array();
 
-        $ret['group_functions'] = [];
+        $ret['functions'] = [];
         foreach($fns as $fn){
             if($fn['rw'] == 1)
             {
@@ -122,7 +122,7 @@ class Group extends CI_Controller {
                 $fn['write'] = 0;
             }
 
-            $ret['group_functions'][] = $fn;
+            $ret['functions'][] = $fn;
         }
 
 
