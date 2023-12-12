@@ -592,6 +592,7 @@ new Vue({
                         .then((data) => {
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;
+                            console.log(this.payments);
                                                                 
                             if(this.registration && this.registration.paymentType == 'partial')
                                 this.has_partial = true;
@@ -702,7 +703,7 @@ new Vue({
                     else{
                         //document.location = this.base_url + 'users/login';
                     }
-                    console.log(this.payments);
+                    
                                   
                 })
                 .catch((error) => {
