@@ -372,6 +372,7 @@ class Finance extends CI_Controller {
         else
             $sem = $this->data_fetcher->get_active_sem();  
         
+        unset($post['sy']);
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();        
         
