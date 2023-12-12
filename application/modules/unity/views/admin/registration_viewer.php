@@ -796,6 +796,7 @@ new Vue({
                                         formdata.append('or_current',this.cashier.or_current);
                                         formdata.append('or_used',this.or_update.or_number);
                                         formdata.append('payments',pay_length);
+                                        formdata.append('sy',this.sem);
                                         formdata.append('description',this.or_update_description);
                                         formdata.append('description_other',this.description_other);
                                         formdata.append('total_amount',this.or_update.total_amount_due);
@@ -1109,6 +1110,7 @@ new Vue({
                                         formdata.append('or_used',this.request.or_number);                                      
                                         formdata.append('payments',this.payments_paid.length);
                                         formdata.append('total_amount',this.request.total_amount_due);
+                                        formdata.append('sy',this.sem);
                                         //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
                                         formdata.append('student_id',this.student.intID);
                                         formdata.append('description',this.request.description);

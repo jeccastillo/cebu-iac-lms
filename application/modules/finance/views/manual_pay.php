@@ -501,6 +501,7 @@ new Vue({
                                         formdata.append('intID',this.cashier.intID);
                                         formdata.append('or_current',this.cashier.or_current);
                                         formdata.append('or_used',this.cashier.or_current);                                        
+                                        formdata.append('sy',this.student.sy_reference); 
                                         axios.post(base_url + 'finance/next_or', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
@@ -616,7 +617,8 @@ new Vue({
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
                                             formdata.append('or_current',this.cashier.or_current);
-                                            formdata.append('or_used',this.cashier.or_current);                                            
+                                            formdata.append('or_used',this.cashier.or_current); 
+                                            formdata.append('sy',this.student.sy_reference);                                                                                        
                                             axios.post(base_url + 'finance/next_or', formdata, {
                                             headers: {
                                                 Authorization: `Bearer ${window.token}`
