@@ -702,6 +702,7 @@ new Vue({
                     else{
                         //document.location = this.base_url + 'users/login';
                     }
+                    console.log(this.payments);
                                   
                 })
                 .catch((error) => {
