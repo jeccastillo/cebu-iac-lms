@@ -56,7 +56,7 @@
                                     <td><input type="text" class="form-control" required v-model="request.name"></td>
                                     <td>
                                         <select class="form-control" required v-model="request.syid">
-                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                                         </select>
                                     </td>
                                     <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
@@ -94,7 +94,7 @@
                             <tr v-for="item in ledger">
                                 <td colspan="2" v-if="finance.special_role != 0">
                                     <select @change="switchTerm(item.id,$event)" class="form-control" v-model="item.syid">
-                                        <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                        <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                                     </select>
                                 </td>
                                 <td v-if="finance.special_role == 0" :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
