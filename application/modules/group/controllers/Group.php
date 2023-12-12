@@ -143,6 +143,7 @@ class Group extends CI_Controller {
             if($this->db->insert('tb_mas_user_group',$post)){
                 $data['success'] = true;
                 $data['message'] = "Successfully Added Group";
+                $data['group_id'] = $this->db->insert_id();
             }
             else{
                 $data['success'] = false;
@@ -179,6 +180,7 @@ class Group extends CI_Controller {
                 }
                 $data['success'] = true;
                 $data['message'] = "Successfully Updated Group";
+                $data['group_id'] = $post['id'];
             }
             else{
                 $data['success'] = false;
