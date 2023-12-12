@@ -354,6 +354,7 @@ class Finance extends CI_Controller {
     public function next_or(){
         $post = $this->input->post();
         $data = $post;
+        unset($data['sy']);
         $current_or = $post['or_current'];
         if(isset($post['registration_id'])){
             unset($data['payments']);
@@ -365,6 +366,7 @@ class Finance extends CI_Controller {
             unset($data['installment']);
             unset($data['payment_type']);
             unset($data['description_other']);            
+            
         }
 
         if(isset($post['sy']))
