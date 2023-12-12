@@ -69,8 +69,7 @@ class Group extends CI_Controller {
     }
 
     public function view_all_groups(){
-
-        $this->data['id'] = $id;        
+          
         $this->data['opentree'] = "admin";
         $this->data['page'] = "view_groups";              
         $this->load->view("common/header",$this->data);
