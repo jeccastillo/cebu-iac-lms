@@ -140,7 +140,8 @@ new Vue({
         group_functions:[],
         request:{
             id: '<?php echo $id; ?>',
-            group_name: undefined,            
+            group_name: undefined,    
+            group_functions: undefined,        
         },
         add_function:{
             name: undefined,
@@ -183,6 +184,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
+                    this.request.group_functions = this.group_functions;
                     for (const [key, value] of Object.entries(this.request)) {
                         formdata.append(key,value);
                     }                                                              
