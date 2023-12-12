@@ -131,7 +131,7 @@ class Group extends CI_Controller {
     }
 
     public function submit_group(){
-        $post = $this->input->post();                
+        $post = $this->input->post();                      
         if($post['id'] == 0)
             if($this->db->insert('tb_mas_user_group',$post)){
                 $data['success'] = true;

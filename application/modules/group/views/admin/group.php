@@ -184,7 +184,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    this.request.group_functions = this.group_functions;
+                    this.request.group_functions = JSON.stringify(this.group_functions);
                     for (const [key, value] of Object.entries(this.request)) {
                         formdata.append(key,value);
                     }                                                              
