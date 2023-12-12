@@ -202,7 +202,7 @@ new Vue({
                                     text: data.data.message,
                                     icon: "success"
                                 }).then(function() {
-                                    document.location = base_url + 'group/add_group' + data.data.group_id;
+                                    document.location = base_url + 'group/add_group/' + data.data.group_id;
                                 });
                             } else {
                                 Swal.fire(
