@@ -153,21 +153,21 @@ class Group extends CI_Controller {
                     ->where('id',$post['id'])
                     ->update('tb_mas_user_group',$post)){
                 foreach($group_functions as $gf){
-                    if($gf['read'] || $gf['write']){
+                    if($gf->read || $gf->write){
                         $group_access = $this->db
-                        ->get_where('tb_mas_user_group_access',array('group_id'=>$post['id'],'function_id'=>$gf['id']))
+                        ->get_where('tb_mas_user_group_access',array('group_id'=>$post['id'],'function_id'=>$gf->id))
                         ->first_row();
 
-                        if($gf['read'] && $gf['write'])
+                        if($gf->read && $gf->write)
                             $rw = 3;                
-                        elseif($gf['read'])
+                        elseif($gf->read)
                             $rw = 1;
-                        elseif($gf['write'])
+                        elseif($gf->write)
                             $rw = 2;
         
                         $data = array(
                             'group_id' => $post['id'],
-                            'function_id' => $gf['id'],
+                            'function_id' => $gf->id,
                             'rw' => $rw
                         );
         
