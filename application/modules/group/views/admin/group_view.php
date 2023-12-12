@@ -22,7 +22,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in user_groups">                            
-                            <td>{{ item.name  }}</td>
+                            <td>{{ item.group_name  }}</td>
                             <td>
                                 <a class="btn btn-primary" :href="base_url + 'group/add_group/' + item.id">View</a>
                             </td>
