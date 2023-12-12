@@ -606,7 +606,8 @@ new Vue({
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }                                
-                            }                        
+                            }       
+                            console.log(this.student.enumStudentType);
                             if(this.student.enumStudentType == "new"){
                                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                                 .then((data) => {
