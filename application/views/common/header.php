@@ -383,8 +383,12 @@
                         <li class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>faculty/view_all_faculty" style="margin-left: 10px;"><i
                                     class="ion ion-eye"></i> View User Accounts</a></li>
-
-
+                        <li class="<?php echo (isset($page) && $page=="view_groups")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>group/view_all_groups" style="margin-left: 10px;"><i
+                                    class="ion ion-eye"></i> All User Groups</a></li>
+                        <li class="<?php echo (isset($page) && $page=="group")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>group/add_group" style="margin-left: 10px;"><i
+                                    class="ion ion-android-person-add"></i> Add User Group</a></li>
                         <li class="<?php echo (isset($page) && $page=="logs")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>unity/logs" style="margin-left: 10px;"><i
                                     class="ion ion-ios-list-outline"></i> View Logs</a></li>

@@ -1,36 +1,88 @@
-<aside class="right-side">
-<section class="content-header">
-                    <h1>
-                    Deficiencies
-                        <small></small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i>Deficiencies</a></li>
-                        <li class="active">Search Student</li>
-                    </ol>
-                </section>
-<div class="content">
-    <div class="span10 box box-primary">
-        <div class="box-header">
-                <h3 class="box-title">Search Student</h3>
-                
-        </div>
-       
-        <div class="box box-solid">
-            <div class="box-body">                               
-             <form id="advise-student" action="<?php echo base_url(); ?>deficiencies/student_deficiencies" method="post" role="form">
-                 <p>Search Student</p>
-                 <div class="row">
-                     <div class="col-sm-6">
-                        <input type="text" id="select-student-id" name="studentID" placeholder="Enter Student Number" class="form-control" />
-                     </div>
-                 </div>
-                 <br />
-                 <input class="btn btn-info btn-flat" type="submit" />
-                 
-            </form>
+<aside class="right-side" id="registration-container">    
+    <section class="content-header">
+        <h1>
+            User Group
+            <small>                
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#addFunction" ><i class="fa fa-plus"></i>Add Function</a>                
+            </small>
+        </h1>
+        <hr />
+    </section>
+        <hr />
+    <div class="content">  
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3>Group</h3>
             </div>
+            <div class="box-body">                
+                <h4>User Groups</h4>                
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>                            
+                            <th>Actions</th>                                                       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in user_groups">                            
+                            <td>{{ item.name  }}</td>
+                            <td>
+                                <a class="btn btn-primary" :href="base_url + 'group/add_group/' + item.id">View</a>
+                            </td>
+                            <td v-else></td>
+                        </tr>
+                    </tbody>
+                </table>                              
+            </div>        
         </div>
-       
-        </div>
+        
+    </div>
 </aside>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+<script>
+new Vue({
+    el: '#registration-container',
+    data: {                    
+        base_url: '<?php echo base_url(); ?>',               
+        user_groups:[],        
+        
+        
+    },
+
+    mounted() {
+
+        let url_string = window.location.href;        
+                
+            //this.loader_spinner = true;
+            axios.get(this.base_url + 'group/group_view_data/')
+                .then((data) => {  
+                    if(data.data.group){
+                        this.user_groups = data.data.user_groups;                                     
+                    }
+                })
+            .catch((error) => {
+                console.log(error);
+                
+            });    
+
+    },
+
+    methods: {              
+         
+        
+        
+       
+                                       
+    }
+
+})
+</script>
+

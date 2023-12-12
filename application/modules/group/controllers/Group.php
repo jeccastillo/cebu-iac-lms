@@ -72,12 +72,15 @@ class Group extends CI_Controller {
 
         $this->data['id'] = $id;        
         $this->data['opentree'] = "admin";
-        $this->data['page'] = "group";              
+        $this->data['page'] = "view_groups";              
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/group_view",$this->data);
-        $this->load->view("common/footer",$this->data);
-                
+        $this->load->view("common/footer",$this->data);                
+    }
 
+    public function group_view_data(){
+        $ret['user_groups'] = $this->db->get('tb_mas_user_group')->result_array();
+        echo json_encode($ret);
     }
 
     public function add_function(){
