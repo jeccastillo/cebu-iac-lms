@@ -313,16 +313,6 @@
                                                 <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr> 
-                                        <tr>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                            <td>SDASDASDASDSAD</td>
-                                        </tr>
                                         <tr v-for="payment in payments">                                            
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
@@ -343,10 +333,10 @@
                                                         @click="printOR(payment)" 
                                                         class="btn btn-primary">
                                                         Print OR
-                                                </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
-                                                <button v-if="(payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
-                                                <button v-if="(payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
+                                                </button>                                                
+                                                <button v-if="payment.mode && payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
+                                                <button v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
                                         </tr>  
                                         <tr v-if="user.special_role > 1">
