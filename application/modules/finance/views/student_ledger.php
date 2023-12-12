@@ -56,7 +56,7 @@
                                     <td><input type="text" class="form-control" required v-model="request.name"></td>
                                     <td>
                                         <select class="form-control" required v-model="request.syid">
-                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.enumSem + " Term " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt.term_student_type + " " + opt_sy.enumSem + " " + opt.term_label + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
                                         </select>
                                     </td>
                                     <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
@@ -92,8 +92,13 @@
                         </thead>
                         <tbody>                                                         
                             <tr v-for="item in ledger">
-                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
-                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
+                                <td colspan="2" v-if="finance.special_role != 0">
+                                    <select @change="switchTerm(item.id,$event)" class="form-control" v-model="item.syid">
+                                        <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt.term_student_type + " " + opt_sy.enumSem + " " + opt.term_label + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                    </select>
+                                </td>
+                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted">{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
@@ -397,7 +402,8 @@ new Vue({
             
             })
         },
-        switchTerm: function(id,sy){
+        switchTerm: function(id,event){
+            var sy = event.target.value;
             let url = this.base_url + 'finance/update_ledger_item';                        
             
             Swal.fire({
