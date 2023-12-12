@@ -277,7 +277,7 @@ class Finance extends CI_Controller {
             ->update('tb_mas_student_ledger',$post)){
 
             $data['success'] =  true;
-            $data['message'] = "Successfully added to ledger";
+            $data['message'] = "Successfully updated ledger";
         }
         else{
             $data['success'] =  false;
