@@ -313,7 +313,17 @@
                                                 <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr> 
-                                        <tr v-for="payment in payments">
+                                        <tr>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                            <td>SDASDASDASDSAD</td>
+                                        </tr>
+                                        <tr v-for="payment in payments">                                            
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
@@ -591,8 +601,7 @@ new Vue({
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
                             this.payments = data.data.data;
-                            this.other_payments = data.data.other;
-                            console.log(this.payments);
+                            this.other_payments = data.data.other;                            
                                                                 
                             if(this.registration && this.registration.paymentType == 'partial')
                                 this.has_partial = true;
