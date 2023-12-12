@@ -174,7 +174,7 @@ class Group extends CI_Controller {
                         if($group_access)
                             $this->db->where('id',$group_access->id)->update('tb_mas_user_group_access',$data);
                         else
-                            $this->insert('tb_mas_user_group_access',$data);
+                            $this->db->insert('tb_mas_user_group_access',$data);
                     }
                 }
                 $data['success'] = true;
