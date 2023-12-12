@@ -1,10 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            User Group
-            <small>                
-                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#addFunction" ><i class="fa fa-plus"></i>Add Function</a>                
-            </small>
+            User Group            
         </h1>
         <hr />
     </section>
@@ -63,10 +60,8 @@ new Vue({
                 
             //this.loader_spinner = true;
             axios.get(this.base_url + 'group/group_view_data/')
-                .then((data) => {  
-                    if(data.data.group){
-                        this.user_groups = data.data.user_groups;                                     
-                    }
+                .then((data) => {                      
+                    this.user_groups = data.data.user_groups;                                                         
                 })
             .catch((error) => {
                 console.log(error);
