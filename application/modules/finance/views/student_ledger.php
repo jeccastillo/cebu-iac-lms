@@ -397,6 +397,56 @@ new Vue({
             
             })
         },
+        switchTerm: function(id,sy){
+            let url = this.base_url + 'finance/update_ledger_item';                        
+            
+            Swal.fire({
+                title: 'Switch Term?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                                        
+                    formdata.append('syid',sy);
+                    formdata.append('id',id);
+                    
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+        },
         changeLedgerItemStatus: function(type,id){
 
             let url = this.base_url + 'finance/update_ledger_item_status';                        

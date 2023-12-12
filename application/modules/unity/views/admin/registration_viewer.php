@@ -644,9 +644,7 @@ new Vue({
                                     for(i=0; i < 5; i++)
                                         this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
                                     
-                                    
-                                
-                                
+                                                                                                    
                                 
                                 var val = 0;                                
                                 
@@ -659,7 +657,38 @@ new Vue({
                                 
                             })
                             .catch((error) => {
-                                console.log(error);
+                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
+                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                //installment amounts                                
+                                if(this.registration.downpayment == 1){
+                                    var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                    for(i=0; i < 5; i++){
+                                        if(this.tuition_data.installment_fee > temp){
+                                            val = this.tuition_data.installment_fee - temp;
+                                            val = val.toFixed(2);
+                                            this.installments.push(val);
+                                            temp = 0;
+                                        }
+                                        else{
+                                            this.installments.push(0);
+                                            temp = temp - this.tuition_data.installment_fee;
+                                        }
+                                    
+                                    }
+                                }
+                                else
+                                    for(i=0; i < 5; i++)
+                                        this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
+                                    
+                                                                                                    
+                                
+                                var val = 0;                                
+                                
+
+                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
+                                this.loader_spinner = false;
+                                if(this.remaining_amount <= 0)
+                                    this.description = "Other";                                
                             })
                         })
                         .catch((error) => {
