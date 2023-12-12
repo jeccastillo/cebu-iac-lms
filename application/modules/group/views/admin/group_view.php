@@ -2,6 +2,9 @@
     <section class="content-header">
         <h1>
             User Group            
+            <small>                
+                <a class="btn btn-app" :href="base_url+'group/add_group'"><i class="fa fa-plus"></i>Add Group</a>                
+            </small>
         </h1>
         <hr />
     </section>
