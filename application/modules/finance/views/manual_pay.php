@@ -379,7 +379,7 @@ new Vue({
             this.request.slug = this.slug;   
             this.or_print.type = this.student.type;
             for(i in this.student.payments){
-                // if(this.student.sy_reference == this.student.payments[i].sy_reference || this.student.payments[i].sy_reference == null)
+                if(this.student.sy_reference == this.student.payments[i].sy_reference || this.student.payments[i].sy_reference == null)
                     this.payments.push(this.student.payments[i]);
             }             
             console.log(this.payments);          
