@@ -1247,6 +1247,27 @@ class Data_fetcher extends CI_Model {
             
                         
     }
+    
+    //get enrolled students based on search result by name
+    function getListEnrolledStudent($search = '')
+    {
+        $select = "tb_mas_users.*,strProgramCode, strMajor, short_name, name as blockName, strProgramDescription,tb_mas_registration.intYearLevel,dteRegistered, tb_mas_curriculum.strName as curriculumName, type_of_class";
+        $result = $this->db
+                    ->select($select)
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
+                    ->join('tb_mas_block_sections','tb_mas_users.blockSection = tb_mas_block_sections.intID','left')
+                    ->join('tb_mas_curriculum','tb_mas_users.intCurriculumID = tb_mas_curriculum.intID','left')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID','left')
+                    ->order_by('strLastname','asc')
+                    ->where('tb_mas_registration.intROG', 1);
+                    if (!empty($search) || $search !== 'all') {
+                        $this->db->like('strLastname', $search);
+                    }
+                    return $this->db
+                     ->get()
+                     ->result_array();
+    }
     function getStudentsNew($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0, $studNumStart=0, $studNumEnd=0)
     {
         
