@@ -161,6 +161,23 @@
                         <hr>
                     </div>
                     <div>
+                        <strong><i class="fa fa-user margin-r-5"></i>Waive Application Fee?</strong>
+                        <select class="form-control" @change="updateField('waive_app_fee',$event)"
+                            v-model="request.waive_app_fee">
+                            <option value="0">No</option>
+                            <option value="0">Yes</option>
+                        </select>
+                    </div>
+                    <div v-if="request.waive_app_fee">
+                        <strong><i class="fa fa-user margin-r-5"></i>Reason</strong>
+                        <select class="form-control" @change="updateField('waive_reason',$event)"
+                            v-model="request.waive_reason">
+                            <option value="organic">Organic</option>
+                            <option value="scholarship">Scholarship</option>
+                            <option value="special application">Special Application</option>
+                        </select>
+                    </div>
+                    <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Citizenship</strong>
                         <select class="form-control" @change="updateField('citizenship',$event)"
                             v-model="request.citizenship">
