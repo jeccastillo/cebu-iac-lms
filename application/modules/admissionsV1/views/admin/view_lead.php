@@ -1154,7 +1154,9 @@ new Vue({
     },
     data: {
         request: {
-            uploaded_requirements: []
+            uploaded_requirements: [],
+            waive_app_fee: 0,
+            waive_reason: undefined,
         },
         request_sched: {
             from: "",
