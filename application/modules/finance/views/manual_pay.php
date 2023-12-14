@@ -14,6 +14,10 @@
             <div class="alert alert-danger" role="alert" v-if="!uploaded_requirements">
                 This student has not submitted any requirements.
             </div>
+            <div class="alert alert-info" role="alert" v-if="student.waive_app_fee">
+                The Application Fee for this student is waived for the reason of {{ student.waive_reason }}
+            </div>
+            
             <div class="row">       
                 <div class="col-sm-12">
                     <div v-if="cashier" class="box box-solid box-success">
@@ -29,7 +33,7 @@
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription" class="form-control" v-model="request.description">
                                                 <option v-if="(application_payment && application_payment.status == 'Paid') || student.waive_app_fee" value="Reservation Payment">Reservation</option>
-                                                <option value="Application Payment">Application</option>
+                                                <option v-if="!student.waive_app_fee" value="Application Payment">Application</option>
                                                 <option value="Other">Other</option>                                
                                             </select>
                                         </div>                                                
