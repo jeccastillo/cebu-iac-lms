@@ -167,6 +167,7 @@
                             <option value="0">No</option>
                             <option value="0">Yes</option>
                         </select>
+                        <hr>
                     </div>
                     <div v-if="request.waive_app_fee">
                         <strong><i class="fa fa-user margin-r-5"></i>Reason</strong>
@@ -176,6 +177,7 @@
                             <option value="scholarship">Scholarship</option>
                             <option value="special application">Special Application</option>
                         </select>
+                        <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Citizenship</strong>
