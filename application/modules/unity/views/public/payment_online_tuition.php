@@ -489,7 +489,7 @@ new Vue({
                     let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                     this.down_payment = down_payment;
                     
-                    if(this.registration.downpayment == 1 || down_payment == 0){
+                    if(this.registration.downpayment == 1 || down_payment == 0 && this.payment_type == "partial"){
                         this.has_down = true;                                    
                         //installment amounts                                                                    
                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
