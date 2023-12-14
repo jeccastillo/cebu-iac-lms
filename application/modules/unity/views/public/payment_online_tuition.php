@@ -545,7 +545,11 @@ new Vue({
 
                     let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
                     
-                    if(this.registration.downpayment == 1 || down_payment == 0 && this.payment_type != "full"){
+                    if(this.payment_type == "full"){
+                        
+                        this.item_details.price = this.remaining_amount;
+                    } 
+                    else if(this.registration.downpayment == 1 || down_payment == 0){
                         this.has_down = true;                                    
                         //installment amounts                                                                    
                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);                        
@@ -571,10 +575,7 @@ z
                         for(i=0; i < 5; i++)
                                 this.installments.push(this.tuition_data.installment_fee);
                     }                            
-                    else{
-                        
-                        this.item_details.price = this.remaining_amount;
-                    } 
+                    
                 axios.get(api_url + 'admissions/student-info/' + this.slug)
                 .then((data) => {
                     this.student_api_data = data.data.data;
