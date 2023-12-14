@@ -1396,7 +1396,15 @@ new Vue({
                 .then(data => {
 
                     Swal.hideLoading();
-                    document.location = base_url + 'admissionsV1/view_lead/' + this.slug;
+                    Swal.fire({
+                        showCancelButton: false,
+                        showCloseButton: true,
+                        allowEscapeKey: false,
+                        title: 'Successfully Updated',
+                        text: 'Field Updated',
+                        icon: 'success',
+                    });
+                    //document.location = base_url + 'admissionsV1/view_lead/' + this.slug;
 
 
                 });
