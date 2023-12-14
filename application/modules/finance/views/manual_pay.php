@@ -15,7 +15,7 @@
                 This student has not submitted any requirements.
             </div>
             <div class="alert alert-info" role="alert" v-if="student.waive_app_fee">
-                The Application Fee for this student is waived for the reason of {{ student.waive_reason }}
+                The Application Fee for this student is waived for the reason of: {{ student.waive_reason }}
             </div>
             
             <div class="row">       
