@@ -144,16 +144,33 @@ class Scholarship extends CI_Controller {
 
     public function add_scholarship(){
         $post = $this->input->post();
-        echo $post;
         $post['status'] = "pending";
-        $this->db->insert('tb_mas_student_discount',$post);
-        $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
-        $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
-        $this->data_poster->log_action('Scholarships','Added a Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
 
-        $data['success'] = "success";
-        $data['message'] = "Added Successfully";
+        // Specify the conditions
+        $conditions = array(
+            'discount_id' => $post['discount_id'],
+            'student_id' => $post['student_id'],
+            'referrer_id' => $post['referrer_id'],
+            'syid' => $post['syid'],
+        );
 
+        $this->db->where($conditions);
+        //check if exist in db
+        $query = $this->db->get('tb_mas_student_discount');
+
+        if ($query->num_rows() > 0) {
+            // Record exists
+            $data['success'] = "error";
+            $data['message'] = "Record Exist";
+        } else {
+            $this->db->insert('tb_mas_student_discount',$post);
+            $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$post['student_id']))->first_row('array');
+            $this->data_poster->log_action('Scholarships','Added a Scholarship '.$scholarship['name'].' for student '.$student['strLastname'].' '.$student['strFirstname'],'green');
+
+            $data['success'] = "success";
+            $data['message'] = "Added Successfully";
+        }
         echo json_encode($data);
     }
 

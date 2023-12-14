@@ -67,8 +67,8 @@
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-6">
                                                 <label>Select from Result</label>
-                                                <select required class="form-control" v-model="request_discount.referrer">
-                                                    <option v-for="referee_name in referee_names" :value="referee_name.intID">{{ referee_name.strFirstname }} {{ referee_name.strMiddlename }} {{ referee_name.strLastname }}</option>
+                                                <select required class="form-control" v-model="referee_data" @change="onChangeRefereee()">
+                                                    <option v-for="referee_name in referee_names" :value="referee_name">{{ referee_name.strFirstname }} {{ referee_name.strMiddlename }} {{ referee_name.strLastname }}</option>
                                                 </select> 
                                             </div>
                                         </div>
@@ -243,6 +243,7 @@ new Vue({
         payment_type: undefined,
         remaining_amount: 0,
         referee_names: [],
+        referee_data: '',
         refereee_search_name: '',
         payments: [],
         other_payments: [],
@@ -392,6 +393,11 @@ new Vue({
                 console.log(error);
             });
         },
+        onChangeRefereee(data) {
+            console.log(this.referee_data)
+            this.request_discount.referrer_id = this.referee_data.intID;
+            this.request_discount.referrer = this.referee_data.strLastname + ', ' +this.referee_data.strFirstname+ ' ' +this.referee_data.strMiddlename;
+        },
         updateScStatus: function(event,id){
 
             this.loader_spinner = true;
@@ -430,19 +436,22 @@ new Vue({
             
             console.log(req);                
             this.loader_spinner = true;
+            // local_url = 'http://localhost/cebu-iac-lms/';
             axios.post(base_url + 'scholarship/add_scholarship', formdata, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
             })
             .then(data => {
+                console.log(data.data);                
+
                 this.loader_spinner = false;
                 Swal.fire({
                     title: data.data.success,
                     text: data.data.message,
                     icon: data.data.success,
                 }).then(function() {
-                    location.reload();
+                    // location.reload();
                 });
             });
         },
