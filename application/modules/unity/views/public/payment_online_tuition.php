@@ -46,7 +46,7 @@
                                         <div class="col-md-8">          
                                             <h3>Select Mode of Payment</h3>                          
                                             <hr />
-                                            <!-- <div>
+                                            <div>
                                                 <h5 class="my-3">BDO PAY</h5>
                                                 <hr />  
                                                 <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -56,7 +56,7 @@
                                                         <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
                                                     </div>
                                                 </div>                                                        
-                                            </div> -->
+                                            </div>
                                             <hr />
                                             <h5>PAYNAMICS</h5>
                                             <hr />
