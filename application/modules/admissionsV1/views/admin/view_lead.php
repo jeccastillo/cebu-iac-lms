@@ -165,7 +165,7 @@
                         <select class="form-control" @change="updateField('waive_app_fee',$event)"
                             v-model="request.waive_app_fee">
                             <option value="0">No</option>
-                            <option value="0">Yes</option>
+                            <option value="1">Yes</option>
                         </select>
                         <hr>
                     </div>
