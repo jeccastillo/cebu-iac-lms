@@ -144,6 +144,7 @@ class Scholarship extends CI_Controller {
 
     public function add_scholarship(){
         $post = $this->input->post();
+        echo $post;
         $post['status'] = "pending";
         $this->db->insert('tb_mas_student_discount',$post);
         $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
@@ -234,12 +235,20 @@ class Scholarship extends CI_Controller {
 
     }
 
+    //get enrolled students based on search result by name
+    public function enrolled_student_data(){
+        $search = $this->input->get('search') ?  $this->input->get('search') : ''; 
+        $students = $this->data_fetcher->getListEnrolledStudent($search);
+
+        $data['referees'] =  $students;
+        echo json_encode($data);
+    }
+
     public function data($id){
         $data['scholarship'] = $this->db->get_where('tb_mas_scholarships',array('intID'=>$id))->row();        
         $data['status_options'] = get_enum_values('tb_mas_scholarships','status');
         $data['type_options'] = get_enum_values('tb_mas_scholarships','type');
         echo json_encode($data);
-
     }
 
     public function submit_form(){

@@ -12,7 +12,7 @@
     <div class="content"> 
         <div class="pull-right">
             <select @change="changeTerm($event)" class="form-control" v-model="current_sem">
-                <option v-for="term in terms" :value="term.intID">{{ term.term_student_type + " " + term.enumSem + " " + term.term_label }} SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
+                <option v-for="term in terms" :value="term.intID">{{ term.enumSem }} Term SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
             </select>
         </div>
         <hr />
@@ -55,12 +55,23 @@
                                             <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
                                         </select>                            
                                         <hr />    
-                                    
-                                        <label>Referree Name</label>
-                                        <input type="text" class="form-control" v-model="request_discount.referrer" />                                
-                                        
+                                        <!-- <label>Referree Name</label>
+                                        <input type="text" class="form-control" v-model="request_discount.referrer" />        -->
                                         <hr />
                                         <input class="btn btn-primary" type="submit" value="Add">
+                                        <!-- Input group -->
+                                        <div class="row" style="padding-top:25px">
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <label>Search Referree Name</label>
+                                                <input @change="enrolledStudents()" type="text" class="form-control" name="search" v-model="refereee_search_name" value="Search">
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <label>Select from Result</label>
+                                                <select required class="form-control" v-model="request_discount.referrer">
+                                                    <option v-for="referee_name in referee_names" :value="referee_name.intID">{{ referee_name.strFirstname }} {{ referee_name.strMiddlename }} {{ referee_name.strLastname }}</option>
+                                                </select> 
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>                                                                
                             </div>
@@ -231,6 +242,8 @@ new Vue({
         tuition_data: undefined,
         payment_type: undefined,
         remaining_amount: 0,
+        referee_names: [],
+        refereee_search_name: '',
         payments: [],
         other_payments: [],
         student_discounts:[],    
@@ -259,115 +272,125 @@ new Vue({
     },
 
     mounted() {
-
+        // this.enrolledStudents();
         axios.get(this.base_url + 'scholarship/assign_scholarship_data/'+this.student_id+'/'+this.current_sem)
-                .then((data) => {        
-                    this.scholarships = data.data.scholarships;
-                    this.discounts = data.data.discounts;
-                    this.terms = data.data.terms;
-                    this.student_scholarships = data.data.student_scholarships;
-                    this.student_discounts = data.data.student_discounts;
-                    this.student = data.data.student;
-                    this.request_discount.syid = this.current_sem;
-                    
-                    if(data.data.registration){         
-                        this.registration = data.data.registration;                                                   
-                        this.tuition = data.data.tuition;
-                        this.tuition_data = data.data.tuition_data;                                               
-                        this.payment_type = this.registration.paymentType;
-                        this.remaining_amount = data.data.tuition_data.total;                         
-                    }
+            .then((data) => {        
+                this.scholarships = data.data.scholarships;
+                this.discounts = data.data.discounts;
+                this.terms = data.data.terms;
+                this.student_scholarships = data.data.student_scholarships;
+                this.student_discounts = data.data.student_discounts;
+                this.student = data.data.student;
+                this.request_discount.syid = this.current_sem;
+                
+                if(data.data.registration){         
+                    this.registration = data.data.registration;                                                   
+                    this.tuition = data.data.tuition;
+                    this.tuition_data = data.data.tuition_data;                                               
+                    this.payment_type = this.registration.paymentType;
+                    this.remaining_amount = data.data.tuition_data.total;                         
+                }
 
-                    this.request_scholarship.syid = this.current_sem;
-                        axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.current_sem)
+                this.request_scholarship.syid = this.current_sem;
+                    axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.current_sem)
+                    .then((data) => {
+                        this.payments = data.data.data;
+                        this.other_payments = data.data.other;
+                                                            
+                        if(this.registration && this.registration.paymentType == 'partial')
+                            this.has_partial = true;
+                                                                                
+
+                        if(this.has_partial)
+                            this.remaining_amount = this.tuition_data.total_installment;                            
+
+                        for(i in this.payments){
+                            if(this.payments[i].status == "Paid"){     
+                                this.payments_paid.push(this.payments[i]);                         
+                                this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
+                                this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
+                            }                                
+                        }                        
+
+                        axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                         .then((data) => {
-                            this.payments = data.data.data;
-                            this.other_payments = data.data.other;
-                                                                
-                            if(this.registration && this.registration.paymentType == 'partial')
-                                this.has_partial = true;
-                                                                                    
+                            this.reservation_payment = data.data.data;    
+                            this.application_payment = data.data.application;
+                            
+                            if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.current_sem){
+                                    this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
+                                    this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
+                                    this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
+                            }
 
-                            if(this.has_partial)
-                                this.remaining_amount = this.tuition_data.total_installment;                            
-
-                            for(i in this.payments){
-                                if(this.payments[i].status == "Paid"){     
-                                    this.payments_paid.push(this.payments[i]);                         
-                                    this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
-                                    this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
-                                }                                
-                            }                        
-
-                            axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
-                            .then((data) => {
-                                this.reservation_payment = data.data.data;    
-                                this.application_payment = data.data.application;
-                                
-                                if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.current_sem){
-                                        this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
-                                        this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
-                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
-                                }
-
-                                
-                                
-                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
-                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                //installment amounts                                
-                                if(this.registration.downpayment == 1){
-                                    var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                    for(i=0; i < 5; i++){
-                                        if(this.tuition_data.installment_fee > temp){
-                                            val = this.tuition_data.installment_fee - temp;
-                                            val = val.toFixed(2);
-                                            this.installments.push(val);
-                                            temp = 0;
-                                        }
-                                        else{
-                                            this.installments.push(0);
-                                            temp = temp - this.tuition_data.installment_fee;
-                                        }
-                                    
+                            
+                            
+                            this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
+                            this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            //installment amounts                                
+                            if(this.registration.downpayment == 1){
+                                var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                for(i=0; i < 5; i++){
+                                    if(this.tuition_data.installment_fee > temp){
+                                        val = this.tuition_data.installment_fee - temp;
+                                        val = val.toFixed(2);
+                                        this.installments.push(val);
+                                        temp = 0;
                                     }
+                                    else{
+                                        this.installments.push(0);
+                                        temp = temp - this.tuition_data.installment_fee;
+                                    }
+                                
                                 }
-                                else
-                                    for(i=0; i < 5; i++)
-                                        this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
-                                    
-                                    
+                            }
+                            else
+                                for(i=0; i < 5; i++)
+                                    this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
                                 
                                 
-                                
-                                var val = 0;                                
-                                
+                            
+                            
+                            
+                            var val = 0;                                
+                            
 
-                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
-                                this.loader_spinner = false;
-                                if(this.remaining_amount <= 0)
-                                    this.description = "Other";
+                            this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
+                            this.loader_spinner = false;
+                            if(this.remaining_amount <= 0)
+                                this.description = "Other";
 
-                                
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
+                            
                         })
                         .catch((error) => {
                             console.log(error);
-                        })  
-               
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })  
+            
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    },
+
+    methods: {     
+       
+        changeTerm: function(event){
+             document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value + '/' + this.student_id;
+        },
+        enrolledStudents: function() {
+            this.referee_names = [];
+            axios.get(this.base_url + 'scholarship/enrolled_student_data?search='+ this.refereee_search_name)
+            .then((data) => {        
+                this.referee_names = data.data.referees;
+                console.log(referee_names)
             })
             .catch((error) => {
                 console.log(error);
             });
-                        
-
-    },
-
-    methods: {      
-        changeTerm: function(event){
-             document.location = base_url + 'scholarship/assign_scholarship/' + event.target.value + '/' + this.student_id;
         },
         updateScStatus: function(event,id){
 
