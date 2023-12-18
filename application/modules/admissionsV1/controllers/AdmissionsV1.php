@@ -159,21 +159,24 @@ class AdmissionsV1 extends CI_Controller {
 
     public function add_new_student(){
         
+        $student = $this->data_fetcher->getStudent($post['slug'], 'slug');
         $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){            
-            $tempNum = $this->data_fetcher->generateNewTempNumber();            
+            if(!$student){
+                $tempNum = $this->data_fetcher->generateNewTempNumber();                            
+                $post = $this->input->post();
+                $data['data'] = $post;       
+                $post['dteCreated'] = date("Y-m-d"); 
+                $post['strStudentNumber'] = $tempNum;
+                $post['strAcademicStanding'] = "regular";
+                $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID'])?$this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']):'1';
+                
+                $post['intTuitionYear'] = (get_stype($post['level']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
+                //IF SHS
+                $this->data_poster->post_data('tb_mas_users',$post);
+            }
             $data['message'] = "success";
             $data['success'] = true;
-            $post = $this->input->post();
-            $data['data'] = $post;       
-            $post['dteCreated'] = date("Y-m-d"); 
-            $post['strStudentNumber'] = $tempNum;
-            $post['strAcademicStanding'] = "regular";
-            $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID'])?$this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']):'1';
-            
-            $post['intTuitionYear'] = (get_stype($post['level']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
-            //IF SHS
-            $this->data_poster->post_data('tb_mas_users',$post);
         }
         else{
             $data['message'] = "Access Denied: you are using an invalid ip address";
