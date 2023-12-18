@@ -159,7 +159,7 @@ class AdmissionsV1 extends CI_Controller {
 
     public function add_new_student(){
         
-        $student = $this->data_fetcher->getStudent($post['slug'], 'slug');
+        $student = $this->db->get_where('tb_mas_users', array('slug'=>$post['slug']));
         $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){            
             if(!$student){
