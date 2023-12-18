@@ -159,12 +159,13 @@ class AdmissionsV1 extends CI_Controller {
 
     public function add_new_student(){
         
-        $student = $this->db->get_where('tb_mas_users',array('slug'=>$post['slug']))->first_row();
+        
         $ip = $this->input->ip_address();
-        if($ip == "172.16.80.22"){            
+        if($ip == "172.16.80.22"){       
+            $post = $this->input->post();
+            $student = $this->db->get_where('tb_mas_users',array('slug'=>$post['slug']))->first_row();     
             if(!$student){
-                $tempNum = $this->data_fetcher->generateNewTempNumber();                            
-                $post = $this->input->post();
+                $tempNum = $this->data_fetcher->generateNewTempNumber();                                            
                 $data['data'] = $post;       
                 $post['dteCreated'] = date("Y-m-d"); 
                 $post['strStudentNumber'] = $tempNum;
