@@ -98,7 +98,7 @@
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Application Payment Link</strong>
                         <p class="text-muted">
-                            {{base_url+'site/admissions_student_payment/'+slug}}
+                            {{base_url+'site/admissions_student_payment/'+slug+'/'+sy_reference}}
                         </p>
                         <hr>
 
