@@ -55,23 +55,23 @@
                                             <option v-for="discount in discounts" :value="discount.intID">{{ discount.name }}</option>
                                         </select>                            
                                         <hr />    
-                                        <!-- <label>Referree Name</label>
-                                        <input type="text" class="form-control" v-model="request_discount.referrer" />        -->
+                                        <label>Referree Name</label>
+                                        <input type="text" class="form-control" v-model="request_discount.referrer" />       
                                         <hr />
                                         <input class="btn btn-primary" type="submit" value="Add">
                                         <!-- Input group -->
-                                        <div class="row" style="padding-top:25px">
+                                        <!-- <div class="row" style="padding-top:25px">
                                             <div class="col-md-6 col-sm-6 col-xs-6">
-                                                <label>Search Referree Name</label>
-                                                <input @change="enrolledStudents()" type="text" class="form-control" name="search" v-model="refereee_search_name" value="Search">
+                                                <label>Referree Name</label>
+                                                <input type="text" class="form-control" name="search" v-model="request.referrer">
                                             </div>
-                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                             <div class="col-md-6 col-sm-6 col-xs-6">
                                                 <label>Select from Result</label>
                                                 <select required class="form-control" v-model="referee_data" @change="onChangeRefereee()">
                                                     <option v-for="referee_name in referee_names" :value="referee_name">{{ referee_name.strFirstname }} {{ referee_name.strMiddlename }} {{ referee_name.strLastname }}</option>
                                                 </select> 
-                                            </div>
-                                        </div>
+                                            </div> 
+                                        </div> -->
                                     </form>
                                 </div>                                                                
                             </div>
@@ -262,12 +262,14 @@ new Vue({
             student_id: <?php echo $student; ?>,
             syid: undefined,
             referrer: 'none',
+            referrer_id: 0,
         },
         request_discount:{
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
             syid: undefined,
             referrer: undefined,
+            referrer_id: 0,
         }
                       
     },
