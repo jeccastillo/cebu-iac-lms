@@ -336,53 +336,57 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         '</table>  
                     </td>
                     <td width="130px">
-                        <table style="color:#333; font-size:7;">                            
-                            <tr>
-                                <td colspan="2" style= "font-size:8; font-weight:bold;">OTHER FEES DETAIL</td>
-                                
-                            </tr>';
-
-                    if($tuition['new_student'] != 0){
-
-                        $html.='<tr>
-                        <td colspan="2" style= "font-size:7;">NEW STUDENT FEES</td></tr>';
-                    
-                        foreach($tuition['new_student_list'] as $key=>$val){
-        
-                            $html .= '<tr>
-                                        <td width="80px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr>';                
-                        }                       
-                    }
-
-                    
-                    
-                     
-
-                    if($tuition['total_foreign'] != 0){
-                        $html .= '<tr>
-                            <td width="80px"></td>
-                            <td width="60px" style="text-align:right;"></td>
-                        </tr>
-                        <tr>
-                        <td colspan="2" style= "font-size:7;">FOREIGN STUDENT FEES</td></tr>';
-                    
-                        foreach($tuition['foreign_fee_list'] as $key=>$val){
-        
-                            $html .= '<tr>
-                                        <td width="80px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr>';                
+                        <table style="color:#333; font-size:7;">';
+                        if($tuition['new_student'] != 0 && $tuition['total_foreign'] != 0){
+                            $html .='
+                                <tr>
+                                    <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
+                                    
+                                </tr>';
                         }
-                      
-                    }        
-                    
-                    $html.=' 
-                    <tr>
-                        <td style="font-weight:bold;">Total</td>
-                        <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
-                    </tr>';
+    
+                        if($tuition['new_student'] != 0){
+    
+                            $html.='<tr>
+                            <td colspan="2" style= "font-size:8;">NEW STUDENT FEES</td></tr>';
+                        
+                            foreach($tuition['new_student_list'] as $key=>$val){
+            
+                                $html .= '<tr>
+                                            <td width="80px">'.$key.'</td>
+                                            <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        </tr>';                
+                            }                       
+                        }
+    
+                        
+                        
+                         
+    
+                        if($tuition['total_foreign'] != 0){
+                            $html .= '<tr>
+                                <td width="80px"></td>
+                                <td width="60px" style="text-align:right;"></td>
+                            </tr>
+                            <tr>
+                            <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
+                        
+                            foreach($tuition['foreign_fee_list'] as $key=>$val){
+            
+                                $html .= '<tr>
+                                            <td width="80px">'.$key.'</td>
+                                            <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        </tr>';                
+                            }
+                          
+                        }        
+                        if($tuition['new_student'] != 0 && $tuition['total_foreign'] != 0){
+                            $html.=' 
+                            <tr>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
+                            </tr>';
+                        }
                         
                     $html.='                        
                     </table>

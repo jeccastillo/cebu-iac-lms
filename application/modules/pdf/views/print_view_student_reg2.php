@@ -336,11 +336,15 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         '</table>  
                     </td>
                     <td width="130px">
-                        <table style="color:#333; font-size:8;">                            
+                        <table style="color:#333; font-size:8;">';
+                        
+                    if($tuition['new_student'] != 0 && $tuition['total_foreign'] != 0){
+                        $html .='
                             <tr>
                                 <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
                                 
                             </tr>';
+                    }
 
                     if($tuition['new_student'] != 0){
 
@@ -377,12 +381,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         }
                       
                     }        
-                    
-                    $html.=' 
-                    <tr>
-                        <td style="font-weight:bold;">Total</td>
-                        <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
-                    </tr>';
+                    if($tuition['new_student'] != 0 && $tuition['total_foreign'] != 0){
+                        $html.=' 
+                        <tr>
+                            <td style="font-weight:bold;">Total</td>
+                            <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
+                        </tr>';
+                    }
                         
                     $html.='                        
                     </table>
