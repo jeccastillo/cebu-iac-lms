@@ -13,7 +13,7 @@
                     "aTargets":[3],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>pdf/faculty_load_form/'+row[0]+'">Generate Form</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>pdf/faculty_load_form/'+row[0]+'/'+$("#sem").val()">Generate Form</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],

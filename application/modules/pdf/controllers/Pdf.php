@@ -464,8 +464,10 @@ class Pdf extends CI_Controller {
         $pdf->Output("grading_sheet.pdf", 'I');
     }
 
-    function faculty_load_form($id){
-        $sem = $this->data_fetcher->get_active_sem();
+    function faculty_load_form($id,$sem){
+        
+        $sem = $this->data_fetcher->get_sem_by_id($sem);
+
         $this->data['classlists'] = $this->data_fetcher->getClasslistsByFaculty($sem['intID'],$id);
         $this->data['faculty'] = $this->db->get_where('tb_mas_faculty',array('intID'=>$id))->first_row('array');
         $this->data['user'] =  $this->session->all_userdata();
