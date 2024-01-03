@@ -23,7 +23,7 @@
             "aaSorting": [[1,'asc']],
             "fnDrawCallback": function () {  
                 $("#sem").change(function(){
-                    document.location = "<?php echo base_url(); ?>faculty/view_all_teachers"+$(this).val();
+                    document.location = "<?php echo base_url(); ?>faculty/view_all_teachers/"+$(this).val();
                 });          
                             
             },
