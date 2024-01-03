@@ -451,7 +451,7 @@ new Vue({
                     text: data.data.message,
                     icon: data.data.success,
                 }).then(function() {
-                    // location.reload();
+                    location.reload();
                 });
             });
         },
