@@ -338,7 +338,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="130px">
                         <table style="color:#333; font-size:8;">';
                         
-                    if(($tuition['new_student'] + $tuition['total_foreign'])  == 0){
+                    if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
                         $html .='
                             <tr>
                                 <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
@@ -381,7 +381,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         }
                       
                     }        
-                    if(($tuition['new_student'] + $tuition['total_foreign'])  == 0){
+                    if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
                         $html.=' 
                         <tr>
                             <td style="font-weight:bold;">Total</td>
