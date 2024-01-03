@@ -2,8 +2,8 @@
 ?>
 <script type="text/javascript">
     
-    $(document).ready(function(){
-    $('#faculty-table').dataTable( {
+    $(document).ready(function(){    
+        $('#faculty-table').dataTable( {
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
             "bServerSide": true,
@@ -13,7 +13,7 @@
                     "aTargets":[3],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>pdf/faculty_load_form/'+row[0]+'/'+$("#sem").val()">Generate Form</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>pdf/faculty_load_form/'+row[0]+'/<?php echo $sem; ?>'">Generate Form</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
@@ -22,11 +22,14 @@
             ],
             "aaSorting": [[1,'asc']],
             "fnDrawCallback": function () {  
-                
-                
-            
+                $("#sem").change(function(){
+                    document.location = "<?php echo base_url(); ?>faculty/view_all_teachers"+$(this).val();
+                });          
+                            
             },
         } );
+
+    
         
     });
 

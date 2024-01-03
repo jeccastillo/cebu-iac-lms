@@ -135,11 +135,17 @@ class Faculty extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
-    public function view_all_teachers()
+    public function view_all_teachers($sem = 0)
     {
         if($this->is_super_admin() || $this->is_registrar())
         {
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            if($sem == 0){
+                $sem = $this->data_fetcher->get_active_sem();
+                $sem = $sem['intID'];
+            }
+                
+            $this->data['sem'] = $sem;
             $this->data['page'] = "faculty_loading";
             $this->data['opentree'] = "registrar";
             $this->load->view("common/header",$this->data);
