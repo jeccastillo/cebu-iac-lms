@@ -261,15 +261,13 @@ new Vue({
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
             syid: undefined,
-            referrer: 'none',
-            referrer_id: 0,
+            referrer: 'none',            
         },
         request_discount:{
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
             syid: undefined,
-            referrer: undefined,
-            referrer_id: 0,
+            referrer: undefined,            
         }
                       
     },
