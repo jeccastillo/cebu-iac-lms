@@ -150,7 +150,7 @@ class Scholarship extends CI_Controller {
         $conditions = array(
             'discount_id' => $post['discount_id'],
             'student_id' => $post['student_id'],
-            'referrer_id' => $post['referrer_id'],
+            //'referrer_id' => $post['referrer_id'],
             'syid' => $post['syid'],
         );
 
