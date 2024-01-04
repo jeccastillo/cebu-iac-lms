@@ -986,7 +986,7 @@ class Unity extends CI_Controller {
     public function update_academic_status(){
         $post = $this->input->post();
 
-        if($this->db->where('intID',$post['intID'])
+        if($this->db->where('intRegistrationID',$post['intRegistrationID'])
             ->update('tb_mas_registration',$post)){
             $data['success'] = true;
             $data['message'] = "Successfully updated Status";
