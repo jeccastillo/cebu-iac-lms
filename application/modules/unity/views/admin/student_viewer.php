@@ -574,8 +574,8 @@ new Vue({
         updateAcademicStatus: function(event){
                      
             var formdata= new FormData();
-            formdata.append(intID,this.registration.intID);
-            formdata.append(enumRegistrationStatus,event.target.value);
+            formdata.append('intID',this.registration.intID);
+            formdata.append('enumRegistrationStatus',event.target.value);
                                                                 
 
             this.loader_spinner = true;
