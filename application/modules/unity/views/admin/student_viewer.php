@@ -116,7 +116,12 @@
                                             <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}</li>
                                             <div v-if="registration">
                                                 <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}</p>
-                                                <p><strong>Academic Status: </strong>{{ registration.enumRegistrationStatus }}</p>
+                                                <p><strong>Academic Status: </strong>
+                                                <select @change="updateAcademicStatus($event)" v-model="registration.enumRegistrationStatus">
+                                                    <option value="regular">Regular</option>
+                                                    <option value="irregular">Irregular</option>
+                                                </select>                                                
+                                                </p>
                                             </div>
                                             <hr />                                        
                                         </div>                            
@@ -564,6 +569,32 @@ new Vue({
                     text: 'Incomplete Data',
                     icon: "success"
                 });
+
+        },
+        updateAcademicStatus: function(event){
+                     
+            var formdata= new FormData();
+            formdata.append(intID,this.registration.intID);
+            formdata.append(enumRegistrationStatus,event.target.value);
+                                                                
+
+            this.loader_spinner = true;
+            axios.post(base_url + 'unity/update_academic_status', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                Swal.fire({
+                    title: "Success",
+                    text: data.data.message,
+                    icon: "success"
+                }).then(function() {
+                    
+                });
+            });
+            
 
         },
         printRF: function(){

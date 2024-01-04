@@ -983,6 +983,22 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function update_academic_status(){
+        $post = $this->input->post();
+
+        if($this->db->where('intID',$post['intID'])
+            ->update('tb_mas_registration',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully updated Status";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Oops something went wrong.";
+        }
+
+        echo json_encode($data);
+    }
+
     public function delete_credited(){
         $post = $this->input->post();
         $credited = $this->db->get_where('tb_mas_credited',array('id'=>$post['id']))->first_row();
