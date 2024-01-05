@@ -708,12 +708,13 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function payments($date = null, $other = 0){                        
+    public function payments($date = 0, $other = 0, $type = "all"){                        
 
-        if($date == null)
+        if($date == 0)
             $date = date("Y-m-d");
 
         $sem = $this->data_fetcher->get_active_sem();        
+        $this->data['type'] = $type;
         $this->data['current_sem'] = $sem['intID'];
         $this->data['date'] = $date;
         $this->data['other'] = $other;
