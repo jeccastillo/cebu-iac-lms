@@ -280,6 +280,12 @@ $(document).ready(function() {
                 $("#print_or").submit();
             });
 
+
+            $("#select-filter").change(function(e){
+                var type_filter = $(this).val();
+                document.location = "<?php echo base_url().'finance/payments/0/0/' ?>" + type_filter; 
+            });
+
         },
     });
 

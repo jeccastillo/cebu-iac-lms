@@ -43,6 +43,14 @@
                             <option value="description">Particulars</option>
                         </select>
                     </div>
+                    <div class="col-md-6 col-md-offset-6 text-right">
+                        <label>Filter Type: <label>
+                        <select id="select-filter" class="form-control">
+                            <option value="all">All</option>
+                            <option value="paynamics">Paynamics</option>
+                            <option value="bdo_pay">BDO Pay</option>
+                        </select>
+                    </div>
                 </div>
                 <hr />
                 <table id="subjects-table" class="table table-hover table-bordered">
