@@ -47,6 +47,7 @@
                         <label>Filter Type: <label>
                         <select id="select-filter" class="form-control">
                             <option <?php echo ($type == "all") ? "selected" : ""; ?> value="all">All</option>
+                            <option <?php echo ($type == "onsite") ? "selected" : ""; ?> value="onsite">On Site</option>
                             <option <?php echo ($type == "paynamics") ? "selected" : ""; ?> value="paynamics">Paynamics</option>
                             <option <?php echo ($type == "bdo_pay") ? "selected" : ""; ?> value="bdo_pay">BDO Pay</option>
                         </select>
