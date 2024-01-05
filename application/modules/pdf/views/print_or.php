@@ -109,8 +109,8 @@
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
                     <td style="width:50%"><?php 
-                        if($remarks == "Paynamics")
-                            echo "Paynamics";
+                        if($remarks == "Paynamics" || $remarks == "BDO Pay")
+                            echo $remarks;                                                
                         else
                             echo !$is_cash?$check_number:""; 
                         
