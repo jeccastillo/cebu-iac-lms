@@ -47,6 +47,7 @@
                                 Reserve</span>
                             <span class="label label-danger" v-if="request.status ==  'Floating'">Floating
                                 Application</span>
+                            <span class="label label-danger" v-if="request.status ==  'Will Not Proceed'">Will Not Proceed</span>
                             <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
                             <span class="label label-danger" v-if="request.status ==  'Withdrawn Before'">Withdrawn
                                 Enrollment Before Opening of SY</span>
@@ -764,6 +765,7 @@
                                 <option value="Enrolled">Enrolled</option>
                                 <option value="Cancelled">Cancelled Application</option>
                                 <option value="Floating">Floating Application</option>
+                                <option value="Will Not Proceed">Will Not Proceed</option>
                                 <option value="Did Not Reserve">Did Not Reserve</option>
                                 <option value="Rejected">Rejected</option>
                                 <?php if($userlevel == "2" || $userlevel == "3"): ?>
