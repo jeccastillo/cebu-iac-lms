@@ -34,6 +34,8 @@
                     <option value="For Interview">For Interview</option>
                     <option value="For Reservation">For Reservation</option>
                     <option value="Reserved">Reserved</option>
+                    <option value="Floating">Floating</option>
+                    <option value="Will Not Proceed">Will Not Proceed</option>
                     <option value="For Enrollment">For Enrollment</option>
                     <option value="Confirmed">Complete Confirmed Information</option>                    
                     <option value="Enlisted">Enlisted</option>
