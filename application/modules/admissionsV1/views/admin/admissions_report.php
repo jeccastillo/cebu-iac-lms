@@ -41,11 +41,11 @@
                         <td>{{ total }}</td>
                         <td>Paid: {{ stats.paid }} Unpaid: {{ stats.unpaid }}</td>
                     </tr>
-                    <!-- <tr>
-                        <th>Floating Application</th>
-                        <td>{{ stats.floating }}</td>
-                        <td>{{ ((stats.floating/total)*100).toFixed(2) }}%</td>
-                    </tr> -->
+                    <tr>
+                        <th>Will Not Proceed</th>
+                        <td>{{ stats.will_not_proceed }}</td>
+                        <td>{{ ((stats.will_not_proceed/total)*100).toFixed(2) }}%</td>
+                    </tr>
                     <tr>
                         <th>Cancelled Applications (Paid Application fee but was not Interviewed)</th>
                         <td>{{ stats.cancelled }}</td>
@@ -150,7 +150,7 @@ new Vue({
             .then((data) => {       
                 // console.log(data);           
                 this.stats = data.data;  
-                this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + 
+                this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + this.stats.will_not_proceed +
                             this.stats.for_enrollment + this.stats.reserved + this.stats.floating +
                             this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + 
                             this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled +
