@@ -993,8 +993,8 @@ class Data_fetcher extends CI_Model {
         $slots = $this->db
                 ->select('tb_mas_classlist_student.intCSID')                                
                 ->from('tb_mas_classlist_student')
-                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                ->where(array('intClassListID'=>$classlist_id))
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                                
+                ->where(array('intClassListID'=>$classlist_id,'tb_mas_registration.intAYID'=>$classlist['strAcademicYear']))
                 ->get()
                 ->num_rows();
 
