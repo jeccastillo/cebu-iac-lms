@@ -90,7 +90,7 @@ $html .= '
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="6"></th>
+        <th style="border-top:1px solid #333;" colspan="7"></th>
     </tr>
      <tr>
          <td>Total</td>
@@ -109,9 +109,11 @@ $html .= '
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
     </tr>
     <tr style="text-align:center;">
         <td>RUNDATE&TIME:'.date('Y-m-d h:i a').'</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
