@@ -1016,7 +1016,7 @@ class Data_fetcher extends CI_Model {
                 ->select('tb_mas_classlist_student.intCSID')                                
                 ->from('tb_mas_classlist_student')
                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                ->where(array('intClassListID'=>$classlist['intID']))
+                ->where(array('intClassListID'=>$classlist['intID'],'tb_mas_registration.intAYID'=>$sem))
                 ->get()
                 ->num_rows();
 
