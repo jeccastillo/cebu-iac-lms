@@ -54,6 +54,7 @@
                     <th>Transferee</th>
                     <th>Second Degree</th>                    
                     <th>Continuing</th>
+                    <th>Shiftee</th>
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
@@ -67,7 +68,9 @@
                     <td v-if="date.second > 0"><b>{{ date.second }}</b></td>
                     <td v-else>{{ date.second }}</td> 
                     <td v-if="date.second > 0"><b>{{ date.continuing }}</b></td>
-                    <td v-else>{{ date.continuing }}</td>                   
+                    <td v-else>{{ date.continuing }}</td>     
+                    <td v-if="date.second > 0"><b>{{ date.shiftee }}</b></td>
+                    <td v-else>{{ date.shiftee }}</td>                 
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
                     <td v-else>{{ date.total }}</td>                    
                 </tr>
@@ -77,6 +80,7 @@
                     <td><strong>{{ totals.transferee }}</strong></td>                    
                     <td><strong>{{ totals.second }}</strong></td>
                     <td><strong>{{ totals.continuing }}</strong></td>
+                    <td><strong>{{ totals.shiftee }}</strong></td>
                     <td><strong>{{ full_total }}</strong></td>
                 </tr>                               
             </tbody>
