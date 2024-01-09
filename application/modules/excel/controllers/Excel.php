@@ -3615,7 +3615,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1', $title);
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1');
 
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A3', 'Program')
@@ -3623,7 +3623,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C3', 'Transferee')
                     ->setCellValue('D3', 'Second Degree')                    
                     ->setCellValue('E3', 'Continuing')
-                    ->setCellValue('F3', 'Total Enrollment');
+                    ->setCellValue('F3', 'Shiftee')
+                    ->setCellValue('G3', 'Total Enrollment');
                             
         $i = 4;
         
@@ -3637,7 +3638,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, $item->transferee)                    
                     ->setCellValue('D'.$i, $item->second)
                     ->setCellValue('E'.$i, $item->continuing)
-                    ->setCellValue('F'.$i, '=SUM(B'.$i.':E'.$i.')');                                                
+                    ->setCellValue('F'.$i, $item->shiftee)
+                    ->setCellValue('G'.$i, '=SUM(B'.$i.':F'.$i.')');                                                
                              
         
             $i++;
@@ -3649,10 +3651,11 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
                     ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
                     ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
-                    ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')');
+                    ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
+                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')');
         
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('F'.$i)->getFont()->setBold( true );                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:F3')->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('G'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:G3')->getFont()->setBold( true );
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -3660,6 +3663,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         
                 
          
