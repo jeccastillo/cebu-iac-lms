@@ -45,7 +45,7 @@ $html .= '
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="width:48%;font-size:9px;">Program</th>
+         <th style="width:44%;font-size:9px;">Program</th>
          <th style="width:8%;font-size:9px;">Freshman</th>
          <th style="width:8%;font-size:9px;">Transferee</th>
          <th style="width:8%;font-size:9px;">Foreign</th>
