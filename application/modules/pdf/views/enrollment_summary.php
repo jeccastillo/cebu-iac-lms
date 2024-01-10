@@ -51,17 +51,18 @@ $html .= '
          <th style="width:10%;font-size:9px;">Foreign</th>
          <th style="width:10%;font-size:9px;">SD</th>
          <th style="width:10%;font-size:9px;">Continuing</th>
+         <th style="width:10%;font-size:9px;">Shiftee</th>
          <th style="width:10%;font-size:9px;">Total</th>
      </tr>
      <tr style="line-height:10px;">
-        <th colspan="6"></th>
+        <th colspan="7"></th>
      </tr>
      ';
      
      $all_enrolled = 0;
     foreach($enrollment as $item){        
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'];
+        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'];
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
@@ -81,7 +82,10 @@ $html .= '
                     '.$item['enrolled_continuing'].'
                 </td>
                 <td style="font-size:8px;">
-                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing']).'
+                    '.$item['enrolled_shiftee'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee']).'
                 </td>
             </tr>
             <tr style="line-height:5px;">
@@ -91,9 +95,10 @@ $html .= '
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="7"></th>
+        <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
     <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
