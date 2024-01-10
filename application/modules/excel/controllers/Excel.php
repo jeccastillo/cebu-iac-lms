@@ -3537,7 +3537,7 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('G'.$i, "TOTAL")
-                    ->setCellValue('H'.$i, '=SUM(G4:G'.($i-1).')');                    
+                    ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');                    
         
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
