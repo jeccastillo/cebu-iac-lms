@@ -172,7 +172,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
-        ledger: [],       
+        ledger: [],               
         term_balances: [], 
         tuition: [],
         other: [],
@@ -238,6 +238,7 @@ new Vue({
                 
 
                 for(i in this.tuition){
+                    var ledger_term = [];
                     if(this.tuition[i].term.paymentType == 'partial')
                         amount = this.tuition[i].ti_before_deductions;
                     else
@@ -245,7 +246,7 @@ new Vue({
 
                     term_balance += amount;
 
-                    this.ledger.push({
+                    this.ledger_term.push({
                         'strYearStart':this.tuition[i].term.strYearStart,
                         'strYearEnd':this.tuition[i].term.strYearEnd,
                         'enumSem':this.tuition[i].term.enumSem,
@@ -270,7 +271,7 @@ new Vue({
                                 if(payments[i].status == "Paid"){                                    
                                     var paid = payments[i].subtotal_order * -1;
                                     term_balance += paid;
-                                    this.ledger.push({
+                                    this.ledger_term.push({
                                         'strYearStart':this.tuition[i].term.strYearStart,
                                         'strYearEnd':this.tuition[i].term.strYearEnd,
                                         'enumSem':this.tuition[i].term.enumSem,
@@ -288,6 +289,13 @@ new Vue({
                                 }
                             }
                     });
+
+                    this.ledger.push({
+                        'ledger_items': ledger_term,
+                        'balance': term_balance;
+                    });
+
+                    this.running_balance += term_balance;
                 }
 
                 this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                
