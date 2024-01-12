@@ -321,6 +321,7 @@ new Vue({
                     
                     }
                     
+                    this.getPayments(this.tuition[i]);
                     
                     this.ledger.push({
                         'ledger_items': ledger_term,
