@@ -293,20 +293,19 @@ new Vue({
                                     });
                                 }
                             }
-                    });
 
-                    this.ledger.push({
-                        'ledger_items': ledger_term,
-                        'balance': term_balance
-                    });
+                            this.ledger.push({
+                                'ledger_items': ledger_term,
+                                'balance': term_balance
+                            });
 
-                    this.running_balance += term_balance;
+                            this.running_balance += term_balance;                            
+                            this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                
+                            this.running_balance = this.running_balance.toFixed(2);
+                    });                    
                 }
 
-                console.log(this.ledger);
 
-                this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                
-                this.running_balance = this.running_balance.toFixed(2);
 
                 for(i in other_temp){
                     if(other_temp[i].is_disabled == 0){
