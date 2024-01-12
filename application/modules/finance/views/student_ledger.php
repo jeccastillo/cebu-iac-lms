@@ -357,7 +357,7 @@ new Vue({
     },
 
     methods: {      
-        async getPayments: function(tuition){
+        async getPayments(tuition){
             await axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + tuition.term.intID)
                 .then((data) => {
                     var payments = data.data.data;                                                 
