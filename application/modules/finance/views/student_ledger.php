@@ -288,7 +288,7 @@ new Vue({
                             'name':'Scholarship',
                             'or_number':'',
                             'remarks':'',
-                            'amount': scholarship_amount.toFixed(2),
+                            'amount': scholarship_amount,
                             'added_by': 0,
                             'is_disabled':0,
                             'balance': term_balance,
