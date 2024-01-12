@@ -237,8 +237,7 @@ class Finance extends CI_Controller {
                                     ->get('tb_mas_registration')
                                     ->result_array();
         $tuition = [];
-        foreach($registrations as $reg){
-            print_r($reg);
+        foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;                       
             $tuition[] =  $temp;
