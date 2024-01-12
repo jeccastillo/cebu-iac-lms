@@ -266,10 +266,9 @@ new Vue({
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                         .then((data) => {
                             var payments = data.data.data;                                                 
-                            for(i in payments){
-                                console.log(payments[i]);
-                                if(this.payments[i].status == "Paid"){
-                                    var paid = this.payments[i].subtotal_order * -1;
+                            for(i in payments){                                
+                                if(payments[i].status == "Paid"){
+                                    var paid = payments[i].subtotal_order * -1;
                                     this.ledger.push({
                                         'strYearStart':this.tuition[i].term.strYearStart,
                                         'strYearEnd':this.tuition[i].term.strYearEnd,
@@ -277,9 +276,9 @@ new Vue({
                                         'term_label':this.tuition[i].term.term_label,
                                         'syid':this.tuition[i].term.intID,
                                         'scholarship_name':'',
-                                        'name': this.payments[i].description,
-                                        'or_number':this.payments[i].or_number,
-                                        'remarks': this.payments[i].remarks,
+                                        'name': payments[i].description,
+                                        'or_number':payments[i].or_number,
+                                        'remarks': payments[i].remarks,
                                         'amount': paid,
                                         'added_by': 0,
                                         'is_disabled':0,
