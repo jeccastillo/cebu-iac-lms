@@ -243,7 +243,39 @@ new Vue({
                 this.request.syid = data.data.active_sem;  
                 var current_sy_id = 0;                                               
 
-                for(i in this.tuition){
+                for(i in this.tuition){                    
+                    
+                    this.getPayments(this.tuition[i]);
+                                                          
+                }
+
+                
+                for(i in other_temp){
+                    if(other_temp[i].is_disabled == 0){
+                        this.running_balance_other += Number(other_temp[i].amount);                         
+                        other_temp[i].muted = "";
+                    }
+                    else{
+                        other_temp[i].muted = "text-muted";                        
+                    }                    
+                                                                                     
+                    other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    
+                    this.other.push(other_temp[i]);
+                }
+                this.running_balance_other = this.running_balance_other.toFixed(2);
+                // console.log(data);
+            });
+
+   
+
+
+    },
+
+    methods: {      
+        async getPayments(tuition){
+            await axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + tuition.term.intID)
+                .then((data) => {
                     this.term_balance = 0;
                     this.ledger_term = [];
                     if(this.tuition[i].term.paymentType == 'partial')
@@ -320,38 +352,6 @@ new Vue({
                         }); 
                     
                     }
-                    
-                    this.getPayments(this.tuition[i]);
-                                                          
-                }
-
-                
-                for(i in other_temp){
-                    if(other_temp[i].is_disabled == 0){
-                        this.running_balance_other += Number(other_temp[i].amount);                         
-                        other_temp[i].muted = "";
-                    }
-                    else{
-                        other_temp[i].muted = "text-muted";                        
-                    }                    
-                                                                                     
-                    other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                    
-                    this.other.push(other_temp[i]);
-                }
-                this.running_balance_other = this.running_balance_other.toFixed(2);
-                // console.log(data);
-            });
-
-   
-
-
-    },
-
-    methods: {      
-        async getPayments(tuition){
-            await axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + tuition.term.intID)
-                .then((data) => {
                     var payments = data.data.data;                                                 
                     for(i in payments){                                
                         if(payments[i].status == "Paid"){                                    
