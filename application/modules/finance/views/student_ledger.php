@@ -268,6 +268,32 @@ new Vue({
                         'is_disabled':0,
                         'balance': term_balance,
                     });
+
+                    for(i in this.tuition[i].scholarship){
+                        var scholarship_amount = 0;
+                        if(this.tuition[i].term.paymentType == 'partial')
+                            scholarship_amount = this.tuition[i].scholarship_deductions_installment_array[i] * -1;
+                        else
+                            scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
+                        
+                        term_balance += scholarship_amount;
+                        ledger_term.push({
+                            'strYearStart':this.tuition[i].term.strYearStart,
+                            'strYearEnd':this.tuition[i].term.strYearEnd,
+                            'enumSem':this.tuition[i].term.enumSem,
+                            'term_label':this.tuition[i].term.term_label,
+                            'syid':this.tuition[i].term.intID,
+                            'scholarship_name': this.tuition[i].scholarship[i].name,
+                            'name':'Scholarship',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': scholarship_amount,
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': term_balance,
+                        }); 
+                    
+                    }
                     
                     
 
