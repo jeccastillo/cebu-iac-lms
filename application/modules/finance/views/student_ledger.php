@@ -316,7 +316,7 @@ new Vue({
                             'amount': discount_amount.toFixed(2),
                             'added_by': 0,
                             'is_disabled':0,
-                            'balance': term_balance.toFixed(2),
+                            'balance': this.term_balance.toFixed(2),
                         }); 
                     
                     }
