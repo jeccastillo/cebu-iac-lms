@@ -241,13 +241,13 @@ class Finance extends CI_Controller {
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;            
             $temp['student_scholarships'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                    ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'scholarship','status' => 'applied'))
+                                    ->where(array('syid'=>$reg['intID'],'student_id'=>$id,'deduction_type'=>'scholarship','status' => 'applied'))
                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                     ->get('tb_mas_student_discount')
                                      ->result_array();
 
             $temp['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                        ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','status' => 'applied'))
+                                        ->where(array('syid'=>$reg['intID'],'student_id'=>$id,'deduction_type'=>'discount','status' => 'applied'))
                                         ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                         ->get('tb_mas_student_discount')
                                         ->result_array();    
