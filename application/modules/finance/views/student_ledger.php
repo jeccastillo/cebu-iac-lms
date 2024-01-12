@@ -265,7 +265,8 @@ new Vue({
 
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                         .then((data) => {
-                            var payments = data.data.data;                            
+                            var payments = data.data.data;
+                            console.log(payments);                            
                             for(i in payments){
                                 if(this.payments[i].status == "Paid"){
                                     var paid = this.payments[i].subtotal_order * -1;
