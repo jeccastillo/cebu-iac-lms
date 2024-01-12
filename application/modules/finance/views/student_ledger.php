@@ -277,7 +277,7 @@ new Vue({
                     this.term_balance = 0;
                     this.ledger_term = [];
                     if(tuition.term.paymentType == 'partial')
-                        amount = this.tuition.ti_before_deductions;
+                        amount = tuition.ti_before_deductions;
                     else
                         amount = tuition.total_before_deductions;
 
