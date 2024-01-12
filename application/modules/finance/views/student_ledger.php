@@ -98,20 +98,19 @@
                             <tr>                                
                                 <td colspan="12" class="text-right">Term Balance:{{ term.balance }}</td>
                                 <td></td>
-                            </tr>
-                            <tr>
-                                <th colspan="10">Other</th>
-                            </tr>           
+                            </tr>                                      
                         </tbody>                
                     </table>
                     <table>
                         <tr>                                
-                            <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
-                            <td></td>
+                            <td class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>                            
                         </tr>
                     </table>
                     <table class="table table-bordered table-striped">
                         <thead>
+                            <tr>
+                                <th colspan="10">Other</th>
+                            </tr> 
                             <tr>
                                 <th>School Year</th>
                                 <th>Term/Semester</th>                                
