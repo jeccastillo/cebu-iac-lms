@@ -301,7 +301,8 @@ new Vue({
                             discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
                         else
                             discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
-                                                                        
+                                                
+                        term_balance += discount_amount;
                         ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
                             'strYearEnd':this.tuition[i].term.strYearEnd,
