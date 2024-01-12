@@ -294,6 +294,32 @@ new Vue({
                         }); 
                     
                     }
+
+                    for(i in this.tuition[i].discount){
+                        var discount_amount = 0;
+                        if(this.tuition[i].term.paymentType == 'partial')
+                            discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
+                        else
+                            discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
+                        
+                        term_balance += discount_amount;
+                        ledger_term.push({
+                            'strYearStart':this.tuition[i].term.strYearStart,
+                            'strYearEnd':this.tuition[i].term.strYearEnd,
+                            'enumSem':this.tuition[i].term.enumSem,
+                            'term_label':this.tuition[i].term.term_label,
+                            'syid':this.tuition[i].term.intID,
+                            'scholarship_name': this.tuition[i].discount[i].name,
+                            'name':'Discount',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': discount_amount,
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': term_balance,
+                        }); 
+                    
+                    }
                     
                     
 
