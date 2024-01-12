@@ -181,6 +181,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],               
         term_balances: [], 
+        term_balance: 0,
         tuition: [],
         other: [],
         finance: undefined, 
@@ -239,122 +240,94 @@ new Vue({
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
-                var current_sy_id = 0;
-                var term_balance = 0;
-                var ledger_term = [];
-                var l = 0;
-                while(l < this.tuition.length){                                       
+                var current_sy_id = 0;                
+                var ledger_term = [];                
+
+                for(i in this.tuition){
+                    this.term_balance = 0;
+                    ledger_term = [];
+                    if(this.tuition[i].term.paymentType == 'partial')
+                        amount = this.tuition[i].ti_before_deductions;
+                    else
+                        amount = this.tuition[i].total_before_deductions;
+
+                    this.term_balance += amount;
+
+                    ledger_term.push({
+                        'strYearStart':this.tuition[i].term.strYearStart,
+                        'strYearEnd':this.tuition[i].term.strYearEnd,
+                        'enumSem':this.tuition[i].term.enumSem,
+                        'term_label':this.tuition[i].term.term_label,
+                        'syid':this.tuition[i].term.intID,
+                        'scholarship_name':'',
+                        'name':'Tuition',
+                        'or_number':'',
+                        'remarks':'',
+                        'amount': amount.toFixed(2),
+                        'added_by': 0,
+                        'is_disabled':0,
+                        'balance': this.term_balance.toFixed(2),
+                    });
+
+                    for(i in this.tuition[i].scholarship){
+                        var scholarship_amount = 0;
+                        if(this.tuition[i].term.paymentType == 'partial')
+                            scholarship_amount = this.tuition[i].scholarship_deductions_installment_array[i] * -1;
+                        else
+                            scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
+                                                
+                        this.term_balance += scholarship_amount;
+                        ledger_term.push({
+                            'strYearStart':this.tuition[i].term.strYearStart,
+                            'strYearEnd':this.tuition[i].term.strYearEnd,
+                            'enumSem':this.tuition[i].term.enumSem,
+                            'term_label':this.tuition[i].term.term_label,
+                            'syid':this.tuition[i].term.intID,
+                            'scholarship_name': this.tuition[i].scholarship[i].name,
+                            'name':'Scholarship',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': scholarship_amount.toFixed(2),
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': this.term_balance.toFixed(2),
+                        }); 
                     
-                    axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
-                        .then((data) => {
+                    }
 
-                            term_balance = 0;
-                            ledger_term = []; 
-                            if(this.tuition[i].term.paymentType == 'partial')
-                                amount = this.tuition[i].ti_before_deductions;
-                            else
-                                amount = this.tuition[i].total_before_deductions;
+                    for(i in this.tuition[i].discount){
+                        var discount_amount = 0;
+                        if(this.tuition[i].term.paymentType == 'partial')
+                            discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
+                        else
+                            discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
+                                                
+                        this.term_balance += discount_amount;
+                        ledger_term.push({
+                            'strYearStart':this.tuition[i].term.strYearStart,
+                            'strYearEnd':this.tuition[i].term.strYearEnd,
+                            'enumSem':this.tuition[i].term.enumSem,
+                            'term_label':this.tuition[i].term.term_label,
+                            'syid':this.tuition[i].term.intID,
+                            'scholarship_name': this.tuition[i].discount[i].name,
+                            'name':'Discount',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': discount_amount.toFixed(2),
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': term_balance.toFixed(2),
+                        }); 
+                    
+                    }
+                    
+                    
+                    this.ledger.push({
+                        'ledger_items': ledger_term,
+                        'balance': this.term_balance.toFixed(2)
+                    });
 
-                            term_balance += amount;
-
-                            ledger_term.push({
-                                'strYearStart':this.tuition[i].term.strYearStart,
-                                'strYearEnd':this.tuition[i].term.strYearEnd,
-                                'enumSem':this.tuition[i].term.enumSem,
-                                'term_label':this.tuition[i].term.term_label,
-                                'syid':this.tuition[i].term.intID,
-                                'scholarship_name':'',
-                                'name':'Tuition',
-                                'or_number':'',
-                                'remarks':'',
-                                'amount': amount.toFixed(2),
-                                'added_by': 0,
-                                'is_disabled':0,
-                                'balance': term_balance.toFixed(2),
-                            });
-
-                            for(i in this.tuition[i].scholarship){
-                                var scholarship_amount = 0;
-                                if(this.tuition[i].term.paymentType == 'partial')
-                                    scholarship_amount = this.tuition[i].scholarship_deductions_installment_array[i] * -1;
-                                else
-                                    scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
-                                                        
-                                term_balance += scholarship_amount;
-                                ledger_term.push({
-                                    'strYearStart':this.tuition[i].term.strYearStart,
-                                    'strYearEnd':this.tuition[i].term.strYearEnd,
-                                    'enumSem':this.tuition[i].term.enumSem,
-                                    'term_label':this.tuition[i].term.term_label,
-                                    'syid':this.tuition[i].term.intID,
-                                    'scholarship_name': this.tuition[i].scholarship[i].name,
-                                    'name':'Scholarship',
-                                    'or_number':'',
-                                    'remarks':'',
-                                    'amount': scholarship_amount.toFixed(2),
-                                    'added_by': 0,
-                                    'is_disabled':0,
-                                    'balance': term_balance.toFixed(2),
-                                }); 
-                            
-                            }
-
-                            for(i in this.tuition[i].discount){
-                                var discount_amount = 0;
-                                if(this.tuition[i].term.paymentType == 'partial')
-                                    discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
-                                else
-                                    discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
-                                                        
-                                term_balance += discount_amount;
-                                ledger_term.push({
-                                    'strYearStart':this.tuition[i].term.strYearStart,
-                                    'strYearEnd':this.tuition[i].term.strYearEnd,
-                                    'enumSem':this.tuition[i].term.enumSem,
-                                    'term_label':this.tuition[i].term.term_label,
-                                    'syid':this.tuition[i].term.intID,
-                                    'scholarship_name': this.tuition[i].discount[i].name,
-                                    'name':'Discount',
-                                    'or_number':'',
-                                    'remarks':'',
-                                    'amount': discount_amount.toFixed(2),
-                                    'added_by': 0,
-                                    'is_disabled':0,
-                                    'balance': term_balance.toFixed(2),
-                                }); 
-                            
-                            }
-                            var payments = data.data.data;                                                 
-                            for(i in payments){                                
-                                if(payments[i].status == "Paid"){                                    
-                                    var paid = payments[i].subtotal_order * -1;
-                                    term_balance += paid;
-                                    ledger_term.push({
-                                        'strYearStart':this.tuition[i].term.strYearStart,
-                                        'strYearEnd':this.tuition[i].term.strYearEnd,
-                                        'enumSem':this.tuition[i].term.enumSem,
-                                        'term_label':this.tuition[i].term.term_label,
-                                        'syid':this.tuition[i].term.intID,
-                                        'scholarship_name':'',
-                                        'name': payments[i].description,
-                                        'or_number':payments[i].or_number,
-                                        'remarks': payments[i].remarks,
-                                        'amount': paid.toFixed(2),
-                                        'added_by': 0,
-                                        'is_disabled':0,
-                                        'balance': term_balance.toFixed(2),
-                                    });
-                                }
-                            }
-
-                            this.running_balance += term_balance;   
-                            this.ledger.push({
-                                'ledger_items': ledger_term,
-                                'balance': term_balance.toFixed(2)
-                            });
-                            l++;
-                                                                         
-                        });                    
+                    this.running_balance += this.term_balance;                                       
                 }
 
                 
@@ -383,7 +356,36 @@ new Vue({
 
     },
 
-    methods: {        
+    methods: {      
+        async getPayments: function(tuition){
+            await axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + tuition.term.intID)
+                .then((data) => {
+                    var payments = data.data.data;                                                 
+                    for(i in payments){                                
+                        if(payments[i].status == "Paid"){                                    
+                            var paid = payments[i].subtotal_order * -1;
+                            this.term_balance += paid;
+                            ledger_term.push({
+                                'strYearStart':tuition.term.strYearStart,
+                                'strYearEnd':tuition.term.strYearEnd,
+                                'enumSem':tuition.term.enumSem,
+                                'term_label':tuition.term.term_label,
+                                'syid':tuition.term.intID,
+                                'scholarship_name':'',
+                                'name': payments[i].description,
+                                'or_number':payments[i].or_number,
+                                'remarks': payments[i].remarks,
+                                'amount': paid.toFixed(2),
+                                'added_by': 0,
+                                'is_disabled':0,
+                                'balance': this.term_balance.toFixed(2),
+                            });
+                        }
+                    }
+
+                                                                            
+            });  
+        },
         submitLedgerItem: function(){
             let url = this.base_url + 'finance/submit_ledger_item';                        
             
