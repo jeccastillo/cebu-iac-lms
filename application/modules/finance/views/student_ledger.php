@@ -278,19 +278,19 @@ new Vue({
                 .then((data) => {
                     this.term_balance = 0;
                     this.ledger_term = [];
-                    if(this.tuition[i].term.paymentType == 'partial')
-                        amount = this.tuition[i].ti_before_deductions;
+                    if(tuition.term.paymentType == 'partial')
+                        amount = this.tuition.ti_before_deductions;
                     else
-                        amount = this.tuition[i].total_before_deductions;
+                        amount = tuition.total_before_deductions;
 
                     this.term_balance += amount;
 
                     this.ledger_term.push({
-                        'strYearStart':this.tuition[i].term.strYearStart,
-                        'strYearEnd':this.tuition[i].term.strYearEnd,
-                        'enumSem':this.tuition[i].term.enumSem,
-                        'term_label':this.tuition[i].term.term_label,
-                        'syid':this.tuition[i].term.intID,
+                        'strYearStart':tuition.term.strYearStart,
+                        'strYearEnd':tuition.term.strYearEnd,
+                        'enumSem':tuition.term.enumSem,
+                        'term_label':tuition.term.term_label,
+                        'syid':tuition.term.intID,
                         'scholarship_name':'',
                         'name':'Tuition',
                         'or_number':'',
@@ -301,21 +301,21 @@ new Vue({
                         'balance': this.term_balance.toFixed(2),
                     });
 
-                    for(i in this.tuition[i].scholarship){
+                    for(i in tuition.scholarship){
                         var scholarship_amount = 0;
-                        if(this.tuition[i].term.paymentType == 'partial')
-                            scholarship_amount = this.tuition[i].scholarship_deductions_installment_array[i] * -1;
+                        if(tuition.term.paymentType == 'partial')
+                            scholarship_amount = tuition.scholarship_deductions_installment_array[i] * -1;
                         else
-                            scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
+                            scholarship_amount = tuition.scholarship_deductions_array[i] * -1;
                                                 
                         this.term_balance += scholarship_amount;
                         this.ledger_term.push({
-                            'strYearStart':this.tuition[i].term.strYearStart,
-                            'strYearEnd':this.tuition[i].term.strYearEnd,
-                            'enumSem':this.tuition[i].term.enumSem,
-                            'term_label':this.tuition[i].term.term_label,
-                            'syid':this.tuition[i].term.intID,
-                            'scholarship_name': this.tuition[i].scholarship[i].name,
+                            'strYearStart':tuition.term.strYearStart,
+                            'strYearEnd':tuition.term.strYearEnd,
+                            'enumSem':tuition.term.enumSem,
+                            'term_label':tuition.term.term_label,
+                            'syid':tuition.term.intID,
+                            'scholarship_name': tuition.scholarship[i].name,
                             'name':'Scholarship',
                             'or_number':'',
                             'remarks':'',
@@ -327,21 +327,21 @@ new Vue({
                     
                     }
 
-                    for(i in this.tuition[i].discount){
+                    for(i in tuition.discount){
                         var discount_amount = 0;
-                        if(this.tuition[i].term.paymentType == 'partial')
-                            discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
+                        if(tuition.term.paymentType == 'partial')
+                            discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
                         else
-                            discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
+                            discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;
                                                 
                         this.term_balance += discount_amount;
                         this.ledger_term.push({
-                            'strYearStart':this.tuition[i].term.strYearStart,
-                            'strYearEnd':this.tuition[i].term.strYearEnd,
-                            'enumSem':this.tuition[i].term.enumSem,
-                            'term_label':this.tuition[i].term.term_label,
-                            'syid':this.tuition[i].term.intID,
-                            'scholarship_name': this.tuition[i].discount[i].name,
+                            'strYearStart':tuition.term.strYearStart,
+                            'strYearEnd':tuition.term.strYearEnd,
+                            'enumSem':tuition.term.enumSem,
+                            'term_label':tuition.term.term_label,
+                            'syid':tuition.term.intID,
+                            'scholarship_name': tuition.discount[i].name,
                             'name':'Discount',
                             'or_number':'',
                             'remarks':'',
