@@ -238,6 +238,7 @@ class Finance extends CI_Controller {
                                     ->result_array();
         $tuition = [];
         foreach($registrations as $reg){
+            print_r($reg);
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;                       
             $tuition[] =  $temp;
