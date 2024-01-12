@@ -243,6 +243,7 @@ new Vue({
                 
 
                 for(i in this.tuition){
+                    term_balance = 0;
                     var ledger_term = [];
                     if(this.tuition[i].term.paymentType == 'partial')
                         amount = this.tuition[i].ti_before_deductions;
