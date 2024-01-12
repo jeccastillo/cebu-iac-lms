@@ -105,7 +105,7 @@
                     </table>
                     <table class="table table-bordered table-striped">
                         <tr>                                
-                            <td class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>                            
+                            <td class="text-right">Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</td>                            
                         </tr>
                     </table>
                     <table class="table table-bordered table-striped">
@@ -357,9 +357,7 @@ new Vue({
                     });                    
                 }
 
-
-                this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                
-                this.running_balance = this.running_balance.toFixed(2);
+                
                 for(i in other_temp){
                     if(other_temp[i].is_disabled == 0){
                         this.running_balance_other += Number(other_temp[i].amount);                         
