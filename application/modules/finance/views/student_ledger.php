@@ -263,10 +263,10 @@ new Vue({
                         'name':'Tuition',
                         'or_number':'',
                         'remarks':'',
-                        'amount': amount,
+                        'amount': amount.toFixed(2),
                         'added_by': 0,
                         'is_disabled':0,
-                        'balance': term_balance,
+                        'balance': term_balance.toFixed(2),
                     });
 
                     for(i in this.tuition[i].scholarship){
@@ -287,10 +287,10 @@ new Vue({
                             'name':'Scholarship',
                             'or_number':'',
                             'remarks':'',
-                            'amount': scholarship_amount,
+                            'amount': scholarship_amount.toFixed(2),
                             'added_by': 0,
                             'is_disabled':0,
-                            'balance': term_balance,
+                            'balance': term_balance.toFixed(2),
                         }); 
                     
                     }
@@ -301,8 +301,7 @@ new Vue({
                             discount_amount = this.tuition[i].scholarship_deductions_installment_dc_array[i] * -1;
                         else
                             discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
-                                                
-                        term_balance += discount_amount;
+                                                                        
                         ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
                             'strYearEnd':this.tuition[i].term.strYearEnd,
@@ -313,10 +312,10 @@ new Vue({
                             'name':'Discount',
                             'or_number':'',
                             'remarks':'',
-                            'amount': discount_amount,
+                            'amount': discount_amount.toFixed(2),
                             'added_by': 0,
                             'is_disabled':0,
-                            'balance': term_balance,
+                            'balance': term_balance.toFixed(2),
                         }); 
                     
                     }
@@ -340,10 +339,10 @@ new Vue({
                                         'name': payments[i].description,
                                         'or_number':payments[i].or_number,
                                         'remarks': payments[i].remarks,
-                                        'amount': paid,
+                                        'amount': paid.toFixed(2),
                                         'added_by': 0,
                                         'is_disabled':0,
-                                        'balance': term_balance,
+                                        'balance': term_balance.toFixed(2),
                                     });
                                 }
                             }
