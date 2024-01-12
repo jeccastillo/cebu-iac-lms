@@ -272,7 +272,7 @@ new Vue({
 
     methods: {      
         async getPayments(tuition){
-            await axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + tuition.term.intID)
+            await axios.get(api_url + 'finance/transactions_ledger/' + this.student.slug + '/' + tuition.term.intID)
                 .then((data) => {
                     this.term_balance = 0;
                     this.ledger_term = [];
