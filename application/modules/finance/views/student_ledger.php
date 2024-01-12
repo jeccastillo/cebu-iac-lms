@@ -242,8 +242,8 @@ new Vue({
                 var current_sy_id = 0;
                 var term_balance = 0;
                 var ledger_term = [];
-
-                for(i in this.tuition){                                       
+                var l = 0;
+                while(l < this.tuition.length){                                       
                     
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                         .then((data) => {
@@ -352,7 +352,7 @@ new Vue({
                                 'ledger_items': ledger_term,
                                 'balance': term_balance.toFixed(2)
                             });
-
+                            l++;
                                                                          
                         });                    
                 }
