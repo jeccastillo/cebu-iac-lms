@@ -63,10 +63,13 @@
                 </div>
             </div>
             <div class="box box-primary">
-                <div class="box-header">Tuition</div>
+                <div class="box-header">Ledger</div>
                 <div class="box-body">
                     <table v-for="term in ledger" class="table table-bordered table-striped">
                         <thead>
+                            <tr>
+                                <th colspan="11">Tuition</th>
+                            </tr> 
                             <tr>
                                 <th>School Year</th>
                                 <th>Term/Semester</th>
@@ -96,12 +99,11 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                             </tr>
                             <tr>                                
-                                <td colspan="12" class="text-right">Term Balance:{{ term.balance }}</td>
-                                <td></td>
+                                <td colspan="11" class="text-right">Term Balance:{{ term.balance }}</td>                                
                             </tr>                                      
                         </tbody>                
                     </table>
-                    <table>
+                    <table class="table table-bordered table-striped">
                         <tr>                                
                             <td class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>                            
                         </tr>
@@ -109,7 +111,7 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th colspan="10">Other</th>
+                                <th colspan="12">Other</th>
                             </tr> 
                             <tr>
                                 <th>School Year</th>
