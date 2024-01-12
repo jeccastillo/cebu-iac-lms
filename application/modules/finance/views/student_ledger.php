@@ -243,7 +243,7 @@ new Vue({
                     else
                         amount = this.tuition[i].total_before_deductions;
 
-                    
+                    term_balance += amount;
 
                     this.ledger.push({
                         'strYearStart':this.tuition[i].term.strYearStart,
@@ -258,17 +258,18 @@ new Vue({
                         'amount': amount,
                         'added_by': 0,
                         'is_disabled':0,
-                        'balance': '',
+                        'balance': term_balance,
                     });
                     
-                    term_balance += amount;
+                    
 
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                         .then((data) => {
                             var payments = data.data.data;                                                 
                             for(i in payments){                                
-                                if(payments[i].status == "Paid"){
+                                if(payments[i].status == "Paid"){                                    
                                     var paid = payments[i].subtotal_order * -1;
+                                    term_balance += paid;
                                     this.ledger.push({
                                         'strYearStart':this.tuition[i].term.strYearStart,
                                         'strYearEnd':this.tuition[i].term.strYearEnd,
@@ -282,7 +283,7 @@ new Vue({
                                         'amount': paid,
                                         'added_by': 0,
                                         'is_disabled':0,
-                                        'balance': '',
+                                        'balance': term_balance,
                                     });
                                 }
                             }
