@@ -82,7 +82,7 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in term">                                
+                            <tr v-for="item in term.ledger_items">                                
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
