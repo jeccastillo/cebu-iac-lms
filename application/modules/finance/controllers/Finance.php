@@ -230,7 +230,11 @@ class Finance extends CI_Controller {
             $where_other['syid'] = $sem;
         }
 
-        // $registrations =  $this->db->get_where('tb_mas_registration')
+        $registrations =  $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id))->result_array();
+        $tuition = [];
+        foreach($registrations as $reg){
+            $tuition[] = $this->data_fetcher->getTuition($registration['intStudentID'],$reg['intRegistrationID']);                            
+        }
 
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
@@ -251,6 +255,7 @@ class Finance extends CI_Controller {
             ->result_array();
 
         $data['student'] = $this->data_fetcher->getStudent($id);
+        $data['tuition'] = $tuition;
         $data['user'] = $this->data["user"];
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $sem = $this->data_fetcher->get_active_sem();  
