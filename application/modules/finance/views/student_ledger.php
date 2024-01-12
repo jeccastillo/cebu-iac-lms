@@ -276,6 +276,7 @@ new Vue({
                         else
                             scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
                         
+                        scholarship_amount = scholarship_amount.toFixed(2);
                         term_balance += scholarship_amount;
                         ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
@@ -287,7 +288,7 @@ new Vue({
                             'name':'Scholarship',
                             'or_number':'',
                             'remarks':'',
-                            'amount': scholarship_amount,
+                            'amount': scholarship_amount.toFixed(2),
                             'added_by': 0,
                             'is_disabled':0,
                             'balance': term_balance,
@@ -302,6 +303,7 @@ new Vue({
                         else
                             discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
                         
+                        discount_amount = discount_amount.toFixed(2);
                         term_balance += discount_amount;
                         ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
