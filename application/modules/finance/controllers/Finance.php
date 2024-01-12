@@ -240,7 +240,19 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;            
+            $temp['student_scholarships'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                    ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'scholarship','status' => 'applied'))
+                                    ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                    ->get('tb_mas_student_discount')
+                                     ->result_array();
+
+            $temp['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                        ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','status' => 'applied'))
+                                        ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                        ->get('tb_mas_student_discount')
+                                        ->result_array();    
             $tuition[] =  $temp;
+            
         }
 
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
