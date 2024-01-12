@@ -82,14 +82,9 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in ledger">
-                                <td colspan="2" v-if="finance.special_role != 0">
-                                    <select @change="switchTerm(item.id,$event)" class="form-control" v-model="item.syid">
-                                        <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                                    </select>
-                                </td>
-                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
-                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
+                            <tr v-for="item in ledger">                                
+                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted">{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
@@ -270,7 +265,27 @@ new Vue({
 
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                         .then((data) => {
-                            console.log(data);
+                            var payments = data.data.data;                            
+                            for(i in payments){
+                                if(this.payments[i].status == "Paid"){
+                                    var paid = this.payments[i].subtotal_order * -1;
+                                    this.ledger.push({
+                                        'strYearStart':this.tuition[i].term.strYearStart,
+                                        'strYearEnd':this.tuition[i].term.strYearEnd,
+                                        'enumSem':this.tuition[i].term.enumSem,
+                                        'term_label':this.tuition[i].term.term_label,
+                                        'syid':this.tuition[i].term.intID,
+                                        'scholarship_name':'',
+                                        'name': this.payments[i].description,
+                                        'or_number':this.payments[i].or_number,
+                                        'remarks': this.payments[i].remarks,
+                                        'amount': paid,
+                                        'added_by': 0,
+                                        'is_disabled':0,
+                                        'balance': '',
+                                    });
+                                }
+                            }
                     });
                 }
 
