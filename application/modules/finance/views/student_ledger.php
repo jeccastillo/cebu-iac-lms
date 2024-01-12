@@ -322,13 +322,7 @@ new Vue({
                     }
                     
                     this.getPayments(this.tuition[i]);
-
-                    this.ledger.push({
-                        'ledger_items': this.ledger_term,
-                        'balance': this.term_balance.toFixed(2)
-                    });
-
-                    this.running_balance += this.term_balance;                                       
+                                                          
                 }
 
                 
@@ -381,6 +375,12 @@ new Vue({
                         }
                     }
 
+                    this.ledger.push({
+                        'ledger_items': this.ledger_term,
+                        'balance': this.term_balance.toFixed(2)
+                    });
+
+                    this.running_balance += this.term_balance; 
                                                                             
             });  
         },
