@@ -298,7 +298,7 @@ new Vue({
 
                     this.ledger.push({
                         'ledger_items': ledger_term,
-                        'balance': term_balance;
+                        'balance': term_balance
                     });
 
                     this.running_balance += term_balance;
