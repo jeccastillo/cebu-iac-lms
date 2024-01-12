@@ -35,8 +35,7 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Type</th>
+                                    <th>Date</th>                                    
                                     <th>Particulars</th>
                                     <th>Sem/Term</th>
                                     <th>Amount</th>
@@ -46,13 +45,7 @@
                             </thead>
                             <tbody>
                                 <tr v-if="finance && finance.special_role != 0">                                
-                                    <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
-                                    <td>
-                                        <select class="form-control" required v-model="request.type">
-                                            <option value="tuition">tuition</option>
-                                            <option value="other">other</option>
-                                        </select>
-                                    </td>
+                                    <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>                                   
                                     <td><input type="text" class="form-control" required v-model="request.name"></td>
                                     <td>
                                         <select class="form-control" required v-model="request.syid">
@@ -206,7 +199,7 @@ new Vue({
             name: undefined,
             syid: 0,
             amount: undefined, 
-            type: 'tuition',   
+            type: 'other',   
             remarks: "",        
         }
     },
