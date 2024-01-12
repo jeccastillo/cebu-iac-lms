@@ -346,9 +346,6 @@ new Vue({
                 }
                 this.running_balance_other = this.running_balance_other.toFixed(2);
                 // console.log(data);
-            })
-            .catch((e) => {
-                console.log("error");
             });
 
    
