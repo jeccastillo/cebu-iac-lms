@@ -179,7 +179,8 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
-        ledger: [],               
+        ledger: [],      
+        ledger_term: [],         
         term_balances: [], 
         term_balance: 0,
         tuition: [],
@@ -240,12 +241,11 @@ new Vue({
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
-                var current_sy_id = 0;                
-                var ledger_term = [];                
+                var current_sy_id = 0;                                               
 
                 for(i in this.tuition){
                     this.term_balance = 0;
-                    ledger_term = [];
+                    this.ledger_term = [];
                     if(this.tuition[i].term.paymentType == 'partial')
                         amount = this.tuition[i].ti_before_deductions;
                     else
@@ -253,7 +253,7 @@ new Vue({
 
                     this.term_balance += amount;
 
-                    ledger_term.push({
+                    this.ledger_term.push({
                         'strYearStart':this.tuition[i].term.strYearStart,
                         'strYearEnd':this.tuition[i].term.strYearEnd,
                         'enumSem':this.tuition[i].term.enumSem,
@@ -277,7 +277,7 @@ new Vue({
                             scholarship_amount = this.tuition[i].scholarship_deductions_array[i] * -1;
                                                 
                         this.term_balance += scholarship_amount;
-                        ledger_term.push({
+                        this.ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
                             'strYearEnd':this.tuition[i].term.strYearEnd,
                             'enumSem':this.tuition[i].term.enumSem,
@@ -303,7 +303,7 @@ new Vue({
                             discount_amount = this.tuition[i].scholarship_deductions_dc_array[i] * -1;
                                                 
                         this.term_balance += discount_amount;
-                        ledger_term.push({
+                        this.ledger_term.push({
                             'strYearStart':this.tuition[i].term.strYearStart,
                             'strYearEnd':this.tuition[i].term.strYearEnd,
                             'enumSem':this.tuition[i].term.enumSem,
@@ -322,9 +322,9 @@ new Vue({
                     }
                     
                     this.getPayments(this.tuition[i]);
-                    
+
                     this.ledger.push({
-                        'ledger_items': ledger_term,
+                        'ledger_items': this.ledger_term,
                         'balance': this.term_balance.toFixed(2)
                     });
 
@@ -363,7 +363,7 @@ new Vue({
                         if(payments[i].status == "Paid"){                                    
                             var paid = payments[i].subtotal_order * -1;
                             this.term_balance += paid;
-                            ledger_term.push({
+                            this.ledger_term.push({
                                 'strYearStart':tuition.term.strYearStart,
                                 'strYearEnd':tuition.term.strYearEnd,
                                 'enumSem':tuition.term.enumSem,
