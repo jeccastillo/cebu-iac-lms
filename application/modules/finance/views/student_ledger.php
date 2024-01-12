@@ -99,7 +99,7 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                             </tr>
                             <tr>                                
-                                <td colspan="11" class="text-right">Term Balance:{{ term.balance }}</td>                                
+                                <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
                             </tr>                                      
                         </tbody>                
                     </table>
@@ -298,7 +298,7 @@ new Vue({
 
                             this.ledger.push({
                                 'ledger_items': ledger_term,
-                                'balance': term_balance
+                                'balance': term_balance.toFixed(2)
                             });
 
                             this.running_balance += term_balance;                            
