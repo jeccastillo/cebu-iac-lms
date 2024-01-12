@@ -321,7 +321,7 @@ new Vue({
                     
                     }
                     
-                    
+                    this.running_balance += term_balance;   
 
                     // axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
                     //     .then((data) => {
@@ -353,7 +353,7 @@ new Vue({
                     //             'balance': term_balance.toFixed(2)
                     //         });
 
-                    //         this.running_balance += term_balance;                                                        
+                                                                         
                     // });                    
                 }
 
