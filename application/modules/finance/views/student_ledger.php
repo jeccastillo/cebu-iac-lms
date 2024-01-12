@@ -323,38 +323,38 @@ new Vue({
                     
                     
 
-                    axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
-                        .then((data) => {
-                            var payments = data.data.data;                                                 
-                            for(i in payments){                                
-                                if(payments[i].status == "Paid"){                                    
-                                    var paid = payments[i].subtotal_order * -1;
-                                    term_balance += paid;
-                                    ledger_term.push({
-                                        'strYearStart':this.tuition[i].term.strYearStart,
-                                        'strYearEnd':this.tuition[i].term.strYearEnd,
-                                        'enumSem':this.tuition[i].term.enumSem,
-                                        'term_label':this.tuition[i].term.term_label,
-                                        'syid':this.tuition[i].term.intID,
-                                        'scholarship_name':'',
-                                        'name': payments[i].description,
-                                        'or_number':payments[i].or_number,
-                                        'remarks': payments[i].remarks,
-                                        'amount': paid.toFixed(2),
-                                        'added_by': 0,
-                                        'is_disabled':0,
-                                        'balance': term_balance.toFixed(2),
-                                    });
-                                }
-                            }
+                    // axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.tuition[i].term.intID)
+                    //     .then((data) => {
+                    //         var payments = data.data.data;                                                 
+                    //         for(i in payments){                                
+                    //             if(payments[i].status == "Paid"){                                    
+                    //                 var paid = payments[i].subtotal_order * -1;
+                    //                 term_balance += paid;
+                    //                 ledger_term.push({
+                    //                     'strYearStart':this.tuition[i].term.strYearStart,
+                    //                     'strYearEnd':this.tuition[i].term.strYearEnd,
+                    //                     'enumSem':this.tuition[i].term.enumSem,
+                    //                     'term_label':this.tuition[i].term.term_label,
+                    //                     'syid':this.tuition[i].term.intID,
+                    //                     'scholarship_name':'',
+                    //                     'name': payments[i].description,
+                    //                     'or_number':payments[i].or_number,
+                    //                     'remarks': payments[i].remarks,
+                    //                     'amount': paid.toFixed(2),
+                    //                     'added_by': 0,
+                    //                     'is_disabled':0,
+                    //                     'balance': term_balance.toFixed(2),
+                    //                 });
+                    //             }
+                    //         }
 
-                            this.ledger.push({
-                                'ledger_items': ledger_term,
-                                'balance': term_balance.toFixed(2)
-                            });
+                    //         this.ledger.push({
+                    //             'ledger_items': ledger_term,
+                    //             'balance': term_balance.toFixed(2)
+                    //         });
 
-                            this.running_balance += term_balance;                                                        
-                    });                    
+                    //         this.running_balance += term_balance;                                                        
+                    // });                    
                 }
 
                 
