@@ -230,6 +230,8 @@ class Finance extends CI_Controller {
             $where_other['syid'] = $sem;
         }
 
+        // $registrations =  $this->db->get_where('tb_mas_registration')
+
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
