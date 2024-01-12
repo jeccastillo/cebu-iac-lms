@@ -251,7 +251,7 @@ new Vue({
 
                     term_balance += amount;
 
-                    this.ledger_term.push({
+                    ledger_term.push({
                         'strYearStart':this.tuition[i].term.strYearStart,
                         'strYearEnd':this.tuition[i].term.strYearEnd,
                         'enumSem':this.tuition[i].term.enumSem,
@@ -276,7 +276,7 @@ new Vue({
                                 if(payments[i].status == "Paid"){                                    
                                     var paid = payments[i].subtotal_order * -1;
                                     term_balance += paid;
-                                    this.ledger_term.push({
+                                    ledger_term.push({
                                         'strYearStart':this.tuition[i].term.strYearStart,
                                         'strYearEnd':this.tuition[i].term.strYearEnd,
                                         'enumSem':this.tuition[i].term.enumSem,
