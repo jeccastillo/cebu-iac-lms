@@ -65,7 +65,7 @@
             <div class="box box-primary">
                 <div class="box-header">Tuition</div>
                 <div class="box-body">
-                    <table class="table table-bordered table-striped">
+                    <table v-for="term in ledger" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>School Year</th>
@@ -82,7 +82,7 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in ledger">                                
+                            <tr v-for="item in term">                                
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
@@ -96,13 +96,19 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                             </tr>
                             <tr>                                
-                                <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
+                                <td colspan="12" class="text-right">Term Balance:{{ term.balance }}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th colspan="10">Other</th>
                             </tr>           
                         </tbody>                
+                    </table>
+                    <table>
+                        <tr>                                
+                            <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
+                            <td></td>
+                        </tr>
                     </table>
                     <table class="table table-bordered table-striped">
                         <thead>
