@@ -62,8 +62,8 @@
                         <div class="form-group col-xs-4">
                             <label for="locked">Account Status</label>
                             <select class="form-control" name="locked" >
-                                <option <?php echo ($student['locked'] == 0)?'selected':''; ?> value="active">Active</option>
-                                <option <?php echo ($student['locked'] == 1)?'selected':''; ?> value="loa">Inactive</option>                                
+                                <option <?php echo ($student['locked'] == 0)?'selected':''; ?> value="0">Active</option>
+                                <option <?php echo ($student['locked'] == 1)?'selected':''; ?> value="1">Inactive</option>                                
                             </select>                        
                         </div>
                     </div>

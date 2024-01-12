@@ -233,7 +233,9 @@ class Finance extends CI_Controller {
         $registrations =  $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id))->result_array();
         $tuition = [];
         foreach($registrations as $reg){
-            $tuition[] = $this->data_fetcher->getTuition($id,$reg['intAYID']);                            
+            $temp = $this->data_fetcher->getTuition($id,$reg['intAYID']);                            
+            $temp['term_id'] = $reg['intAYID'];
+            $tuition[] =  $temp;
         }
 
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
