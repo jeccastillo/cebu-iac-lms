@@ -85,9 +85,7 @@
                                 <th>Assessment</th>
                                 <th>Payment</th>
                                 <th>Balance</th>
-                                <th>Added/Changed By</th>                                
-                                <th>Switch to Other</th>
-                                <th>Disable</th>
+                                <th>Added/Changed By</th>                                                                                  
                             </tr>
                         </thead>
                         <tbody>                                                         
@@ -107,13 +105,7 @@
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ item.balance }}</td>
-                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                                <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
-                                <td v-if="finance && finance.special_role != 0">
-                                    <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
-                                    <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
-                                </td>
-                                <td v-else></td>
+                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                             </tr>
                             <tr>                                
                                 <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
@@ -267,10 +259,11 @@ new Vue({
                         'or_number':'',
                         'remarks':'',
                         'amount': amount,
-                        'added_by': 'System Generated',
+                        'added_by': 0,
+                        'is_disabled':0,
                     });
                 }
-                
+
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
