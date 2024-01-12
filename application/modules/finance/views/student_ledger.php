@@ -350,7 +350,8 @@ new Vue({
                         }); 
                     
                     }
-                    var payments = data.data.data;                                                 
+                    var payments = data.data.data;   
+                    var reservation = data.data.reservation;                                              
                     for(i in payments){                                
                         if(payments[i].status == "Paid"){                                    
                             var paid = payments[i].subtotal_order * -1;
@@ -365,6 +366,28 @@ new Vue({
                                 'name': payments[i].description,
                                 'or_number':payments[i].or_number,
                                 'remarks': payments[i].remarks,
+                                'amount': paid.toFixed(2),
+                                'added_by': 0,
+                                'is_disabled':0,
+                                'balance': this.term_balance.toFixed(2),
+                            });
+                        }
+                    }
+
+                    for(i in reservation){                                
+                        if(reservation[i].status == "Paid"){                                    
+                            var paid = reservation[i].subtotal_order * -1;
+                            this.term_balance += paid;
+                            this.ledger_term.push({
+                                'strYearStart':tuition.term.strYearStart,
+                                'strYearEnd':tuition.term.strYearEnd,
+                                'enumSem':tuition.term.enumSem,
+                                'term_label':tuition.term.term_label,
+                                'syid':tuition.term.intID,
+                                'scholarship_name':'',
+                                'name': reservation[i].description,
+                                'or_number':reservation[i].or_number,
+                                'remarks': reservation[i].remarks,
                                 'amount': paid.toFixed(2),
                                 'added_by': 0,
                                 'is_disabled':0,
