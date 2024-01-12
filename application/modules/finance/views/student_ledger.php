@@ -263,7 +263,7 @@ new Vue({
                         'amount': amount,
                         'added_by': 0,
                         'is_disabled':0,
-                        'balance': 
+                        'balance': '',
                     });
                     
                     term_balance += amount;
