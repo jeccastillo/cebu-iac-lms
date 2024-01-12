@@ -122,8 +122,7 @@ class Portal extends CI_Controller {
             ->result_array();
 
         $data['student'] = $this->data_fetcher->getStudent($id);
-        $data['tuition'] = $tuition;
-        $data['user'] = $this->data["user"];
+        $data['tuition'] = $tuition;        
         
         $data['ledger_group_term'] = $this->db->select('tb_mas_sy.*')        
             ->from('tb_mas_student_ledger')
