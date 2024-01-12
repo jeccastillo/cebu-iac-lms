@@ -194,6 +194,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],       
         term_balances: [], 
+        tuition: [],
         other: [],
         finance: undefined, 
         student: {
@@ -224,6 +225,7 @@ new Vue({
         var day = now.getDate();
         var hour = now.getHours();
         var minute = now.getMinutes();
+        var amount = 0;
         var localDatetime =
         year +
         '-' +
@@ -244,9 +246,31 @@ new Vue({
             })
 
             .then((data) => {
-                ledger_temp = data.data.ledger;
+                ledger_temp = [];                
                 other_temp = data.data.other;
                 this.finance = data.data.user;
+                this.tuition = data.data.tuition;
+                for(i in this.tuition){
+                    if(this.tuition[i].term.paymentType == 'partial')
+                        amount = this.tuition[i].ti_before_deductions;
+                    else
+                        amount = this.tuition[i].total_before_deductions;
+
+                    ledger_temp.push({
+                        'strYearStart':this.tuition[i].term.strYearStart,
+                        'strYearEnd':this.tuition[i].term.strYearEnd,
+                        'enumSem':this.tuition[i].term.enumSem,
+                        'term_label':this.tuition[i].term.term_label,
+                        'syid':this.tuition[i].term.intID,
+                        'scholarship_name':'',
+                        'name':'Tuition',
+                        'or_number':'',
+                        'remarks':'',
+                        'amount': amount,
+                        'added_by': 'System Generated',
+                    });
+                }
+                
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  

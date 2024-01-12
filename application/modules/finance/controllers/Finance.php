@@ -230,11 +230,16 @@ class Finance extends CI_Controller {
             $where_other['syid'] = $sem;
         }
 
-        $registrations =  $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id))->result_array();
+        $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
+                                    ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                                    ->where(array('intStudentID'=>$id))
+                                    ->order_by("strYearStart asc, enumSem asc")
+                                    ->get('tb_mas_registration')
+                                    ->result_array();
         $tuition = [];
         foreach($registrations as $reg){
-            $temp = $this->data_fetcher->getTuition($id,$reg['intAYID']);                            
-            $temp['term_id'] = $reg['intAYID'];
+            $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
+            $temp['term'] = $reg;            
             $tuition[] =  $temp;
         }
 
