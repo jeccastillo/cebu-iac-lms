@@ -334,8 +334,8 @@ new Vue({
 
                     for(i in tuition.ledger){
                                                 
-                        this.term_balance += tuiton.ledger[i].amount;
-                        this.ledger_term.push(tuiton.ledger[i]); 
+                        this.term_balance += tuition.ledger[i].amount;
+                        this.ledger_term.push(tuition.ledger[i]); 
                     
                     }
 
