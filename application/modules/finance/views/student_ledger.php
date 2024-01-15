@@ -38,6 +38,7 @@
                                     <th>Date</th>                                    
                                     <th>Particulars</th>
                                     <th>Sem/Term</th>
+                                    <th>Type</th>
                                     <th>Amount</th>
                                     <th>Remarks</th>
                                     <th>Submit</th>
@@ -50,6 +51,12 @@
                                     <td>
                                         <select class="form-control" required v-model="request.syid">
                                             <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" required v-model="request.type">
+                                            <option value="tuition">Tuition</option>
+                                            <option value="other">Other</option>
                                         </select>
                                     </td>
                                     <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
@@ -203,7 +210,7 @@ new Vue({
             name: undefined,
             syid: 0,
             amount: undefined, 
-            type: 'other',   
+            type: 'tuition',   
             remarks: "",        
         }
     },

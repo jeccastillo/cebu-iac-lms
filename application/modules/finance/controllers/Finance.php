@@ -225,8 +225,7 @@ class Finance extends CI_Controller {
         $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');
         $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
 
-        if($sem != 0){
-            $where_tuition['syid'] = $sem;
+        if($sem != 0){            
             $where_other['syid'] = $sem;
         }
 
@@ -240,21 +239,25 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;                       
+            
+
+            $temp['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
+            ->where('syid',$reg['intID'])        
+            ->order_by("strYearStart asc, enumSem asc")
+            ->get()
+            ->result_array();
+
             $tuition[] =  $temp;
             
         }
 
-        $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
-                    ->from('tb_mas_student_ledger')
-                    ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-                    ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
-                    ->where($where_tuition)        
-                    ->order_by("strYearStart asc, enumSem asc")
-                    ->get()
-                    ->result_array();
+        
 
-        $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+        $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
             ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
@@ -410,25 +413,6 @@ class Finance extends CI_Controller {
 
         if(isset($post['registration_id'])){
             
-            $ledger['student_id'] = $post['student_id'];
-            $ledger['name'] = $post['description'];
-
-            if($post['description'] == "Tuition Fee")
-            {
-                $desc = explode(" ",$post['description']);
-                $ledger['type'] = strtolower($desc[0]);
-            }
-            else{
-                $ledger['type'] = "other";
-            }
-            
-            $ledger['amount'] = -1 * $post['total_amount'];
-            $ledger['date'] = date("Y-m-d H:i:s");
-            $update = [];
-            $ledger['syid'] = $sem['intID'];
-            $ledger['or_number'] = $current_or;
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);            
-            
 
             if($post['description_other'] == "full"){                                
                 $update['fullpayment'] = 1;
@@ -463,13 +447,6 @@ class Finance extends CI_Controller {
                     $amount = $tuition_data['total_before_deductions'];
                 else
                     $amount = $tuition_data['ti_before_deductions'];
-        
-                $ledger['student_id'] = $registration['intStudentID'];
-                $ledger['name'] = "tuition";
-                $ledger['amount'] = $amount;
-                $ledger['date'] = date("Y-m-d H:i:s");
-                $ledger['syid'] = $sem['intID'];
-                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
             
             }
 
@@ -805,14 +782,6 @@ class Finance extends CI_Controller {
                     $amount = ($tuition['total'] * ($post['discount']/100));
             }
 
-            $ledger['student_id'] = $reg['intStudentID'];
-            $ledger['name'] = $post['name'];
-            $ledger['amount'] = -1 * $amount;
-            $ledger['date'] = date("Y-m-d H:i:s");
-            $ledger['syid'] = $sem['intID'];
-            $ledger['added_by'] =  $this->session->userdata('intID');
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-
             $data['message'] = "Successfully Added Discount";
             $data['success'] = true;
         }
@@ -847,15 +816,7 @@ class Finance extends CI_Controller {
                     $amount = $tuition['total_installment'] * ($discount['discount']/100);
                 else
                     $amount = $tuition['total'] * ($discount['discount']/100);
-            }
-
-            $ledger['student_id'] = $reg['intStudentID'];
-            $ledger['name'] = "Removed Discount:".$discount['name'];
-            $ledger['amount'] = $amount;
-            $ledger['date'] = date("Y-m-d H:i:s");
-            $ledger['syid'] = $sem['intID'];
-            $ledger['added_by'] =  $this->session->userdata('intID');
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);            
+            }          
 
             $this->db->where(array('id'=>$post['id']))            
             ->delete('tb_mas_registration_discount');
