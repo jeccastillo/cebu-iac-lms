@@ -86,7 +86,7 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        <button v-if="reg_status == 'Enrolled'" data-toggle="modal" data-target="#withdrawStudentModal" class="btn btn-danger btn-lg">
+                        <button v-if="reg_status == 'Enrolled' || reg_status == 'Registered'" data-toggle="modal" data-target="#withdrawStudentModal" class="btn btn-danger btn-lg">
                                 Withdraw
                         </button>
                         <a target="_blank" :href="base_url + 'pdf/adjustments/'+ id + '/' + sem" v-if="reg_status == 'Enrolled'" class="btn btn-primary btn-lg">

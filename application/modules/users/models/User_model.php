@@ -64,7 +64,7 @@
         public function authenticate_student($username,$password,$table)
 		{
            
-            $sql = "SELECT * FROM ".$table." WHERE  REPLACE(strStudentNumber, '-', '') = '".$username."'";
+            $sql = "SELECT * FROM ".$table." WHERE  REPLACE(strStudentNumber, '-', '') = '".$username."' AND locked = 0";
 			
 			$user = $this->db->query($sql)->result_array();
 			
@@ -72,7 +72,7 @@
             
 			if(empty($user))
 			{
-				$sql = "SELECT * FROM ".$table." WHERE  strEmail = '".$username."'";
+				$sql = "SELECT * FROM ".$table." WHERE  strEmail = '".$username."' AND locked = 0";
 				$user = $this->db->query($sql)->result_array();
 				if(empty($user))
 					return false;

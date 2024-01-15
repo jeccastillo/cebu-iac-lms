@@ -78,36 +78,40 @@ class Portal extends CI_Controller {
 	}
 
     public function student_ledger_data($id,$sem){
-                
+        
         $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');
         $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
-        $data['student'] = $this->data_fetcher->getStudent($id);
-        $student_type = get_stype($data['student']['level']);
-        $where_tuition['term_student_type'] =  $student_type;
 
         if($sem != 0){
             $where_tuition['syid'] = $sem;
             $where_other['syid'] = $sem;
         }
 
+        $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
+                                    ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                                    ->where(array('intStudentID'=>$id))
+                                    ->order_by("strYearStart asc, enumSem asc")
+                                    ->get('tb_mas_registration')
+                                    ->result_array();
+        $tuition = [];
+        foreach($registrations as $reg){            
+            $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
+            $temp['term'] = $reg;                       
+            $tuition[] =  $temp;
+            
+        }
+
         $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
                     ->from('tb_mas_student_ledger')
                     ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
                     ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
                     ->where($where_tuition)        
+                    ->order_by("strYearStart asc, enumSem asc")
                     ->get()
                     ->result_array();
 
-        $data['ledger_group_term'] = $this->db->select('tb_mas_sy.*')        
-                    ->from('tb_mas_student_ledger')
-                    ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-                    ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-                    ->where($where_tuition)        
-                    ->group_by('tb_mas_sy.intID')
-                    ->get()
-                    ->result_array();
+        
 
         $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
@@ -117,13 +121,18 @@ class Portal extends CI_Controller {
             ->get()
             ->result_array();
 
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        $data['tuition'] = $tuition;        
         
-
-        
-                
-        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $sem = $this->data_fetcher->get_active_sem();  
-        $data['active_sem'] = $sem['intID'];
+        $data['ledger_group_term'] = $this->db->select('tb_mas_sy.*')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+            ->where($where_tuition)        
+            ->group_by('tb_mas_sy.intID')
+            ->get()
+            ->result_array();
 
         echo json_encode($data);
     }

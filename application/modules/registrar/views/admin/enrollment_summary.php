@@ -30,6 +30,7 @@
                     <th>Foreign</th>
                     <th>Second Degree</th>
                     <th>Continuing</th>
+                    <th>Shiftee</th>
                     <th>Total</th>
                 </tr>
                 <tr v-for="item in enrolled">
@@ -52,10 +53,14 @@
                         {{ item.enrolled_continuing }}
                     </td>
                     <td>
-                        {{ item.enrolled_freshman + item.enrolled_transferee + item.enrolled_foreign + item.enrolled_second + item.enrolled_continuing }}
+                        {{ item.enrolled_shiftee }}
+                    </td>
+                    <td>
+                        {{ item.enrolled_freshman + item.enrolled_transferee + item.enrolled_foreign + item.enrolled_second + item.enrolled_continuing + item.enrolled_shiftee }}
                     </td>
                 </tr>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -110,7 +115,7 @@ new Vue({
                     this.sy = data.data.sy;
                     this.enrolled = data.data.data;
                     for(i in this.enrolled){
-                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee + this.enrolled[i].enrolled_continuing;
+                        this.all_enrolled +=  this.enrolled[i].enrolled_freshman + this.enrolled[i].enrolled_foreign + this.enrolled[i].enrolled_second + this.enrolled[i].enrolled_transferee + this.enrolled[i].enrolled_continuing + this.enrolled[i].enrolled_shiftee;
                     }
                    
                 })

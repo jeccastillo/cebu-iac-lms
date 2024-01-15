@@ -993,8 +993,8 @@ class Data_fetcher extends CI_Model {
         $slots = $this->db
                 ->select('tb_mas_classlist_student.intCSID')                                
                 ->from('tb_mas_classlist_student')
-                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                ->where(array('intClassListID'=>$classlist_id))
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                                
+                ->where(array('intClassListID'=>$classlist_id,'tb_mas_registration.intAYID'=>$classlist['strAcademicYear']))
                 ->get()
                 ->num_rows();
 
@@ -1016,7 +1016,7 @@ class Data_fetcher extends CI_Model {
                 ->select('tb_mas_classlist_student.intCSID')                                
                 ->from('tb_mas_classlist_student')
                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                ->where(array('intClassListID'=>$classlist['intID']))
+                ->where(array('intClassListID'=>$classlist['intID'],'tb_mas_registration.intAYID'=>$sem))
                 ->get()
                 ->num_rows();
 
@@ -1110,24 +1110,31 @@ class Data_fetcher extends CI_Model {
         if($type!=0){
             switch($type){
                 case 1:
-                    $this->db->where('tb_mas_users.student_type',"freshman");
+                    $this->db->where('tb_mas_users.student_type',"freshman");                    
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                 break;
                 case 2:
                     $this->db->where('tb_mas_users.student_type',"transferee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                 break;
                 case 3:
                     $this->db->where('tb_mas_users.student_type',"foreign");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                 break;
                 case 4:
                     $this->db->where('tb_mas_users.student_type',"second degree");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                 break;
                 case 5:
                     $this->db->where('tb_mas_registration.enumStudentType',"continuing");
-                break;                        
+                break; 
+                case 6:
+                    $this->db->where('tb_mas_registration.enumStudentType',"shiftee");
+                break;                       
 
             }
         }

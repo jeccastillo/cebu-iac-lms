@@ -3467,6 +3467,7 @@ class Excel extends CI_Controller {
             $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,3));
             $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,4));
             $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,5));
+            $program['enrolled_shiftee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,2,$sem,6));
              
             $enrollment[] = $program; 
         }
@@ -3499,7 +3500,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1', $title);
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1');
 
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A3', 'Program')
@@ -3508,7 +3509,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('D3', 'Foreign')
                     ->setCellValue('E3', 'Second Degree')
                     ->setCellValue('F3', 'Continuing')
-                    ->setCellValue('G3', 'Total');
+                    ->setCellValue('G3', 'Shiftee')
+                    ->setCellValue('H3', 'Total');
                             
         $i = 4;
 
@@ -3516,7 +3518,7 @@ class Excel extends CI_Controller {
         
         foreach($enrollment as $item){
             $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-            $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'];
+            $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'];
                     
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, trim($item['strProgramDescription']))
@@ -3525,7 +3527,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, $item['enrolled_foreign'])
                     ->setCellValue('E'.$i, $item['enrolled_second'])
                     ->setCellValue('F'.$i, $item['enrolled_continuing'])
-                    ->setCellValue('G'.$i, '=SUM(B'.$i.':F'.$i.')');                                                
+                    ->setCellValue('G'.$i, $item['enrolled_shiftee'])
+                    ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
                              
         
             $i++;
@@ -3533,11 +3536,11 @@ class Excel extends CI_Controller {
         }
 
         $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('F'.$i, "TOTAL")
-                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')');                    
+                    ->setCellValue('G'.$i, "TOTAL")
+                    ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');                    
         
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('G'.$i)->getFont()->setBold( true );                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:G3')->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -3546,6 +3549,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         
                 
          

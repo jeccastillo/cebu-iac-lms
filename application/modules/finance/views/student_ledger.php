@@ -35,8 +35,7 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Type</th>
+                                    <th>Date</th>                                    
                                     <th>Particulars</th>
                                     <th>Sem/Term</th>
                                     <th>Amount</th>
@@ -46,13 +45,7 @@
                             </thead>
                             <tbody>
                                 <tr v-if="finance && finance.special_role != 0">                                
-                                    <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>
-                                    <td>
-                                        <select class="form-control" required v-model="request.type">
-                                            <option value="tuition">tuition</option>
-                                            <option value="other">other</option>
-                                        </select>
-                                    </td>
+                                    <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>                                   
                                     <td><input type="text" class="form-control" required v-model="request.name"></td>
                                     <td>
                                         <select class="form-control" required v-model="request.syid">
@@ -70,10 +63,13 @@
                 </div>
             </div>
             <div class="box box-primary">
-                <div class="box-header">Tuition</div>
+                <div class="box-header">Ledger</div>
                 <div class="box-body">
-                    <table class="table table-bordered table-striped">
+                    <table v-for="term in ledger" class="table table-bordered table-striped">
                         <thead>
+                            <tr>
+                                <th colspan="11">Tuition</th>
+                            </tr> 
                             <tr>
                                 <th>School Year</th>
                                 <th>Term/Semester</th>
@@ -85,20 +81,13 @@
                                 <th>Assessment</th>
                                 <th>Payment</th>
                                 <th>Balance</th>
-                                <th>Added/Changed By</th>                                
-                                <th>Switch to Other</th>
-                                <th>Disable</th>
+                                <th>Added/Changed By</th>                                                                                  
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in ledger">
-                                <td colspan="2" v-if="finance.special_role != 0">
-                                    <select @change="switchTerm(item.id,$event)" class="form-control" v-model="item.syid">
-                                        <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                                    </select>
-                                </td>
-                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
-                                <td v-if="finance.special_role == 0" :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
+                            <tr v-for="item in term.ledger_items">                                
+                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted">{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
@@ -107,25 +96,23 @@
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ item.balance }}</td>
-                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                                <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
-                                <td v-if="finance && finance.special_role != 0">
-                                    <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
-                                    <button v-else class="btn btn-danger" @click="changeLedgerItemStatus(1,item.id)">Disable</button>
-                                </td>
-                                <td v-else></td>
+                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                             </tr>
                             <tr>                                
-                                <td colspan="12" class="text-right">Grand Total Balance/Refund:{{ running_balance }}</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th colspan="10">Other</th>
-                            </tr>           
+                                <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
+                            </tr>                                      
                         </tbody>                
                     </table>
                     <table class="table table-bordered table-striped">
+                        <tr>                                
+                            <td class="text-right">Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</td>                            
+                        </tr>
+                    </table>
+                    <table class="table table-bordered table-striped">
                         <thead>
+                            <tr>
+                                <th colspan="12">Other</th>
+                            </tr> 
                             <tr>
                                 <th>School Year</th>
                                 <th>Term/Semester</th>                                
@@ -192,8 +179,11 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
-        ledger: [],       
+        ledger: [],      
+        ledger_term: [],         
         term_balances: [], 
+        term_balance: 0,
+        tuition: [],
         other: [],
         finance: undefined, 
         student: {
@@ -213,7 +203,7 @@ new Vue({
             name: undefined,
             syid: 0,
             amount: undefined, 
-            type: 'tuition',   
+            type: 'other',   
             remarks: "",        
         }
     },
@@ -224,6 +214,7 @@ new Vue({
         var day = now.getDate();
         var hour = now.getHours();
         var minute = now.getMinutes();
+        var amount = 0;
         var localDatetime =
         year +
         '-' +
@@ -243,38 +234,20 @@ new Vue({
                 },
             })
 
-            .then((data) => {
-                ledger_temp = data.data.ledger;
+            .then((data) => {                          
                 other_temp = data.data.other;
                 this.finance = data.data.user;
+                this.tuition = data.data.tuition;
                 this.student = data.data.student;
                 this.sy = data.data.sy;
                 this.request.syid = data.data.active_sem;  
-                var current_sy_id = 0;
+                var current_sy_id = 0;                                               
 
-                if(ledger_temp.length > 0)
-                    current_sy_id = ledger_temp[0].syid;
-
-                var term_balance = 0;
-                for(i in ledger_temp){
-                    if(ledger_temp[i].syid != current_sy_id){
-                        term_balance = 0;
-                    }
-                    if(ledger_temp[i].is_disabled == 0){
-                        this.running_balance += Number(ledger_temp[i].amount);                         
-                        ledger_temp[i].muted = "";
-                    }
-                    else{
-                        ledger_temp[i].muted = "text-muted";                        
-                    }                    
-                                                                                     
-                    ledger_temp[i]['balance'] =  this.running_balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                    
-                    this.ledger.push(ledger_temp[i]);
-                    current_sy_id = ledger_temp[i].syid;
+                for(i in this.tuition){                                        
+                    this.getPayments(this.tuition[i]);                                                          
                 }
-                this.running_balance = this.running_balance.toFixed(2);
 
+                
                 for(i in other_temp){
                     if(other_temp[i].is_disabled == 0){
                         this.running_balance_other += Number(other_temp[i].amount);                         
@@ -290,9 +263,6 @@ new Vue({
                 }
                 this.running_balance_other = this.running_balance_other.toFixed(2);
                 // console.log(data);
-            })
-            .catch((e) => {
-                console.log("error");
             });
 
    
@@ -300,7 +270,141 @@ new Vue({
 
     },
 
-    methods: {        
+    methods: {      
+        async getPayments(tuition){
+            await axios.get(api_url + 'finance/transactions_ledger/' + this.student.slug + '/' + tuition.term.intID)
+                .then((data) => {
+                    this.term_balance = 0;
+                    this.ledger_term = [];
+                    if(tuition.term.paymentType == 'partial')
+                        amount = tuition.ti_before_deductions;
+                    else
+                        amount = tuition.total_before_deductions;
+
+                    this.term_balance += amount;
+
+                    this.ledger_term.push({
+                        'strYearStart':tuition.term.strYearStart,
+                        'strYearEnd':tuition.term.strYearEnd,
+                        'enumSem':tuition.term.enumSem,
+                        'term_label':tuition.term.term_label,
+                        'syid':tuition.term.intID,
+                        'scholarship_name':'',
+                        'name':'Tuition',
+                        'or_number':'',
+                        'remarks':'',
+                        'amount': amount.toFixed(2),
+                        'added_by': 0,
+                        'is_disabled':0,
+                        'balance': this.term_balance.toFixed(2),
+                    });
+
+                    for(i in tuition.scholarship){
+                        var scholarship_amount = 0;
+                        if(tuition.term.paymentType == 'partial')
+                            scholarship_amount = tuition.scholarship_deductions_installment_array[i] * -1;
+                        else
+                            scholarship_amount = tuition.scholarship_deductions_array[i] * -1;
+                                                
+                        this.term_balance += scholarship_amount;
+                        this.ledger_term.push({
+                            'strYearStart':tuition.term.strYearStart,
+                            'strYearEnd':tuition.term.strYearEnd,
+                            'enumSem':tuition.term.enumSem,
+                            'term_label':tuition.term.term_label,
+                            'syid':tuition.term.intID,
+                            'scholarship_name': tuition.scholarship[i].name,
+                            'name':'Scholarship',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': scholarship_amount.toFixed(2),
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': this.term_balance.toFixed(2),
+                        }); 
+                    
+                    }
+
+                    for(i in tuition.discount){
+                        var discount_amount = 0;
+                        if(tuition.term.paymentType == 'partial')
+                            discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
+                        else
+                            discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;
+                                                
+                        this.term_balance += discount_amount;
+                        this.ledger_term.push({
+                            'strYearStart':tuition.term.strYearStart,
+                            'strYearEnd':tuition.term.strYearEnd,
+                            'enumSem':tuition.term.enumSem,
+                            'term_label':tuition.term.term_label,
+                            'syid':tuition.term.intID,
+                            'scholarship_name': tuition.discount[i].name,
+                            'name':'Discount',
+                            'or_number':'',
+                            'remarks':'',
+                            'amount': discount_amount.toFixed(2),
+                            'added_by': 0,
+                            'is_disabled':0,
+                            'balance': this.term_balance.toFixed(2),
+                        }); 
+                    
+                    }
+                    var payments = data.data.data;   
+                    var reservation = data.data.reservation;                                              
+                    for(i in payments){                                
+                        if(payments[i].status == "Paid"){                                    
+                            var paid = payments[i].subtotal_order * -1;
+                            this.term_balance += paid;
+                            this.ledger_term.push({
+                                'strYearStart':tuition.term.strYearStart,
+                                'strYearEnd':tuition.term.strYearEnd,
+                                'enumSem':tuition.term.enumSem,
+                                'term_label':tuition.term.term_label,
+                                'syid':tuition.term.intID,
+                                'scholarship_name':'',
+                                'name': payments[i].description,
+                                'or_number':payments[i].or_number,
+                                'remarks': payments[i].remarks,
+                                'amount': paid.toFixed(2),
+                                'added_by': 0,
+                                'is_disabled':0,
+                                'balance': this.term_balance.toFixed(2),
+                            });
+                        }
+                    }
+
+                    for(i in reservation){                                
+                        if(reservation[i].status == "Paid"){                                    
+                            var paid = reservation[i].subtotal_order * -1;
+                            this.term_balance += paid;
+                            this.ledger_term.push({
+                                'strYearStart':tuition.term.strYearStart,
+                                'strYearEnd':tuition.term.strYearEnd,
+                                'enumSem':tuition.term.enumSem,
+                                'term_label':tuition.term.term_label,
+                                'syid':tuition.term.intID,
+                                'scholarship_name':'',
+                                'name': reservation[i].description,
+                                'or_number':reservation[i].or_number,
+                                'remarks': reservation[i].remarks,
+                                'amount': paid.toFixed(2),
+                                'added_by': 0,
+                                'is_disabled':0,
+                                'balance': this.term_balance.toFixed(2),
+                            });
+                        }
+                    }
+
+                    this.ledger.push({
+                        'ledger_items': this.ledger_term,
+                        'balance': this.term_balance.toFixed(2)
+                    });
+
+                    this.running_balance += this.term_balance; 
+                                                                            
+            });  
+        },
         submitLedgerItem: function(){
             let url = this.base_url + 'finance/submit_ledger_item';                        
             

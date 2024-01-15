@@ -59,8 +59,15 @@
                             <input type="text" value="<?php echo $student['strLRN']; ?>" name="strLRN"
                                 class="form-control" id="strLRN" placeholder="Enter Learner Reference Number">
                         </div>
-
-
+                        <div class="form-group col-xs-4">
+                            <label for="locked">Account Status</label>
+                            <select class="form-control" name="locked" >
+                                <option <?php echo ($student['locked'] == 0)?'selected':''; ?> value="0">Active</option>
+                                <option <?php echo ($student['locked'] == 1)?'selected':''; ?> value="1">Inactive</option>                                
+                            </select>                        
+                        </div>
+                    </div>
+                    <div class="row">                    
                         <div class="form-group col-xs-6">
                             <label for="strStudentNumber">Portal Password
                                 (<?php echo ($student['strPass']!="")?'has password':'no password'; ?>)</label>
