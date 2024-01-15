@@ -54,7 +54,7 @@
                             <option <?php echo ($postreg == 1)?'selected':''; ?> value="1">regular</option>
                             <option <?php echo ($postreg == 2)?'selected':''; ?> value="2">irregular</option>
                             <option <?php echo ($postreg == 3)?'selected':''; ?> value="3">new student</option>
-                        </select>gi
+                        </select>
                     </div>
                     <div class="col-sm-4">
                         <label for="intYearLevel">By Year Level:</label>
