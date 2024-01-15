@@ -332,6 +332,13 @@ new Vue({
                     
                     }
 
+                    for(i in tuition.ledger){
+                                                
+                        this.term_balance += tuiton.ledger[i].amount;
+                        this.ledger_term.push(tuiton.ledger[i]); 
+                    
+                    }
+
                     for(i in tuition.discount){
                         var discount_amount = 0;
                         if(tuition.term.paymentType == 'partial')
