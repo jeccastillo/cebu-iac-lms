@@ -41,7 +41,7 @@
     );
 
     if($citizenship[$student['strCitizenship']])
-        $student['strCitizenship'] = $citizenship[$student['citizenship']];
+        $student['strCitizenship'] = $citizenship[$student['strCitizenship']];
     
     $pdf->setPrintHeader(false);
     //$pdf->setPrintFooter(true);
