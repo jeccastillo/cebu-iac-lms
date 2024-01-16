@@ -57,6 +57,17 @@
                                                     </div>
                                                 </div>                                                        
                                             </div>
+                                            <div>
+                                                <h5 class="my-3">Maya</h5>
+                                                <hr />  
+                                                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                                    <div style="border:1px solid #000" @click="selectPayment(maya)"
+                                                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                        style="display:flex; align-itenms:center;">
+                                                        <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
+                                                    </div>
+                                                </div>                                                        
+                                            </div>
                                             <hr />
                                             <h5>PAYNAMICS</h5>
                                             <hr />
@@ -249,7 +260,7 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -356,6 +367,12 @@ new Vue({
             name: "BDO PAY",
             pchannel: "bdo_pay",
             pmethod: "onlinebanktransfer",            
+            type: "none"
+        },
+        maya:{
+            charge: 0,
+            id: 100,        
+            name: "maya",
             type: "none"
         },
         request_bdo:{
