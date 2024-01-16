@@ -286,6 +286,20 @@ class Finance extends CI_Controller {
 
     }
 
+    public function delete_ledger_item(){
+        $post =  $this->input->post();        
+        $this->db->where('id',$post['id'])
+                 ->delete('tb_mas_student_ledger');
+
+        //$this->data_poster->log_action('Ledger','Deleted'.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
+
+        $data['success'] =  true;
+        $data['message'] = "Successfully deleted item";
+
+        echo json_encode($data);
+
+    }
+
     public function update_ledger_item(){
         $post =  $this->input->post();        
         
@@ -437,9 +451,7 @@ class Finance extends CI_Controller {
 
                 
                 $tuition_data = $this->data_fetcher->getTuition($registration['intStudentID'],$registration['intAYID']);                            
-                //remove from Ledger
-                    $this->db->where(array('name'=>'tuition','syid'=>$registration['intAYID'],'student_id'=>$registration['intStudentID']))
-                    ->delete('tb_mas_student_ledger');
+               
         
                 $amount = 0;
                 if($post['payment_type'] == "full")
