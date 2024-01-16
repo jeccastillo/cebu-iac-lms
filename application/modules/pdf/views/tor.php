@@ -35,6 +35,13 @@
     
    //font setting
     //$pdf->SetFont('calibril_0', '', 10, '', 'false');
+
+    $citizenship = array(
+        'Philippines' => 'Filipino',
+    );
+
+    if($citizenship[$student['strCitizenship']])
+        $student['strCitizenship'] = $citizenship[$student['citizenship']];
     
     $pdf->setPrintHeader(false);
     //$pdf->setPrintFooter(true);
