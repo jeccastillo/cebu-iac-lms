@@ -220,9 +220,9 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-                                                <p class="p-3">Digital/Scanned of current school ID</p>
+                                                <p class="p-3">School ID for student applicants OR Government ID for 2nd degree applicants</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                    <span class="bg-gray-700 px-2 text-sm font-medium">School ID</span>
+                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Valid ID</span>
                                                 </h2>
                                             </div>
                                         </div>                                        
