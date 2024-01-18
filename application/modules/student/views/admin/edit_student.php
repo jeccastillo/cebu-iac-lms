@@ -88,7 +88,7 @@
                         <div class="form-group col-xs-6">
                             <label for="dteBirthDate">Birthdate</label>
                             <input type="date" name="dteBirthDate"
-                                    value="<?php echo $student['dteBirthDate']; ?>"
+                                    value="<?php echo date('m/d/Y',strtotime($student['dteBirthDate'])); ?>"
                                     class="form-control validate" id="dteBirthDate" />                                                            
                         </div>
                         <div class="form-group col-xs-6">
