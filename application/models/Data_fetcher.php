@@ -3645,6 +3645,7 @@ class Data_fetcher extends CI_Model {
                 ->from('tb_mas_classlist_student')
                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
                 ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->group_by('tb_mas_classlist_student.intCSID')
                 ->get()
                 ->num_rows();
 
