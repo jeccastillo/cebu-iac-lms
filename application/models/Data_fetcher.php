@@ -3581,7 +3581,7 @@ class Data_fetcher extends CI_Model {
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
         ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
         ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
-        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
+        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')        
         ->where($where)
         ->get()
         ->result_array(); 
@@ -3592,6 +3592,7 @@ class Data_fetcher extends CI_Model {
                 ->from('tb_mas_classlist_student')
                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
                 ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->group_by('tb_mas_classlist_student.intCSID')
                 ->get()
                 ->num_rows();
 
@@ -3644,6 +3645,7 @@ class Data_fetcher extends CI_Model {
                 ->from('tb_mas_classlist_student')
                 ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
                 ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->group_by('tb_mas_classlist_student.intCSID')
                 ->get()
                 ->num_rows();
 
