@@ -946,51 +946,6 @@ class Registrar extends CI_Controller {
             $stud['intStudentYear'] = $academic_standing['year']; 
             $this->data_poster->post_data('tb_mas_users',$stud,$post['studentID']);            
 
-            $ledger['student_id'] = $post['studentID'];
-            $ledger['name'] = "tuition";
-            $ledger['amount'] = $post['tuition'];
-            $ledger['date'] = date("Y-m-d H:i:s");
-            $ledger['syid'] = $data['ayid'];
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-
-            if($post['reservation_payment_amount'] > 0){
-                $ledger['student_id'] = $post['studentID'];
-                $ledger['name'] = "reservation";
-                $ledger['amount'] = -1 * $post['reservation_payment_amount'];
-                $ledger['or_number'] = $post['reservation_or_number'];
-                $ledger['date'] = date("Y-m-d H:i:s");
-                $ledger['syid'] = $data['ayid'];
-                $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-            }
-
-            // if($post['scholarship_deductions'] > 0){
-            //     $ledger['student_id'] = $post['studentID'];
-            //     $ledger['name'] = "scholarship deduction";
-            //     $ledger['amount'] = -1 * $post['scholarship_deductions'];                
-            //     $ledger['date'] = date("Y-m-d H:i:s");
-            //     $ledger['syid'] = $data['ayid'];
-            //     $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-            // }
-
-            // if($post['discount_deductions'] > 0){
-            //     $ledger['student_id'] = $post['studentID'];
-            //     $ledger['name'] = "discount deduction";
-            //     $ledger['amount'] = -1 * $post['discount_deductions'];                
-            //     $ledger['date'] = date("Y-m-d H:i:s");
-            //     $ledger['syid'] = $data['ayid'];
-            //     $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-            // }
-
-            // if($post['discount'] > 0){
-            //     $ledger['student_id'] = $post['studentID'];
-            //     $ledger['name'] = "scholarship deduction";
-            //     $ledger['amount'] = -1 * $post['discount'];                
-            //     $ledger['date'] = date("Y-m-d H:i:s");
-            //     $ledger['syid'] = $data['ayid'];
-            //     $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-            // }
-
-            //SEND AND GENERATE PAYMENT FOR TUITION LINK
         }
         else
         {
@@ -1486,14 +1441,7 @@ class Registrar extends CI_Controller {
                 $total = $tuition['total_before_deductions'];
 
             $update['is_disabled'] = 1;
-            $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);
-
-            $ledger['student_id'] = $post['student'];
-            $ledger['name'] = "tuition";
-            $ledger['amount'] = $total;
-            $ledger['date'] = date("Y-m-d H:i:s");
-            $ledger['syid'] = $post['sem'];
-            $this->data_poster->post_data('tb_mas_student_ledger',$ledger);     
+            $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);   
             
             $data['success'] = true;
             $data['message'] = "Success";
@@ -1608,14 +1556,7 @@ class Registrar extends CI_Controller {
 
                 if(!$replace){
                     $update['is_disabled'] = 1;
-                    $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);
-
-                    $ledger['student_id'] = $post['student'];
-                    $ledger['name'] = "tuition";
-                    $ledger['amount'] = $total;
-                    $ledger['date'] = date("Y-m-d H:i:s");
-                    $ledger['syid'] = $post['sem'];
-                    $this->data_poster->post_data('tb_mas_student_ledger',$ledger);                                
+                    $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);                             
                 }
 
         }

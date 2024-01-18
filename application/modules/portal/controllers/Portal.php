@@ -79,11 +79,9 @@ class Portal extends CI_Controller {
 
     public function student_ledger_data($id,$sem){
         
-        $where_tuition = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition');
         $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
 
-        if($sem != 0){
-            $where_tuition['syid'] = $sem;
+        if($sem != 0){            
             $where_other['syid'] = $sem;
         }
 
@@ -96,20 +94,21 @@ class Portal extends CI_Controller {
         $tuition = [];
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
-            $temp['term'] = $reg;                       
+            $temp['term'] = $reg;      
+            
+            $temp['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
+            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID']))        
+            ->order_by("strYearStart asc, enumSem asc")
+            ->get()
+            ->result_array();
+
             $tuition[] =  $temp;
             
         }
-
-        $data['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
-                    ->from('tb_mas_student_ledger')
-                    ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-                    ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                    ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
-                    ->where($where_tuition)        
-                    ->order_by("strYearStart asc, enumSem asc")
-                    ->get()
-                    ->result_array();
 
         
 

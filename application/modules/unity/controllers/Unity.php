@@ -2260,13 +2260,6 @@ class Unity extends CI_Controller {
         else
             $amount = $tuition_data['ti_before_deductions'];
 
-        $ledger['student_id'] = $registration['intStudentID'];
-        $ledger['name'] = "tuition";
-        $ledger['amount'] = $amount;
-        $ledger['date'] = date("Y-m-d H:i:s");
-        $ledger['syid'] = $registration['intAYID'];
-        $this->data_poster->post_data('tb_mas_student_ledger',$ledger);
-
 
         $data['success'] = true;
         echo json_encode($data);

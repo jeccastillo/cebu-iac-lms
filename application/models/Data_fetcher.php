@@ -1085,6 +1085,7 @@ class Data_fetcher extends CI_Model {
             ->join('tb_mas_block_sections','tb_mas_users.blockSection = tb_mas_block_sections.intID','left')
             ->join('tb_mas_curriculum','tb_mas_users.intCurriculumID = tb_mas_curriculum.intID','left')
             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID','left')
+            ->group_by('tb_mas_users.intID')
             ->order_by('strLastname','asc');
         if($registered!=0 && $sem!=0){            
             switch($registered)
