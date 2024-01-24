@@ -38,7 +38,7 @@
                             </select>
                             
                         </div>
-                        <div v-if="registration" style="margin-right:1rem;" class="pull-right">                                                                         
+                        <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>                                
