@@ -123,15 +123,12 @@ class Portal extends CI_Controller {
         $data['student'] = $this->data_fetcher->getStudent($id);
         $data['tuition'] = $tuition;        
         
-        $data['ledger_group_term'] = $this->db->select('tb_mas_sy.*')        
-            ->from('tb_mas_student_ledger')
-            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-            ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID']))             
-            ->group_by('tb_mas_sy.intID')
-            ->get()
-            ->result_array();
+        $data['ledger_group_term'] =$this->db->select('tb_mas_sy.*, paymentType')
+                                        ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                                        ->where(array('intStudentID'=>$id))
+                                        ->order_by("strYearStart asc, enumSem asc")
+                                        ->get('tb_mas_registration')
+                                        ->result_array();
 
         echo json_encode($data);
     }
