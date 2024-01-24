@@ -373,6 +373,7 @@ new Vue({
             charge: 0,
             id: 100,        
             name: "maya",
+            pchannel: "maya",
             type: "none"
         },
         request_bdo:{
