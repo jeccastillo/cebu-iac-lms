@@ -711,7 +711,7 @@ z
 
                     if (data.data.success) {
 
-                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay") {
+                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya") {
                             this.redirect_link = data.data.payment_link;
                             this.loading_spinner = false;
 
