@@ -726,6 +726,12 @@ z
                                 this.$refs.bdo_form.submit();
                             }, 500);                        
                         }
+                        else if(this.selected_mode_of_payment.pchannel == "maya"){                            
+                            this.request_bdo = data.data.post_data;
+                            setTimeout(() => {
+                                console.log(data.data.post_data);
+                            }, 500);                        
+                        }
                         else {
                             Swal.fire({
                                 title: "Payment is Pending",
