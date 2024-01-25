@@ -57,7 +57,7 @@
                                                     </div>
                                                 </div>                                                        
                                             </div>
-                                            <div>
+                                            <!-- <div>
                                                 <h5 class="my-3">Maya</h5>
                                                 <hr />  
                                                 <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -67,7 +67,7 @@
                                                         <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
                                                     </div>
                                                 </div>                                                        
-                                            </div>
+                                            </div> -->
                                             <hr />
                                             <h5>PAYNAMICS</h5>
                                             <hr />

@@ -1729,7 +1729,7 @@ class Registrar extends CI_Controller {
                 }
             }
 
-            $this->db->where(array('date_enlisted >='=>$post['cutoff'],'date_enlisted <='=>$post['cutoff_end'],'intROG'=>"0"))                    
+            $this->db->where(array('date_enlisted >='=>$post['cutoff'],'date_enlisted <='=>$post['cutoff_end'],'intROG'=>0))                    
             ->delete('tb_mas_registration');
 
             $this->data_poster->log_action('Registrar','Cut off Registration for Term: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
