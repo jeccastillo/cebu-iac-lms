@@ -89,7 +89,7 @@
                                 <th>Payment</th>
                                 <th>Balance</th>
                                 <th>Added/Changed By</th>   
-                                <th>Cashier</th> 
+                                <th>Cashier/Appointer</th> 
                                 <th>Actions</th>                                                                              
                             </tr>
                         </thead>
@@ -343,6 +343,7 @@ new Vue({
                             'remarks':'',
                             'amount': scholarship_amount.toFixed(2),
                             'added_by': 0,
+                            'cashier': tuition.scholarship[i].created_by_id,
                             'is_disabled':0,
                             'balance': this.term_balance.toFixed(2),
                         }); 
@@ -377,6 +378,7 @@ new Vue({
                             'amount': discount_amount.toFixed(2),
                             'added_by': 0,
                             'is_disabled':0,
+                            'cashier': tuition.discount[i].created_by_id,
                             'balance': this.term_balance.toFixed(2),
                         }); 
                     
