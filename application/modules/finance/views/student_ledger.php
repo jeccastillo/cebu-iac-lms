@@ -380,6 +380,7 @@ new Vue({
                                 'term_label':tuition.term.term_label,
                                 'syid':tuition.term.intID,
                                 'scholarship_name':'',
+                                'date': payments[i].updated_at,
                                 'name': payments[i].description,
                                 'or_number':payments[i].or_number,
                                 'remarks': payments[i].remarks,
