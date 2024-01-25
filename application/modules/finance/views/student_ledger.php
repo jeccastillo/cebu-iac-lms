@@ -403,6 +403,7 @@ new Vue({
                                 'term_label':tuition.term.term_label,
                                 'syid':tuition.term.intID,
                                 'scholarship_name':'',
+                                'date': payments[i].updated_at,
                                 'name': reservation[i].description,
                                 'or_number':reservation[i].or_number,
                                 'remarks': reservation[i].remarks,
