@@ -288,7 +288,7 @@ new Vue({
             .then((data) => {            
                 var cashier_details = data.data.cashier_data;
                 Swal.fire({
-                    title: "Cashier",
+                    title: "Cashier/Appointer",
                     text: cashier_details.strFirstname+" "+cashier_details.strLastname,
                     icon: "info"
                 })
