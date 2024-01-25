@@ -385,7 +385,7 @@ new Vue({
                                 'or_number':payments[i].or_number,
                                 'remarks': payments[i].remarks,
                                 'amount': paid.toFixed(2),
-                                'added_by': 0,
+                                'added_by': payments[i].cashier_id,
                                 'is_disabled':0,
                                 'balance': this.term_balance.toFixed(2),
                             });
@@ -403,12 +403,12 @@ new Vue({
                                 'term_label':tuition.term.term_label,
                                 'syid':tuition.term.intID,
                                 'scholarship_name':'',
-                                'date': payments[i].updated_at,
+                                'date': reservation[i].updated_at,
                                 'name': reservation[i].description,
                                 'or_number':reservation[i].or_number,
                                 'remarks': reservation[i].remarks,
                                 'amount': paid.toFixed(2),
-                                'added_by': 0,
+                                'added_by': reservation[i].cashier_id,
                                 'is_disabled':0,
                                 'balance': this.term_balance.toFixed(2),
                             });
