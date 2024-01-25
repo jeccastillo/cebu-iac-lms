@@ -75,7 +75,7 @@
                     <table v-for="term in ledger" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th colspan="11">Tuition</th>
+                                <th colspan="13">Tuition</th>
                             </tr> 
                             <tr>
                                 <th>School Year</th>
