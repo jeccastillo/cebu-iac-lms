@@ -2447,6 +2447,8 @@ class Data_fetcher extends CI_Model {
         $total_assessment_installment_temp = 0;
         $total_assessment = 0;
         $total_assessment_installment = 0;
+        $discount_array = [];
+        $scholarship_array = [];
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
@@ -2467,6 +2469,11 @@ class Data_fetcher extends CI_Model {
                 ->result(); 
         }
 
+        foreach($discounts as $disc){
+            $disc['date_applied'] = date('M j, Y h:ia',strtotime($disc['date_applied']));
+            $discount_array[] = $disc;
+        }
+
         if($sch == 0){
             $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','tb_mas_student_discount.status'=>'applied'))
@@ -2480,6 +2487,11 @@ class Data_fetcher extends CI_Model {
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                 ->get('tb_mas_student_discount')
                 ->result(); 
+        }
+
+        foreach($scholarships as $disc){
+            $disc['date_applied'] = date('M j, Y h:ia',strtotime($disc['date_applied']));
+            $scholarship_array[] = $disc;
         }
 
         
@@ -2963,8 +2975,8 @@ class Data_fetcher extends CI_Model {
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
         $data['tuition'] = $tuition - $tuition_scholarship - $tuition_discount;
         $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship - $tuition_discount;
-        $data['scholarship'] = $scholarships;
-        $data['discount'] = $discounts;
+        $data['scholarship'] = $scholarship_array;
+        $data['discount'] = $discount_array;
         $data['total'] = $data['total_before_deductions'] - $scholarship_grand_total - $discount_grand_total;                        
         $data['scholarship_deductions_array'] = $total_scholarship;        
         $data['scholarship_deductions'] = $scholarship_grand_total;        
