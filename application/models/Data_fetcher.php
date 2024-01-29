@@ -2470,7 +2470,7 @@ class Data_fetcher extends CI_Model {
         }
 
         foreach($discounts as $disc){
-            $disc['date_applied'] = date('M j, Y h:ia',strtotime($disc['date_applied']));
+            $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $discount_array[] = $disc;
         }
 
@@ -2490,7 +2490,7 @@ class Data_fetcher extends CI_Model {
         }
 
         foreach($scholarships as $disc){
-            $disc['date_applied'] = date('M j, Y h:ia',strtotime($disc['date_applied']));
+            $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
         }
 
