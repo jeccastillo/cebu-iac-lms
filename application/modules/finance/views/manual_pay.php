@@ -41,7 +41,7 @@
                                     <div v-if="!student.waive_app_fee && student.campus == 'Cebu'" class="col-sm-6">
                                         <div class="form-group">
                                             <label>Deduct referal discount from application fee?</label>
-                                            <select  class="form-control" v-model="application_referal">
+                                            <select @change="selectDescription"  class="form-control" v-model="application_referal">
                                                 <option  value=false>No</option>
                                                 <option  value=true>Yes</option>                                                                                                                              
                                             </select>
