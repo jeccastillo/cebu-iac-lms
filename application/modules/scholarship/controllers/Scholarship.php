@@ -181,6 +181,9 @@ class Scholarship extends CI_Controller {
         $scholarship = $this->db->get_where('tb_mas_scholarships',array('intID'=>$st_scholarship['discount_id']))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('intID'=>$st_scholarship['student_id']))->first_row('array');
         
+        if($post['status'] == "applied")
+            $post['date_applied'] = date("Y-m-d H:i:s");
+
         $deductions = 0;
         //Get deduction amount
         
