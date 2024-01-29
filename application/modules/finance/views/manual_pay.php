@@ -33,8 +33,17 @@
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription" class="form-control" v-model="request.description">
                                                 <option v-if="(application_payment && application_payment.status == 'Paid') || student.waive_app_fee" value="Reservation Payment">Reservation</option>
-                                                <option v-if="!student.waive_app_fee" value="Application Payment">Application</option>
+                                                <option v-if="!student.waive_app_fee" value="Application Payment">Application</option>                                                
                                                 <option value="Other">Other</option>                                
+                                            </select>
+                                        </div>                                                
+                                    </div>
+                                    <div v-if="!student.waive_app_fee && student.campus == 'Cebu'" class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Deduct referal discount from application fee?</label>
+                                            <select  class="form-control" v-model="application_referal">
+                                                <option  value=false>No</option>
+                                                <option  value=true>Yes</option>                                                                                                                              
                                             </select>
                                         </div>                                                
                                     </div>
@@ -313,6 +322,7 @@ new Vue({
         slug: "<?php echo $slug; ?>",
         base_url: "<?php echo base_url(); ?>",   
         applicant_id: undefined,
+        application_referal: false,
         reservation_payment: undefined,
         application_payment: undefined, 
         user: {
@@ -700,8 +710,12 @@ new Vue({
                 this.amount_to_pay = 10000;                
             }
             else if(this.request.description == "Application Payment"){
-                if(this.student.campus == "Cebu")
-                    this.amount_to_pay = 500;            
+                if(this.student.campus == "Cebu"){
+                    if(this.application_referal)
+                        this.amount_to_pay = 300;     
+                    else
+                        this.amount_to_pay = 500;     
+                }       
                 else
                     this.amount_to_pay = 700;            
             }
