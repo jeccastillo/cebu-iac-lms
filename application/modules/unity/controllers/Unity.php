@@ -2270,7 +2270,7 @@ class Unity extends CI_Controller {
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
         $clist_sy_id = $clist['strAcademicYear'];
 
-        $active_sem = $this->data_fetcher->get_active_sem();
+        $active_sem = $this->data_fetcher->get_sem_by_id($clist_sy_id);
         
         
         if($this->is_super_admin())
