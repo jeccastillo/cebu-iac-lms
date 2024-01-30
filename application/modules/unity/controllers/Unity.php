@@ -2278,7 +2278,7 @@ class Unity extends CI_Controller {
         
         $data['active_sem'] = $active_sem;
 
-        if($this->is_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
+        if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {            
             
             $data['classlist'] = $clist;
