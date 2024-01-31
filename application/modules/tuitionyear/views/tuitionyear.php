@@ -242,6 +242,7 @@
                                     <option value="regular">Regular</option>
                                     <option value="nsf">New Student Misc</option>
                                     <option value="new_student">New Student Fees</option>
+                                    <option value="late_tuition">Late Tuition Fee</option>
                                     <option value="thesis">Thesis</option>
                                     <option value="internship">Internship</option>
                                     <option value="nstp">NSTP/ROTC</option>
@@ -249,10 +250,8 @@
                                     <option value="svf">Student Visa Fee</option>                                    
                                     <option value="other">Other</option>                                    
                                 </select>
-                            </div>                            
-                                           
-                        </div>
-                        
+                            </div>                                                                       
+                        </div>                        
                         <div class="row">    
                             <div class="col-sm-6">
                                 <button type="submit" class="btn btn-primary">Submit</button>
