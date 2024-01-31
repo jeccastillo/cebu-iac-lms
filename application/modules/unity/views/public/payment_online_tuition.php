@@ -46,7 +46,7 @@
                                         <div class="col-md-8">          
                                             <h3>Select Mode of Payment</h3>                          
                                             <hr />
-                                            <div>
+                                            <!-- <div>
                                                 <h5 class="my-3">BDO PAY</h5>
                                                 <hr />  
                                                 <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -68,7 +68,7 @@
                                                     </div>
                                                 </div>                                                        
                                             </div>
-                                            <hr />
+                                            <hr /> -->
                                             <h5>PAYNAMICS</h5>
                                             <hr />
                                             <h5 class="my-3">Banks</h5>
