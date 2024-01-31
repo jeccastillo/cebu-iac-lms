@@ -85,8 +85,17 @@ class Faculty extends CI_Controller {
         }
         else
             redirect(base_url()."unity");    
-        
-        
+                
+    }
+
+    public function edit_faculty_data($id){
+
+        $data['faculty'] = $this->data_fetcher->getFaculty($id);
+        $data['subjects'] = $this->data_fetcher->getSubjects();
+        $data['selectedSubjects'] = $this->data_fetcher->getSelectedSubjects($id);
+
+        echo json_encode($data);
+
     }
     
     public function submit_faculty()
