@@ -1744,6 +1744,21 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
 
     }
+    
+    public function leave_of_abscence($id){
+
+        $this->data['id'] =  $id;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/loa",$this->data);
+        $this->load->view("common/footer",$this->data); 
+
+    }
+
+    public function leave_of_abscence_data($id){
+        
+
+    }
 
     public function register_old_student_data($studNum,$sem){
 

@@ -1552,16 +1552,17 @@ class Excel extends CI_Controller {
                     ->setCellValue('B8', 'Student Number')
                     ->setCellValue('C8', 'Student Name')
                     ->setCellValue('D8', 'Section')
-                    ->setCellValue('E8', 'Subject')
-                    ->setCellValue('F8', 'Room')
-                    ->setCellValue('G8', 'Day')
-                    ->setCellValue('H8', 'Time')
-                    ->setCellValue('I8', 'Midterm Grade')
-                    ->setCellValue('J8', 'Final Grade')
-                    ->setCellValue('K8', 'Remarks')
-                    ->setCellValue('L8', 'Professor')
-                    ->setCellValue('M8', 'Date Enrolled')
-                    ->setCellValue('N8', 'Units');
+                    ->setCellValue('E8', 'Units')
+                    ->setCellValue('F8', 'Subject')
+                    ->setCellValue('G8', 'Room')
+                    ->setCellValue('H8', 'Day')
+                    ->setCellValue('I8', 'Time')
+                    ->setCellValue('J8', 'Midterm Grade')
+                    ->setCellValue('K8', 'Final Grade')
+                    ->setCellValue('L8', 'Remarks')
+                    ->setCellValue('M8', 'Professor')
+                    ->setCellValue('N8', 'Date Enrolled');
+                    
                     
         $i = 9;
         $count = 1;
@@ -1581,15 +1582,15 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
                     ->setCellValue('D'.$i, $cl['strClassName'].$cl['year'].$cl['strSection']." ".$cl['sub_section'])
                     ->setCellValue('E'.$i, $cl['strCode'])
-                    ->setCellValue('F'.$i, $cl['sched_room'])
-                    ->setCellValue('G'.$i, $cl['sched_day'])
-                    ->setCellValue('H'.$i, $cl['sched_time'])
-                    ->setCellValue('I'.$i, $cl['v2'])
-                    ->setCellValue('J'.$i, $cl['v3'])
-                    ->setCellValue('K'.$i, $cl['strRemarks'])
-                    ->setCellValue('L'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
-                    ->setCellValue('M'.$i, date("M j, Y",strtotime($student['dteRegistered'])))                                                                                                                                                
-                    ->setCellValue('N'.$i, $cl['strUnits']);
+                    ->setCellValue('F'.$i, $cl['strUnits'])
+                    ->setCellValue('G'.$i, $cl['sched_room'])
+                    ->setCellValue('H'.$i, $cl['sched_day'])
+                    ->setCellValue('I'.$i, $cl['sched_time'])
+                    ->setCellValue('J'.$i, $cl['v2'])
+                    ->setCellValue('K'.$i, $cl['v3'])
+                    ->setCellValue('L'.$i, $cl['strRemarks'])
+                    ->setCellValue('M'.$i, $cl['strLastname'].", ".$cl['strFirstname'])
+                    ->setCellValue('N'.$i, date("M j, Y",strtotime($student['dteRegistered'])));
                     
             
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("F".$i)->applyFromArray($style_left);
@@ -1609,15 +1610,16 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);        
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(10);        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);        
+                
         
 
         // Rename worksheet

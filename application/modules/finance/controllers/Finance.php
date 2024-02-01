@@ -273,6 +273,18 @@ class Finance extends CI_Controller {
 
         echo json_encode($data);
     }
+
+    public function sync_payment_details(){
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("sync_payment",$this->data);
+        $this->load->view("common/footer",$this->data);
+    
+    }
+
+    public function sync_payment_details_data(){
+        
+    }
     
     public function submit_ledger_item(){
         $post =  $this->input->post();
