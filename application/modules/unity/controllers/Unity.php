@@ -1211,7 +1211,7 @@ class Unity extends CI_Controller {
             $units_earned = 0;
             $total = 0;
             foreach($records as $record){
-                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
                     $units_earned += $record['strUnits'];
                 if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
                     switch($record['v3']){
