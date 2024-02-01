@@ -836,7 +836,7 @@ class Pdf extends CI_Controller {
         else{
             $this->data['period_label'] = "Midterm Grade";
         }
-        
+        //pass fail do not include in gwa
         foreach($records as $record)
         {
             
@@ -849,7 +849,7 @@ class Pdf extends CI_Controller {
                 $total += $record['strUnits'];
             }
 
-            if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
+            if($record['strRemarks'] == "Passed" && $period == "final" && $record['intFinalized'] > 1){
                 $total_units += $record['strUnits'];
             }
 
