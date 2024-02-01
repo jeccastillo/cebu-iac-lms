@@ -410,7 +410,7 @@
                             <textarea required  v-model="add_credits.descriptive_title" class="form-control"></textarea>
                         </div>
                         <div class="form-group col-sm-6">
-                            <label>Units *</label>
+                            <label>Units to credit *</label>
                             <input required v-model="add_credits.units" type="number" step="0.5" class="form-control">
                         </div> 
                         <div class="form-group col-sm-6">
