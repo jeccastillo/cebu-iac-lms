@@ -66,7 +66,18 @@
                             style="display:flex; align-itenms:center;">
                             <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">
                         </div>
-                    </div>   
+                    </div> 
+                    <div>
+                    <h5 class="my-3">Maya</h5>
+                        <hr />  
+                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                            <div style="border:1px solid #000" @click="selectPayment(maya)"
+                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                style="display:flex; align-itenms:center;">
+                                <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
+                            </div>
+                        </div>                                                        
+                    </div>  
                 </div>
 
                 <hr>
@@ -212,7 +223,14 @@ new Vue({
             pchannel: "bdo_pay",
             pmethod: "bdo_pay",
             type: "none"
-        }
+        },
+        maya:{
+            charge: 0,
+            id: 100,        
+            name: "maya",
+            pchannel: "maya",
+            type: "none"
+        },
     },
     mounted() {
 
