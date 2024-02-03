@@ -124,6 +124,17 @@
                             </div>
                         </div>                                                        
                     </div>
+                    <hr />
+                    <h5 class="my-3">Maya</h5>
+                        <hr />  
+                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                            <div style="border:1px solid #000" @click="selectPayment(maya)"
+                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                style="display:flex; align-itenms:center;">
+                                <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
+                            </div>
+                        </div>                                                        
+                    </div>
                     <hr />                    
                     <h5>PAYNAMICS</h5>
                     <hr />
@@ -301,6 +312,13 @@ new Vue({
             pmethod: "onlinebanktransfer",            
             type: "none"
         },
+        maya:{
+            charge: 0,
+            id: 100,        
+            name: "maya",
+            pchannel: "maya",
+            type: "none"
+        },
         request_bdo:{
             access_key: undefined,
             amount: undefined,
@@ -471,7 +489,7 @@ new Vue({
 
                     if (data.data.success) {
 
-                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay") {
+                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya") {
                             this.redirect_link = data.data.payment_link;
                             this.loading_spinner = false;
 
@@ -480,13 +498,18 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        } 
+                        }
                         else if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
                             this.request_bdo = data.data.post_data;
                             setTimeout(() => {
                                 this.$refs.bdo_form.submit();
                             }, 500);                        
-                        }else {
+                        }
+                        else if(this.selected_mode_of_payment.pchannel == "maya"){     
+                            console.log("success");                       
+                            document.location = data.data.post_data.redirectUrl;                     
+                        }
+                        else {
                             Swal.fire({
                                 title: "Payment is Pending",
                                 text: data.data.message,
@@ -496,13 +519,13 @@ new Vue({
                             });
 
                         }
-                    } else {
+                        } else {
                         Swal.fire(
                             'Failed!',
                             data.data.message,
                             'error'
                         )
-                    }
+                        }
                 });
         }
     }
