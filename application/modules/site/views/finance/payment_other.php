@@ -328,7 +328,7 @@ new Vue({
 
                     if (data.data.success) {
 
-                        if (!this.selected_mode_of_payment.is_nonbank) {
+                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya") {
                             this.redirect_link = data.data.payment_link;
                             this.loading_spinner = false;
 
@@ -337,22 +337,34 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        } else {
-                            Swal.fire({
-                            title: "Payment is Pending",
-                            text: data.data.message,
-                            icon: "success"
-                            }).then(function() {
-                                window.location = base_url;
-                            });
                         }
-                    } else {
+                        else if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
+                            this.request_bdo = data.data.post_data;
+                            setTimeout(() => {
+                                this.$refs.bdo_form.submit();
+                            }, 500);                        
+                        }
+                        else if(this.selected_mode_of_payment.pchannel == "maya"){     
+                            console.log("success");                       
+                            document.location = data.data.post_data.redirectUrl;                     
+                        }
+                        else {
+                            Swal.fire({
+                                title: "Payment is Pending",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                window.location = "https://iacademy.edu.ph";
+                            });
+
+                        }
+                        } else {
                         Swal.fire(
                             'Failed!',
                             data.data.message,
                             'error'
                         )
-                    }
+                        }
                 });
         }
     }
