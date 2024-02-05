@@ -78,7 +78,13 @@ new Vue({
         period: '<?php echo $period; ?>', 
         sy: [],
     },
-
+    computed: {
+        sortedData: function() {
+            return this.list.sort(function(a, b) {
+                return a.gwa > b.gwa;
+            });
+        }
+    },
     mounted() {
 
         let url_string = window.location.href;        
@@ -88,6 +94,7 @@ new Vue({
                 .then((data) => {                                          
                     this.list = data.data.list;
                     this.sy = data.data.sy;
+                    this.sortedData();
                 })
                 .catch((error) => {
                     console.log(error);
