@@ -21,7 +21,7 @@
         <hr />
     <div class="content">             
         <h4>Dean's List</h4>
-        <table class="table table-striped">
+        <table v-if="list.length > 0" class="table table-striped">
             <thead>
                 <tr>
                     <th>Student Number</th>
@@ -40,6 +40,9 @@
             </tbody>
             
         </table>
+        <div v-else>
+            <h3>Nothing to Display</h3>
+        </div>
     </div>    
 </aside>
 
