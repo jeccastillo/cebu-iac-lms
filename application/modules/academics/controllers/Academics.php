@@ -533,9 +533,12 @@ class Academics extends CI_Controller {
         {  
             $data['success'] = true;
             $data['list'] = $this->db
+                                ->select('tb_mas_deans_listers.*, tb_mas_users.strFirstname, tb_mas_users.strStudentNumber, tb_mas_users.strLastname')
+                                ->from('tb_mas_deans_listers')
+                                ->join('tb_mas_users','tb_mas_deans_listers.student_id = tb_mas_users.intID')  
                                 ->where('term_id',$term)
                                 ->where('period',$period)
-                                ->get('tb_mas_deans_listers')
+                                ->get()
                                 ->result_array();
             $data['sy'] = $this->db                            
                             ->get('tb_mas_sy')
