@@ -539,7 +539,7 @@ class Academics extends CI_Controller {
                                 ->where('period',$period)
                                 ->get('tb_mas_deans_listers')
                                 ->result_array();
-            $ret['sy'] = $this->db                            
+            $data['sy'] = $this->db                            
                             ->get('tb_mas_sy')
                             ->result_array();
 
