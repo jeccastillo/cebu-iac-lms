@@ -110,7 +110,7 @@
                         <select required @change="updateField('syid',$event)" v-model="sy_reference"
                             class="form-control">
                             <option v-for="sem in sy" :value="sem.intID">
-                                {{ sem.term_label + " " + sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
+                                {{ sem.term_student_type + " " + sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}</option>
 
                         </select>
                         <hr />
