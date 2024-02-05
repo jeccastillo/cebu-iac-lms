@@ -26,7 +26,7 @@
                 </tr>                
             </thead>
             <tbody>
-                <tr v-for="list as st">
+                <tr v-for="st in list">
                     <td>{{ st.strStudentNumber }}</td>
                 </tr>
             </tbody>
