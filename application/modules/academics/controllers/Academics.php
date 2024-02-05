@@ -534,6 +534,7 @@ class Academics extends CI_Controller {
             $data['success'] = true;
             $syid = $term;
             $data['list'] = [];
+            $data['gwa'] = [];
             $pr = ($period == 0)?"v2":"v3";
             $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$syid,2);
             foreach($students as $student){
@@ -562,7 +563,7 @@ class Academics extends CI_Controller {
 
 
                 }
-                                
+
                 $term_gwa = 0;
                 if($total > 0){
                     $term_gwa = $sum_grades/$total;
@@ -570,6 +571,8 @@ class Academics extends CI_Controller {
                 }
                 if($term_gwa != 0 && $term_gwa <= 1.5)
                     $data['list'][] = $student;
+
+                $data['gwa'][] = $term_gwa;
             }
 
             
