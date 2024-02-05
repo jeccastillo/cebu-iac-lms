@@ -19,7 +19,7 @@
         <hr />
     </section>
         <hr />
-    <div class="content">             
+    <div v-if="!loading" class="content">             
         <h4>Dean's List</h4>
         <table v-if="list.length > 0" class="table table-striped">
             <thead>
@@ -44,6 +44,9 @@
             <h3>Nothing to Display</h3>
         </div>
     </div>    
+    <div v-else class="content">             
+        <h4>Loading Data Please Wait...</h4>
+    </div>
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -77,6 +80,7 @@ new Vue({
         term: '<?php echo $term; ?>',
         period: '<?php echo $period; ?>', 
         sy: [],
+        loading: true,
     },
     computed: {
         sortedData: function() {
@@ -94,7 +98,8 @@ new Vue({
                 .then((data) => {                                          
                     this.list = data.data.list;
                     this.sy = data.data.sy;       
-                    this.sortedData();             
+                    this.sortedData();       
+                    this.loading = false;      
                 })
                 .catch((error) => {
                     console.log(error);
