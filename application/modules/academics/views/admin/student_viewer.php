@@ -352,7 +352,7 @@ new Vue({
             formdata.append("isGraduate",this.grad_status);
 
             this.loader_spinner = true;
-            axios.post(base_url + 'unity/update_graduate_status', formdata, {
+            axios.post(base_url + 'academics/update_graduate_status', formdata, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
@@ -370,7 +370,7 @@ new Vue({
                                 
         },
         changeTermSelected: function(){
-            document.location = this.base_url + "unity/student_viewer/" + 
+            document.location = this.base_url + "academics/student_viewer/" + 
             this.student.intID + "/" + this.sem_student + "/" + this.tab;
         },          
                  

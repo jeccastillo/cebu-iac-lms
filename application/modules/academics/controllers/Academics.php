@@ -508,6 +508,46 @@ class Academics extends CI_Controller {
     
     }
 
+    public function deans_listers($term = 0,$period = 0){
+        
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            if($term == 0){
+                $term = $this->data_fetcher->get_active_sem();
+                $term = $term['intID'];
+            }
+            if($period == 0)
+                $period == "final";
+
+            $this->data['id'] = $id;
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/deans_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+        }
+        else
+            redirect(base_url()."unity");
+    }
+
+    public function deans_listers_data($term,$period){
+        
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            $data['success'] = true;
+            $data['list'] = $this->db
+                                ->where('term_id',$term)
+                                ->where('period',$period)
+                                ->get('tb_mas_deans_listers')
+                                ->result_array();
+            $ret['sy'] = $this->db                            
+                            ->get('tb_mas_sy')
+                            ->result_array();
+
+            echo json_encode($data);
+        }
+        else
+            echo "error";
+    }
+
     public function student_records($id){
         
         if($this->data["user"]["special_role"] >= 1)
