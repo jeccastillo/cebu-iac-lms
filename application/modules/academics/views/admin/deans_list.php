@@ -4,9 +4,13 @@
            Dean's Listers            
         </h1>
         <div class="box-tools pull-right">
+            <label>Term</label>
             <select v-model="term" @change="changeTermSelected" class="form-control" >
                 <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
             </select>   
+        </div>
+        <div class="box-tools pull-right">
+            <label>Period</label>
             <select v-model="period" @change="changeTermSelected" class="form-control" >
                 <option value="0">Midterm</option>                      
                 <option value="1">Final</option>                      
