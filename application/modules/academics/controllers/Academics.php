@@ -520,6 +520,8 @@ class Academics extends CI_Controller {
                 $period == "final";
 
             $this->data['id'] = $id;
+            $this->data['term'] = $term;
+            $this->data['period'] = $period;
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/deans_list",$this->data);
             $this->load->view("common/footer",$this->data); 
