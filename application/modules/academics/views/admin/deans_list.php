@@ -96,10 +96,11 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'academics/deans_listers_data/' + this.term + '/' + this.period)
                 .then((data) => {                                          
+                    this.loading = false; 
                     this.list = data.data.list;
                     this.sy = data.data.sy;       
                     this.sortedData();       
-                    this.loading = false;      
+                         
                 })
                 .catch((error) => {
                     console.log(error);
