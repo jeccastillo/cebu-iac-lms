@@ -1,11 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Records
-            <small>
-                <a class="btn btn-app" :href="base_url + 'academics/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a>                                 
-            </small>
-            
+           Dean's Listers            
         </h1>
         <div class="box-tools pull-right">
             <select v-model="term" @change="changeTermSelected" class="form-control" >
