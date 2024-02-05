@@ -304,6 +304,10 @@
                         <a href="<?php echo base_url()."academics/view_classlist_archive_admin" ?>"><i class="fa fa-user"></i>
                             Slot Monitoring</a>
                         </li>
+                        <li class="<?php echo (isset($page) && $page=="deans_listers")?'active':''; ?>">
+                        <a href="<?php echo base_url()."academics/deans_listers" ?>"><i class="fa fa-user"></i>
+                            Dean's List</a>
+                        </li>                        
                     </ul>
                 </li>
                 <?php endif; ?>

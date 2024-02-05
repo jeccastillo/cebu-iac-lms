@@ -516,7 +516,8 @@ class Academics extends CI_Controller {
                 $term = $this->data_fetcher->get_active_sem();
                 $term = $term['intID'];
             }            
-
+            $this->data['page'] = "deans_listers";
+            $this->data['opentree'] = "academics_students";
             $this->data['term'] = $term;
             $this->data['period'] = $period;
             $this->load->view("common/header",$this->data);
