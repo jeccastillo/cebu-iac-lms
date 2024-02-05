@@ -41,8 +41,7 @@ function inArray(needle, haystack) {
 }
 new Vue({
     el: '#registration-container',
-    data: {
-        id: '<?php echo $id; ?>',    
+    data: {        
         base_url: '<?php echo base_url(); ?>',
         list: [],
         term: '<?php echo $term; ?>',
