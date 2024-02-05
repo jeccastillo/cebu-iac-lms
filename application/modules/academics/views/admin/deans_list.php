@@ -6,13 +6,32 @@
         <div class="box-tools pull-right">
             <select v-model="term" @change="changeTermSelected" class="form-control" >
                 <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
-            </select>                   
+            </select>   
+            <select v-model="period" @change="changeTermSelected" class="form-control" >
+                <option value="0">Midterm</option>                      
+                <option value="1">Final</option>                      
+            </select>                
         </div>
         <hr />
     </section>
         <hr />
     <div class="content">             
-        
+        <h4>Dean's List</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Student Number</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr v-for="list as st">
+                    <td>{{ st.strStudentNumber }}</td>
+                </tr>
+            </tbody>
+            
+        </table>
     </div>    
 </aside>
 
@@ -69,8 +88,8 @@ new Vue({
     methods: {   
         changeTermSelected: function(){
             document.location = this.base_url + "academics/deans_listers/" + 
-            this.term;
-        },   
+            this.term + '/' + this.period;
+        }, 
     }
 
 })

@@ -532,14 +532,47 @@ class Academics extends CI_Controller {
         if($this->data["user"]["special_role"] >= 1)
         {  
             $data['success'] = true;
-            $data['list'] = $this->db
-                                ->select('tb_mas_deans_listers.*, tb_mas_users.strFirstname, tb_mas_users.strStudentNumber, tb_mas_users.strLastname')
-                                ->from('tb_mas_deans_listers')
-                                ->join('tb_mas_users','tb_mas_deans_listers.student_id = tb_mas_users.intID')  
-                                ->where('term_id',$term)
-                                ->where('period',$period)
-                                ->get()
-                                ->result_array();
+            $syid = $term;
+            $data['list'] = [];
+            $pr = ($period == 0)?"v2":"v3";
+            $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$syid,2);
+            foreach($students as $student){
+                $records = $this->data_fetcher->getClassListStudentsSt($student['intID'],$syid); 
+                $units = 0;
+                $sum_grades = 0;
+                $units_earned = 0;
+                $total = 0;
+                foreach($records as $record){
+                    if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
+                        $units_earned += $record['strUnits'];
+                    if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                        switch($record[$pr]){
+                            case 'FA':
+                                $v3 = 5;
+                            break;
+                            case 'UD':
+                                $v3 = 5;
+                            break;
+                            default:
+                                $v3 = $record['v3'];
+                        }                    
+                        $sum_grades += $v3 * $record['strUnits'];
+                        $total += $record['strUnits'];
+                    }
+
+
+                }
+                                
+                $term_gwa = 0;
+                if($total > 0){
+                    $term_gwa = $sum_grades/$total;
+                    $term_gwa = number_format(round($term_gwa,3),3);
+                }
+                if($term_gwa != 0 && $term_gwa <= 1.5)
+                    $data['list'][] = $student;
+            }
+
+            
             $data['sy'] = $this->db                            
                             ->get('tb_mas_sy')
                             ->result_array();
