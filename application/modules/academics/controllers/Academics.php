@@ -537,6 +537,7 @@ class Academics extends CI_Controller {
             $data['gwa'] = [];
             $pr = ($period == 0)?"v2":"v3";
             $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$syid,2);
+            $data['students'] =  $students;
             foreach($students as $student){
                 $records = $this->data_fetcher->getClassListStudentsSt($student['intID'],$syid); 
                 $units = 0;
