@@ -23,11 +23,15 @@
                     <th>Student Number</th>
                     <th>Last Name</th>
                     <th>First Name</th>
+                    <th>GWA</th>
                 </tr>                
             </thead>
             <tbody>
                 <tr v-for="st in list">
                     <td>{{ st.strStudentNumber }}</td>
+                    <td>{{ st.strLastname }}</td>
+                    <td>{{ st.strFirstname }}</td>
+                    <td>{{ st.gwa }}</td>                    
                 </tr>
             </tbody>
             
