@@ -81,7 +81,7 @@ new Vue({
     computed: {
         sortedData: function() {
             return this.list.sort(function(a, b) {
-                return a.gwa > b.gwa;
+                return a.gwa - b.gwa;
             });
         }
     },
@@ -93,8 +93,8 @@ new Vue({
             axios.get(this.base_url + 'academics/deans_listers_data/' + this.term + '/' + this.period)
                 .then((data) => {                                          
                     this.list = data.data.list;
-                    this.sy = data.data.sy;
-                    this.sortedData();
+                    this.sy = data.data.sy;       
+                    this.sortedData();             
                 })
                 .catch((error) => {
                     console.log(error);
