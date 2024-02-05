@@ -518,8 +518,7 @@ class Academics extends CI_Controller {
             }
             if($period == 0)
                 $period == "final";
-
-            $this->data['id'] = $id;
+            
             $this->data['term'] = $term;
             $this->data['period'] = $period;
             $this->load->view("common/header",$this->data);
