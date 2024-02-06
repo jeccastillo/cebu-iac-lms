@@ -287,9 +287,9 @@ new Vue({
                         this.request.syid = data.data.active_sem;  
                         var current_sy_id = 0;                                               
 
-                        // for(i in this.tuition){                                        
-                        //     this.getPayments(this.tuition[i]);                                                          
-                        // }
+                        for(i in this.tuition){                                        
+                             this.getPayments(this.tuition[i]);                                                          
+                        }
 
                         
                         for(i in other_temp){
@@ -330,154 +330,171 @@ new Vue({
             })
 
         },     
-        async getPayments(tuition){
-            await axios.get(api_url + 'finance/transactions_ledger/' + this.student.slug + '/' + tuition.term.intID)
-                .then((data) => {
-                    this.term_balance = 0;
-                    this.ledger_term = [];
-                    if(tuition.term.paymentType == 'partial')
-                        amount = tuition.ti_before_deductions;
-                    else
-                        amount = tuition.total_before_deductions;
+        getPayments: function(tuition){
+            
+            this.term_balance = 0;
+            this.ledger_term = [];
+            if(tuition.term.paymentType == 'partial')
+                amount = tuition.ti_before_deductions;
+            else
+                amount = tuition.total_before_deductions;
 
-                    this.term_balance += amount;
+            this.term_balance += amount;
 
-                    this.ledger_term.push({
-                        'strYearStart':tuition.term.strYearStart,
-                        'strYearEnd':tuition.term.strYearEnd,
-                        'enumSem':tuition.term.enumSem,
-                        'term_label':tuition.term.term_label,
-                        'syid':tuition.term.intID,
-                        'scholarship_name':'',
-                        'name':'Tuition',
-                        'or_number':'',
-                        'remarks':'',
-                        'amount': amount.toFixed(2),
-                        'added_by': 0,
-                        'is_disabled':0,
-                        'balance': this.term_balance.toFixed(2),
-                    });
+            this.ledger_term.push({
+                'strYearStart':tuition.term.strYearStart,
+                'strYearEnd':tuition.term.strYearEnd,
+                'enumSem':tuition.term.enumSem,
+                'term_label':tuition.term.term_label,
+                'syid':tuition.term.intID,
+                'scholarship_name':'',
+                'name':'Tuition',
+                'or_number':'',
+                'remarks':'',
+                'amount': amount.toFixed(2),
+                'added_by': 0,
+                'is_disabled':0,
+                'balance': this.term_balance.toFixed(2),
+            });
 
-                    for(i in tuition.scholarship){
-                        var scholarship_amount = 0;
-                        if(tuition.term.paymentType == 'partial')
-                            scholarship_amount = tuition.scholarship_deductions_installment_array[i] * -1;
-                        else
-                            scholarship_amount = tuition.scholarship_deductions_array[i] * -1;
-                                                
-                        this.term_balance += scholarship_amount;
-                        this.ledger_term.push({
-                            'strYearStart':tuition.term.strYearStart,
-                            'strYearEnd':tuition.term.strYearEnd,
-                            'enumSem':tuition.term.enumSem,
-                            'term_label':tuition.term.term_label,
-                            'syid':tuition.term.intID,
-                            'scholarship_name': tuition.scholarship[i].name,
-                            'name':'Scholarship',
-                            'or_number':'',
-                            'date': tuition.scholarship[i].date_applied,
-                            'remarks':'',
-                            'amount': scholarship_amount.toFixed(2),
-                            'added_by': 0,
-                            'cashier': tuition.scholarship[i].created_by_id,
-                            'is_disabled':0,
-                            'balance': this.term_balance.toFixed(2),
-                        }); 
-                    
-                    }
+            for(i in tuition.scholarship){
+                var scholarship_amount = 0;
+                if(tuition.term.paymentType == 'partial')
+                    scholarship_amount = tuition.scholarship_deductions_installment_array[i] * -1;
+                else
+                    scholarship_amount = tuition.scholarship_deductions_array[i] * -1;
+                                        
+                this.term_balance += scholarship_amount;
+                this.ledger_term.push({
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name': tuition.scholarship[i].name,
+                    'name':'Scholarship',
+                    'or_number':'',
+                    'date': tuition.scholarship[i].date_applied,
+                    'remarks':'',
+                    'amount': scholarship_amount.toFixed(2),
+                    'added_by': 0,
+                    'cashier': tuition.scholarship[i].created_by_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                }); 
+            
+            }
 
-                    for(i in tuition.ledger){
-                                             
-                        this.term_balance += parseFloat(tuition.ledger[i].amount);
-                        this.ledger_term.push(tuition.ledger[i]); 
-                    
-                    }
+            for(i in tuition.ledger){
+                                        
+                this.term_balance += parseFloat(tuition.ledger[i].amount);
+                this.ledger_term.push(tuition.ledger[i]); 
+            
+            }
 
-                    for(i in tuition.discount){
-                        var discount_amount = 0;
-                        if(tuition.term.paymentType == 'partial')
-                            discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
-                        else
-                            discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;
-                                                
-                        this.term_balance += discount_amount;
-                        this.ledger_term.push({
-                            'strYearStart':tuition.term.strYearStart,
-                            'strYearEnd':tuition.term.strYearEnd,
-                            'enumSem':tuition.term.enumSem,
-                            'term_label':tuition.term.term_label,
-                            'syid':tuition.term.intID,
-                            'scholarship_name': tuition.discount[i].name,
-                            'name':'Discount',
-                            'or_number':'',
-                            'date': tuition.discount[i].date_applied,
-                            'remarks':'',
-                            'amount': discount_amount.toFixed(2),
-                            'added_by': 0,
-                            'is_disabled':0,
-                            'cashier': tuition.discount[i].created_by_id,
-                            'balance': this.term_balance.toFixed(2),
-                        }); 
-                    
-                    }
-                    var payments = data.data.data;   
-                    var reservation = data.data.reservation;                                              
-                    for(i in payments){                                
-                        if(payments[i].status == "Paid"){                                    
-                            var paid = payments[i].subtotal_order * -1;
-                            this.term_balance += paid;
-                            this.ledger_term.push({
-                                'strYearStart':tuition.term.strYearStart,
-                                'strYearEnd':tuition.term.strYearEnd,
-                                'enumSem':tuition.term.enumSem,
-                                'term_label':tuition.term.term_label,
-                                'syid':tuition.term.intID,
-                                'scholarship_name':'',
-                                'date': payments[i].updated_at,
-                                'name': payments[i].description,
-                                'or_number':payments[i].or_number,
-                                'remarks': payments[i].remarks,
-                                'amount': paid.toFixed(2),
-                                'added_by': 0, 
-                                'cashier': payments[i].cashier_id,
-                                'is_disabled':0,
-                                'balance': this.term_balance.toFixed(2),
-                            });
-                        }
-                    }
+            for(i in tuition.discount){
+                var discount_amount = 0;
+                if(tuition.term.paymentType == 'partial')
+                    discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
+                else
+                    discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;
+                                        
+                this.term_balance += discount_amount;
+                this.ledger_term.push({
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name': tuition.discount[i].name,
+                    'name':'Discount',
+                    'or_number':'',
+                    'date': tuition.discount[i].date_applied,
+                    'remarks':'',
+                    'amount': discount_amount.toFixed(2),
+                    'added_by': 0,
+                    'is_disabled':0,
+                    'cashier': tuition.discount[i].created_by_id,
+                    'balance': this.term_balance.toFixed(2),
+                }); 
+            
+            }
+            var payments = tuition.payments_tuition;   
+            var reservation = tuition.payments_reservation;  
+            var other = tuition.payments_other;                                              
+            for(i in payments){                                                                                
+                var paid = payments[i].subtotal_order * -1;
+                this.term_balance += paid;
+                this.ledger_term.push({
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',
+                    'date': payments[i].updated_at,
+                    'name': payments[i].description,
+                    'or_number':payments[i].or_number,
+                    'remarks': payments[i].remarks,
+                    'amount': paid.toFixed(2),
+                    'added_by': 0, 
+                    'cashier': payments[i].cashier_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            }
 
-                    for(i in reservation){                                
-                        if(reservation[i].status == "Paid"){                                    
-                            var paid = reservation[i].subtotal_order * -1;
-                            this.term_balance += paid;
-                            this.ledger_term.push({
-                                'strYearStart':tuition.term.strYearStart,
-                                'strYearEnd':tuition.term.strYearEnd,
-                                'enumSem':tuition.term.enumSem,
-                                'term_label':tuition.term.term_label,
-                                'syid':tuition.term.intID,
-                                'scholarship_name':'',
-                                'date': reservation[i].updated_at,
-                                'name': reservation[i].description,
-                                'or_number':reservation[i].or_number,
-                                'remarks': reservation[i].remarks,
-                                'amount': paid.toFixed(2),
-                                'added_by': 0,
-                                'cashier': payments[i].cashier_id,
-                                'is_disabled':0,
-                                'balance': this.term_balance.toFixed(2),
-                            });
-                        }
-                    }
+            for(i in reservation){                                                                                  
+                var paid = reservation[i].subtotal_order * -1;
+                this.term_balance += paid;
+                this.ledger_term.push({
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',
+                    'date': reservation[i].updated_at,
+                    'name': reservation[i].description,
+                    'or_number':reservation[i].or_number,
+                    'remarks': reservation[i].remarks,
+                    'amount': paid.toFixed(2),
+                    'added_by': 0,
+                    'cashier': payments[i].cashier_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            }
+            for(i in other){                                                                                   
+                var paid = other[i].subtotal_order * -1;
+                this.term_balance += paid;
+                this.ledger_term.push({
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',
+                    'date': other[i].updated_at,
+                    'name': other[i].description,
+                    'or_number':other[i].or_number,
+                    'remarks': other[i].remarks,
+                    'amount': paid.toFixed(2),
+                    'added_by': 0, 
+                    'cashier': other[i].cashier_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });
+                
+            }
 
-                    this.ledger.push({
-                        'ledger_items': this.ledger_term,
-                        'balance': this.term_balance.toFixed(2)
-                    });
+            this.ledger.push({
+                'ledger_items': this.ledger_term,
+                'balance': this.term_balance.toFixed(2)
+            });
 
-                    this.running_balance += this.term_balance; 
-                                                                            
-            });  
+            this.running_balance += this.term_balance; 
+                
         },
         submitLedgerItem: function(){
             let url = this.base_url + 'finance/submit_ledger_item';                        
