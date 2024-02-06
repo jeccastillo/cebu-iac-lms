@@ -55,7 +55,7 @@
                 <h4 class="alert-heading">Alert!</h4>
                 <p>This Student still has remaining balances:</p>
                 <hr>
-                <div v-for="item in term_balances">
+                <div v-for="item in term_balances" v-if="item.balance > 0">
                     <p class="mb-0">{{ item.term }} : P{{ item.balance }}</p>
                 </div>
             </div>
