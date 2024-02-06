@@ -2449,6 +2449,7 @@ class Data_fetcher extends CI_Model {
         $total_assessment_installment = 0;
         $discount_array = [];
         $scholarship_array = [];
+        $late_enrollment_fee = 0;
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
@@ -2516,7 +2517,16 @@ class Data_fetcher extends CI_Model {
                 $new_student_list[$nsd['name']] = getExtraFee($nsd, $class_type, 'misc');
                 $total_new_student += $new_student_list[$nsd['name']];
             }
-        }    
+        }   
+        else{
+            $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
+                         ->get('tb_mas_tuition_year_misc')->result_array();
+
+            foreach($late_enrollment as $late){
+                $late_fee = getExtraFee($late, $class_type, 'misc');
+                $late_enrollment_fee += $late_fee;
+            }
+        }   
         
         if($student['strCitizenship'] != "Philippines"){
             $is_foreign = true;
@@ -2961,11 +2971,12 @@ class Data_fetcher extends CI_Model {
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
+        $data['late_enrollment_fee'] = $late_enrollment_fee;
         $data['other_discount'] = $other_scholarship;        
         $data['other_discount_dc'] = $other_discount;
         $data['total_other_before_discount'] = $data['new_student'] + $data['total_foreign'];                
-        $data['total_before_deductions'] = $data['tuition'] + $data['lab_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee;
-        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee;                
+        $data['total_before_deductions'] = $data['tuition'] + $data['lab_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship - $other_discount;
