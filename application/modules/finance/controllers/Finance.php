@@ -318,7 +318,7 @@ class Finance extends CI_Controller {
                                                   array(
                                                           'student_number'=>$data['student']['slug'],
                                                           'sy_reference'=>$reg['intID'],
-                                                          'description NOT LIKE' =>'Reservation Payment',
+                                                          'description !=' =>'Reservation Payment',
                                                           'description NOT LIKE' =>'Tuition%',                                                        
                                                           'status' => 'Paid'      
                                                       ))
