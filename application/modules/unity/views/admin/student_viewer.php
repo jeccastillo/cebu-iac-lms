@@ -56,7 +56,7 @@
                 <p>This Student still has remaining balances:</p>
                 <hr>
                 <div v-for="item in term_balances" v-if="item.balance > 0">
-                    <p class="mb-0">{{ item.term }} : P{{ item.formatted_balance }}</p>
+                    <p class="mb-0">{{ item.term }} : <strong>P{{ item.formatted_balance }}</strong></p>
                 </div>
             </div>
             <div class="row">
