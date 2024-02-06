@@ -266,7 +266,7 @@ new Vue({
                     formdata.append(key,value);
                 }
             axios
-                .post(base_url + 'finance/sync_payment_details_data/',formdata{
+                .post(base_url + 'finance/sync_payment_details_data/',formdata,{
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     },
