@@ -55,7 +55,7 @@
                 <h4 class="alert-heading">Alert!</h4>
                 <p>This Student still has remaining balances:</p>
                 <hr>
-                <table class="table">
+                <table class="table table-bordered table-striped">
                 <tr>
                     <th>Term</th>
                     <th>Balance</th>
