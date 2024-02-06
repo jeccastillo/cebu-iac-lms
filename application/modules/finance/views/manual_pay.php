@@ -38,7 +38,7 @@
                                             </select>
                                         </div>                                                
                                     </div>
-                                    <div v-if="!student.waive_app_fee && student.campus == 'Cebu'" class="col-sm-6">
+                                    <div v-if="!student.waive_app_fee" class="col-sm-6">
                                         <div class="form-group">
                                             <label>Deduct referal discount from application fee?</label>
                                             <select @change="selectDescription"  class="form-control" v-model="application_referal">
@@ -717,7 +717,10 @@ new Vue({
                         this.amount_to_pay = 500;     
                 }       
                 else
-                    this.amount_to_pay = 700;            
+                if(this.application_referal)
+                        this.amount_to_pay = 500;     
+                    else
+                        this.amount_to_pay = 700;                               
             }
             else{
                 this.amount_to_pay = 0;
