@@ -262,9 +262,9 @@ new Vue({
                         this.request.syid = data.data.active_sem;  
                         var current_sy_id = 0;                                               
 
-                        for(i in this.tuition){                                        
-                            this.getPayments(this.tuition[i]);                                                          
-                        }
+                        // for(i in this.tuition){                                        
+                        //     this.getPayments(this.tuition[i]);                                                          
+                        // }
 
                         
                         for(i in other_temp){
