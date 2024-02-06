@@ -121,17 +121,16 @@ class Finance extends CI_Controller {
     }
 
     public function student_account_report($id = 0){
-        $this->api_url = 'http://127.0.0.1:8000/';
 
         $this->load->library("curl");
         
         /* API URL */
-        $url = 'http://127.0.0.1:8000/api/v1/sms/finance/sync_payments';
+        $url = 'http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/sync_payments';
    
         // Data to be sent in the POST request
         $post_data = array(
             'id' => '1372',
-            'campus' => 'Makati',
+            'campus' => $this->data['campus'],
         );
 
         // Make the POST request
