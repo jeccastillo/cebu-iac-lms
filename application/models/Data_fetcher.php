@@ -2519,13 +2519,13 @@ class Data_fetcher extends CI_Model {
             }
         }   
         else{
-            $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
-                         ->get('tb_mas_tuition_year_misc')->result_array();
+            // $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
+            //              ->get('tb_mas_tuition_year_misc')->result_array();
 
-            foreach($late_enrollment as $late){
-                $late_fee = getExtraFee($late, $class_type, 'misc');
-                $late_enrollment_fee += $late_fee;
-            }
+            // foreach($late_enrollment as $late){
+            //     $late_fee = getExtraFee($late, $class_type, 'misc');
+            //     $late_enrollment_fee += $late_fee;
+            // }
         }   
         
         if($student['strCitizenship'] != "Philippines"){
