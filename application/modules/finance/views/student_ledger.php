@@ -261,7 +261,7 @@ new Vue({
 
             .then((data) => {                   
                 var formdata = new FormData();                    
-                formdata.append('data',data.data.data);
+                formdata.append('data',JSON.stringify(data.data.data));
             axios
                 .post(base_url + 'finance/sync_payment_details_data/',formdata,{
                     headers: {
