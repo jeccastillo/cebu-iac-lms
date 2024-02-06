@@ -530,7 +530,11 @@
                         <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/edit_ay/" style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                                 <span>Edit Dates</span> </a>
-                        </li>             
+                        </li>   
+                        <li class="<?php echo (isset($page) && $page=="student_account_report")?'active':''; ?>"><a
+                                href="<?php echo base_url() ?>finance/student_account_report/" style="margin-left: 10px;"><i class="fa fa-calendar"></i>
+                                <span>Student Account Report</span> </a>
+                        </li>            
                         <?php if($user['special_role'] >= 2): ?>       
                         <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/view_payees" style="margin-left: 10px;"><i class="fa fa-users"></i>
