@@ -3044,9 +3044,7 @@ class Data_fetcher extends CI_Model {
             $data['installment_fee'] = 0;
         }
 
-        $data['class_type'] = $sem['classType'];
-        
-        
+        $data['class_type'] = $sem['classType'];               
         
         
         // $data['discounted_price'] = $discounted_price;

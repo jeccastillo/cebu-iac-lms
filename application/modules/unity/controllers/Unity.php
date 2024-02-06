@@ -1568,8 +1568,40 @@ class Unity extends CI_Controller {
             if(!empty($ret['curriculum_subjects']))
                 $ret['sections'] = $this->data_fetcher->fetch_classlist_by_subject($ret['curriculum_subjects'][0]['intSubjectID'],$sm['intID']);
             
-            //for total units
-            //$ret['total_units'] = $this->data_fetcher->getTotalUnits($id);           
+            
+            $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
+                ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                ->where(array('intStudentID'=>$ret['student']['intID']))
+                ->order_by("strYearStart asc, enumSem asc")
+                ->get('tb_mas_registration')
+                ->result_array();
+            
+            $term_balances = [];
+            foreach($registrations as $reg){            
+                $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
+                $term_payments = $this->db->get_where('payment_details',
+                array(
+                        'student_number'=>$ret['student']['slug'],
+                        'sy_reference'=>$reg['intID'],
+                        'description LIKE' =>'Tuition%', 
+                        'status' => 'Paid'                                                       
+                    ))
+                ->result_array();         
+                $paid = 0;
+                foreach($term_payments as $payment){
+                    $paid += $payment['subtotal_order'];
+                }       
+                if($reg['paymentType'] == "full")
+                    $balance = $tuition['total'] - $paid;
+                else
+                    $balance = $tuition['total_installment'] - $paid;
+
+                $term_balances[] = [
+                    'balance'=>$balance,
+                    'term'=>$reg['enumSem']." ".$reg['term_label']." ".$reg['strYearStart']." ".$reg['strYearEnd']
+                ];
+            }
+            $ret['term_balances'] = $term_balances;
             $ret['success']= true;
         }
         else{
