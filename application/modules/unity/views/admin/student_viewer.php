@@ -57,15 +57,19 @@
                     <p>This Student still has remaining balances:</p>                                
                 </div>
                 <div class="col-sm-6">
-                    <table class="table table-bordered table-striped">
-                        <tr>
-                            <th>Term</th>
-                            <th>Balance</th>
-                        </tr>
-                        <tr v-for="item in term_balances" v-if="item.balance > 0">
-                            <td>{{ item.term }}</td>
-                            <td><strong>P{{ item.formatted_balance }}</strong></td>
-                        </tr>
+                    <table class="table table-bordered thead-dark table-striped">
+                        <thead>
+                            <tr>
+                                <th>Term</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in term_balances" v-if="item.balance > 0">
+                                <td>{{ item.term }}</td>
+                                <td><strong>P{{ item.formatted_balance }}</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
