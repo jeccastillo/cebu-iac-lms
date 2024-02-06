@@ -371,9 +371,10 @@ class Finance extends CI_Controller {
         foreach($response as $data){
             $this->data_poster->post_data('payment_details',$data);
         }
-        $data['success'] = true;
+        
+        $ret['success'] = true;
            
-        echo json_encode($data);
+        echo json_encode($ret);
     }
     
     public function submit_ledger_item(){
