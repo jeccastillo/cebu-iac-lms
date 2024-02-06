@@ -253,7 +253,7 @@ new Vue({
         Swal.showLoading();
         
         axios
-            .post(api_url + 'finance/sync_payment', this.sync_data,{
+            .post(api_url + 'finance/sync_payments', this.sync_data,{
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
