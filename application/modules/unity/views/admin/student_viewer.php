@@ -51,6 +51,14 @@
         </section>
         <hr />
         <div class="content">
+            <div class="alert alert-danger" v-if="show_alert" role="alert">
+                <h4 class="alert-heading">Alert!</h4>
+                <p>This Student still has remaining balances:</p>
+                <hr>
+                <div v-for="item in term_balances">
+                    <p class="mb-0">{{ item.term }} : P{{ item.balance }}</p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-12">
                     <div v-if="student" class="box box-widget widget-user-2">
@@ -383,7 +391,9 @@ new Vue({
         lab_units: 0,    
         gpa: 0,        
         assessment: '',   
-        deficency_msg: '',          
+        deficency_msg: '', 
+        term_balances: [],      
+        show_alert: false,           
     },
 
     mounted() {
@@ -395,7 +405,12 @@ new Vue({
                 .then((data) => {  
                     console.log(data);
                     if(data.data.success){                                                                                                                   
-                        this.student = data.data.student;                        
+                        this.student = data.data.student;     
+                        this.term_balances = data.data.term_balances;
+                        for(i in this.term_balances)
+                            if(this.term_balances[i].balance > 0)
+                                this.show_alert = true;
+
                         if(data.data.scholarship.length > 0){
                             var sch = "";
                             for(i in data.data.scholarship)
