@@ -1591,7 +1591,8 @@ class Unity extends CI_Controller {
                     $balance = $tuition['total_installment'] - $paid;
 
                 $term_balances[] = [
-                    'balance'=> number_format($balance),
+                    'formatted_balance'=> number_format($balance),
+                    'balance'=>$balance,
                     'term'=>$reg['enumSem']." ".$reg['term_label']." ".$reg['strYearStart']."-".$reg['strYearEnd']
                 ];
             }
