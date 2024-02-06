@@ -366,8 +366,9 @@ class Finance extends CI_Controller {
     public function sync_payment_details_data(){
 
         $response = $this->input->post();
+        $response = json_decode($response);
             
-        foreach($response as $data){
+        foreach($response['data'] as $data){
             $this->data_poster->post_data('payment_details',$data);
         }
         $data['success'] = true;
