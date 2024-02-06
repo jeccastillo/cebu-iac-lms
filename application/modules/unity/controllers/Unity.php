@@ -1579,7 +1579,7 @@ class Unity extends CI_Controller {
             $term_balances = [];
             foreach($registrations as $reg){            
                 $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
-                $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = ".$ret['student']['slug']." AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
+                $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = '".$ret['student']['slug']."' AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
                                          ->result_array();                        
                 $paid = 0;
                 foreach($term_payments as $payment){
