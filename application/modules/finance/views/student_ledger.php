@@ -72,7 +72,7 @@
             <div class="box box-primary">
                 <div class="box-header">Ledger</div>
                 <div class="box-body">
-                    <table v-for="term in ledger" class="table table-bordered table-striped">
+                    <table v-for="term in ledger" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="13">Tuition</th>
