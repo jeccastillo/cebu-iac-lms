@@ -1583,8 +1583,7 @@ class Unity extends CI_Controller {
                                          ->result_array();   
                                          
                 $ledger_payments = $this->db                                                
-                ->where(array('student_id'=>$ret['student']['intID'],'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID'],'amount <'=>0))        
-                ->order_by("strYearStart asc, enumSem asc")                
+                ->where(array('student_id'=>$ret['student']['intID'],'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID'],'amount <'=>0))                                        
                 ->get('tb_mas_student_ledger')
                 ->result_array();                                         
 
