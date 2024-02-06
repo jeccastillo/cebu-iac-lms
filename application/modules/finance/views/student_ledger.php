@@ -460,9 +460,7 @@ new Vue({
             }
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
-                this.term_balance_other += paid;
-                console.log("paid",paid);
-                console.log("tb",this.term_balance_other);
+                this.term_balance_other += paid;                
                 this.other_term.push({
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
