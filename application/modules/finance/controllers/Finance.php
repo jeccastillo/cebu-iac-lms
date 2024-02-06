@@ -367,7 +367,7 @@ class Finance extends CI_Controller {
 
         $response = $this->input->post();
             
-        foreach($response['data'] as $data){
+        foreach($response as $data){
             $this->data_poster->post_data('payment_details',$data);
         }
         $data['success'] = true;

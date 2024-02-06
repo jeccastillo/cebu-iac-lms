@@ -259,12 +259,9 @@ new Vue({
                 },
             })
 
-            .then((data) => {   
-                var resp = data.data.data;
+            .then((data) => {                   
                 var formdata = new FormData();                    
-                for(const [key,value] of Object.entries(resp)){                   
-                    formdata.append(key,value);
-                }
+                formdata.append('data',data.data.data);
             axios
                 .post(base_url + 'finance/sync_payment_details_data/',formdata,{
                     headers: {
