@@ -51,7 +51,7 @@
         </section>
         <hr />
         <div class="content">
-            <div class="row" v-if="show_alert">
+            <div class="" v-if="show_alert">
                 <div class="alert alert-danger col-sm-6" role="alert">
                     <h4 class="alert-heading">Alert!</h4>
                     <p>This Student still has remaining balances:</p>                                
