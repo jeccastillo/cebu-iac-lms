@@ -352,6 +352,7 @@ class Finance extends CI_Controller {
     }
 
     public function sync_payment_details_data(){
+        
         $this->load->library("curl");
         
         $max_id = $this->db->select('id')
