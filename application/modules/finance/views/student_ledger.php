@@ -123,7 +123,7 @@
                     <table v-for="term in other" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th colspan="12">Other</th>
+                                <th colspan="11">Other</th>
                             </tr> 
                             <tr>
                                 <th>School Year</th>
@@ -135,8 +135,7 @@
                                 <th>Assessment</th>
                                 <th>Payment</th>
                                 <th>Balance</th>
-                                <th>Added/Changed By</th>                                                                 
-                                <th>Switch to Tuition</th>
+                                <th>Added/Changed By</th>                                                                                                 
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -151,8 +150,7 @@
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
                                 <td :class="item.muted">{{ item.balance }}</td>
-                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>
-                                <td><button v-if="finance && finance.special_role != 0" @click="switchType(item.id,'other')" class="btn btn-default">Switch</button></td>
+                                <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td v-if="finance && finance.special_role != 0">
                                     <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
                                     <button v-else class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
@@ -193,9 +191,9 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],      
         ledger_term: [],    
-        other_term: [],     
-        term_balances: [], 
+        other_term: [],             
         term_balance: 0,
+        term_balance_other: 0,
         tuition: [],
         other: [],
         finance: undefined, 
@@ -318,6 +316,7 @@ new Vue({
         getPayments: function(tuition){
             
             this.term_balance = 0;
+            this.term_balance_other = 0;
             this.ledger_term = [];
             this.other_term = [];
             if(tuition.term.paymentType == 'partial')
@@ -380,7 +379,7 @@ new Vue({
 
             for(i in tuition.other){
                                         
-                this.term_balance += parseFloat(tuition.other[i].amount);
+                this.term_balance_other += parseFloat(tuition.other[i].amount);
                 this.other_term.push(tuition.other[i]); 
             
             }
@@ -460,7 +459,7 @@ new Vue({
             }
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
-                this.other_term_balance += paid;
+                this.term_balance_other += paid;
                 this.other_term.push({
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
