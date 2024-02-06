@@ -78,13 +78,8 @@ class Portal extends CI_Controller {
 	}
 
     public function student_ledger_data($id,$sem){
-        
-        $where_other = array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other');
-
-        if($sem != 0){            
-            $where_other['syid'] = $sem;
-        }
-
+                                
+        $data['student'] = $this->data_fetcher->getStudent($id);
         $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
                                     ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
                                     ->where(array('intStudentID'=>$id))
@@ -94,8 +89,33 @@ class Portal extends CI_Controller {
         $tuition = [];
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
-            $temp['term'] = $reg;      
-            
+            $temp['term'] = $reg;     
+            $temp['payments_tuition'] = $this->db->get_where('payment_details',
+                                                array(
+                                                        'student_number'=>$data['student']['slug'],
+                                                        'sy_reference'=>$reg['intID'],
+                                                        'description LIKE' =>'Tuition%', 
+                                                        'status' => 'Paid'                                                       
+                                                    ))
+                                                 ->result_array();                  
+            $temp['payments_reservation'] = $this->db->get_where('payment_details',
+                                                 array(
+                                                         'student_number'=>$data['student']['slug'],
+                                                         'sy_reference'=>$reg['intID'],
+                                                         'description LIKE' =>'Reservation%',                                                        
+                                                         'status' => 'Paid'      
+                                                     ))
+                                                  ->result_array();       
+            $temp['payments_other'] = $this->db->get_where('payment_details',
+                                                  array(
+                                                          'student_number'=>$data['student']['slug'],
+                                                          'sy_reference'=>$reg['intID'],
+                                                          'description !=' =>'Reservation Payment',
+                                                          'description NOT LIKE' =>'Tuition%',                                                        
+                                                          'status' => 'Paid'      
+                                                      ))
+                                                   ->result_array();               
+
             $temp['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
@@ -106,19 +126,17 @@ class Portal extends CI_Controller {
             ->get()
             ->result_array();
 
-            $tuition[] =  $temp;
-            
-        }
-
-        
-
-        $data['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            $temp['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
             ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-            ->where($where_other)        
+            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $reg['intID']))        
             ->get()
             ->result_array();
+
+            $tuition[] =  $temp;
+            
+        }
 
         $data['student'] = $this->data_fetcher->getStudent($id);
         $data['tuition'] = $tuition;        
