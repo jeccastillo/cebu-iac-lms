@@ -248,7 +248,7 @@ new Vue({
         })
         Swal.showLoading();
         axios
-            .get(base_url + 'finance/sync_payment_details_data/'{
+            .get(base_url + 'finance/sync_payment_details_data/',{
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
