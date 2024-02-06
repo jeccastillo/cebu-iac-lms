@@ -270,7 +270,7 @@ new Vue({
                 })
 
             .then((data) => {   
-                Swal.hideLoading();                       
+                Swal.close();                       
                 axios
                     .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
                         headers: {
