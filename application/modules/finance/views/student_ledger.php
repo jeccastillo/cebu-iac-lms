@@ -133,9 +133,9 @@
                                 <th>O.R. Number</th>
                                 <th>Remarks</th>
                                 <th>Assessment</th>
-                                <th>Payment</th>
-                                <th>Balance</th>
+                                <th>Payment</th>                                
                                 <th>Added/Changed By</th>                                                                                                 
+                                <th>Cashier</th> 
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -148,18 +148,18 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>
-                                <td :class="item.muted">{{ item.balance }}</td>
+                                <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>                                
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
+                                <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td v-if="finance && finance.special_role != 0">
                                     <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
                                     <button v-else class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
                                 </td>
                                 <td v-else></td>
                             </tr>
-                            <tr>                                
+                            <!-- <tr>                                
                                 <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>                     
                 </div>
