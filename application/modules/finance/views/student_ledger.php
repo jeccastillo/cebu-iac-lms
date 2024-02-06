@@ -120,7 +120,7 @@
                             <td class="text-right">Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</td>                            
                         </tr>
                     </table>
-                    <table class="table table-bordered table-striped">
+                    <table v-for="term in other" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="12">Other</th>
@@ -141,7 +141,7 @@
                             </tr>
                         </thead>
                         <tbody>                            
-                            <tr v-for="item in other">
+                            <tr v-for="item in term.ledger_items">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
                                 <td :class="item.muted">{{ item.name }}</td>
@@ -192,7 +192,8 @@ new Vue({
         sem: '<?php echo $sem; ?>',
         base_url: '<?php echo base_url(); ?>',
         ledger: [],      
-        ledger_term: [],         
+        ledger_term: [],    
+        other_term: [],     
         term_balances: [], 
         term_balance: 0,
         tuition: [],
@@ -334,6 +335,7 @@ new Vue({
             
             this.term_balance = 0;
             this.ledger_term = [];
+            this.other_term = [];
             if(tuition.term.paymentType == 'partial')
                 amount = tuition.ti_before_deductions;
             else
@@ -467,8 +469,8 @@ new Vue({
             }
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
-                this.term_balance += paid;
-                this.ledger_term.push({
+                this.other_term_balance += paid;
+                this.other_term.push({
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
@@ -491,6 +493,11 @@ new Vue({
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
+            });
+
+            this.other.push({
+                'ledger_items': this.other_term,
+                'balance': this.running_balance_other.toFixed(2)
             });
 
             this.running_balance += this.term_balance; 
