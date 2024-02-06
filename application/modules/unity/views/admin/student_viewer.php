@@ -51,21 +51,23 @@
         </section>
         <hr />
         <div class="content">
-            <div v-if="show_alert">
-                <div class="alert alert-danger" role="alert">
+            <div class="row" v-if="show_alert">
+                <div class="alert alert-danger col-sm-6" role="alert">
                     <h4 class="alert-heading">Alert!</h4>
                     <p>This Student still has remaining balances:</p>                                
                 </div>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>Term</th>
-                        <th>Balance</th>
-                    </tr>
-                    <tr v-for="item in term_balances" v-if="item.balance > 0">
-                        <td>{{ item.term }}</td>
-                        <td><strong>P{{ item.formatted_balance }}</strong></td>
-                    </tr>
-                </table>
+                <div class="col-sm-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Term</th>
+                            <th>Balance</th>
+                        </tr>
+                        <tr v-for="item in term_balances" v-if="item.balance > 0">
+                            <td>{{ item.term }}</td>
+                            <td><strong>P{{ item.formatted_balance }}</strong></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
