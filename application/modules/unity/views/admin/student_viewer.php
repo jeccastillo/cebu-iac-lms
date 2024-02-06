@@ -55,9 +55,16 @@
                 <h4 class="alert-heading">Alert!</h4>
                 <p>This Student still has remaining balances:</p>
                 <hr>
-                <div v-for="item in term_balances" v-if="item.balance > 0">
-                    <p class="mb-0">{{ item.term }} : <strong>P{{ item.formatted_balance }}</strong></p>
-                </div>
+                <table class="table">
+                <tr>
+                    <th>Term</th>
+                    <th>Balance</th>
+                </tr>
+                <tr v-for="item in term_balances" v-if="item.balance > 0">
+                    <td>{{ item.term }}</td>
+                    <td><strong>P{{ item.formatted_balance }}</strong></td>
+                </tr>
+                </table>
             </div>
             <div class="row">
                 <div class="col-sm-12">
