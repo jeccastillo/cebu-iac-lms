@@ -279,8 +279,7 @@ new Vue({
                         },
                     })
 
-                    .then((data) => {                          
-                        other_temp = data.data.other;
+                    .then((data) => {                                                  
                         this.finance = data.data.user;
                         this.tuition = data.data.tuition;
                         this.student = data.data.student;
@@ -291,22 +290,7 @@ new Vue({
                         for(i in this.tuition){                                        
                              this.getPayments(this.tuition[i]);                                                          
                         }
-
-                        
-                        for(i in other_temp){
-                            if(other_temp[i].is_disabled == 0){
-                                this.running_balance_other += Number(other_temp[i].amount);                         
-                                other_temp[i].muted = "";
-                            }
-                            else{
-                                other_temp[i].muted = "text-muted";                        
-                            }                    
-                                                                                            
-                            other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            
-                            this.other.push(other_temp[i]);
-                        }
-                        this.running_balance_other = this.running_balance_other.toFixed(2);
+                                            
                         // console.log(data);
                     });
             });
@@ -391,6 +375,13 @@ new Vue({
                                         
                 this.term_balance += parseFloat(tuition.ledger[i].amount);
                 this.ledger_term.push(tuition.ledger[i]); 
+            
+            }
+
+            for(i in tuition.other){
+                                        
+                this.term_balance += parseFloat(tuition.other[i].amount);
+                this.other_term.push(tuition.other[i]); 
             
             }
 
