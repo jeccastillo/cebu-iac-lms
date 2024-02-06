@@ -120,7 +120,7 @@
                             <td class="text-right">Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</td>                            
                         </tr>
                     </table>
-                    <table v-for="term in other" class="table table-bordered table-striped">
+                    <table v-for="term in other" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="11">Other</th>
