@@ -1760,6 +1760,21 @@ class Registrar extends CI_Controller {
 
     }
 
+    public function leave_of_abscence_report($sem){
+
+        $this->data['sem'] =  $sem;
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/loa",$this->data);
+        $this->load->view("common/footer",$this->data); 
+
+    }
+
+    public function leave_of_abscence_report_data($sem){
+        
+
+    }
+
     public function register_old_student_data($studNum,$sem){
 
         $data['student'] = $this->data_fetcher->getStudent($studNum);
