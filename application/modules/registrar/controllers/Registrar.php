@@ -1765,7 +1765,7 @@ class Registrar extends CI_Controller {
         $this->data['sem'] =  $sem;
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/loa",$this->data);
+        $this->load->view("admin/loa_report",$this->data);
         $this->load->view("common/footer",$this->data); 
 
     }
