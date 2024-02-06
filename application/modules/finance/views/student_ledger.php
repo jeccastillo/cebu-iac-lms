@@ -151,10 +151,8 @@
                                 <td :class="item.muted">{{ (item.amount < 0)?item.amount:'-' }}</td>                                
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
-                                <td v-if="finance && finance.special_role != 0">
-                                    <button class="btn btn-success" v-if="item.is_disabled != 0" @click="changeLedgerItemStatus(0,item.id)">Enable</button>
-                                    <button v-else class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
-                                </td>
+                                <td :class="item.muted" v-if="item.id && finance && finance.special_role != 0"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
+                                <td :class="item.muted" v-else></td>                                                                                             
                                 <td v-else></td>
                             </tr>
                             <!-- <tr>                                
