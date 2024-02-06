@@ -206,6 +206,10 @@ new Vue({
             strMajor:'',
 
         },
+        sync_data:{
+            id:'<?php echo $max_id; ?>',
+            campus:'<?php echo $campus; ?>',
+        },
         running_balance: 0,
         running_balance_other: 0,
         sy: undefined,               
@@ -247,12 +251,26 @@ new Vue({
             icon: 'info',
         })
         Swal.showLoading();
+        
         axios
-            .get(base_url + 'finance/sync_payment_details_data/',{
+            .post(api_url + 'finance/sync_payment', this.sync_data{
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
             })
+
+            .then((data) => {   
+                var resp = data.data.data;
+                var formdata = new FormData();                    
+                for(const [key,value] of Object.entries(resp)){                   
+                    formdata.append(key,value);
+                }
+            axios
+                .post(base_url + 'finance/sync_payment_details_data/',formdata{
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    },
+                })
 
             .then((data) => {   
                 Swal.hideLoading();                       
@@ -294,6 +312,7 @@ new Vue({
                         // console.log(data);
                     });
             });
+        });
         
 
    
