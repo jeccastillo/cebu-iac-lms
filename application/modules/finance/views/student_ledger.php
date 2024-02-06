@@ -380,6 +380,7 @@ new Vue({
             for(i in tuition.other){
                                         
                 this.term_balance_other += parseFloat(tuition.other[i].amount);
+                tuition.other[i]['balance'] = this.term_balance_other;
                 this.other_term.push(tuition.other[i]); 
             
             }
@@ -475,7 +476,7 @@ new Vue({
                     'added_by': 0, 
                     'cashier': other[i].cashier_id,
                     'is_disabled':0,
-                    'balance': this.term_balance.toFixed(2),
+                    'balance': this.term_balance_other.toFixed(2),
                 });
                 
             }
@@ -491,6 +492,7 @@ new Vue({
             });
 
             this.running_balance += this.term_balance; 
+            this.running_balance_other += this.term_balance_other; 
                 
         },
         submitLedgerItem: function(){
