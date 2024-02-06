@@ -238,44 +238,53 @@ new Vue({
         ':' +
         (minute < 10 ? '0' + minute.toString() : minute);
         this.request.date = localDatetime;
-
         axios
-            .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
+            .get(base_url + 'finance/sync_payment_details_data/'{
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
             })
 
             .then((data) => {                          
-                other_temp = data.data.other;
-                this.finance = data.data.user;
-                this.tuition = data.data.tuition;
-                this.student = data.data.student;
-                this.sy = data.data.sy;
-                this.request.syid = data.data.active_sem;  
-                var current_sy_id = 0;                                               
+                axios
+                    .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        },
+                    })
 
-                for(i in this.tuition){                                        
-                    this.getPayments(this.tuition[i]);                                                          
-                }
+                    .then((data) => {                          
+                        other_temp = data.data.other;
+                        this.finance = data.data.user;
+                        this.tuition = data.data.tuition;
+                        this.student = data.data.student;
+                        this.sy = data.data.sy;
+                        this.request.syid = data.data.active_sem;  
+                        var current_sy_id = 0;                                               
 
-                
-                for(i in other_temp){
-                    if(other_temp[i].is_disabled == 0){
-                        this.running_balance_other += Number(other_temp[i].amount);                         
-                        other_temp[i].muted = "";
-                    }
-                    else{
-                        other_temp[i].muted = "text-muted";                        
-                    }                    
-                                                                                     
-                    other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                    
-                    this.other.push(other_temp[i]);
-                }
-                this.running_balance_other = this.running_balance_other.toFixed(2);
-                // console.log(data);
+                        for(i in this.tuition){                                        
+                            this.getPayments(this.tuition[i]);                                                          
+                        }
+
+                        
+                        for(i in other_temp){
+                            if(other_temp[i].is_disabled == 0){
+                                this.running_balance_other += Number(other_temp[i].amount);                         
+                                other_temp[i].muted = "";
+                            }
+                            else{
+                                other_temp[i].muted = "text-muted";                        
+                            }                    
+                                                                                            
+                            other_temp[i]['balance'] =  this.running_balance_other.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            
+                            this.other.push(other_temp[i]);
+                        }
+                        this.running_balance_other = this.running_balance_other.toFixed(2);
+                        // console.log(data);
+                    });
             });
+        
 
    
 

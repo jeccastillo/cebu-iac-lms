@@ -120,6 +120,7 @@ class Finance extends CI_Controller {
         $this->load->view("common/edit_ay_conf",$this->data); 
     }
 
+
     public function student_account_report($id = 0){
 
         $this->load->library("curl");
@@ -349,16 +350,49 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function sync_payment_details(){
-
-        $this->load->view("common/header",$this->data);
-        $this->load->view("sync_payment",$this->data);
-        $this->load->view("common/footer",$this->data);
-    
-    }
-
     public function sync_payment_details_data(){
+        $this->load->library("curl");
         
+        $max_id = $this->db->select('id')
+                            ->order_by('id', 'DESC')
+                            ->limit(1)
+                            ->get('payment_details')
+                            ->first_row();
+        /* API URL */
+        $url = 'http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/sync_payments';
+   
+        // Data to be sent in the POST request
+        if($max_id)
+            $id = $max_id->id;
+        else
+            $id = 0;
+
+        $post_data = array(
+            'id' => $id,
+            'campus' => $this->data['campus'],
+        );
+
+        // Make the POST request
+        $response = $this->curl->simple_post($url, $post_data);
+
+
+        // Check for cURL errors
+        if ($this->curl->error_string) {
+            //echo "cURL Error: " . $this->curl->error_string;
+            $data['success'] = false;
+            $data['message'] = $this->curl->error_string;
+        } else {
+            // Process the response
+
+            // $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
+            $response = json_decode($response, true);
+            
+            foreach($response['data'] as $data){
+                $this->data_poster->post_data('payment_details',$data);
+            }
+            $data['success'] = true;
+        }   
+        echo json_encode($data);
     }
     
     public function submit_ledger_item(){
