@@ -35,6 +35,7 @@ class Finance extends CI_Controller {
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
         $this->data['title'] = "CCT Unity";
+        $this->data['api_url'] = $this->config->item('api_url');
         $this->load->library("email");
         
                 
@@ -359,7 +360,7 @@ class Finance extends CI_Controller {
                             ->get('payment_details')
                             ->first_row();
         /* API URL */
-        $url = 'http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/sync_payments';
+        $url = $this->data['api_url'].'sms/finance/sync_payments';
    
         // Data to be sent in the POST request
         if($max_id)

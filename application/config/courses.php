@@ -22,6 +22,7 @@ $config['sfdf'] = 1350;
 $config['csg']['student_handbook'] = 70;
 $config['csg']['student_publication'] = 105; 
 $config['campus'] = "Cebu";
+$config['api_url'] = 'http://cebuapi.iacademy.edu.ph/api/v1/';
 
 /* Form Configuration */
 
