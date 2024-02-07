@@ -51,7 +51,7 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
-                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount * -1):'-' }}</td>                               
+                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                                 <td :class="item.muted">{{ item.balance }}</td>                                
                             </tr>
                             <tr>                                
@@ -89,7 +89,7 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
-                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount * -1):'-' }}</td>                               
+                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                             </tr>
                             <!-- <tr>                                
                                 <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
