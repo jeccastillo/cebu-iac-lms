@@ -61,12 +61,14 @@
                         <thead>
                             <tr>
                                 <th>Term</th>
+                                <th>Payment Type</th>
                                 <th>Balance</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in term_balances" v-if="item.balance > 0">
                                 <td>{{ item.term }}</td>
+                                <td>{{ item.payment_type }}</td>
                                 <td><strong>P{{ item.formatted_balance }}</strong></td>
                             </tr>
                         </tbody>

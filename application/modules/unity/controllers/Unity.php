@@ -1602,6 +1602,7 @@ class Unity extends CI_Controller {
                 $term_balances[] = [
                     'formatted_balance'=> number_format($balance),
                     'balance'=>$balance,
+                    'payment_type'=>$reg['paymentType'],
                     'term'=>$reg['enumSem']." ".$reg['term_label']." S.Y.".$reg['strYearStart']."-".$reg['strYearEnd']
                 ];
             }
