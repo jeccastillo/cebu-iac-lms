@@ -32,7 +32,7 @@
                     </tr>                
                 </thead>
                 <tbody>
-                    <tr v-for="st in list1">
+                    <tr v-for="st in sortedData">
                         <td>{{ st.strStudentNumber }}</td>
                         <td>{{ st.strLastname }}</td>
                         <td>{{ st.strFirstname }}</td>
@@ -52,7 +52,7 @@
                     </tr>                
                 </thead>
                 <tbody>
-                    <tr v-for="st in list2">
+                    <tr v-for="st in sortedData2">
                         <td>{{ st.strStudentNumber }}</td>
                         <td>{{ st.strLastname }}</td>
                         <td>{{ st.strFirstname }}</td>
