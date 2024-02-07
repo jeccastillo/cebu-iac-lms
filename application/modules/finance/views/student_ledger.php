@@ -102,8 +102,8 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (item.amount >= 0)?numberWithCommas(item.amount):'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance) }}</td>
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
@@ -149,8 +149,8 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (item.amount >= 0)?numberWithCommas(item.amount):'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?numberWithCommas(item.amount * -1):'-' }}</td>                               
+                                <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount * -1):'-' }}</td>                               
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role != 0"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
@@ -347,13 +347,19 @@ new Vue({
 
             for(i in tuition.scholarship){
                 var scholarship_amount = 0;
-                if(tuition.term.paymentType == 'partial')
+                var sa = 0;
+                if(tuition.term.paymentType == 'partial'){
                     scholarship_amount = tuition.scholarship_deductions_installment_array[i] * -1;
-                else
+                    sa = tuition.scholarship_deductions_installment_array[i];
+                }
+                else{
                     scholarship_amount = tuition.scholarship_deductions_array[i] * -1;
+                    sa = tuition.scholarship_deductions_array[i];
+                }
                                         
                 this.term_balance += scholarship_amount;
                 this.ledger_term.push({
+                    'type': 'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
@@ -364,7 +370,7 @@ new Vue({
                     'or_number':'',
                     'date': tuition.scholarship[i].date_applied,
                     'remarks':'',
-                    'amount': scholarship_amount.toFixed(2),
+                    'amount': sa.toFixed(2),
                     'added_by': 0,
                     'cashier': tuition.scholarship[i].created_by_id,
                     'is_disabled':0,
@@ -376,7 +382,26 @@ new Vue({
             for(i in tuition.ledger){
                                         
                 this.term_balance += parseFloat(tuition.ledger[i].amount);
+                tuition.ledger[i]['balance'] = this.term_balance;
+                if(tuition.ledger[i].amount < 0){
+                    tuition.ledger[i].type = "payment";
+                    tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
+                    tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
+                }
                 this.ledger_term.push(tuition.ledger[i]); 
+            
+            }
+
+            for(i in tuition.other){                                        
+                this.term_balance_other += parseFloat(tuition.other[i].amount);
+
+                tuition.other[i]['balance'] = this.term_balance_other;
+                if(tuition.other[i].amount < 0){
+                    tuition.other[i].type = "payment";
+                    tuition.other[i].amount = tuition.other[i].amount * -1;
+                    tuition.other[i].amount = tuition.other[i].amount.toFixed(2);
+                }
+                this.other_term.push(tuition.other[i]); 
             
             }
 
@@ -384,13 +409,19 @@ new Vue({
 
             for(i in tuition.discount){
                 var discount_amount = 0;
-                if(tuition.term.paymentType == 'partial')
+                var dc = 0;
+                if(tuition.term.paymentType == 'partial'){
                     discount_amount = tuition.scholarship_deductions_installment_dc_array[i] * -1;
-                else
+                    dc = tuition.scholarship_deductions_installment_dc_array[i];
+                }
+                else{
                     discount_amount = tuition.scholarship_deductions_dc_array[i] * -1;
+                    dc = tuition.scholarship_deductions_dc_array[i];
+                }
                                         
                 this.term_balance += discount_amount;
                 this.ledger_term.push({
+                    'type': 'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
@@ -401,7 +432,7 @@ new Vue({
                     'or_number':'',
                     'date': tuition.discount[i].date_applied,
                     'remarks':'',
-                    'amount': discount_amount.toFixed(2),
+                    'amount': dc.toFixed(2),
                     'added_by': 0,
                     'is_disabled':0,
                     'cashier': tuition.discount[i].created_by_id,
@@ -416,6 +447,7 @@ new Vue({
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
+                    'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
@@ -426,7 +458,7 @@ new Vue({
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
                     'remarks': payments[i].remarks,
-                    'amount': paid.toFixed(2),
+                    'amount': payments[i].subtotal_order.toFixed(2),
                     'added_by': 0, 
                     'cashier': payments[i].cashier_id,
                     'is_disabled':0,
@@ -438,6 +470,7 @@ new Vue({
                 var paid = reservation[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
+                    'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
@@ -448,23 +481,19 @@ new Vue({
                     'name': reservation[i].description,
                     'or_number':reservation[i].or_number,
                     'remarks': reservation[i].remarks,
-                    'amount': paid.toFixed(2),
+                    'amount': reservation[i].subtotal_order.toFixed(2),
                     'added_by': 0,
                     'cashier': payments[i].cashier_id,
                     'is_disabled':0,
                     'balance': this.term_balance.toFixed(2),
                 });                
             }
-            for(i in tuition.other){                                        
-                this.term_balance_other += parseFloat(tuition.other[i].amount);
-                tuition.other[i]['balance'] = this.term_balance_other;
-                this.other_term.push(tuition.other[i]); 
             
-            }
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
                 this.term_balance_other += paid;                
                 this.other_term.push({
+                    'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
                     'enumSem':tuition.term.enumSem,
