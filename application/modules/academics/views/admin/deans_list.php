@@ -127,9 +127,7 @@ new Vue({
                     this.loading = false; 
                     this.list1 = data.data.list_1st_honor;
                     this.list2 = data.data.list_2nd_honor;
-                    this.sy = data.data.sy;       
-                    this.sortedData();       
-                    this.sortedData2();       
+                    this.sy = data.data.sy;         
                          
                 })
                 .catch((error) => {
