@@ -426,7 +426,7 @@ new Vue({
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
                     'remarks': payments[i].remarks,
-                    'amount': paid.toFixed(2),
+                    'amount': payments[i].subtotal_order,
                     'added_by': 0, 
                     'cashier': payments[i].cashier_id,
                     'is_disabled':0,
