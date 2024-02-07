@@ -107,7 +107,12 @@ new Vue({
     },
     computed: {
         sortedData: function() {
-            return this.list.sort(function(a, b) {
+            return this.list1.sort(function(a, b) {
+                return a.gwa - b.gwa;
+            });
+        },
+        sortedData2: function() {
+            return this.list2.sort(function(a, b) {
                 return a.gwa - b.gwa;
             });
         }
@@ -124,6 +129,7 @@ new Vue({
                     this.list2 = data.data.list_2nd_honor;
                     this.sy = data.data.sy;       
                     this.sortedData();       
+                    this.sortedData2();       
                          
                 })
                 .catch((error) => {
