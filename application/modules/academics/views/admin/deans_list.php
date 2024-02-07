@@ -20,9 +20,9 @@
     </section>
         <hr />
     <div v-if="!loading" class="content">
-        <div v-if="list.length > 0">
+        <div v-if="list1.length > 0 && list2.length > 0">
             <h4>1st Honors</h4>
-            <table class="table table-striped">
+            <table v-if="list1.length > 0" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Student Number</th>
@@ -42,7 +42,7 @@
                 
             </table>
             <h4>2nd Honors</h4>
-            <table class="table table-striped">
+            <table v-if="list2.length > 0" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Student Number</th>
