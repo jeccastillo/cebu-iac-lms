@@ -118,7 +118,7 @@
                     </table>
                     <table class="table table-bordered table-striped">
                         <tr>                                
-                            <td class="text-right">Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</td>                            
+                            <td class="text-right"><strong>Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</strong></td>                            
                         </tr>
                     </table>
                     <table v-for="term in other" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
