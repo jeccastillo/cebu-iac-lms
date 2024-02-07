@@ -534,7 +534,8 @@ class Academics extends CI_Controller {
         {  
             $data['success'] = true;
             $syid = $term;
-            $data['list'] = [];
+            $data['list_1st_honor'] = [];
+            $data['list_2nd_honor'] = [];
             $data['gwa'] = [];
             $pr = ($period == 0)?"v2":"v3";
             $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$syid,0);
@@ -573,7 +574,11 @@ class Academics extends CI_Controller {
                 }
                 if($term_gwa != 0 && $term_gwa <= 1.5){
                     $student['gwa'] = $term_gwa;
-                    $data['list'][] = $student;                    
+                    $data['list_2nd_honor'][] = $student;                    
+                }
+                if($term_gwa != 0 && $term_gwa <= 1.25){
+                    $student['gwa'] = $term_gwa;
+                    $data['list_1st_honor'][] = $student;                    
                 }
                 
             }

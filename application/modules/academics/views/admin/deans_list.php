@@ -19,27 +19,49 @@
         <hr />
     </section>
         <hr />
-    <div v-if="!loading" class="content">             
-        <h4>Dean's List</h4>
-        <table v-if="list.length > 0" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Student Number</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>GWA</th>
-                </tr>                
-            </thead>
-            <tbody>
-                <tr v-for="st in list">
-                    <td>{{ st.strStudentNumber }}</td>
-                    <td>{{ st.strLastname }}</td>
-                    <td>{{ st.strFirstname }}</td>
-                    <td>{{ st.gwa }}</td>                    
-                </tr>
-            </tbody>
-            
-        </table>
+    <div v-if="!loading" class="content">
+        <div v-if="list.length > 0">
+            <h4>1st Honors</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Student Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>GWA</th>
+                    </tr>                
+                </thead>
+                <tbody>
+                    <tr v-for="st in list1">
+                        <td>{{ st.strStudentNumber }}</td>
+                        <td>{{ st.strLastname }}</td>
+                        <td>{{ st.strFirstname }}</td>
+                        <td>{{ st.gwa }}</td>                    
+                    </tr>
+                </tbody>
+                
+            </table>
+            <h4>2nd Honors</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Student Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>GWA</th>
+                    </tr>                
+                </thead>
+                <tbody>
+                    <tr v-for="st in list2">
+                        <td>{{ st.strStudentNumber }}</td>
+                        <td>{{ st.strLastname }}</td>
+                        <td>{{ st.strFirstname }}</td>
+                        <td>{{ st.gwa }}</td>                    
+                    </tr>
+                </tbody>
+                
+            </table>
+        </div>
         <div v-else>
             <h3>Nothing to Display</h3>
         </div>
@@ -76,7 +98,8 @@ new Vue({
     el: '#registration-container',
     data: {        
         base_url: '<?php echo base_url(); ?>',
-        list: [],
+        list1: [],
+        list2: [],
         term: '<?php echo $term; ?>',
         period: '<?php echo $period; ?>', 
         sy: [],
@@ -97,7 +120,8 @@ new Vue({
             axios.get(this.base_url + 'academics/deans_listers_data/' + this.term + '/' + this.period)
                 .then((data) => {                                          
                     this.loading = false; 
-                    this.list = data.data.list;
+                    this.list1 = data.data.list_1st_honor;
+                    this.list2 = data.data.list_2nd_honor;
                     this.sy = data.data.sy;       
                     this.sortedData();       
                          
