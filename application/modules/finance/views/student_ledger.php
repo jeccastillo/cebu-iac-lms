@@ -150,7 +150,7 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?item.amount * -1:'-' }}</td>                               
+                                <td :class="item.muted">{{ (item.amount < 0)?numberWithCommas(item.amount * -1):'-' }}</td>                               
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role != 0"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
@@ -183,6 +183,9 @@
 
 
 <script>
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}    
 new Vue({
     el: "#vue-container",
     data: {
