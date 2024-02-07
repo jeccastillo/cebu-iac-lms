@@ -103,8 +103,8 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (item.amount >= 0)?item.amount:'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?"("+(item.amount * -1)+")":'-' }}</td>
-                                <td :class="item.muted">{{ item.balance }}</td>
+                                <td :class="item.muted">{{ (item.amount < 0)?item.amount * -1:'-' }}</td>
+                                <td :class="item.muted">{{ item.balance < 0 ?"(" + (item.balance * -1) + ")": item.balance }}</td>
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
