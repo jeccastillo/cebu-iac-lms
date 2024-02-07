@@ -572,7 +572,7 @@ class Academics extends CI_Controller {
                     $term_gwa = $sum_grades/$total;
                     $term_gwa = number_format(round($term_gwa,3),3);
                 }
-                if($term_gwa != 0 && $term_gwa <= 1.5){
+                if($term_gwa != 0 && $term_gwa <= 1.5 && $term_gwa > 1.25){
                     $student['gwa'] = $term_gwa;
                     $data['list_2nd_honor'][] = $student;                    
                 }
