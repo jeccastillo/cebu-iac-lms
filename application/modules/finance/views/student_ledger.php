@@ -102,8 +102,8 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (item.amount >= 0)?numberWithCommas(item.amount):'-' }}</td>
-                                <td :class="item.muted">{{ (item.amount < 0)?numberWithCommas(item.amount * -1):'-' }}</td>
+                                <td :class="item.muted">{{ (item.amount_paid >= 0)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.amount_paid < 0)?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance) }}</td>
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
@@ -426,7 +426,7 @@ new Vue({
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
                     'remarks': payments[i].remarks,
-                    'amount': payments[i].subtotal_order,
+                    'amount': paid.toFixed(2),
                     'added_by': 0, 
                     'cashier': payments[i].cashier_id,
                     'is_disabled':0,
