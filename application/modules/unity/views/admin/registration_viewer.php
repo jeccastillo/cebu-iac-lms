@@ -641,15 +641,14 @@ new Vue({
                                 }                                
                             }         
                             for(i in this.ledger_items){                                
-                                this.amount_paid += parseFloat(ledger_items[i].amount);
-                                ledger_items[i]['balance'] = this.term_balance.toFixed(2);
-                                if(ledger_items[i].amount < 0){
-                                    ledger_items[i].type = "payment";
-                                    ledger_items[i].amount = ledger_items[i].amount * -1;
-                                    ledger_items[i].amount = ledger_items[i].amount.toFixed(2);
+                                this.amount_paid += parseFloat(this.ledger_items[i].amount);                                
+                                if(this.ledger_items[i].amount < 0){
+                                    this.ledger_items[i].type = "payment";
+                                    this.ledger_items[i].amount = this.ledger_items[i].amount * -1;
+                                    this.ledger_items[i].amount = this.ledger_items[i].amount.toFixed(2);
                                 }                
                                 else{
-                                    ledger_items[i].amount = parseFloat(ledger_items[i].amount).toFixed(2)
+                                    this.ledger_items[i].amount = parseFloat(this.ledger_items[i].amount).toFixed(2)
                                 }                                
                             }                          
                             if(this.registration.enumStudentType == "new"){
