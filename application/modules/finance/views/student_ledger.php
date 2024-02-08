@@ -381,7 +381,7 @@ new Vue({
             for(i in tuition.ledger){
                                         
                 this.term_balance += parseFloat(tuition.ledger[i].amount);
-                tuition.ledger[i]['balance'] = this.term_balance;
+                tuition.ledger[i]['balance'] = this.term_balance.toFixed(2);
                 if(tuition.ledger[i].amount < 0){
                     tuition.ledger[i].type = "payment";
                     tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
@@ -394,7 +394,7 @@ new Vue({
             for(i in tuition.other){                                        
                 this.term_balance_other += parseFloat(tuition.other[i].amount);
 
-                tuition.other[i]['balance'] = this.term_balance_other;
+                tuition.other[i]['balance'] = this.term_balance_other.toFixed(2);
                 if(tuition.other[i].amount < 0){
                     tuition.other[i].type = "payment";
                     tuition.other[i].amount = tuition.other[i].amount * -1;
