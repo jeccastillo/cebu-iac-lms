@@ -226,9 +226,8 @@
                                                 <th>Date Added</th>                                                
                                                 <th>Remarks</th>
                                                 <th>Assessment</th>
-                                                <th>Payment</th>                                                
-                                                <th>Added/Changed By</th>   
-                                                <th>Cashier/Appointer</th>                                                 
+                                                <th>Payment</th>                                                                                                 
+                                                <th>Added By</th>                                                 
                                             </tr>
                                         </thead>
                                         <tbody>                                                         
@@ -237,10 +236,8 @@
                                                 <td :class="item.muted">{{  item.date }}</td>                                                
                                                 <td :class="item.muted">{{  item.remarks }}</td>
                                                 <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
-                                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                                                
-                                                <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
-                                                <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
-                                                <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>                                                                                                
+                                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                                                                                                                                                
+                                                <td :class="item.muted"><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>                                                                                                
                                             </tr>                                                                                                           
                                         </tbody>                
                                     </table>                                 
