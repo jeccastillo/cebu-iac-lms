@@ -386,9 +386,9 @@ new Vue({
                     tuition.ledger[i].type = "payment";
                     tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
                     tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
-                }
+                }                
                 this.ledger_term.push(tuition.ledger[i]); 
-            
+                console.log("tuition ledger balance: ",this.term_balance);
             }
 
             for(i in tuition.other){                                        
