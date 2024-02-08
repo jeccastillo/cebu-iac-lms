@@ -223,8 +223,7 @@
                                             </tr> 
                                             <tr>                                                                                              
                                                 <th>Payment Description</th>
-                                                <th>O.R. Date</th>
-                                                <th>O.R. Number</th>
+                                                <th>Date Added</th>                                                
                                                 <th>Remarks</th>
                                                 <th>Assessment</th>
                                                 <th>Payment</th>                                                
@@ -235,8 +234,7 @@
                                         <tbody>                                                         
                                             <tr v-for="item in ledger_items">                                                                                
                                                 <td :class="item.muted">{{ item.name }}</td>
-                                                <td :class="item.muted">{{  item.date }}</td>
-                                                <td :class="item.muted">{{  item.or_number }}</td>
+                                                <td :class="item.muted">{{  item.date }}</td>                                                
                                                 <td :class="item.muted">{{  item.remarks }}</td>
                                                 <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                                                
@@ -642,7 +640,7 @@ new Vue({
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }                                
                             }         
-                            for(i in ledger_items){                                
+                            for(i in this.ledger_items){                                
                                 this.amount_paid += parseFloat(ledger_items[i].amount);
                                 ledger_items[i]['balance'] = this.term_balance.toFixed(2);
                                 if(ledger_items[i].amount < 0){
