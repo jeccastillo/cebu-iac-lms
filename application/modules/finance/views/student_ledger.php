@@ -102,7 +102,7 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance) }}</td>
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
