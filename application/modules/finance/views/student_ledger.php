@@ -387,8 +387,10 @@ new Vue({
                     tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
                     tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
                 }                
-                this.ledger_term.push(tuition.ledger[i]);
-                console.log(tuition.ledger[i]);
+                else{
+                    tuition.ledger[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
+                }
+                this.ledger_term.push(tuition.ledger[i]);                
             }
 
             for(i in tuition.other){                                        
