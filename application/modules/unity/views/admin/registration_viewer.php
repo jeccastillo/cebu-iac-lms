@@ -215,7 +215,41 @@
                                 <div class="box-header">
                                     <h4 class="box-title">DETAILS</h4>                                    
                                 </div>                                    
-                                <div class="box-body">                                    
+                                <div class="box-body">   
+                                    <table v-if="ledger_items.length > 0" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="11">Manually Added Ledger Items</th>
+                                            </tr> 
+                                            <tr>
+                                                <th>School Year</th>
+                                                <th>Term/Semester</th>                                                
+                                                <th>Payment Description</th>
+                                                <th>O.R. Date</th>
+                                                <th>O.R. Number</th>
+                                                <th>Remarks</th>
+                                                <th>Assessment</th>
+                                                <th>Payment</th>                                                
+                                                <th>Added/Changed By</th>   
+                                                <th>Cashier/Appointer</th>                                                 
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                                         
+                                            <tr v-for="item in ledger_items">                                
+                                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
+                                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                                
+                                                <td :class="item.muted">{{ item.name }}</td>
+                                                <td :class="item.muted">{{  item.date }}</td>
+                                                <td :class="item.muted">{{  item.or_number }}</td>
+                                                <td :class="item.muted">{{  item.remarks }}</td>
+                                                <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
+                                                <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                                                
+                                                <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
+                                                <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
+                                                <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>                                                                                                
+                                            </tr>                                                                                                           
+                                        </tbody>                
+                                    </table>                                 
                                     <table class="table table-bordered table-striped">
                                         <tr>
                                             <th></th>
@@ -429,6 +463,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 
 <script>
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}        
 new Vue({
     el: '#registration-container',
     data: {
@@ -515,6 +552,7 @@ new Vue({
         amount_paid_formatted: 0,
         payments: [],
         payments_paid: [],
+        ledger_items: [],
         remaining_amount_formatted: 0,
         has_partial: false,
         reg_status: undefined,        
@@ -537,6 +575,7 @@ new Vue({
                         this.or_update.sy_reference = this.sem;                                                                                                                 
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
+                        this.ledger_items = data.data.ledger;
                         
                         
                         this.installment_dates.push(data.data.active_sem.installment1);
@@ -606,7 +645,19 @@ new Vue({
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }                                
-                            }                                   
+                            }         
+                            for(i in ledger_items){                                
+                                this.remaining_amount += parseFloat(ledger_items[i].amount);
+                                ledger_items[i]['balance'] = this.term_balance.toFixed(2);
+                                if(ledger_items[i].amount < 0){
+                                    ledger_items[i].type = "payment";
+                                    ledger_items[i].amount = ledger_items[i].amount * -1;
+                                    ledger_items[i].amount = ledger_items[i].amount.toFixed(2);
+                                }                
+                                else{
+                                    ledger_items[i].amount = parseFloat(ledger_items[i].amount).toFixed(2)
+                                }                                
+                            }                          
                             if(this.registration.enumStudentType == "new"){
                                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                                 .then((data) => {
@@ -713,6 +764,18 @@ new Vue({
     },
 
     methods: {      
+        cashierDetails: function(id){
+            axios.get(base_url + 'finance/cashier_details/' + id)
+            .then((data) => {            
+                var cashier_details = data.data.cashier_data;
+                Swal.fire({
+                    title: "Cashier/Appointer",
+                    text: cashier_details.strFirstname+" "+cashier_details.strLastname,
+                    icon: "info"
+                })
+            })
+
+        },  
         forwardSelected: function(){
             if(this.switch_term && this.selected_items.length > 0){
                 var data = {
