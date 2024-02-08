@@ -219,11 +219,9 @@
                                     <table v-if="ledger_items.length > 0" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th colspan="11">Manually Added Ledger Items</th>
+                                                <th colspan="9">Manually Added Ledger Items</th>
                                             </tr> 
-                                            <tr>
-                                                <th>School Year</th>
-                                                <th>Term/Semester</th>                                                
+                                            <tr>                                                                                              
                                                 <th>Payment Description</th>
                                                 <th>O.R. Date</th>
                                                 <th>O.R. Number</th>
@@ -235,9 +233,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                                         
-                                            <tr v-for="item in ledger_items">                                
-                                                <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
-                                                <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                                
+                                            <tr v-for="item in ledger_items">                                                                                
                                                 <td :class="item.muted">{{ item.name }}</td>
                                                 <td :class="item.muted">{{  item.date }}</td>
                                                 <td :class="item.muted">{{  item.or_number }}</td>
@@ -647,7 +643,7 @@ new Vue({
                                 }                                
                             }         
                             for(i in ledger_items){                                
-                                this.remaining_amount += parseFloat(ledger_items[i].amount);
+                                this.amount_paid += parseFloat(ledger_items[i].amount);
                                 ledger_items[i]['balance'] = this.term_balance.toFixed(2);
                                 if(ledger_items[i].amount < 0){
                                     ledger_items[i].type = "payment";
