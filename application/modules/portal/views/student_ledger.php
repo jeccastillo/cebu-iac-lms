@@ -50,7 +50,7 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                                 <td :class="item.muted">{{ item.balance }}</td>                                
                             </tr>
@@ -88,7 +88,7 @@
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (!item.type)?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                             </tr>
                             <!-- <tr>                                
@@ -266,6 +266,9 @@ new Vue({
                     tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
                     tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
                 }
+                else{
+                    tuition.ledger[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
+                }
                 this.ledger_term.push(tuition.ledger[i]); 
             
             }
@@ -278,6 +281,9 @@ new Vue({
                     tuition.other[i].type = "payment";
                     tuition.other[i].amount = tuition.other[i].amount * -1;
                     tuition.other[i].amount = tuition.other[i].amount.toFixed(2);
+                }
+                else{
+                    tuition.other[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
                 }
                 this.other_term.push(tuition.other[i]); 
             
