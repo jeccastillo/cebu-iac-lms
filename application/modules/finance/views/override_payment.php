@@ -30,6 +30,10 @@
                                         <option value="maya">Maya</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label>Date Paid</label>
+                                    <input type="date" required v-model="date_paid" class="form-control" />
+                                </div>
                             </div><!---box body--->
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>                                        
@@ -56,6 +60,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         request_id: undefined,
         webhook: 'bdo',
+        date_paid: undefined,
              
     },
 
@@ -92,12 +97,15 @@ new Vue({
                             var formdata = new FormData();
                             formdata.append('requestReferenceNumber',this.request_id);                                    
                             formdata.append('decision','ACCEPT');
+                            formdata.append('date_paid',this.date_paid);
+                            
                             
                         }
                         else if(this.webhook == "bdo"){
                             var formdata = new FormData();
                             formdata.append('req_reference_number',this.request_id);                                    
                             formdata.append('status','PAYMENT_SUCCESS');
+                            formdata.append('date_paid',this.date_paid);
                         }
                         axios
                         .post(api_url + 'payments/webhook_' this.webhook, formdata, {
