@@ -123,24 +123,16 @@ new Vue({
                             }
                         })
                         .then(data => {                
-                            if (data == "<h3 style='text-align:center;'>Successful Transaction</h3>" && this.webhook == 'bdo'){
-                                Swal.fire(
-                                    'Updated',
-                                    data.data.message,
-                                    'success'
-                                ).then(function(){
-                                    if(data.data.reload)
-                                        location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                ).then(function() {   
-                                    Swal.hideLoading();                                 
-                                });
-                            }
+                            
+                            Swal.fire(
+                                'Done',
+                                data.data.message,
+                                'success'
+                            ).then(function(){
+                                if(data.data.reload)
+                                    location.reload();
+                            });
+                            
                             
                         });
                     }
