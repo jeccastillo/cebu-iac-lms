@@ -96,15 +96,15 @@ new Vue({
                         {
                             var formdata = new FormData();
                             formdata.append('requestReferenceNumber',this.request_id);                                    
-                            formdata.append('decision','ACCEPT');
+                            formdata.append('status','PAYMENT_SUCCESS');
                             formdata.append('date_paid',this.date_paid);
                             
                             
                         }
                         else if(this.webhook == "bdo"){
                             var formdata = new FormData();
-                            formdata.append('req_reference_number',this.request_id);                                    
-                            formdata.append('status','PAYMENT_SUCCESS');
+                            formdata.append('req_reference_number',this.request_id);                                                                
+                            formdata.append('decision','ACCEPT');
                             formdata.append('date_paid',this.date_paid);
                         }
                         axios
