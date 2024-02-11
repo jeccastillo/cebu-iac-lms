@@ -107,6 +107,15 @@ new Vue({
                             formdata.append('decision','ACCEPT');
                             formdata.append('date_paid',this.date_paid);
                         }
+                        Swal.fire({
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            allowEscapeKey: false,
+                            title: 'Updating',
+                            text: 'Processing Data do not leave page',
+                            icon: 'info',
+                        })
+                        Swal.showLoading();
                         axios
                         .post(api_url + 'payments/webhook_' + this.webhook, formdata, {
                             headers: {
@@ -114,7 +123,7 @@ new Vue({
                             }
                         })
                         .then(data => {                
-                            if (data.data.success) {
+                            if (data == "<h3 style='text-align:center;'>Successful Transaction</h3>" && this.webhook == 'bdo'){
                                 Swal.fire(
                                     'Updated',
                                     data.data.message,
@@ -128,7 +137,8 @@ new Vue({
                                     'Failed!',
                                     data.data.message,
                                     'error'
-                                ).then(function() {                                    
+                                ).then(function() {   
+                                    Swal.hideLoading();                                 
                                 });
                             }
                             
