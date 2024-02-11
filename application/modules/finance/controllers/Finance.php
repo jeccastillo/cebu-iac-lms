@@ -241,6 +241,30 @@ class Finance extends CI_Controller {
 
     }
 
+    public function override_payment(){
+                
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($role == 0 && $userlevel != 2)
+            redirect(base_url()."unity");
+
+        $this->data['page'] = "override_payment";
+        $this->data['opentree'] = "finance_admin";
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("override_payment",$this->data);
+        $this->load->view("common/footer",$this->data);        
+
+    }
+
+    public function override_payment_data(){
+        $data['user'] = $this->data["user"];
+        echo json_encode($data);        
+
+    }
+
     public function student_ledger($id,$sem = 0){
 
         $this->data['id'] = $id;        

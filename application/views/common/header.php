@@ -526,11 +526,16 @@
                                 href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition Fee
                                 </a>
-                        </li>
+                        </li>                                            
                         <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
                         </li>    
+                        <li class="<?php echo (isset($page) && $page=="override_payment")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>finance/override_payment"
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Override Payment
+                                </a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/edit_ay/" style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                                 <span>Edit Dates</span> </a>
