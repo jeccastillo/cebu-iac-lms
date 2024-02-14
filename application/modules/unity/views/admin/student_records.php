@@ -39,7 +39,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
-                        <div v-for="term in records" :class="term.reg.intROG ? 'box box-success box-solid' : 'box box-default box-solid'">
+                        <div v-for="term in records" :class="term.reg.color + ' box box-solid'">
                             <div class="box-header">
                                 <div class="row">
                                     <div class="col-sm-3">School Year: <span style="font-weight:400;">{{ term.reg.strYearStart + "-" + term.reg.strYearEnd }}</span></div>
@@ -622,21 +622,27 @@ new Vue({
                         switch(this.records[i].reg.intROG){
                             case '0': 
                                 this.records[i].reg.enrollment_status = "Enlisted";
+                                this.records[i].reg.color = "box-default";
                             break;
                             case '1': 
                                 this.records[i].reg.enrollment_status = "Enrolled";
+                                this.records[i].reg.color = "box-success";
                             break;
                             case '2': 
                                 this.records[i].reg.enrollment_status = "Cleared";
+                                this.records[i].reg.color = "box-success";
                             break;
                             case '3': 
                                 this.records[i].reg.enrollment_status = "Officially Withdrawn";
+                                this.records[i].reg.color = "box-warning";
                             break;
                             case '4': 
                                 this.records[i].reg.enrollment_status = "LOA";
+                                this.records[i].reg.color = "box-info";
                             break;
                             case '5': 
                                 this.records[i].reg.enrollment_status = "AWOL";
+                                this.records[i].reg.color = "box-danger";
                             break;
                         }
                     }
