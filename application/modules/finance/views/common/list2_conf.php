@@ -67,42 +67,51 @@ $(document).ready(function() {
                     type: '<?php echo $type; ?>',
                     campus: '<?php echo $campus; ?>'              
                 },
-                function(json) {
-                    callback({
-                        recordsTotal: json.meta.to,
-                        recordsFiltered: json.meta.total,
-                        data: json.data
-                    });
-                    $("#print_form").show();
-                    $("#print_form").click(function(e){
-                        e.preventDefault();
-                        // The rest of this code assumes you are not using a library.
-                        // It can be made less verbose if you use one.
-                        const form = document.createElement('form');
-                        form.method = "post";
-                        form.action = "<?php echo base_url() ?>excel/daily_collection_report";
-                        form.dataType = "json";
+                function(json) {      
+                                                                       
+                    $.ajax({
+                            'type': 'post',
+                            'url':base_url + 'finance/get_payee_details',
+                            'data':{'data':JSON.stringify(json.data)}, 
+                            'dataType': 'json',
+                            'success':function(payee_data){
+                                callback({
+                                    recordsTotal: json.meta.to,
+                                    recordsFiltered: json.meta.total,
+                                    data: payee_data.data
+                                });
 
-                        
-                        const hiddenField = document.createElement('input');
-                        hiddenField.type = 'hidden';
-                        hiddenField.name = 'data';
-                        hiddenField.value = JSON.stringify(json.data);
+                                $("#print_form").show();
+                                $("#print_form").click(function(e){
+                                    e.preventDefault();
+                                    // The rest of this code assumes you are not using a library.
+                                    // It can be made less verbose if you use one.
+                                    const form = document.createElement('form');
+                                    form.method = "post";
+                                    form.action = "<?php echo base_url() ?>excel/daily_collection_report";
+                                    form.dataType = "json";
 
-                        form.appendChild(hiddenField);
+                                    
+                                    const hiddenField = document.createElement('input');
+                                    hiddenField.type = 'hidden';
+                                    hiddenField.name = 'data';
+                                    hiddenField.value = JSON.stringify(payee_data.data);
 
-                        const hiddenField2 = document.createElement('input');
-                        hiddenField2.type = 'hidden';
-                        hiddenField2.name = 'date';
-                        hiddenField2.value = "<?php echo $date; ?>";
+                                    form.appendChild(hiddenField);
 
-                        form.appendChild(hiddenField2);
-                        
+                                    const hiddenField2 = document.createElement('input');
+                                    hiddenField2.type = 'hidden';
+                                    hiddenField2.name = 'date';
+                                    hiddenField2.value = "<?php echo $date; ?>";
 
-                        document.body.appendChild(form);
-                        form.submit();
-                    });
-                                        
+                                    form.appendChild(hiddenField2);
+                                    
+
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                });                    
+                            },
+                    });                
                 }
             );
         },
@@ -221,7 +230,7 @@ $(document).ready(function() {
                 data: "or_number"
             },
             {
-                data: "student_information_id"
+                data: "student_number"
             },
             {
                 data: "student_name"

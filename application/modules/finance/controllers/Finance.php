@@ -124,48 +124,19 @@ class Finance extends CI_Controller {
 
     public function student_account_report($id = 0){
 
-        $this->load->library("curl");
-        
-        /* API URL */
-        $url = 'http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/sync_payments';
-   
-        // Data to be sent in the POST request
-        $post_data = array(
-            'id' => '1372',
-            'campus' => $this->data['campus'],
-        );
+        $sy = $this->data_fetcher->get_active_sem();
+        if($id != 0)
+            $sy = $this->data_fetcher->getAy($id); 
 
-        // Make the POST request
-        $response = $this->curl->simple_post($url, $post_data);
+        $sem = $sy['intID'];
 
-
-        // Check for cURL errors
-        if ($this->curl->error_string) {
-            echo "cURL Error: " . $this->curl->error_string;
-        } else {
-            // Process the response
-
-            // $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
-            $response = json_decode($response, true);
-            
-            foreach($response['data'] as $data){
-                $this->data_poster->post_data('payment_details',$data);
-            }
-            die();
-        }
-
-        
-        if($id == 0)
-            $this->data['item'] = $this->data_fetcher->get_active_sem();
-        else
-            $this->data['item'] = $this->data_fetcher->getAy($id);
-        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['page'] = "installment_dates";
         $this->data['opentree'] = "finance_admin";
+        $this->data['sem'] = $sem;
 
-        $this->data['excel_link'] = base_url()."excel/student_account_report/";
+        // $this->data['excel_link'] = base_url()."excel/student_account_report/" . $sem . "/" . $this->data['campus'];
         
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         
         $this->load->view("common/header",$this->data);
         $this->load->view("student_account_report",$this->data);
@@ -210,6 +181,37 @@ class Finance extends CI_Controller {
             $data['payee'] = null;
 
         echo json_encode($data);
+    }
+
+    public function get_payee_details(){
+        $post =  $this->input->post();        
+        $data = json_decode($post['data']);
+        $ret = [];
+        $ret['data'] = [];
+        foreach($data as $item){
+            $details = null;
+            if($item->student_information_id != 0){
+                $details = $this->db->get_where('tb_mas_users',array('slug'=>$item->slug))->first_row(); 
+                if($details){
+                    $item->student_number = preg_replace("/[^a-zA-Z0-9]+/", "", $details->strStudentNumber);
+                }
+                else{
+                    $sem = $this->db->get_where('tb_mas_sy',array('intID'=>$item->sy_reference))->first_row(); 
+                    $item->student_number = "A".$sem->strYearStart.str_pad($item->student_information_id, 4, '0', STR_PAD_LEFT);
+                }
+            }
+            else{
+                $details = $this->db->get_where('tb_mas_ns_payee',array('lastname'=>$item->lastname,'firstname'=>$item->firstname))->first_row(); 
+                $item->student_number = $details->id_number;
+            }
+            
+            
+            $ret['data'][] = $item;
+
+        }
+
+        $ret['success'] =  true;        
+        echo json_encode($ret);
     }
 
     public function view_payees(){
