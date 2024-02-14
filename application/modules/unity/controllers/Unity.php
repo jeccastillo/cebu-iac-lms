@@ -488,7 +488,8 @@ class Unity extends CI_Controller {
             }
             if($registration->intROG == 1){
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
-            
+                print_r($records);
+                die();
                 foreach($records as $record){
                     $data =[
                         'floatMidtermGrade' => "OW",
