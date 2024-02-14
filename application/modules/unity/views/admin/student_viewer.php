@@ -995,6 +995,7 @@ new Vue({
                 formdata.append(key, value);
                 }
                 formdata.append('term_id',this.sem_student);              
+                formdata.append('student_id',this.student.intID);
                 formdata.append('password',inputValue);
 
                 $('#loa-modal').modal('toggle')

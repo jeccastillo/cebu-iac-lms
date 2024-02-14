@@ -456,7 +456,43 @@ class Unity extends CI_Controller {
 
     public function tag_loa(){
         $post =  $this->input->post();
-        print_r($post);
+        $registration = $this->db->get_where('tb_mas_registration',array('intAYID'=>$post['term_id'],'intStudentID'=>$post['student_id']))->first_row();
+        if(pw_unhash($this->data['user']['strPass']) == $post['password']){
+            if(!$registration){
+                $reg_data = 
+                [
+                    'intStudentID'=> $post['student_id'],
+                    'enlisted_by' => $this->data['user']['intID'],
+                    'intAYID' => $post['term_id'],
+                    'enumRegistrationStatus' => 'regular',
+                    'enumStudentType' => 'continuing',
+                    'intYearLevel' => 1,
+                    'intROG' => 4,
+                    'loa_remarks' => $post['loa_remarks'],
+                    'loa_date' => $post['loa_date']
+                ];
+
+                $this->db->insert('tb_mas_registration',$reg_data);
+            }
+            else{
+                $reg_data = [
+                    'intROG' => 4,
+                    'loa_remarks' => $post['loa_remarks'],
+                    'loa_date' => $post['loa_date']
+                ];
+                $this->db->where(array('intAYID'=>$post['term_id'],'intStudentID'=>$post['student_id']))
+                        ->update('tb_mas_registration',$reg_data);
+
+            }
+            $data['message'] = "successfully updated";
+            $data['success'] = true;
+        }
+        else{
+            $data['message'] = "invalid password";
+            $data['success'] = false;
+        }
+        
+        echo json_encode($data);
     }
     
     public function registration_viewer_data($id,$sem){
