@@ -486,8 +486,25 @@ class Unity extends CI_Controller {
                         ->update('tb_mas_registration',$reg_data);
 
             }
+            if($registration->intROG == 2){
+                $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
+            
+                foreach($records as $record){
+                    $data =[
+                        'floatMidtermGrade' => "OW",
+                        'floatFinalGrade' => "OW",
+                        'strRemarks' => "Officaly Withdrawn"
+                    ];
+                
+                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
+                }     
+            }           
+        
             $data['message'] = "successfully updated";
             $data['success'] = true;
+            $active_sem = $this->data_fetcher->get_sem_by_id($post['term_id']);
+
+            $this->data_poster->log_action('Registrar','Tagged Student '.$post['student_name'].' For LOA: '.$active_sem['term_student_type']." ".$active_sem['enumSem']." ".$active_sem['term_label']." ".$active_sem['strYearStart']."-".$active_sem['strYearEnd'],'green');
         }
         else{
             $data['message'] = "Invalid password";
