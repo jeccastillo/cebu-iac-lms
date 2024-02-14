@@ -69,7 +69,8 @@ $(document).ready(function() {
                 },
                 function(json) {      
                                                                        
-                    $.ajax(
+                    $.ajax({
+                            'type': 'post'
                             'url':base_url + 'finance/get_payee_details',
                             'data':{'data':JSON.stringify(json.data)}, 
                             'dataType': 'json',
@@ -113,8 +114,8 @@ $(document).ready(function() {
                                     document.body.appendChild(form);
                                     form.submit();
                                 });                    
-                            });
-                                        
+                            },
+                    });                
                 }
             );
         },
