@@ -135,7 +135,7 @@ class Finance extends CI_Controller {
         $this->data['opentree'] = "finance_admin";
         $this->data['sem'] = $sem;
 
-        $this->data['excel_link'] = base_url()."excel/student_account_report/" . $sem . "/" . $this->data['campus'];
+        // $this->data['excel_link'] = base_url()."excel/student_account_report/" . $sem . "/" . $this->data['campus'];
         
         
         $this->load->view("common/header",$this->data);

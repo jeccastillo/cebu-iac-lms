@@ -674,6 +674,24 @@ $(document).ready(function() {
         $("#strUnits").val('');
         $("#strDescription").val('');
     });
+
+    $("#submit-ay").click(function(e) {
+        var submit_sy = confirm(
+            "Are you sure you want to switch school year?"
+        );
+        if (submit_sy) {
+            $("#set-ay-form").submit();
+        }
+
+
+    });
+
+    $("#export_student_account_report").click(function(e){
+        var campus = "<?php echo $campus;?>";
+        var base_url = "<?php echo base_url(); ?>";
+        var url = base_url + 'excel/student_account_report/' + $("#sem").val() + '/' + campus;
+        window.open(url, '_blank');
+    })
 });
 
 
