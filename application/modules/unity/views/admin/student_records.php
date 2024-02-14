@@ -620,22 +620,22 @@ new Vue({
                     this.assessment_units = data.data.assessment_units;
                     for(i in this.records){
                         switch(this.records[i].reg.intROG){
-                            case 0: 
+                            case '0': 
                                 this.records[i].reg.enrollment_status = "Enlisted";
                             break;
-                            case 1: 
+                            case '1': 
                                 this.records[i].reg.enrollment_status = "Enrolled";
                             break;
-                            case 2: 
+                            case '2': 
                                 this.records[i].reg.enrollment_status = "Cleared";
                             break;
-                            case 3: 
+                            case '3': 
                                 this.records[i].reg.enrollment_status = "Officially Withdrawn";
                             break;
-                            case 4: 
+                            case '4': 
                                 this.records[i].reg.enrollment_status = "LOA";
                             break;
-                            case 5: 
+                            case '5': 
                                 this.records[i].reg.enrollment_status = "AWOL";
                             break;
                         }
