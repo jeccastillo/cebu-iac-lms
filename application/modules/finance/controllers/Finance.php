@@ -187,6 +187,7 @@ class Finance extends CI_Controller {
         $post =  $this->input->post();        
         $data = json_decode($post['data']);
         $ret = [];
+        $ret['data'] = [];
         foreach($data as $item){
             $details = null;
             if($item->student_information_id != 0){
@@ -197,7 +198,7 @@ class Finance extends CI_Controller {
             }
             
             
-            $ret[] = $item;
+            $ret['data'][] = $item;
 
         }
 

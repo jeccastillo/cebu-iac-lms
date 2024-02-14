@@ -74,7 +74,7 @@ $(document).ready(function() {
                         callback({
                             recordsTotal: json.meta.to,
                             recordsFiltered: json.meta.total,
-                            data: json.data
+                            data: payee_data.data
                         });
 
                         $("#print_form").show();
@@ -226,7 +226,7 @@ $(document).ready(function() {
                 data: "or_number"
             },
             {
-                data: "student_information_id"
+                data: "student_number"
             },
             {
                 data: "student_name"
