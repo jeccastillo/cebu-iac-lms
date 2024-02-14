@@ -2227,6 +2227,10 @@ class Data_fetcher extends CI_Model {
                 return "Cleared";
             if($r->intROG == 3)
                 return "Officially Withdrawn";
+            if($r->intROG == 4)
+                return "LOA";
+            if($r->intROG == 5)
+                return "AWOL";
         }
         elseif($this->db
              ->select('intID')
