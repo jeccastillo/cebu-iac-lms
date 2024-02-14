@@ -124,48 +124,19 @@ class Finance extends CI_Controller {
 
     public function student_account_report($id = 0){
 
-        $this->load->library("curl");
-        
-        /* API URL */
-        $url = 'http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/sync_payments';
-   
-        // Data to be sent in the POST request
-        $post_data = array(
-            'id' => '1372',
-            'campus' => $this->data['campus'],
-        );
+        $sy = $this->data_fetcher->get_active_sem();
+        if($id != 0)
+            $sy = $this->data_fetcher->getAy($id); 
 
-        // Make the POST request
-        $response = $this->curl->simple_post($url, $post_data);
+        $sem = $sy['intID'];
 
-
-        // Check for cURL errors
-        if ($this->curl->error_string) {
-            echo "cURL Error: " . $this->curl->error_string;
-        } else {
-            // Process the response
-
-            // $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
-            $response = json_decode($response, true);
-            
-            foreach($response['data'] as $data){
-                $this->data_poster->post_data('payment_details',$data);
-            }
-            die();
-        }
-
-        
-        if($id == 0)
-            $this->data['item'] = $this->data_fetcher->get_active_sem();
-        else
-            $this->data['item'] = $this->data_fetcher->getAy($id);
-        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['page'] = "installment_dates";
         $this->data['opentree'] = "finance_admin";
+        $this->data['sem'] = $sem;
 
-        $this->data['excel_link'] = base_url()."excel/student_account_report/";
+        $this->data['excel_link'] = base_url()."excel/student_account_report/" . $sem . "/" . $this->data['campus'];
         
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         
         $this->load->view("common/header",$this->data);
         $this->load->view("student_account_report",$this->data);
