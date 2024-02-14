@@ -70,6 +70,7 @@ $(document).ready(function() {
                 function(json) {      
                                                                        
                     $.post(base_url + 'finance/get_payee_details',{'data':JSON.stringify(json.data)}, function(payee_data){
+                        console.log(payee_data.data);
                         for(i in json.data){
                             json.data[i].student_number = payee_data.data[i].student_number;
                         }
