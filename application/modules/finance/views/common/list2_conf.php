@@ -69,9 +69,9 @@ $(document).ready(function() {
                 },
                 function(json) {      
                     console.log(json.data);              
-                    //var formdata= new FormData();
-                    //formdata.append('data',json.data);
-                    $.post(base_url + 'finance/get_payee_details', json.data, function(payee_data){
+                    var formdata= new FormData();
+                    formdata.append('data',JSON.stringify(json.data));
+                    $.post(base_url + 'finance/get_payee_details', formdata, function(payee_data){
                         callback({
                             recordsTotal: json.meta.to,
                             recordsFiltered: json.meta.total,
