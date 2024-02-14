@@ -1113,7 +1113,7 @@ class Unity extends CI_Controller {
         foreach($all_terms as $trm){
             $registration = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id, strProgramCode')
                                   ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
-                                  ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_registration.current_program')
+                                  ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_registration.current_program','left')
                                   ->where(array('intStudentID'=>$id,'intAYID'=>$trm['intID']))
                                   ->order_by("strYearStart ASC, enumSem ASC")
                                   ->get('tb_mas_registration')
