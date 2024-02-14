@@ -488,8 +488,7 @@ class Unity extends CI_Controller {
             }
             if($registration->intROG == 1){
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
-                print_r($records);
-                die();
+            
                 foreach($records as $record){
                     $data =[
                         'floatMidtermGrade' => "OW",
@@ -497,7 +496,7 @@ class Unity extends CI_Controller {
                         'strRemarks' => "Officaly Withdrawn"
                     ];
                 
-                    $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
+                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
                 }     
             }           
         
