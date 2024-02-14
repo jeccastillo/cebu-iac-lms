@@ -191,7 +191,7 @@ class Finance extends CI_Controller {
             $details = null;
             if($item->student_information_id != 0){
                 $details = $this->db->get_where('tb_mas_users',array('slug'=>$item->slug))->first_row(); 
-                if($item->details){
+                if($details){
                     $item->student_number = preg_replace("/[^a-zA-Z]+/", "", $details->strStudentNumber);
                 }
             }
