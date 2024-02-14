@@ -68,10 +68,8 @@ $(document).ready(function() {
                     campus: '<?php echo $campus; ?>'              
                 },
                 function(json) {      
-                    console.log(json.data);              
-                    var formdata= new FormData();
-                    formdata.append('data',JSON.stringify(json.data));
-                    $.post(base_url + 'finance/get_payee_details', formdata, function(payee_data){
+                    console.log(json.data);                                                      
+                    $.post(base_url + 'finance/get_payee_details',JSON.stringify(json.data), function(payee_data){
                         callback({
                             recordsTotal: json.meta.to,
                             recordsFiltered: json.meta.total,
