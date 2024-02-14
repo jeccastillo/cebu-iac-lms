@@ -994,7 +994,7 @@ new Vue({
                 for (const [key, value] of Object.entries(this.loaDetails)) {
                 formdata.append(key, value);
                 }
-                formdata.append('term_id',this.sem);              
+                formdata.append('term_id',this.sem_student);              
                 formdata.append('password',inputValue);
 
                 $('#loa-modal').modal('toggle')
