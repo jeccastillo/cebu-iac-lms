@@ -644,6 +644,10 @@ new Vue({
                                 this.records[i].reg.enrollment_status = "AWOL";
                                 this.records[i].reg.color = "box-danger";
                             break;
+                            default:
+                                this.records[i].reg.color = "box-default";
+                                this.records[i].reg.enrollment_status = "None";
+
                         }
                     }
                     axios.get(api_url + 'admissions/student-info/' + this.student.slug)

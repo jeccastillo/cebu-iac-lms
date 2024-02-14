@@ -1095,17 +1095,12 @@ class Unity extends CI_Controller {
 
         $data['student'] = $this->data_fetcher->getStudent($id);
         
-        $first_registration = $this->db->select('tb_mas_sy.strYearStart,tb_mas_sy.enumSem')
-                                ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
-                                ->where(array('intStudentID'=>$id))
-                                ->order_by("strYearStart ASC, enumSem ASC")
-                                ->get('tb_mas_registration')
-                                ->first_row('array');
-        
-        if(isset($first_registration['strYearStart']))
-            $all_terms = $this->data_fetcher->get_all_past_terms(get_stype($data['student']['level']),$first_registration['strYearStart'],$first_registration['enumSem']);
-        else
-            $all_terms = [];                          
+        $all_terms =  $this->db->select('tb_mas_sy.*')  
+                ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')                
+                ->where(array('intStudentID'=>$id))
+                ->order_by("strYearStart asc, enumSem asc")
+                ->get('tb_mas_registration')
+                ->result_array();                          
 
         if(get_stype($data['student']['level']) == "college")
             $active_sem = $this->data_fetcher->get_active_sem();
