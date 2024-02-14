@@ -185,6 +185,7 @@ class Finance extends CI_Controller {
 
     public function get_payee_details(){
         $post =  $this->input->post();
+        echo current($post);
         $post = json_decode(current($post));
         print_r($post);
     }
