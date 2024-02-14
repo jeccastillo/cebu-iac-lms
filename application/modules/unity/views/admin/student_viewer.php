@@ -1010,13 +1010,20 @@ new Vue({
 
                 })
                 .then(data => {
-                    Swal.fire({
-                        title: "Success",
-                        text: data.data.message,
-                        icon: "success"
-                    }).then(function() {
-                        location.reload();
-                    });
+                    if(data.data.success)
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    else
+                        Swal.fire({
+                            title: "Error",
+                            text: data.data.message,
+                            icon: "error"
+                        })
                 })
             },
             allowOutsideClick: () => !Swal.isLoading()
