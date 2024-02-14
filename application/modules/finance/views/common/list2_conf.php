@@ -73,6 +73,7 @@ $(document).ready(function() {
                         recordsFiltered: json.meta.total,
                         data: json.data
                     });
+                    console.log(json.data);
                     $("#print_form").show();
                     $("#print_form").click(function(e){
                         e.preventDefault();
