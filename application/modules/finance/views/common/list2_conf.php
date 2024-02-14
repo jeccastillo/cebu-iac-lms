@@ -69,47 +69,51 @@ $(document).ready(function() {
                 },
                 function(json) {      
                                                                        
-                    $.post(base_url + 'finance/get_payee_details',{'data':JSON.stringify(json.data)}, function(payee_data){
-                        console.log(payee_data);
-                        for(i in json.data){
-                            json.data[i].student_number = payee_data.data[i].student_number;
-                        }
-                        callback({
-                            recordsTotal: json.meta.to,
-                            recordsFiltered: json.meta.total,
-                            data: json.data
-                        });
+                    $.ajax(
+                            'url':base_url + 'finance/get_payee_details',
+                            'data':{'data':JSON.stringify(json.data)}, 
+                            'dataType': 'json',
+                            'success':function(payee_data){
+                                console.log(payee_data);
+                                for(i in json.data){
+                                    json.data[i].student_number = payee_data.data[i].student_number;
+                                }
+                                callback({
+                                    recordsTotal: json.meta.to,
+                                    recordsFiltered: json.meta.total,
+                                    data: json.data
+                                });
 
-                        $("#print_form").show();
-                        $("#print_form").click(function(e){
-                            e.preventDefault();
-                            // The rest of this code assumes you are not using a library.
-                            // It can be made less verbose if you use one.
-                            const form = document.createElement('form');
-                            form.method = "post";
-                            form.action = "<?php echo base_url() ?>excel/daily_collection_report";
-                            form.dataType = "json";
+                                $("#print_form").show();
+                                $("#print_form").click(function(e){
+                                    e.preventDefault();
+                                    // The rest of this code assumes you are not using a library.
+                                    // It can be made less verbose if you use one.
+                                    const form = document.createElement('form');
+                                    form.method = "post";
+                                    form.action = "<?php echo base_url() ?>excel/daily_collection_report";
+                                    form.dataType = "json";
 
-                            
-                            const hiddenField = document.createElement('input');
-                            hiddenField.type = 'hidden';
-                            hiddenField.name = 'data';
-                            hiddenField.value = JSON.stringify(json.data);
+                                    
+                                    const hiddenField = document.createElement('input');
+                                    hiddenField.type = 'hidden';
+                                    hiddenField.name = 'data';
+                                    hiddenField.value = JSON.stringify(json.data);
 
-                            form.appendChild(hiddenField);
+                                    form.appendChild(hiddenField);
 
-                            const hiddenField2 = document.createElement('input');
-                            hiddenField2.type = 'hidden';
-                            hiddenField2.name = 'date';
-                            hiddenField2.value = "<?php echo $date; ?>";
+                                    const hiddenField2 = document.createElement('input');
+                                    hiddenField2.type = 'hidden';
+                                    hiddenField2.name = 'date';
+                                    hiddenField2.value = "<?php echo $date; ?>";
 
-                            form.appendChild(hiddenField2);
-                            
+                                    form.appendChild(hiddenField2);
+                                    
 
-                            document.body.appendChild(form);
-                            form.submit();
-                        });                    
-                    });
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                });                    
+                            });
                                         
                 }
             );
