@@ -70,7 +70,7 @@ $(document).ready(function() {
                 function(json) {      
                                                                        
                     $.ajax({
-                            'type': 'post'
+                            'type': 'post',
                             'url':base_url + 'finance/get_payee_details',
                             'data':{'data':JSON.stringify(json.data)}, 
                             'dataType': 'json',
