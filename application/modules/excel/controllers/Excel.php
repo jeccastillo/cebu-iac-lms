@@ -4571,7 +4571,6 @@ class Excel extends CI_Controller {
     
     public function student_account_report($sem, $campus)
     {
-
         $users = $this->data_fetcher->fetch_table('tb_mas_users');
 
 
@@ -4677,22 +4676,11 @@ class Excel extends CI_Controller {
         $count = 1;
         foreach($users as $index => $user)
         {
-            // if($user['intID'] == 35)
-            // {
-                $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
-                $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
-                
-                $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
-                // $registration = $this->db->get_where('tb_mas_registration', array('intStudentID'=>$user['intID']))->first_row();
-                // print_r($tuition);
-                // die();
-
-                // $paymentType = $reg['paymentType'];
-                $tuitionFee = $tuition['tuition'];
-            // }
+            $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
+            $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
             
-            // $student = $this->db->get_where('tb_mas_users', array('slug' => $detail['student_number']))->result_array();
-            // $student_number = '';
+            $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
+            $tuitionFee = $tuition['tuition'];
 
             $payments = array();
             $year = '';
@@ -4728,11 +4716,6 @@ class Excel extends CI_Controller {
                 $payments[count($payments) - 1]['date'] .= ', ' . $year;
             }
             if($reg){
-                // if($user['strStudentNumber'] != 'C2023-01-094'){
-                //     print_r($user);
-                //     die();
-                // }
-                // $fullname = strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']);
                 $assessment_discount_rate = $assessment_discount_fixed = '';
                 if($reg['paymentType'] == 'full'){
                     if($tuition['scholarship_total_assessment_rate'] > 0){
@@ -4749,11 +4732,7 @@ class Excel extends CI_Controller {
                         $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
                     }
                 }
-                // print(date("d-M-Y",strtotime($reg['date_enlisted'])));
-                // $num1 = (float)$tuition['misc_before_discount'];
-                // $num2 = number_format($num1, 2, '.', ',');
-                // var_dump($num1);
-                // die();
+
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
@@ -4761,20 +4740,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
                         ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                        // ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (double)number_format($tuition['tuition_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (double)number_format($tuition['lab_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (double)number_format($tuition['misc_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (double)number_format($tuition['thesis_fee'], 2, '.', ',') : '')
-                        // ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['nsf'] > 0 ? (double)number_format($tuition['nsf'], 2, '.', ',') : '')
-                        // ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (double)number_format($tuition['late_enrollment_fee'], 2, '.', ',') : '')
-                        // ->setCellValue('M'.$i, $reg['paymentType'] == 'partial' && $tuition['tuition_installment_before_discount'] > 0 ? (double)number_format($tuition['tuition_installment_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('N'.$i, $reg['paymentType'] == 'partial' && $tuition['lab_installment_before_discount'] > 0 ? (double)number_format($tuition['lab_installment_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('O'.$i, $reg['paymentType'] == 'partial' && $tuition['misc_before_discount'] > 0 ? (double)number_format($tuition['misc_before_discount'], 2, '.', ',') : '')
-                        // ->setCellValue('P'.$i, $reg['paymentType'] == 'partial' && $tuition['thesis_fee'] > 0 ? (double)number_format($tuition['thesis_fee'], 2, '.', ',') : '')
-                        // ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (double)number_format($tuition['nsf'], 2, '.', ',') : '')
-                        // ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (double)number_format($tuition['late_enrollment_fee'], 2, '.', ',') : '')
-
-                        ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
+                          ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
                         ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
                         ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
                         ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
