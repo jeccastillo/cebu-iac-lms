@@ -44,7 +44,7 @@
                                 <div class="row">
                                     <div class="col-sm-3">School Year: <span style="font-weight:400;">{{ term.reg.strYearStart + "-" + term.reg.strYearEnd }}</span></div>
                                     <div class="col-sm-3">Term: <span style="font-weight:400;">{{term.reg.enumSem + " " + term.reg.term_label}}</span></div>
-                                    <div v-if="term.reg.intROG" class="col-sm-3">Enrollment Status: {{ term.reg.intROG > 0 ? 'Enrolled' : 'Enlisted' }}</div>
+                                    <div v-if="term.reg.intROG" class="col-sm-3">Enrollment Status: {{ term.reg.enrollment_status }}</div>
                                     <div v-else class="col-sm-3">Enrollment Status:</div>                                
                                     <div class="col-sm-3">Course: <span style="font-weight:400;">{{ term.reg.strProgramCode }}</span></div>
                                 </div>                                
@@ -609,7 +609,7 @@ new Vue({
                     this.generated_tor =  data.data.generated_tor;
                     this.change_grades = data.data.change_grades;
                     this.credited_subjects =  data.data.credited_subjects;
-                    this.records = data.data.data;        
+                    this.records = data.data.data;                            
                     this.balance = data.data.balance;
                     this.subjects = data.data.all_subjects;
                     this.deficiencies = data.data.deficiencies;
@@ -618,6 +618,28 @@ new Vue({
                     this.units = data.data.total_units_earned;  
                     this.assessment_gwa = data.data.assessment_gwa; 
                     this.assessment_units = data.data.assessment_units;
+                    for(i in this.records){
+                        switch(this.records[i].reg.intROG){
+                            case 0: 
+                                this.records[i].reg.enrollment_status = "Enlisted";
+                            break;
+                            case 1: 
+                                this.records[i].reg.enrollment_status = "Enrolled";
+                            break;
+                            case 2: 
+                                this.records[i].reg.enrollment_status = "Cleared";
+                            break;
+                            case 3: 
+                                this.records[i].reg.enrollment_status = "Officially Withdrawn";
+                            break;
+                            case 4: 
+                                this.records[i].reg.enrollment_status = "LOA";
+                            break;
+                            case 5: 
+                                this.records[i].reg.enrollment_status = "AWOL";
+                            break;
+                        }
+                    }
                     axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                     .then((data) => {
                         this.applicant_data = data.data.data;
