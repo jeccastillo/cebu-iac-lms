@@ -183,6 +183,11 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function get_payee_details(){
+        $post =  $this->input->post();
+        print_r($post);
+    }
+
     public function view_payees(){
         
         $role = $this->session->userdata('special_role');
