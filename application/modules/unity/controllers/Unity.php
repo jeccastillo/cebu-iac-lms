@@ -490,7 +490,7 @@ class Unity extends CI_Controller {
             $data['success'] = true;
         }
         else{
-            $data['message'] = "Invalid date";
+            $data['message'] = "Invalid password";
             $data['success'] = false;
         }
 
