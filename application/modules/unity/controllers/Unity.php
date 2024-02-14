@@ -486,7 +486,7 @@ class Unity extends CI_Controller {
                         ->update('tb_mas_registration',$reg_data);
 
             }
-            if($registration->intROG == 2){
+            if($registration->intROG == 1){
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
             
                 foreach($records as $record){
