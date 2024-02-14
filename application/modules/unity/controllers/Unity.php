@@ -457,7 +457,7 @@ class Unity extends CI_Controller {
     public function tag_loa(){
         $post =  $this->input->post();
         $registration = $this->db->get_where('tb_mas_registration',array('intAYID'=>$post['term_id'],'intStudentID'=>$post['student_id']))->first_row();
-        if(pw_unhash($this->data['user']['strPass']) == $post['password']){
+        if(date("Y-m-d") == $post['date']){
             if(!$registration){
                 $reg_data = 
                 [
@@ -488,7 +488,7 @@ class Unity extends CI_Controller {
             $data['success'] = true;
         }
         else{
-            $data['message'] = "invalid password ".$this->data['user']['strPass'];
+            $data['message'] = "Invalid date";
             $data['success'] = false;
         }
 
