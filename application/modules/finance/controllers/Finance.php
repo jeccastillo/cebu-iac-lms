@@ -188,9 +188,9 @@ class Finance extends CI_Controller {
         $data = json_decode($post['data']);
         $ret = [];
         foreach($data as $item){
-            $item['details'] = null;
+            $item->details = null;
             if($item->student_information_id != 0)
-                $item['details'] = $this->db->get_where('tb_mas_users',array('slug'=>$item->slug))->first_row();            
+                $item->details = $this->db->get_where('tb_mas_users',array('slug'=>$item->slug))->first_row();            
             $ret[] = $item;
 
         }
