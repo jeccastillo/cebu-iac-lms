@@ -496,7 +496,7 @@ class Unity extends CI_Controller {
                         'strRemarks' => "Officaly Withdrawn"
                     ];
                 
-                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
+                    $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
                 }     
             }           
         
