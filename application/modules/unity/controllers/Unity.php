@@ -488,10 +488,10 @@ class Unity extends CI_Controller {
             $data['success'] = true;
         }
         else{
-            $data['message'] = "invalid password";
+            $data['message'] = "invalid password ".pw_unhash($this->data['user']['strPass']);
             $data['success'] = false;
         }
-        
+
         echo json_encode($data);
     }
     
