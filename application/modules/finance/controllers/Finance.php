@@ -195,6 +195,10 @@ class Finance extends CI_Controller {
                 if($details){
                     $item->student_number = preg_replace("/[^a-zA-Z0-9]+/", "", $details->strStudentNumber);
                 }
+                else{
+                    $sem = $this->db->get_where('tb_mas_sy',array('intID'=>$item->sy_reference))->first_row(); 
+                    $item->student_number = "A".$sem->strYearStart.str_pad($item->student_information_id, 4, '0', STR_PAD_LEFT);
+                }
             }
             
             
