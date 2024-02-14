@@ -75,14 +75,10 @@ $(document).ready(function() {
                             'data':{'data':JSON.stringify(json.data)}, 
                             'dataType': 'json',
                             'success':function(payee_data){
-                                console.log(payee_data);
-                                for(i in json.data){
-                                    json.data[i].student_number = payee_data.data[i].student_number;
-                                }
                                 callback({
                                     recordsTotal: json.meta.to,
                                     recordsFiltered: json.meta.total,
-                                    data: json.data
+                                    data: payee_data.data
                                 });
 
                                 $("#print_form").show();
