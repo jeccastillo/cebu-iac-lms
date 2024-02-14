@@ -980,7 +980,7 @@ new Vue({
         preConfirm: (login) => {
           Swal.fire({
             title: 'Tag Student for Leave Of Absence',
-            text: "Are you really sure? Enter today's date in yyyy-mm-dd format.",
+            text: "Are you really sure? Enter your password.",
             showCancelButton: true,
             input: "password",
             confirmButtonText: "Yes",
@@ -996,7 +996,7 @@ new Vue({
                 }
                 formdata.append('term_id',this.sem_student);              
                 formdata.append('student_id',this.student.intID);
-                formdata.append('date',inputValue);
+                formdata.append('password',inputValue);
 
                 $('#loa-modal').modal('toggle')
 

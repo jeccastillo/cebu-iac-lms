@@ -455,9 +455,11 @@ class Unity extends CI_Controller {
     }
 
     public function tag_loa(){
-        $post =  $this->input->post();
-        $registration = $this->db->get_where('tb_mas_registration',array('intAYID'=>$post['term_id'],'intStudentID'=>$post['student_id']))->first_row();
-        if(date("Y-m-d") == $post['date']){
+        $post =  $this->input->post();        
+        $auth_data = $this->db->get_where('tb_mas_faculty', array('strUsername'=>$this->session->userdata('strUsername')))->first_row();
+        if(password_verify($post['password'],$auth_data->strPass))
+        {
+            $registration = $this->db->get_where('tb_mas_registration',array('intAYID'=>$post['term_id'],'intStudentID'=>$post['student_id']))->first_row();
             if(!$registration){
                 $reg_data = 
                 [
