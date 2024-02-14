@@ -68,15 +68,16 @@ $(document).ready(function() {
                     campus: '<?php echo $campus; ?>'              
                 },
                 function(json) {      
+                    callback({
+                        recordsTotal: json.meta.to,
+                        recordsFiltered: json.meta.total,
+                        data: json.data
+                    });
                     console.log(json.data);              
                     var formdata= new FormData();
                     formdata.append('data',json.data);
                     $.post(base_url + 'finance/get_payee_details', formdata, function(payee_data){
-                        callback({
-                            recordsTotal: json.meta.to,
-                            recordsFiltered: json.meta.total,
-                            data: json.data
-                        });
+                        
 
                         $("#print_form").show();
                         $("#print_form").click(function(e){
