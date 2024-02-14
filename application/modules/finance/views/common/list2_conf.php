@@ -67,10 +67,11 @@ $(document).ready(function() {
                     type: '<?php echo $type; ?>',
                     campus: '<?php echo $campus; ?>'              
                 },
-                function(json) {                    
+                function(json) {      
+                    console.log(json.data);              
                     var formdata= new FormData();
                     formdata.append('data',json.data);
-                    $.post(base_url + 'finance/get_payee_details',formdata,function(payee_data){
+                    $.post(base_url + 'finance/get_payee_details', formdata, function(payee_data){
                         callback({
                             recordsTotal: json.meta.to,
                             recordsFiltered: json.meta.total,
