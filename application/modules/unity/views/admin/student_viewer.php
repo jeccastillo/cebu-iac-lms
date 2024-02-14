@@ -492,58 +492,58 @@
       id="loa-modal"
       tabindex="-1"
       role="dialog">
-      <div class="modal-dialog"
+        <div class="modal-dialog"
         role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title"
-              id="modalLabel">Tag Student for Leave of Absence</h4>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="submitLoa()">
-              <div class="form-group">
-                <label for="input-reason">Reason for leave of absence</label>
-                <textarea id="input-reason"
-                  v-model.trim="loaDetails.loa_remarks"
-                  class="form-control"
-                  rows="2"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="loa-date">Date</label>
-                <div class="input-group col-sm-12">
-                  <input type="date"
-                    v-model="loaDetails.loa_date"
-                    class="form-control validate"
-                    id="loa-date"
-                    placeholder="Enter Date">
-                  <!-- <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                  </span> -->
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"
+                    id="modalLabel">Tag Student for Leave of Absence</h4>
                 </div>
-              </div>
-              <div class="form-group ">
-                <div>
-                  <button type="submit"
-                    class="btn btn-default"
-                    style="margin-top: 15px;">Submit</button>
+                <div class="modal-body">
+                <form @submit.prevent="submitLoa()">
+                    <div class="form-group">
+                    <label for="input-reason">Reason for leave of absence</label>
+                    <textarea id="input-reason"
+                        v-model.trim="loaDetails.loa_remarks"
+                        class="form-control"
+                        rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                    <label for="loa-date">Date</label>
+                    <div class="input-group col-sm-12">
+                        <input type="date"
+                        v-model="loaDetails.loa_date"
+                        class="form-control validate"
+                        id="loa-date"
+                        placeholder="Enter Date">
+                        <!-- <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        </span> -->
+                    </div>
+                    </div>
+                    <div class="form-group ">
+                    <div>
+                        <button type="submit"
+                        class="btn btn-default"
+                        style="margin-top: 15px;">Submit</button>
+                    </div>
+                    </div>
+                </form>
                 </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer"
-            style="margin-top:0">
-            <button type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal">Close</button>
-          </div>
+                <div class="modal-footer"
+                style="margin-top:0">
+                <button type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <!-- modal end -->
   </div>
@@ -990,24 +990,33 @@ new Vue({
             showCloseButton: true,
             showLoaderOnConfirm: true,
             preConfirm: (inputValue) => {
-              var formdata = new FormData();
-              for (const [key, value] of Object.entries(this.loaDetails)) {
+                var formdata = new FormData();
+                for (const [key, value] of Object.entries(this.loaDetails)) {
                 formdata.append(key, value);
-              }
-              console.log(formdata);
+                }
+                formdata.append('term_id',this.sem);              
+                formdata.append('password',inputValue);
 
-              $('#loa-modal').modal('toggle')
+                $('#loa-modal').modal('toggle')
 
-              for (const prop in this.loaDetails) {
+                for (const prop in this.loaDetails) {
                 this.loaDetails[prop] = ''
-              }
-              //   return axios.post(url, formdata, {
-              //       headers: {
-              //         Authorization: `Bearer ${window.token}`
-              //       }
-              //     })
-              //     .then(data => {})
+                }
+                return axios.post(base_url + 'unity/tag_loa', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    },
 
+                })
+                .then(data => {
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                })
             },
             allowOutsideClick: () => !Swal.isLoading()
           }).then((result) => {

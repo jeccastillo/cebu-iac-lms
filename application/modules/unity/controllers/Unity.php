@@ -453,6 +453,11 @@ class Unity extends CI_Controller {
         else
             redirect(base_url()."unity");
     }
+
+    public function tag_loa(){
+        $post =  $this->input->post();
+        print_r($post);
+    }
     
     public function registration_viewer_data($id,$sem){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
