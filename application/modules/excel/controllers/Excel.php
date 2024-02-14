@@ -4161,7 +4161,7 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A'.$i, $d->updated_at)
                     ->setCellValue('B'.$i, $or_number)
-                    ->setCellValue('C'.$i, $d->student_information_id)
+                    ->setCellValue('C'.$i, $d->student_number)
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
                     ->setCellValue('E'.$i, $d->description)
                     ->setCellValue('F'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
