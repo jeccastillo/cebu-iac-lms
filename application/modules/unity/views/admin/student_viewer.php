@@ -340,10 +340,13 @@
                               :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a>
                           </td>
                           <td>{{ record.strUnits }}</td>
-                          <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                          <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
                             {{ record.intFinalized >=1?record.v2:'NGS' }}
                           </td>
-                          <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                          <td v-else style="font-weight:bold">
+                            OW
+                          </td>
+                          <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
                             <span v-if="record.intFinalized >=2"
                               :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                               {{ record.v3 }}
@@ -351,6 +354,9 @@
                             <span v-else>
                               NGS
                             </span>
+                          </td>
+                          <td v-else style="font-weight:bold">
+                            OW
                           </td>
                           <td
                             :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
