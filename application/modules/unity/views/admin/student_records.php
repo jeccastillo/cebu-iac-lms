@@ -69,14 +69,20 @@
                                             <td>{{ record.strCode }}</td>
                                             <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
                                             <td v-else>({{ record.strUnits }})</td>
-                                            <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
-                                            <td :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                                            <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
+                                            <td v-else style="font-weight:bold">
+                                                OW
+                                            </td>
+                                            <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
                                                 <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.v3 }}
                                                 </span>
                                                 <span v-else>
                                                     NGS
                                                 </span>
+                                            </td>
+                                            <td v-else style="font-weight:bold">
+                                                OW
                                             </td>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.strFirstname+" "+record.strLastname }}</td>
