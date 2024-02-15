@@ -54,6 +54,7 @@
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'midterm',student.intCSID)" class="form-control" >                              
                                         <option :selected="(!student.floatMidtermGrade || student.floatMidtermGrade == 50)? true : false"  value="NGS">NGS</option>                                        
+                                        <option v-if="is_super_admin" value="OW">OW</option>
                                         <option v-for="grading_item in grading_items_midterm" :selected="student.floatMidtermGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
@@ -65,7 +66,8 @@
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>                                                                                                                 
                                     <select v-else @change="updateGrade($event,'final',student.intCSID)"class="form-control">                              
-                                        <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>                                        
+                                        <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>
+                                        <option v-if="is_super_admin" value="OW">OW</option>                                        
                                         <option v-for="grading_item in grading_items" :selected="student.floatFinalGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
