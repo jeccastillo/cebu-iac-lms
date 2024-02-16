@@ -42,97 +42,132 @@
                                     </div>     
                                                                                                 -->
                                     <input type="hidden" value="Tuition Fee" v-model="desc" />                                                                                            
-                                    <div>          
-                                        <h3>Select Mode of Payment</h3>                          
-                                        <hr />
-                                        <div>
-                                            <h5 class="my-3">BDO PAY</h5>
-                                            <hr />  
+                                    <div class="row">
+                                        <div class="col-md-8">          
+                                            <h3>Select Mode of Payment</h3>                          
+                                            <hr />
+                                            <div>
+                                                <h5 class="my-3">BDO PAY</h5>
+                                                <hr />  
+                                                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                                    <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
+                                                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                        style="display:flex; align-itenms:center;">
+                                                        <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
+                                                    </div>
+                                                </div>                                                        
+                                            </div>
+                                            <div>
+                                                <h5 class="my-3">Maya</h5>
+                                                <hr />  
+                                                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                                    <div style="border:1px solid #000" @click="selectPayment(maya)"
+                                                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                        style="display:flex; align-itenms:center;">
+                                                        <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
+                                                    </div>
+                                                </div>                                                        
+                                            </div>
+                                            <hr />
+                                            <h5>PAYNAMICS</h5>
+                                            <hr />
+                                            <h5 class="my-3">Banks</h5>
                                             <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                                <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
+                                                <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
                                                     class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                                                     style="display:flex; align-itenms:center;">
-                                                    <img class="img-fluid d-block mx-auto" width="51px" src="https://portalv2.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
+                                                    <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+                                                </div>
+                                            </div>
+
+                                            <hr>
+                                            <h5 class="my-3">Non-Banks</h5>
+                                            <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                                                <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
+                                                    class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                                                    style="display:flex; align-itenms:center;">
+                                                    <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
                                                 </div>
                                             </div>                                                        
-                                        </div>
-                                        <hr />
-                                        <h5>PAYNAMICS</h5>
-                                        <hr />
-                                        <h5 class="my-3">Banks</h5>
-                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                            <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
-                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                                style="display:flex; align-itenms:center;">
-                                                <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
-                                            </div>
-                                        </div>
+                                            <hr />
+                                            <div class="d-flex flex-wrap my-5" style="margin-top:50px">
+                                                <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
 
-                                        <hr>
-                                        <h5 class="my-3">Non-Banks</h5>
-                                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                                            <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
-                                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                                style="display:flex; align-itenms:center;">
-                                                <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
-                                            </div>
-                                        </div>                                                        
-                                        <hr />
-                                        <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                                            <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+                                                <table class="table" style="width:100%">
+                                                    <tbody>
+                                                        <tr v-if="item">
+                                                            <td> {{ desc }}
+                                                            </td>
+                                                            <td>₱ {{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
+                                                        </tr>
 
-                                            <table class="table" style="width:100%">
-                                                <tbody>
-                                                    <tr v-if="item">
-                                                        <td> {{ desc }}
-                                                        </td>
-                                                        <td>₱ {{ item_details.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td>Gateway Fee <span class="font-weight-bold"
+                                                                    v-if="selected_mode_of_payment.type == 'percentage'">(
+                                                                    {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
+                                                                    Php
+                                                                    25.00 whichever is higher )</span> </td>
+                                                            <td v-if="selected_mode_of_payment">
+                                                                <span>
+                                                                    ₱ {{ new_charge.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
+                                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
+                                                                    class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
+                                                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
+                                                                <span class="font-weight-bold">₱
+                                                                    {{ total_price_cart_with_charge_es }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
 
-                                                    <tr>
-                                                        <td>Gateway Fee <span class="font-weight-bold"
-                                                                v-if="selected_mode_of_payment.type == 'percentage'">(
-                                                                {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                                                Php
-                                                                25.00 whichever is higher )</span> </td>
-                                                        <td v-if="selected_mode_of_payment">
-                                                            <span>
-                                                                ₱ {{ new_charge.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') }}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                                                class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                                        <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                                            <span class="font-weight-bold">₱
-                                                                {{ total_price_cart_with_charge_es }}</span>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <div class="text-right mt-3">
-                                                <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
-                                                <div v-else>
-                                                    <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                                        class="btn btn-primary"
-                                                        name="button">Submit 
-                                                    </button>
-                                                    <button type="button" disabled v-else
-                                                        class="btn btn-default"
-                                                        name="button">Submit</button>
-                                                    <button type="button" onclick="window.history.back()"
-                                                        class="btn btn-default"
-                                                        name="button">Cancel</button>
-                                                    <a :href="redirect_link" style="opacity:0" 
-                                                        id="payment_link">{{ redirect_link }}</a>
+                                                <div class="text-right mt-3">
+                                                    <div v-if="loading_spinner" class="lds-ring"><div></div><div></div><div></div><div></div></div> 
+                                                    <div v-else>
+                                                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
+                                                            class="btn btn-primary"
+                                                            name="button">Submit 
+                                                        </button>
+                                                        <button type="button" disabled v-else
+                                                            class="btn btn-default"
+                                                            name="button">Submit</button>
+                                                        <button type="button" onclick="window.history.back()"
+                                                            class="btn btn-default"
+                                                            name="button">Cancel</button>
+                                                        <a :href="redirect_link" style="opacity:0" 
+                                                            id="payment_link">{{ redirect_link }}</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+                                        <div class="col-md-4">
+                                            <label>Payment Type:</label>  
+                                            {{ payment_type }}                                            
+                                            <hr />
+                                            <table class="table table-striped" v-if="payment_type == 'full'">
+                                                <tr>
+                                                    <td>Full Tuition</td>
+                                                    <td>{{ remaining_amount }}</td>
+                                                </tr> 
+                                            </table>
+                                            <table class="table table-striped" v-else>
+                                                <tr>
+                                                    <td>Down Payment</td>
+                                                    <td v-if="registration.downpayment == 0 && down_payment != 0">{{ tuition_data.down_payment }}</td>                                                        
+                                                    <td v-else>Paid</td>
+                                                </tr> 
+                                                <tr v-for="(inst,ctr) in installments">
+                                                    <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
+                                                    <td>{{ inst == 0 ? 'Paid' : inst }}</td>
+                                                </tr>
+                                            </table>                                                
+                                        </div> 
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -225,7 +260,7 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -274,6 +309,7 @@ new Vue({
         student_api_data: {},
         desc: 'Tuition Fee',
         payment_modes: [],
+        down_payment: 0,
         mode_of_releases: [],
         area_delivery: [],
         city_delivery: [],
@@ -321,6 +357,7 @@ new Vue({
         total_price_from_cart: 0,
         total_price_cart_with_charge_es: 0,
         total_price_cart_with_charge: 0,
+        installment_dates:[],
         payload: {},         
         installments:[], 
         bdo_pay:{
@@ -330,6 +367,13 @@ new Vue({
             name: "BDO PAY",
             pchannel: "bdo_pay",
             pmethod: "onlinebanktransfer",            
+            type: "none"
+        },
+        maya:{
+            charge: 0,
+            id: 100,        
+            name: "maya",
+            pchannel: "maya",
             type: "none"
         },
         request_bdo:{
@@ -402,6 +446,11 @@ new Vue({
                         this.tuition_data = data.data.tuition_data;          
                         this.payment_type = this.registration.paymentType;
                         this.remaining_amount = data.data.tuition_data.total;
+                        this.installment_dates.push(data.data.active_sem.installment1);
+                        this.installment_dates.push(data.data.active_sem.installment2);
+                        this.installment_dates.push(data.data.active_sem.installment3);
+                        this.installment_dates.push(data.data.active_sem.installment4);
+                        this.installment_dates.push(data.data.active_sem.installment5);
                         if(this.payment_type == "partial")                       
                             this.remaining_amount = data.data.tuition_data.total_installment;
                                       
@@ -420,124 +469,9 @@ new Vue({
                             
                             
                             this.other_payments = data.data.other;
-                                   
+                            this.computePayment(); 
                                                          
-                            if(this.registration.enumStudentType == "new"){
-                                axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
-                                .then((data) => {
-                                    this.reservation_payment = data.data.data;    
-                                    this.application_payment = data.data.application;
-                                    
-                                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
-                                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
-                                    }                                
-                                    this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
-                                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                    this.item_details.price = this.remaining_amount;
-                                    this.loader_spinner = false;
-
-                                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                                    
-                                    if(this.registration.downpayment == 1 || down_payment == 0){
-                                        this.has_down = true;                                    
-                                        //installment amounts                                                                    
-                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                        console.log(temp);
-                                        for(i=0; i < 5; i++){
-                                            if(this.tuition_data.installment_fee > temp){
-                                                val = this.tuition_data.installment_fee - temp;                                            
-                                                this.item_details.price = val;
-                                                break;
-                                            }     
-                                            else{
-                                                temp = temp - this.tuition_data.installment_fee;
-                                            }                                                                       
-                                        }
-                                        
-                                        
-                                    }
-                                    else if(this.payment_type == "partial"){
-                                        
-                                        this.item_details.price = down_payment;
-                                    }                            
-                                    else{
-                                        
-                                        this.item_details.price = this.remaining_amount;
-                                    }      
-                                    axios.get(api_url + 'admissions/student-info/' + this.slug)
-                                    .then((data) => {
-                                        this.student_api_data = data.data.data;
-                                        Swal.close();
-                                        $(function() {
-                                            $(".box_mode_payment").click(function() {
-                                                $(".box_mode_payment").removeClass("active");
-                                                $(this).addClass("active");
-                                            })
-                                        })
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                    })
-                                    
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                })
-                            }
-                            else{
-                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
-                                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                                    this.item_details.price = this.remaining_amount;
-                                    this.loader_spinner = false;
-
-                                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
-                                    
-                                    if(this.registration.downpayment == 1 || down_payment == 0){
-                                        this.has_down = true;                                    
-                                        //installment amounts                                                                    
-                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                        console.log(temp);
-                                        for(i=0; i < 5; i++){
-                                            if(this.tuition_data.installment_fee > temp){
-                                                val = this.tuition_data.installment_fee - temp;                                            
-                                                this.item_details.price = val;
-                                                break;
-                                            }     
-                                            else{
-                                                temp = temp - this.tuition_data.installment_fee;
-                                            }                                                                       
-                                        }
-                                        
-                                        
-                                    }
-                                    else if(this.payment_type == "partial"){
-                                        
-                                        this.item_details.price = down_payment;
-                                    }                            
-                                    else{
-                                        
-                                        this.item_details.price = this.remaining_amount;
-                                    } 
-                                axios.get(api_url + 'admissions/student-info/' + this.slug)
-                                .then((data) => {
-                                    this.student_api_data = data.data.data;
-                                    Swal.close();
-                                    $(function() {
-                                        $(".box_mode_payment").click(function() {
-                                            $(".box_mode_payment").removeClass("active");
-                                            $(this).addClass("active");
-                                        })
-                                    })
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                })
-                            }
+                            
                         })
                         .catch((error) => {
                             console.log(error);
@@ -551,7 +485,134 @@ new Vue({
                 .catch((error) => {
                     console.log(error);
                 })
-        },        
+        },   
+        computePayment: function(event){
+            if(this.registration.enumStudentType == "new"){
+                axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
+                .then((data) => {
+                    this.reservation_payment = data.data.data;    
+                    this.application_payment = data.data.application;
+                    
+                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
+                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
+                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
+                    }                                
+                    this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
+                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
+                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
+                    this.item_details.price = this.remaining_amount;
+                    this.loader_spinner = false;
+
+                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                    this.down_payment = down_payment;
+                    
+                    if(this.payment_type == "full"){
+                        
+                        this.item_details.price = this.remaining_amount;
+                    } 
+                    else if(this.registration.downpayment == 1 || down_payment == 0 && this.payment_type != "full"){
+                        this.has_down = true;                                    
+                        //installment amounts                                                                    
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                        console.log(temp);
+                        for(i=0; i < 5; i++){
+                            if(this.tuition_data.installment_fee > temp){
+                                val = this.tuition_data.installment_fee - temp;    
+                                val = Math.round(val*100)/100;                                        
+                                this.item_details.price = val;
+                                this.installments.push(val);                                
+                            }     
+                            else{
+                                temp = temp - this.tuition_data.installment_fee;
+                                this.installments.push(0);
+                            }                                                                       
+                        }                                                                                                           
+                    }
+                    else if(this.payment_type == "partial"){                        
+                        this.item_details.price = down_payment;
+                        for(i=0; i < 5; i++)
+                                this.installments.push(this.tuition_data.installment_fee); 
+                    } 
+
+                    axios.get(api_url + 'admissions/student-info/' + this.slug)
+                    .then((data) => {
+                        this.student_api_data = data.data.data;
+                        Swal.close();
+                        $(function() {
+                            $(".box_mode_payment").click(function() {
+                                $(".box_mode_payment").removeClass("active");
+                                $(this).addClass("active");
+                            })
+                        })
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            }
+            else{
+                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
+                    this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
+                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
+                    this.item_details.price = this.remaining_amount;
+                    this.loader_spinner = false;
+
+                    let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
+                    
+                    if(this.payment_type == "full"){
+                        
+                        this.item_details.price = this.remaining_amount;
+                    } 
+                    else if(this.registration.downpayment == 1 || down_payment == 0){
+                        this.has_down = true;                                    
+                        //installment amounts                                                                    
+                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);                        
+                        for(i=0; i < 5; i++){
+                            if(this.tuition_data.installment_fee > temp){
+                                val = this.tuition_data.installment_fee - temp;                                            
+                                val = Math.round(val*100)/100;
+                                console.log(temp);
+                                this.item_details.price = val;                                
+                                this.installments.push(val);                                
+                            }     
+                            else{
+                                temp = temp - this.tuition_data.installment_fee;
+                                this.installments.push(0);
+                            }                                                                       
+                        }
+                        
+                        
+                    }
+                    else if(this.payment_type == "partial"){
+z                        
+                        this.item_details.price = down_payment;
+                        for(i=0; i < 5; i++)
+                                this.installments.push(this.tuition_data.installment_fee);
+                    }                            
+                    
+                axios.get(api_url + 'admissions/student-info/' + this.slug)
+                .then((data) => {
+                    this.student_api_data = data.data.data;
+                    Swal.close();
+                    $(function() {
+                        $(".box_mode_payment").click(function() {
+                            $(".box_mode_payment").removeClass("active");
+                            $(this).addClass("active");
+                        })
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            }
+
+        },     
         selectPayment: function(mode_payment) {
             this.selected_mode_of_payment = mode_payment;
 
@@ -571,8 +632,8 @@ new Vue({
 
             }
 
-            this.total_single_without_charge = 1;
-            this.total_single = 1 + new_charge;
+            this.total_single_without_charge = (new_price * qty);
+            this.total_single = (new_price * qty) + new_charge;
             this.total_single_format = (this.total_single + parseFloat(this.request.mailing_fee))
                 .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             
@@ -599,8 +660,8 @@ new Vue({
                 "delivery_city_id": "",
                 "country": "",
                 "other_country": "",
-                "total_price_with_charge": this.total_single,
-                "charge": parseFloat(this.new_charge),
+                "total_price_with_charge": 1,
+                "charge": 0,
                 "mode_of_release": null,
                 "mailing_fee": 0,
                 "student_information_id": this.student_api_data.id
@@ -650,7 +711,7 @@ new Vue({
 
                     if (data.data.success) {
 
-                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay") {
+                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya") {
                             this.redirect_link = data.data.payment_link;
                             this.loading_spinner = false;
 
@@ -665,6 +726,10 @@ new Vue({
                             setTimeout(() => {
                                 this.$refs.bdo_form.submit();
                             }, 500);                        
+                        }
+                        else if(this.selected_mode_of_payment.pchannel == "maya"){     
+                            console.log("success");                       
+                            document.location = data.data.post_data.redirectUrl;                     
                         }
                         else {
                             Swal.fire({
