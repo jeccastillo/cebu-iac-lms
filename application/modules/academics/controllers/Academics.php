@@ -830,6 +830,14 @@ class Academics extends CI_Controller {
 
     }
     
+    public function discipline_report(){
+               
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/discipline_report",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+    
+    
     
     public function faculty_logged_in()
     {
