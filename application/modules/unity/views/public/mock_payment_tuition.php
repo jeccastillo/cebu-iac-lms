@@ -501,7 +501,7 @@ new Vue({
                     this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
                     this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                
-                    this.item_details.price = this.remaining_amount;
+                    this.item_details.price = 1;
                     this.loader_spinner = false;
 
                     let down_payment = (this.tuition_data.down_payment <= this.amount_paid) ? 0 : ( this.tuition_data.down_payment - this.amount_paid );
@@ -509,7 +509,7 @@ new Vue({
                     
                     if(this.payment_type == "full"){
                         
-                        this.item_details.price = this.remaining_amount;
+                        this.item_details.price = 1;
                     } 
                     else if(this.registration.downpayment == 1 || down_payment == 0 && this.payment_type != "full"){
                         this.has_down = true;                                    
