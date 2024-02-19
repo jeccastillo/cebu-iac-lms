@@ -4572,7 +4572,9 @@ class Excel extends CI_Controller {
     public function student_account_report($sem, $campus)
     {
         $users = $this->data_fetcher->fetch_table('tb_mas_users');
-
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        // print('_' . $sy->enumSem . '_' . $this->data['term_type'] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd);
+        // die();
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -4587,7 +4589,6 @@ class Excel extends CI_Controller {
       
         $title = 'Student Account Report';
 
-        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NO.')
                     ->setCellValue('B1', 'STUDENT NUMBER')
@@ -4716,6 +4717,7 @@ class Excel extends CI_Controller {
                 $payments[count($payments) - 1]['date'] .= ', ' . $year;
             }
             if($reg){
+                $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = '';
                 if($reg['paymentType'] == 'full'){
                     if($tuition['scholarship_total_assessment_rate'] > 0){
@@ -4740,7 +4742,8 @@ class Excel extends CI_Controller {
                         ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
                         ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                          ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
+                        ->setCellValue('F'.$i, $course['strProgramCode'])
+                        ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
                         ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
                         ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
                         ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
@@ -4885,6 +4888,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
@@ -5016,7 +5020,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="student_account_reports.xls"');
+        header('Content-Disposition: attachment;filename="student_account_reports_' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
