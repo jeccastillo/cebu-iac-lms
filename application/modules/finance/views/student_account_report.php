@@ -3,7 +3,6 @@
             <h1>
             Student Account Report
             <small>
-                <!-- <a class="btn btn-app" target="_blank" href="<?php echo base_url()."excel/student_account_report/" . $sem . "/" . $campus; ?>" ><i class="fa fa-book"></i>Download Excel</a>  -->
                 <button class="btn btn-app" id="export_student_account_report" target="_blank" href="#" ><i class="fa fa-book"></i>Download Excel</button> 
             </small>
             
