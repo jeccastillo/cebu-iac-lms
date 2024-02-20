@@ -12,7 +12,7 @@
                         <table class="table table-bordered table-striped">
                             <tbody>
                                 <tr>
-                                    <th>Select Program</th>
+                                    <th>Selected Program</th>
                                     <td>
                                         <select id="program" disabled v-model="request.intProgramID"
                                             @change="changeProgram($event)" class="form-control">
