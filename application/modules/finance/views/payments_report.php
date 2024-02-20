@@ -91,5 +91,5 @@
     <input type="hidden" id="description" name="description" />
     <input type="hidden" id="total_amount_due" name="total_amount_due" /> 
     <input type="hidden" id="name" name="name" />       
-    <input type="hidden" id="transaction_date" name="transaction_date" />               
+    <input type="hidden" id="transaction_date" name="transaction_date" />   
 </form>
