@@ -11,7 +11,7 @@
                     <form @submit.prevent="confirmProgram" method="post">
                         <table class="table table-bordered table-striped">
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <th>Select Program</th>
                                     <td>
                                         <select id="program" disabled v-model="request.intProgramID"
@@ -37,7 +37,7 @@
                                             :href="base_url + 'unity/schedule_viewer/' + section.intID"
                                             target="_blank">View Schedule</a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
 
