@@ -131,7 +131,7 @@ class Finance extends CI_Controller {
         $sem = $sy['intID'];
 
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $this->data['page'] = "installment_dates";
+        $this->data['page'] = "student_account_report";
         $this->data['opentree'] = "finance_admin";
         $this->data['sem'] = $sem;
         
