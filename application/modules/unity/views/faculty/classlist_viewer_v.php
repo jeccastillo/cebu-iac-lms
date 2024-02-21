@@ -84,7 +84,7 @@
                                     {{ student.registered?'yes':'no' }}
                                 </td>
                                 <td :style="student.pre_req_passed?'color:#009900':'color:#990000'" v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
-                                <td  v-if="!student.registered"><button class="btn btn-danger" @click="removeStudent(student.intCSID)">Remove</button></td>
+                                <td  v-if="!student.registered"><button class="btn btn-danger" @click="removeStudent(student.intCSID,section,student.strLastname + ' ' + student.strFirstname)">Remove</button></td>
                                 <td  v-else></td>                                   
                             </tr>
                         </tbody>                        
@@ -193,6 +193,7 @@ new Vue({
         label: 'Submit',
         disable_submit: true,
         legend: undefined,
+        section:undefined,
 
     },
 
@@ -217,6 +218,7 @@ new Vue({
                 this.legend = data.data.legend;
                 this.cl = data.data.cl;
                 this.classlist = data.data.classlist;
+                this.section = classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' + (classlist.sub_section?classlist.sub_section:'') ;
                 this.grading_items =  data.data.grading_items;
                 this.grading_items_midterm =  data.data.grading_items_midterm;
                 this.is_admin = data.data.is_admin;
@@ -310,10 +312,12 @@ new Vue({
                 });
             }
         },
-        removeStudent: function(csid){            
+        removeStudent: function(csid,section,name){            
                         
             var formdata= new FormData();
             formdata.append("intCSID",csid);
+            formdata.append("name",name);
+            formdata.append("section",section);
             var values = event.target.value.split("-");            
             this.loader_spinner = true;
             

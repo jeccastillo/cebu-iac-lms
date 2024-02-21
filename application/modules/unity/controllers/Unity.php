@@ -2678,6 +2678,9 @@ class Unity extends CI_Controller {
                  ->delete('tb_mas_classlist_student');
         $data['success'] = true;
         $data['message'] = "deleted student";
+
+        $this->data_poster->log_action('Registration','Removed Enlisted student From Classlist:'.$post['section'].' Student:'.$post['name'],'green');
+
         echo json_encode($data);
     }
     public function update_grade($term = 1)
