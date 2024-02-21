@@ -257,6 +257,31 @@ new Vue({
             
             }
 
+            var payments = tuition.payments_tuition;   
+                                                                 
+            for(i in payments){                                                                                
+                var paid = payments[i].subtotal_order * -1;
+                this.term_balance += paid;
+                this.ledger_term.push({
+                    'type':'payment',
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',
+                    'date': payments[i].updated_at,
+                    'name': payments[i].description,
+                    'or_number':payments[i].or_number,
+                    'remarks': payments[i].remarks,
+                    'amount': parseFloat(payments[i].subtotal_order).toFixed(2),
+                    'added_by': 0, 
+                    'cashier': payments[i].cashier_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            }            
+
             for(i in tuition.ledger){
                                         
                 this.term_balance += parseFloat(tuition.ledger[i].amount);
@@ -324,55 +349,8 @@ new Vue({
                 }); 
             
             }
-            var payments = tuition.payments_tuition;   
-            var reservation = tuition.payments_reservation;  
-            var other = tuition.payments_other;                                              
-            for(i in payments){                                                                                
-                var paid = payments[i].subtotal_order * -1;
-                this.term_balance += paid;
-                this.ledger_term.push({
-                    'type':'payment',
-                    'strYearStart':tuition.term.strYearStart,
-                    'strYearEnd':tuition.term.strYearEnd,
-                    'enumSem':tuition.term.enumSem,
-                    'term_label':tuition.term.term_label,
-                    'syid':tuition.term.intID,
-                    'scholarship_name':'',
-                    'date': payments[i].updated_at,
-                    'name': payments[i].description,
-                    'or_number':payments[i].or_number,
-                    'remarks': payments[i].remarks,
-                    'amount': parseFloat(payments[i].subtotal_order).toFixed(2),
-                    'added_by': 0, 
-                    'cashier': payments[i].cashier_id,
-                    'is_disabled':0,
-                    'balance': this.term_balance.toFixed(2),
-                });                
-            }
-
-            for(i in reservation){                                                                                  
-                var paid = reservation[i].subtotal_order * -1;
-                this.term_balance += paid;
-                this.ledger_term.push({
-                    'type':'payment',
-                    'strYearStart':tuition.term.strYearStart,
-                    'strYearEnd':tuition.term.strYearEnd,
-                    'enumSem':tuition.term.enumSem,
-                    'term_label':tuition.term.term_label,
-                    'syid':tuition.term.intID,
-                    'scholarship_name':'',
-                    'date': reservation[i].updated_at,
-                    'name': reservation[i].description,
-                    'or_number':reservation[i].or_number,
-                    'remarks': reservation[i].remarks,
-                    'amount': parseFloat(reservation[i].subtotal_order).toFixed(2),
-                    'added_by': 0,
-                    'cashier': payments[i].cashier_id,
-                    'is_disabled':0,
-                    'balance': this.term_balance.toFixed(2),
-                });                
-            }
-            
+           
+            var other = tuition.payments_other;   
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
                 this.term_balance_other += paid;                
