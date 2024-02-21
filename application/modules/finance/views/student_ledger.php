@@ -401,22 +401,7 @@ new Vue({
                     'balance': this.term_balance.toFixed(2),
                 }); 
             
-            }
-
-            for(i in tuition.ledger){
-                                        
-                this.term_balance += parseFloat(tuition.ledger[i].amount);
-                tuition.ledger[i]['balance'] = this.term_balance.toFixed(2);
-                if(tuition.ledger[i].amount < 0){
-                    tuition.ledger[i].type = "payment";
-                    tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
-                    tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
-                }                
-                else{
-                    tuition.ledger[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
-                }
-                this.ledger_term.push(tuition.ledger[i]);                
-            }
+            }            
 
             for(i in tuition.other){                                        
                 this.term_balance_other += parseFloat(tuition.other[i].amount);
@@ -468,6 +453,21 @@ new Vue({
                     'balance': this.term_balance.toFixed(2),
                 }); 
             
+            }
+
+            for(i in tuition.ledger){
+                                        
+                this.term_balance += parseFloat(tuition.ledger[i].amount);
+                tuition.ledger[i]['balance'] = this.term_balance.toFixed(2);
+                if(tuition.ledger[i].amount < 0){
+                    tuition.ledger[i].type = "payment";
+                    tuition.ledger[i].amount = tuition.ledger[i].amount * -1;
+                    tuition.ledger[i].amount = tuition.ledger[i].amount.toFixed(2);
+                }                
+                else{
+                    tuition.ledger[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
+                }
+                this.ledger_term.push(tuition.ledger[i]);                
             }
             var other = tuition.payments_other;                                              
             
