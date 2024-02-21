@@ -321,6 +321,8 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;     
+            
+            //TUITION PAYMENTS
             $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY updated_at ASC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
@@ -329,18 +331,20 @@ class Finance extends CI_Controller {
             foreach($tuition_payments as $tuition_payment){
                 $tuition_payment['updated_at'] = date('M j, Y',strtotime($tuition_payment['updated_at']));
                 $temp['payments_tuition'][] = $tuition_payment;
-            }                                        
+            }   
+            
+            //OTHER PAYMENTS
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description != 'Reservation Payment%' AND description NOT LIKE 'Tuition%') AND status = 'Paid' ORDER BY updated_at ASC";
+            $other_payments =  $this->db->query($sql)
+                                          ->result_array();                  
 
-                                                                  
-            $temp['payments_other'] = $this->db->get_where('payment_details',
-                                                  array(
-                                                          'student_number'=>$data['student']['slug'],
-                                                          'sy_reference'=>$reg['intID'],
-                                                          'description !=' =>'Reservation Payment',
-                                                          'description NOT LIKE' =>'Tuition%',                                                        
-                                                          'status' => 'Paid'      
-                                                      ))
-                                                   ->result_array();               
+            $temp['payments_other']  = [];                                  
+            foreach($other_payments as $other_payment){
+                $other_payment['updated_at'] = date('M j, Y',strtotime($other_payment['updated_at']));
+                $temp['payments_other'][] = $other_payment;
+            } 
+
+                                                      
 
             $temp['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
