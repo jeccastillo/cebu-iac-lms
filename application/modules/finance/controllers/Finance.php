@@ -325,10 +325,10 @@ class Finance extends CI_Controller {
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
-            $temp['tuition_payments']  = [];                                  
+            $temp['payments_tuition']  = [];                                  
             foreach($tuition_payments as $tuition_payment){
                 $tuition_payment['updated_at'] = date('M j, Y',strtotime($tuition_payment['updated_at']));
-                $temp['tuition_payments'][] = $tuition_payment;
+                $temp['payments_tuition'][] = $tuition_payment;
             }                                        
 
                                                                   
