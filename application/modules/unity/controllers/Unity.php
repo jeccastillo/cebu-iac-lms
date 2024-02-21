@@ -1178,7 +1178,7 @@ class Unity extends CI_Controller {
                         break;
                     }
                 }
-                if($temp_rec && $temp_rec['include_gwa'] && $temp_rec['intFinalized'] == 2){                
+                if($temp_rec && $temp_rec['intFinalized'] == 2){                
                     switch($temp_rec['floatFinalGrade']){
                         case 'FA':
                             $grade = 5;
@@ -1196,8 +1196,10 @@ class Unity extends CI_Controller {
                             $temp_rec['color'] = "#f2f2f2";
                     }                             
     
-                    $assessment_units += $temp_rec['strUnits'];   
-                    $assessment_sum += $grade * $temp_rec['strUnits'];         
+                    if($temp_rec['include_gwa']){
+                        $assessment_units += $temp_rec['strUnits'];   
+                        $assessment_sum += $grade * $temp_rec['strUnits'];         
+                    }
                 }
                 if($current){
                     $temp_rec['bg'] = "#ADD8E6";
