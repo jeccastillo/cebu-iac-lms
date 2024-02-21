@@ -26,6 +26,7 @@
                                 <div class="form-group">
                                     <label>Type</label>
                                     <select required v-model="webhook" class="form-control">
+                                        <option value="paynamics">Paynamics</option>
                                         <option value="bdo">BDO Pay</option>
                                         <option value="maya">Maya</option>
                                     </select>
@@ -61,6 +62,7 @@ new Vue({
         request_id: undefined,
         webhook: 'bdo',
         date_paid: undefined,
+        webhook_url: undefined,
              
     },
 
@@ -94,6 +96,7 @@ new Vue({
                         //console.log(this.$refs['or_start'+id][0].value);
                         if(this.webhook == "maya")
                         {
+                            this.webhook_url = "_maya";
                             var formdata = new FormData();
                             formdata.append('requestReferenceNumber',this.request_id);                                    
                             formdata.append('status','PAYMENT_SUCCESS');
@@ -102,10 +105,18 @@ new Vue({
                             
                         }
                         else if(this.webhook == "bdo"){
+                            this.webhook_url = "_bdo";
                             var formdata = new FormData();
                             formdata.append('req_reference_number',this.request_id);                                                                
                             formdata.append('decision','ACCEPT');
                             formdata.append('date_paid',this.date_paid);
+                        }
+                        else if(this.webhook == "paynamics"){
+                            this.webhook_url = "";
+                            var formdata = new FormData();
+                            formdata.append('request_id',this.request_id);                                    
+                            formdata.append('response_message','Transaction Successful');
+                            formdata.append('date_paid',this.date_paid);                            
                         }
                         Swal.fire({
                             showCancelButton: false,
@@ -117,7 +128,7 @@ new Vue({
                         })
                         Swal.showLoading();
                         axios
-                        .post(api_url + 'payments/webhook_' + this.webhook, formdata, {
+                        .post(api_url + 'payments/webhook' + this.webhook_url, formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
