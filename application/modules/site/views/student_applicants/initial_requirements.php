@@ -220,15 +220,9 @@
                                     <div class="bg-gray-700 h-48 md-w-full min-h-fit text-gray-400">                                        
                                         <div class="container mx-auto px-5 py-10">
                                             <div class="relative rounded-md border border-gray-600">
-<<<<<<< HEAD
                                                 <p class="p-3">Digital/Scanned of School ID for student applicants or Government ID for 2nd degree applicants</p>
                                                 <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                                     <span class="bg-gray-700 px-2 text-sm font-medium">Valid ID</span> 
-=======
-                                                <p class="p-3">School ID for student applicants OR Government ID for 2nd degree applicants</p>
-                                                <h2 class="absolute flex top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                    <span class="bg-gray-700 px-2 text-sm font-medium">Valid ID</span>
->>>>>>> e701dc91 (update Initial Requirement Valid ID)
                                                 </h2>
                                             </div>
                                         </div>                                        
