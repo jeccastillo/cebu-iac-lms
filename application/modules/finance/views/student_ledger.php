@@ -94,7 +94,7 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in term.ledger_items">                                
+                            <tr v-for="item in sortedData">                                
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
@@ -223,6 +223,11 @@ new Vue({
             type: 'tuition',   
             remarks: "",        
         }
+    },
+    sortedData: function() {
+            return this.term.ledger_items.sort(function(a, b) {
+                return a.gwa - b.gwa;
+            });
     },
     mounted() {        
         var now = new Date();
