@@ -224,7 +224,6 @@ new Vue({
             remarks: "",        
         }
     },
-    
     mounted() {        
         var now = new Date();
         var year = now.getFullYear();
@@ -345,6 +344,31 @@ new Vue({
                 'balance': this.term_balance.toFixed(2),
             });
 
+            var payments = tuition.payments_tuition;                
+            
+            for(i in payments){                                                                                
+                var paid = payments[i].subtotal_order * -1;
+                this.term_balance += paid;
+                this.ledger_term.push({
+                    'type':'payment',
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',
+                    'date': payments[i].updated_at,
+                    'name': payments[i].description,
+                    'or_number':payments[i].or_number,
+                    'remarks': payments[i].remarks,
+                    'amount': parseFloat(payments[i].subtotal_order).toFixed(2),
+                    'added_by': 0, 
+                    'cashier': payments[i].cashier_id,
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            }            
+
             for(i in tuition.scholarship){
                 var scholarship_amount = 0;
                 var sa = 0;
@@ -445,31 +469,8 @@ new Vue({
                 }); 
             
             }
-            var payments = tuition.payments_tuition;   
-             
             var other = tuition.payments_other;                                              
-            for(i in payments){                                                                                
-                var paid = payments[i].subtotal_order * -1;
-                this.term_balance += paid;
-                this.ledger_term.push({
-                    'type':'payment',
-                    'strYearStart':tuition.term.strYearStart,
-                    'strYearEnd':tuition.term.strYearEnd,
-                    'enumSem':tuition.term.enumSem,
-                    'term_label':tuition.term.term_label,
-                    'syid':tuition.term.intID,
-                    'scholarship_name':'',
-                    'date': payments[i].updated_at,
-                    'name': payments[i].description,
-                    'or_number':payments[i].or_number,
-                    'remarks': payments[i].remarks,
-                    'amount': parseFloat(payments[i].subtotal_order).toFixed(2),
-                    'added_by': 0, 
-                    'cashier': payments[i].cashier_id,
-                    'is_disabled':0,
-                    'balance': this.term_balance.toFixed(2),
-                });                
-            }            
+            
             for(i in other){                                                                                   
                 var paid = other[i].subtotal_order * -1;
                 this.term_balance_other += paid;                
