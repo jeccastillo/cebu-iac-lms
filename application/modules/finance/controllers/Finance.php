@@ -346,7 +346,7 @@ class Finance extends CI_Controller {
 
                                                       
 
-            $temp['ledger'] = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
             ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
@@ -355,6 +355,13 @@ class Finance extends CI_Controller {
             ->order_by("strYearStart asc, enumSem asc")
             ->get()
             ->result_array();
+
+            $temp['ledger'] = [];
+
+            foreach($ledger as $item){
+                $item['date'] = date('M j, Y',strtotime($item['date']));
+                $temp['ledger'][] = $item;
+            }
 
             $temp['other'] = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
