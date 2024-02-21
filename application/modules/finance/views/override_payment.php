@@ -116,6 +116,7 @@ new Vue({
                             var formdata = new FormData();
                             formdata.append('request_id',this.request_id);                                    
                             formdata.append('response_message','Transaction Successful');
+                            format.append('response_advise','Paid');
                             formdata.append('date_paid',this.date_paid);                            
                         }
                         Swal.fire({
