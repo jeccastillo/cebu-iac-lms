@@ -218,7 +218,7 @@ new Vue({
                 this.legend = data.data.legend;
                 this.cl = data.data.cl;
                 this.classlist = data.data.classlist;
-                this.section = classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' + (classlist.sub_section?classlist.sub_section:'') ;
+                this.section = this.classlist.strCode + ' - ' + this.classlist.strClassName + ' ' + this.classlist.year + this.classlist.strSection + ' ' + (this.classlist.sub_section?this.classlist.sub_section:'') ;
                 this.grading_items =  data.data.grading_items;
                 this.grading_items_midterm =  data.data.grading_items_midterm;
                 this.is_admin = data.data.is_admin;
