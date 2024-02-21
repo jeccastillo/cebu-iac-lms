@@ -331,15 +331,7 @@ class Finance extends CI_Controller {
                 $temp['tuition_payments'][] = $tuition_payment;
             }                                        
 
-                                                  
-            $temp['payments_reservation'] = $this->db->get_where('payment_details',
-                                                 array(
-                                                         'student_number'=>$data['student']['slug'],
-                                                         'sy_reference'=>$reg['intID'],
-                                                         'description LIKE' =>'Reservation%',                                                        
-                                                         'status' => 'Paid'      
-                                                     ))
-                                                  ->result_array();       
+                                                                  
             $temp['payments_other'] = $this->db->get_where('payment_details',
                                                   array(
                                                           'student_number'=>$data['student']['slug'],
