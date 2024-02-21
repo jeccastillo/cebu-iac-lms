@@ -144,6 +144,16 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer_new',$this->data);
     }
 
+	public function test_admissions_student_payment() {
+		
+		if(!$this->is_super_admin())
+		  redirect(base_url()."unity");
+
+        $this->load->view('common/header',$this->data);        
+		$this->load->view('student_applicants/test_payment',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
+
 	public function admissions_student_payment_reservation() {
         $this->load->view('common/header',$this->data);        
 		$this->load->view('student_applicants/payment',$this->data);
@@ -254,13 +264,22 @@ class Site extends CI_Controller {
 
     }
 
-		public function maya_redirect_url($status) {
+	public function maya_redirect_url($status) {
 
 			$data['event'] = $status;
 			$this->load->view('common/header_maya',$this->data);        
 			$this->load->view('maya_redirect_url/events',$data);
 			$this->load->view('common/footer_new',$this->data);
 	}
+
+	public function is_super_admin()
+    {
+         $admin = $this->session->userdata('intUserLevel');
+        if($admin == 2)
+            return true;
+        else
+            return false;
+    }
 
    }
 
