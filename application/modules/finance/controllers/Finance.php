@@ -321,7 +321,7 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;     
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%' AND status = 'Paid' ORDER BY updated_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY updated_at ASC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
