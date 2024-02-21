@@ -224,10 +224,12 @@ new Vue({
             remarks: "",        
         }
     },
-    sortedData: function() {
+    computed: {
+        sortedData: function() {
             return this.term.ledger_items.sort(function(a, b) {
-                return a.gwa - b.gwa;
+                return a.date - b.date;
             });
+        }
     },
     mounted() {        
         var now = new Date();
