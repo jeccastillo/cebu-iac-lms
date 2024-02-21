@@ -321,16 +321,17 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;     
-            $temp['payments_tuition'] = $this->db->where(
-                                                array(
-                                                        'student_number'=>$data['student']['slug'],
-                                                        'sy_reference'=>$reg['intID'],
-                                                        'description LIKE' =>'Tuition%', 
-                                                        'status' => 'Paid'                                                       
-                                                    ))
-                                                ->order_by('updated_at','asc')
-                                                ->get('payment_details')
-                                                ->result_array();                  
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%' AND status = 'Paid' ORDER BY updated_at ASC";
+            $tuition_payments =  $this->db->query($sql)
+                                          ->result_array();                  
+
+            $temp['tuition_payments']  = [];                                  
+            foreach($tuition_payments as $tuition_payment){
+                $tuition_payment['updated_at'] = date('M j, Y',strtotime($tuition_payment['updated_at']));
+                $temp['tuition_payments'][] = $tuition_payment;
+            }                                        
+
+                                                  
             $temp['payments_reservation'] = $this->db->get_where('payment_details',
                                                  array(
                                                          'student_number'=>$data['student']['slug'],
