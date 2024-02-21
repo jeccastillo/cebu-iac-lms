@@ -321,7 +321,7 @@ class Finance extends CI_Controller {
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;     
-            $temp['payments_tuition'] = $this->db->get_where('payment_details',
+            $temp['payments_tuition'] = $this->db->where(
                                                 array(
                                                         'student_number'=>$data['student']['slug'],
                                                         'sy_reference'=>$reg['intID'],
@@ -329,6 +329,7 @@ class Finance extends CI_Controller {
                                                         'status' => 'Paid'                                                       
                                                     ))
                                                 ->order_by('updated_at','asc')
+                                                ->get('payment_details')
                                                 ->result_array();                  
             $temp['payments_reservation'] = $this->db->get_where('payment_details',
                                                  array(
