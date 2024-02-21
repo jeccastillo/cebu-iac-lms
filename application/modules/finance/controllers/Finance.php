@@ -328,7 +328,8 @@ class Finance extends CI_Controller {
                                                         'description LIKE' =>'Tuition%', 
                                                         'status' => 'Paid'                                                       
                                                     ))
-                                                 ->result_array();                  
+                                                ->order_by('updated_at','asc')
+                                                ->result_array();                  
             $temp['payments_reservation'] = $this->db->get_where('payment_details',
                                                  array(
                                                          'student_number'=>$data['student']['slug'],
