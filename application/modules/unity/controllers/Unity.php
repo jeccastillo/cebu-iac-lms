@@ -2672,7 +2672,14 @@ class Unity extends CI_Controller {
         }
         echo json_encode($data);
     }
-
+    public function remove_student_classlist(){
+        $post = $this->input->post();
+        $this->db->where('intCSID',$post['intCSID'])
+                 ->delete('tb_mas_classlist_student');
+        $data['success'] = true;
+        $data['message'] = "deleted student";
+        echo json_encode($data);
+    }
     public function update_grade($term = 1)
     {
          $active_sem = $this->data_fetcher->get_active_sem();

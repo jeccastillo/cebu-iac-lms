@@ -40,6 +40,7 @@
                                 <th>Remarks</th>                                
                                 <th>Enrolled</th>
                                 <th v-if="pre_req.length > 0">Passed Pre-requisite(s)</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>                        
@@ -83,6 +84,8 @@
                                     {{ student.registered?'yes':'no' }}
                                 </td>
                                 <td :style="student.pre_req_passed?'color:#009900':'color:#990000'" v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
+                                <td  v-if="!student.registered"><button class="btn btn-danger" @click="removeStudent(student.intCSID)">Remove</button></td>
+                                <td  v-else></td>                                   
                             </tr>
                         </tbody>                        
                     </table>
@@ -306,6 +309,44 @@ new Vue({
                     });
                 });
             }
+        },
+        removeStudent: function(csid){            
+                        
+            var formdata= new FormData();
+            formdata.append("intCSID",csid);
+            var values = event.target.value.split("-");            
+            this.loader_spinner = true;
+            
+                Swal.fire({
+                    title: 'Remove Student?',
+                    text: "Are you sure you want to remove Student?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        axios.post(base_url + 'unity/remove_student_classlist', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        });
+                    
+                    }
+                    
+                });                                        
         },
         finalizePeriod: function(){
             var complete_grades = true;
