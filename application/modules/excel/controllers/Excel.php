@@ -4689,24 +4689,24 @@ class Excel extends CI_Controller {
                 $payment = array();
                 if($payment_detail['description'] == 'Tuition Fee'){
                     if($payments == null){
-                        $payment['date'] = date("M d", strtotime($payment_detail['date_paid']));
+                        $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
                         $payment['or_number'] = $payment_detail['or_number'];
                         $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                        $month_paid = date("m", strtotime($payment_detail['date_paid']));
-                        $year = date("Y", strtotime($payment_detail['date_paid']));
+                        $month_paid = date("m", strtotime($payment_detail['updated_at']));
+                        $year = date("Y", strtotime($payment_detail['updated_at']));
                     }else{
-                        if($month_paid == date("m", strtotime($payment_detail['date_paid']))){
-                            $payments[count($payments) - 1]['date'] .= ', ' . date("d", strtotime($payment_detail['date_paid']));
+                        if($month_paid == date("m", strtotime($payment_detail['updated_at']))){
+                            $payments[count($payments) - 1]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
                             $payments[count($payments) - 1]['or_number'] .= ', ' . $payment_detail['or_number'];
                             $payments[count($payments) - 1]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
                         }else{
                             $payments[count($payments) - 1]['date'] .= ', ' . $year;
                             
-                            $payment['date'] = $date_paid = date("M d", strtotime($payment_detail['date_paid']));
+                            $payment['date'] = $date_paid = date("M d", strtotime($payment_detail['updated_at']));
                             $payment['or_number'] = $payment_detail['or_number'];
                             $payment['amount'] = number_format((float)$payment_detail['total_amount_due'], 2, '.', '');
-                            $month_paid = date("m", strtotime($payment_detail['date_paid']));
-                            $year = date("Y", strtotime($payment_detail['date_paid']));
+                            $month_paid = date("m", strtotime($payment_detail['updated_at']));
+                            $year = date("Y", strtotime($payment_detail['updated_at']));
                         }
                     }
                 }

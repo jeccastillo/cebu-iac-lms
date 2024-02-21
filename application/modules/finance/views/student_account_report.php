@@ -8,15 +8,15 @@
             
         </h1>                          
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
-            <li class="active">View All Student</li>
+            <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
+            <li class="active">View All Student</li> -->
         </ol>
     </section>
     <div class="content">
         <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Advanced Search</h3>              
-            </div>
+            <!-- <div class="box-header with-border"> -->
+                <!-- <h3 class="box-title">Search</h3>               -->
+            <!-- </div> -->
 
             <div class="box-body" style="display: block;">
                 <div class="row">                                            
