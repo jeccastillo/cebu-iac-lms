@@ -4643,31 +4643,43 @@ class Excel extends CI_Controller {
                     ->setCellValue('AP2', 'DATE')
                     ->setCellValue('AQ2', 'OR NUMBER')
                     ->setCellValue('AR2', 'AMOUNT')
-                    ->setCellValue('AS1', 'TOTAL PAYMENT')
-                    ->setCellValue('AT1', 'BALANCE AFTER PAYMENT')
-                    ->setCellValue('AU1', 'ADJUSTMENTS')
-                    ->setCellValue('AU2', 'APPLIED FROM')
-                    ->setCellValue('AX2', 'APPLIED TO')
-                    ->setCellValue('BA2', 'LATE TAGGING')
-                    ->setCellValue('BD2', 'REFUND')
-                    ->setCellValue('BG2', 'OTHERS')
-                    ->setCellValue('AU3', 'DATE')
-                    ->setCellValue('AV3', 'REMARKS')
-                    ->setCellValue('AW3', 'AMOUNT')
-                    ->setCellValue('AX3', 'DATE')
-                    ->setCellValue('AY3', 'REMARKS')
-                    ->setCellValue('AZ3', 'AMOUNT')
-                    ->setCellValue('BA3', 'DATE')
-                    ->setCellValue('BB3', 'REMARKS')
-                    ->setCellValue('BC3', 'AMOUNT')
-                    ->setCellValue('BD3', 'DATE')
-                    ->setCellValue('BE3', 'REMARKS')
-                    ->setCellValue('BF3', 'AMOUNT')
+                    ->setCellValue('AS2', 'DATE')
+                    ->setCellValue('AT2', 'OR NUMBER')
+                    ->setCellValue('AU2', 'AMOUNT')
+                    ->setCellValue('AV2', 'DATE')
+                    ->setCellValue('AW2', 'OR NUMBER')
+                    ->setCellValue('AX2', 'AMOUNT')
+                    ->setCellValue('AY2', 'DATE')
+                    ->setCellValue('AZ2', 'OR NUMBER')
+                    ->setCellValue('BA2', 'AMOUNT')
+                    ->setCellValue('BB2', 'DATE')
+                    ->setCellValue('BC2', 'OR NUMBER')
+                    ->setCellValue('BD2', 'AMOUNT')
+                    ->setCellValue('BE1', 'TOTAL PAYMENT')
+                    ->setCellValue('BF1', 'BALANCE AFTER PAYMENT')
+                    ->setCellValue('BG1', 'ADJUSTMENTS')
+                    ->setCellValue('BG2', 'APPLIED FROM')
+                    ->setCellValue('BJ2', 'APPLIED TO')
+                    ->setCellValue('BM2', 'LATE TAGGING')
+                    ->setCellValue('BP2', 'REFUND')
+                    ->setCellValue('BS2', 'OTHERS')
                     ->setCellValue('BG3', 'DATE')
                     ->setCellValue('BH3', 'REMARKS')
                     ->setCellValue('BI3', 'AMOUNT')
-                    ->setCellValue('BJ1', 'TOTAL ADJUSTMENT')
-                    ->setCellValue('BK1', 'BALANCE AS OF (DATE EXTRACTED)');
+                    ->setCellValue('BJ3', 'DATE')
+                    ->setCellValue('BK3', 'REMARKS')
+                    ->setCellValue('BL3', 'AMOUNT')
+                    ->setCellValue('BM3', 'DATE')
+                    ->setCellValue('BN3', 'REMARKS')
+                    ->setCellValue('BO3', 'AMOUNT')
+                    ->setCellValue('BP3', 'DATE')
+                    ->setCellValue('BQ3', 'REMARKS')
+                    ->setCellValue('BR3', 'AMOUNT')
+                    ->setCellValue('BS3', 'DATE')
+                    ->setCellValue('BT3', 'REMARKS')
+                    ->setCellValue('BU3', 'AMOUNT')
+                    ->setCellValue('BV1', 'TOTAL ADJUSTMENT')
+                    ->setCellValue('BW1', 'BALANCE AS OF (DATE EXTRACTED)');
 
 
         $i = 4;
@@ -4830,10 +4842,27 @@ class Excel extends CI_Controller {
                         ->setCellValue('AP'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['date'] . ', ' . $payments[3]['year'] : '')
                         ->setCellValue('AQ'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['or_number'] : '')
                         ->setCellValue('AR'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AS'.$i, '=AI' . $i . '+AL' . $i . '+AO' . $i . '+AR' . $i . ')')
-                        ->setCellValue('AT'.$i, '=AF' . $i . '-AS' . $i . ')')
-                        ->setCellValue('BJ'.$i, '=AW' . $i . '+AZ' . $i . '+BC' . $i . '+BF' . $i . '+BF' . $i . ')')
-                        ->setCellValue('BK'.$i, '=AT' . $i . '-BJ' . $i . ')');
+                        
+                        ->setCellValue('AS1', count($payments) > 4 ? $payments[4]['month_name'] . ' ' . $payments[4]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AS'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['date'] . ', ' . $payments[4]['year'] : '')
+                        ->setCellValue('AT'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AU'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('AV1', count($payments) > 5 ? $payments[5]['month_name'] . ' ' . $payments[5]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AV'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['date'] . ', ' . $payments[5]['year'] : '')
+                        ->setCellValue('AW'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AX'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('AY1', count($payments) > 6 ? $payments[6]['month_name'] . ' ' . $payments[6]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AY'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['date'] . ', ' . $payments[6]['year'] : '')
+                        ->setCellValue('AZ'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('BA'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('BB1', count($payments) > 7 ? $payments[7]['month_name'] . ' ' . $payments[7]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('BB'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['date'] . ', ' . $payments[7]['year'] : '')
+                        ->setCellValue('BC'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('BD'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('BE'.$i, '=AI' . $i . '+AL' . $i . '+AO' . $i . '+AR' . $i . '+AU' . $i . '+AX' . $i . '+BA' . $i . '+BD' . $i . ')')
+                        ->setCellValue('BF'.$i, '=AF' . $i . '-BE' . $i . ')')
+                        ->setCellValue('BV'.$i, '=BI' . $i . '+BL' . $i . '+BO' . $i . '+BR' . $i . '+BU' . $i . ')')
+                        ->setCellValue('BW'.$i, '=BF' . $i . '-BV' . $i . ')');
 
                 $i++;
                 $count++;
@@ -4871,22 +4900,31 @@ class Excel extends CI_Controller {
                     ->setCellValue('AL'.$i, '=SUM(AL4:AL' . ($i-1) . ')')
                     ->setCellValue('AO'.$i, '=SUM(AO4:AO' . ($i-1) . ')')
                     ->setCellValue('AR'.$i, '=SUM(AR4:AR' . ($i-1) . ')')
-                    ->setCellValue('AS'.$i, '=SUM(AS4:AS' . ($i-1) . ')')
-                    ->setCellValue('AT'.$i, '=SUM(AT4:AT' . ($i-1) . ')')
-                    ->setCellValue('AW'.$i, '=SUM(AW4:AW' . ($i-1) . ')')
-                    ->setCellValue('AZ'.$i, '=SUM(AZ4:AZ' . ($i-1) . ')')
-                    ->setCellValue('BC'.$i, '=SUM(BC4:BC' . ($i-1) . ')')
+                    ->setCellValue('AU'.$i, '=SUM(AU4:AU' . ($i-1) . ')')
+                    ->setCellValue('AX'.$i, '=SUM(AX4:AX' . ($i-1) . ')')
+                    ->setCellValue('BB'.$i, '=SUM(BB4:BB' . ($i-1) . ')')
+                    ->setCellValue('BA'.$i, '=SUM(BA4:BA' . ($i-1) . ')')
+                    ->setCellValue('BD'.$i, '=SUM(BD4:BD' . ($i-1) . ')')
+                    ->setCellValue('BE'.$i, '=SUM(BE4:BE' . ($i-1) . ')')
                     ->setCellValue('BF'.$i, '=SUM(BF4:BF' . ($i-1) . ')')
                     ->setCellValue('BI'.$i, '=SUM(BI4:BI' . ($i-1) . ')')
-                    ->setCellValue('BJ'.$i, '=SUM(BJ4:BJ' . ($i-1) . ')')
-                    ->setCellValue('BK'.$i, '=SUM(BK4:BK' . ($i-1) . ')');  
+                    ->setCellValue('BL'.$i, '=SUM(BL4:BL' . ($i-1) . ')')
+                    ->setCellValue('BO'.$i, '=SUM(BO4:BO' . ($i-1) . ')')
+                    ->setCellValue('BR'.$i, '=SUM(BR4:BR' . ($i-1) . ')')
+                    ->setCellValue('BU'.$i, '=SUM(BU4:BU' . ($i-1) . ')')
+                    ->setCellValue('BV'.$i, '=SUM(BV4:BV' . ($i-1) . ')')
+                    ->setCellValue('BW'.$i, '=SUM(BW4:BW' . ($i-1) . ')');  
         
-        $objPHPExcel->getActiveSheet()->getStyle('A1:BK3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:BW3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('AG4:AH' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('AJ4:AK' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('AM4:AN' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('AP4:AQ' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:BK3')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('AS4:AT' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AV4:AW' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AY4:AZ' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('BB4:BC' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:BW3')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -4906,7 +4944,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':BK' . $i)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':BW' . $i)->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -4929,13 +4967,17 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getStyle('AI4:AI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('AL4:AL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('AO4:AO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AO4:AO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AR4:AT' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AW4:AW' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AZ4:AZ' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BC4:BC' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BF4:BF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BI4:BK' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('AR4:AR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('AU4:AU' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('AX4:AX' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BA4:BA' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BD4:BF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        
+        $objPHPExcel->getActiveSheet()->getStyle('BI4:BI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BL4:BL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BO4:BO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BR4:BR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('BU4:BW' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
@@ -4977,28 +5019,44 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(15);
+
         $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AT')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AT')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AU')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AV')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AW')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AX')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AY')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AY')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AZ')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('BA')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BB')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BB')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('BC')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('BD')->setWidth(15);
+        
         $objPHPExcel->getActiveSheet()->getColumnDimension('BE')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BF')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BF')->setWidth(25);
+
         $objPHPExcel->getActiveSheet()->getColumnDimension('BG')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('BH')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('BI')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BJ')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BK')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BJ')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BK')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BL')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BM')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BN')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BO')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BP')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BQ')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BR')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BS')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BT')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BU')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BV')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BW')->setWidth(35);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:A3');
@@ -5035,6 +5093,12 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('AJ1:AL1');
         $sheet->mergeCells('AM1:AO1');
         $sheet->mergeCells('AP1:AR1');
+
+        $sheet->mergeCells('AS1:AU1');
+        $sheet->mergeCells('AV1:AX1');
+        $sheet->mergeCells('AY1:BA1');
+        $sheet->mergeCells('BB1:BD1');
+
         $sheet->mergeCells('AG2:AG3');
         $sheet->mergeCells('AH2:AH3');
         $sheet->mergeCells('AI2:AI3');
@@ -5047,23 +5111,34 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('AP2:AP3');
         $sheet->mergeCells('AQ2:AQ3');
         $sheet->mergeCells('AR2:AR3');
-        $sheet->mergeCells('AS1:AS3');
-        $sheet->mergeCells('AT1:AT3');
-        $sheet->mergeCells('AU1:BI1');
-        $sheet->mergeCells('AU2:AW2');
-        $sheet->mergeCells('AX2:AZ2');
-        $sheet->mergeCells('BA2:BC2');
-        $sheet->mergeCells('BD2:BF2');
-        $sheet->mergeCells('BG2:BI2');
-        $sheet->mergeCells('BJ1:BJ3');
-        $sheet->mergeCells('BK1:BK3');
 
-                
+        $sheet->mergeCells('AS2:AS3');
+        $sheet->mergeCells('AT2:AT3');
+        $sheet->mergeCells('AU2:AU3');
+        $sheet->mergeCells('AV2:AV3');
+        $sheet->mergeCells('AW2:AW3');
+        $sheet->mergeCells('AX2:AX3');
+        $sheet->mergeCells('AY2:AY3');
+        $sheet->mergeCells('AZ2:AZ3');
+        $sheet->mergeCells('BA2:BA3');
+        $sheet->mergeCells('BB2:BB3');
+        $sheet->mergeCells('BC2:BC3');
+        $sheet->mergeCells('BD2:BD3');
+
+        $sheet->mergeCells('BE1:BE3');
+        $sheet->mergeCells('BF1:BF3');
+        $sheet->mergeCells('BG1:BU1');
+        $sheet->mergeCells('BG2:BI2');
+        $sheet->mergeCells('BJ2:BL2');
+        $sheet->mergeCells('BM2:BO2');
+        $sheet->mergeCells('BP2:BR2');
+        $sheet->mergeCells('BS2:BU2');
+        $sheet->mergeCells('BV1:BV3');
+        $sheet->mergeCells('BW1:BW3');
          
         $objPHPExcel->getActiveSheet()->setTitle('Student Account Report');
 
         $date = date("ymdhis");
-
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
