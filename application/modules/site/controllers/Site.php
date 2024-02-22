@@ -264,6 +264,14 @@ class Site extends CI_Controller {
 
     }
 
+	public function bdo_redirect_url($status) {
+
+			$data['event'] = $status;
+			$this->load->view('common/header_maya',$this->data);        
+			$this->load->view('bdo_redirect_url/events',$data);
+			$this->load->view('common/footer_new',$this->data);
+	}
+
 	public function maya_redirect_url($status) {
 
 			$data['event'] = $status;
