@@ -4573,8 +4573,6 @@ class Excel extends CI_Controller {
     {
         $users = $this->data_fetcher->fetch_table('tb_mas_users');
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        // print('_' . $sy->enumSem . '_' . $this->data['term_type'] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd);
-        // die();
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -4582,7 +4580,6 @@ class Excel extends CI_Controller {
 
         if (PHP_SAPI == 'cli')
             die('This example should only be run from a Web Browser');
-
 
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
@@ -4675,6 +4672,87 @@ class Excel extends CI_Controller {
 
         $i = 4;
         $count = 1;
+        $payments = array();
+
+        foreach($users as $index => $user){
+            $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
+            
+            $payment_month = $payment_year = '';
+            $current_index = 0;
+            foreach($payment_details as $payment_detail){
+                $payment = $user_payment = $date = array();
+                if($payment_detail['description'] == 'Tuition Fee'){
+                    if($payments == null){
+                        $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                        $payment['or_number'] = $payment_detail['or_number'];
+                        $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                        
+                        $payment_month = date("m", strtotime($payment_detail['updated_at']));
+                        $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                        
+                        $user_payment[$user['intID']] = $payment;
+
+                        $date['month'] = $payment_month;
+                        $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                        $date['year'] = $payment_year;
+                        $date['data'] = $user_payment;
+
+                        $payments[] = $date;
+                    }else{
+                        if($payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
+                            $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
+                            $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
+                            $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                            
+                        }else{
+                            $flag = $same_month_year = false;
+                            $data = array();
+                            for($index = count($payments) - 1; $index >= 0; $index--){
+                                
+                                if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['updated_at']))){
+                                    $same_month_year = true;
+                                    $current_index = $index;
+                                }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at']))){
+                                    if($payments[$index]['month'] > date("m", strtotime($payment_detail['updated_at']))){
+                                        $current_index = $index;
+                                        $flag = true;
+                                    }
+                                }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['updated_at']))){
+                                    $current_index = $index;
+                                    $flag = true;
+                                }
+                            }
+
+                                $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                                $payment['or_number'] = $payment_detail['or_number'];
+                                $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                                
+                                $payment_month = date("m", strtotime($payment_detail['updated_at']));
+                                $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                                
+                                $user_payment[$user['intID']] = $payment;
+        
+                                $date['month'] = $payment_month;
+                                $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                                $date['year'] = $payment_year;
+                                $date['data'] = $user_payment;
+                                $data[] = $date;
+                                
+                                if($same_month_year){
+                                    $payments[$current_index]['data'][$user['intID']] = $payment;
+                                }else{
+                                    if($flag){
+                                        array_splice($payments, $current_index, 0, $data);
+                                    }else{
+                                        array_push($payments, $data);
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+
         foreach($users as $index => $user)
         {
             $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
@@ -4683,39 +4761,6 @@ class Excel extends CI_Controller {
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
             $tuitionFee = $tuition['tuition'];
 
-            $payments = array();
-            $year = '';
-            foreach($payment_details as $payment_detail){
-                $payment = array();
-                if($payment_detail['description'] == 'Tuition Fee'){
-                    if($payments == null){
-                        $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
-                        $payment['or_number'] = $payment_detail['or_number'];
-                        $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                        $month_paid = date("m", strtotime($payment_detail['updated_at']));
-                        $year = date("Y", strtotime($payment_detail['updated_at']));
-                    }else{
-                        if($month_paid == date("m", strtotime($payment_detail['updated_at']))){
-                            $payments[count($payments) - 1]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
-                            $payments[count($payments) - 1]['or_number'] .= ', ' . $payment_detail['or_number'];
-                            $payments[count($payments) - 1]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                        }else{
-                            $payments[count($payments) - 1]['date'] .= ', ' . $year;
-                            
-                            $payment['date'] = $date_paid = date("M d", strtotime($payment_detail['updated_at']));
-                            $payment['or_number'] = $payment_detail['or_number'];
-                            $payment['amount'] = number_format((float)$payment_detail['total_amount_due'], 2, '.', '');
-                            $month_paid = date("m", strtotime($payment_detail['updated_at']));
-                            $year = date("Y", strtotime($payment_detail['updated_at']));
-                        }
-                    }
-                }
-                if($payment)
-                    $payments[] = $payment;
-            }
-            if(count($payments) > 0){
-                $payments[count($payments) - 1]['date'] .= ', ' . $year;
-            }
             if($reg){
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = '';
@@ -4769,18 +4814,22 @@ class Excel extends CI_Controller {
                         ->setCellValue('AD'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
                         ->setCellValue('AE'.$i, '=SUM(U' . $i . ':AD' . $i . ')')
                         ->setCellValue('AF'.$i, '=S' . $i . '-AE' . $i . ')')
-                        ->setCellValue('AG'.$i, count($payments) > 0 ? $payments[0]['date'] : '')
-                        ->setCellValue('AH'.$i, count($payments) > 0 ? $payments[0]['or_number'] : '')
-                        ->setCellValue('AI'.$i, count($payments) > 0 ? $payments[0]['amount'] : '')
-                        ->setCellValue('AJ'.$i, count($payments) > 1 ? $payments[1]['date'] : '')
-                        ->setCellValue('AK'.$i, count($payments) > 1 ? $payments[1]['or_number'] : '')
-                        ->setCellValue('AL'.$i, count($payments) > 1 ? $payments[1]['amount'] : '')
-                        ->setCellValue('AM'.$i, count($payments) > 2 ? $payments[2]['date'] : '')
-                        ->setCellValue('AN'.$i, count($payments) > 2 ? $payments[2]['or_number'] : '')
-                        ->setCellValue('AO'.$i, count($payments) > 2 ? $payments[2]['amount'] : '')
-                        ->setCellValue('AP'.$i, count($payments) > 3 ? $payments[3]['date'] : '')
-                        ->setCellValue('AQ'.$i, count($payments) > 3 ? $payments[3]['or_number'] : '')
-                        ->setCellValue('AR'.$i, count($payments) > 3 ? $payments[3]['amount'] : '')
+                        ->setCellValue('AG1', count($payments) > 0 ? $payments[0]['month_name'] . ' ' . $payments[0]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AG'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['date'] . ', ' . $payments[0]['year'] : '')
+                        ->setCellValue('AH'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AI'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('AJ1', count($payments) > 1 ? $payments[1]['month_name'] . ' ' . $payments[1]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AJ'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['date'] . ', ' . $payments[1]['year'] : '')
+                        ->setCellValue('AK'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AL'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('AM1', count($payments) > 2 ? $payments[2]['month_name'] . ' ' . $payments[2]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AM'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['date'] . ', ' . $payments[2]['year'] : '')
+                        ->setCellValue('AN'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AO'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['amount'] : '')
+                        ->setCellValue('AP1', count($payments) > 3 ? $payments[3]['month_name'] . ' ' . $payments[3]['year'] : 'MONTH & YEAR')
+                        ->setCellValue('AP'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['date'] . ', ' . $payments[3]['year'] : '')
+                        ->setCellValue('AQ'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['or_number'] : '')
+                        ->setCellValue('AR'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['amount'] : '')
                         ->setCellValue('AS'.$i, '=AI' . $i . '+AL' . $i . '+AO' . $i . '+AR' . $i . ')')
                         ->setCellValue('AT'.$i, '=AF' . $i . '-AS' . $i . ')')
                         ->setCellValue('BJ'.$i, '=AW' . $i . '+AZ' . $i . '+BC' . $i . '+BF' . $i . '+BF' . $i . ')')
@@ -4833,6 +4882,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('BK'.$i, '=SUM(BK4:BK' . ($i-1) . ')');  
         
         $objPHPExcel->getActiveSheet()->getStyle('A1:BK3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AG4:AH' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AJ4:AK' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AM4:AN' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('AP4:AQ' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1:BK3')->applyFromArray(
             array(
                 'font'  => array(
