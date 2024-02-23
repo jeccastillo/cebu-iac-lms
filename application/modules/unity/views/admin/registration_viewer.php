@@ -65,8 +65,35 @@
                         </ul>
                     </div>
                 </div>                
-            </div>
+            </div>            
             <div class="col-sm-12">
+            <div class=""
+                    v-if="show_alert">
+                    <div class="alert alert-danger col-sm-6"
+                    role="alert">
+                    <h4 class="alert-heading">Alert!</h4>
+                    <p>This Student still has remaining balances:</p>
+                    </div>
+                    <div class="col-sm-6">
+                    <table class="table table-bordered thead-dark table-striped">
+                        <thead>
+                        <tr>
+                            <th>Term</th>
+                            <th>Payment Type</th>
+                            <th>Balance</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in term_balances"
+                            v-if="item.balance > 0">
+                            <td>{{ item.term }}</td>
+                            <td>{{ item.payment_type }}</td>
+                            <td><strong>P{{ item.formatted_balance }}</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li v-if="advanced_privilages">
@@ -472,6 +499,8 @@ new Vue({
         cashier: undefined,     
         user_level: undefined, 
         user: undefined,
+        term_balances: [],
+        show_alert: false,
         change_payment_type: undefined,
         payment_type: 'full', 
         or_print: {
@@ -567,7 +596,10 @@ new Vue({
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
                         this.ledger_items = data.data.ledger;
-                        
+                        this.term_balances = data.data.term_balances;
+                        for (i in this.term_balances)
+                        if (this.term_balances[i].balance > 0)
+                            this.show_alert = true;
                         
                         this.installment_dates.push(data.data.active_sem.installment1);
                         this.installment_dates.push(data.data.active_sem.installment2);

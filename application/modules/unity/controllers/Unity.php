@@ -567,7 +567,47 @@ class Unity extends CI_Controller {
                
             
             //--------TUITION-------------------------------------------------------------------
+            $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
+                ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                ->where(array('intStudentID'=>$ret['student']['intID']))
+                ->order_by("strYearStart asc, enumSem asc")
+                ->get('tb_mas_registration')
+                ->result_array();
             
+            $term_balances = [];
+            
+            foreach($registrations as $reg){            
+                $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
+                $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = '".$ret['student']['slug']."' AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
+                                         ->result_array();   
+                                         
+                $ledger_payments = $this->db                                                
+                ->where(array('student_id'=>$ret['student']['intID'],'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID'],'amount <'=>0))                                        
+                ->get('tb_mas_student_ledger')
+                ->result_array();                                         
+
+                $paid = 0;
+                foreach($term_payments as $payment){
+                    $paid += $payment['subtotal_order'];
+                }       
+                foreach($ledger_payments as $payment){
+                    $paid -= $payment['amount'];
+                }       
+                if($reg['paymentType'] == "full")
+                    $balance = $tuition['total'] - $paid;
+                else
+                    $balance = $tuition['total_installment'] - $paid;
+
+                $term_balances[] = [
+                    'formatted_balance'=> number_format($balance),
+                    'balance'=>$balance,
+                    'payment_type'=>$reg['paymentType'],
+                    'term'=>$reg['enumSem']." ".$reg['term_label']." S.Y.".$reg['strYearStart']."-".$reg['strYearEnd']
+                ];
+            }
+
+            $ret['term_balances'] = $term_balances;
+
             
             $ret['success']= true;
         }
