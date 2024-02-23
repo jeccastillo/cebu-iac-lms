@@ -94,6 +94,8 @@
                     </table>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li v-if="advanced_privilages">
