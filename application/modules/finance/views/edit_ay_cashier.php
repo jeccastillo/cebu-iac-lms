@@ -57,7 +57,7 @@
                         <input required type="date" name="reconf_end" value="<?php echo $item['reconf_end']; ?>" class="form-control" />                         
                     </div>                                                       
                     <div class="form-group col-xs-12 col-lg-4">
-                        <label>AR Report Regeneration Date</label>
+                        <label>AR Report Generation Date</label>
                         <input required type="date" name="reconf_end" value="<?php echo $item['ar_report_date_generation']; ?>" class="form-control" />                         
                     </div>                            
                     <div class="form-group col-xs-12">
