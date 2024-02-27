@@ -838,6 +838,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:M4');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:M5');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A6:M6');
+
         $style = array(
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -4819,7 +4820,7 @@ class Excel extends CI_Controller {
                         $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
                         $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
     
-                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                         
                         $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
                         $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
