@@ -4786,43 +4786,45 @@ class Excel extends CI_Controller {
                 // if(count($payments) > 0){
                 $total_amount = '=' . $this->columnIndexToLetter(34) . '' . $i;
 
-                foreach($payments as $index => $payment){
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), 1)
-                        ->setValue($payment['month_name'] . ' ' . $payment['year']);
-
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), $i)
-                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
-                    
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index * 3), $i)
-                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
-                    
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index * 3), $i)
-                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
+                if($payments){
+                    foreach($payments as $index => $payment){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), 1)
+                            ->setValue($payment['month_name'] . ' ' . $payment['year']);
+    
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), $i)
+                            ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
                         
-                    $column_letter = $this->columnIndexToLetter(34 + ($index * 3));
-                    
-                    $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue($this->columnIndexToLetter(32 + ($index * 3)) . '2', 'DATE')
-                        ->setCellValue($this->columnIndexToLetter(33 + ($index * 3)) . '2', 'OR NUMBER')
-                        ->setCellValue($this->columnIndexToLetter(34 + ($index * 3)) . '2', 'AMOUNT');
-                    
-                    $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-                    
-                    if($index > 0){
-                        $total_amount .= '+' . $column_letter . '' . $i;
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index * 3), $i)
+                            ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
+                        
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index * 3), $i)
+                            ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
+                            
+                        $column_letter = $this->columnIndexToLetter(34 + ($index * 3));
+                        
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue($this->columnIndexToLetter(32 + ($index * 3)) . '2', 'DATE')
+                            ->setCellValue($this->columnIndexToLetter(33 + ($index * 3)) . '2', 'OR NUMBER')
+                            ->setCellValue($this->columnIndexToLetter(34 + ($index * 3)) . '2', 'AMOUNT');
+                        
+                        $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                        
+                        if($index > 0){
+                            $total_amount .= '+' . $column_letter . '' . $i;
+                        }
+    
+                        $sheet = $objPHPExcel->getActiveSheet();
+                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
+                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+    
+                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index * 3)))->setWidth(15);
                     }
-
-                    $sheet = $objPHPExcel->getActiveSheet();
-                    $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
-                    $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
-                    $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
-                    $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
-
-                    $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index * 3)))->setWidth(15);
                 }
 
                 $last_index = 34 + ($index * 3) + 1;
