@@ -4569,7 +4569,7 @@ class Excel extends CI_Controller {
         exit;
     }
     
-    public function student_account_report($sem, $campus)
+    public function student_account_report($sem, $campus, $date_from, $date_to)
     {
         $users = $this->data_fetcher->fetch_table('tb_mas_users');
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
@@ -4584,7 +4584,272 @@ class Excel extends CI_Controller {
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
       
-        $title = 'Student Account Report';
+        $title = 'AR Report';
+
+        $i = 4;
+        $count = 1;
+        $payments = array();
+
+        foreach($users as $index => $user){
+            // $payment_details = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
+            $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'));
+            
+            if($date_from && $date_to){
+                $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at >=' => $date_from, 'updated_at <=' => $date_to . ' 11:59:59'));
+            }else if($date_from && !$date_to){
+                $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at >=' => $date_from . ' 00:00:00'));
+            }else if(!$date_from && $date_to){
+                $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at <=' => $date_to . ' 11:59:59'));
+            }
+
+            $payment_details = $query->result_array();
+
+            $payment_month = $payment_year = '';
+            $current_index = 0;
+            if($payment_details){
+                foreach($payment_details as $payment_detail){
+                    $payment = $user_payment = $date = array();
+                    if($payment_detail['description'] == 'Tuition Fee'){
+                        if($payments == null){
+                            $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                            $payment['or_number'] = $payment_detail['or_number'];
+                            $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                            
+                            $payment_month = date("m", strtotime($payment_detail['updated_at']));
+                            $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                            
+                            $user_payment[$user['intID']] = $payment;
+    
+                            $date['month'] = $payment_month;
+                            $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                            $date['year'] = $payment_year;
+                            $date['data'] = $user_payment;
+    
+                            $payments[] = $date;
+
+                        }else{
+                            if($payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
+                                $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
+                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
+                                $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                                
+                            }else{
+                                $flag = $same_month_year = false;
+                                $data = $date = array();
+                                for($index = count($payments) - 1; $index >= 0; $index--){
+                                    if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['updated_at']))){
+                                        $same_month_year = true;
+                                        $current_index = $index;
+                                    }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at']))){
+                                        if($payments[$index]['month'] > date("m", strtotime($payment_detail['updated_at']))){
+                                            $current_index = $index;
+                                            $flag = true;
+                                        }
+                                    }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['updated_at']))){
+                                        $current_index = $index;
+                                        $flag = true;
+                                    }
+                                }
+
+                                $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                                $payment['or_number'] = $payment_detail['or_number'];
+                                $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
+                                
+                                $payment_month = date("m", strtotime($payment_detail['updated_at']));
+                                $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                                $user_payment[$user['intID']] = $payment;
+        
+                                $date['month'] = $payment_month;
+                                $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                                $date['year'] = $payment_year;
+                                $date['data'] = $user_payment;
+                                $data[] = $date;
+                                
+                                if($same_month_year){
+                                    $payments[$current_index]['data'][$user['intID']] = $payment;
+                                }else{
+                                    if($flag){
+                                        array_splice($payments, $current_index, 0, $data);
+                                    }
+                                    else{
+                                        array_splice($payments, count($payments), 0, $data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach($users as $index => $user)
+        {
+            $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
+            $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
+            
+            $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
+            $tuitionFee = $tuition['tuition'];
+
+            if($reg){
+                $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
+                $assessment_discount_rate = $assessment_discount_fixed = '';
+                if($reg['paymentType'] == 'full'){
+                    if($tuition['scholarship_total_assessment_rate'] > 0){
+                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                    }
+                    if($tuition['scholarship_total_assessment_fixed'] > 0){
+                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                    }
+                }else{ 
+                    if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                    }
+                    if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                    }
+                }
+
+                // $objPHPExcel->setActiveSheetIndex(0)->fromArray($cells, null, 'AG');
+
+
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $count)
+                    ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
+                    ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
+                    ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
+                    ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
+                    ->setCellValue('F'.$i, $course['strProgramCode'])
+                    ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
+                    ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
+                    ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                    ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+                    ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
+                    ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+                    ->setCellValue('M'.$i, $reg['paymentType'] == 'partial' && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
+                    ->setCellValue('N'.$i, $reg['paymentType'] == 'partial' && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
+                    ->setCellValue('O'.$i, $reg['paymentType'] == 'partial' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                    ->setCellValue('P'.$i, $reg['paymentType'] == 'partial' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+                    ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
+                    ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+                    ->setCellValue('S'.$i, '=SUM(G' . $i . ':R' . $i . ')')
+                    ->setCellValue('U'.$i, $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
+                    ->setCellValue('V'.$i, $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                    ->setCellValue('W'.$i, $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                    ->setCellValue('X'.$i, $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                    ->setCellValue('Y'.$i, $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                    ->setCellValue('Z'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    ->setCellValue('AA'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AB'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AC'.$i, $assessment_discount_rate)
+                    ->setCellValue('AD'.$i, $assessment_discount_fixed)
+                    ->setCellValue('AD'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    ->setCellValue('AE'.$i, '=SUM(U' . $i . ':AD' . $i . ')')
+                    ->setCellValue('AF'.$i, '=S' . $i . '-AE' . $i . ')');
+                //     ->setCellValue('AG1', count($payments) > 0 ? $payments[0]['month_name'] . ' ' . $payments[0]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AG'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['date'] . ', ' . $payments[0]['year'] : '')
+                //     ->setCellValue('AH'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AI'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AJ1', count($payments) > 1 ? $payments[1]['month_name'] . ' ' . $payments[1]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AJ'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['date'] . ', ' . $payments[1]['year'] : '')
+                //     ->setCellValue('AK'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AL'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AM1', count($payments) > 2 ? $payments[2]['month_name'] . ' ' . $payments[2]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AM'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['date'] . ', ' . $payments[2]['year'] : '')
+                //     ->setCellValue('AN'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AO'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AP1', count($payments) > 3 ? $payments[3]['month_name'] . ' ' . $payments[3]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AP'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['date'] . ', ' . $payments[3]['year'] : '')
+                //     ->setCellValue('AQ'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AR'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AS1', count($payments) > 4 ? $payments[4]['month_name'] . ' ' . $payments[4]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AS'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['date'] . ', ' . $payments[4]['year'] : '')
+                //     ->setCellValue('AT'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AU'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AV1', count($payments) > 5 ? $payments[5]['month_name'] . ' ' . $payments[5]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AV'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['date'] . ', ' . $payments[5]['year'] : '')
+                //     ->setCellValue('AW'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('AX'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('AY1', count($payments) > 6 ? $payments[6]['month_name'] . ' ' . $payments[6]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('AY'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['date'] . ', ' . $payments[6]['year'] : '')
+                //     ->setCellValue('AZ'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('BA'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('BB1', count($payments) > 7 ? $payments[7]['month_name'] . ' ' . $payments[7]['year'] : 'MONTH & YEAR')
+                //     ->setCellValue('BB'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['date'] . ', ' . $payments[7]['year'] : '')
+                //     ->setCellValue('BC'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['or_number'] : '')
+                //     ->setCellValue('BD'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['amount'] : '')
+                //     ->setCellValue('BE'.$i, '=AI' . $i . '+AL' . $i . '+AO' . $i . '+AR' . $i . '+AU' . $i . '+AX' . $i . '+BA' . $i . '+BD' . $i . ')')
+                //     ->setCellValue('BF'.$i, '=AF' . $i . '-BE' . $i . ')')
+                //     ->setCellValue('BV'.$i, '=BI' . $i . '+BL' . $i . '+BO' . $i . '+BR' . $i . '+BU' . $i . ')')
+                //     ->setCellValue('BW'.$i, '=BF' . $i . '-BV' . $i . ')');
+
+                // if(count($payments) > 0){
+                $total_amount = '=' . $this->columnIndexToLetter(34) . '' . $i;
+
+                foreach($payments as $index => $payment){
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), 1)
+                        ->setValue($payment['month_name'] . ' ' . $payment['year']);
+
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), $i)
+                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
+                    
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index * 3), $i)
+                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
+                    
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index * 3), $i)
+                        ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
+                        
+                    $column_letter = $this->columnIndexToLetter(34 + ($index * 3));
+                    
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($this->columnIndexToLetter(32 + ($index * 3)) . '2', 'DATE')
+                        ->setCellValue($this->columnIndexToLetter(33 + ($index * 3)) . '2', 'OR NUMBER')
+                        ->setCellValue($this->columnIndexToLetter(34 + ($index * 3)) . '2', 'AMOUNT');
+                    
+                    $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                    
+                    if($index > 0){
+                        $total_amount .= '+' . $column_letter . '' . $i;
+                    }
+
+                    $sheet = $objPHPExcel->getActiveSheet();
+                    $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
+                    $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
+                    $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
+                    $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+
+                    $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index * 3)))->setWidth(15);
+                }
+
+                $last_index = 34 + ($index * 3) + 1;
+                $balance_after_payment = '=AF' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
+                $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+                                    '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
+
+                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
+                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 1, $i)->setValue($balance_after_payment);
+                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
+                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
+
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 7) . '4:' . $this->columnIndexToLetter($last_index + 7) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 10) . '4:' . $this->columnIndexToLetter($last_index + 10) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 13) . '4:' . $this->columnIndexToLetter($last_index + 13) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 16) . '4:' . $this->columnIndexToLetter($last_index + 16) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 17) . '4:' . $this->columnIndexToLetter($last_index + 17) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 18) . '4:' . $this->columnIndexToLetter($last_index + 18) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+
+                $i++;
+                $count++;
+            }
+        }
+
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NO.')
@@ -4627,247 +4892,34 @@ class Excel extends CI_Controller {
                     ->setCellValue('AD3', 'FIX')
                     ->setCellValue('AE1', 'TOTAL SCHOLARSHIP / DISCOUNT')
                     ->setCellValue('AF1', 'AR TERM & YEAR')
-                    ->setCellValue('AG1', 'MONTH & YEAR')
-                    ->setCellValue('AJ1', 'MONTH & YEAR')
-                    ->setCellValue('AM1', 'MONTH & YEAR')
-                    ->setCellValue('AP1', 'MONTH & YEAR')
-                    ->setCellValue('AG2', 'DATE')
-                    ->setCellValue('AH2', 'OR NUMBER')
-                    ->setCellValue('AI2', 'AMOUNT')
-                    ->setCellValue('AJ2', 'DATE')
-                    ->setCellValue('AK2', 'OR NUMBER')
-                    ->setCellValue('AL2', 'AMOUNT')
-                    ->setCellValue('AM2', 'DATE')
-                    ->setCellValue('AN2', 'OR NUMBER')
-                    ->setCellValue('AO2', 'AMOUNT')
-                    ->setCellValue('AP2', 'DATE')
-                    ->setCellValue('AQ2', 'OR NUMBER')
-                    ->setCellValue('AR2', 'AMOUNT')
-                    ->setCellValue('AS2', 'DATE')
-                    ->setCellValue('AT2', 'OR NUMBER')
-                    ->setCellValue('AU2', 'AMOUNT')
-                    ->setCellValue('AV2', 'DATE')
-                    ->setCellValue('AW2', 'OR NUMBER')
-                    ->setCellValue('AX2', 'AMOUNT')
-                    ->setCellValue('AY2', 'DATE')
-                    ->setCellValue('AZ2', 'OR NUMBER')
-                    ->setCellValue('BA2', 'AMOUNT')
-                    ->setCellValue('BB2', 'DATE')
-                    ->setCellValue('BC2', 'OR NUMBER')
-                    ->setCellValue('BD2', 'AMOUNT')
-                    ->setCellValue('BE1', 'TOTAL PAYMENT')
-                    ->setCellValue('BF1', 'BALANCE AFTER PAYMENT')
-                    ->setCellValue('BG1', 'ADJUSTMENTS')
-                    ->setCellValue('BG2', 'APPLIED FROM')
-                    ->setCellValue('BJ2', 'APPLIED TO')
-                    ->setCellValue('BM2', 'LATE TAGGING')
-                    ->setCellValue('BP2', 'REFUND')
-                    ->setCellValue('BS2', 'OTHERS')
-                    ->setCellValue('BG3', 'DATE')
-                    ->setCellValue('BH3', 'REMARKS')
-                    ->setCellValue('BI3', 'AMOUNT')
-                    ->setCellValue('BJ3', 'DATE')
-                    ->setCellValue('BK3', 'REMARKS')
-                    ->setCellValue('BL3', 'AMOUNT')
-                    ->setCellValue('BM3', 'DATE')
-                    ->setCellValue('BN3', 'REMARKS')
-                    ->setCellValue('BO3', 'AMOUNT')
-                    ->setCellValue('BP3', 'DATE')
-                    ->setCellValue('BQ3', 'REMARKS')
-                    ->setCellValue('BR3', 'AMOUNT')
-                    ->setCellValue('BS3', 'DATE')
-                    ->setCellValue('BT3', 'REMARKS')
-                    ->setCellValue('BU3', 'AMOUNT')
-                    ->setCellValue('BV1', 'TOTAL ADJUSTMENT')
-                    ->setCellValue('BW1', 'BALANCE AS OF (DATE EXTRACTED)');
+                    ->setCellValue($this->columnIndexToLetter($last_index) . '1', 'TOTAL PAYMENT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 1) . '1', 'BALANCE AFTER PAYMENT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 2) . '1', 'ADJUSTMENTS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 2) . '2', 'APPLIED FROM')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 5) . '2', 'APPLIED TO')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 8) . '2', 'LATE TAGGING')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 11) . '2', 'REFUND')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 14) . '2', 'OTHERS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 2) . '3', 'DATE')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 3) . '3', 'REMARKS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 4) . '3', 'AMOUNT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 5) . '3', 'DATE')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 6) . '3', 'REMARKS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 7) . '3', 'AMOUNT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 8) . '3', 'DATE')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 9) . '3', 'REMARKS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 10) . '3', 'AMOUNT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 11) . '3', 'DATE')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 12) . '3', 'REMARKS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 13) . '3', 'AMOUNT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 14) . '3', 'DATE')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 15) . '3', 'REMARKS')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 16) . '3', 'AMOUNT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 17) . '1', 'TOTAL ADJUSTMENT')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AS OF (' . date("M d, Y") . ')');
 
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) .  '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-        $i = 4;
-        $count = 1;
-        $payments = array();
-
-        foreach($users as $index => $user){
-            $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
-            
-            $payment_month = $payment_year = '';
-            $current_index = 0;
-            foreach($payment_details as $payment_detail){
-                $payment = $user_payment = $date = array();
-                if($payment_detail['description'] == 'Tuition Fee'){
-                    if($payments == null){
-                        $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
-                        $payment['or_number'] = $payment_detail['or_number'];
-                        $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                        
-                        $payment_month = date("m", strtotime($payment_detail['updated_at']));
-                        $payment_year = date("Y", strtotime($payment_detail['updated_at']));
-                        
-                        $user_payment[$user['intID']] = $payment;
-
-                        $date['month'] = $payment_month;
-                        $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
-                        $date['year'] = $payment_year;
-                        $date['data'] = $user_payment;
-
-                        $payments[] = $date;
-                    }else{
-                        if($payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
-                            $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
-                            $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
-                            $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                            
-                        }else{
-                            $flag = $same_month_year = false;
-                            $data = array();
-                            for($index = count($payments) - 1; $index >= 0; $index--){
-                                
-                                if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['updated_at']))){
-                                    $same_month_year = true;
-                                    $current_index = $index;
-                                }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at']))){
-                                    if($payments[$index]['month'] > date("m", strtotime($payment_detail['updated_at']))){
-                                        $current_index = $index;
-                                        $flag = true;
-                                    }
-                                }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['updated_at']))){
-                                    $current_index = $index;
-                                    $flag = true;
-                                }
-                            }
-
-                                $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
-                                $payment['or_number'] = $payment_detail['or_number'];
-                                $payment['amount'] = (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                                
-                                $payment_month = date("m", strtotime($payment_detail['updated_at']));
-                                $payment_year = date("Y", strtotime($payment_detail['updated_at']));
-                                
-                                $user_payment[$user['intID']] = $payment;
-        
-                                $date['month'] = $payment_month;
-                                $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
-                                $date['year'] = $payment_year;
-                                $date['data'] = $user_payment;
-                                $data[] = $date;
-                                
-                                if($same_month_year){
-                                    $payments[$current_index]['data'][$user['intID']] = $payment;
-                                }else{
-                                    if($flag){
-                                        array_splice($payments, $current_index, 0, $data);
-                                    }else{
-                                        array_push($payments, $data);
-                                    }
-                                }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach($users as $index => $user)
-        {
-            $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
-            $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
-            
-            $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
-            $tuitionFee = $tuition['tuition'];
-
-            if($reg){
-                $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
-                $assessment_discount_rate = $assessment_discount_fixed = '';
-                if($reg['paymentType'] == 'full'){
-                    if($tuition['scholarship_total_assessment_rate'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                    }
-                    if($tuition['scholarship_total_assessment_fixed'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                    }
-                }else{ 
-                    if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                    }
-                    if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                    }
-                }
-
-                // Add some data
-                $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A'.$i, $count)
-                        ->setCellValue('B'.$i, $user['strStudentNumber'])
-                        ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                        ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
-                        ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                        ->setCellValue('F'.$i, $course['strProgramCode'])
-                        ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
-                        ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
-                        ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                        ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                        ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
-                        ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                        ->setCellValue('M'.$i, $reg['paymentType'] == 'partial' && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
-                        ->setCellValue('N'.$i, $reg['paymentType'] == 'partial' && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
-                        ->setCellValue('O'.$i, $reg['paymentType'] == 'partial' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                        ->setCellValue('P'.$i, $reg['paymentType'] == 'partial' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                        ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
-                        ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                        ->setCellValue('S'.$i, '=SUM(G' . $i . ':R' . $i . ')')
-                        ->setCellValue('U'.$i, $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
-                        ->setCellValue('V'.$i, $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                        ->setCellValue('W'.$i, $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                        ->setCellValue('X'.$i, $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                        ->setCellValue('Y'.$i, $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                        ->setCellValue('Z'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                        ->setCellValue('AA'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AB'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AC'.$i, $assessment_discount_rate)
-                        ->setCellValue('AD'.$i, $assessment_discount_fixed)
-                        ->setCellValue('AD'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                        ->setCellValue('AE'.$i, '=SUM(U' . $i . ':AD' . $i . ')')
-                        ->setCellValue('AF'.$i, '=S' . $i . '-AE' . $i . ')')
-                        ->setCellValue('AG1', count($payments) > 0 ? $payments[0]['month_name'] . ' ' . $payments[0]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AG'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['date'] . ', ' . $payments[0]['year'] : '')
-                        ->setCellValue('AH'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AI'.$i, count($payments) > 0 && isset($payments[0]['data'][$user['intID']]) ? $payments[0]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AJ1', count($payments) > 1 ? $payments[1]['month_name'] . ' ' . $payments[1]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AJ'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['date'] . ', ' . $payments[1]['year'] : '')
-                        ->setCellValue('AK'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AL'.$i, count($payments) > 1 && isset($payments[1]['data'][$user['intID']]) ? $payments[1]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AM1', count($payments) > 2 ? $payments[2]['month_name'] . ' ' . $payments[2]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AM'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['date'] . ', ' . $payments[2]['year'] : '')
-                        ->setCellValue('AN'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AO'.$i, count($payments) > 2 && isset($payments[2]['data'][$user['intID']]) ? $payments[2]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AP1', count($payments) > 3 ? $payments[3]['month_name'] . ' ' . $payments[3]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AP'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['date'] . ', ' . $payments[3]['year'] : '')
-                        ->setCellValue('AQ'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AR'.$i, count($payments) > 3 && isset($payments[3]['data'][$user['intID']]) ? $payments[3]['data'][$user['intID']]['amount'] : '')
-                        
-                        ->setCellValue('AS1', count($payments) > 4 ? $payments[4]['month_name'] . ' ' . $payments[4]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AS'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['date'] . ', ' . $payments[4]['year'] : '')
-                        ->setCellValue('AT'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AU'.$i, count($payments) > 4 && isset($payments[4]['data'][$user['intID']]) ? $payments[4]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AV1', count($payments) > 5 ? $payments[5]['month_name'] . ' ' . $payments[5]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AV'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['date'] . ', ' . $payments[5]['year'] : '')
-                        ->setCellValue('AW'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('AX'.$i, count($payments) > 5 && isset($payments[5]['data'][$user['intID']]) ? $payments[5]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('AY1', count($payments) > 6 ? $payments[6]['month_name'] . ' ' . $payments[6]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('AY'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['date'] . ', ' . $payments[6]['year'] : '')
-                        ->setCellValue('AZ'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('BA'.$i, count($payments) > 6 && isset($payments[6]['data'][$user['intID']]) ? $payments[6]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('BB1', count($payments) > 7 ? $payments[7]['month_name'] . ' ' . $payments[7]['year'] : 'MONTH & YEAR')
-                        ->setCellValue('BB'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['date'] . ', ' . $payments[7]['year'] : '')
-                        ->setCellValue('BC'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['or_number'] : '')
-                        ->setCellValue('BD'.$i, count($payments) > 7 && isset($payments[7]['data'][$user['intID']]) ? $payments[7]['data'][$user['intID']]['amount'] : '')
-                        ->setCellValue('BE'.$i, '=AI' . $i . '+AL' . $i . '+AO' . $i . '+AR' . $i . '+AU' . $i . '+AX' . $i . '+BA' . $i . '+BD' . $i . ')')
-                        ->setCellValue('BF'.$i, '=AF' . $i . '-BE' . $i . ')')
-                        ->setCellValue('BV'.$i, '=BI' . $i . '+BL' . $i . '+BO' . $i . '+BR' . $i . '+BU' . $i . ')')
-                        ->setCellValue('BW'.$i, '=BF' . $i . '-BV' . $i . ')');
-
-                $i++;
-                $count++;
-            }
-        }
         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, 'TOTAL')
@@ -4896,35 +4948,36 @@ class Excel extends CI_Controller {
                     ->setCellValue('AD'.$i, '=SUM(AD4:AD' . ($i-1) . ')')
                     ->setCellValue('AE'.$i, '=SUM(AE4:AE' . ($i-1) . ')')
                     ->setCellValue('AF'.$i, '=SUM(AF4:AF' . ($i-1) . ')')
-                    ->setCellValue('AI'.$i, '=SUM(AI4:AI' . ($i-1) . ')')
-                    ->setCellValue('AL'.$i, '=SUM(AL4:AL' . ($i-1) . ')')
-                    ->setCellValue('AO'.$i, '=SUM(AO4:AO' . ($i-1) . ')')
-                    ->setCellValue('AR'.$i, '=SUM(AR4:AR' . ($i-1) . ')')
-                    ->setCellValue('AU'.$i, '=SUM(AU4:AU' . ($i-1) . ')')
-                    ->setCellValue('AX'.$i, '=SUM(AX4:AX' . ($i-1) . ')')
-                    ->setCellValue('BB'.$i, '=SUM(BB4:BB' . ($i-1) . ')')
-                    ->setCellValue('BA'.$i, '=SUM(BA4:BA' . ($i-1) . ')')
-                    ->setCellValue('BD'.$i, '=SUM(BD4:BD' . ($i-1) . ')')
-                    ->setCellValue('BE'.$i, '=SUM(BE4:BE' . ($i-1) . ')')
-                    ->setCellValue('BF'.$i, '=SUM(BF4:BF' . ($i-1) . ')')
-                    ->setCellValue('BI'.$i, '=SUM(BI4:BI' . ($i-1) . ')')
-                    ->setCellValue('BL'.$i, '=SUM(BL4:BL' . ($i-1) . ')')
-                    ->setCellValue('BO'.$i, '=SUM(BO4:BO' . ($i-1) . ')')
-                    ->setCellValue('BR'.$i, '=SUM(BR4:BR' . ($i-1) . ')')
-                    ->setCellValue('BU'.$i, '=SUM(BU4:BU' . ($i-1) . ')')
-                    ->setCellValue('BV'.$i, '=SUM(BV4:BV' . ($i-1) . ')')
-                    ->setCellValue('BW'.$i, '=SUM(BW4:BW' . ($i-1) . ')');  
+                    ->setCellValue($this->columnIndexToLetter($last_index) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index) .'4:' . $this->columnIndexToLetter($last_index) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 1) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 1) .'4:' . $this->columnIndexToLetter($last_index + 1) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 4) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 4) .'4:' . $this->columnIndexToLetter($last_index + 4) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 7) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 7) .'4:' . $this->columnIndexToLetter($last_index + 7) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 10) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 10) .'4:' . $this->columnIndexToLetter($last_index + 10) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 13) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 13) .'4:' . $this->columnIndexToLetter($last_index + 13) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 16) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 16) .'4:' . $this->columnIndexToLetter($last_index + 16) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 17) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 17) .'4:' . $this->columnIndexToLetter($last_index + 17) . '' . ($i-1) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 18) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 18) .'4:' . $this->columnIndexToLetter($last_index + 18) . '' . ($i-1) . ')');  
         
-        $objPHPExcel->getActiveSheet()->getStyle('A1:BW3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AG4:AH' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AJ4:AK' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AM4:AN' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AP4:AQ' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AS4:AT' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AV4:AW' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('AY4:AZ' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('BB4:BC' . ($i - 1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:BW3')->applyFromArray(
+        for($index = $last_index - 1; $index >= 34; $index-=3){
+            $objPHPExcel->setActiveSheetIndex(0)   
+                ->setCellValue($this->columnIndexToLetter($index) . '' . $i, '=SUM('. $this->columnIndexToLetter($index) .'4:' . $this->columnIndexToLetter($index) . '' . ($i-1) . ')');
+
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+
+        $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 7) . '4:' . $this->columnIndexToLetter($last_index + 7) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 10) . '4:' . $this->columnIndexToLetter($last_index + 10) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 13) . '4:' . $this->columnIndexToLetter($last_index + 13) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 16) . '4:' . $this->columnIndexToLetter($last_index + 16) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 17) . '4:' . $this->columnIndexToLetter($last_index + 17) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 18) . '4:' . $this->columnIndexToLetter($last_index + 18) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) . '3')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -4944,7 +4997,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':BW' . $i)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':' . $this->columnIndexToLetter($last_index + 18) . $i)->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -4963,21 +5016,20 @@ class Excel extends CI_Controller {
                 ),
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AI4:AI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AL4:AL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AO4:AO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AR4:AR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AU4:AU' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('AX4:AX' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BA4:BA' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BD4:BF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AI4:AI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AL4:AL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AO4:AO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AR4:AR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AU4:AU' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('AX4:AX' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BA4:BA' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BD4:BF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         
-        $objPHPExcel->getActiveSheet()->getStyle('BI4:BI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BL4:BL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BO4:BO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BR4:BR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('BU4:BW' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BI4:BI' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BL4:BL' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BO4:BO' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BR4:BR' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('BU4:BW' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
@@ -5010,53 +5062,27 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(15);
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AT')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AU')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AW')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AX')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AY')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AZ')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BA')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BB')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BC')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BD')->setWidth(15);
         
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BE')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BF')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 1))->setWidth(25);
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BG')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BH')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BI')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BJ')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BK')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BL')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BM')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BN')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BO')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BP')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BQ')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BR')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BS')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BT')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BU')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BV')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('BW')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 2))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 3))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 4))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 5))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 6))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 7))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 8))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 9))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 10))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 11))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 12))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 13))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 14))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 15))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 16))->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 17))->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 18))->setWidth(35);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:A3');
@@ -5089,54 +5115,28 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('AC2:AD2');
         $sheet->mergeCells('AE1:AE3');
         $sheet->mergeCells('AF1:AF3');
-        $sheet->mergeCells('AG1:AI1');
-        $sheet->mergeCells('AJ1:AL1');
-        $sheet->mergeCells('AM1:AO1');
-        $sheet->mergeCells('AP1:AR1');
 
-        $sheet->mergeCells('AS1:AU1');
-        $sheet->mergeCells('AV1:AX1');
-        $sheet->mergeCells('AY1:BA1');
-        $sheet->mergeCells('BB1:BD1');
+        // foreach($payments as $index => $payment){
 
-        $sheet->mergeCells('AG2:AG3');
-        $sheet->mergeCells('AH2:AH3');
-        $sheet->mergeCells('AI2:AI3');
-        $sheet->mergeCells('AJ2:AJ3');
-        $sheet->mergeCells('AK2:AK3');
-        $sheet->mergeCells('AL2:AL3');
-        $sheet->mergeCells('AM2:AM3');
-        $sheet->mergeCells('AN2:AN3');
-        $sheet->mergeCells('AO2:AO3');
-        $sheet->mergeCells('AP2:AP3');
-        $sheet->mergeCells('AQ2:AQ3');
-        $sheet->mergeCells('AR2:AR3');
+        //     $sheet = $objPHPExcel->getActiveSheet();
+        //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
+        //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
+        //     $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
+        //     $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+        // }
 
-        $sheet->mergeCells('AS2:AS3');
-        $sheet->mergeCells('AT2:AT3');
-        $sheet->mergeCells('AU2:AU3');
-        $sheet->mergeCells('AV2:AV3');
-        $sheet->mergeCells('AW2:AW3');
-        $sheet->mergeCells('AX2:AX3');
-        $sheet->mergeCells('AY2:AY3');
-        $sheet->mergeCells('AZ2:AZ3');
-        $sheet->mergeCells('BA2:BA3');
-        $sheet->mergeCells('BB2:BB3');
-        $sheet->mergeCells('BC2:BC3');
-        $sheet->mergeCells('BD2:BD3');
-
-        $sheet->mergeCells('BE1:BE3');
-        $sheet->mergeCells('BF1:BF3');
-        $sheet->mergeCells('BG1:BU1');
-        $sheet->mergeCells('BG2:BI2');
-        $sheet->mergeCells('BJ2:BL2');
-        $sheet->mergeCells('BM2:BO2');
-        $sheet->mergeCells('BP2:BR2');
-        $sheet->mergeCells('BS2:BU2');
-        $sheet->mergeCells('BV1:BV3');
-        $sheet->mergeCells('BW1:BW3');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index) . '1:' . $this->columnIndexToLetter($last_index) .'3');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 1) . '1:' . $this->columnIndexToLetter($last_index + 1) . '3');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 2) . '1:' . $this->columnIndexToLetter($last_index + 16) . '1');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 2) . '2:' . $this->columnIndexToLetter($last_index + 4) . '2');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 5) . '2:' . $this->columnIndexToLetter($last_index + 7) . '2');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 8) . '2:' . $this->columnIndexToLetter($last_index + 10) . '2');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 11) . '2:' . $this->columnIndexToLetter($last_index + 13) . '2');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 14) . '2:' . $this->columnIndexToLetter($last_index + 16) . '2');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 17) . '1:' . $this->columnIndexToLetter($last_index + 17) . '3');
+        $sheet->mergeCells($this->columnIndexToLetter($last_index + 18) . '1:' . $this->columnIndexToLetter($last_index + 18) . '3');
          
-        $objPHPExcel->getActiveSheet()->setTitle('Student Account Report');
+        $objPHPExcel->getActiveSheet()->setTitle('AR Report');
 
         $date = date("ymdhis");
 
@@ -5148,7 +5148,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="student_account_reports_' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="AR Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -5163,5 +5163,16 @@ class Excel extends CI_Controller {
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
+    }
+
+    private function columnIndexToLetter($columnIndex)
+    {
+        $letter = '';
+        while ($columnIndex >= 0) {
+            $remainder = $columnIndex % 26;
+            $letter = chr(65 + $remainder) . $letter;
+            $columnIndex = intval($columnIndex / 26) - 1;
+        }
+        return $letter;
     }
 }
