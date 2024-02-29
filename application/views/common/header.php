@@ -240,60 +240,8 @@
             href="<?php echo base_url() ?>unity/view_classlist"><i class="fa fa-bars"></i>
             <span>View My
               Classes</span></a></li>
-        <?php endif; ?>
-        <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?>
-        <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
-        <li class="header">Admissions</li>
-        <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
-        <li class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>"><a
-            href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i class="fa fa-calendar"></i>
-            <span>Edit Application Dates</span> </a>
-        </li>
-        <?php endif; ?>
-        <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
-          <a href="#">
-            <i class="ion ion-email"></i> <span>Student Applicants</span>
-            <i class="fa pull-right fa-angle-left"></i>
-          </a>
-          <ul class="treeview-menu">
-            <li class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
-            <li class="<?php echo (isset($page) && $page=="view_reserved")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>admissionsV1/view_reserved_leads"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Reserved List</a></li>
-            <li class="<?php echo (isset($page) && $page=="fi_calendar")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>admissionsV1/fi_calendar"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> View FI Calendar</a></li>
-
-          </ul>
-        </li>
-        <?php endif; ?>
-        <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
-        <li
-          class="treeview <?php echo (isset($opentree) && $opentree=="examination")?'active':''; ?>">
-          <a href="#">
-            <i class="fa fa-book"></i> <span>Student Examination</span>
-            <i class="fa pull-right fa-angle-left"></i>
-          </a>
-          <ul class="treeview-menu">
-            <li class="<?php echo (isset($page) && $page=="view_exams")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>examination/"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Examination</a></li>
-            <li class="<?php echo (isset($page) && $page=="exam_type_list")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>examination/exam_type_list"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Exam Types</a></li>
-            <li class="<?php echo (isset($page) && $page=="add_exam_type")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>examination/add_exam_type"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> Add Exam Type</a></li>
-            <li class="<?php echo (isset($page) && $page=="student_generate_exam")?'active':''; ?>">
-              <a href="<?php echo base_url(); ?>examination/student_generate_exam"
-                style="margin-left: 10px;"><i class="fa fa-book"> </i> Generate Exam Link</a>
-            </li>
-
-          </ul>
-        </li>
-        <?php endif; ?>
+        <?php endif; ?>        
+        
         <li class="header">Menu</li>
 
         <?php if($user['teaching'] == 1): ?>
