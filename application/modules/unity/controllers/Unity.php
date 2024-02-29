@@ -1565,7 +1565,7 @@ class Unity extends CI_Controller {
                     }
                     else {
                         
-                        $sgpa += $grades[$i]['floatFinalGrade']*$grades[$i]['strUnits'];
+                        $sgpa += (float)$grades[$i]['floatFinalGrade']*$grades[$i]['strUnits'];
                         $scount+=$grades[$i]['strUnits'];
                     
                     }                
