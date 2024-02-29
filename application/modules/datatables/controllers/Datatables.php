@@ -169,7 +169,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strFirstName" && $table == 'tb_mas_message_user')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = '<label><input rel="'.$aRow->$aColumns[0].'" type="checkbox" class="minimal message-check"/></label> '.$aRow->$aColumns[$i]." ".$aRow->$aColumns[$i+1];
+                    $row[] = '<label><input rel="'.$aRow->{$aColumns[0]}.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->{$aColumns[$i]}." ".$aRow->{$aColumns[$i+1]};
                 }
                 else if ( $aColumns[$i] == "strLastName" && $table == 'tb_mas_message_user')
                 {
@@ -177,20 +177,20 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }
                 else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -350,7 +350,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2];
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]};
                 }
                 else if ( $aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename")
                 {
@@ -358,20 +358,20 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }
                 else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -548,7 +548,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]." ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2];
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}." ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]};
                 }
                 else if ( $aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename")
                 {
@@ -556,20 +556,20 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }
                 else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -773,13 +773,13 @@ class Datatables extends CI_Controller {
               
                 if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }                
                 else if($aColumns[$i] == 'strCode'){
-                    $row[] = "<a href='".base_url()."unity/classlist_viewer/".$aRow->intID."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."unity/classlist_viewer/".$aRow->intID."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if($aColumns[$i] == 'strLastname'){
-                    $row[] = $aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i]};
                 }
                 else if($aColumns[$i] == 'strFirstname'){
 
@@ -787,11 +787,11 @@ class Datatables extends CI_Controller {
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
                     $row[] = $slots_taken_enlisted;
-                    $row[] = $aRow->$aColumns[$i] - $slots_taken_enlisted - $slots_taken_enrolled;
+                    $row[] = $aRow->{$aColumns[$i]} - $slots_taken_enlisted - $slots_taken_enrolled;
                 }                
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ')
                 {
@@ -801,7 +801,7 @@ class Datatables extends CI_Controller {
                         $row[] = $aRow->$st[1];
                     }
                     else
-                        $row[] = $aRow->$aColumns[$i];
+                        $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -978,7 +978,7 @@ class Datatables extends CI_Controller {
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
             {              
                 
-                $row[] = $aRow->$aColumns[$i];                                
+                $row[] = $aRow->{$aColumns[$i]};                                
             }
             $output['aaData'][] = $row;
         }
@@ -1223,12 +1223,12 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2])."</a>";
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->{$aColumns[0]}."'>".strtoupper($aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]})."</a>";
                 }
                 else if ( $aColumns[$i] == "strStudentNumber")
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->$aColumns[$i]);
+                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->{$aColumns[$i]});
                 }
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename"))
                 {
@@ -1236,7 +1236,7 @@ class Datatables extends CI_Controller {
                 } 
                 else if ( $aColumns[$i] == "date_enlisted")
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }               
                 else if ( $aColumns[$i] != ' ' )
                 {
@@ -1245,7 +1245,7 @@ class Datatables extends CI_Controller {
                         $aColumns[$i] = $new[1];
                     }
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -1430,10 +1430,10 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == 'strSection' && $sTable == 'tb_mas_classlist')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = '<label><input name="ids[]" value="'.$aRow->intID.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->$aColumns[$i];
+                    $row[] = '<label><input name="ids[]" value="'.$aRow->intID.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->{$aColumns[$i]};
                 }
                 else if ($aColumns[$i] == 'enumSem') {
-                    $row[] = $aRow->$aColumns[$i] . " sem " . $aRow->$aColumns[$i+1]  . "-" . $aRow->$aColumns[$i+2];
+                    $row[] = $aRow->{$aColumns[$i]} . " sem " . $aRow->{$aColumns[$i+1]}  . "-" . $aRow->{$aColumns[$i+2]};
                 }
                 else if ($aColumns[$i] == 'strYearStart' || $aColumns[$i] == 'strYearEnd' )
                 {
@@ -1447,7 +1447,7 @@ class Datatables extends CI_Controller {
                         $row[] = $aRow->$st[1];
                     }
                     else
-                        $row[] = $aRow->$aColumns[$i];
+                        $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -1632,10 +1632,10 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == 'strSection' && $sTable == 'tb_mas_classlist')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = '<label><input name="ids[]" value="'.$aRow->intID.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->$aColumns[$i];
+                    $row[] = '<label><input name="ids[]" value="'.$aRow->intID.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->{$aColumns[$i]};
                 }
                 // else if ($aColumns[$i] == 'enumSem') {
-                //     $row[] = $aRow->$aColumns[$i] . " sem " . $aRow->$aColumns[$i+1]  . "-" . $aRow->$aColumns[$i+2];
+                //     $row[] = $aRow->{$aColumns[$i]} . " sem " . $aRow->{$aColumns[$i+1]}  . "-" . $aRow->{$aColumns[$i+2]};
                 // }
                 // else if ($aColumns[$i] == 'strYearStart' || $aColumns[$i] == 'strYearEnd' )
                 // {
@@ -1650,7 +1650,7 @@ class Datatables extends CI_Controller {
                         $row[] = $aRow->$st[1];
                     }
                     else
-                        $row[] = $aRow->$aColumns[$i];
+                        $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -1838,23 +1838,23 @@ class Datatables extends CI_Controller {
                 {
                     /* Special output formatting for 'version' column */
                     //$firstNameInitial = substr($record['strFirstname'], 0,1);
-                    $row[] = substr($aRow->$aColumns[$i] , 0, 1) .". ".$aRow->$aColumns[$i+1];
+                    $row[] = substr($aRow->{$aColumns[$i]} , 0, 1) .". ".$aRow->{$aColumns[$i+1]};
                 }          
                 elseif($aColumns[$i] == "facultyLastname" || $aColumns[$i] == "studentLastname"){
 
                 }
                 elseif($aColumns[$i] == "enumSem"){
-                    $row[] = $aRow->$aColumns[$i]."-".$aRow->$aColumns[$i+1]."-".$aRow->$aColumns[$i+2];
+                    $row[] = $aRow->{$aColumns[$i]}."-".$aRow->{$aColumns[$i+1]}."-".$aRow->{$aColumns[$i+2]};
                 }   
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
-                    //$row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
-                    $row[] = date("Y-m-d h:i:sa", strtotime($aRow->$aColumns[$i]));
+                    //$row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
+                    $row[] = date("Y-m-d h:i:sa", strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -2285,12 +2285,12 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = strtoupper($aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2]);
+                    $row[] = strtoupper($aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]});
                 }
                 else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->$aColumns[$i]);
+                    $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->{$aColumns[$i]});
                 }
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_users')
                 {
@@ -2299,7 +2299,7 @@ class Datatables extends CI_Controller {
                 else if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_applications')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."admissions/view_applicant/".$aRow->$aColumns[0]."'>".strtoupper($aRow->$aColumns[$i]).",  ".strtoupper($aRow->$aColumns[$i+1])." ".strtoupper($aRow->$aColumns[$i+2]);
+                    $row[] = "<a href='".base_url()."admissions/view_applicant/".$aRow->{$aColumns[0]}."'>".strtoupper($aRow->{$aColumns[$i]}).",  ".strtoupper($aRow->{$aColumns[$i+1]})." ".strtoupper($aRow->{$aColumns[$i+2]});
                 }
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_applications')
                 {
@@ -2308,7 +2308,7 @@ class Datatables extends CI_Controller {
                 else if ( $aColumns[$i] == "strFirstName" && $table == 'tb_mas_message_user')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = '<label><input rel="'.$aRow->$aColumns[0].'" type="checkbox" class="minimal message-check"/></label> '.$aRow->$aColumns[$i]." ".$aRow->$aColumns[$i+1];
+                    $row[] = '<label><input rel="'.$aRow->{$aColumns[0]}.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->{$aColumns[$i]}." ".$aRow->{$aColumns[$i+1]};
                 }
                 else if ( $aColumns[$i] == "strLastName" && $table == 'tb_mas_message_user')
                 {
@@ -2316,23 +2316,23 @@ class Datatables extends CI_Controller {
                 }
                 else if ( $aColumns[$i] == "intUserLevel" && $table == 'tb_mas_faculty')
                 {
-                    $row[] = switch_user_level($aRow->$aColumns[$i]); 
+                    $row[] = switch_user_level($aRow->{$aColumns[$i]}); 
                 }
                 else if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }
                 else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte' && $table != 'tb_mas_room_schedule')
                 {
-                    $row[] = date("M j, Y",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte' && $table == 'tb_mas_room_schedule')
                 {
-                    $row[] = date("g:ia",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("g:ia",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
@@ -2341,7 +2341,7 @@ class Datatables extends CI_Controller {
                         $aColumns[$i] = $new[1];
                     }
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
@@ -2676,7 +2676,7 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."  ".$aRow->$aColumns[$i+1]." ".$aRow->$aColumns[$i+2];
+                    $row[] = "<a href='".base_url()."unity/student_viewer/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]};
                 }
                 else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_users')
                 {
@@ -2685,7 +2685,7 @@ class Datatables extends CI_Controller {
                 else if ( $aColumns[$i] == "strFirstName" && $table == 'tb_mas_message_user')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = '<label><input rel="'.$aRow->$aColumns[0].'" type="checkbox" class="minimal message-check"/></label> '.$aRow->$aColumns[$i]." ".$aRow->$aColumns[$i+1];
+                    $row[] = '<label><input rel="'.$aRow->{$aColumns[0]}.'" type="checkbox" class="minimal message-check"/></label> '.$aRow->{$aColumns[$i]}." ".$aRow->{$aColumns[$i+1]};
                 }
                 else if ( $aColumns[$i] == "strLastName" && $table == 'tb_mas_message_user')
                 {
@@ -2694,29 +2694,29 @@ class Datatables extends CI_Controller {
                 
                 else if ( $aColumns[$i] == "intUserLevel" && $table == 'tb_mas_faculty')
                 {
-                    $row[] = switch_user_level($aRow->$aColumns[$i]); 
+                    $row[] = switch_user_level($aRow->{$aColumns[$i]}); 
                 }
                 else if($aColumns[$i] == 'dteDate' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = time_lapsed($aRow->$aColumns[$i]);
+                    $row[] = time_lapsed($aRow->{$aColumns[$i]});
                 }
                 else if($aColumns[$i] == 'strSubject' && $table == 'tb_mas_message_user')
                 {
-                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->$aColumns[0]."'>".$aRow->$aColumns[$i]."</a>";
+                    $row[] = "<a href='".base_url()."messages/view_message/".$aRow->{$aColumns[0]}."'>".$aRow->{$aColumns[$i]}."</a>";
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte' && $table != 'tb_mas_room_schedule')
                 {
-                    $row[] = pw_hash(date("mdY",strtotime($aRow->$aColumns[$i])));
-                    //$row[] = date("mdY",strtotime($aRow->$aColumns[$i]));
+                    $row[] = pw_hash(date("mdY",strtotime($aRow->{$aColumns[$i]})));
+                    //$row[] = date("mdY",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if(substr($aColumns[$i], 0, 3) == 'dte' && $table == 'tb_mas_room_schedule')
                 {
-                    $row[] = date("g:ia",strtotime($aRow->$aColumns[$i]));
+                    $row[] = date("g:ia",strtotime($aRow->{$aColumns[$i]}));
                 }
                 else if ( $aColumns[$i] != ' ' )
                 {
                     /* General output */
-                    $row[] = $aRow->$aColumns[$i];
+                    $row[] = $aRow->{$aColumns[$i]};
                 }
                 
             }
