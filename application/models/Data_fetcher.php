@@ -3085,7 +3085,21 @@ class Data_fetcher extends CI_Model {
 
     }
         
+    function getNSTPGraduates($sem){
+
+        $ret =  $this->db->select('tb_mas_users.*')
+                 ->from('tb_mas_users')
+                 ->join('tb_mas_classlist_student', 'tb_mas_classlist_student.intStudentID = tb_mas_users.intID')
+                 ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
+                 ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                 ->where(array('tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_subjects.strCode'=>'NSTP0002','strRemarks >'=>'Passed'))
+                 ->group_by('tb_mas_users.intID')
+                 ->get()
+                 ->result_array();
+        
+        return $ret;
     
+    }
     
     
     function getTransactions($id,$sem)
