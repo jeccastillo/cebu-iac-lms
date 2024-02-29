@@ -413,7 +413,7 @@ new Vue({
                     tuition.other[i].amount = tuition.other[i].amount.toFixed(2);
                 }
                 else{
-                    tuition.other[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
+                    tuition.other[i].amount = parseFloat(tuition.other[i].amount).toFixed(2)
                 }
                 this.other_term.push(tuition.other[i]); 
             
