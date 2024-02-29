@@ -645,139 +645,109 @@ new Vue({
   mounted() {
 
     let url_string = window.location.href;
-    if (this.id != 0) {
-      Swal.fire({
-        showCancelButton: false,
-        showCloseButton: false,
-        allowEscapeKey: false,
-        title: 'Syncing',
-        text: 'Syncing Data do not leave page',
-        icon: 'info',
-      })
-      Swal.showLoading();
-      axios
-        .post(api_url + 'finance/sync_payments', this.sync_data, {
-          headers: {
-            Authorization: `Bearer ${window.token}`
-          },
-        })
-
+    if (this.id != 0) {          
+      //this.loader_spinner = true;
+      axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this
+          .sem)
         .then((data) => {
-          var formdata = new FormData();
-          formdata.append('data', JSON.stringify(data.data.data));
-          axios
-            .post(base_url + 'finance/sync_payment_details_data/', formdata, {
-              headers: {
-                Authorization: `Bearer ${window.token}`
-              },
-            })
+          console.log(data);
+          if (data.data.success) {
+            this.student = data.data.student;
+            this.term_balances = data.data.term_balances;
+            for (i in this.term_balances)
+              if (this.term_balances[i].balance > 0)
+                this.show_alert = true;
 
-            .then((data) => {
-              Swal.close();
-              //this.loader_spinner = true;
-              axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this
-                  .sem)
-                .then((data) => {
-                  console.log(data);
-                  if (data.data.success) {
-                    this.student = data.data.student;
-                    this.term_balances = data.data.term_balances;
-                    for (i in this.term_balances)
-                      if (this.term_balances[i].balance > 0)
-                        this.show_alert = true;
+            if (data.data.scholarship.length > 0) {
+              var sch = "";
+              for (i in data.data.scholarship)
+                sch += data.data.scholarship[i].name + " ";
+              this.scholarship = {
+                name: sch
+              };
+            } else {
+              this.scholarship = {
+                name: 'none'
+              };
+            }
+            if (data.data.discount.length > 0) {
+              var sch = "";
+              for (i in data.data.discount)
+                sch += data.data.discount[i].name + " ";
+              this.discount = {
+                name: sch
+              };
+            } else {
+              this.discount = {
+                name: 'none'
+              };
+            }
+            this.change_grade = data.data.change_grade;
+            this.deficiencies = data.data.deficiencies;
+            this.balance = data.data.balancel;
+            this.user_level = data.data.user_level;
+            this.registration = data.data.registration;
+            this.registration_status = data.data.registration ? data.data
+              .registration.intROG : 0;
+            this.active_sem = data.data.active_sem;
+            this.reg_status = data.data.reg_status;
+            this.selected_ay = data.data.selected_ay;
+            this.curriculum_subjects = data.data.curriculum_subjects;
+            this.sections = data.data.sections;
 
-                    if (data.data.scholarship.length > 0) {
-                      var sch = "";
-                      for (i in data.data.scholarship)
-                        sch += data.data.scholarship[i].name + " ";
-                      this.scholarship = {
-                        name: sch
-                      };
-                    } else {
-                      this.scholarship = {
-                        name: 'none'
-                      };
-                    }
-                    if (data.data.discount.length > 0) {
-                      var sch = "";
-                      for (i in data.data.discount)
-                        sch += data.data.discount[i].name + " ";
-                      this.discount = {
-                        name: sch
-                      };
-                    } else {
-                      this.discount = {
-                        name: 'none'
-                      };
-                    }
-                    this.change_grade = data.data.change_grade;
-                    this.deficiencies = data.data.deficiencies;
-                    this.balance = data.data.balancel;
-                    this.user_level = data.data.user_level;
-                    this.registration = data.data.registration;
-                    this.registration_status = data.data.registration ? data.data
-                      .registration.intROG : 0;
-                    this.active_sem = data.data.active_sem;
-                    this.reg_status = data.data.reg_status;
-                    this.selected_ay = data.data.selected_ay;
-                    this.curriculum_subjects = data.data.curriculum_subjects;
-                    this.sections = data.data.sections;
+            if (this.sections)
+              this.add_subject.section = (this.sections.length > 0) ? this
+              .sections[0].intID : null;
 
-                    if (this.sections)
-                      this.add_subject.section = (this.sections.length > 0) ? this
-                      .sections[0].intID : null;
+            this.add_subject.subject = (this.curriculum_subjects.length > 0) ?
+              this.curriculum_subjects[0].intSubjectID : null;
+            this.add_subject.studentID = this.id;
+            this.add_subject.activeSem = this.selected_ay;
+            this.advanced_privilages1 = data.data.advanced_privilages1;
+            this.advanced_privilages2 = data.data.advanced_privilages2;
+            this.sy = data.data.sy;
+            this.term_type = data.data.term_type;
+            this.photo_dir = data.data.photo_dir;
+            this.img_dir = data.data.img_dir;
+            this.sem_student = this.selected_ay;
+            this.registrar_privilages = data.data.registrar_privilages;
+            this.grad_status = this.student.isGraduate;
+            this.records = data.data.records;
+            this.total_units = data.data.total_units;
+            this.lab_units = data.data.lab_units;
+            this.gpa = data.data.gpa;
+            this.other_data = data.data.other_data;
+            var sched = data.data.schedule;
+            axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+              .then((data) => {
+                this.applicant_data = data.data.data;
+                for (i in this.applicant_data.uploaded_requirements) {
+                  if (this.applicant_data.uploaded_requirements[i].type ==
+                    "2x2" || this.applicant_data.uploaded_requirements[i]
+                    .type == "2x2_foreign")
+                    this.picture = this.applicant_data.uploaded_requirements[i]
+                    .path;
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              })
 
-                    this.add_subject.subject = (this.curriculum_subjects.length > 0) ?
-                      this.curriculum_subjects[0].intSubjectID : null;
-                    this.add_subject.studentID = this.id;
-                    this.add_subject.activeSem = this.selected_ay;
-                    this.advanced_privilages1 = data.data.advanced_privilages1;
-                    this.advanced_privilages2 = data.data.advanced_privilages2;
-                    this.sy = data.data.sy;
-                    this.term_type = data.data.term_type;
-                    this.photo_dir = data.data.photo_dir;
-                    this.img_dir = data.data.img_dir;
-                    this.sem_student = this.selected_ay;
-                    this.registrar_privilages = data.data.registrar_privilages;
-                    this.grad_status = this.student.isGraduate;
-                    this.records = data.data.records;
-                    this.total_units = data.data.total_units;
-                    this.lab_units = data.data.lab_units;
-                    this.gpa = data.data.gpa;
-                    this.other_data = data.data.other_data;
-                    var sched = data.data.schedule;
-                    axios.get(api_url + 'admissions/student-info/' + this.student.slug)
-                      .then((data) => {
-                        this.applicant_data = data.data.data;
-                        for (i in this.applicant_data.uploaded_requirements) {
-                          if (this.applicant_data.uploaded_requirements[i].type ==
-                            "2x2" || this.applicant_data.uploaded_requirements[i]
-                            .type == "2x2_foreign")
-                            this.picture = this.applicant_data.uploaded_requirements[i]
-                            .path;
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      })
+            setTimeout(function() {
+              // function code goes here
+              load_schedule(sched);
+            }, 1000);
 
-                    setTimeout(function() {
-                      // function code goes here
-                      load_schedule(sched);
-                    }, 1000);
+          } else {
+            //document.location = this.base_url + 'users/login';
+          }
 
-                  } else {
-                    //document.location = this.base_url + 'users/login';
-                  }
-
-                  this.loader_spinner = false;
-                })
-                .catch((error) => {
-                  console.log(error);
-                })
-
-            });
-        });
+          this.loader_spinner = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+          
     }
 
   },
