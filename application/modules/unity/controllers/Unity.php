@@ -1523,7 +1523,7 @@ class Unity extends CI_Controller {
                         $totalUnits -= 3;
                     }
                     else{
-                        $product = intval($record['strUnits']) * $record['v3']; 
+                        $product = intval($record['strUnits']) * (float)$record['v3']; 
                         $products[] = $product;
                         $totalUnits += intval($record['strUnits']);
                     }    
