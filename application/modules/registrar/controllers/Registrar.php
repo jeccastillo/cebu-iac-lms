@@ -879,6 +879,27 @@ class Registrar extends CI_Controller {
         $this->load->view("common/enlistment_report_conf",$this->data); 
     }
 
+    public function nstp_report($sem = 0)    
+    {
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $this->data['sem'] = $active_sem['intID'];
+        }        
+        // $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$this->data['sem'];
+        // $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$this->data['sem'];
+
+  
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/nstp_report",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        
