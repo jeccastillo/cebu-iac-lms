@@ -243,61 +243,29 @@ new Vue({
         ':' +
         (minute < 10 ? '0' + minute.toString() : minute);
         this.request.date = localDatetime;
-        Swal.fire({
-            showCancelButton: false,
-            showCloseButton: false,
-            allowEscapeKey: false,
-            title: 'Syncing',
-            text: 'Syncing Data do not leave page',
-            icon: 'info',
-        })
-        Swal.showLoading();
-        
+                              
         axios
-            .post(api_url + 'finance/sync_payments', this.sync_data,{
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                },
-            })
+        .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            },
+        })
 
-            .then((data) => {                   
-                var formdata = new FormData();                    
-                formdata.append('data',JSON.stringify(data.data.data));
-            axios
-                .post(base_url + 'finance/sync_payment_details_data/',formdata,{
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    },
-                })
+        .then((data) => {                                                  
+            this.finance = data.data.user;
+            this.tuition = data.data.tuition;
+            this.student = data.data.student;
+            this.sy = data.data.sy;
+            this.request.syid = data.data.active_sem;  
+            var current_sy_id = 0;                                               
 
-            .then((data) => {   
-                Swal.close();                       
-                axios
-                    .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        },
-                    })
-
-                    .then((data) => {                                                  
-                        this.finance = data.data.user;
-                        this.tuition = data.data.tuition;
-                        this.student = data.data.student;
-                        this.sy = data.data.sy;
-                        this.request.syid = data.data.active_sem;  
-                        var current_sy_id = 0;                                               
-
-                        for(i in this.tuition){                                        
-                             this.getPayments(this.tuition[i]);                                                          
-                        }
-                                            
-                        // console.log(data);
-                    });
-            });
+            for(i in this.tuition){                                        
+                this.getPayments(this.tuition[i]);                                                          
+            }
+                                
+            // console.log(data);
         });
-        
-
-   
+                    
 
 
     },
@@ -413,7 +381,7 @@ new Vue({
                     tuition.other[i].amount = tuition.other[i].amount.toFixed(2);
                 }
                 else{
-                    tuition.other[i].amount = parseFloat(tuition.ledger[i].amount).toFixed(2)
+                    tuition.other[i].amount = parseFloat(tuition.other[i].amount).toFixed(2)
                 }
                 this.other_term.push(tuition.other[i]); 
             
