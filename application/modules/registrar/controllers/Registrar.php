@@ -900,6 +900,16 @@ class Registrar extends CI_Controller {
         
     }
 
+    public function nstp_report_data($sem){
+
+        $ret['data'] = $this->data_fetcher->getNSTPGraduates($sem);        
+        $ret['success'] = true;
+        $ret['message'] = "Success";
+
+        echo json_encode($ret);
+
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        
@@ -1774,31 +1784,7 @@ class Registrar extends CI_Controller {
         $this->load->view("admin/loa",$this->data);
         $this->load->view("common/footer",$this->data); 
 
-    }
-
-    public function nstp_report($sem = 0){
-        
-        if($sem == 0){
-            $sem = $this->data_fecther->get_active_sem();
-            $sem = $sem['intID'];
-        }
-
-        $this->data['sem'] = $sem;
-
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/loa",$this->data);
-        $this->load->view("common/footer",$this->data); 
-    }
-
-    public function nstp_report_data($sem){
-        
-        $ret['data'] = $this->data_fetcher->getNSTPGraduates($sem);        
-        $ret['success'] = true;
-        $ret['message'] = "Success";
-
-        echo json_encode($ret);
-
-    }
+    }    
 
     public function leave_of_abscence_data($id){
         
