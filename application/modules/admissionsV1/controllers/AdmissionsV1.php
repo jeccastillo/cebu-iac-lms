@@ -190,6 +190,7 @@ class AdmissionsV1 extends CI_Controller {
 
         echo json_encode($data);
     }
+    
 
     public function programs($slug){
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
@@ -253,6 +254,30 @@ class AdmissionsV1 extends CI_Controller {
         }
         else
             redirect(base_url()."users/login");            
+    }
+
+    public function paid_applicants($term = 0) {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);  
+                
+            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            
+            $this->data['page'] = "view_paid";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_paid_applicants",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url()."unity");            
     }
     
    

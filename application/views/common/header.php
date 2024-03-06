@@ -265,6 +265,9 @@
             <li class="<?php echo (isset($page) && $page=="fi_calendar")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>admissionsV1/fi_calendar"
                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View FI Calendar</a></li>
+            <li class="<?php echo (isset($page) && $page=="view_paid")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>admissionsV1/paid_applicants"
+                style="margin-left: 10px;"><i class="fa fa-book"> </i> View Paid Applicants</a></li>
 
           </ul>
         </li>
