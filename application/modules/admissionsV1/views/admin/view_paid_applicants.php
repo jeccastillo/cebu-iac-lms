@@ -1,13 +1,10 @@
-<div id="paid-applicant"
-  class="content-wrapper ">
+<div class="content-wrapper ">
   <section class="content-header container ">
     <h1>
       Student Paid Applicants
       <small>
-        <a class="btn btn-app"
-          :href="base_url + 'admissionsV1/view_all_leads'"><i class="fa fa-users"></i>
-          Students Applicants</a>
-        <a class="btn btn-app"
+        <a style="display:none;"
+          class="btn btn-app"
           href="#"
           id="print_form"><i class="fa fa-file"></i> Export to Excel</a>
       </small>
@@ -19,17 +16,75 @@
     <hr />
     <div class="pull-right">
       <select id="select-term-leads"
-        class="form-control"
-        v-model="current_sem">
-        <option v-for="sem in sems"
-          :value="sem.intID">
-          {{ `${sem.term_student_type} ${sem.enumSem} ${sem.term_label} ${sem.strYearStart} ${sem.strYearEnd}`}}
+        class="form-control">
+        <?php foreach($sy as $s): ?>
+        <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?>
+          value="<?php echo $s['intID']; ?>">
+          <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?>
         </option>
+        <?php endforeach; ?>
       </select>
     </div>
     <hr />
+    <div class="row"
+      style="display:none;">
+      <div class="col-sm-4">
+        Filter by Status
+      </div>
+    </div>
+    <div class="row"
+      style="display:none;">
+      <div class="col-sm-4">
+        <select class="form-select form-control"
+          id="status_filter">
+          <option value="none"
+            selected>None</option>
+          <option value="New">New Applicant</option>
+          <option value="Waiting for Interview">Waiting for Interview</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="For Interview">For Interview</option>
+          <option value="For Reservation">For Reservation</option>
+          <option value="Reserved">Reserved</option>
+          <option value="Floating">Floating</option>
+          <option value="Will Not Proceed">Will Not Proceed</option>
+          <option value="For Enrollment">For Enrollment</option>
+          <option value="Confirmed">Complete Confirmed Information</option>
+          <option value="Enlisted">Enlisted</option>
+          <option value="Enrolled">Enrolled</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Disqualified">Disqualified</option>
+          <option value="Not Answering">Not Answering</option>
+        </select>
+      </div>
+      <div class="col-sm-4">
+        <div class="input-group pull-right">
+          <a href="<?php echo base_url(); ?>admissionsV1/admissions_report"
+            class="btn btn-primary">
+            Quick Stats
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group  pull-left">
+          <select class="form-select form-control"
+            id="range-to-select">
+            <option value="created_at">Date Applied</option>
+            <option value="date_interviewed">Date Interviewed</option>
+            <option value="date_reserved">Date Reserved</option>
+            <option value="date_enrolled">Date Enrolled</option>
+          </select>
+        </div>
+        <div class="input-group pull-right">
+          <button class="btn btn-default pull-right"
+            id="daterange-btn-users">
+            <i class="fa fa-calendar"></i> Choose Date Range
+            <i class="fa fa-caret-down"></i>
+          </button>
+        </div>
+      </div>
 
-    <div class="row">
+    </div>
+    <!-- end row -->
   </section>
   <div class="content container">
     <div class="alert alert-danger"
@@ -43,66 +98,25 @@
 
       </div><!-- /.box-header -->
       <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped">
+        <table id="applicant-table"
+          class="table table-hover table-bordered">
           <thead>
             <tr>
+              <th>slug</th>
+
+
               <th>Last Name</th>
               <th>First Name</th>
+
               <th>Actions</th>
+
             </tr>
           </thead>
           <tbody>
-            <tr>
-
-            </tr>
           </tbody>
-
         </table>
       </div><!-- /.box-body -->
     </div><!-- /.box -->
   </div>
 </div>
 </div>
-
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script type="text/javascript"
-  src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
-  integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-
-<script>
-new Vue({
-  el: '#paid-applicant',
-  data: {
-    sems: JSON.parse(`<?php echo json_encode($sy); ?>`),
-    base_url: '<?php echo base_url(); ?>',
-    current_sem: '<?php echo $current_sem; ?>',
-    applicants_data: []
-  },
-  mounted() {
-    this.getAllPaidList()
-  },
-  methods: {
-
-    getAllPaidList: function() {
-      axios.get(
-          `${api_url}admissions/applications/paid-application-fee?current_sem=${this.current_sem} `
-        )
-        .then((data) => {
-          console.log(data.data);
-          this.applicants_data = data.data
-
-        })
-        .catch((error) => {
-          console.log(error);
-
-        });
-    }
-  }
-})
-</script>
