@@ -28,45 +28,97 @@
         </select>
       </div>
       <table class="table table-bordered table-striped">
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Grade</th>
-          <th>NSTP 1</th>
-          <th>NSTP 2</th>
+        <thead>
+          <tr>
+            <th rowspan="2">Serial No.</th>
+            <th colspan="3">Student Name</th>
+            <th rowspan="2">Course/Program</th>
+            <th rowspan="2">Gender</th>
+            <th rowspan="2">Birthdate</th>
+            <th rowspan="2">Street/Barangay</th>
+            <th rowspan="2">Town/City Address</th>
+            <th rowspan="2">Provincial Address</th>
+            <th rowspan="2">Contact Number Telephone/Mobile</th>
+            <th rowspan="2">Email Address</th>
+          </tr>
+          <tr>
+            <th>Surname</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td rowspan="1"
+              style="vertical-align:middle;">Sub Total:</td>
+            <td>
+              <div>Male:</div>
+              <div>Female:</div>
+            </td>
+            <td style="text-align:center">
+              <div>0</div>
+              <div>0</div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td rowspan="2"
+              style="vertical-align:middle;">Grand Total:</td>
+            <td>
+              <div>Male:</div>
+              <div>Female:</div>
+            </td>
+            <td style="text-align:right">
+              <div>0</div>
+              <div>0</div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
 
-        </tr>
-        <tr>
-          <td>
-
-          </td>
-          <td>
-
-          </td>
-          <td>
-
-          </td>
-          <td>
-
-          </td>
-          <td>
-
-          </td>
-
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-
-        </tr>
       </table>
     </div>
   </div>
 
 </aside>
+
+<style>
+thead th {
+  text-align: center;
+  vertical-align: middle !important;
+}
+</style>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript"
@@ -91,10 +143,16 @@ new Vue({
 
     let url_string = window.location.href;
 
+    axios.get(this.base_url + 'registrar/nstp_report_data/' + this.current_sem)
+      .then((data) => {
+        console.log(data);
 
-  },
+      })
+      .catch((error) => {
+        console.log(error);
 
-  methods: {
+      });
+
 
 
   }
