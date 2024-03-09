@@ -2256,7 +2256,7 @@ class Pdf extends CI_Controller {
                 
         $pdf->AddPage();        
         $this->data['student_name'] = strtoupper($request['student_name']);        
-        $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
+        $this->data['cashier_name'] = strtoupper($cashier['strFirstname']." ".$cashier['strLastname']);        
         $this->data['student_id'] = $request['student_id'];        
         $this->data['student_address'] = strtoupper($request['student_address']);
         $this->data['is_cash'] = $request['is_cash'];        
