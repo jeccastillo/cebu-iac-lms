@@ -1014,9 +1014,9 @@ new Vue({
                     }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
-
+                var or_send = this.$refs.print_or;
                 setTimeout(function() {
-                    this.$refs.print_or.submit();
+                    or_send.submit();
                 }, delayInMilliseconds);
                             
             });  
