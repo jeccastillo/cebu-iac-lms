@@ -1010,12 +1010,12 @@ new Vue({
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.sem = payment.sy_reference;
-                        this.or_print.cashier_id = payment.cashier_id;
-                        console.log(this.or_print);
-                        this.$nextTick(() => {
-                            this.$refs.print_or.submit();
-                        });             
+                        this.or_print.cashier_id = payment.cashier_id;                                                                                                
                     }
+            }).then((result) => {
+                this.$nextTick(() => {
+                    this.$refs.print_or.submit();
+                });             
             });  
         },
         deletePayment: function(payment_id){
