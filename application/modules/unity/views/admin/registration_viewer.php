@@ -666,6 +666,10 @@ new Vue({
 
                             for(i in this.payments){
                                 if(this.payments[i].status == "Paid"){     
+                                    if(!this.payments[i].mode)
+                                    this.payments[i].mode = {
+                                        name: 'Other'
+                                    };
                                     this.payments_paid.push(this.payments[i]);                         
                                     this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
@@ -687,6 +691,15 @@ new Vue({
                                 .then((data) => {
                                     this.reservation_payment = data.data.data;    
                                     this.application_payment = data.data.application;
+
+                                    if(!this.reservation_payment.mode)
+                                        this.reservation_payment.mode = {
+                                            name: 'Other'
+                                        };
+                                    if(!this.application_payment.mode)
+                                        this.application_payment.mode = {
+                                            name: 'Other'
+                                        };
                                     
                                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                                             this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
