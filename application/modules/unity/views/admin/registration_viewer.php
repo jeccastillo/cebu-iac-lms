@@ -1011,9 +1011,10 @@ new Vue({
                         this.or_print.check_number = payment.check_number;
                         this.or_print.sem = payment.sy_reference;
                         this.or_print.cashier_id = payment.cashier_id;
-                        this.$nextTick(() => {
-                            this.$refs.print_or.submit();
-                        });             
+                        console.log(this.or_print);
+                        // this.$nextTick(() => {
+                        //     this.$refs.print_or.submit();
+                        // });             
                     }
             });  
         },
