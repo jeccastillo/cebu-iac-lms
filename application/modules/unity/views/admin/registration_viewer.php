@@ -1013,9 +1013,12 @@ new Vue({
                         this.or_print.cashier_id = payment.cashier_id;                                                                                                
                     }
             }).then((result) => {
-                this.$nextTick(() => {
+                var delayInMilliseconds = 1000; //1 second
+
+                setTimeout(function() {
                     this.$refs.print_or.submit();
-                });             
+                }, delayInMilliseconds);
+                            
             });  
         },
         deletePayment: function(payment_id){
