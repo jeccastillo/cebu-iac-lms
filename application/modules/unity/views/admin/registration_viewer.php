@@ -1012,9 +1012,9 @@ new Vue({
                         this.or_print.sem = payment.sy_reference;
                         this.or_print.cashier_id = payment.cashier_id;
                         console.log(this.or_print);
-                        // this.$nextTick(() => {
-                        //     this.$refs.print_or.submit();
-                        // });             
+                        this.$nextTick(() => {
+                            this.$refs.print_or.submit();
+                        });             
                     }
             });  
         },
