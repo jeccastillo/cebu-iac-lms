@@ -2228,8 +2228,7 @@ class Pdf extends CI_Controller {
 
         // Add a page
         // This method has several options, check the source code documentation for more information.
-        print_r($request);
-        die();
+
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         $this->data['term'] = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
         
@@ -2267,7 +2266,7 @@ class Pdf extends CI_Controller {
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
         $this->data['description'] = $request['description'];
         $this->data['total_amount_due'] = $request['total_amount_due'];
-        $this->data['decimal'] = ((float)$this->data['total_amount_due'] - floor((float)$this->data['total_amount_due'] )) * 100;
+        $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  $request['transaction_date'];          
         $this->data['tin'] = $payee?$payee['tin']:'';
