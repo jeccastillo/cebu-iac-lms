@@ -550,17 +550,17 @@ class Unity extends CI_Controller {
             $ret['user_level'] = $this->data['user']['intUserLevel'];
             $ret['user'] = $this->data['user'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
-            //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
-            // $pay =  array();
-            // foreach($payment as $p){
-            //     if(isset($pay[$p['strTransactionType']]))
-            //         $pay[$p['strTransactionType']] += $p['intAmountPaid'];
-            //     else
-            //         $pay[$p['strTransactionType']] = $p['intAmountPaid'];
+            $ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+            $payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
+            $pay =  array();
+            foreach($payment as $p){
+                if(isset($pay[$p['strTransactionType']]))
+                    $pay[$p['strTransactionType']] += $p['intAmountPaid'];
+                else
+                    $pay[$p['strTransactionType']] = $p['intAmountPaid'];
 
-            // }
-            // $ret['payment'] = $pay;
+            }
+            $ret['payment'] = $pay;
             $ret['advanced_privilages'] = (in_array($this->data["user"]['intUserLevel'],array(2,3)) )?true:false;
             $role = $this->session->userdata('special_role');
             $ret['finance_manager_privilages'] = ($role == 2)?true:false;    
