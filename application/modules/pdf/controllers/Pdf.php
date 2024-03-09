@@ -2229,7 +2229,7 @@ class Pdf extends CI_Controller {
         // Add a page
         // This method has several options, check the source code documentation for more information.
 
-        $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
+        $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->first_row();
         $this->data['term'] = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
         
         if(isset($request['payee_id']))
