@@ -816,7 +816,7 @@ class Unity extends CI_Controller {
 
      public function student_exam($slug,$exam_id) {                
         
-        $student = $this->data_fetcher->getStudent($slug, 'slug');
+        // $student = $this->data_fetcher->getStudent($slug, 'slug');
         $answers = array();
         $studentExamQuestion = $this->data_fetcher->getStudentExamQuestion($slug, 'student_id');
         foreach($studentExamQuestion as $question){
@@ -843,7 +843,7 @@ class Unity extends CI_Controller {
             $answers[] = $answerArray;
         }
 
-        $data['id'] = $student['intID'];
+        // $data['id'] = $student['intID'];
         $data['answers'] = $answers;
            
         $this->load->view('public/header',$this->data);        
