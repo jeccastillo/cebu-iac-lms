@@ -330,5 +330,31 @@ class AdmissionsV1 extends CI_Controller {
         
     }
 
+    public function view_paid_app_fee()
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);                  
+            
+            
+            $applicants = $this->data_fetcher->fetch_table('tb_mas_sy');
+
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "view_reserved";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/reserved_students",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/reserved_students_conf",$this->data); 
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url()."unity");
+    } 
 
 }

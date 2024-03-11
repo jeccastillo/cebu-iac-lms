@@ -29,12 +29,8 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="date_from">Date From:</label>
-                        <input required type="date" id="date_from" name="date_from" class="form-control" />                     
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="date_to">Date To:</label>
-                        <input required type="date" id="date_to" name="date_to" class="form-control" />                
+                        <label for="report_date">As Of:</label>
+                        <input required type="date" id="report_date" name="report_date" class="form-control" />                     
                     </div>
                 </div>
             </div>

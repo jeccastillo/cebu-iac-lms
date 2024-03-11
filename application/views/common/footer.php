@@ -689,7 +689,7 @@ $(document).ready(function() {
     $("#export_student_account_report").click(function(e){
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/student_account_report/' + $("#sem").val() + '/' + campus + '/' + $("#date_from").val() + '/' + $("#date_to").val();
+        var url = base_url + 'excel/student_account_report/' + $("#sem").val() + '/' + campus + '/' + $("#report_date").val();
         window.open(url, '_blank');
     })
 });

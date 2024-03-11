@@ -2675,6 +2675,7 @@ class Data_fetcher extends CI_Model {
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
+        $scholar_type = '';
         
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
@@ -2687,6 +2688,7 @@ class Data_fetcher extends CI_Model {
                 $other_scholarship_current = 0;
                 $total_scholarship_temp = 0;
                 $total_scholarship_installment_temp = 0;
+                $scholar_type = $scholar->deduction_type;
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
@@ -3029,6 +3031,7 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_total_assessment_rate_installment'] = $total_assessment_rate_installment;
         $data['scholarship_total_assessment_fixed'] = $total_assessment_fixed;
         $data['scholarship_total_assessment_fixed_installment'] = $total_assessment_fixed_installment;
+        $data['scholar_type'] = $scholar_type;
 
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
         
@@ -3085,21 +3088,7 @@ class Data_fetcher extends CI_Model {
 
     }
         
-    function getNSTPGraduates($sem){
-
-        $ret =  $this->db->select('tb_mas_users.*')
-                 ->from('tb_mas_users')
-                 ->join('tb_mas_classlist_student', 'tb_mas_classlist_student.intStudentID = tb_mas_users.intID')
-                 ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
-                 ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
-                 ->where(array('tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_subjects.strCode'=>'NSTP0002','strRemarks >'=>'Passed'))
-                 ->group_by('tb_mas_users.intID')
-                 ->get()
-                 ->result_array();
-        
-        return $ret;
     
-    }
     
     
     function getTransactions($id,$sem)
