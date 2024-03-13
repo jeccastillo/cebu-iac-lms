@@ -3083,7 +3083,7 @@ class Data_fetcher extends CI_Model {
         $data['class_type'] = $sem['classType'];               
         
         print_r($tuition_year);
-        die();
+        
         // $data['discounted_price'] = $discounted_price;
         // $data['scholarship_discount'] = $scholarship_discount;
         
