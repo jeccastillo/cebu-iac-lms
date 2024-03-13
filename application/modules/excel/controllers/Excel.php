@@ -4703,7 +4703,7 @@ class Excel extends CI_Controller {
             $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
             
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
-            $tuitionFee = $tuition['tuition'];
+            // $tuitionFee = $tuition['tuition'];
 
             if($reg){
                 $studentsEnrolled = true;
