@@ -33,7 +33,7 @@ $(document).ready(function() {
                 break;
             }
             $.get(
-                api_url + "admissions/applications", {
+                api_url + "admissions/applications/reserved_applicants", {
                     limit: data.length,
                     page: data.start / data.length + 1,
                     search_data: data.search.value,
