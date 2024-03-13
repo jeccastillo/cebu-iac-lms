@@ -2381,14 +2381,11 @@ class Data_fetcher extends CI_Model {
             $subjects[] = $class['subjectID'];                            
         }
         
-        if(isset($registration)){
-            echo "success:".$sem." ".$id."<br />";
+        if(isset($registration))
             return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
-        }
-        else{              
-            echo "Failed".$sem." ".$id."<br />";         
+        else                              
             return null;
-        }
+        
         
     }
 
