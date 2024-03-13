@@ -4682,29 +4682,22 @@ class Excel extends CI_Controller {
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = array();
-            
 
-            $ledger = $this->db->get_where(array('syid' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at <=' => $report_date . ' 11:59:59'))->first_row();
+
+            $ledger = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 11:59:59'))->first_row();
             if($ledger){
                 if(strpos($ledger->name, 'APPLIED TO') !== false){
                     $applied_from[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_from[1] = $ledger->remarks;
-                    $applied_from[2] = $ledger->amount;
+                    $applied_from[1] = $ledger->name;
+                    $applied_from[2] = $ledger->amount; 
                 }
                 if(strpos($ledger->name, 'APPLIED FROM') !== false){
                     $applied_to[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_to[1] = $ledger->remarks;
+                    $applied_to[1] = $ledger->name;
                     $applied_to[2] = $ledger->amount;
                 }
 
             }
-            //     print("true");x
-            // }else{
-            //     print("false");
-            // }
-            // print_r($query);
-            // die();
-
             
             // $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
             $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
@@ -5157,6 +5150,459 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+
+    // public function ched_export($sem, $campus)
+    // {
+    //     $students = $this->db->select('tb_mas_users.intID')
+    //                 ->from('tb_mas_users')
+    //                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+    //                 ->where(array('tb_mas_registration.intAYID'=>$sem))
+    //                 ->get()
+    //                 ->result_array();
+
+    //     error_reporting(E_ALL);
+    //     ini_set('display_errors', TRUE);
+    //     ini_set('display_startup_errors', TRUE);
+
+    //     if (PHP_SAPI == 'cli')
+    //         die('This example should only be run from a Web Browser');
+
+    //     // Create new PHPExcel object
+    //     $objPHPExcel = new PHPExcel();
+      
+    //     $title = 'Ched Report';
+
+    //     $i = 4;
+    //     $count = 1;
+    //     $payments = $students = array();
+
+    //     foreach($students as $student){
+            
+    //         $subjects = $this->db->select('tb_mas_classlist_student.*')
+    //         ->from('tb_mas_classlist_student')
+    //         ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+    //         ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+    //         ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+    //         ->get()
+    //         ->result_array();
+            
+    //         print_r($subjects);
+    //         die();
+            
+    //         // Add some data
+    //         $objPHPExcel->setActiveSheetIndex(0)
+    //             ->setCellValue('A'.$i, $count)
+    //             ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
+    //             ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
+    //             ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
+    //             ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
+    //             ->setCellValue('F'.$i, $course['strProgramCode'])
+    //             ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
+    //             ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
+    //             ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+    //             ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+    //             ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
+    //             ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+    //             ->setCellValue('M'.$i, $reg['paymentType'] == 'partial' && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
+    //             ->setCellValue('N'.$i, $reg['paymentType'] == 'partial' && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
+    //             ->setCellValue('O'.$i, $reg['paymentType'] == 'partial' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+    //             ->setCellValue('P'.$i, $reg['paymentType'] == 'partial' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+    //             ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
+    //             ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+    //             ->setCellValue('S'.$i, '=SUM(G' . $i . ':R' . $i . ')')
+    //             ->setCellValue('T'.$i, $date_enrolled < $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+    //             ->setCellValue('U'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
+    //             ->setCellValue('V'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+    //             ->setCellValue('W'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+    //             ->setCellValue('X'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+    //             ->setCellValue('Y'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+    //             ->setCellValue('Z'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+    //             ->setCellValue('AA'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+    //             ->setCellValue('AB'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+    //             ->setCellValue('AC'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+    //             ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_fixed > 0? $assessment_discount_fixed : '')
+    //             ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+    //             ->setCellValue('AE'.$i, '=SUM(U' . $i . ':AD' . $i . ')')
+    //             ->setCellValue('AF'.$i, '=S' . $i . '-AE' . $i . ')');
+
+    //         $total_amount = '=' . $this->columnIndexToLetter(34) . '' . $i;
+
+    //             if($payments){
+    //                 foreach($payments as $index => $payment){
+    //                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), 1)
+    //                         ->setValue($payment['month_name'] . ' ' . $payment['year']);
+    
+    //                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), $i)
+    //                         ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
+                        
+    //                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index * 3), $i)
+    //                         ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
+                        
+    //                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index * 3), $i)
+    //                         ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
+                            
+    //                     $column_letter = $this->columnIndexToLetter(34 + ($index * 3));
+                        
+    //                     $objPHPExcel->setActiveSheetIndex(0)
+    //                         ->setCellValue($this->columnIndexToLetter(32 + ($index * 3)) . '2', 'DATE')
+    //                         ->setCellValue($this->columnIndexToLetter(33 + ($index * 3)) . '2', 'OR NUMBER')
+    //                         ->setCellValue($this->columnIndexToLetter(34 + ($index * 3)) . '2', 'AMOUNT');
+                        
+    //                     $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                        
+    //                     if($index > 0){
+    //                         $total_amount .= '+' . $column_letter . '' . $i;
+    //                     }
+
+    //                     $sheet = $objPHPExcel->getActiveSheet();
+    //                     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
+    //                     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
+    //                     $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
+    //                     $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+    
+    //                     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        
+    //                     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
+    //                     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
+    //                     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index * 3)))->setWidth(15);
+    //                 }
+    //             }
+
+    //             $last_index = 34 + ($index * 3) + 1;
+    //             $balance_after_payment = '=AF' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
+    //             $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+    //                                 '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
+                                    
+    //             $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
+    //             $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 1, $i)->setValue($balance_after_payment);
+                
+    //             if($applied_from){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 2, $i)->setValue($applied_from[0]);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 3, $i)->setValue($applied_from[1]);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 4, $i)->setValue($applied_from[2]);
+    //             }
+
+    //             if($applied_to){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($applied_to[0]);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($applied_to[1]);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($applied_to[2]);
+    //             }
+
+    //             if($date_enrolled > $sy->ar_report_date_generation){
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($date_enrolled);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($tuition['scholar_type']);
+    //                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
+    //             }
+
+    //             $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
+    //             $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
+    //             $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
+
+    //             $i++;
+    //             $count++;
+    //         }
+    //     }
+
+
+    //     $objPHPExcel->setActiveSheetIndex(0)
+    //                 ->setCellValue('A1', 'INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY ' . ucfirst(strtolower($campus))  . ' )')
+    //                 ->setCellValue('B1', 'STUDENT NUMBER')
+    //                 ->setCellValue('C1', 'STUDENT NAME')
+    //                 ->setCellValue('D1', 'DATE ENROLLED')
+    //                 ->setCellValue('E1', 'MOP')
+    //                 ->setCellValue('F1', 'COURSE')
+    //                 ->setCellValue('G1', 'FULL PAYMENT')
+    //                 ->setCellValue('G2', 'TF')
+    //                 ->setCellValue('H2', 'LABORATORY')
+    //                 ->setCellValue('I2', 'MISC FEES')
+    //                 ->setCellValue('J2', 'THESIS FEE')
+    //                 ->setCellValue('K2', 'NSF')
+    //                 ->setCellValue('L2', 'LEF')
+    //                 ->setCellValue('M1', 'INSTALLMENT')
+    //                 ->setCellValue('M2', 'TF')
+    //                 ->setCellValue('N2', 'LABORATORY')
+    //                 ->setCellValue('O2', 'MISC FEES')
+    //                 ->setCellValue('P2', 'THESIS FEE')
+    //                 ->setCellValue('Q2', 'NSF')
+    //                 ->setCellValue('R2', 'LEF')
+    //                 ->setCellValue('S1', 'TUITION FEE GRAND TOTAL')
+    //                 ->setCellValue('T1', 'SCHOLARSHIPS/ DISCOUNTS RATE')
+    //                 ->setCellValue('T2', 'TYPE')
+    //                 ->setCellValue('U2', 'TUITION')
+    //                 ->setCellValue('W2', 'LAB')
+    //                 ->setCellValue('Y2', 'MISC')
+    //                 ->setCellValue('AA2', 'NSF')
+    //                 ->setCellValue('AC2', 'TOTAL ASSESSMENT')
+    //                 ->setCellValue('U3', 'RATE')
+    //                 ->setCellValue('V3', 'FIX')
+    //                 ->setCellValue('W3', 'RATE')
+    //                 ->setCellValue('X3', 'FIX')
+    //                 ->setCellValue('Y3', 'RATE')
+    //                 ->setCellValue('Z3', 'FIX')
+    //                 ->setCellValue('AA3', 'RATE')
+    //                 ->setCellValue('AB3', 'FIX')
+    //                 ->setCellValue('AC3', 'RATE')
+    //                 ->setCellValue('AD3', 'FIX')
+    //                 ->setCellValue('AE1', 'TOTAL SCHOLARSHIP / DISCOUNT')
+    //                 ->setCellValue('AF1', 'AR TERM & YEAR')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index) . '1', 'TOTAL PAYMENT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 1) . '1', 'BALANCE AFTER PAYMENT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 2) . '1', 'ADJUSTMENTS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 2) . '2', 'APPLIED FROM')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 5) . '2', 'APPLIED TO')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 8) . '2', 'LATE TAGGING')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 11) . '2', 'REFUND')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 14) . '2', 'OTHERS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 2) . '3', 'DATE')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 3) . '3', 'REMARKS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 4) . '3', 'AMOUNT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 5) . '3', 'DATE')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 6) . '3', 'REMARKS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 7) . '3', 'AMOUNT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 8) . '3', 'DATE')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 9) . '3', 'REMARKS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 10) . '3', 'AMOUNT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 11) . '3', 'DATE')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 12) . '3', 'REMARKS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 13) . '3', 'AMOUNT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 14) . '3', 'DATE')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 15) . '3', 'REMARKS')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 16) . '3', 'AMOUNT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 17) . '1', 'TOTAL ADJUSTMENT')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')');
+
+    //     $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) .  '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        
+    //     $objPHPExcel->setActiveSheetIndex(0)
+    //                 ->setCellValue('A'.$i, 'TOTAL')
+    //                 ->setCellValue('G'.$i, '=SUM(G4:G' . ($i-1) . ')')
+    //                 ->setCellValue('H'.$i, '=SUM(H4:H' . ($i-1) . ')')
+    //                 ->setCellValue('I'.$i, '=SUM(I4:I' . ($i-1) . ')')
+    //                 ->setCellValue('J'.$i, '=SUM(J4:J' . ($i-1) . ')')
+    //                 ->setCellValue('K'.$i, '=SUM(K4:K' . ($i-1) . ')')
+    //                 ->setCellValue('L'.$i, '=SUM(L4:L' . ($i-1) . ')')
+    //                 ->setCellValue('M'.$i, '=SUM(M4:M' . ($i-1) . ')')
+    //                 ->setCellValue('N'.$i, '=SUM(N4:N' . ($i-1) . ')')
+    //                 ->setCellValue('O'.$i, '=SUM(O4:O' . ($i-1) . ')')
+    //                 ->setCellValue('P'.$i, '=SUM(P4:P' . ($i-1) . ')')
+    //                 ->setCellValue('Q'.$i, '=SUM(Q4:Q' . ($i-1) . ')')
+    //                 ->setCellValue('R'.$i, '=SUM(R4:R' . ($i-1) . ')')
+    //                 ->setCellValue('S'.$i, '=SUM(S4:S' . ($i-1) . ')')
+    //                 ->setCellValue('U'.$i, '=SUM(U4:U' . ($i-1) . ')')
+    //                 ->setCellValue('V'.$i, '=SUM(V4:V' . ($i-1) . ')')
+    //                 ->setCellValue('W'.$i, '=SUM(W4:W' . ($i-1) . ')')
+    //                 ->setCellValue('X'.$i, '=SUM(X4:X' . ($i-1) . ')')
+    //                 ->setCellValue('Y'.$i, '=SUM(Y4:Y' . ($i-1) . ')')
+    //                 ->setCellValue('Z'.$i, '=SUM(Z4:Z' . ($i-1) . ')')
+    //                 ->setCellValue('AA'.$i, '=SUM(AA4:AA' . ($i-1) . ')')
+    //                 ->setCellValue('AB'.$i, '=SUM(AB4:AB' . ($i-1) . ')')
+    //                 ->setCellValue('AC'.$i, '=SUM(AC4:AC' . ($i-1) . ')')
+    //                 ->setCellValue('AD'.$i, '=SUM(AD4:AD' . ($i-1) . ')')
+    //                 ->setCellValue('AE'.$i, '=SUM(AE4:AE' . ($i-1) . ')')
+    //                 ->setCellValue('AF'.$i, '=SUM(AF4:AF' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index) .'4:' . $this->columnIndexToLetter($last_index) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 1) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 1) .'4:' . $this->columnIndexToLetter($last_index + 1) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 4) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 4) .'4:' . $this->columnIndexToLetter($last_index + 4) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 7) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 7) .'4:' . $this->columnIndexToLetter($last_index + 7) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 10) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 10) .'4:' . $this->columnIndexToLetter($last_index + 10) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 13) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 13) .'4:' . $this->columnIndexToLetter($last_index + 13) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 16) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 16) .'4:' . $this->columnIndexToLetter($last_index + 16) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 17) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 17) .'4:' . $this->columnIndexToLetter($last_index + 17) . '' . ($i-1) . ')')
+    //                 ->setCellValue($this->columnIndexToLetter($last_index + 18) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 18) .'4:' . $this->columnIndexToLetter($last_index + 18) . '' . ($i-1) . ')');  
+        
+    //     for($index = $last_index - 1; $index >= 34; $index-=3){
+    //         $objPHPExcel->setActiveSheetIndex(0)   
+    //             ->setCellValue($this->columnIndexToLetter($index) . '' . $i, '=SUM('. $this->columnIndexToLetter($index) .'4:' . $this->columnIndexToLetter($index) . '' . ($i-1) . ')');
+
+    //         $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     }
+
+    //     $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 7) . '4:' . $this->columnIndexToLetter($last_index + 7) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 10) . '4:' . $this->columnIndexToLetter($last_index + 10) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 13) . '4:' . $this->columnIndexToLetter($last_index + 13) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 16) . '4:' . $this->columnIndexToLetter($last_index + 16) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 17) . '4:' . $this->columnIndexToLetter($last_index + 17) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 18) . '4:' . $this->columnIndexToLetter($last_index + 18) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+
+
+    //     $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) . '3')->applyFromArray(
+    //         array(
+    //             'font'  => array(
+    //                 'bold'  => true,
+    //                 'color' => array('rgb' => 'FFFFFF'),
+    //                 'size'  => 12,
+    //             ),
+    //             'fill' => array(
+    //                 'type' => PHPExcel_Style_Fill::FILL_SOLID,
+    //                 'color' => array('rgb' => '101D6B')
+    //             ),
+    //             'borders' => array(
+    //                 'allborders' => array(
+    //                     'style' => PHPExcel_Style_Border::BORDER_THIN,
+    //                     'color' => array('rgb' => 'FFFFFF'),
+    //                     )
+    //                 )
+    //         )
+    //     );
+
+    //     $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':' . $this->columnIndexToLetter($last_index + 18) . $i)->applyFromArray(
+    //         array(
+    //             'font'  => array(
+    //                 'bold'  => true,
+    //                 'color' => array('rgb' => '000000'),
+    //                 'size'  => 12,
+    //             ),
+    //             'borders' => array(
+    //                 'top' => array(
+    //                     'style' => PHPExcel_Style_Border::BORDER_THIN,
+    //                     'color' => array('rgb' => '000000'),
+    //                 ),
+    //                 'bottom' => array(
+    //                     'style' => PHPExcel_Style_Border::BORDER_THIN,
+    //                     'color' => array('rgb' => '000000'),
+    //                 )
+    //             ),
+    //         )
+    //     );
+
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(25);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(10);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(30);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(20);
+        
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 1))->setWidth(25);
+
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 2))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 3))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 4))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 5))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 6))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 7))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 8))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 9))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 10))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 11))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 12))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 13))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 14))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 15))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 16))->setWidth(15);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 17))->setWidth(20);
+    //     $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter($last_index + 18))->setWidth(35);
+        
+    //     $sheet = $objPHPExcel->getActiveSheet();
+    //     $sheet->mergeCells('A1:A3');
+    //     $sheet->mergeCells('B1:B3');
+    //     $sheet->mergeCells('C1:C3');
+    //     $sheet->mergeCells('D1:D3');
+    //     $sheet->mergeCells('E1:E3');
+    //     $sheet->mergeCells('F1:F3');
+    //     $sheet->mergeCells('G1:L1');
+    //     $sheet->mergeCells('G2:G3');
+    //     $sheet->mergeCells('H2:H3');
+    //     $sheet->mergeCells('I2:I3');
+    //     $sheet->mergeCells('J2:J3');
+    //     $sheet->mergeCells('K2:K3');
+    //     $sheet->mergeCells('L2:L3');
+    //     $sheet->mergeCells('M1:R1');
+    //     $sheet->mergeCells('M2:M3');
+    //     $sheet->mergeCells('N2:N3');
+    //     $sheet->mergeCells('O2:O3');
+    //     $sheet->mergeCells('P2:P3');
+    //     $sheet->mergeCells('Q2:Q3');
+    //     $sheet->mergeCells('R2:R3');
+    //     $sheet->mergeCells('S1:S3');
+    //     $sheet->mergeCells('T1:AD1');
+    //     $sheet->mergeCells('T2:T3');
+    //     $sheet->mergeCells('U2:V2');
+    //     $sheet->mergeCells('W2:X2');
+    //     $sheet->mergeCells('Y2:Z2');
+    //     $sheet->mergeCells('AA2:AB2');
+    //     $sheet->mergeCells('AC2:AD2');
+    //     $sheet->mergeCells('AE1:AE3');
+    //     $sheet->mergeCells('AF1:AF3');
+
+    //     // foreach($payments as $index => $payment){
+
+    //     //     $sheet = $objPHPExcel->getActiveSheet();
+    //     //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
+    //     //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
+    //     //     $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
+    //     //     $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+    //     // }
+
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index) . '1:' . $this->columnIndexToLetter($last_index) .'3');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 1) . '1:' . $this->columnIndexToLetter($last_index + 1) . '3');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 2) . '1:' . $this->columnIndexToLetter($last_index + 16) . '1');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 2) . '2:' . $this->columnIndexToLetter($last_index + 4) . '2');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 5) . '2:' . $this->columnIndexToLetter($last_index + 7) . '2');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 8) . '2:' . $this->columnIndexToLetter($last_index + 10) . '2');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 11) . '2:' . $this->columnIndexToLetter($last_index + 13) . '2');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 14) . '2:' . $this->columnIndexToLetter($last_index + 16) . '2');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 17) . '1:' . $this->columnIndexToLetter($last_index + 17) . '3');
+    //     $sheet->mergeCells($this->columnIndexToLetter($last_index + 18) . '1:' . $this->columnIndexToLetter($last_index + 18) . '3');
+         
+    //     $objPHPExcel->getActiveSheet()->setTitle('AR Report');
+
+    //     $date = date("ymdhis");
+
+    //     // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+    //     $objPHPExcel->setActiveSheetIndex(0);
+
+
+    //     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+    //     // Redirect output to a client’s web browser (Excel2007)
+    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+    //     header('Content-Disposition: attachment;filename="AR Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+    //     header('Cache-Control: max-age=0');
+    //     // If you're serving to IE 9, then the following may be needed
+    //     header('Cache-Control: max-age=1');
+
+    //     // If you're serving to IE over SSL, then the following may be needed
+    //     header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    //     header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    //     header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    //     header ('Pragma: public'); // HTTP/1.0
+
+        
+    //     // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    //     $objWriter->save('php://output');
+    //     exit;
+    // }
 
     private function columnIndexToLetter($columnIndex)
     {
