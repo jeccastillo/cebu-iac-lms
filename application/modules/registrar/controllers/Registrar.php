@@ -1813,8 +1813,12 @@ class Registrar extends CI_Controller {
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy',array('intProcessing','desc'));
         $data['scholarship'] = $this->data_fetcher->fetch_single_entry('tb_mas_scholarships',$data['student']['enumScholarship']);
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
-        $prev_sem = $this->data_fetcher->get_prev_sem($sem,$data['student']['intID']);        
-        $data['prev_reg'] = $this->db->get_where('tb_mas_registration',array('intAYID'=>$prev_sem['intID'],'intStudentID'=>$studNum))->first_row();
+        $prev_sem = $this->data_fetcher->get_prev_sem($sem,$data['student']['intID']);      
+        if(isset($prev_sem))
+            $data['prev_reg'] = $this->db->get_where('tb_mas_registration',array('intAYID'=>$prev_sem['intID'],'intStudentID'=>$studNum))->first_row();
+        else
+            $data['prev_reg'] = null;
+        
         $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($data['student']['intID'],$active_sem['intID']);
             $sem = 1;
             
