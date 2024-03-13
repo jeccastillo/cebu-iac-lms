@@ -4698,7 +4698,7 @@ class Excel extends CI_Controller {
                 }
 
             }
-            
+        
             // $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
             $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
             
