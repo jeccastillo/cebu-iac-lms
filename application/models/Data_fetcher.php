@@ -2380,8 +2380,10 @@ class Data_fetcher extends CI_Model {
         {                                         
             $subjects[] = $class['subjectID'];                            
         }
-
-        return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
+        if(isset($registration))
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
+        else
+            return null;
         
     }
 
@@ -3081,8 +3083,6 @@ class Data_fetcher extends CI_Model {
         }
 
         $data['class_type'] = $sem['classType'];               
-        
-        print_r($tuition_year);
         
         // $data['discounted_price'] = $discounted_price;
         // $data['scholarship_discount'] = $scholarship_discount;
