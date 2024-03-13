@@ -2459,9 +2459,6 @@ class Data_fetcher extends CI_Model {
         $level = get_stype($student['level']);
     
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
-        echo $tuition_year_id;
-        print_r($tuition_year);
-        die();
         
         if($discount == 0)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
