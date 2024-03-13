@@ -2807,8 +2807,7 @@ class Data_fetcher extends CI_Model {
             }
         }
 
-        print_r($tuition_year);
-        die();
+        
         
         $discount_grand_total = 0;
         $discount_installment_grand_total = 0;
@@ -3083,7 +3082,8 @@ class Data_fetcher extends CI_Model {
 
         $data['class_type'] = $sem['classType'];               
         
-        
+        print_r($tuition_year);
+        die();
         // $data['discounted_price'] = $discounted_price;
         // $data['scholarship_discount'] = $scholarship_discount;
         
