@@ -2380,7 +2380,7 @@ class Data_fetcher extends CI_Model {
         {                                         
             $subjects[] = $class['subjectID'];                            
         }
-                
+
         return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
         
     }
@@ -2508,7 +2508,8 @@ class Data_fetcher extends CI_Model {
 
 
         // $discount = $this->db->where('intID',$student['enumDiscount'])->get('tb_mas_scholarships')->row();
-        
+        print_r($tuition_year);
+        die();
 
         $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
