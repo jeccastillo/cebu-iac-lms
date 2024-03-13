@@ -4830,10 +4830,10 @@ class Excel extends CI_Controller {
                 }
 
                 $last_index = 35;
-                if(count($payments > 0)){
+                if(count($payments) > 0){
                     $last_index = 34 + (count($payments) - 1 * 3) + 1;
                 }
-                
+
                 $balance_after_payment = '=AF' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
                 $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
                                     '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
