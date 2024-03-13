@@ -4688,12 +4688,12 @@ class Excel extends CI_Controller {
             if($ledger){
                 if(strpos($ledger->name, 'APPLIED TO') !== false){
                     $applied_from[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_from[1] = $ledger->remarks;
-                    $applied_from[2] = $ledger->amount;
+                    $applied_from[1] = $ledger->name;
+                    $applied_from[2] = $ledger->amount; 
                 }
                 if(strpos($ledger->name, 'APPLIED FROM') !== false){
                     $applied_to[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_to[1] = $ledger->remarks;
+                    $applied_to[1] = $ledger->name;
                     $applied_to[2] = $ledger->amount;
                 }
 
