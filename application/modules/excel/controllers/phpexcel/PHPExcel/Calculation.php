@@ -3345,9 +3345,8 @@ class PHPExcel_Calculation
                     //    Should only be applied to the actual cell column, not the worksheet name
 
                     //    If the last entry on the stack was a : operator, then we have a cell range reference
-                    $testPrevOp = $stack->last(1);                    
-                    echo "val- ".$testPrevOp['value']." -end";
-                    if ($testPrevOp['value'] == ':') {
+                    $testPrevOp = $stack->last(1);                                                            
+                    if (isset($testPrevOp) && $testPrevOp['value'] == ':') {
                         //    If we have a worksheet reference, then we're playing with a 3D reference
                         if ($matches[2] == '') {
                             //    Otherwise, we 'inherit' the worksheet reference from the start cell reference
