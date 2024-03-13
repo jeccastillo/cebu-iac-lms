@@ -4871,8 +4871,6 @@ class Excel extends CI_Controller {
                     }
                 }
 
-                // $objPHPExcel->setActiveSheetIndex(0)->fromArray($cells, null, 'AG');
-
                 $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
 
                 $total_discount = $tuition['scholarship_tuition_fee_rate'] + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] +
@@ -5341,9 +5339,6 @@ class Excel extends CI_Controller {
             ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
             ->get()
             ->result_array();
-            
-            // print_r($subjects);
-            // die();
             
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
