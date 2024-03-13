@@ -2382,8 +2382,10 @@ class Data_fetcher extends CI_Model {
         }
         if(isset($registration))
             return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
-        else
+        else{
+            print_r($registration);
             return null;
+        }
         
     }
 
