@@ -27,12 +27,12 @@ class Data_fetcher extends CI_Model {
 	}
 
     function fetch_single_entry($table,$id,$label = "intID"){
-        return $this->db->where(array($label => $id))->get($table)->first_row();
+        return $this->db->where(array($label => $id))->get($table)->first_row('array');
     }
     
     function getCourseName($id)
     {
-        $course = $this->db->where(array('intProgramID'=>$id))->get('tb_mas_programs')->first_row();
+        $course = $this->db->where(array('intProgramID'=>$id))->get('tb_mas_programs')->first_row('array');
         
         $desc = $course['strProgramDescription'];
             
@@ -44,31 +44,31 @@ class Data_fetcher extends CI_Model {
 
     function getDefaultTuitionYearID()
     {
-        $tuition = $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row();        
+        $tuition = $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row('array');        
         return $tuition['intID'];
     }
     
     function getDefaultTuitionYear()
     {
-        return $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row();        
+        return $this->db->where(array('isDefault'=>1))->get('tb_mas_tuition_year')->first_row('array');        
         
     }
 
     function getDefaultTuitionYearIDShs()
     {
-        $tuition = $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row();        
+        $tuition = $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row('array');        
         return $tuition['intID'];
     }
     
     function getDefaultTuitionYearShs()
     {
-        return $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row();        
+        return $this->db->where(array('isDefaultShs'=>1))->get('tb_mas_tuition_year')->first_row('array');        
         
     }
     
     function getCourseCode($id)
     {
-        $course = $this->db->where(array('intProgramID'=>$id))->get('tb_mas_programs')->first_row();
+        $course = $this->db->where(array('intProgramID'=>$id))->get('tb_mas_programs')->first_row('array');
         
         //$desc = $course['strProgramDescription'];
         $courseCode = $course['strProgramCode'];
@@ -82,7 +82,7 @@ class Data_fetcher extends CI_Model {
     
     function getGeneralDesc($table,$id,$key,$field)
     {
-        $item = $this->db->where(array($key=>$id))->get($table)->first_row();
+        $item = $this->db->where(array($key=>$id))->get($table)->first_row('array');
         $desc = $item[$field];
         return $desc;
     }
@@ -166,7 +166,7 @@ class Data_fetcher extends CI_Model {
         ))
         ->order_by('blockSection','desc')
         ->get('tb_mas_users')
-        ->first_row();
+        ->first_row('array');
 
         if($res)
             return $this->db
@@ -840,7 +840,7 @@ class Data_fetcher extends CI_Model {
     function get_prev_sem($sem,$id)
     {
         
-        $active = $this->db->get_where('tb_mas_sy',array('intID'=>$sem))->first_row();
+        $active = $this->db->get_where('tb_mas_sy',array('intID'=>$sem))->first_row('array');
         
         if($active['enumSem'] != "1st")
         {
@@ -863,7 +863,7 @@ class Data_fetcher extends CI_Model {
                 ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
                 ->where(array('intStudentID'=>$id,'enumSem'=>$sem,'strYearStart'=>$yearStart,'strYearEnd'=>$yearEnd,'term_student_type'=>$active['term_student_type']))
                 ->get('tb_mas_registration')
-                ->first_row();
+                ->first_row('array');
         
         
     }
@@ -989,7 +989,7 @@ class Data_fetcher extends CI_Model {
 
     function get_classlist_remaining_slots($classlist_id){
 
-        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$classlist_id))->first_row();
+        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$classlist_id))->first_row('array');
         $slots = $this->db
                 ->select('tb_mas_classlist_student.intCSID')                                
                 ->from('tb_mas_classlist_student')
@@ -1523,7 +1523,7 @@ class Data_fetcher extends CI_Model {
                      ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_users.intCurriculumID','left')
                      ->where(array('tb_mas_users.'.$field => $id))
                      ->get()
-                     ->first_row();
+                     ->first_row('array');
 
                      
                      if($ret){
@@ -2187,7 +2187,7 @@ class Data_fetcher extends CI_Model {
                     ->where(array('intStudentID'=>$id,'intAYID'=>$sem))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
-                    ->first_row();
+                    ->first_row('array');
     }
     
     function getRegistrationData($sem)
@@ -2259,7 +2259,7 @@ class Data_fetcher extends CI_Model {
         ))
         ->order_by('strStudentNumber','desc')
         ->get('tb_mas_users')        
-        ->first_row();
+        ->first_row('array');
 
         if($res)
             return $res['strStudentNumber'];
@@ -2280,7 +2280,7 @@ class Data_fetcher extends CI_Model {
         ))
         ->order_by('strStudentNumber','desc')
         ->get('tb_mas_users')        
-        ->first_row();
+        ->first_row('array');
 
         if($res)
             return $res['strStudentNumber'];
@@ -2296,7 +2296,7 @@ class Data_fetcher extends CI_Model {
         ))
         ->order_by('strStudentNumber','desc')
         ->get('tb_mas_users')        
-        ->first_row();
+        ->first_row('array');
 
         if($res)
             return $res['strStudentNumber'];
@@ -2401,7 +2401,7 @@ class Data_fetcher extends CI_Model {
         //Checks if subject is NSTP nstp fee is different from normal fee                                
         if($class['isNSTP']){
             $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-            ->get('tb_mas_tuition_year_misc')->first_row();
+            ->get('tb_mas_tuition_year_misc')->first_row('array');
             $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
             $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
@@ -2411,14 +2411,14 @@ class Data_fetcher extends CI_Model {
         
         if($class['strLabClassification'] != "none"){
             $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
-                                        ->get('tb_mas_tuition_year_lab_fee')->first_row();
+                                        ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
             $tuition += getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
             
         }
         
         if($class['isThesisSubject']){                
             $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
-            ->get('tb_mas_tuition_year_misc')->first_row();
+            ->get('tb_mas_tuition_year_misc')->first_row('array');
             $tuition += getExtraFee($thesis, $class_type, 'misc');                                
         }
         
@@ -2455,10 +2455,10 @@ class Data_fetcher extends CI_Model {
         $scholarship_array = [];
         $late_enrollment_fee = 0;
         
-        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row(); 
+        $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
     
-        $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row();
+        $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         
         if($discount == 0)
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
@@ -2536,7 +2536,7 @@ class Data_fetcher extends CI_Model {
             $is_foreign = true;
             if($sem['pay_student_visa'] != 0){
                     $student_visa = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'svf'))
-                    ->get('tb_mas_tuition_year_misc')->first_row();
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
                     if($student_visa){
                         $foreign_fee_list['Student Visa'] = getExtraFee($student_visa, $class_type, 'misc');
                         $total_foreign += $foreign_fee_list['Student Visa'];
@@ -2544,7 +2544,7 @@ class Data_fetcher extends CI_Model {
             }
 
             $international_student_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'isf'))
-                    ->get('tb_mas_tuition_year_misc')->first_row();
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
             if($international_student_fee){
                 $foreign_fee_list['International Student Fee'] = getExtraFee($international_student_fee, $class_type, 'misc');
                 $total_foreign += $foreign_fee_list['International Student Fee'];
@@ -2552,7 +2552,7 @@ class Data_fetcher extends CI_Model {
         }
 
         $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
-            ->get('tb_mas_tuition_year_program')->first_row();
+            ->get('tb_mas_tuition_year_program')->first_row('array');
         
         if(!$unit_rate)
             $unit_fee = getUnitPrice($tuition_year,$class_type);        
@@ -2589,7 +2589,7 @@ class Data_fetcher extends CI_Model {
                 //Checks if subject is NSTP nstp fee is different from normal fee                                
                 if($class['isNSTP']){
                     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
-                    ->get('tb_mas_tuition_year_misc')->first_row();
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
                     $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
                     $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
@@ -2599,14 +2599,14 @@ class Data_fetcher extends CI_Model {
                 
                 if($class['strLabClassification'] != "none"){
                     $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $class['strLabClassification']))
-                                                ->get('tb_mas_tuition_year_lab_fee')->first_row();
+                                                ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
                     $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
                     $total_lab += $lab_list[$class['strCode']];
                 }
                 
                 if($class['isThesisSubject']){                
                     $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
-                    ->get('tb_mas_tuition_year_misc')->first_row();
+                    ->get('tb_mas_tuition_year_misc')->first_row('array');
                     $thesis_fee = getExtraFee($thesis, $class_type, 'misc');                                
                 }
 
@@ -2619,7 +2619,7 @@ class Data_fetcher extends CI_Model {
         else{
             //$tuition = $unit_fee;
             $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
-            ->get('tb_mas_tuition_year_track')->first_row();
+            ->get('tb_mas_tuition_year_track')->first_row('array');
             
             if($shs_rate)
                 switch($class_type){
@@ -3289,7 +3289,7 @@ class Data_fetcher extends CI_Model {
     function getClassListStudents($id,$sem = 0)
     {
         $faculty_id = $this->session->userdata("intID");
-        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row();        
+        $classlist = $this->db->get_where('tb_mas_classlist',array('intID'=>$id))->first_row('array');        
         
         if($sem == 0){
             $where["intClassListID"] = $id;
@@ -3496,7 +3496,7 @@ class Data_fetcher extends CI_Model {
                 $c['adjustments'] = $this->db->where(array('classlist_student_id'=> $c['subjectID'],'syid'=>$classlist,'student_id'=>$id))                                          
                                           ->order_by('date','desc')
                                           ->get('tb_mas_classlist_student_adjustment_log')
-                                          ->first_row();
+                                          ->first_row('array');
 
                 $schedule = $this->getScheduleByCode($c['intClassListID']);        
                 $sched_day = '';
@@ -3692,7 +3692,7 @@ class Data_fetcher extends CI_Model {
         ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
         ->where($where)
         ->get()
-        ->first_row(); 
+        ->first_row('array'); 
 
         
             $classlist['slots_taken_enrolled'] = $this->db
