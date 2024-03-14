@@ -2161,6 +2161,47 @@ class Registrar extends CI_Controller {
         //print_r($this->data['classlist']);
             
     }
+
+    public function ched_report($sem)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+
+        $students = $this->db->select('tb_mas_users.intID, tb_mas_users.intProgramID, tb_mas_users.strStudentNumber, tb_mas_users.strLastname, tb_mas_users.strFirstname, tb_mas_users.strMiddlename, tb_mas_users.enumGender, tb_mas_users.intStudentYear')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $student){
+            $student_data = array();
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+            if($subjects){
+                $student['course'] = $course['strProgramCode'];
+                $student['subjects'] = $subjects;
+                $student['student'] = $student['intID'];
+                $students_array[] = $student;
+            }
+        }
+
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
     
     
     public function faculty_logged_in()
