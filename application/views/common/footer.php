@@ -696,14 +696,14 @@ $(document).ready(function() {
     $("#ched_report_excel").click(function(e){
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/ched_report/' + $("#sem").val() + '/' + campus + '/' + $("#report_date").val();
+        var url = base_url + 'excel/ched_report/' + $("#sem").val() + '/' + campus;
         window.open(url, '_blank');
     })
 
     $("#ched_report_pdf").click(function(e){
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'pdf/ched_report/' + $("#sem").val() + '/' + campus + '/' + $("#report_date").val();
+        var url = base_url + 'pdf/ched_report/' + $("#sem").val() + '/' + campus;
         window.open(url, '_blank');
     })
 });
