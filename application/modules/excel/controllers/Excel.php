@@ -5163,9 +5163,16 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function ched_export($sem, $campus)
+    public function ched_report($sem = 0, $campus)
     {
-        $students = $this->db->select('tb_mas_users.intID')
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->where(array('tb_mas_registration.intAYID'=>$sem))
@@ -5184,49 +5191,59 @@ class Excel extends CI_Controller {
       
         $title = 'Ched Report';
 
-        $i = 4;
-        $count = 1;
+        $i = 8;
 
         foreach($students as $student){
-            
-            $subjects = $this->db->select('tb_mas_classlist_student.*')
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
             ->from('tb_mas_classlist_student')
             ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
             ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
             ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
             ->get()
             ->result_array();
-            
-            // Add some data
-            $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, $count)
-                ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
-                ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
-                ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                ->setCellValue('F'.$i, $course['strProgramCode'])
-                ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
-                ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
-                ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
-                ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                ->setCellValue('M'.$i, $reg['paymentType'] == 'partial' && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
-                ->setCellValue('N'.$i, $reg['paymentType'] == 'partial' && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
-                ->setCellValue('O'.$i, $reg['paymentType'] == 'partial' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                ->setCellValue('P'.$i, $reg['paymentType'] == 'partial' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
-                ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                ->setCellValue('S'.$i, '=SUM(G' . $i . ':R' . $i . ')');
 
+            if($subjects){
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('B'.$i, strtoupper($student['strLastname']))
+                    ->setCellValue('C'.$i, strtoupper($student['strFirstname']))
+                    ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
+                    ->setCellValue('E'.$i, strtoupper($student['enumGender']))
+                    ->setCellValue('F'.$i, $course['strProgramCode'])
+                    ->setCellValue('G'.$i, strtoupper($student['intStudentYear']));
+
+                foreach($subjects as $subject){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('H'.$i, strtoupper($subject['strCode']))
+                        ->setCellValue('I'.$i, strtoupper($subject['strDescription']))
+                        ->setCellValue('J'.$i, strtoupper($subject['strUnits']))
+                        ->setCellValue('K'.$i, strtoupper($subject['floatMidtermGrade']))
+                        ->setCellValue('L'.$i, strtoupper($subject['floatFinalGrade']));
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':L' . $i)->applyFromArray(
+                    array(
+                        'borders' => array(
+                            'top' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array('rgb' => '000000'),
+                            ),
+                        ),
+                    )
+                );
+            }
         }
-
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY ' . ucfirst(strtolower($campus))  . ' )')
-                    ->setCellValue('A3', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park,Apas, Cebu City' : '7434 Yakal Street Brgy. San Antonio, Makati City')
+                    ->setCellValue('A3', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : '7434 Yakal Street Brgy. San Antonio, Makati City')
                     ->setCellValue('B5', 'CHED FORM XIX FOR')
-                    ->setCellValue('I5', 'SCHOOL YEAR')
+                    ->setCellValue('C5', $sy->enumSem . ' ' . $this->data["term_type"])
+                    ->setCellValue('H5', 'SCHOOL YEAR')
+                    ->setCellValue('I5', $sy->strYearStart . '-' . $sy->strYearEnd)
                     ->setCellValue('A7', 'STUDENT NO.')
                     ->setCellValue('B7', 'LAST NAME')
                     ->setCellValue('C7', 'FIRST NAME')
@@ -5235,70 +5252,77 @@ class Excel extends CI_Controller {
                     ->setCellValue('F7', 'COURSE')
                     ->setCellValue('G7', 'YEAR')
                     ->setCellValue('H7', 'SUBJECTS')
-                    ->setCellValue('I7', 'SUBJECT  DESCRIPTIONS')
+                    ->setCellValue('I7', 'SUBJECT DESCRIPTIONS')
                     ->setCellValue('J7', 'UNIT')
                     ->setCellValue('K7', 'MG')
                     ->setCellValue('L7', 'FG');
                     
+        $objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setUnderline(true);
+        $objPHPExcel->getActiveSheet()->getStyle('I5')->getFont()->setUnderline(true);
         $objPHPExcel->getActiveSheet()->getStyle('A2:A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('G7:G' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('J7:L' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A7:H7')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 15,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I5')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 13,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
                     'color' => array('rgb' => '000000'),
                     'size'  => 12,
+                )
+            )
+        );
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
                 ),
-                // 'borders' => array(
-                //     'top' => array(
-                //         'style' => PHPExcel_Style_Border::BORDER_THIN,
-                //         'color' => array('rgb' => '000000'),
-                //     ),
-                //     'bottom' => array(
-                //         'style' => PHPExcel_Style_Border::BORDER_THIN,
-                //         'color' => array('rgb' => '000000'),
-                //     )
-                // ),
             )
         );
 
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A2:L2');
         $sheet->mergeCells('A3:L3');
-        $sheet->mergeCells('B5:C5');
-        $sheet->mergeCells('H5:I5');
+        // $sheet->mergeCells('B5:C5');
+        // $sheet->mergeCells('H5:I5');
 
         $objPHPExcel->getActiveSheet()->setTitle('AR Report');
 
@@ -5312,7 +5336,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="AR Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="Ched Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
