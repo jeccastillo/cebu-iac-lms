@@ -8,15 +8,10 @@
             
         </h1>                          
         <ol class="breadcrumb">
-            <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
-            <li class="active">View All Student</li> -->
         </ol>
     </section>
     <div class="content">
         <div class="box">
-            <!-- <div class="box-header with-border"> -->
-                <!-- <h3 class="box-title">Search</h3>               -->
-            <!-- </div> -->
 
             <div class="box-body" style="display: block;">
                 <div class="row">                                            
@@ -29,7 +24,7 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="report_date">As Of:</label>
+                        <label for="report_date">As Of Date:</label>
                         <input required type="date" id="report_date" name="report_date" class="form-control" />                     
                     </div>
                 </div>
