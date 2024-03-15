@@ -66,7 +66,7 @@
                     <td style="text-align:center"><?php echo strtoupper($student['subjects'][$index]['floatMidtermGrade']) ?> </td>
                     <td style="text-align:center"><?php echo strtoupper($student['subjects'][$index]['floatFinalGrade']) ?> </td>
                 </tr>
-            <?  endfor;
+            <?php  endfor;
                 endif; 
             ?>
     <?php endforeach; ?>
