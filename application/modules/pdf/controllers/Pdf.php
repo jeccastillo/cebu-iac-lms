@@ -2474,7 +2474,7 @@ class Pdf extends CI_Controller {
         //             if(count($per_page) == $chunks_count)
         //                 $this->data['last_page'] = true;
         
-                    $html = $this->load->view("ched_report",$this->data,true);
+                    $html = $this->load->view("ched_promotional_report",$this->data,true);
                     $pdf->writeHTML($html, true, false, true, false, '');            
                     // $this->data['count_start'] += 2;                    
                     // $chunks_count++;
@@ -2484,7 +2484,7 @@ class Pdf extends CI_Controller {
          
          
           
-         $pdf->Output("ched_report.pdf", 'I');
+         $pdf->Output("ched_promotional_report.pdf", 'I');
 
 
 
