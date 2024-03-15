@@ -9,10 +9,10 @@
                 </a>
             </small>
             <small>
-            <button class="btn btn-app" id="ched_report_pdf" target="_blank" href="#" ><i class="fa fa-book"></i>CHED Print PDF</button>
+            <button class="btn btn-app" id="ched_report_pdf" target="_blank" href="#" ><i class="fa fa-book"></i>Print PDF</button>
             </small>
             <small>
-            <button class="btn btn-app" id="ched_report_excel" target="_blank" href="#" ><i class="fa fa-book"></i>CHED Download Excel</button>
+            <button class="btn btn-app" id="ched_report_excel" target="_blank" href="#" ><i class="fa fa-book"></i>Download Excel</button>
             </small>
 
         </h1>
