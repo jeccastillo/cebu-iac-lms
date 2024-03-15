@@ -6,7 +6,7 @@
     </tr>         -->
     <tr>            
         <td colspan = "3" width="100%" style="text-align: center; line-height:1; font-weight: bold;">             
-            <font style="font-family:Calibri Light; font-size: 13px;">INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY <?php ucfirst(strtolower($campus)) ?>)</font><br />
+            <font style="font-family:Calibri Light; font-size: 13px;">INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY <?php echo ucfirst(strtolower($campus)); ?>)</font><br />
             <?php if($campus == 'Cebu'):?>
                 <font style="font-family:Calibri Light; font-size: 11px;">5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City</font><br />
             <?php else: ?>
