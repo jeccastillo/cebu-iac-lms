@@ -193,6 +193,25 @@
 
         <!-- small box -->
       </div>
+      <div class="col-md-4 col-sm-8 col-xs-12">
+        <!-- small box -->
+        <div class="small-box bg-blue">
+          <div class="inner">
+            <h3>Promotional Report</h3>
+
+            <p>Promotional Report List</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-users"></i>
+          </div>
+          <a href="<?php echo base_url(); ?>registrar/promotional_report"
+            class="small-box-footer">
+            View <i class="fa fa-arrow-circle-right"></i>
+          </a>
+        </div>
+
+        <!-- small box -->
+      </div>
 
 
     </div>
