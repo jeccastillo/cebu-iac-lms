@@ -689,7 +689,25 @@ $(document).ready(function() {
     $("#export_student_account_report").click(function(e){
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/student_account_report/' + $("#sem").val() + '/' + campus + '/' + $("#report_date").val();
+        if($("#report_date").val() == ""){
+            alert("Please select report date");
+        }else{
+            var url = base_url + 'excel/student_account_report/' + $("#sem").val() + '/' + campus + '/' + $("#report_date").val();
+            window.open(url, '_blank');
+        }
+    })
+
+    $("#ched_report_excel").click(function(e){
+        var campus = "<?php echo $campus;?>";
+        var base_url = "<?php echo base_url(); ?>";
+        var url = base_url + 'excel/ched_report/' + $("#select-term-leads").val() + '/' + campus;
+        window.open(url, '_blank');
+    })
+
+    $("#ched_report_pdf").click(function(e){
+        var campus = "<?php echo $campus;?>";
+        var base_url = "<?php echo base_url(); ?>";
+        var url = base_url + 'pdf/ched_report/' + $("#select-term-leads").val() + '/' + campus;
         window.open(url, '_blank');
     })
 });

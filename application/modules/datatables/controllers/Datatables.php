@@ -798,7 +798,7 @@ class Datatables extends CI_Controller {
                     if(strpos($aColumns[$i],".") !== false)
                     {
                         $st = explode(".",$aColumns[$i]);
-                        $row[] = $aRow->$st[1];
+                        $row[] = $aRow->{$st[1]};
                     }
                     else
                         $row[] = $aRow->{$aColumns[$i]};

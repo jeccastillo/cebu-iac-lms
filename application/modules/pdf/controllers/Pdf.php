@@ -2360,6 +2360,136 @@ class Pdf extends CI_Controller {
             $pdf->Output("request-form.pdf", 'I');
         }
     }
+
+    public function ched_report($sem = 0, $campus)
+    {                
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+
+        $students = $this->db->select('tb_mas_users.intID, tb_mas_users.intProgramID, tb_mas_users.strStudentNumber, tb_mas_users.strLastname, tb_mas_users.strFirstname, tb_mas_users.strMiddlename, tb_mas_users.enumGender, tb_mas_users.intStudentYear')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $student){
+            $student_data = array();
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+            if($subjects){
+                $student['course'] = $course['strProgramCode'];
+                $student['subjects'] = $subjects;
+                $student['student'] = $student;
+                $students_array[] = $student;
+            }
+        }
+
+        $this->data['students'] = $students_array;
+        $this->data['sy'] = $sy;
+        $this->data['campus'] = $campus;
+                
+
+        //print_r($this->data['spouse']);
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // create new PDF document
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Ched Enrollment");
+        
+
+        // set margins
+        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(0.5, .25, 0.5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$pdf->SetAutoPageBreak(TRUE, 6);
+
+    //font setting
+        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
+        // set default font subsetting mode
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+
+        // if($course == 0)
+        //     $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        // else
+        //     $programs = $this->data_fetcher->fetch_table('tb_mas_programs',null,null,array('intProgramID'=>$course));
+        
+
+
+        // foreach($programs as $program){
+        //     $st = [];
+        //     $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
+        //     if(!empty($students)){
+                
+        //         $this->data['year_level_total'] = count($students);
+        //         $male = 0;
+        //         $female = 0;
+        //         $this->data['last_page'] = false;
+        //         foreach($students as $student)
+        //         {
+        //             $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
+        //             $student['classes'] = $cl;                
+        //             $st[] = $student;
+        //             if($student['enumGender'] == "male")
+        //                 $male++;
+        //             else
+        //                 $female++;
+        //         }
+
+        //         $this->data['male'] = $male;
+        //         $this->data['female'] = $female;
+
+        //         $per_page = array_chunk($st, 2);
+        //         $this->data['count_start'] = 1;
+        //         $chunks_count = 1;
+        //         foreach($per_page as $chunk){
+        //             $this->data['students'] = $chunk;                
+                    $pdf->AddPage();
+        //             if(count($per_page) == $chunks_count)
+        //                 $this->data['last_page'] = true;
+        
+                    $html = $this->load->view("ched_report",$this->data,true);
+                    $pdf->writeHTML($html, true, false, true, false, '');            
+                    // $this->data['count_start'] += 2;                    
+                    // $chunks_count++;
+            //     }
+            // }
+        // }
+         
+         
+          
+         $pdf->Output("ched_promotional_report.pdf", 'I');
+
+
+
+    }
     
     public function is_admin()
     {

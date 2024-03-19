@@ -4624,11 +4624,10 @@ class Excel extends CI_Controller {
                             $payments[] = $date;
 
                         }else{
-                            if($payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
+                            if(isset($payment['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
                                 $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
                                 $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
                                 $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['total_amount_due'], 2, '.', '');
-                                
                             }else{
                                 $flag = $same_month_year = false;
                                 $data = $date = array();
@@ -4674,45 +4673,40 @@ class Excel extends CI_Controller {
                             }
                         }
                     }
-                    $students[] = $payment_detail['student_number'];
+                    // $students[] = $payment_detail['student_number'];
                 }
             }
         }
+        $studentsEnrolled = false;
+        $last_index = 32;
 
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = array();
-            
 
-            $ledger = $this->db->get_where(array('syid' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at <=' => $report_date . ' 11:59:59'))->first_row();
+            $ledger = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 11:59:59'))->first_row();
             if($ledger){
                 if(strpos($ledger->name, 'APPLIED TO') !== false){
                     $applied_from[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_from[1] = $ledger->remarks;
-                    $applied_from[2] = $ledger->amount;
+                    $applied_from[1] = $ledger->name;
+                    $applied_from[2] = $ledger->amount; 
                 }
                 if(strpos($ledger->name, 'APPLIED FROM') !== false){
                     $applied_to[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_to[1] = $ledger->remarks;
+                    $applied_to[1] = $ledger->name;
                     $applied_to[2] = $ledger->amount;
                 }
 
             }
-            //     print("true");x
-            // }else{
-            //     print("false");
-            // }
-            // print_r($query);
-            // die();
-
-            
+        
             // $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
             $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
             
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
-            $tuitionFee = $tuition['tuition'];
+            // $tuitionFee = $tuition['tuition'];
 
             if($reg){
+                $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = 0;
                 if($reg['paymentType'] == 'full'){
@@ -4731,17 +4725,10 @@ class Excel extends CI_Controller {
                     }
                 }
 
-                // $objPHPExcel->setActiveSheetIndex(0)->fromArray($cells, null, 'AG');
-
                 $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
 
                 $total_discount = $tuition['scholarship_tuition_fee_rate'] + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] +
                                 $tuition['scholarship_misc_fee_rate'] + $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
-
-                // print($date_enrolled . '\n');
-                // print($sy->ar_report_date_generation . '\n');
-                // print($total_discount);
-                // die();
                 
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -4781,48 +4768,72 @@ class Excel extends CI_Controller {
 
                 $total_amount = '=' . $this->columnIndexToLetter(34) . '' . $i;
 
-                if($payments){
-                    foreach($payments as $index => $payment){
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), 1)
+                if(count($payments) > 0){
+                    foreach($payments as $index_payment => $payment){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index_payment * 3), 1)
                             ->setValue($payment['month_name'] . ' ' . $payment['year']);
     
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index * 3), $i)
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(32 + ($index_payment * 3), $i)
                             ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
                         
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index * 3), $i)
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(33 + ($index_payment * 3), $i)
                             ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
                         
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index * 3), $i)
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index_payment * 3), $i)
                             ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
                             
-                        $column_letter = $this->columnIndexToLetter(34 + ($index * 3));
+                        $column_letter = $this->columnIndexToLetter(34 + ($index_payment * 3));
                         
                         $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue($this->columnIndexToLetter(32 + ($index * 3)) . '2', 'DATE')
-                            ->setCellValue($this->columnIndexToLetter(33 + ($index * 3)) . '2', 'OR NUMBER')
-                            ->setCellValue($this->columnIndexToLetter(34 + ($index * 3)) . '2', 'AMOUNT');
+                            ->setCellValue($this->columnIndexToLetter(32 + ($index_payment * 3)) . '2', 'DATE')
+                            ->setCellValue($this->columnIndexToLetter(33 + ($index_payment * 3)) . '2', 'OR NUMBER')
+                            ->setCellValue($this->columnIndexToLetter(34 + ($index_payment * 3)) . '2', 'AMOUNT');
                         
                         $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
                         
-                        if($index > 0){
+                        if($index_payment > 0){
                             $total_amount .= '+' . $column_letter . '' . $i;
                         }
 
                         $sheet = $objPHPExcel->getActiveSheet();
-                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
-                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
-                        $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
-                        $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index_payment * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index_payment * 3)) . '1');
+                        $sheet->mergeCells($this->columnIndexToLetter(32 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index_payment * 3)) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(33 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index_payment * 3)) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(34 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index_payment * 3)) . '3');
     
-                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32 + ($index_payment * 3)) . '4:' . $this->columnIndexToLetter(33 + ($index_payment * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                         
-                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index * 3)))->setWidth(20);
-                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index * 3)))->setWidth(15);
-                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index * 3)))->setWidth(15);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32 + ($index_payment * 3)))->setWidth(20);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33 + ($index_payment * 3)))->setWidth(15);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34 + ($index_payment * 3)))->setWidth(15);
                     }
+                }else{
+                    $column_letter = $this->columnIndexToLetter(34);
+                        
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($this->columnIndexToLetter(32) . '2', 'DATE')
+                        ->setCellValue($this->columnIndexToLetter(33) . '2', 'OR NUMBER')
+                        ->setCellValue($this->columnIndexToLetter(34) . '2', 'AMOUNT');
+                    
+                    $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                    
+                    $sheet = $objPHPExcel->getActiveSheet();
+                    $sheet->mergeCells($this->columnIndexToLetter(32) . '1:' . $this->columnIndexToLetter(34) . '1');
+                    $sheet->mergeCells($this->columnIndexToLetter(32) . '2:' . $this->columnIndexToLetter(32) . '3');
+                    $sheet->mergeCells($this->columnIndexToLetter(33) . '2:' . $this->columnIndexToLetter(33) . '3');
+                    $sheet->mergeCells($this->columnIndexToLetter(34) . '2:' . $this->columnIndexToLetter(34) . '3');
+                    $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(32) . '4:' . $this->columnIndexToLetter(33) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(32))->setWidth(20);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(33))->setWidth(15);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(34))->setWidth(15);
                 }
 
-                $last_index = 34 + ($index * 3) + 1;
+                $last_index = 35;
+                if(count($payments) > 0){
+                    $last_index = 32 + (count($payments) * 3);
+                }
+
                 $balance_after_payment = '=AF' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
                 $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
                                     '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
@@ -4843,8 +4854,8 @@ class Excel extends CI_Controller {
                 }
 
                 if($date_enrolled > $sy->ar_report_date_generation){
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($date_enrolled);
-                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($tuition['scholar_type']);
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
                 }
 
@@ -4857,6 +4868,8 @@ class Excel extends CI_Controller {
             }
         }
 
+        // print_r($payments);
+        // die();
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NO.')
@@ -4927,61 +4940,62 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) .  '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, 'TOTAL')
-                    ->setCellValue('G'.$i, '=SUM(G4:G' . ($i-1) . ')')
-                    ->setCellValue('H'.$i, '=SUM(H4:H' . ($i-1) . ')')
-                    ->setCellValue('I'.$i, '=SUM(I4:I' . ($i-1) . ')')
-                    ->setCellValue('J'.$i, '=SUM(J4:J' . ($i-1) . ')')
-                    ->setCellValue('K'.$i, '=SUM(K4:K' . ($i-1) . ')')
-                    ->setCellValue('L'.$i, '=SUM(L4:L' . ($i-1) . ')')
-                    ->setCellValue('M'.$i, '=SUM(M4:M' . ($i-1) . ')')
-                    ->setCellValue('N'.$i, '=SUM(N4:N' . ($i-1) . ')')
-                    ->setCellValue('O'.$i, '=SUM(O4:O' . ($i-1) . ')')
-                    ->setCellValue('P'.$i, '=SUM(P4:P' . ($i-1) . ')')
-                    ->setCellValue('Q'.$i, '=SUM(Q4:Q' . ($i-1) . ')')
-                    ->setCellValue('R'.$i, '=SUM(R4:R' . ($i-1) . ')')
-                    ->setCellValue('S'.$i, '=SUM(S4:S' . ($i-1) . ')')
-                    ->setCellValue('U'.$i, '=SUM(U4:U' . ($i-1) . ')')
-                    ->setCellValue('V'.$i, '=SUM(V4:V' . ($i-1) . ')')
-                    ->setCellValue('W'.$i, '=SUM(W4:W' . ($i-1) . ')')
-                    ->setCellValue('X'.$i, '=SUM(X4:X' . ($i-1) . ')')
-                    ->setCellValue('Y'.$i, '=SUM(Y4:Y' . ($i-1) . ')')
-                    ->setCellValue('Z'.$i, '=SUM(Z4:Z' . ($i-1) . ')')
-                    ->setCellValue('AA'.$i, '=SUM(AA4:AA' . ($i-1) . ')')
-                    ->setCellValue('AB'.$i, '=SUM(AB4:AB' . ($i-1) . ')')
-                    ->setCellValue('AC'.$i, '=SUM(AC4:AC' . ($i-1) . ')')
-                    ->setCellValue('AD'.$i, '=SUM(AD4:AD' . ($i-1) . ')')
-                    ->setCellValue('AE'.$i, '=SUM(AE4:AE' . ($i-1) . ')')
-                    ->setCellValue('AF'.$i, '=SUM(AF4:AF' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index) .'4:' . $this->columnIndexToLetter($last_index) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 1) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 1) .'4:' . $this->columnIndexToLetter($last_index + 1) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 4) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 4) .'4:' . $this->columnIndexToLetter($last_index + 4) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 7) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 7) .'4:' . $this->columnIndexToLetter($last_index + 7) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 10) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 10) .'4:' . $this->columnIndexToLetter($last_index + 10) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 13) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 13) .'4:' . $this->columnIndexToLetter($last_index + 13) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 16) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 16) .'4:' . $this->columnIndexToLetter($last_index + 16) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 17) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 17) .'4:' . $this->columnIndexToLetter($last_index + 17) . '' . ($i-1) . ')')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 18) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 18) .'4:' . $this->columnIndexToLetter($last_index + 18) . '' . ($i-1) . ')');  
-        
-        for($index = $last_index - 1; $index >= 34; $index-=3){
-            $objPHPExcel->setActiveSheetIndex(0)   
-                ->setCellValue($this->columnIndexToLetter($index) . '' . $i, '=SUM('. $this->columnIndexToLetter($index) .'4:' . $this->columnIndexToLetter($index) . '' . ($i-1) . ')');
-
-            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        if($studentsEnrolled){
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i, 'TOTAL')
+                        ->setCellValue('G'.$i, '=SUM(G4:G' . ($i-1) . ')')
+                        ->setCellValue('H'.$i, '=SUM(H4:H' . ($i-1) . ')')
+                        ->setCellValue('I'.$i, '=SUM(I4:I' . ($i-1) . ')')
+                        ->setCellValue('J'.$i, '=SUM(J4:J' . ($i-1) . ')')
+                        ->setCellValue('K'.$i, '=SUM(K4:K' . ($i-1) . ')')
+                        ->setCellValue('L'.$i, '=SUM(L4:L' . ($i-1) . ')')
+                        ->setCellValue('M'.$i, '=SUM(M4:M' . ($i-1) . ')')
+                        ->setCellValue('N'.$i, '=SUM(N4:N' . ($i-1) . ')')
+                        ->setCellValue('O'.$i, '=SUM(O4:O' . ($i-1) . ')')
+                        ->setCellValue('P'.$i, '=SUM(P4:P' . ($i-1) . ')')
+                        ->setCellValue('Q'.$i, '=SUM(Q4:Q' . ($i-1) . ')')
+                        ->setCellValue('R'.$i, '=SUM(R4:R' . ($i-1) . ')')
+                        ->setCellValue('S'.$i, '=SUM(S4:S' . ($i-1) . ')')
+                        ->setCellValue('U'.$i, '=SUM(U4:U' . ($i-1) . ')')
+                        ->setCellValue('V'.$i, '=SUM(V4:V' . ($i-1) . ')')
+                        ->setCellValue('W'.$i, '=SUM(W4:W' . ($i-1) . ')')
+                        ->setCellValue('X'.$i, '=SUM(X4:X' . ($i-1) . ')')
+                        ->setCellValue('Y'.$i, '=SUM(Y4:Y' . ($i-1) . ')')
+                        ->setCellValue('Z'.$i, '=SUM(Z4:Z' . ($i-1) . ')')
+                        ->setCellValue('AA'.$i, '=SUM(AA4:AA' . ($i-1) . ')')
+                        ->setCellValue('AB'.$i, '=SUM(AB4:AB' . ($i-1) . ')')
+                        ->setCellValue('AC'.$i, '=SUM(AC4:AC' . ($i-1) . ')')
+                        ->setCellValue('AD'.$i, '=SUM(AD4:AD' . ($i-1) . ')')
+                        ->setCellValue('AE'.$i, '=SUM(AE4:AE' . ($i-1) . ')')
+                        ->setCellValue('AF'.$i, '=SUM(AF4:AF' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index) .'4:' . $this->columnIndexToLetter($last_index) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 1) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 1) .'4:' . $this->columnIndexToLetter($last_index + 1) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 4) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 4) .'4:' . $this->columnIndexToLetter($last_index + 4) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 7) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 7) .'4:' . $this->columnIndexToLetter($last_index + 7) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 10) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 10) .'4:' . $this->columnIndexToLetter($last_index + 10) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 13) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 13) .'4:' . $this->columnIndexToLetter($last_index + 13) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 16) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 16) .'4:' . $this->columnIndexToLetter($last_index + 16) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 17) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 17) .'4:' . $this->columnIndexToLetter($last_index + 17) . '' . ($i-1) . ')')
+                        ->setCellValue($this->columnIndexToLetter($last_index + 18) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 18) .'4:' . $this->columnIndexToLetter($last_index + 18) . '' . ($i-1) . ')');  
+            
+            for($index = $last_index - 1; $index >= 34; $index-=3){
+                $objPHPExcel->setActiveSheetIndex(0)   
+                    ->setCellValue($this->columnIndexToLetter($index) . '' . $i, '=SUM('. $this->columnIndexToLetter($index) .'4:' . $this->columnIndexToLetter($index) . '' . ($i-1) . ')');
+    
+                $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            }
+    
+            $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 7) . '4:' . $this->columnIndexToLetter($last_index + 7) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 10) . '4:' . $this->columnIndexToLetter($last_index + 10) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 13) . '4:' . $this->columnIndexToLetter($last_index + 13) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 16) . '4:' . $this->columnIndexToLetter($last_index + 16) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 17) . '4:' . $this->columnIndexToLetter($last_index + 17) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 18) . '4:' . $this->columnIndexToLetter($last_index + 18) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-
-        $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 7) . '4:' . $this->columnIndexToLetter($last_index + 7) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 10) . '4:' . $this->columnIndexToLetter($last_index + 10) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 13) . '4:' . $this->columnIndexToLetter($last_index + 13) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 16) . '4:' . $this->columnIndexToLetter($last_index + 16) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 17) . '4:' . $this->columnIndexToLetter($last_index + 17) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 18) . '4:' . $this->columnIndexToLetter($last_index + 18) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
 
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) . '3')->applyFromArray(
@@ -5109,15 +5123,6 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('AE1:AE3');
         $sheet->mergeCells('AF1:AF3');
 
-        // foreach($payments as $index => $payment){
-
-        //     $sheet = $objPHPExcel->getActiveSheet();
-        //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '1:' . $this->columnIndexToLetter(34 + ($index * 3)) . '1');
-        //     $sheet->mergeCells($this->columnIndexToLetter(32 + ($index * 3)) . '2:' . $this->columnIndexToLetter(32 + ($index * 3)) . '3');
-        //     $sheet->mergeCells($this->columnIndexToLetter(33 + ($index * 3)) . '2:' . $this->columnIndexToLetter(33 + ($index * 3)) . '3');
-        //     $sheet->mergeCells($this->columnIndexToLetter(34 + ($index * 3)) . '2:' . $this->columnIndexToLetter(34 + ($index * 3)) . '3');
-        // }
-
         $sheet->mergeCells($this->columnIndexToLetter($last_index) . '1:' . $this->columnIndexToLetter($last_index) .'3');
         $sheet->mergeCells($this->columnIndexToLetter($last_index + 1) . '1:' . $this->columnIndexToLetter($last_index + 1) . '3');
         $sheet->mergeCells($this->columnIndexToLetter($last_index + 2) . '1:' . $this->columnIndexToLetter($last_index + 16) . '1');
@@ -5142,6 +5147,197 @@ class Excel extends CI_Controller {
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
         header('Content-Disposition: attachment;filename="AR Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function ched_report($sem = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+      
+        $title = 'Ched Report';
+
+        $i = 8;
+
+        foreach($students as $student){
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+            if($subjects){
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('B'.$i, strtoupper($student['strLastname']))
+                    ->setCellValue('C'.$i, strtoupper($student['strFirstname']))
+                    ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
+                    ->setCellValue('E'.$i, strtoupper($student['enumGender']))
+                    ->setCellValue('F'.$i, $course['strProgramCode'])
+                    ->setCellValue('G'.$i, strtoupper($student['intStudentYear']));
+
+                foreach($subjects as $subject){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('H'.$i, strtoupper($subject['strCode']))
+                        ->setCellValue('I'.$i, strtoupper($subject['strDescription']))
+                        ->setCellValue('J'.$i, strtoupper($subject['strUnits']))
+                        ->setCellValue('K'.$i, strtoupper($subject['floatMidtermGrade']))
+                        ->setCellValue('L'.$i, strtoupper($subject['floatFinalGrade']));
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':L' . $i)->applyFromArray(
+                    array(
+                        'borders' => array(
+                            'top' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array('rgb' => '000000'),
+                            ),
+                        ),
+                    )
+                );
+            }
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY ' . ucfirst(strtolower($campus))  . ' )')
+                    ->setCellValue('A3', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : '7434 Yakal Street Brgy. San Antonio, Makati City')
+                    ->setCellValue('B5', 'CHED FORM XIX FOR')
+                    ->setCellValue('C5', $sy->enumSem . ' ' . $this->data["term_type"])
+                    ->setCellValue('H5', 'SCHOOL YEAR')
+                    ->setCellValue('I5', $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A7', 'STUDENT NO.')
+                    ->setCellValue('B7', 'LAST NAME')
+                    ->setCellValue('C7', 'FIRST NAME')
+                    ->setCellValue('D7', 'MIDDLE NAME')
+                    ->setCellValue('E7', 'GENDER')
+                    ->setCellValue('F7', 'COURSE')
+                    ->setCellValue('G7', 'YEAR')
+                    ->setCellValue('H7', 'SUBJECTS')
+                    ->setCellValue('I7', 'SUBJECT DESCRIPTIONS')
+                    ->setCellValue('J7', 'UNIT')
+                    ->setCellValue('K7', 'MG')
+                    ->setCellValue('L7', 'FG');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setUnderline(true);
+        $objPHPExcel->getActiveSheet()->getStyle('I5')->getFont()->setUnderline(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('G7:G' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('J7:L' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 15,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3:I5')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 13,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 12,
+                )
+            )
+        );
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A7:L7')->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A3:L3');
+        // $sheet->mergeCells('B5:C5');
+        // $sheet->mergeCells('H5:I5');
+
+        $objPHPExcel->getActiveSheet()->setTitle('AR Report');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Ched Promotional Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

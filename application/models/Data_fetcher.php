@@ -2380,8 +2380,12 @@ class Data_fetcher extends CI_Model {
         {                                         
             $subjects[] = $class['subjectID'];                            
         }
-
-        return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
+        
+        if(isset($registration))
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
+        else                              
+            return null;
+        
         
     }
 
@@ -2396,7 +2400,7 @@ class Data_fetcher extends CI_Model {
                             ->get()
                             ->result_array());      
                             
-        $student = $this->db->where('intID',$student_id)->get('tb_mas_users')->first_row('array');                             
+        $student = $this->db->where('intID',$student_id)->get('tb_mas_users')->first_row();                             
         
         //Checks if subject is NSTP nstp fee is different from normal fee                                
         if($class['isNSTP']){
@@ -2806,6 +2810,8 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
+
+        
         
         $discount_grand_total = 0;
         $discount_installment_grand_total = 0;
@@ -3079,7 +3085,6 @@ class Data_fetcher extends CI_Model {
         }
 
         $data['class_type'] = $sem['classType'];               
-        
         
         // $data['discounted_price'] = $discounted_price;
         // $data['scholarship_discount'] = $scholarship_discount;
