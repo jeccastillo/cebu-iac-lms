@@ -166,7 +166,8 @@ $(document).ready(function() {
             },            
             {
                 "aTargets": [7],                                
-                "mRender": function(data, type, row, meta) {                    
+                "mRender": function(data, type, row, meta) {  
+                    console.log("row",row);                  
                     var mode = "Online";
                     if(row.is_cash){
                         switch(row.is_cash){
