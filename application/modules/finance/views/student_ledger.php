@@ -108,7 +108,7 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
-                                <td :class="item.muted" v-if="item.id && finance && finance.special_role != 0"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
+                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
                                 <td :class="item.muted" v-else></td>                                                                                             
                             </tr>
                             <tr>                                
@@ -152,7 +152,7 @@
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
-                                <td :class="item.muted" v-if="item.id && finance && finance.special_role != 0"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
+                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
                                 <td :class="item.muted" v-else></td>                                                                                             
                                 <td v-else></td>
                             </tr>
