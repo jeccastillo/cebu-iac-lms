@@ -570,7 +570,7 @@
           </a>
           <ul class="treeview-menu">
             <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/view_all_students_ledger"><i
+              style="margin-left: 10px;" href="<?php echo base_url() ?>finance/view_all_students_ledger"><i
                   class="fa fa-file"></i>
                 <span>Student Ledger</span> </a>
             </li>
