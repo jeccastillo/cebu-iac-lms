@@ -170,7 +170,7 @@ $(document).ready(function() {
                     var mode = "Online";
                     if(row.is_cash){
                         switch(row.is_cash){
-                            case '0':
+                            case 0:
                                 mode = "Check";
                                 break;
                             case 1:
