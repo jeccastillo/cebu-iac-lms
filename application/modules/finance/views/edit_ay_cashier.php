@@ -49,11 +49,11 @@
                         <input required type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
                     </div>  
                     <div class="form-group col-xs-12 col-lg-4">
-                        <label>Reconfiguration Date Start</label>
+                        <label>Late Enrollment Date Start</label>
                         <input required type="date" name="reconf_start" value="<?php echo $item['reconf_start']; ?>" class="form-control" />                         
                     </div> 
                     <div class="form-group col-xs-12 col-lg-4">
-                        <label>Reconfiguration Date End</label>
+                        <label>Late Enrollment Date End</label>
                         <input required type="date" name="reconf_end" value="<?php echo $item['reconf_end']; ?>" class="form-control" />                         
                     </div>                                                       
                     <div class="form-group col-xs-12 col-lg-4">
