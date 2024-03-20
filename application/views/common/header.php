@@ -574,10 +574,16 @@
                   class="fa fa-file"></i>
                 <span>Student Ledger</span> </a>
             </li>
+            <li
+              class="<?php echo (isset($page) && $page=="student_account_report")?'active':''; ?>">
+              <a href="<?php echo base_url() ?>finance/student_account_report/"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                <span>Student Account Report</span> </a>
+            </li>
             <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a
                 href="#"><i class="ion"></i>
                 <span>Student Account</span> </a>
-            </li>
+            </li>            
             <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
@@ -612,13 +618,7 @@
                 href="<?php echo base_url() ?>finance/edit_ay/"
                 style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                 <span>Edit Dates</span> </a>
-            </li>
-            <li
-              class="<?php echo (isset($page) && $page=="student_account_report")?'active':''; ?>">
-              <a href="<?php echo base_url() ?>finance/student_account_report/"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                <span>Student Account Report</span> </a>
-            </li>
+            </li>            
             <?php if($user['special_role'] >= 2): ?>
             <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
                 href="<?php echo base_url() ?>finance/view_payees"
