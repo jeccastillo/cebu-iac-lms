@@ -166,10 +166,9 @@ $(document).ready(function() {
             },            
             {
                 "aTargets": [7],                                
-                "mRender": function(data, type, row, meta) {  
-                    console.log("row",row);                  
+                "mRender": function(data, type, row, meta) {                      
                     var mode = "Online";
-                    if(row.is_cash){
+                    if(row.is_cash != null){
                         switch(row.is_cash){
                             case 0:
                                 mode = "Check";
