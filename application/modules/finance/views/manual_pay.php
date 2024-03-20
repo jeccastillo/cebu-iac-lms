@@ -56,7 +56,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Enter amount to pay/refund:</label>
-                                            <input type="text" :disabled="request.description != 'Other' && request.description != 'Reservation Payment'" required class="form-control" v-model="amount_to_pay" />
+                                            <input type="text" :disabled="request.description != 'Other' && (request.description != 'Reservation Payment' || cashier.temporary_admin !=  1 || user.special_role != 2)" required class="form-control" v-model="amount_to_pay" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
