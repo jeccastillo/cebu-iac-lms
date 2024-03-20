@@ -64,7 +64,7 @@
                             <th>OR Number</th>
                             <th>Applicant Number</th>
                             <th>Name</th>
-                            <th>Payment Mode</th>
+                            <th>Payment Mode</th>                            
                             <th>Check/CC/Debit #</th>
                             <th>Amount Paid</th>
                             <th>Particulars</th>                                                                                                                                          

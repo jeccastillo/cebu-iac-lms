@@ -187,6 +187,7 @@ $(document).ready(function() {
                                 break;                   
 
                         }
+                        console.log("mode: "+ mode);
                         return mode;
                     }                   
                     
