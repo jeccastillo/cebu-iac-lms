@@ -568,7 +568,7 @@ new Vue({
         other_payments:[],
         tuition:'',
         tuition_data: {},
-        reservation_payment: undefined,
+        reservation_payments: [],
         application_payment: undefined,
         registration_status: 0,
         remaining_amount: 0,
@@ -701,10 +701,10 @@ new Vue({
                                             };
 
                                         if(this.reservation_payments[i].status == "Paid" && data.data.student_sy == this.sem){
-                                        this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
-                                        this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
-                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
-                                    }
+                                            this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
+                                            this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
+                                            this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
+                                            }
                                     }
 
                                     if(!this.application_payment.mode)
