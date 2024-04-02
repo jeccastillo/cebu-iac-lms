@@ -694,7 +694,7 @@ new Vue({
                                     this.reservation_payments = data.data.data;    
                                     this.application_payment = data.data.application;
                                     
-                                    for(i in reservation_payments){
+                                    for(i in this.reservation_payments){
                                         if(!this.reservation_payments[i].mode)
                                             this.reservation_payments[i].mode = {
                                                 name: 'Other'
