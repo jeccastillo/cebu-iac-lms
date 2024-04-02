@@ -345,7 +345,7 @@
                                             Tuition Payments:
                                             </th>
                                         </tr>
-                                        <tr v-for="reservation_payment in reservation_payments">
+                                        <tr v-if="reservation_payments" v-for="reservation_payment in reservation_payments">
                                             <td></td>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
