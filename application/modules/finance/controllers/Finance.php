@@ -402,7 +402,7 @@ class Finance extends CI_Controller {
         $response = json_decode($response['data']);
             
         foreach($response as $data){
-            $item = $this->db->get_where('payment_details',array('id'=>$data['id']))->first_row();
+            $item = $this->db->get_where('payment_details',array('id'=>$data->id))->first_row();
             if(isset($item))
                 $this->data_poster->post_data('payment_details',$data,$data['id'],'id');
             else
