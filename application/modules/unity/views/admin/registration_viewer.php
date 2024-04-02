@@ -345,7 +345,7 @@
                                             Tuition Payments:
                                             </th>
                                         </tr>
-                                        <tr v-if="reservation_payment">
+                                        <tr v-for="reservation_payment in reservation_payments">
                                             <td></td>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
@@ -691,23 +691,28 @@ new Vue({
                             if(this.registration.enumStudentType == "new"){
                                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                                 .then((data) => {
-                                    this.reservation_payment = data.data.data;    
+                                    this.reservation_payments = data.data.data;    
                                     this.application_payment = data.data.application;
+                                    
+                                    for(i in reservation_payments){
+                                        if(!this.reservation_payments[i].mode)
+                                            this.reservation_payments[i].mode = {
+                                                name: 'Other'
+                                            };
 
-                                    if(!this.reservation_payment.mode)
-                                        this.reservation_payment.mode = {
-                                            name: 'Other'
-                                        };
+                                        if(this.reservation_payments[i].status == "Paid" && data.data.student_sy == this.sem){
+                                        this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
+                                        this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
+                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
+                                    }
+                                    }
+
                                     if(!this.application_payment.mode)
                                         this.application_payment.mode = {
                                             name: 'Other'
                                         };
                                     
-                                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
-                                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
-                                            this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
-                                    }
+                                    
 
                                     
                                     
