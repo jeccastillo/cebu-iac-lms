@@ -633,7 +633,7 @@ new Vue({
     term_balances: [],
     show_alert: false,
     sync_data: {
-      id: '<?php echo $max_id; ?>',
+      updated_at: '<?php echo $max_id; ?>',
       campus: '<?php echo $campus; ?>',
     },
     loaDetails: {

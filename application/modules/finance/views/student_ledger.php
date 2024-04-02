@@ -208,7 +208,7 @@ new Vue({
 
         },
         sync_data:{
-            id:'<?php echo $max_id; ?>',
+            updated_at:'<?php echo $max_id; ?>',
             campus:'<?php echo $campus; ?>',
         },
         running_balance: 0,

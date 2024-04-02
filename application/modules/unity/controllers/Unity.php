@@ -1734,17 +1734,17 @@ class Unity extends CI_Controller {
         if($user_level != 2 && $user_level != 3 && $user_level != 7)
             redirect(base_url().'unity');
         
-        $max_id = $this->db->select('id')
-        ->order_by('id', 'DESC')
-        ->limit(1)
-        ->get('payment_details')
-        ->first_row();
+        $max_id = $this->db->select('updated_at')
+            ->order_by('updated_at', 'DESC')
+            ->limit(1)
+            ->get('payment_details')
+            ->first_row();
 
         // Data to be sent in the POST request
         if($max_id)
-            $this->data['max_id'] = $max_id->id;
+            $this->data['max_id'] = $max_id->updated_at;
         else
-            $this->data['max_id'] = 0; 
+            $this->data['max_id'] = 0;
         
 
         $post = $this->input->post();

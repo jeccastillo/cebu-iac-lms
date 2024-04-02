@@ -271,15 +271,15 @@ class Finance extends CI_Controller {
         $this->data['page'] = "view_all_students";
         $this->data['opentree'] = "finance_student_account";
 
-        $max_id = $this->db->select('id')
-                            ->order_by('id', 'DESC')
+        $max_id = $this->db->select('updated_at')
+                            ->order_by('updated_at', 'DESC')
                             ->limit(1)
                             ->get('payment_details')
                             ->first_row();
 
         // Data to be sent in the POST request
         if($max_id)
-            $this->data['max_id'] = $max_id->id;
+            $this->data['max_id'] = $max_id->updated_at;
         else
             $this->data['max_id'] = 0;       
 
