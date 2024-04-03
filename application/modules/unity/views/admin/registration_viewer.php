@@ -707,7 +707,7 @@ new Vue({
                                             }
                                     }
 
-                                    if(!this.application_payment.mode)
+                                    if(this.application_payment && !this.application_payment.mode)
                                         this.application_payment.mode = {
                                             name: 'Other'
                                         };
