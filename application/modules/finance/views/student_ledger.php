@@ -364,6 +364,7 @@ new Vue({
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
+                    'id':payments[i].id,
                     'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
