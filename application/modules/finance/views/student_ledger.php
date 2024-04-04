@@ -99,7 +99,7 @@
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
-                                    <select class="form-control" v-model="ledger[i].ledger_items[j].name">
+                                    <select @change="updateDescription(item.id,$event)" class="form-control" v-model="ledger[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
                                         <option value="Reservation Payment">Reservation Payment</option>                                        
@@ -152,7 +152,7 @@
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
                                 <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
-                                    <select class="form-control" v-model="other[i].ledger_items[j].name">
+                                    <select @change="updateDescription(item.id,$event)" class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
                                         <option value="Reservation Payment">Reservation Payment</option>                                        
@@ -673,6 +673,58 @@ new Vue({
             }).then((result) => {
             
             })
+        },
+        updateDescription: function(id,event){
+            var desc = event.target.value;
+            let url = this.base_url + 'finance/update_payment_description';
+            
+            Swal.fire({
+                title: 'Switch Term?',
+                text: "Are you sure you want to change payment description?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                                        
+                    formdata.append('description',desc);
+                    formdata.append('id',id);
+                    
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+            
         },
         switchTerm: function(id,event){
             var sy = event.target.value;
