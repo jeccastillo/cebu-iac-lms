@@ -145,9 +145,9 @@
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
                                 <td :class="item.muted" v-if="finance && finance.special_role > 1">
-                                    <select v-model="other[i].ledger_items[j].name">
-                                        <option value="Tuition Fee">Tuition Fee</option>
+                                    <select class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
+                                        <option value="Tuition Fee">Tuition Fee</option>                                        
                                         <option value="Reservation Payment">Reservation Payment</option>                                        
                                     </select>
                                 </td>
