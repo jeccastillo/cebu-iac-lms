@@ -323,7 +323,7 @@ class Finance extends CI_Controller {
             $temp['term'] = $reg;     
             
             //TUITION PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY updated_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY created_at ASC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
@@ -334,7 +334,7 @@ class Finance extends CI_Controller {
             }   
             
             //OTHER PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY updated_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY created_at ASC";
             $other_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
