@@ -98,7 +98,7 @@
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
-                                <td :class="item.muted" v-if="finance && finance.special_role > 1">
+                                <td :class="item.muted" v-if="item.type == 'payment' && finance && finance.special_role > 1">
                                     <select class="form-control" v-model="ledger[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
@@ -151,7 +151,7 @@
                             <tr v-for="(item,j) in term.ledger_items">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
-                                <td :class="item.muted" v-if="finance && finance.special_role > 1">
+                                <td :class="item.muted" v-if="item.type == 'payment' && finance && finance.special_role > 1">
                                     <select class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
