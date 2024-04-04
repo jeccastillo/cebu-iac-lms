@@ -360,8 +360,7 @@ new Vue({
 
             var payments = tuition.payments_tuition;                
             
-            for(i in payments){       
-                console.log(payments[i].id);                                                                         
+            for(i in payments){                       
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
@@ -491,6 +490,7 @@ new Vue({
                 var paid = other[i].subtotal_order * -1;
                 this.term_balance_other += paid;                
                 this.other_term.push({
+                    'payment_id':payments[i].id,
                     'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
