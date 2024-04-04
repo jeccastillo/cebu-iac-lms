@@ -72,7 +72,7 @@
             <div class="box box-primary">
                 <div class="box-header">Ledger</div>
                 <div class="box-body">
-                    <table v-for="term in ledger" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
+                    <table v-for="(term,i) in ledger" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="13">Tuition</th>
@@ -94,11 +94,18 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="item in term.ledger_items">                                
+                            <tr v-for="(item,j) in term.ledger_items">                                
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
-                                <td :class="item.muted">{{ item.name }}</td>
+                                <td :class="item.muted" v-if="finance && finance.special_role > 1">
+                                    <select class="form-control" v-model="ledger[i].ledger_items[j].name">
+                                        <option value="Application Payment">Application Payment</option>
+                                        <option value="Tuition Fee">Tuition Fee</option>                                        
+                                        <option value="Reservation Payment">Reservation Payment</option>                                        
+                                    </select>
+                                </td>
+                                <td :class="item.muted" v-else>{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
