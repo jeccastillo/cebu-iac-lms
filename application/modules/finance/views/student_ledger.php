@@ -146,9 +146,9 @@
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
                                     <select v-model="other[i].ledger_items[j].name">
-                                        <option value="Application Payment">Application Payment</option>
-                                        <option value="Reservation Payment">Reservation Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>
+                                        <option value="Application Payment">Application Payment</option>
+                                        <option value="Reservation Payment">Reservation Payment</option>                                        
                                     </select>
                                 </td>
                                 <td :class="item.muted" v-else>{{ item.name }}</td>
