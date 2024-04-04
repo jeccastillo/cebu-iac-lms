@@ -490,7 +490,7 @@ new Vue({
                 var paid = other[i].subtotal_order * -1;
                 this.term_balance_other += paid;                
                 this.other_term.push({
-                    'payment_id':payments[i].id,
+                    'payment_id':other[i].id,
                     'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
