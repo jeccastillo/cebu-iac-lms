@@ -99,7 +99,7 @@
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
                                 <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
-                                    <select @change="updateDescription(item.id,$event)" class="form-control" v-model="ledger[i].ledger_items[j].name">
+                                    <select @change="updateDescription(item.payment_id,$event)" class="form-control" v-model="ledger[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
                                         <option value="Reservation Payment">Reservation Payment</option>                                        
@@ -152,7 +152,7 @@
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
                                 <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
-                                    <select @change="updateDescription(item.id,$event)" class="form-control" v-model="other[i].ledger_items[j].name">
+                                    <select @change="updateDescription(item.payment_id,$event)" class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
                                         <option value="Reservation Payment">Reservation Payment</option>                                        
@@ -342,7 +342,7 @@ new Vue({
 
             this.term_balance += amount;
 
-            this.ledger_term.push({
+            this.ledger_term.push({                
                 'strYearStart':tuition.term.strYearStart,
                 'strYearEnd':tuition.term.strYearEnd,
                 'enumSem':tuition.term.enumSem,
@@ -364,7 +364,7 @@ new Vue({
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
-                    'id':payments[i].id,
+                    'payment_id':payments[i].id,
                     'type':'payment',
                     'strYearStart':tuition.term.strYearStart,
                     'strYearEnd':tuition.term.strYearEnd,
