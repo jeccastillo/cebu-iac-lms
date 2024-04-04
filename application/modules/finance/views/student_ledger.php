@@ -121,7 +121,7 @@
                             <td colspan="11" class="text-right"><strong>Grand Total Balance/Refund:{{ running_balance.toFixed(2) }}</strong></td>                            
                         </tr>
                     </table>
-                    <table v-for="term in other" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
+                    <table v-for="(term,i) in other" v-if="term.ledger_items.length > 0" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th colspan="11">Other</th>
@@ -137,14 +137,21 @@
                                 <th>Payment</th>                                
                                 <th>Added/Changed By</th>                                                                                                 
                                 <th>Cashier</th> 
-                                <th>Delete</th>
+                                <th>Delete</th>                                
                             </tr>
                         </thead>
                         <tbody>                            
-                            <tr v-for="item in term.ledger_items">
+                            <tr v-for="(item,j) in term.ledger_items">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
-                                <td :class="item.muted">{{ item.name }}</td>
+                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
+                                    <select v-model="other[i].ledger_items[j].name">
+                                        <option value="Application Payment">Application Payment</option>
+                                        <option value="Reservation Payment">Reservation Payment</option>
+                                        <option value="Tuition Fee">Tuition Fee</option>
+                                    </select>
+                                </td>
+                                <td :class="item.muted" v-else>{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
