@@ -360,7 +360,8 @@ new Vue({
 
             var payments = tuition.payments_tuition;                
             
-            for(i in payments){                                                                                
+            for(i in payments){       
+                console.log(payments[i].id);                                                                         
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
                 this.ledger_term.push({
