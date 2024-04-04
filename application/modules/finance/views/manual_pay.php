@@ -32,7 +32,7 @@
                                         <div class="form-group">
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription" class="form-control" v-model="request.description">
-                                                <option v-if="(application_payment && application_payment.status == 'Paid') || student.waive_app_fee" value="Reservation Payment">Reservation</option>
+                                                <option value="Reservation Payment">Reservation</option>
                                                 <option v-if="!student.waive_app_fee" value="Application Payment">Application</option>                                                
                                                 <option value="Other">Other</option>                                
                                             </select>
