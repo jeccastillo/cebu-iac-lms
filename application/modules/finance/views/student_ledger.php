@@ -676,10 +676,10 @@ new Vue({
         },
         updateDescription: function(id,event){
             var desc = event.target.value;
-            let url = this.base_url + 'finance/update_payment_description';
+            let url = api_url + 'finance/update_payment_description';
             
             Swal.fire({
-                title: 'Switch Term?',
+                title: 'Change Description?',
                 text: "Are you sure you want to change payment description?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
