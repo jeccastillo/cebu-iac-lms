@@ -4592,10 +4592,10 @@ class Excel extends CI_Controller {
         $payments = $students = array();
 
         foreach($users as $index => $user){
-            $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid'));
+            $query = $this->db->order_by('created_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid'));
             
             if($report_date){
-                $query = $this->db->order_by('updated_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at <=' => $report_date . ' 11:59:59'));
+                $query = $this->db->order_by('created_at', 'asc')->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => $campus, 'student_number' => $user['slug'], 'status' => 'Paid', 'updated_at <=' => $report_date . ' 11:59:59'));
             }
 
             $payment_details = $query->result_array();
@@ -4682,23 +4682,47 @@ class Excel extends CI_Controller {
 
         foreach($users as $index => $user)
         {
-            $applied_from = $applied_to = array();
+            $applied_from = $applied_to = $other = array();
 
-            $ledger = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 11:59:59'))->first_row();
-            if($ledger){
-                if(strpos($ledger->name, 'APPLIED TO') !== false){
-                    $applied_from[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_from[1] = $ledger->name;
-                    $applied_from[2] = $ledger->amount; 
+            $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 11:59:59'))->result_array();
+            
+            if($ledger_data){
+                foreach($ledger_data as $ledger){
+                    
+                    if($ledger['type'] == 'other'){
+                        if(!$other){
+                            $other[0] = date("M d,Y",strtotime($ledger['date']));
+                            $other[1] = $ledger['name'];
+                            $other[2] = $ledger['amount'];
+                        }else{
+                            $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+                            $other[1] = ', ' . $ledger['name'];
+                            $other[2] += $ledger['amount'];
+                        }
+                    }else if(strpos($ledger['name'], 'APPLIED FROM') !== false){
+                        if(!$applied_from){
+                            $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
+                            $applied_from[1] = $ledger['name'];
+                            $applied_from[2] = $ledger['amount']; 
+                        }else{
+                            $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
+                            $applied_from[1] .= ', ' . $ledger['name'];
+                            $applied_from[2] += $ledger['amount']; 
+                        }
+                    }else if(strpos($ledger['name'], 'APPLIED TO') !== false){
+                        if(!$applied_from){
+                            $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                            $applied_to[1] = $ledger['name'];
+                            $applied_to[2] = $ledger['amount']; 
+                        }else{
+                            $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                            $applied_to[1] = $ledger['name'];
+                            $applied_to[2] = $ledger['amount'];
+                        }
+                    }
                 }
-                if(strpos($ledger->name, 'APPLIED FROM') !== false){
-                    $applied_to[0] = date("M d,Y",strtotime($ledger->date));
-                    $applied_to[1] = $ledger->name;
-                    $applied_to[2] = $ledger->amount;
-                }
-
             }
-        
+
             // $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
             $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
             
@@ -4857,6 +4881,12 @@ class Excel extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
+                }
+
+                if($date_enrolled > $sy->ar_report_date_generation){
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 14, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 15, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 16, $i)->setValue($total_discount > 0 ? $total_discount : '');
                 }
 
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
