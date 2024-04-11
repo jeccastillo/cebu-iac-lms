@@ -13,7 +13,7 @@
                     "aTargets":[8],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/'+row[0]+'">Edit/View</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>tuitionyear/set_default/1/'+row[0]+'">Set as Default for College</a></li><li><a href="<?php echo base_url(); ?>tuitionyear/set_default/0/'+row[0]+'">Set as Default for SHS</a></li></ul></div>'; }
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/'+row[0]+'">Edit/View</a></li><li><a href="#" rel="'+row[0]+'" class="duplicate-item">Duplicate</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>tuitionyear/set_default/1/'+row[0]+'">Set as Default for College</a></li><li><a href="<?php echo base_url(); ?>tuitionyear/set_default/0/'+row[0]+'">Set as Default for SHS</a></li></ul></div>'; }
                 },
                 {
                     "aTargets":[0],
@@ -46,6 +46,28 @@
                                 }
                                 else
                                     parent.hide();
+
+                                $(".loading-img").hide();
+                                $(".overlay").hide();
+                        }
+                    });
+                    }
+                });
+                $(".duplicate-item").click(function(e){
+                    conf = confirm("Are you sure you want to delete?");
+                    if(conf)
+                    {
+                        $(".loading-img").show();
+                        $(".overlay").show();
+                        var id = $(this).attr('rel');                                                
+                        var data = {'id':id};
+                        $.ajax({
+                            'url':'<?php echo base_url(); ?>index.php/tuitionyear/duplicate_tuition_year',
+                            'method':'post',
+                            'data':data,
+                            'dataType':'json',
+                            'success':function(ret){
+                                document.location.reload();
 
                                 $(".loading-img").hide();
                                 $(".overlay").hide();

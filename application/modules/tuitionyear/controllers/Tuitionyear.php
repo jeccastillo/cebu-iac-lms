@@ -142,11 +142,25 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
     }
 
-    // public function duplicate_tuition_year($id){
-    //     $tuition_year = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
-    //     $misc = $this->data_fetcher->getTuitionExtra('misc',$id);
-    //     $lab_fees = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
-    // }
+    public function duplicate_tuition_year(){
+        $post = $this->input->post();
+        $id = $post['id'];
+        $tuition_year = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
+        $misc = $this->data_fetcher->getTuitionExtra('misc',$id);
+        $lab_fees = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
+
+        $this->data_poster->post_data('tb_mas_tuition_year',$tuition_year);
+        foreach($misc as $item){
+            $this->data_poster->post_data('tb_mas_tuition_year_misc',$item);
+        }
+        foreach($lab_fees as $item){
+            $this->data_poster->post_data('tb_mas_tuition_year_lab_fee',$item);
+        }
+
+        $data['message'] = "success";
+        $data['success'] = true;
+        echo json_encode($data);
+    }
 
     public function submit_form($id = 0)
     {
