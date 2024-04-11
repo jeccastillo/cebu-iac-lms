@@ -152,6 +152,8 @@ class Tuitionyear extends CI_Controller {
         $track = $this->data_fetcher->getTuitionTrack($id,'track');
 
         unset($tuition_year['intID']);
+        $tuition_year['isDefault'] = 0;
+        $tuition_year['isDefaultShs'] = 0;
         $this->data_poster->post_data('tb_mas_tuition_year',$tuition_year);
         $t_id = $this->db->insert_id();
         foreach($misc as $item){
