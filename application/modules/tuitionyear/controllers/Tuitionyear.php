@@ -148,12 +148,29 @@ class Tuitionyear extends CI_Controller {
         $tuition_year = $this->data_fetcher->fetch_single_entry('tb_mas_tuition_year',$id);
         $misc = $this->data_fetcher->getTuitionExtra('misc',$id);
         $lab_fees = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
+        $program = $this->data_fetcher->getTuitionExtra('program',$id);
+        $track = $this->data_fetcher->getTuitionExtra('track',$id);
 
+        unset($tuition_year['intID']);
         $this->data_poster->post_data('tb_mas_tuition_year',$tuition_year);
+        $t_id = $this->db->insert_id();
         foreach($misc as $item){
-            $this->data_poster->post_data('tb_mas_tuition_year_misc',$item);
+            unset($item['intID']);
+            $this->data_poster->post_data('tb_mas_tuition_year_misc',$item);            
         }
         foreach($lab_fees as $item){
+            unset($item['intID']);
+            $item['tuition_year_id'] = $t_id;
+            $this->data_poster->post_data('tb_mas_tuition_year_lab_fee',$item);
+        }
+        foreach($program as $item){
+            unset($item['id']);
+            $item['tuition_year_id'] = $t_id;
+            $this->data_poster->post_data('tb_mas_tuition_year_lab_fee',$item);
+        }
+        foreach($track as $item){
+            unset($item['id']);
+            $item['tuition_year_id'] = $t_id;
             $this->data_poster->post_data('tb_mas_tuition_year_lab_fee',$item);
         }
 
