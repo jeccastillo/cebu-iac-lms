@@ -913,6 +913,31 @@ new Vue({
             document.location = base_url + "unity/registration_viewer/" + this.id + "/" + event.target.value;
         },
         selectTuitionYear: function(event){
+            let url = this.base_url + 'unity/update_tuition_year';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("tuition_year",event.target.value);                        
+                        
+            this.loader_spinner = true;
+            
+            //validate description
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                if (data.data.success) {
+                        Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                       location.reload();
+                    });
+                }
+            });
 
         },
         updateOR: function(){

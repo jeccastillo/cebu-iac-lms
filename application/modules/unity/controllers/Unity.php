@@ -2419,6 +2419,17 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function update_tuition_year(){
+        $post = $this->input->post();
+        $this->db->where('intRegistrationID',$post['intRegistrationID'])
+                 ->update('tb_mas_registration',$post);        
+
+        $data['success'] = true;
+        $data['message'] = "Updated Tuition Year";
+        echo json_encode($data);
+
+    }
+
     public function classlist_viewer_data($id,$showAll = 0, $sid){
 
         $clist = $this->data_fetcher->fetch_classlist_by_id(null,$id);
