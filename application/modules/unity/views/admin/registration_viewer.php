@@ -72,7 +72,7 @@
                 </div>                
             </div>            
             <div class="col-sm-12">
-            <div class=""
+                <div class=""
                     v-if="show_alert">
                     <div class="alert alert-danger col-sm-6"
                     role="alert">
@@ -99,7 +99,11 @@
                     </table>
                     </div>
                 </div>
-            </div>
+            </div>            
+            <div class="" v-if="applicant_data.reserve_enroll" class="alert alert-success col-sm-6" role="alert">                    
+                <h4 class="alert-heading">For Early Reservation</h4>
+                <p>This student has been tagged for early enrollment please update tuition year if it hasn't been updated</p>                                
+            </div>            
             <div class="col-sm-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
@@ -500,6 +504,9 @@ new Vue({
         sem: '<?php echo $selected_ay; ?>',
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
+        applicant_data: {
+            reserve_enroll: 0,
+        },
         slug: undefined,
         switch_term: undefined,
         student:{
@@ -667,7 +674,8 @@ new Vue({
                         axios.get(api_url + 'finance/transactions/' + this.slug + '/' + this.sem)
                         .then((data) => {
                             this.payments = data.data.data;
-                            this.other_payments = data.data.other;                            
+                            this.other_payments = data.data.other;   
+                            this.applicant_data = data.data.student;                         
                                                                 
                             if(this.registration && this.registration.paymentType == 'partial')
                                 this.has_partial = true;
