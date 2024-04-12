@@ -170,6 +170,15 @@
                         </select>
                         <hr>
                     </div>
+                    <div>
+                        <strong><i class="fa fa-user margin-r-5"></i>Early Reservation Fee</strong>
+                        <select class="form-control" @change="updateField('reserve_enroll',$event)"
+                            v-model="request.reserve_enroll">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <hr>
+                    </div>
                     <div v-if="request.waive_app_fee">
                         <strong><i class="fa fa-user margin-r-5"></i>Reason</strong>
                         <select class="form-control" @change="updateField('waive_reason',$event)"
@@ -1160,6 +1169,7 @@ new Vue({
         request: {
             uploaded_requirements: [],
             waive_app_fee: 0,
+            reserve_enroll: 0,
             waive_reason: undefined,
         },
         request_sched: {
