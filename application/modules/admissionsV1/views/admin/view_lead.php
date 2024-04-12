@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://unpkg.com/vue2-datepicker/index.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 <script src="https://unpkg.com/vue2-datepicker/index.min.js"></script>
 <script src="https://unpkg.com/vue2-datepicker/locale/zh-cn.js"></script>
 
