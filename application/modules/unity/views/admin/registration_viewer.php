@@ -23,6 +23,11 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
                         <div class="pull-right" style="margin-left:1rem;">
+                            <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
+                                <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
+                            </select>
+                        </div>
+                        <div class="pull-right" style="margin-left:1rem;">
                             <select class="form-control" @change="selectTerm($event)" v-model="sem">
                                 <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
@@ -568,6 +573,7 @@ new Vue({
         other_payments:[],
         tuition:'',
         tuition_data: {},
+        tuition_years: [],
         reservation_payments: [],
         application_payment: undefined,
         registration_status: 0,
@@ -619,6 +625,7 @@ new Vue({
                             this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total; 
                             this.change_payment_type = this.payment_type;
+                            this.tuition_years = data.data.tuition_years;
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
@@ -901,6 +908,9 @@ new Vue({
         },
         selectTerm: function(event){
             document.location = base_url + "unity/registration_viewer/" + this.id + "/" + event.target.value;
+        },
+        selectTuitionYear: function(event){
+
         },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
