@@ -102,8 +102,8 @@
             </div>            
             <div class="col-sm-12">
                 <div v-if="applicant_data.reserve_enroll" class="alert alert-success" role="alert">                    
-                    <h4 class="alert-heading">Early Enrollment</h4>
-                    <p>This student has been tagged for early enrollment please update tuition year if it hasn't been updated</p>                                
+                    <h4 class="alert-heading">Reserve Enroll</h4>
+                    <p>This student has been tagged for reserve enrollment promo please update tuition year if it hasn't been updated</p>                                
                 </div>            
             </div>
             <div class="col-sm-12">

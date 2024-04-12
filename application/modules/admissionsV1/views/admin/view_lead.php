@@ -171,7 +171,7 @@
                         <hr>
                     </div>
                     <div>
-                        <strong><i class="fa fa-user margin-r-5"></i>Early Enrollment</strong>
+                        <strong><i class="fa fa-user margin-r-5"></i>Reserve Enroll Promo</strong>
                         <select class="form-control" @change="updateField('reserve_enroll',$event)"
                             v-model="request.reserve_enroll">
                             <option value="0">No</option>
