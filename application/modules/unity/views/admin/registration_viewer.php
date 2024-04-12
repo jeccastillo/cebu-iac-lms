@@ -512,6 +512,7 @@ new Vue({
         show_alert: false,
         change_payment_type: undefined,
         payment_type: 'full', 
+        tuition_year: undefined,
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -626,6 +627,7 @@ new Vue({
                             this.remaining_amount = data.data.tuition_data.total; 
                             this.change_payment_type = this.payment_type;
                             this.tuition_years = data.data.tuition_years;
+                            this.tuition_year = this.registration.tuition_year;
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
@@ -637,6 +639,7 @@ new Vue({
                         this.request.first_name = this.student.strFirstname;
                         this.request.middle_name = this.student.strMiddlename;
                         this.request.last_name = this.student.strLastname;    
+                        
                         
                         
                         if(this.student.strMobileNumber || this.student.strMobileNumber != "")
