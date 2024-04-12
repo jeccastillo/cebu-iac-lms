@@ -1,7 +1,6 @@
-<link rel="stylesheet" href="https://unpkg.com/vue2-datepicker/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
-<script src="https://unpkg.com/vue2-datepicker/index.min.js"></script>
-<script src="https://unpkg.com/vue2-datepicker/locale/zh-cn.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.js"></script>
 
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
