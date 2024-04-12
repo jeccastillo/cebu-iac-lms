@@ -136,7 +136,7 @@ class Tuitionyear extends CI_Controller {
     public function delete_tuition_year(){
         $post = $this->input->post();
         $this->data_poster->deleteItem('tb_mas_tuition_year',$post['id'],'intID');
-        $this->data_poster->log_action('Tuition Year Deleted Tuition Year'.$post['id'],'red');
+        $this->data_poster->log_action('Tuition Year','Deleted Tuition Year'.$post['id'],'red');
         $data['message'] = "success";
         $data['success'] = true;
         echo json_encode($data);
