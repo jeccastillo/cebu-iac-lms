@@ -28,6 +28,7 @@
                         <th>Student Number</th>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Course</th>
                         <th>GWA</th>
                     </tr>                
                 </thead>
@@ -36,6 +37,7 @@
                         <td>{{ st.strStudentNumber }}</td>
                         <td>{{ st.strLastname }}</td>
                         <td>{{ st.strFirstname }}</td>
+                        <td>{{ st.strProgramCode }}</td>                        
                         <td>{{ st.gwa }}</td>                    
                     </tr>
                 </tbody>
@@ -48,6 +50,7 @@
                         <th>Student Number</th>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Course</th>
                         <th>GWA</th>
                     </tr>                
                 </thead>
@@ -56,6 +59,7 @@
                         <td>{{ st.strStudentNumber }}</td>
                         <td>{{ st.strLastname }}</td>
                         <td>{{ st.strFirstname }}</td>
+                        <td>{{ st.strProgramCode }}</td>
                         <td>{{ st.gwa }}</td>                    
                     </tr>
                 </tbody>
