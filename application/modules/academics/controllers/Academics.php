@@ -561,7 +561,7 @@ class Academics extends CI_Controller {
                             default:
                                 $v3 = $record['v3'];
                         }                    
-                        $sum_grades += $v3 * $record['strUnits'];
+                        $sum_grades += floatval($v3) * $record['strUnits'];
                         $total += $record['strUnits'];
                     }
 
