@@ -225,7 +225,7 @@ $(document).ready(function() {
                 data: "cashier_id"
             },
             {
-                data: "updated_at"
+                data: "or_date"
             },
             {
                 data: "or_number"
