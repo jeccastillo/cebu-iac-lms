@@ -31,6 +31,7 @@ class Academics extends CI_Controller {
 		$this->load->model("google_login");	
 		$this->load->model("facebook_login");	
 		$this->load->model("user_model");
+        $this->data['campus'] = $this->config->item('campus');
         $this->config->load('courses');
         
         $this->data['department_config'] = $this->config->item('department');
