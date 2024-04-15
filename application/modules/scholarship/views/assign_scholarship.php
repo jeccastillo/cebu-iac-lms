@@ -312,61 +312,96 @@ new Vue({
                                 this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                             }                                
                         }                        
-
-                        axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
-                        .then((data) => {
-                            this.reservation_payments = data.data.data;    
-                            this.application_payment = data.data.application;
-                            
-                            for(i in this.reservation_payments){
-                                if(this.reservation_payments[i].status == "Paid" && data.data.student_sy == this.current_sem){
-                                        this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
-                                        this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
-                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
-                                }
-                            }
-                            
-                            
-                            this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
-                            this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            //installment amounts                                
-                            if(this.registration.downpayment == 1){
-                                var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
-                                for(i=0; i < 5; i++){
-                                    if(this.tuition_data.installment_fee > temp){
-                                        val = this.tuition_data.installment_fee - temp;
-                                        val = val.toFixed(2);
-                                        this.installments.push(val);
-                                        temp = 0;
+                        if(this.registration.enumStudentType == "new"){
+                            axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
+                            .then((data) => {
+                                this.reservation_payments = data.data.data;    
+                                this.application_payment = data.data.application;
+                                
+                                for(i in this.reservation_payments){
+                                    if(this.reservation_payments[i].status == "Paid" && data.data.student_sy == this.current_sem){
+                                            this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
+                                            this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
+                                            this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
                                     }
-                                    else{
-                                        this.installments.push(0);
-                                        temp = temp - this.tuition_data.installment_fee;
-                                    }
-                                
                                 }
-                            }
-                            else
-                                for(i=0; i < 5; i++)
-                                    this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
                                 
                                 
-                            
-                            
-                            
-                            var val = 0;                                
-                            
+                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
+                                this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                //installment amounts                                
+                                if(this.registration.downpayment == 1){
+                                    var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                    for(i=0; i < 5; i++){
+                                        if(this.tuition_data.installment_fee > temp){
+                                            val = this.tuition_data.installment_fee - temp;
+                                            val = val.toFixed(2);
+                                            this.installments.push(val);
+                                            temp = 0;
+                                        }
+                                        else{
+                                            this.installments.push(0);
+                                            temp = temp - this.tuition_data.installment_fee;
+                                        }
+                                    
+                                    }
+                                }
+                                else
+                                    for(i=0; i < 5; i++)
+                                        this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
+                                    
+                                    
+                                
+                                
+                                
+                                var val = 0;                                
+                                
 
-                            this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
-                            this.loader_spinner = false;
-                            if(this.remaining_amount <= 0)
-                                this.description = "Other";
+                                this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
+                                this.loader_spinner = false;
+                                if(this.remaining_amount <= 0)
+                                    this.description = "Other";
 
-                            
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        })
+                                
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                        else{
+                                this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
+                                    this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    //installment amounts                                
+                                    if(this.registration.downpayment == 1){
+                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                        for(i=0; i < 5; i++){
+                                            if(this.tuition_data.installment_fee > temp){
+                                                val = this.tuition_data.installment_fee - temp;
+                                                val = val.toFixed(2);
+                                                this.installments.push(val);
+                                                temp = 0;
+                                            }
+                                            else{
+                                                this.installments.push(0);
+                                                temp = temp - this.tuition_data.installment_fee;
+                                            }
+                                        
+                                        }
+                                    }
+                                    else
+                                        for(i=0; i < 5; i++)
+                                            this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
+                                        
+                                                                                                        
+                                    
+                                    var val = 0;                                
+                                    
+
+                                    this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
+                                    this.loader_spinner = false;
+                                    if(this.remaining_amount <= 0)
+                                        this.description = "Other";
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
