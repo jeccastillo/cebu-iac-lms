@@ -230,7 +230,7 @@
                                 <tr v-for="(payment,i) in payments">
                                     <td>{{ payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
-                                    <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
+                                    <td :class="payment.muted" v-if="(payment.name == 'Application Payment' || payment.name == 'Reservation Payment' || payment.name == 'Tuition Fee') && finance">
                                     <select @change="updateDescription(payment.payment_id,$event)" class="form-control" v-model="payments[i].description">
                                             <option value="Application Payment">Application Payment</option>
                                             <option value="Tuition Fee">Tuition Fee</option>                                        
