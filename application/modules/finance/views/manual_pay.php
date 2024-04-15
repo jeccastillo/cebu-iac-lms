@@ -227,10 +227,16 @@
                                         </button>
                                     </td>
                                 </tr>                                                                                                     -->                                                               
-                                <tr v-for="payment in payments">
+                                <tr v-for="(payment,i) in payments">
                                     <td>{{ payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
-                                    <td>{{ payment.description }}</td>
+                                    <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
+                                    <select @change="updateDescription(payment.payment_id,$event)" class="form-control" v-model="payments[i].description">
+                                            <option value="Application Payment">Application Payment</option>
+                                            <option value="Tuition Fee">Tuition Fee</option>                                        
+                                            <option value="Reservation Payment">Reservation Payment</option>                                        
+                                        </select>
+                                    </td>
                                     <td>{{ payment.check_number }}</td>
                                     <td>{{ payment.request_id }}</td>
                                     <td>{{ payment.subtotal_order }}</td>
@@ -480,6 +486,58 @@ new Vue({
                     }
             });  
         },  
+        updateDescription: function(id,event){
+            var desc = event.target.value;
+            let url = api_url + 'finance/update_payment_description';
+            
+            Swal.fire({
+                title: 'Change Description?',
+                text: "Are you sure you want to change payment description?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();                                        
+                    formdata.append('description',desc);
+                    formdata.append('id',id);
+                    
+                    
+                    return axios.post(url, formdata, {
+                        headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            
+                            if(data.data.success)
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                    
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            
+            })
+            
+        },
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
             .then((data) => {            
