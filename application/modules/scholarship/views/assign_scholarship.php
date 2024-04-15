@@ -152,7 +152,7 @@
                                     <td>{{ application_payment.updated_at }}</td>
                                     
                                 </tr>
-                                <tr v-if="reservation_payment">
+                                <tr v-for="reservation_payment in reservation_payments">
                                     <td>{{ reservation_payment.or_number }}</td>
                                     <td>{{ reservation_payment.description }}</td>
                                     <td>{{ reservation_payment.check_number }}</td>
@@ -249,7 +249,7 @@ new Vue({
         other_payments: [],
         student_discounts:[],    
         payments_paid: [],
-        reservation_payment: undefined,
+        reservation_payments: [],
         application_payment: undefined,
         remaining_amount:0,
         amount_paid: 0,
@@ -315,15 +315,16 @@ new Vue({
 
                         axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                         .then((data) => {
-                            this.reservation_payment = data.data.data;    
+                            this.reservation_payments = data.data.data;    
                             this.application_payment = data.data.application;
                             
-                            if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.current_sem){
-                                    this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                                                                    
-                                    this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;      
-                                    this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payment.subtotal_order;
+                            for(i in reservation_payments){
+                                if(this.reservation_payments[i].status == "Paid" && data.data.student_sy == this.current_sem){
+                                        this.remaining_amount = this.remaining_amount - this.reservation_payments[i].subtotal_order;                                                                                                                                    
+                                        this.amount_paid = this.amount_paid + this.reservation_payments[i].subtotal_order;      
+                                        this.tuition_data.down_payment =  this.tuition_data.down_payment - this.reservation_payments[i].subtotal_order;
+                                }
                             }
-
                             
                             
                             this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
