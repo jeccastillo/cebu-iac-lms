@@ -198,17 +198,19 @@ class AdmissionsV1 extends CI_Controller {
         $ret['entrance_exam'] = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$slug))->first_row('array'); 
         // print_r($ret['entrance_exam']);
         $scorePerSectionArray = [];
-        $examPerSection = $this->db->get_where('tb_mas_student_exam_score_per_section',array('tb_mas_student_exam_id'=>$ret['entrance_exam']['intID']))->result_array('array');
-        // print_r($examPerSection);
-        // print($ret['entrance_exam']['intID']);
-        // die();
-        foreach($examPerSection as $exam){
-            $scorePerSectionArray[] = array(
-                'section' => $exam['section'],
-                'score' =>  $exam['score'],
-                'items' => $exam['exam_overall'],
-                'percentage'=> $exam['percentage'],
-            );
+        if($ret['entrance_exam']['intID']){
+            $examPerSection = $this->db->get_where('tb_mas_student_exam_score_per_section',array('tb_mas_student_exam_id'=>$ret['entrance_exam']['intID']))->result_array('array');
+            // print_r($examPerSection);
+            // print($ret['entrance_exam']['intID']);
+            // die();
+            foreach($examPerSection as $exam){
+                $scorePerSectionArray[] = array(
+                    'section' => $exam['section'],
+                    'score' =>  $exam['score'],
+                    'items' => $exam['exam_overall'],
+                    'percentage'=> $exam['percentage'],
+                );
+            }            
         }
         $ret['section_scores'] = $scorePerSectionArray;
         echo json_encode($ret);
