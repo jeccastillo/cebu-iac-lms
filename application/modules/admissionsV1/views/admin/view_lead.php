@@ -1240,9 +1240,10 @@ new Vue({
 
                         this.status_update_manual = this.request.status;
                         this.sy = data.data.sy;
-                        this.filtered_programs = this.programs.filter((prog) => {
-                            return prog.type == this.request.type
-                        })
+                        if(this.programs.length > 0)
+                            this.filtered_programs = this.programs.filter((prog) => {
+                                return prog.type == this.request.type
+                            })
 
 
 
