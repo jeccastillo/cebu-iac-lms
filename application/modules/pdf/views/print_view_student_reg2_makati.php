@@ -27,7 +27,7 @@
     $payment_division = $tuition['total'] / 4;    
 
     
-    if($mt != 12){
+    if($mt != 6){
         $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
         <tr>
             <td width="100%" align="center" style="text-align:center;vertical-align: middle;"></td>
