@@ -1231,6 +1231,11 @@ class Unity extends CI_Controller {
                             $temp_rec['bg'] = "#990000";
                             $temp_rec['color'] = "#f2f2f2";
                         break;
+                        case '5.00':
+                            $grade = 5;
+                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
+                        break;
                         default:
                             $grade = $temp_rec['floatFinalGrade'];
                             $temp_rec['bg'] = "#009000";
@@ -1325,6 +1330,9 @@ class Unity extends CI_Controller {
                             $v3 = 5;
                         break;
                         case 'UD':
+                            $v3 = 5;
+                        break;
+                        case '5.00':
                             $v3 = 5;
                         break;
                         default:
