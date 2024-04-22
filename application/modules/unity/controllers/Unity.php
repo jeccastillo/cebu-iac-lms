@@ -1247,7 +1247,7 @@ class Unity extends CI_Controller {
                         $assessment_sum += $grade * $temp_rec['strUnits'];         
                     }
                 }
-                if($current){
+                elseif($current){
                     $temp_rec['bg'] = "#ADD8E6";
                     $temp_rec['color'] = "#333";
                 }
