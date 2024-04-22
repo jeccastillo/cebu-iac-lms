@@ -50,7 +50,7 @@
                 <td width="80%" style="text-align: center;line-height:1;vertical-align: middle">  
                     <br /><br /><br />
                     <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">Information & Communications Technology Academy </font><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines</font>
+                    <font style="font-family:Calibri Light; font-size: 10;">iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines</font>
                 </td>  
             </tr>
             </table>
