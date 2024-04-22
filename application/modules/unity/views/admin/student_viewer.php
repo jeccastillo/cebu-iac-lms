@@ -14,9 +14,9 @@
             class="btn btn-app"
             :href="base_url + 'unity/student_records/' + student.intID"><i
               class="fa fa-user"></i>Records</a>
-          <!-- <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
-                        <i class="ion ion-printer"></i>RF Print
-                    </a>                      -->
+          <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+              <i class="ion ion-printer"></i>RF Print
+          </a>                     
           <a target="_blank"
             v-if="registration && (user_level == 2 || user_level == 3)"
             class="btn btn-app"
