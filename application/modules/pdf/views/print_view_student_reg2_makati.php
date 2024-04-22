@@ -4,8 +4,7 @@
     // create new PDF document
     //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $mt = 12;
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);    
     // set document information
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetTitle($student['strLastname'] . ", " . $student['strFirstname'] . ', ' . substr($student['strMiddlename'], 0,1). ".-". $student['strProgramCode']);
@@ -28,7 +27,7 @@
     $payment_division = $tuition['total'] / 4;    
 
     
-    if($mt != 6){
+    if($mt != 12){
         $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
         <tr>
             <td width="100%" align="center" style="text-align:center;vertical-align: middle;"></td>
