@@ -578,6 +578,7 @@ new Vue({
   el: '#student-viewer-container',
   data: {
     test: 'dasd',
+    campus: '<?php echo $campus; ?>',
     id: '<?php echo $id; ?>',
     tab: '<?php echo $tab; ?>',
     sem: '<?php echo $sem; ?>',
@@ -902,8 +903,12 @@ new Vue({
 
     },
     printRF: function() {
+      var mt = 35;
+      if(this.campus = 'Makati')
+        mt = 12;
+
       var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +
-        '/' + this.applicant_data.id + '/' + this.active_sem.intID + '/35';
+        '/' + this.applicant_data.id + '/' + this.active_sem.intID + '/' + mt;
       if (this.deficiencies.length > 0 || this.balance > 0) {
         Swal.fire({
           title: 'Warning',
