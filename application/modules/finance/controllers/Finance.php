@@ -132,7 +132,7 @@ class Finance extends CI_Controller {
 
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['page'] = "student_account_report";
-        $this->data['opentree'] = "finance_student_account";
+        $this->data['opentree'] = "finance_admin";
         $this->data['sem'] = $sem;
         
         $this->load->view("common/header",$this->data);
@@ -271,15 +271,15 @@ class Finance extends CI_Controller {
         $this->data['page'] = "view_all_students";
         $this->data['opentree'] = "finance_student_account";
 
-        $max_id = $this->db->select('updated_at')
-                            ->order_by('updated_at', 'DESC')
+        $max_id = $this->db->select('id')
+                            ->order_by('id', 'DESC')
                             ->limit(1)
                             ->get('payment_details')
                             ->first_row();
 
         // Data to be sent in the POST request
         if($max_id)
-            $this->data['max_id'] = $max_id->updated_at;
+            $this->data['max_id'] = $max_id->id;
         else
             $this->data['max_id'] = 0;       
 
@@ -323,24 +323,24 @@ class Finance extends CI_Controller {
             $temp['term'] = $reg;     
             
             //TUITION PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY created_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY updated_at ASC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
             $temp['payments_tuition']  = [];                                  
             foreach($tuition_payments as $tuition_payment){
-                $tuition_payment['created_at'] = date('M j, Y',strtotime($tuition_payment['created_at']));
+                $tuition_payment['updated_at'] = date('M j, Y',strtotime($tuition_payment['updated_at']));
                 $temp['payments_tuition'][] = $tuition_payment;
             }   
             
             //OTHER PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY created_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY updated_at ASC";
             $other_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
             $temp['payments_other']  = [];                                  
             foreach($other_payments as $other_payment){
-                $other_payment['created_at'] = date('M j, Y',strtotime($other_payment['created_at']));
+                $other_payment['updated_at'] = date('M j, Y',strtotime($other_payment['updated_at']));
                 $temp['payments_other'][] = $other_payment;
             } 
 
@@ -402,11 +402,7 @@ class Finance extends CI_Controller {
         $response = json_decode($response['data']);
             
         foreach($response as $data){
-            $item = $this->db->get_where('payment_details',array('id'=>$data->id))->first_row();
-            if(isset($item))
-                $this->data_poster->post_data('payment_details',$data,$data->id,'id');
-            else
-                $this->data_poster->post_data('payment_details',$data);
+            $this->data_poster->post_data('payment_details',$data);
         }
         
         $ret['success'] = true;

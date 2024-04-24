@@ -2401,93 +2401,343 @@ class Pdf extends CI_Controller {
         $this->data['sy'] = $sy;
         $this->data['campus'] = $campus;
                 
-
-        //print_r($this->data['spouse']);
         tcpdf();
         // create new PDF document
-        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        // create new PDF document
-        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array('A4'), true, 'UTF-8', false, true);        
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Ched Enrollment");
+        $pdf->SetTitle("Ched Promotional Report");
         
 
         // set margins
-        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetMargins(0.5, .25, 0.5);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        //$pdf->SetAutoPageBreak(TRUE, 6);
-
-    //font setting
-        //$pdf->SetFont('calibril_0', '', 15, '', 'false');
-        // set default font subsetting mode
-        // Set font
-        // dejavusans is a UTF-8 Unicode font, if you only need to
-        // print standard ASCII chars, you can use core fonts like
-        // helvetica or times to reduce file size.
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        
+        $html = $this->load->view("ched_report",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output("ched_promotional_report.pdf", 'I');
+    }
+    
+    public function ched_enrollment_report($sem = 0, $campus)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            $student_data = array();
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+
+            $totalUnits = 0;
+            $subjectsEnrolled = '';
+
+            foreach($subjects as $subjectIndex => $subject){
+                $totalUnits += $subject['strUnits'];
+                $subjectsEnrolled .= $subject['strDescription'] . ' (' . $subject['strUnits'] . ')';
+                if($subjectIndex < count($subjects) - 1){
+                    $subjectsEnrolled .= ', ';
+                }
+            }
+            
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $student['nameExtension'] = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $student['nameExtension'] = $suffix;
+                    $student['strLastname'] = str_replace($suffix, '', $student['strLastname']);
+                    break;
+                }
+            }
+
+            if($subjects){
+                $student['totalUnits'] = $totalUnits;
+                $student['subjectsEnrolled'] = $subjectsEnrolled;
+                $student['course'] = $course;
+                $student['index'] = $index + 1;
+                $students_array[] = $student;
+            }
+        }
+
+        $this->data['students'] = $students_array;
+        $this->data['sy'] = $sy;
+        $this->data['campus'] = $campus;
+                
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Ched Enrollment Report");
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);    
-
-        // if($course == 0)
-        //     $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
-        // else
-        //     $programs = $this->data_fetcher->fetch_table('tb_mas_programs',null,null,array('intProgramID'=>$course));
-        
-
-
-        // foreach($programs as $program){
-        //     $st = [];
-        //     $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
-        //     if(!empty($students)){
-                
-        //         $this->data['year_level_total'] = count($students);
-        //         $male = 0;
-        //         $female = 0;
-        //         $this->data['last_page'] = false;
-        //         foreach($students as $student)
-        //         {
-        //             $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);                                            
-        //             $student['classes'] = $cl;                
-        //             $st[] = $student;
-        //             if($student['enumGender'] == "male")
-        //                 $male++;
-        //             else
-        //                 $female++;
-        //         }
-
-        //         $this->data['male'] = $male;
-        //         $this->data['female'] = $female;
-
-        //         $per_page = array_chunk($st, 2);
-        //         $this->data['count_start'] = 1;
-        //         $chunks_count = 1;
-        //         foreach($per_page as $chunk){
-        //             $this->data['students'] = $chunk;                
-                    $pdf->AddPage();
-        //             if(count($per_page) == $chunks_count)
-        //                 $this->data['last_page'] = true;
-        
-                    $html = $this->load->view("ched_report",$this->data,true);
-                    $pdf->writeHTML($html, true, false, true, false, '');            
-                    // $this->data['count_start'] += 2;                    
-                    // $chunks_count++;
-            //     }
-            // }
-        // }
-         
-         
+             
+        $pdf->AddPage();
           
-         $pdf->Output("ched_promotional_report.pdf", 'I');
+        $html = $this->load->view("ched_enrollment_report",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output("CHED_Enrollment_Report_" . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
 
+    public function ched_tes_report($sem = 0, $campus)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
 
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
 
+        foreach($students as $index => $student){
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $nameExtension = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $nameExtension = $suffix;
+                    $lastName = str_replace($suffix, '', $student['strLastname']);
+                    $lastName = trim($lastName, ' ');
+                    break;
+                }
+            }
+            
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $fatherLastName = $fatherFirstName = $fatherMiddleName = $motherLastName = $motherFirstName = $motherMiddleName = '';
+
+            //format name to capital then compare to student name to get first and last name of parents
+            $student['mother'] = ucwords($student['mother']);
+            $student['father'] = ucwords($student['father']);
+            $lastName = ucwords($lastName);
+            $student['strMiddlename'] = ucwords(trim($student['strMiddlename'], ' '));
+
+            if($student['father']){
+                if($student['father'] != 'n/a' && $student['father'] != 'no info'){
+
+                    if(strpos($student['father'], $lastName) !== false){
+                        $fatherLastName = $lastName;
+                        $fatherFirstName = str_replace($fatherLastName, '', $student['father']);
+                        $father = explode(" ", trim($fatherFirstName));
+
+                        if(count($father) > 1){
+                            $checkFatherMiddle = $father[count($father) - 1];
+                            if($checkFatherMiddle[1] == '.'){
+                                $fatherMiddleName = $checkFatherMiddle;
+                                $fatherFirstName = str_replace($checkFatherMiddle, '', $fatherFirstName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($student['mother']){
+                if($student['mother'] != 'n/a' && $student['mother'] != 'no info'){
+                    //check if mother used maiden name
+                    if($student['strMiddlename']){
+                        if(strpos($student['mother'], $student['strMiddlename']) !== false){
+                            $motherLastName = $student['strMiddlename'];
+                            $motherFirstName = str_replace($motherLastName, '', $student['mother']);
+                            $mother = explode(" ", trim($motherFirstName));
+
+                            if(count($mother) > 1){
+                                $checkMotherMiddle = $mother[count($mother) - 1];
+                                if($checkMotherMiddle[1] == '.'){
+                                    $motherMiddleName = $checkMotherMiddle;
+                                    $motherFirstName = str_replace($checkMotherMiddle, '', $motherFirstName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            $address = explode(",", $student['strAddress']);
+            $students[$index]['address'] = $address;
+            $students[$index]['fatherLastName'] = $fatherLastName;
+            $students[$index]['fatherFirstName'] = $fatherFirstName;
+            $students[$index]['fatherMiddleName'] = $fatherMiddleName;
+            $students[$index]['motherLastName'] = $motherLastName;
+            $students[$index]['motherFirstName'] = $motherFirstName;
+            $students[$index]['motherMiddleName'] = $motherMiddleName;
+            $students[$index]['course'] = $course;
+            $students[$index]['strLastname'] = $lastName;
+            $students[$index]['nameExtension'] = $nameExtension;
+            $students[$index]['index'] = $index + 1;
+        }
+
+        $this->data['students'] = $students;
+        $this->data['sy'] = $sy;
+        $this->data['campus'] = $campus;
+                
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Ched TES Report");
+        
+        // set margins
+        $pdf->SetMargins(0.15, .20, 0.05);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("ched_tes_report",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output("CHED_TES_Report_" . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
+
+    
+    public function ched_nstp_report($sem = 0, $campus)
+    {
+        $studentsArray = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            $nstpEnrolled = false;
+            $subjects = $this->db->select('tb_mas_subjects.isNSTP')
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+                ->get()
+                ->result_array();
+            
+            foreach($subjects as $subject){
+                if($subject['isNSTP'] == 1){
+                    $nstpEnrolled = true;
+                    break;
+                }
+            }
+
+            if($nstpEnrolled){
+                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+                $address = explode(",", $student['strAddress']);
+                $city = $province = '';
+    
+                if(count($address) > 1){
+                    if(!is_numeric($address[1])){
+                        $city = $address[1];
+                    }
+                    if(count($address) > 3){
+                        if(is_numeric($address[count($address) - 1]) && !is_numeric($address[count($address) - 2])){
+                            $province = $address[count($address) - 2];
+                        }
+                    }else if(count($address) > 2){
+                        if(!is_numeric($address[2])){
+                            $province = $address[2];
+                        }
+                    }
+                }
+                
+                $address = explode(",", $student['strAddress']);
+                $student['address'] = $address;
+                $student['city'] = $city;
+                $student['province'] = $province;
+                $student['course'] = $course;
+                $student['index'] = $index + 1;
+                $studentsArray[] = $student;
+            }
+        }
+        $this->data['students'] = $studentsArray;
+        $this->data['sy'] = $sy;
+        $this->data['campus'] = $campus;
+                
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Ched NSTP Report");
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("ched_nstp_report",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output("CHED_NSTP_Report_" . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
     
     public function is_admin()

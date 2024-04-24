@@ -879,27 +879,6 @@ class Registrar extends CI_Controller {
         $this->load->view("common/enlistment_report_conf",$this->data); 
     }
 
-    public function nstp_report($sem = 0)    
-    {
-        if($sem == 0){
-            $active_sem = $this->data_fetcher->get_active_sem();
-            $this->data['sem'] = $active_sem['intID'];
-        }
-        else{
-            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
-            $this->data['sem'] = $active_sem['intID'];
-        }        
-        // $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$this->data['sem'];
-        // $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$this->data['sem'];
-
-  
-        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
-        $this->load->view("common/header",$this->data);
-        $this->load->view("admin/nstp_report",$this->data);
-        $this->load->view("common/footer",$this->data); 
-        
-    }
-
     public function nstp_report_data($sem){
 
         $ret['data'] = $this->data_fetcher->getNSTPGraduates($sem);        
@@ -927,9 +906,64 @@ class Registrar extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/promotion_report_conf",$this->data); 
         }
-       
     }
 
+    public function ched_enrollment_report($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/ched_enrollment_report",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/ched_enrollment_report_conf",$this->data); 
+        }
+    }
+
+    public function ched_tes_report($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/ched_tes_report",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/ched_tes_report_conf",$this->data); 
+        }
+    }
+
+    public function nstp_report($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/ched_nstp_report",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/ched_nstp_report_conf",$this->data);
+        }
+    }
 
     public function advising_done(){
 
@@ -2197,7 +2231,7 @@ class Registrar extends CI_Controller {
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->where(array('tb_mas_registration.intAYID'=>$sem))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->order_by('tb_mas_users.strLastname', 'DESC')
                     ->get()
                     ->result_array();
 
@@ -2224,7 +2258,6 @@ class Registrar extends CI_Controller {
 
         echo json_encode($data);
     }
-    
     
     public function faculty_logged_in()
     {
