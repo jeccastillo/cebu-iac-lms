@@ -36,6 +36,7 @@
                     <option value="Reserved">Reserved</option>
                     <option value="Floating">Floating</option>
                     <option value="Will Not Proceed">Will Not Proceed</option>
+                    <option value="Did Not Reserve">Did Not Reserve</option>
                     <option value="For Enrollment">For Enrollment</option>
                     <option value="Confirmed">Complete Confirmed Information</option>                    
                     <option value="Enlisted">Enlisted</option>
