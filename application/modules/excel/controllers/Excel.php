@@ -5243,7 +5243,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
                     ->setCellValue('E'.$i, strtoupper($student['enumGender']))
                     ->setCellValue('F'.$i, $course['strProgramCode'])
-                    ->setCellValue('G'.$i, strtoupper($student['intStudentYear']));
+                    ->setCellValue('G'.$i, $student['intStudentYear']);
 
                 foreach($subjects as $subject){
                     $objPHPExcel->setActiveSheetIndex(0)
@@ -5384,6 +5384,760 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    public function ched_enrollment_report($sem = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Ched Enrollment Report';
+
+        $i = 8;
+
+        foreach($students as $index => $student){
+            
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $nameExtension = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $nameExtension = $suffix;
+                    $lastName = str_replace($suffix, '', $student['strLastname']);
+                    break;
+                }
+            }
+            
+            $totalUnits = 0;
+            $subjectsEnrolled = '';
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+            if($subjects){
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $index + 1)
+                    ->setCellValue('B'.$i, $course['strProgramDescription'])
+                    ->setCellValue('C'.$i, $course['strMajor'] != 'None' ? $course['strMajor'] : null)
+                    ->setCellValue('D'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('E'.$i, ucfirst($student['strFirstname']))
+                    ->setCellValue('F'.$i, ucfirst($student['strMiddlename']))
+                    ->setCellValue('G'.$i, ucfirst($lastName))
+                    ->setCellValue('H'.$i, ucfirst($nameExtension))
+                    ->setCellValue('I'.$i, ucfirst($student['strCitizenship']))
+                    ->setCellValue('J'.$i, substr(ucfirst($student['enumGender']), 0, 1))
+                    ->setCellValue('K'.$i, strtoupper($student['intStudentYear']))
+                    ->setCellValue('L'.$i, $subjectsEnrolled)
+                    ->setCellValue('M'.$i, $totalUnits);
+
+                $i++;
+
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':L' . $i)->applyFromArray(
+                    array(
+                        'borders' => array(
+                            'top' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array('rgb' => '000000'),
+                            ),
+                        ),
+                    )
+                );
+            }
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'School Name :')
+                    ->setCellValue('B1', 'iACADEMY')
+                    ->setCellValue('A2', 'Address :')
+                    ->setCellValue('B2', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City')
+                    ->setCellValue('A3', 'Term & AY :')
+                    ->setCellValue('B3', $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A4', 'Note:')
+                    ->setCellValue('B4', 'This template is the official template for Enrollment List submission released by CHED NCR Office, You may add rows for student lists but not the columns')
+                    ->setCellValue('A5', 'NO.')
+                    ->setCellValue('B5', 'PROGRAM')
+                    ->setCellValue('C5', 'MAJOR')
+                    ->setCellValue('D5', 'STUDENT NUMBER')
+                    ->setCellValue('E5', 'FIRST NAME')
+                    ->setCellValue('F5', 'MIDDLE NAME')
+                    ->setCellValue('G5', 'SURNAME')
+                    ->setCellValue('H5', 'NAME EXTENSION')
+                    ->setCellValue('I5', 'CITIZENSHIP')
+                    ->setCellValue('J5', 'GENDER')
+                    ->setCellValue('K5', 'YEAR LEVEL')
+                    ->setCellValue('L5', 'SUBJECTS ENROLLED FOLLOWED BY UNITS')
+                    ->setCellValue('M5', 'NO. OF UNITS')
+                    ->setCellValue('N5', 'REMARKS (if any)')
+                    ->setCellValue('B6', 'Ex. Bachelor of Science in Business Administration')
+                    ->setCellValue('B7', 'Please do not abbreviate')
+                    ->setCellValue('C6', 'Ex. Marketing')
+                    ->setCellValue('C7', 'Do not insert N/A')
+                    ->setCellValue('D7', 'Do not insert N/A')
+                    ->setCellValue('E6', 'Juan III')
+                    ->setCellValue('F6', 'Santos')
+                    ->setCellValue('G6', 'Dela Cruz')
+                    ->setCellValue('E7', 'Do not insert N/A')
+                    ->setCellValue('H6', 'Ex. Jr., II, III Do not insert N/A')
+                    ->setCellValue('I6', 'Ex. Filipino')
+                    ->setCellValue('J6', 'M/F')
+                    ->setCellValue('K6', '1 / 2 / 3 / 4 / 5')
+                    ->setCellValue('L6', 'Ex. On the Job Trainee (3), Communication Arts (3)')
+                    ->setCellValue('L7', 'Please do not abbreviate');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('B5')->getFont()->setItalic(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:B3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B5:N7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A3')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => 'FFFFFF'),
+                    'size'  => 12,
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '101D6B')
+                ),
+            )
+        );
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A1'), 'A5:N7');
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A1'), 'A8:A' . $i);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B1:B3')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 15,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A3')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A5:N5')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('B6:L7')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => false,
+                    'italic' => true,
+                    'size'  => 10,
+                )
+            )
+        );
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A5:N' . $i)->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+        
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A5:N'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('B8:N'.$i)->getAlignment()->setWrapText(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('B1:H1');
+        $sheet->mergeCells('B2:H2');
+        $sheet->mergeCells('B3:H3');
+        $sheet->mergeCells('A5:A7');
+        $sheet->mergeCells('D5:D6');
+        $sheet->mergeCells('H6:H7');
+        $sheet->mergeCells('I6:I7');
+        $sheet->mergeCells('J6:J7');
+        $sheet->mergeCells('K6:K7');
+        $sheet->mergeCells('M5:M7');
+        $sheet->mergeCells('N5:N7');
+        $sheet->mergeCells('E7:G7');
+
+        $objPHPExcel->getActiveSheet()->setTitle('CHED - Enrollment Report');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="CHED Enrollment Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function ched_tes_report($sem = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Ched TES Report';
+
+        $i = 10;
+
+        foreach($students as $index => $student){
+
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $nameExtension = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $nameExtension = $suffix;
+                    $lastName = str_replace($suffix, '', $student['strLastname']);
+                    $lastName = trim($lastName, ' ');
+                    break;
+                }
+            }
+            
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $fatherLastName = $fatherFirstName = $fatherMiddleName = $motherLastName = $motherFirstName = $motherMiddleName = '';
+
+            //format name to capital then compare to student name to get first and last name of parents
+            $student['mother'] = ucwords($student['mother']);
+            $student['father'] = ucwords($student['father']);
+            $lastName = ucwords($lastName);
+            $student['strMiddlename'] = ucwords(trim($student['strMiddlename'], ' '));
+
+            if($student['father']){
+                if($student['father'] != 'n/a' && $student['father'] != 'no info'){
+
+                    if(strpos($student['father'], $lastName) !== false){
+                        $fatherLastName = $lastName;
+                        $fatherFirstName = str_replace($fatherLastName, '', $student['father']);
+                        $father = explode(" ", trim($fatherFirstName));
+
+                        if(count($father) > 1){
+                            $checkFatherMiddle = $father[count($father) - 1];
+                            if($checkFatherMiddle[1] == '.'){
+                                $fatherMiddleName = $checkFatherMiddle;
+                                $fatherFirstName = str_replace($checkFatherMiddle, '', $fatherFirstName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($student['mother']){
+                if($student['mother'] != 'n/a' && $student['mother'] != 'no info'){
+                    //check if mother used maiden name
+                    if($student['strMiddlename']){
+                        if(strpos($student['mother'], $student['strMiddlename']) !== false){
+                            $motherLastName = $student['strMiddlename'];
+                            $motherFirstName = str_replace($motherLastName, '', $student['mother']);
+                            $mother = explode(" ", trim($motherFirstName));
+
+                            if(count($mother) > 1){
+                                $checkMotherMiddle = $mother[count($mother) - 1];
+                                if($checkMotherMiddle[1] == '.'){
+                                    $motherMiddleName = $checkMotherMiddle;
+                                    $motherFirstName = str_replace($checkMotherMiddle, '', $motherFirstName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            $address = explode(",", $student['strAddress']);
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($lastName))
+                ->setCellValue('D'.$i, ucfirst($student['strFirstname']))
+                ->setCellValue('E'.$i, ucfirst($nameExtension))
+                ->setCellValue('F'.$i, ucfirst($student['strMiddlename']))
+                ->setCellValue('G'.$i, ucfirst($student['enumGender']))
+                ->setCellValue('H'.$i, date("d/m/Y", strtotime($student['dteBirthDate'])))
+                ->setCellValue('I'.$i, $course['strProgramDescription'])
+                ->setCellValue('J'.$i, $student['intStudentYear'])
+                ->setCellValue('K'.$i, $fatherLastName)
+                ->setCellValue('L'.$i, $fatherFirstName)
+                ->setCellValue('M'.$i, $fatherMiddleName)
+                ->setCellValue('N'.$i, $motherLastName)
+                ->setCellValue('O'.$i, $motherFirstName)
+                ->setCellValue('P'.$i, $motherMiddleName)
+                ->setCellValue('Q'.$i, $address[0])
+                ->setCellValue('R'.$i, is_numeric($address[count($address) - 1]) ? $address[count($address) - 1] : '')
+                ->setCellValue('S'.$i, '')
+                ->setCellValue('T'.$i, $student['strMobileNumber'])
+                ->setCellValue('U'.$i, $student['strEmail'])
+                ->setCellValue('V'.$i, '');
+
+            $i++;
+
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':L' . $i)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('rgb' => '000000'),
+                        ),
+                    ),
+                )
+            );
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'HEI NAME :')
+                    ->setCellValue('B2', 'iACADEMY')
+                    ->setCellValue('A3', 'HEI UII :')
+                    ->setCellValue('B3', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City')
+                    ->setCellValue('A4', 'Acad Year :')
+                    ->setCellValue('B4', $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('B7', 'STUDENT INFORMATION')
+                    ->setCellValue('K7', 'FAMILY BACKGROUND')
+                    ->setCellValue('A8', 'SEQ')
+                    ->setCellValue('B8', 'STUDENT ID')
+                    ->setCellValue('C8', 'STUDENT\'S NAME')
+                    ->setCellValue('G8', 'STUDENT\'S PROFILE')
+                    ->setCellValue('K8', 'FATHER\'S NAME')
+                    ->setCellValue('N8', 'MOTHER\'S MAIDEN NAME')
+                    ->setCellValue('Q8', 'PERMANENT ADDRESS	')
+                    ->setCellValue('S8', 'DISABILITY (leave blank if NOT Applicable)')
+                    ->setCellValue('T8', 'CONTACT NUMBER')
+                    ->setCellValue('U8', 'EMAIL ADDRESS')
+                    ->setCellValue('V8', 'INDIGENOUS PEOPLE GROUP (leave blank if NOT Applicable)')
+                    ->setCellValue('C9', 'LAST NAME')
+                    ->setCellValue('D9', 'GIVEN NAME')
+                    ->setCellValue('E9', 'EXT. NAME')
+                    ->setCellValue('F9', 'MIDDLE NAME')
+                    ->setCellValue('G9', 'SEX (Male or Female)')
+                    ->setCellValue('H9', 'BIRTHDATE (dd/mm/yyyy)')
+                    ->setCellValue('I9', 'COMPLETE PROGRAM NAME (Should be consistent with your HEI Registry)')
+                    ->setCellValue('J9', 'YEAR LEVEL (1,2,3,4,5)')
+                    ->setCellValue('K9', 'LAST NAME')
+                    ->setCellValue('L9', 'GIVEN NAME')
+                    ->setCellValue('M9', 'MIDDLE NAME')
+                    ->setCellValue('N9', 'LAST NAME')
+                    ->setCellValue('O9', 'GIVEN NAME')
+                    ->setCellValue('P9', 'MIDDLE NAME')
+                    ->setCellValue('Q9', 'STREET & BARANGAY')
+                    ->setCellValue('R9', 'ZIPCODE (TES Applicant)');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('B5')->getFont()->setItalic(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:A4')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A8')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '0D6ED0')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'C8:S8');
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'V8');
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'E9');
+
+        $objPHPExcel->getActiveSheet()->getStyle('B8')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'FFAD56')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'T8:U8');
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'C9:D9');
+        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'F9:R9');
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A8:V' . $i)->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A8:V'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:V'.$i)->getAlignment()->setWrapText(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(11);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(6);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(15);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('B2:H2');
+        $sheet->mergeCells('B3:H3');
+        $sheet->mergeCells('B4:H4');
+        $sheet->mergeCells('B7:J7');
+        $sheet->mergeCells('K7:R7');
+        $sheet->mergeCells('A8:A9');
+        $sheet->mergeCells('B8:B9');
+        $sheet->mergeCells('C8:F8');
+        $sheet->mergeCells('G8:J8');
+        $sheet->mergeCells('K8:M8');
+        $sheet->mergeCells('N8:P8');
+        $sheet->mergeCells('Q8:R8');
+        $sheet->mergeCells('S8:S9');
+        $sheet->mergeCells('T8:T9');
+        $sheet->mergeCells('U8:U9');
+        $sheet->mergeCells('V8:V9');
+
+        $objPHPExcel->getActiveSheet()->setTitle('CHED - TES');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="CHED TES Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function ched_nstp_report($sem = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Ched NSTP Report';
+
+        $i = 8;
+
+        foreach($students as $index => $student){
+            
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+            $address = explode(",", $student['strAddress']);
+            $city = $province = '';
+            if(count($address) > 1){
+                if(!is_numeric($address[1])){
+                    $city = $address[1];
+                }
+                if(count($address) > 3){
+                    if(is_numeric($address[count($address) - 1]) && !is_numeric($address[count($address) - 2])){
+                        $province = $address[count($address) - 2];
+                    }
+                }else if(count($address) > 2){
+                    if(!is_numeric($address[2])){
+                        $province = $address[2];
+                    }
+                }
+            }
+
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($student['strLastname']))
+                ->setCellValue('D'.$i, ucfirst($student['strFirstname']))
+                ->setCellValue('E'.$i, ucfirst($student['strMiddlename']))
+                ->setCellValue('F'.$i, $course['strProgramDescription'])
+                ->setCellValue('G'.$i, ucfirst($student['enumGender']))
+                ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
+                ->setCellValue('I'.$i, $address[0])
+                ->setCellValue('J'.$i, $city)
+                ->setCellValue('K'.$i, $province)
+                ->setCellValue('L'.$i, $student['strMobileNumber'])
+                ->setCellValue('M'.$i, $student['strEmail']);
+
+            $i++;
+
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY')
+                    ->setCellValue('A2', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City Contact No. 889-5555')
+                    ->setCellValue('A3', 'Institutional Identifier No.: 13315')
+                    ->setCellValue('A4', 'Term/SY: ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A5', 'List of NSTP CWTS/LTS Enrollees')
+                    ->setCellValue('A7', 'No.')
+                    ->setCellValue('B7', 'Student No.')
+                    ->setCellValue('C7', 'Surname')
+                    ->setCellValue('D7', 'First Name')
+                    ->setCellValue('E7', 'Middle Name')
+                    ->setCellValue('F7', 'Course/Program (Write in Full)')
+                    ->setCellValue('G7', 'Gender')
+                    ->setCellValue('H7', 'Birthdate (ex. 11/25/1992)')
+                    ->setCellValue('I7', 'Street/Barangay Address')
+                    ->setCellValue('J7', 'Town/City Address')
+                    ->setCellValue('K7', 'Provincial Address')
+                    ->setCellValue('L7', 'Contact Number Telephone/Mobile')
+                    ->setCellValue('M7', 'Email address');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:M5')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A7:M7')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A7:M' . $i)->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A7:M'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:M'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(13);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(25);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:M1');
+        $sheet->mergeCells('A2:M2');
+        $sheet->mergeCells('A3:M3');
+        $sheet->mergeCells('A4:M4');
+        $sheet->mergeCells('A5:M5');
+
+        $objPHPExcel->getActiveSheet()->setTitle('CHED - NSTP');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="CHED NSTP Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
     private function columnIndexToLetter($columnIndex)
     {
         $letter = '';
