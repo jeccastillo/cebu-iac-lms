@@ -966,6 +966,246 @@ class Registrar extends CI_Controller {
         }
     }
 
+    public function ched_enrollment_report_data($sem)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            $student_data = array();
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+
+            $totalUnits = 0;
+            $subjectsEnrolled = '';
+
+            foreach($subjects as $subjectIndex => $subject){
+                $totalUnits += $subject['strUnits'];
+                $subjectsEnrolled .= $subject['strDescription'] . ' (' . $subject['strUnits'] . ')';
+                if($subjectIndex < count($subjects) - 1){
+                    $subjectsEnrolled .= ', ';
+                }
+            }
+            
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $student['nameExtension'] = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $student['nameExtension'] = $suffix;
+                    $student['strLastname'] = str_replace($suffix, '', $student['strLastname']);
+                    break;
+                }
+            }
+
+            if($subjects){
+                $student['totalUnits'] = $totalUnits;
+                $student['subjectsEnrolled'] = $subjectsEnrolled;
+                $student['course'] = $course;
+                $student['index'] = $index + 1;
+                $students_array[] = $student;
+            }
+        }
+
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
+
+    public function ched_tes_report_data($sem)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            $suffixList = ['Jr.', 'Jr', 'Sr.', 'Sr', 'II', 'III', 'IV'];
+            $nameExtension = '';
+            $lastName = $student['strLastname'];
+
+            foreach($suffixList as $suffix){
+                // check if last name contains a suffix 
+                if(strpos($student['strLastname'], $suffix) !== false){
+                    $nameExtension = $suffix;
+                    $lastName = str_replace($suffix, '', $student['strLastname']);
+                    $lastName = trim($lastName, ' ');
+                    break;
+                }
+            }
+            
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            $fatherLastName = $fatherFirstName = $fatherMiddleName = $motherLastName = $motherFirstName = $motherMiddleName = '';
+
+            //format name to capital then compare to student name to get first and last name of parents
+            $student['mother'] = ucwords($student['mother']);
+            $student['father'] = ucwords($student['father']);
+            $lastName = ucwords($lastName);
+            $student['strMiddlename'] = ucwords(trim($student['strMiddlename'], ' '));
+
+            if($student['father']){
+                if($student['father'] != 'n/a' && $student['father'] != 'no info'){
+
+                    if(strpos($student['father'], $lastName) !== false){
+                        $fatherLastName = $lastName;
+                        $fatherFirstName = str_replace($fatherLastName, '', $student['father']);
+                        $father = explode(" ", trim($fatherFirstName));
+
+                        if(count($father) > 1){
+                            $checkFatherMiddle = $father[count($father) - 1];
+                            if($checkFatherMiddle[1] == '.'){
+                                $fatherMiddleName = $checkFatherMiddle;
+                                $fatherFirstName = str_replace($checkFatherMiddle, '', $fatherFirstName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($student['mother']){
+                if($student['mother'] != 'n/a' && $student['mother'] != 'no info'){
+                    //check if mother used maiden name
+                    if($student['strMiddlename']){
+                        if(strpos($student['mother'], $student['strMiddlename']) !== false){
+                            $motherLastName = $student['strMiddlename'];
+                            $motherFirstName = str_replace($motherLastName, '', $student['mother']);
+                            $mother = explode(" ", trim($motherFirstName));
+
+                            if(count($mother) > 1){
+                                $checkMotherMiddle = $mother[count($mother) - 1];
+                                if($checkMotherMiddle[1] == '.'){
+                                    $motherMiddleName = $checkMotherMiddle;
+                                    $motherFirstName = str_replace($checkMotherMiddle, '', $motherFirstName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            $address = explode(",", $student['strAddress']);
+            $student['address'] = $address;
+            $student['fatherLastName'] = $fatherLastName;
+            $student['fatherFirstName'] = $fatherFirstName;
+            $student['fatherMiddleName'] = $fatherMiddleName;
+            $student['motherLastName'] = $motherLastName;
+            $student['motherFirstName'] = $motherFirstName;
+            $student['motherMiddleName'] = $motherMiddleName;
+            $student['course'] = $course;
+            $student['strLastname'] = $lastName;
+            $student['nameExtension'] = $nameExtension;
+            $student['index'] = $index + 1;
+            $students_array[] = $student;
+        }
+        
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
+
+    public function ched_nstp_report_data($sem)
+    {
+        $students_array = array();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            $nstpEnrolled = false;
+            $subjects = $this->db->select('tb_mas_subjects.isNSTP')
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+                ->get()
+                ->result_array();
+            
+            foreach($subjects as $subject){
+                if($subject['isNSTP'] == 1){
+                    $nstpEnrolled = true;
+                    break;
+                }
+            }
+
+            if($nstpEnrolled){
+                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+                $address = explode(",", $student['strAddress']);
+                $city = $province = '';
+    
+                if(count($address) > 1){
+                    if(!is_numeric($address[1])){
+                        $city = $address[1];
+                    }
+                    if(count($address) > 3){
+                        if(is_numeric($address[count($address) - 1]) && !is_numeric($address[count($address) - 2])){
+                            $province = $address[count($address) - 2];
+                        }
+                    }else if(count($address) > 2){
+                        if(!is_numeric($address[2])){
+                            $province = $address[2];
+                        }
+                    }
+                }
+                
+                $address = explode(",", $student['strAddress']);
+                $student['address'] = $address;
+                $student['city'] = $city;
+                $student['province'] = $province;
+                $student['course'] = $course;
+                $student['index'] = $index + 1;
+                $students_array[] = $student;
+            }
+        }
+        
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        
