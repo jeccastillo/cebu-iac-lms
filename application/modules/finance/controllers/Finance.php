@@ -323,24 +323,24 @@ class Finance extends CI_Controller {
             $temp['term'] = $reg;     
             
             //TUITION PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY updated_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND status = 'Paid' ORDER BY or_date ASC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
             $temp['payments_tuition']  = [];                                  
             foreach($tuition_payments as $tuition_payment){
-                $tuition_payment['updated_at'] = date('M j, Y',strtotime($tuition_payment['updated_at']));
+                $tuition_payment['or_date'] = date('M j, Y',strtotime($tuition_payment['or_date']));
                 $temp['payments_tuition'][] = $tuition_payment;
             }   
             
             //OTHER PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY updated_at ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' ORDER BY or_date ASC";
             $other_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
             $temp['payments_other']  = [];                                  
             foreach($other_payments as $other_payment){
-                $other_payment['updated_at'] = date('M j, Y',strtotime($other_payment['updated_at']));
+                $other_payment['or_date'] = date('M j, Y',strtotime($other_payment['or_date']));
                 $temp['payments_other'][] = $other_payment;
             } 
 
@@ -402,7 +402,12 @@ class Finance extends CI_Controller {
         $response = json_decode($response['data']);
             
         foreach($response as $data){
-            $this->data_poster->post_data('payment_details',$data);
+            $item = $this->db->get_where('payment_details',array('id'=>$data->id))->first_row();
+            if(isset($item))
+                $this->data_poster->post_data('payment_details',$data,$data->id,'id');
+            else
+                $this->data_poster->post_data('payment_details',$data);
+            
         }
         
         $ret['success'] = true;
