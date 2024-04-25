@@ -653,7 +653,7 @@ class Registrar extends CI_Controller {
 
 
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-        $type = $active_sem['term_student_type'];
+        $type = $active_sem->term_student_type;
         $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type));
         $data['programs'] = $programs;
         $ret = [];        
