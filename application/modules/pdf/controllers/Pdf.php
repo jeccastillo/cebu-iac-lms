@@ -394,9 +394,11 @@ class Pdf extends CI_Controller {
     
     }
 
-    function enrollment_summary($sem){
-        
-        $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+    function enrollment_summary($sem)
+    {
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        $type = $active_sem['term_student_type'];
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
         $data['programs'] = $programs;
         $ret = [];        
 
