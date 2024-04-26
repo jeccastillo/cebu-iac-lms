@@ -44,6 +44,30 @@
     }
     else{
     // Set some content to print
+    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+                <tr>                             
+                    <td rowspan="3" width="20%">
+                        <img width="60px;" src="https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png" alt="seal" border="0">
+                    </td>
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.</font>
+                    </td>
+                </tr>
+                <tr>                                                 
+                    <td width="80%">             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.$cm.'</font>
+                    </td>
+                </tr>
+                <tr>                                           
+                    <td>             
+                        <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.ucfirst($period).' Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
+                    </td>
+                </tr> 
+                <tr>
+                    <td style="line-height:10px;" colspan=5></td>         
+                </tr>        
+            </table>
+           ';
     $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
             <tr>
                 <td width="20%" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/1spYkNx/seal.png"  width="100" height="95"/></td>
