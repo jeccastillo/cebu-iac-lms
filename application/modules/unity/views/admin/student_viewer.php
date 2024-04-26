@@ -904,8 +904,8 @@ new Vue({
     },
     printRF: function() {
       var mt = 35;
-      if(this.campus = 'Makati')
-        mt = 12;
+      if(this.campus == 'Makati')
+        mt = 12;      
 
       var url = base_url + 'pdf/student_viewer_registration_print/' + this.student.intID +
         '/' + this.applicant_data.id + '/' + this.active_sem.intID + '/' + mt;
