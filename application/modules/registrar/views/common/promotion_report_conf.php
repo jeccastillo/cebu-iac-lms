@@ -1,7 +1,6 @@
 <?php $d_open = '<div class="btn-group"><button type="button" class="btn btn-default">Actions</button><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu" role="menu">';
 ?>
 <script type="text/javascript">
-
 $(document).ready(function() {
     let table = $('#users-table').DataTable({
         searching: false,
@@ -43,7 +42,7 @@ $(document).ready(function() {
             },
             {
                 data: 'subjects',
-                title: 'Subjects',   
+                title: 'Subjects',
             },
             {
                 data: 'subjectDesc',
@@ -70,7 +69,8 @@ $(document).ready(function() {
         ],
     });
 
-    $.get('<?php echo base_url(); ?>' + 'registrar/ched_report/' + '<?php echo $current_sem; ?>', function(json) {
+    $.get('<?php echo base_url(); ?>' + 'registrar/ched_report/' + '<?php echo $current_sem; ?>', function(
+        json) {
         let chedData = JSON.parse(json).data
         chedData.forEach((student, index) => {
             table.row.add({
@@ -87,7 +87,7 @@ $(document).ready(function() {
                 mg: student.subjects[0].floatMidtermGrade,
                 fg: student.subjects[0].floatFinalGrade
             }).draw();
-            if (student.subjects.length > 1) {           
+            if (student.subjects.length > 1) {
                 for (let i = 1; i < student.subjects.length; i++) {
                     table.row.add({
                         studentNo: '',
@@ -112,6 +112,5 @@ $(document).ready(function() {
 $("#select-term-leads").on('change', function(e) {
     const term = $(this).val();
     document.location = "<?php echo base_url()."registrar/promotional_report/"; ?>" + term;
-  });
-
+});
 </script>
