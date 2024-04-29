@@ -122,18 +122,18 @@ class Finance extends CI_Controller {
     }
 
 
-    public function student_account_report($id = 0){
+    public function student_account_report($term = 0){
 
-        $sy = $this->data_fetcher->get_active_sem();
-        if($id != 0)
-            $sy = $this->data_fetcher->getAy($id); 
-
-        $sem = $sy['intID'];
+        if($term == 0)
+            $term = $this->data_fetcher->get_processing_sem();        
+        else
+            $term = $this->data_fetcher->get_sem_by_id($term); 
+         
 
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['current_sem'] = $term['intID'];
         $this->data['page'] = "student_account_report";
         $this->data['opentree'] = "finance_student_account";
-        $this->data['sem'] = $sem;
         
         $this->load->view("common/header",$this->data);
         $this->load->view("student_account_report",$this->data);
