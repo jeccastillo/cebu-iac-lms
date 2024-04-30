@@ -243,6 +243,7 @@
                                     <option value="nsf">New Student Misc</option>
                                     <option value="new_student">New Student Fees</option>
                                     <option value="late_tuition">Late Tuition Fee</option>
+                                    <option value="late_enrollment">Late Enrollment Fee</option>
                                     <option value="thesis">Thesis</option>
                                     <option value="internship">Internship</option>
                                     <option value="nstp">NSTP/ROTC</option>
