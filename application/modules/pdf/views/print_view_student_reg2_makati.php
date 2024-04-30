@@ -220,6 +220,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                                 <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                             </tr>';
+                            if($tuition['late_enrollment_fee'] > 0):
+                                $html .='<tr>
+                                        <td>Other Fees</td>
+                                        <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
+                                    </tr>';
+                            endif;
                             
 
                 if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
