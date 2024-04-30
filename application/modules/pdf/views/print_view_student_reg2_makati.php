@@ -222,7 +222,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             </tr>';
                             if($tuition['late_enrollment_fee'] > 0):
                                 $html .='<tr>
-                                        <td>Other Fees</td>
+                                        <td>Late Enrollment</td>
                                         <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
                                         <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
                                     </tr>';
