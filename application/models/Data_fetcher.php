@@ -2452,7 +2452,7 @@ class Data_fetcher extends CI_Model {
         $thesis_fee = 0;    
         $total_internship_fee = 0;
         $hasInternship = false;
-        $sem  = $this->get_active_sem();
+        $sem  = $this->get_sem_by_id($syid);
         $scholarship_discount = 0;
         $discounted_price = 0;        
         $scholar = null;
@@ -2530,7 +2530,7 @@ class Data_fetcher extends CI_Model {
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }   
-        else{
+        elseif(date("Y-m-d ") >= $sem['reconf_start']){
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 

@@ -230,7 +230,14 @@
             <div class="col-sm-4">Other Fees</div>
             <div class="col-sm-4"><?php echo number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') ?></div>
             <div class="col-sm-4"><?php echo number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') ?></div>            
-        </div>                                   
+        </div>
+        <?php if($tuition['late_enrollment_fee'] > 0): ?>
+            <div class="row">
+                <div class="col-sm-4">Late Enrollment</div>
+                <div class="col-sm-4"><?php echo number_format($tuition['late_enrollment_fee'], 2, '.' ,',') ?></div>
+                <div class="col-sm-4"><?php echo number_format($tuition['late_enrollment_fee'], 2, '.' ,',') ?></div>            
+            </div>
+        <?php endif; ?>                                   
         <hr />
         <?php if($tuition['total_discount'] > 0 || $tuition['total_discount_dc'] > 0): ?>
             <div class="row">
