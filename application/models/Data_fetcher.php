@@ -2386,7 +2386,7 @@ class Data_fetcher extends CI_Model {
         }
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered']);
         else                              
             return null;
         
@@ -2432,7 +2432,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01")
     {
 
         $tuition = 0;
@@ -2462,6 +2462,8 @@ class Data_fetcher extends CI_Model {
         $discount_array = [];
         $scholarship_array = [];
         $late_enrollment_fee = 0;
+        if(!isset($dr))
+            $dr = date("Y-m-d");
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
@@ -2530,7 +2532,7 @@ class Data_fetcher extends CI_Model {
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }   
-        elseif(date("Y-m-d ") >= $sem['reconf_start']){
+        elseif($dr >= $sem['reconf_start']){
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
