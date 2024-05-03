@@ -191,6 +191,25 @@ class AdmissionsV1 extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function awareness_stats($term = 0){
+        if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);  
+                
+            
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $this->data['current_sem'] = $term['intID'];
+                   
+        $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/awareness_stats",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
+    public function awareness_stats_data($term){
+
+    }
 
     public function programs($slug){
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
