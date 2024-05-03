@@ -117,11 +117,11 @@
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
                                     <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
-                                    <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid; apply_term_amount = item.amount; apply_term_description = item.name" 
+                                    <button data-toggle="modal"  @click="update_id = item.id" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
                                 <td :class="item.muted" v-else>
-                                <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid;" 
+                                <button data-toggle="modal"  @click="appyToTermUpdate(item)" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>                                                                                             
                             </tr>
@@ -764,6 +764,12 @@ new Vue({
             
             })
             
+        },
+        appyToTermUpdate(item){
+            this.update_id = item.id; 
+            this.sy_from = item.syid; 
+            this.apply_term_amount = item.amount; 
+            this.apply_term_description = item.name
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
