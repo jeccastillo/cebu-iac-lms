@@ -242,7 +242,7 @@ new Vue({
         tuition: [],
         apply_term: undefined,
         update_id: undefined,
-        sy_from: undefined;
+        sy_from: undefined,
         other: [],
         finance: undefined, 
         student: {
