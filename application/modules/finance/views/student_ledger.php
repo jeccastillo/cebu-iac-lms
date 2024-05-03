@@ -116,11 +116,14 @@
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
-                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
+                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
                                     <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid;" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
-                                <td :class="item.muted" v-else></td>                                                                                             
+                                <td :class="item.muted" v-else>
+                                <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid;" 
+                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
+                                </td>                                                                                             
                             </tr>
                             <tr>                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
