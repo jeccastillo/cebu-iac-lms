@@ -115,7 +115,11 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
-                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
+                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
+                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
+                                    <button data-toggle="modal"  @click="update_id = item.id;" 
+                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
+                                </td>
                                 <td :class="item.muted" v-else></td>                                                                                             
                             </tr>
                             <tr>                                
@@ -179,6 +183,33 @@
             </div>
             
         </section>
+        <div class="modal fade" id="applyToTermModal" role="dialog">
+            
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Apply To Term</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Select Term <span class="text-danger">*</span> </label>                           
+                            <select  @change="filterByTerm($event)" class="form-control" required v-model="apply_term">
+                                <option value=0>All</option>
+                                <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button @click="applyToTerm" class="btn btn-primary">Submit</button>
+                        <button type="button" :disabled="!or_update.or_number" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            
+        </div>
     </div>
 </aside>
 
@@ -211,6 +242,8 @@ new Vue({
         term_balance: 0,
         term_balance_other: 0,
         tuition: [],
+        apply_term: undefined,
+        update_id: undefined,
         other: [],
         finance: undefined, 
         student: {

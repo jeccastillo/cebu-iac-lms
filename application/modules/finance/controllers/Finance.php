@@ -441,13 +441,13 @@ class Finance extends CI_Controller {
 
     }
 
-    public function update_ledger_item(){
+    public function update_ledger_item($term = 0){
         $post =  $this->input->post();        
         
         if($this->db
             ->where('id',$post['id'])
             ->update('tb_mas_student_ledger',$post)){
-
+            
             $data['success'] =  true;
             $data['message'] = "Successfully updated ledger";
         }
