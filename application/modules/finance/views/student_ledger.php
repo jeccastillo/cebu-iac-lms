@@ -247,7 +247,7 @@ new Vue({
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
-        apply_term_description: undefined;
+        apply_term_description: undefined,
         other: [],
         finance: undefined, 
         student: {
