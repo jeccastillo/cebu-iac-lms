@@ -568,9 +568,19 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="i">
                             How did you find out about iACADEMY? <span class="text-red-500">*</span>
                         </label>
-                        <input
+                        <select
                             class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.source">
+                             required v-model="request.source">
+                             <option value="cos">COS (Career Orientation Seminar)</option>
+                             <option value="facebook">Facebook</option>
+                             <option value="instagram">Instagram</option>
+                             <option value="tiktol">Tiktok</option>
+                             <option value="other">Other Online Site/Platform</option>
+                             <option value="billboard">Billboard</option>
+                             <option value="newspaper">Newspaper</option>
+                             <option value="radio">Radio</option>
+                             <option value="tv">TV</option>
+                        </select>
                     </div>
                 </div>
 
