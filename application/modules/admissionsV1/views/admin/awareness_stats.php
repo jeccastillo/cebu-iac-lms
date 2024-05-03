@@ -7,15 +7,7 @@
                     <i class="ion ion-arrow-left-a"></i>
                     View Leads
                 </a> 
-            </small>
-            <br />
-            <?php if($start != 0): ?>
-                <?php if($start == $end): ?>
-                    <?php echo date('M j, Y',strtotime($start)); ?>
-                <?php else: ?>
-                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime($end)); ?>
-                <?php endif; ?>
-            <?php endif; ?>
+            </small>                       
             
         </h1>     
     </section>
