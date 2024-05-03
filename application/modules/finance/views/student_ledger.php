@@ -769,7 +769,7 @@ new Vue({
             this.update_id = item.id; 
             this.sy_from = item.syid; 
             this.apply_term_amount = item.amount; 
-            this.apply_term_description = item.name
+            this.apply_term_description = item.name            
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        

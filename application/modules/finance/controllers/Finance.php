@@ -464,8 +464,8 @@ class Finance extends CI_Controller {
         $post =  $this->input->post();
         $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);
         $sy_to = $this->data_fetcher->get_sem_by_id($post['syid']);
-        $amount_from = 0 - floatval($post['apply_term_amount']);
-        $amount_to = floatval($post['apply_term_amount']);
+        $amount_to = 0 - floatval($post['apply_term_amount']);
+        $amount_from = floatval($post['apply_term_amount']);
 
         $from = [
             'student_id' => $post['student_id'],
