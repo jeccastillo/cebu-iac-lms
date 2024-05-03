@@ -460,6 +460,11 @@ class Finance extends CI_Controller {
 
     }
 
+    public function apply_to_term(){
+        $post =  $this->input->post();
+        print_r($post);
+    }
+
     public function update_ledger_item_status(){
         $post = $this->input->post();
 

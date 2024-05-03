@@ -117,7 +117,7 @@
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
                                     <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button>
-                                    <button data-toggle="modal"  @click="update_id = item.id;" 
+                                    <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid;" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
                                 <td :class="item.muted" v-else></td>                                                                                             
@@ -242,6 +242,7 @@ new Vue({
         tuition: [],
         apply_term: undefined,
         update_id: undefined,
+        sy_from: undefined;
         other: [],
         finance: undefined, 
         student: {
@@ -759,9 +760,11 @@ new Vue({
             })
             
         },
-        applyToTerm: function(id,event){
-            var sy = event.target.value;
-            let url = this.base_url + 'finance/update_ledger_item';                        
+        applyToTerm: function(){            
+            let url = this.base_url + 'finance/apply_to_term';                        
+            let sy = this.apply_term;
+            let id = this.update_id;
+            let sy_from = this.sy_from;
             
             Swal.fire({
                 title: 'Switch Term?',
@@ -776,6 +779,7 @@ new Vue({
                 preConfirm: (login) => {
                     var formdata = new FormData();                                        
                     formdata.append('syid',sy);
+                    formdata.append('sy_from',sy_from);
                     formdata.append('id',id);
                     
                     
