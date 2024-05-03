@@ -195,7 +195,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Select Term <span class="text-danger">*</span> </label>                           
-                            <select  @change="filterByTerm($event)" class="form-control" required v-model="apply_term">                                
+                            <select class="form-control" required v-model="apply_term">                                
                                 <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                             </select>
                         </div>
