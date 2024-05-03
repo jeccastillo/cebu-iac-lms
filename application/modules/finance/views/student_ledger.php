@@ -204,7 +204,7 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button @click="applyToTerm" class="btn btn-primary">Submit</button>
-                        <button type="button" :disabled="!or_update.or_number" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
 
