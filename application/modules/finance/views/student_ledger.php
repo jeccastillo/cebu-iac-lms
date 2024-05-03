@@ -184,7 +184,7 @@
             
         </section>
         <div class="modal fade" id="applyToTermModal" role="dialog">
-            
+            <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,8 +195,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Select Term <span class="text-danger">*</span> </label>                           
-                            <select  @change="filterByTerm($event)" class="form-control" required v-model="apply_term">
-                                <option value=0>All</option>
+                            <select  @change="filterByTerm($event)" class="form-control" required v-model="apply_term">                                
                                 <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                             </select>
                         </div>
@@ -207,8 +206,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
-            
+            </div>            
         </div>
     </div>
 </aside>
