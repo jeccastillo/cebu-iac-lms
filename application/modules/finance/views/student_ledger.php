@@ -790,7 +790,7 @@ new Vue({
                     formdata.append('apply_term_description',apply_term_description);
                     formdata.append('apply_term_amount',apply_term_amount);                    
                     formdata.append('id',id);
-                    formdata.append('student_id',request.student_id);
+                    formdata.append('student_id',this.request.student_id);
                     
                     
                     
