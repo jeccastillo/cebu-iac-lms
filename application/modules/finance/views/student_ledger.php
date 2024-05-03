@@ -117,7 +117,7 @@
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
                                     <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
-                                    <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid;" 
+                                    <button data-toggle="modal"  @click="update_id = item.id; sy_from = item.syid; apply_term_amount = item.amount; apply_term_description = item.name" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
                                 <td :class="item.muted" v-else>
@@ -246,6 +246,8 @@ new Vue({
         apply_term: undefined,
         update_id: undefined,
         sy_from: undefined,
+        apply_term_amount: undefined,
+        apply_term_description: undefined;
         other: [],
         finance: undefined, 
         student: {
@@ -768,6 +770,8 @@ new Vue({
             let sy = this.apply_term;
             let id = this.update_id;
             let sy_from = this.sy_from;
+            let apply_term_amount = this.apply_term_amount;
+            let apply_term_description = this.apply_term_description;
             
             Swal.fire({
                 title: 'Switch Term?',
@@ -783,7 +787,11 @@ new Vue({
                     var formdata = new FormData();                                        
                     formdata.append('syid',sy);
                     formdata.append('sy_from',sy_from);
+                    formdata.append('apply_term_description',apply_term_description);
+                    formdata.append('apply_term_amount',apply_term_amount);                    
                     formdata.append('id',id);
+                    formdata.append('student_id',request.student_id);
+                    
                     
                     
                     return axios.post(url, formdata, {

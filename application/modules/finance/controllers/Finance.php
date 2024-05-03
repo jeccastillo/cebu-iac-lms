@@ -462,7 +462,39 @@ class Finance extends CI_Controller {
 
     public function apply_to_term(){
         $post =  $this->input->post();
-        print_r($post);
+        $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);
+        $sy_to = $this->data_fetcher->get_sem_by_id($post['sy']);
+        $amount_from = 0 - floatval($post['apply_term_amount']);
+        $amount_to = floatval($post['apply_term_amount']);
+
+        $from = [
+            'student_id' => $post['student_id'],
+            'date' => date("Y-m-d H:i:s"),
+            'name' => $post['apply_term_description'],
+            'syid' => $post['sy_from'],
+            'amount' => $amount_from, 
+            'type' => 'tuition',   
+            'remarks' => "APPLY TO ".strtoupper($sy_to['enumSem']." ".$sy_to['term_label']." ".$sy_to['strYearStart']." - ".$sy_to['strYearEnd']),
+            'added_by' => $this->session->userdata('intID'),
+        ];        
+        $this->db->insert('tb_mas_student_ledger',$from);
+
+        $to = [
+            'student_id' => $post['student_id'],
+            'date' => date("Y-m-d H:i:s"),
+            'name' => $post['apply_term_description'],
+            'syid' => $post['sy'],
+            'amount' => $amount_to, 
+            'type' => 'tuition',   
+            'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
+            'added_by' => $this->session->userdata('intID'),
+        ];        
+        $this->db->insert('tb_mas_student_ledger',$to);
+
+        $data['success'] =  true;
+        $data['message'] = "Successfully updated ledger";
+        echo json_encode($data);
+        
     }
 
     public function update_ledger_item_status(){
