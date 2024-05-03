@@ -483,7 +483,7 @@ class Finance extends CI_Controller {
             'student_id' => $post['student_id'],
             'date' => date("Y-m-d H:i:s"),
             'name' => $post['apply_term_description'],
-            'syid' => $post['sy'],
+            'syid' => $post['syid'],
             'amount' => $amount_to, 
             'type' => 'tuition',   
             'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
