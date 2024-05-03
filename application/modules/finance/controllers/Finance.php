@@ -463,7 +463,7 @@ class Finance extends CI_Controller {
     public function apply_to_term(){
         $post =  $this->input->post();
         $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);
-        $sy_to = $this->data_fetcher->get_sem_by_id($post['sy']);
+        $sy_to = $this->data_fetcher->get_sem_by_id($post['syid']);
         $amount_from = 0 - floatval($post['apply_term_amount']);
         $amount_to = floatval($post['apply_term_amount']);
 
