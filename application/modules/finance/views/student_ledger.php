@@ -761,7 +761,7 @@ new Vue({
             })
             
         },
-        switchTerm: function(id,event){
+        applyToTerm: function(id,event){
             var sy = event.target.value;
             let url = this.base_url + 'finance/update_ledger_item';                        
             
