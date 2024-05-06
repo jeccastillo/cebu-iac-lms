@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>Reserved</th>
-                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end + stats.enrolled_reserved }}</td>
+                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
                         <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.enrolled_reserved)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled + stats.enrolled_reserved + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
@@ -155,6 +155,8 @@ new Vue({
                             this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + 
                             this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled +
                             this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
+
+                this.stats.reserved += this.stats.enrolled_reserved;
             })
             .catch((error) => {
                 console.log(error);
