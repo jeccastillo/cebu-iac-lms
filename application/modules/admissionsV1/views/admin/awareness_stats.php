@@ -1,7 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Admissions Report
+            Admissions Report - Awareness
             <small>
                 <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
                     <i class="ion ion-arrow-left-a"></i>
