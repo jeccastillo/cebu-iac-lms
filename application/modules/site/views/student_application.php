@@ -18,18 +18,18 @@
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Application Form for {{ term.term_student_type.toUpperCase() }}
-            <strong>(Cebu Campus)</strong><br />            
+            <strong>(Cebu Campus)</strong><br />
         </h4>
-        
+
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
             to email us at <strong><u>admissionscebu@iacademy.edu.ph</u></strong> </p>
 
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati (Main Campus) click
             <a style="text-decoration: underline;"
-                href="https://portalv2.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a> for SY23 and
-            <a style="text-decoration: underline;"
-                href="http://sms-makati.iacademy.edu.ph/">here</a> for SY24.
+                href="https://portalv2.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a> for
+            SY23 and
+            <a style="text-decoration: underline;" href="http://sms-makati.iacademy.edu.ph/">here</a> for SY24.
         </p>
     </div>
 
@@ -51,9 +51,11 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
                             Select Term <span class="text-red-500">*</span>
                         </label>
-                        <select class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        <select
+                            class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required v-model="request.syid">
-                            <option v-for="s in sy" :value="s.intID">{{ s.enumSem+" "+s.term_label+" SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
+                            <option v-for="s in sy" :value="s.intID">
+                                {{ s.enumSem+" "+s.term_label+" SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
                         </select>
                     </div>
                 </div>
@@ -571,19 +573,26 @@
                         <select
                             class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required name="source" v-model="request.source">
-                             <option value="cos">COS (Career Orientation Seminar)</option>
-                             <option value="facebook">Facebook</option>
-                             <option value="instagram">Instagram</option>
-                             <option value="tiktok">Tiktok</option>
-                             <option value="google">Google</option>                             
-                             <option value="other">Other Online Site/Platform</option>
-                             <option value="billboard">Billboard</option>
-                             <option value="newspaper">Newspaper</option>
-                             <option value="friends">Friends and Family</option>
-                             <option value="radio">Radio</option>
-                             <option value="tv">TV</option>
+                            <option value="cos">COS (Career Orientation Seminar)</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">Tiktok</option>
+                            <option value="google">Google</option>
+                            <option value="other">Other Online Site/Platform</option>
+                            <option value="billboard">Billboard</option>
+                            <option value="newspaper">Newspaper</option>
+                            <option value="radio">Radio</option>
+                            <option value="tv">TV</option>
+                            <option value="referrer">Referral</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-group md:w-5/5" v-if="request.source == 'referrer'">
+                    <label for="">Referrer <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" required
+                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        v-model="request.referrer" />
                 </div>
 
 
@@ -837,10 +846,10 @@ new Vue({
     el: "#adminssions-form",
     data: {
         syid: <?php echo $current_term; ?>,
-        address:{
-            hns:undefined,
-            brgy_subd:undefined,
-            city_town:undefined,
+        address: {
+            hns: undefined,
+            brgy_subd: undefined,
+            city_town: undefined,
             province: undefined,
             zipcode: undefined,
         },
@@ -859,14 +868,14 @@ new Vue({
         },
         programs: [],
         programs_group: [],
-        sy:[],
+        sy: [],
         types: [],
         base_url: "<?php echo base_url(); ?>",
     },
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs/'+this.syid, {
+            .get(this.base_url + 'site/view_active_programs/' + this.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -951,17 +960,17 @@ new Vue({
 
         customSubmit: function(type, title, text, data, url, redirect) {
             Swal.fire({
-            title: 'iACADEMY CEBU CAMPUS',            
-            html: `
+                title: 'iACADEMY CEBU CAMPUS',
+                html: `
                 You are applying for iACADEMY CEBU Campus. Click <a style='color:#000099' href='https://sms-makati.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Main (Makati Campus)
             `,
-            showCancelButton: true,
-            confirmButtonText: "Submit Application",
-            imageWidth: 100,
-            icon: "question",
-            cancelButtonText: "No, cancel!",
-            showCloseButton: true,
-            showLoaderOnConfirm: true,
+                showCancelButton: true,
+                confirmButtonText: "Submit Application",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     this.loading_spinner = true;
                     if (this.request.mobile_number.length < 18) {
@@ -985,8 +994,10 @@ new Vue({
                         this.request.health_concern = this.request.health_concerns.join(
                             ", "
                         );
-                        
-                        this.request.address = this.address.hns+", "+this.address.brgy_subd+", "+this.address.city_town+", "+this.address.province+", "+this.address.zipcode;
+
+                        this.request.address = this.address.hns + ", " + this.address
+                            .brgy_subd + ", " + this.address.city_town + ", " + this.address
+                            .province + ", " + this.address.zipcode;
 
                         axios
                             .post(api_url + url, data, {
@@ -1008,7 +1019,8 @@ new Vue({
                                         icon: "success"
                                     }).then(function() {
                                         location.href =
-                                            "<?php echo base_url(); ?>site/initial_requirements/" + ret
+                                            "<?php echo base_url(); ?>site/initial_requirements/" +
+                                            ret
                                             .slug;
                                     });
 

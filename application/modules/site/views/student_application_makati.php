@@ -530,19 +530,26 @@
                         <select
                             class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required name="source" v-model="request.source">
-                             <option value="cos">COS (Career Orientation Seminar)</option>
-                             <option value="facebook">Facebook</option>
-                             <option value="instagram">Instagram</option>
-                             <option value="tiktok">Tiktok</option>
-                             <option value="google">Google</option>
-                             <option value="other">Other Online Site/Platform</option>
-                             <option value="billboard">Billboard</option>
-                             <option value="newspaper">Newspaper</option>
-                             <option value="friends">Friends and Family</option>
-                             <option value="radio">Radio</option>
-                             <option value="tv">TV</option>
+                            <option value="cos">COS (Career Orientation Seminar)</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">Tiktok</option>
+                            <option value="google">Google</option>
+                            <option value="other">Other Online Site/Platform</option>
+                            <option value="billboard">Billboard</option>
+                            <option value="newspaper">Newspaper</option>
+                            <option value="radio">Radio</option>
+                            <option value="tv">TV</option>
+                            <option value="referrer">Referral</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-group md:w-5/5" v-if="request.source == 'referrer'">
+                    <label for="">Referrer <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" required
+                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        v-model="request.referrer" />
                 </div>
 
 
@@ -1037,17 +1044,17 @@ new Vue({
         customSubmit: function(type, title, text, data, url, redirect) {
 
             Swal.fire({
-            title: 'iACADEMY MAKATI CAMPUS',            
-            html: `
+                title: 'iACADEMY MAKATI CAMPUS',
+                html: `
                 You are applying for iACADEMY MAKATI Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
             `,
-            showCancelButton: true,
-            confirmButtonText: "Submit Application",
-            imageWidth: 100,
-            icon: "question",
-            cancelButtonText: "No, cancel!",
-            showCloseButton: true,
-            showLoaderOnConfirm: true,
+                showCancelButton: true,
+                confirmButtonText: "Submit Application",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     this.loading_spinner = true;
                     if (this.request.mobile_number.length < 18) {
@@ -1092,7 +1099,8 @@ new Vue({
                                         icon: "success"
                                     }).then(function() {
                                         location.href =
-                                            "<?php echo base_url(); ?>site/initial_requirements/" + ret
+                                            "<?php echo base_url(); ?>site/initial_requirements/" +
+                                            ret
                                             .slug;
                                     });
 
