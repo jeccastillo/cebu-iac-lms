@@ -65,7 +65,7 @@
                             <tr>                            
                                 <td width="19%"><font style="font-size: 8;">Name</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td colspan="3"><font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
+                                <td colspan="3"><font style="font-size: 8;">'.$student['strLastname'].', '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
                                 
                             </tr>
                             <tr>
