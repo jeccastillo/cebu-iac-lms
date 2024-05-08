@@ -69,8 +69,7 @@ new Vue({
             axios.get(api_url + 'admissions/applications/awareness?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>')
             .then((data) => {       
                 // console.log(data);           
-                this.stats = data.data;
-                console.log(this.stats);                  
+                this.stats = data.data.applications;                       
             })
             .catch((error) => {
                 console.log(error);
