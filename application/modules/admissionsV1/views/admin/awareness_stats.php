@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in stats">
+                        <tr v-for="item in stats" v-if="item.count > 0">
                             <td>{{ item.source }}</td>
                             <td>{{ item.count }}</td>
                         </tr>
