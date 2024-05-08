@@ -53,10 +53,11 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             
-            axios.get(api_url + 'admissions/awareness_stats_data/'+current_sem)
+            axios.get(api_url + 'admissions/applications/awareness?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>')
             .then((data) => {       
                 // console.log(data);           
-                this.stats = data.data;                  
+                this.stats = data.data;
+                console.log(this.stats);                  
             })
             .catch((error) => {
                 console.log(error);
