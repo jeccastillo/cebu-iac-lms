@@ -23,7 +23,20 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Awareness Stats</h4>
-                
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in stats">
+                            <td>{{ item.source }}</td>
+                            <td>{{ item.count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
