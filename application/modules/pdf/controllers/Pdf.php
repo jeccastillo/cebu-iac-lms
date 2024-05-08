@@ -2195,14 +2195,14 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
-        // $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
-        //                 ->get('tb_mas_printed_or')
-        //                 ->first_row();
+        $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
+                        ->get('tb_mas_printed_or')
+                        ->first_row();
 
-        // if($printed){
-        //     echo "This OR has already been printed";
-        //     return;
-        // }
+        if($printed){
+            echo "This OR has already been printed";
+            return;
+        }
         
                 
         tcpdf();
