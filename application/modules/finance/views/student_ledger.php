@@ -121,7 +121,7 @@
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
                                 <td :class="item.muted" v-else>
-                                <button data-toggle="modal"  @click="appyToTermUpdate(item)" 
+                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1"  @click="appyToTermUpdate(item)" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>                                                                                             
                             </tr>
