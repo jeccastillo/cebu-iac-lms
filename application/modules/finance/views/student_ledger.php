@@ -117,7 +117,7 @@
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
                                     <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
-                                    <button data-toggle="modal"  @click="update_id = item.id" 
+                                    <button data-toggle="modal" v-if="finance && finance.special_role >= 1"  @click="update_id = item.id" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
                                 </td>
                                 <td :class="item.muted" v-else>
