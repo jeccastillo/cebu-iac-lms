@@ -82,7 +82,7 @@
                             <tr>                            
                                 <td><font style="font-size: 8;">Date of Birth</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td width="30%"><font style="font-size: 8;">'.date("M j, Y",strtotime($student['dteBirthDate'])).'</font></td>    
+                                <td width="30%"><font style="font-size: 8;">'.date("F j, Y",strtotime($student['dteBirthDate'])).'</font></td>    
                                 <td width="19%"><font style="font-size: 8;">Place of Birth</font></td>      
                                 <td width="1%" style="text-align:center">:</td>          
                                 <td width="30%"><font style="font-size: 8;">'.$student['place_of_birth'].'</font></td>                
@@ -118,7 +118,7 @@
                                 <td><font style="font-size: 8;">'.$student['college'].'</font></td>                     
                                 <td><font style="font-size: 8;">Date of Admission</font></td>   
                                 <td width="1%" style="text-align:center">:</td>             
-                                <td><font style="font-size: 8;">'.$other_details['admission_date'].'</font></td>                
+                                <td><font style="font-size: 8;">'.date("F j, Y",strtotime($other_details['admission_date'])).'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
@@ -127,7 +127,7 @@
                                 <td colspan="3"><font style="font-size: 8;"></font></td>                                
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.($student['date_of_graduation']!="" || $student['date_of_graduation']!=null?date("M j, Y",strtotime($student['date_of_graduation'])):"XXXXXXXX").'</font></td>                
+                                <td><font style="font-size: 8;">'.($student['date_of_graduation']!="" || $student['date_of_graduation']!=null?date("F j, Y",strtotime($student['date_of_graduation'])):"XXXXXXXX").'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
