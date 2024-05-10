@@ -569,7 +569,7 @@ class Pdf extends CI_Controller {
         $units_overall = 0;
         $gwa_overall = 0;
         $total_records = 0;
-        $rec['admission_date'] = $post['admission_date'];
+        $rec['admission_date'] = date("M j, Y",strtotime($post['admission_date']));
         $rec['picture'] = $post['picture'];
         $credited_subjects = [];
 
