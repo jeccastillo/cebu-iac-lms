@@ -104,7 +104,7 @@
                             <tr>                            
                                 <td><font style="font-size: 8;">Secondary School</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.$student['high_school'].'</font></td>    
+                                <td><font style="font-size: 8;">'.$student['senior_high'] == "undefined"?$student['high_school']:$student['senior_high'].'</font></td>    
                                 <td><font style="font-size: 8;">ID No.</font></td>     
                                 <td width="1%" style="text-align:center">:</td>           
                                 <td><font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font></td>                
