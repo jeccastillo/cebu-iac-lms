@@ -26,7 +26,7 @@
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
                     <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4> 
-                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramCode }}</h4> 
+                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}</h4> 
                     
                 </div>                
             </div>                            
