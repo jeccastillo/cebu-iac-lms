@@ -328,13 +328,15 @@ foreach($records as $record){
                 $units = "(".number_format($item['strUnits'],1).")";
                 $units_earned = "(".$units_earned.")";
             }
+
+            $grade = $item['v3']?$item['v3']:'NGS';
             
             $html .= '            
                 <tr>
                     <td style="font-size:8px;">'.$item['strCode'].'</td>
                     <td style="font-size:8px;">'.$item['strDescription'].'</td>
                     <td style="font-size:8px;text-align:center;">'.$units.'</td>
-                    <td style="font-size:8px;text-align:center;">'.$item['v3']?$item['v3']:'NGS'.'</td>
+                    <td style="font-size:8px;text-align:center;">'.$grade.'</td>
                     <td style="font-size:8px;text-align:center;"></td>                        
                     <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
                 </tr>            
