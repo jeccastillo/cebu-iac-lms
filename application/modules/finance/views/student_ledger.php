@@ -27,6 +27,7 @@
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
                     <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4> 
                     <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}</h4> 
+                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student_type }}</h4> 
                     
                 </div>                
             </div>                            
@@ -241,7 +242,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],      
         ledger_term: [],    
-        other_term: [],             
+        other_term: [],           
+        student_type: undefined,  
         term_balance: 0,
         term_balance_other: 0,
         tuition: [],
@@ -336,6 +338,7 @@ new Vue({
                         this.finance = data.data.user;
                         this.tuition = data.data.tuition;
                         this.student = data.data.student;
+                        this.student_type = data.data.current_type;
                         this.sy = data.data.sy;
                         this.request.syid = data.data.active_sem;  
                         var current_sy_id = 0;                                               
