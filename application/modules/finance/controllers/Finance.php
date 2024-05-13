@@ -311,6 +311,7 @@ class Finance extends CI_Controller {
     public function student_ledger_data($id,$sem){
                                 
         $data['student'] = $this->data_fetcher->getStudent($id);
+        $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
         $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
                                     ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
                                     ->where(array('intStudentID'=>$id))
