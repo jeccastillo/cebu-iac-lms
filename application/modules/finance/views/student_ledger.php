@@ -181,7 +181,7 @@
                             </tr>
                             <!-- <tr>                                
                                 <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
-                            </tr> -->
+                            </tr>   -->
                         </tbody>
                     </table>                     
                 </div>
