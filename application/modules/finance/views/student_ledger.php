@@ -202,7 +202,7 @@
                         <table class="table table-striped">
                             <tr>
                                 <td>Excess Amount: </td>
-                                <td>{{ apply_term_balance }}</td>
+                                <td v-if="apply_term_balance">{{ apply_term_balance }}</td>
                             </tr>
                         </table>
                         <div class="form-group">
