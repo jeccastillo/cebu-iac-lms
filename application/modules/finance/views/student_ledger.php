@@ -199,6 +199,12 @@
                         <h4 class="modal-title">Apply To Term</h4>
                     </div>
                     <div class="modal-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Excess Amount: </td>
+                                <td>{{ apply_term_balance }}</td>
+                            </tr>
+                        </table>
                         <div class="form-group">
                             <label>Select Term <span class="text-danger">*</span> </label>                           
                             <select class="form-control" required v-model="apply_term">                                
@@ -773,8 +779,7 @@ new Vue({
         },
         appyToTermUpdate(term){            
             this.sy_from = term.ledger_items[0].syid;
-            this.apply_term_balance = term.balance;                                     
-            console.log(this.sy_from);
+            this.apply_term_balance = term.balance;                                                 
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
