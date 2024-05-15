@@ -120,17 +120,15 @@
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
-                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
-                                    <button data-toggle="modal" v-if="finance && finance.special_role >= 1"  @click="update_id = item.id" 
-                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
+                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />                                
                                 </td>
-                                <td :class="item.muted" v-else>
-                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1"  @click="appyToTermUpdate(item)" 
-                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
-                                </td>                                                                                             
+                                    
                             </tr>
-                            <tr>                                
+                            <tr>                                                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
+                                <td>                                    
+                                    <button v-if="term.balance < 0" class="btn btn-primary">Apply To Term</button>                                    
+                                </td>
                             </tr>                                                                  
                         </tbody>                
                     </table>
@@ -246,6 +244,7 @@ new Vue({
         other_term: [],           
         student_type: undefined,  
         term_balance: 0,
+        apply_to_term: [],
         term_balance_other: 0,
         tuition: [],
         apply_term: undefined,
