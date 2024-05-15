@@ -126,9 +126,10 @@
                             </tr>
                             <tr>                                                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
-                                <td>                                    
-                                    <button v-if="term.balance < 0" class="btn btn-primary">Apply To Term</button>                                    
-                                </td>
+                                <td>    
+                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1 && term.balance < 0"  @click="appyToTermUpdate(term)" 
+                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>                                                                    
+                                </td>                                
                             </tr>                                                                  
                         </tbody>                
                     </table>
@@ -770,11 +771,10 @@ new Vue({
             })
             
         },
-        appyToTermUpdate(item){
-            this.update_id = item.id; 
-            this.sy_from = item.syid; 
-            this.apply_term_amount = item.amount; 
-            this.apply_term_description = item.name            
+        appyToTermUpdate(term){            
+            this.sy_from = term.intID;
+            this.apply_term_balance = term.balance;                                     
+            console.log(term);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
