@@ -253,6 +253,7 @@ new Vue({
         term_balance: 0,
         apply_to_term: [],
         term_balance_other: 0,
+        apply_term_balance: 0,
         tuition: [],
         apply_term: undefined,
         update_id: undefined,
