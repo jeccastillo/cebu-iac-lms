@@ -774,7 +774,7 @@ new Vue({
         appyToTermUpdate(term){            
             this.sy_from = term.ledger_items[0].syid;
             this.apply_term_balance = term.balance;                                     
-            console.log(term);
+            console.log(term.ledger_items);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
