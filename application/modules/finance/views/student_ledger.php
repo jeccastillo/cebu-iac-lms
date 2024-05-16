@@ -827,6 +827,8 @@ new Vue({
                 this.apply_term_amount = 0;                                
                 this.description =  '';
 
+                this.apply_term_balance = this.balance_change;
+
             }
             else            
                 Swal.fire({
