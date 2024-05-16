@@ -790,10 +790,10 @@ new Vue({
         appyToTermUpdate(term){            
             this.sy_from = term.ledger_items[0].syid;
             this.apply_term_balance = term.balance;   
-            this.balance_change = parseFloat(term.balance);
+            this.balance_change = term.balance;
         },
         changeBalance(event){
-            this.balance_change = this.apply_term_balance + event.target.value;
+            this.balance_change = this.apply_term_balance + parseFloat(event.target.value);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
