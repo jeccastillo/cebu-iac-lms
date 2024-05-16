@@ -206,18 +206,24 @@
                             </tr>
                         </table>
                         <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                                 <div class="form-group">                                                               
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">                                    
                                     <select class="form-control" required v-model="apply_term">                                
                                         <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">                                    
+                                    <button class="btn btn-success" @click="addTermBalance">Add</button>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class=" modal-footer">
@@ -265,6 +271,7 @@ new Vue({
         balance_change: 0,
         tuition: [],
         apply_term: undefined,
+        apply_description: 'Test',
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
@@ -792,6 +799,7 @@ new Vue({
             this.apply_term_balance = term.balance;   
             this.balance_change = term.balance;
             this.apply_term_amount = 0;
+            this.apply_to_term = [];
         },
         changeBalance(event){
             this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
@@ -802,6 +810,22 @@ new Vue({
 
             this.balance_change.toFixed(2);
             
+        },
+        addTermBalance(){
+            if(this.apply_term)
+                this.apply_to_term.push({
+                    'amount': this.apply_term_amount,
+                    'term_from': this.sy_from,
+                    'term_to': this.apply_term,
+                    'description': this.apply_description,
+                });
+            else            
+                Swal.fire({
+                    title: "Warning",
+                    text: 'Please select a term',
+                    icon: "error"
+                });            
+            console.log(this.apply_to_term);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
