@@ -796,8 +796,10 @@ new Vue({
             this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
             if(this.balance_change > 0){
                 this.balance_change = 0;
-                this.apply_term_amount = parseFloat(this.apply_term_balance);
+                this.apply_term_amount = Math.abs(parseFloat(this.apply_term_balance));
             }
+
+            this.balance_change.toFixed(2);
             
         },
         applyToTerm: function(){            
