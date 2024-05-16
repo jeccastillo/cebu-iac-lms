@@ -211,19 +211,19 @@
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group">                                    
                                     <input type="text"  class="form-control" v-model="apply_description" />
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group">                                    
                                     <select class="form-control" required v-model="apply_term">                                
                                         <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-1">
                                 <div class="form-group">                                    
                                     <button class="btn btn-success" @click="addTermBalance">Add</button>
                                 </div>
