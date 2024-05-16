@@ -794,7 +794,7 @@ new Vue({
         },
         changeBalance(event){
             this.balance_change = this.apply_term_balance + event.taraget.value;
-        }
+        },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
             let sy = this.apply_term;
