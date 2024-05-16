@@ -202,14 +202,22 @@
                         <table class="table table-striped">
                             <tr>
                                 <td>Excess Amount: </td>
-                                <td v-if="apply_term_balance">{{ apply_term_balance }}</td>
+                                <td v-if="balance_change">{{ balance_change }}</td>
                             </tr>
                         </table>
-                        <div class="form-group">
-                            <label>Select Term <span class="text-danger">*</span> </label>                           
-                            <select class="form-control" required v-model="apply_term">                                
-                                <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
-                            </select>
+                        <div class="row">
+                        <div class="col-sm-4">
+                                <div class="form-group">                                                               
+                                    <input type="number" @keyup="changeBalance" class="form-control" v-model="apply_term_amount" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">                                    
+                                    <select class="form-control" required v-model="apply_term">                                
+                                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class=" modal-footer">
@@ -254,6 +262,7 @@ new Vue({
         apply_to_term: [],
         term_balance_other: 0,
         apply_term_balance: 0,
+        balance_change: 0,
         tuition: [],
         apply_term: undefined,
         update_id: undefined,
@@ -780,8 +789,12 @@ new Vue({
         },
         appyToTermUpdate(term){            
             this.sy_from = term.ledger_items[0].syid;
-            this.apply_term_balance = term.balance;                                                 
+            this.apply_term_balance = term.balance;   
+            this.balance_change = term.balance;
         },
+        changeBalance(event){
+            this.balance_change = this.apply_term_balance + event.taraget.value;
+        }
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
             let sy = this.apply_term;
