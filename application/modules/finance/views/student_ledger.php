@@ -794,10 +794,11 @@ new Vue({
         },
         changeBalance(event){
             this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
-            if(this.balance_change > 0)
+            if(this.balance_change > 0){
                 this.balance_change = 0;
+                this.apply_term_amount = parseFloat(this.apply_term_balance);
+            }
             
-            this.apply_term_amount = parseFloat(this.apply_term_balance);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
