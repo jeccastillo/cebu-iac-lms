@@ -818,14 +818,15 @@ new Vue({
             this.apply_to_term = [];
         },
         changeBalance(event){
-            this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
-            if(this.balance_change > 0){
-                this.balance_change = 0;
-                this.apply_term_amount = Math.abs(parseFloat(this.apply_term_balance));
-            }
+            if(this.apply_term_balance && this.apply_term_balance > 0){
+                this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
+                if(this.balance_change > 0){
+                    this.balance_change = 0;
+                    this.apply_term_amount = Math.abs(parseFloat(this.apply_term_balance));
+                }
 
-            this.balance_change.toFixed(2);
-            
+                this.balance_change.toFixed(2);
+            }            
         },
         addTermBalance(){
             if(this.apply_term && this.apply_term_amount > 0 && this.apply_description){
