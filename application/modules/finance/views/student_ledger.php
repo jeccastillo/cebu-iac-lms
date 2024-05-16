@@ -818,7 +818,7 @@ new Vue({
             this.apply_to_term = [];
         },
         changeBalance(event){
-            if(this.apply_term_balance && this.apply_term_balance > 0){
+            if(this.apply_term_amount && this.apply_term_amount > 0){
                 this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
                 if(this.balance_change > 0){
                     this.balance_change = 0;
