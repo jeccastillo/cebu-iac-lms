@@ -190,7 +190,7 @@
             
         </section>
         <div class="modal fade" id="applyToTermModal" role="dialog">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
