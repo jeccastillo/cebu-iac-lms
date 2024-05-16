@@ -206,7 +206,7 @@
                             </tr>
                         </table>
                         <div class="row">
-                        <div class="col-sm-3">
+                            <div class="col-sm-3">
                                 <div class="form-group">                                                               
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
@@ -227,9 +227,20 @@
                                 <div class="form-group">                                    
                                     <button class="btn btn-success" @click="addTermBalance">Add</button>
                                 </div>
-                            </div>
-                            
+                            </div>                            
                         </div>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Term To</th>
+                            </tr>
+                            <tr v-for="item in apply_to_term">
+                                <th>{{ item.amount }}</th>
+                                <th>{{ item.description }}</th>
+                                <th>{{ item.term_to }}</th>
+                            </tr>
+                        </table>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
