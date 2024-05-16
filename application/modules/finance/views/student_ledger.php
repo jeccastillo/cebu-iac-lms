@@ -812,7 +812,7 @@ new Vue({
             
         },
         addTermBalance(){
-            if(this.apply_term)
+            if(this.apply_term && this.apply_term_amount > 0)
                 this.apply_to_term.push({
                     'amount': this.apply_term_amount,
                     'term_from': this.sy_from,
@@ -822,7 +822,7 @@ new Vue({
             else            
                 Swal.fire({
                     title: "Warning",
-                    text: 'Please select a term',
+                    text: 'Please fill in all fields',
                     icon: "error"
                 });            
             console.log(this.apply_to_term);
