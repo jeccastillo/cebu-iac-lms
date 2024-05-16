@@ -824,9 +824,9 @@ new Vue({
                     'term_to': this.apply_term,
                     'description': this.apply_description,
                 });
-                this.apply_term_amount = 0;                
-                this.term_to = undefined;
-                this.description =  undefined;
+                this.apply_term_amount = 0;                                
+                this.description =  '';
+
             }
             else            
                 Swal.fire({
