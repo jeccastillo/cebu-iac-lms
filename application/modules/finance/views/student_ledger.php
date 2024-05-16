@@ -213,6 +213,11 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">                                    
+                                    <input type="text"  class="form-control" v-model="apply_description" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">                                    
                                     <select class="form-control" required v-model="apply_term">                                
                                         <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                                     </select>
@@ -812,13 +817,17 @@ new Vue({
             
         },
         addTermBalance(){
-            if(this.apply_term && this.apply_term_amount > 0)
+            if(this.apply_term && this.apply_term_amount > 0 && this.apply_description){
                 this.apply_to_term.push({
                     'amount': this.apply_term_amount,
                     'term_from': this.sy_from,
                     'term_to': this.apply_term,
                     'description': this.apply_description,
                 });
+                this.apply_term_amount = 0;                
+                this.term_to = undefined;
+                this.description =  undefined;
+            }
             else            
                 Swal.fire({
                     title: "Warning",
