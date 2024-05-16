@@ -791,6 +791,7 @@ new Vue({
             this.sy_from = term.ledger_items[0].syid;
             this.apply_term_balance = term.balance;   
             this.balance_change = term.balance;
+            this.apply_term_amount = 0;
         },
         changeBalance(event){
             this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
