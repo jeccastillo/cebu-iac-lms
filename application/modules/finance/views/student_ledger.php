@@ -206,7 +206,7 @@
                             </tr>
                         </table>
                         <div class="row">
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <div class="form-group">                                                               
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
