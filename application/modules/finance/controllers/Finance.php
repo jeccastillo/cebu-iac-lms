@@ -471,12 +471,12 @@ class Finance extends CI_Controller {
         $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);                
 
         foreach($transfer_data as $item){
-            $amount_to = 0 - floatval($item['amount']);
+            $amount_to = 0 - floatval($item->amount);
             $to = [
                 'student_id' => $post['student_id'],
                 'date' => date("Y-m-d H:i:s"),
-                'name' => $item['description'],
-                'syid' => $item['term_from'],
+                'name' => $item->description,
+                'syid' => $item->term_from,
                 'amount' => $amount_to, 
                 'type' => 'tuition',   
                 'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
