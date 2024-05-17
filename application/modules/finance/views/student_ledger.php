@@ -870,7 +870,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata = new FormData();                                        
-                    formdata.append('transfer_data',this.apply_to_term);
+                    formdata.append('transfer_data',JSON.stringify(this.apply_to_term));
                     formdata.append('sy_from',sy_from);                                        
                     formdata.append('student_id',this.request.student_id);
                                         
