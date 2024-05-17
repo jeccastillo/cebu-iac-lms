@@ -478,7 +478,7 @@ class Finance extends CI_Controller {
                 'name' => $item->description,
                 'syid' => $item->term_to,
                 'amount' => $amount_to, 
-                'type' => 'tuition',   
+                'type' => $item->type,   
                 'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
                 'added_by' => $this->session->userdata('intID'),
             ];        

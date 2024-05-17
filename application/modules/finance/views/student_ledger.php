@@ -127,7 +127,7 @@
                             <tr>                                                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
                                 <td>    
-                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1 && term.balance < 0"  @click="appyToTermUpdate(term)" 
+                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1 && term.balance < 0"  @click="applyToTermUpdate(term)" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>                                                                    
                                 </td>                                
                             </tr>                                                                  
@@ -206,14 +206,24 @@
                             </tr>
                         </table>
                         <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">                                    
+                                    <input type="text"  class="form-control" v-model="apply_description" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">                                                               
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
-                            </div>
-                            <div class="col-sm-3">
+                            </div>                            
+                            <div class="col-sm-4">
                                 <div class="form-group">                                    
-                                    <input type="text"  class="form-control" v-model="apply_description" />
+                                    <select class="form-control" required v-model="apply_term_type">                                
+                                        <option value="tuition">Tuition</option>
+                                        <option value="other">Other</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -233,12 +243,16 @@
                             <tr>
                                 <th>Amount</th>
                                 <th>Description</th>
+                                <th>Type</th>
                                 <th>Term To</th>
+                                <th>Remove</th>
                             </tr>
-                            <tr v-for="item in apply_to_term">
+                            <tr v-for="(item,i) in apply_to_term">
                                 <th>{{ item.amount }}</th>
                                 <th>{{ item.description }}</th>
+                                <th>{{ item.type }}</th>
                                 <th>{{ item.term_to }}</th>
+                                <th><button @click="removeApply(i)" class="btn btn-danger">-</button></th>
                             </tr>
                         </table>
                     </div>
@@ -284,6 +298,7 @@ new Vue({
         apply_to_term: [],
         term_balance_other: 0,
         apply_term_balance: 0,
+        apply_term_type: 'tuition',
         balance_change: 0,
         tuition: [],
         apply_term: undefined,
@@ -757,7 +772,7 @@ new Vue({
             }).then((result) => {
             
             })
-        },
+        },        
         updateDescription: function(id,event){
             var desc = event.target.value;
             let url = api_url + 'finance/update_payment_description';
@@ -810,13 +825,14 @@ new Vue({
             })
             
         },
-        appyToTermUpdate(term){            
+        applyToTermUpdate(term){            
             this.sy_from = term.ledger_items[0].syid;
             this.apply_term_balance = term.balance;   
             this.balance_change = term.balance;
+            this.apply_term_type = 'tuition';
             this.apply_term_amount = 0;
             this.apply_to_term = [];
-        },
+        },        
         changeBalance(event){
             if(this.apply_term_amount && this.apply_term_amount > 0){
                 this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
@@ -828,12 +844,16 @@ new Vue({
                 this.balance_change.toFixed(2);
             }            
         },
+        removeApply: function(index){
+            this.apply_to_term.splice(index,1);
+        },
         addTermBalance(){
             if(this.apply_term && this.apply_term_amount > 0 && this.apply_description){
                 this.apply_to_term.push({
                     'amount': this.apply_term_amount,
                     'term_from': this.sy_from,
                     'term_to': this.apply_term,
+                    'type': this.apply_term_type,
                     'description': this.apply_description,
                 });
                 this.apply_term_amount = 0;                                
