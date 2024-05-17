@@ -870,14 +870,10 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata = new FormData();                                        
-                    formdata.append('syid',sy);
-                    formdata.append('sy_from',sy_from);
-                    formdata.append('apply_term_description',apply_term_description);
-                    formdata.append('apply_term_amount',apply_term_amount);                    
-                    formdata.append('id',id);
+                    formdata.append('transfer_data',this.apply_to_term);
+                    formdata.append('sy_from',sy_from);                                        
                     formdata.append('student_id',this.request.student_id);
-                    
-                    
+                                        
                     
                     return axios.post(url, formdata, {
                         headers: {
