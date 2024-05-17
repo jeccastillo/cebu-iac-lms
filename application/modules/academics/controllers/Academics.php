@@ -31,11 +31,11 @@ class Academics extends CI_Controller {
 		$this->load->model("google_login");	
 		$this->load->model("facebook_login");	
 		$this->load->model("user_model");
-        $this->data['campus'] = $this->config->item('campus');
         $this->config->load('courses');
         
         $this->data['department_config'] = $this->config->item('department');
         $this->data['terms'] = $this->config->item('terms');
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
         $this->data['misc_fee'] = $this->config->item('misc_fee');
@@ -521,9 +521,10 @@ class Academics extends CI_Controller {
             $this->data['opentree'] = "academics_students";
             $this->data['term'] = $term;
             $this->data['period'] = $period;
+
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/deans_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/footer",$this->data);
         }
         else
             redirect(base_url()."unity");
@@ -564,7 +565,6 @@ class Academics extends CI_Controller {
                         $sum_grades += floatval($v3) * $record['strUnits'];
                         $total += $record['strUnits'];
                     }
-
 
                 }
 

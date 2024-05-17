@@ -1,7 +1,16 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-           Dean's Listers            
+           Dean's Listers
+           
+           <small>
+                <button class="btn btn-app" id="deans_list_pdf" @click="deansListPdf" target="_blank" href="#"><i
+                        class="fa fa-book"></i>Print PDF</button>
+            </small>
+            <small>
+                <button class="btn btn-app" id="deans_list_excel" @click="deansListExcel" target="_blank" href="#"><i
+                        class="fa fa-book"></i>Download Excel</button>
+            </small>            
         </h1>
         <div class="box-tools pull-right">
             <label>Term</label>
@@ -108,6 +117,7 @@ new Vue({
         period: '<?php echo $period; ?>', 
         sy: [],
         loading: true,
+        campus: '<?php echo $campus ?>',
     },
     computed: {
         sortedData: function() {
@@ -145,9 +155,16 @@ new Vue({
         changeTermSelected: function(){
             document.location = this.base_url + "academics/deans_listers/" + 
             this.term + '/' + this.period;
-        }, 
-    }
+        },
 
+        deansListPdf:function(){
+            window.open(this.base_url + 'pdf/deans_list/' + this.term + '/' + this.period, 'target= "_blank"');
+        },
+
+        deansListExcel:function(){
+            window.open(base_url + 'excel/deans_list/' + this.term + '/' + this.period, 'target= "_blank"');
+        },
+    }
 })
 </script>
 
