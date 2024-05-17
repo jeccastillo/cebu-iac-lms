@@ -244,7 +244,7 @@
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
-                        <button @click="applyToTerm" class="btn btn-primary">Submit</button>
+                        <button v-if="apply_to_term.length > 0" @click="applyToTerm" class="btn btn-primary">Submit</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
