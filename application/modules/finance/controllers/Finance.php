@@ -483,7 +483,7 @@ class Finance extends CI_Controller {
                 'added_by' => $this->session->userdata('intID'),
             ];        
             $this->db->insert('tb_mas_student_ledger',$to);
-            $amount_from += floatval($item['amount']);
+            $amount_from += floatval($item->amount);
         }
         
         $from = [
