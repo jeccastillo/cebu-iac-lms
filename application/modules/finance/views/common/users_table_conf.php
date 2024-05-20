@@ -1,4 +1,8 @@
-
+<style>
+    .dataTables_filter{
+        display:none;
+    }
+</style>
 <script type="text/javascript">
     
     $(document).ready(function(){
