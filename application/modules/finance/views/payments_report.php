@@ -11,7 +11,7 @@
             <li class="active">Daily Collection Report</li>
         </ol>
     </section>
-    <div class="content mcontainer container">
+    <div class="content mcontainer">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
