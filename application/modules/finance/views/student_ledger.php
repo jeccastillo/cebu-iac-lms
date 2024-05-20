@@ -306,7 +306,7 @@ new Vue({
         balance_change: 0,
         tuition: [],
         apply_term: undefined,
-        apply_description: 'Test',
+        apply_description: 'Tuition Fee',
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
