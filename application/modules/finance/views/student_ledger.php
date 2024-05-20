@@ -208,7 +208,11 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">                                    
-                                    <input type="text"  class="form-control" v-model="apply_description" />
+                                    <select class="form-control" v-model="apply_description">
+                                        <option value="Tuition Fee">Tuition Payment</option>
+                                        <option value="Application Payment">Application Payment</option>
+                                        <option value="Reservation Payment">Reservation Payment</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +222,7 @@
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
                             </div>                            
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">                                    
                                     <select class="form-control" required v-model="apply_term_type">                                
                                         <option value="tuition">Tuition</option>
