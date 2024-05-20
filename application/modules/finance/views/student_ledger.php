@@ -242,7 +242,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-1">
-                                <div class="form-group">                                    
+                                <div class="form-group">    
+                                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>                                  
                                     <button class="btn btn-success" @click="addTermBalance">+</button>
                                 </div>
                             </div>                            
