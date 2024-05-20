@@ -207,7 +207,8 @@
                         </table>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group">                                    
+                                <div class="form-group">    
+                                    <label>Description</label>                                
                                     <select class="form-control" v-model="apply_description">
                                         <option value="Tuition Fee">Tuition Payment</option>
                                         <option value="Application Payment">Application Payment</option>
@@ -218,12 +219,14 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-3">
-                                <div class="form-group">                                                               
+                                <div class="form-group">  
+                                    <label>Amount</label>                                                             
                                     <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
                                 </div>
                             </div>                            
                             <div class="col-sm-3">
-                                <div class="form-group">                                    
+                                <div class="form-group">    
+                                    <label>Type</label>                                
                                     <select class="form-control" required v-model="apply_term_type">                                
                                         <option value="tuition">Tuition</option>
                                         <option value="other">Other</option>
@@ -231,7 +234,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="form-group">                                    
+                                <div class="form-group">     
+                                    <label>Term to Apply</label>                               
                                     <select class="form-control" required v-model="apply_term">                                
                                         <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                                     </select>
