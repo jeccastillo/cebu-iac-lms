@@ -58,6 +58,7 @@
                 </tr>        
             </table>
            ';
+    $secondary = $student['senior_high'] == "undefined"?$student['high_school']:$student['senior_high'];
     $header_first_page = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                    
                     <td width="80%">
@@ -65,7 +66,7 @@
                             <tr>                            
                                 <td width="19%"><font style="font-size: 8;">Name</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td colspan="3"><font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
+                                <td colspan="3"><font style="font-size: 8;">'.$student['strLastname'].', '.$student['strFirstname'].' '.$student['strMiddlename'].'</font></td>                    
                                 
                             </tr>
                             <tr>
@@ -82,7 +83,7 @@
                             <tr>                            
                                 <td><font style="font-size: 8;">Date of Birth</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td width="30%"><font style="font-size: 8;">'.$student['dteBirthDate'].'</font></td>    
+                                <td width="30%"><font style="font-size: 8;">'.date("F j, Y",strtotime($student['dteBirthDate'])).'</font></td>    
                                 <td width="19%"><font style="font-size: 8;">Place of Birth</font></td>      
                                 <td width="1%" style="text-align:center">:</td>          
                                 <td width="30%"><font style="font-size: 8;">'.$student['place_of_birth'].'</font></td>                
@@ -104,7 +105,7 @@
                             <tr>                            
                                 <td><font style="font-size: 8;">Secondary School</font></td>
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.$student['high_school'].'</font></td>    
+                                <td><font style="font-size: 8;">'.$secondary.'</font></td>    
                                 <td><font style="font-size: 8;">ID No.</font></td>     
                                 <td width="1%" style="text-align:center">:</td>           
                                 <td><font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font></td>                
@@ -118,7 +119,7 @@
                                 <td><font style="font-size: 8;">'.$student['college'].'</font></td>                     
                                 <td><font style="font-size: 8;">Date of Admission</font></td>   
                                 <td width="1%" style="text-align:center">:</td>             
-                                <td><font style="font-size: 8;">'.$other_details['admission_date'].'</font></td>                
+                                <td><font style="font-size: 8;">'.date("F j, Y",strtotime($other_details['admission_date'])).'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
@@ -127,7 +128,7 @@
                                 <td colspan="3"><font style="font-size: 8;"></font></td>                                
                                 <td><font style="font-size: 8;">Date of Graduation</font></td>                
                                 <td width="1%" style="text-align:center">:</td>
-                                <td><font style="font-size: 8;">'.($student['date_of_graduation']!="" || $student['date_of_graduation']!=null?$student['date_of_graduation']:"XXXXXXXX").'</font></td>                
+                                <td><font style="font-size: 8;">'.($student['date_of_graduation']!="" || $student['date_of_graduation']!=null?date("F j, Y",strtotime($student['date_of_graduation'])):"XXXXXXXX").'</font></td>                
                             </tr>
                             <tr>
                                 <td style="line-height:1px;" colspan=2></td>         
@@ -316,31 +317,31 @@ foreach($records as $record){
         $page_footer_margin -= 15;
          
         foreach($record['records'] as $item){                
-        
-       
-            if($item['intFinalized'] >= 2){
-                $ctr++;
-                $page_ctr++;
-                $page_footer_margin -= 15;
-                $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
-                if($item['include_gwa'])
-                    $units = number_format($item['strUnits'],1);
-                else{
-                    $units = "(".number_format($item['strUnits'],1).")";
-                    $units_earned = "(".$units_earned.")";
-                }
-                
-                $html .= '            
-                    <tr>
-                        <td style="font-size:8px;">'.$item['strCode'].'</td>
-                        <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                        <td style="font-size:8px;text-align:center;">'.$units.'</td>
-                        <td style="font-size:8px;text-align:center;">'.$item['v3'].'</td>
-                        <td style="font-size:8px;text-align:center;"></td>                        
-                        <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
-                    </tr>            
-                    ';
+                           
+            $ctr++;
+            $page_ctr++;
+            $page_footer_margin -= 15;
+            $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
+            if($item['include_gwa'])
+                $units = number_format($item['strUnits'],1);
+            else{
+                $units = "(".number_format($item['strUnits'],1).")";
+                $units_earned = "(".$units_earned.")";
             }
+
+            $grade = $item['v3']?$item['v3']:'NGS';
+            
+            $html .= '            
+                <tr>
+                    <td style="font-size:8px;">'.$item['strCode'].'</td>
+                    <td style="font-size:8px;">'.$item['strDescription'].'</td>
+                    <td style="font-size:8px;text-align:center;">'.$units.'</td>
+                    <td style="font-size:8px;text-align:center;">'.$grade.'</td>
+                    <td style="font-size:8px;text-align:center;"></td>                        
+                    <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
+                </tr>            
+                ';
+            
 
             if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
                 

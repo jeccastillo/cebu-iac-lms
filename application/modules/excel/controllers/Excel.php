@@ -4574,7 +4574,13 @@ class Excel extends CI_Controller {
     
     public function student_account_report($sem, $campus, $report_date)
     {
-        $users = $this->data_fetcher->fetch_table('tb_mas_users');
+        // $users = $this->data_fetcher->fetch_table('tb_mas_users');
+        $users = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
 
         error_reporting(E_ALL);
@@ -4675,7 +4681,6 @@ class Excel extends CI_Controller {
                             }
                         }
                     }
-                    // $students[] = $payment_detail['student_number'];
                 }
             }
         }
@@ -4726,8 +4731,15 @@ class Excel extends CI_Controller {
             }
 
             // $payment_details = $this->db->get_where('payment_details', array('sy_reference' => $sem,'student_campus' => 'Cebu', 'student_number' => $user['slug'], 'status' => 'Paid'))->result_array();
-            $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
-            
+            // $reg = $this->data_fetcher->getRegistrationInfo($user['intID'], $sem);
+
+            $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
+                    ->from('tb_mas_registration')
+                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+                    ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
+                    ->get()
+                    ->first_row('array');
+
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
             // $tuitionFee = $tuition['tuition'];
 
@@ -4777,18 +4789,30 @@ class Excel extends CI_Controller {
                     ->setCellValue('Q'.$i, $reg['paymentType'] == 'partial' && $tuition['nsf'] > 0 ? (float)$tuition['nsf'] : '')
                     ->setCellValue('R'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                     ->setCellValue('S'.$i, '=SUM(G' . $i . ':R' . $i . ')')
-                    ->setCellValue('T'.$i, $date_enrolled < $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
-                    ->setCellValue('U'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
-                    ->setCellValue('V'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                    ->setCellValue('W'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                    ->setCellValue('X'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                    ->setCellValue('Y'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                    ->setCellValue('Z'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                    ->setCellValue('AA'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                    ->setCellValue('AB'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                    ->setCellValue('AC'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
-                    ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_fixed > 0? $assessment_discount_fixed : '')
-                    ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    ->setCellValue('T'.$i, $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
+                    ->setCellValue('U'.$i, $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
+                    ->setCellValue('V'.$i, $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                    ->setCellValue('W'.$i, $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                    ->setCellValue('X'.$i, $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                    ->setCellValue('Y'.$i, $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                    ->setCellValue('Z'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    ->setCellValue('AA'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AB'.$i, $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AC'.$i, $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                    ->setCellValue('AD'.$i, $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                    ->setCellValue('AD'.$i, $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    // ->setCellValue('T'.$i, $date_enrolled < $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+                    // ->setCellValue('U'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_rate'] > 0 ? $tuition['scholarship_tuition_fee_rate'] : '')
+                    // ->setCellValue('V'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                    // ->setCellValue('W'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                    // ->setCellValue('X'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                    // ->setCellValue('Y'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                    // ->setCellValue('Z'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    // ->setCellValue('AA'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    // ->setCellValue('AB'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    // ->setCellValue('AC'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                    // ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                    // ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
                     ->setCellValue('AE'.$i, '=SUM(U' . $i . ':AD' . $i . ')')
                     ->setCellValue('AF'.$i, '=S' . $i . '-AE' . $i . ')');
 
@@ -4861,7 +4885,7 @@ class Excel extends CI_Controller {
                 }
 
                 $balance_after_payment = '=AF' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
-                $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+                $total_adjustment = '=-' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
                                     '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
                                     
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
@@ -4899,9 +4923,6 @@ class Excel extends CI_Controller {
                 $count++;
             }
         }
-
-        // print_r($payments);
-        // die();
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NO.')
@@ -5088,7 +5109,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
@@ -6140,6 +6161,189 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+
+    public function deans_list($term,$period)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term))->first_row();
+        $data['list_1st_honor'] = [];
+        $data['list_2nd_honor'] = [];
+        $data['gwa'] = [];
+        $pr = ($period == 0)?"v2":"v3";
+        $period = ($period == 0) ? 'Midterm' : "Final";
+        $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$term,0);
+        $data['students'] =  $students;
+        foreach($students as $student){
+            $records = $this->data_fetcher->getClassListStudentsSt($student['intID'],$term); 
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned = 0;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                    switch($record[$pr]){
+                        case 'FA':
+                            $v3 = 5;
+                        break;
+                        case 'UD':
+                            $v3 = 5;
+                        break;
+                        default:
+                            $v3 = $record['v3'];
+                    }                    
+                    $sum_grades += floatval($v3) * $record['strUnits'];
+                    $total += $record['strUnits'];
+                }
+            }
+
+            $term_gwa = 0;
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = number_format(round($term_gwa,3),3);
+            }
+            if($term_gwa != 0 && $term_gwa <= 1.5 && $term_gwa > 1.25){
+                $student['gwa'] = $term_gwa;
+                $data['list_2nd_honor'][] = $student;                    
+            }
+            if($term_gwa != 0 && $term_gwa <= 1.25){
+                $student['gwa'] = $term_gwa;
+                $data['list_1st_honor'][] = $student;                    
+            }
+        }
+
+        //sort by GWA
+        usort($data['list_1st_honor'], function($a, $b) {
+            return $a['gwa'] > $b['gwa'];
+        });
+
+        usort($data['list_2nd_honor'], function($a, $b) {
+            return $a['gwa'] > $b['gwa'];
+        });
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Dean\'s Listers';
+
+        $i = 2;
+
+        //1ST HONORS Sheet
+        foreach($data['list_1st_honor'] as $student){
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, str_replace("-", "", $student['strStudentNumber']))
+                ->setCellValue('B'.$i, ucfirst($student['strLastname']))
+                ->setCellValue('C'.$i, ucfirst($student['strFirstname']))
+                ->setCellValue('D'.$i, ucfirst($student['strMiddlename']))
+                ->setCellValue('E'.$i, $student['strProgramCode'])
+                ->setCellValue('F'.$i, $student['gwa']);
+
+            $i++;
+
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Student Number')
+                    ->setCellValue('B1', 'Last Name')
+                    ->setCellValue('C1', 'First Name')
+                    ->setCellValue('D1', 'Middle Name')
+                    ->setCellValue('E1', 'Course')
+                    ->setCellValue('F1', 'GWA');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('F2:F' . $i)->getNumberFormat()->setFormatCode('#,##0.000');
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+
+        $objPHPExcel->getActiveSheet()->setTitle('1st Honors');
+
+
+        //2ND HONORS Sheet
+        $objPHPExcel->createSheet(1);
+        $i = 2;
+
+        foreach($data['list_2nd_honor'] as $student){
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(1)
+                ->setCellValue('A'.$i, str_replace("-", "", $student['strStudentNumber']))
+                ->setCellValue('B'.$i, ucfirst($student['strLastname']))
+                ->setCellValue('C'.$i, ucfirst($student['strFirstname']))
+                ->setCellValue('D'.$i, ucfirst($student['strMiddlename']))
+                ->setCellValue('E'.$i, $student['strProgramCode'])
+                ->setCellValue('F'.$i, $student['gwa']);
+
+            $i++;
+
+        }
+
+        $objPHPExcel->setActiveSheetIndex(1)
+                    ->setCellValue('A1', 'Student Number')
+                    ->setCellValue('B1', 'Last Name')
+                    ->setCellValue('C1', 'First Name')
+                    ->setCellValue('D1', 'Middle Name')
+                    ->setCellValue('E1', 'Course')
+                    ->setCellValue('F1', 'GWA');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('F2:F' . $i)->getNumberFormat()->setFormatCode('#,##0.000');
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+
+        $objPHPExcel->getActiveSheet()->setTitle('2nd Honors');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Dean\'s Listers_ ' . $period . '_' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
     private function columnIndexToLetter($columnIndex)
     {
         $letter = '';

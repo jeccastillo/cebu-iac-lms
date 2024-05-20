@@ -25,7 +25,11 @@
                 <div class="widget-user-header bg-red">
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
-                    <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4>                   
+                    <h4 class="widget-user-desc" style="margin-left:0;">
+                        {{ student.strStudentNumber }}<br />
+                        {{ student.strProgramDescription }}<br />
+                        {{ student_type.toUpperCase() }}
+                    </h4>                     
                 </div>                
             </div>                            
             <div class="box box-primary">
@@ -116,17 +120,16 @@
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
                                 <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
-                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />
-                                    <button data-toggle="modal"  @click="update_id = item.id" 
-                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
+                                    <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />                                
                                 </td>
-                                <td :class="item.muted" v-else>
-                                <button data-toggle="modal"  @click="appyToTermUpdate(item)" 
-                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>
-                                </td>                                                                                             
+                                    
                             </tr>
-                            <tr>                                
+                            <tr>                                                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
+                                <td>    
+                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1 && term.balance < 0"  @click="applyToTermUpdate(term)" 
+                                                data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>                                                                    
+                                </td>                                
                             </tr>                                                                  
                         </tbody>                
                     </table>
@@ -179,7 +182,7 @@
                             </tr>
                             <!-- <tr>                                
                                 <td colspan="11" class="text-right">Balance: {{ running_balance_other }}</td>                                
-                            </tr> -->
+                            </tr>   -->
                         </tbody>
                     </table>                     
                 </div>
@@ -187,7 +190,7 @@
             
         </section>
         <div class="modal fade" id="applyToTermModal" role="dialog">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -196,16 +199,66 @@
                         <h4 class="modal-title">Apply To Term</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label>Select Term <span class="text-danger">*</span> </label>                           
-                            <select class="form-control" required v-model="apply_term">                                
-                                <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
-                            </select>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Excess Amount: </td>
+                                <td v-if="balance_change">{{ balance_change }}</td>
+                            </tr>
+                        </table>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">                                    
+                                    <input type="text"  class="form-control" v-model="apply_description" />
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">                                                               
+                                    <input type="number" @keyup="changeBalance($event)" class="form-control" v-model="apply_term_amount" />
+                                </div>
+                            </div>                            
+                            <div class="col-sm-4">
+                                <div class="form-group">                                    
+                                    <select class="form-control" required v-model="apply_term_type">                                
+                                        <option value="tuition">Tuition</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">                                    
+                                    <select class="form-control" required v-model="apply_term">                                
+                                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">                                    
+                                    <button class="btn btn-success" @click="addTermBalance">+</button>
+                                </div>
+                            </div>                            
+                        </div>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Term To</th>
+                                <th>Remove</th>
+                            </tr>
+                            <tr v-for="(item,i) in apply_to_term">
+                                <th>{{ item.amount }}</th>
+                                <th>{{ item.description }}</th>
+                                <th>{{ item.type }}</th>
+                                <th>{{ item.term_to }}</th>
+                                <th><button @click="removeApply(i)" class="btn btn-danger">-</button></th>
+                            </tr>
+                        </table>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
-                        <button @click="applyToTerm" class="btn btn-primary">Submit</button>
+                        <button v-if="apply_to_term.length > 0" @click="applyToTerm" class="btn btn-primary">Submit</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -239,11 +292,17 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         ledger: [],      
         ledger_term: [],    
-        other_term: [],             
+        other_term: [],           
+        student_type: undefined,  
         term_balance: 0,
+        apply_to_term: [],
         term_balance_other: 0,
+        apply_term_balance: 0,
+        apply_term_type: 'tuition',
+        balance_change: 0,
         tuition: [],
         apply_term: undefined,
+        apply_description: 'Test',
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
@@ -334,6 +393,7 @@ new Vue({
                         this.finance = data.data.user;
                         this.tuition = data.data.tuition;
                         this.student = data.data.student;
+                        this.student_type = data.data.current_type;
                         this.sy = data.data.sy;
                         this.request.syid = data.data.active_sem;  
                         var current_sy_id = 0;                                               
@@ -712,7 +772,7 @@ new Vue({
             }).then((result) => {
             
             })
-        },
+        },        
         updateDescription: function(id,event){
             var desc = event.target.value;
             let url = api_url + 'finance/update_payment_description';
@@ -765,11 +825,50 @@ new Vue({
             })
             
         },
-        appyToTermUpdate(item){
-            this.update_id = item.id; 
-            this.sy_from = item.syid; 
-            this.apply_term_amount = item.amount; 
-            this.apply_term_description = item.name            
+        applyToTermUpdate(term){            
+            this.sy_from = term.ledger_items[0].syid;
+            this.apply_term_balance = term.balance;   
+            this.balance_change = term.balance;
+            this.apply_term_type = 'tuition';
+            this.apply_term_amount = 0;
+            this.apply_to_term = [];
+        },        
+        changeBalance(event){
+            if(this.apply_term_amount && this.apply_term_amount > 0){
+                this.balance_change = parseFloat(this.apply_term_balance) + parseFloat(event.target.value);
+                if(this.balance_change > 0){
+                    this.balance_change = 0;
+                    this.apply_term_amount = Math.abs(parseFloat(this.apply_term_balance));
+                }
+
+                this.balance_change.toFixed(2);
+            }            
+        },
+        removeApply: function(index){
+            this.apply_to_term.splice(index,1);
+        },
+        addTermBalance(){
+            if(this.apply_term && this.apply_term_amount > 0 && this.apply_description){
+                this.apply_to_term.push({
+                    'amount': this.apply_term_amount,
+                    'term_from': this.sy_from,
+                    'term_to': this.apply_term,
+                    'type': this.apply_term_type,
+                    'description': this.apply_description,
+                });
+                this.apply_term_amount = 0;                                
+                this.description =  '';
+
+                this.apply_term_balance = this.balance_change;
+
+            }
+            else            
+                Swal.fire({
+                    title: "Warning",
+                    text: 'Please fill in all fields',
+                    icon: "error"
+                });            
+            console.log(this.apply_to_term);
         },
         applyToTerm: function(){            
             let url = this.base_url + 'finance/apply_to_term';                        
@@ -791,14 +890,10 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata = new FormData();                                        
-                    formdata.append('syid',sy);
-                    formdata.append('sy_from',sy_from);
-                    formdata.append('apply_term_description',apply_term_description);
-                    formdata.append('apply_term_amount',apply_term_amount);                    
-                    formdata.append('id',id);
+                    formdata.append('transfer_data',JSON.stringify(this.apply_to_term));
+                    formdata.append('sy_from',sy_from);                                        
                     formdata.append('student_id',this.request.student_id);
-                    
-                    
+                                        
                     
                     return axios.post(url, formdata, {
                         headers: {

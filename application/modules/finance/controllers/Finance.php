@@ -311,13 +311,17 @@ class Finance extends CI_Controller {
     public function student_ledger_data($id,$sem){
                                 
         $data['student'] = $this->data_fetcher->getStudent($id);
-        $registrations =  $this->db->select('tb_mas_sy.*, paymentType')
+        $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
+        $registrations =  $this->db->select('tb_mas_sy.*, paymentType, enumStudentType')
                                     ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
                                     ->where(array('intStudentID'=>$id))
-                                    ->order_by("strYearStart asc, enumSem asc")
+                                    ->order_by("strYearStart desc, enumSem desc")
                                     ->get('tb_mas_registration')
                                     ->result_array();
         $tuition = [];
+        
+        $data['current_type'] = $registrations[0]['enumStudentType'];
+
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
             $temp['term'] = $reg;     
@@ -462,34 +466,39 @@ class Finance extends CI_Controller {
 
     public function apply_to_term(){
         $post =  $this->input->post();
-        $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);
-        $sy_to = $this->data_fetcher->get_sem_by_id($post['syid']);
-        $amount_to = 0 - floatval($post['apply_term_amount']);
-        $amount_from = floatval($post['apply_term_amount']);
+        $transfer_data = json_decode($post['transfer_data']);
+        $amount_from = 0;
+        $sy_from = $this->data_fetcher->get_sem_by_id($post['sy_from']);                
 
+        foreach($transfer_data as $item){
+            $amount_to = 0 - floatval($item->amount);
+            $to = [
+                'student_id' => $post['student_id'],
+                'date' => date("Y-m-d H:i:s"),
+                'name' => $item->description,
+                'syid' => $item->term_to,
+                'amount' => $amount_to, 
+                'type' => $item->type,   
+                'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
+                'added_by' => $this->session->userdata('intID'),
+            ];        
+            $this->db->insert('tb_mas_student_ledger',$to);
+            $amount_from += floatval($item->amount);
+        }
+        
         $from = [
             'student_id' => $post['student_id'],
             'date' => date("Y-m-d H:i:s"),
-            'name' => $post['apply_term_description'],
+            'name' => "Term Balance Adjustment",
             'syid' => $post['sy_from'],
             'amount' => $amount_from, 
             'type' => 'tuition',   
-            'remarks' => "APPLY TO ".strtoupper($sy_to['enumSem']." ".$sy_to['term_label']." ".$sy_to['strYearStart']." - ".$sy_to['strYearEnd']),
+            'remarks' => "Transfered payment to different terms",
             'added_by' => $this->session->userdata('intID'),
         ];        
         $this->db->insert('tb_mas_student_ledger',$from);
 
-        $to = [
-            'student_id' => $post['student_id'],
-            'date' => date("Y-m-d H:i:s"),
-            'name' => $post['apply_term_description'],
-            'syid' => $post['syid'],
-            'amount' => $amount_to, 
-            'type' => 'tuition',   
-            'remarks' => "APPLIED FROM ".strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),
-            'added_by' => $this->session->userdata('intID'),
-        ];        
-        $this->db->insert('tb_mas_student_ledger',$to);
+        
 
         $data['success'] =  true;
         $data['message'] = "Successfully updated ledger";

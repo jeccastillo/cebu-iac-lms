@@ -1,7 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Admissions Report
+            Admissions Report - Awareness
             <small>
                 <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
                     <i class="ion ion-arrow-left-a"></i>
@@ -23,7 +23,20 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Awareness Stats</h4>
-                
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in stats" v-if="item.count > 0">
+                            <td>{{ item.source }}</td>
+                            <td>{{ item.count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -53,10 +66,10 @@ new Vue({
         if(this.id != 0){            
             //this.loader_spinner = true;
             
-            axios.get(base_url + 'admissionsV1/awareness_stats_data/'+current_sem)
+            axios.get(api_url + 'admissions/applications/awareness?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>')
             .then((data) => {       
                 // console.log(data);           
-                this.stats = data.data;                  
+                this.stats = data.data.applications;                       
             })
             .catch((error) => {
                 console.log(error);

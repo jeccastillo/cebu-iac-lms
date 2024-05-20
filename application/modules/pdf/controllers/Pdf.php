@@ -569,7 +569,7 @@ class Pdf extends CI_Controller {
         $units_overall = 0;
         $gwa_overall = 0;
         $total_records = 0;
-        $rec['admission_date'] = $post['admission_date'];
+        $rec['admission_date'] = date("M j, Y",strtotime($post['admission_date']));
         $rec['picture'] = $post['picture'];
         $credited_subjects = [];
 
@@ -2195,14 +2195,14 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
-        // $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
-        //                 ->get('tb_mas_printed_or')
-        //                 ->first_row();
+        $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
+                        ->get('tb_mas_printed_or')
+                        ->first_row();
 
-        // if($printed){
-        //     echo "This OR has already been printed";
-        //     return;
-        // }
+        if($printed){
+            echo "This OR has already been printed";
+            return;
+        }
         
                 
         tcpdf();
@@ -2740,6 +2740,94 @@ class Pdf extends CI_Controller {
         $pdf->writeHTML($html, true, false, true, false, '');
           
         $pdf->Output("CHED_NSTP_Report_" . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
+
+    public function deans_list($term,$period){
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term))->first_row();
+        $data['list_1st_honor'] = [];
+        $data['list_2nd_honor'] = [];
+        $data['gwa'] = [];
+        $pr = ($period == 0)?"v2":"v3";
+        $period = ($period == 0) ? 'Midterm' : "Final";
+        $students = $this->data_fetcher->getStudents(0,0,0,0,0,0,2,$term,0);
+        $data['students'] =  $students;
+        foreach($students as $student){
+            $records = $this->data_fetcher->getClassListStudentsSt($student['intID'],$term); 
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned = 0;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed" && $record['include_gwa'])
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                    switch($record[$pr]){
+                        case 'FA':
+                            $v3 = 5;
+                        break;
+                        case 'UD':
+                            $v3 = 5;
+                        break;
+                        default:
+                            $v3 = $record['v3'];
+                    }                    
+                    $sum_grades += floatval($v3) * $record['strUnits'];
+                    $total += $record['strUnits'];
+                }
+            }
+
+            $term_gwa = 0;
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = number_format(round($term_gwa,3),3);
+            }
+            if($term_gwa != 0 && $term_gwa <= 1.5 && $term_gwa > 1.25){
+                $student['gwa'] = $term_gwa;
+                $data['list_2nd_honor'][] = $student;                    
+            }
+            if($term_gwa != 0 && $term_gwa <= 1.25){
+                $student['gwa'] = $term_gwa;
+                $data['list_1st_honor'][] = $student;                    
+            }
+        }
+
+        //sort by GWA
+        usort($data['list_1st_honor'], function($a, $b) {
+            return $a['gwa'] > $b['gwa'];
+        });
+
+        usort($data['list_2nd_honor'], function($a, $b) {
+            return $a['gwa'] > $b['gwa'];
+        });
+
+        $this->data['list_1st_honor'] = $data['list_1st_honor'];
+        $this->data['list_2nd_honor'] = $data['list_2nd_honor'];
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Dean's_Listers_" . $period . '_' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd);
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("deans_list",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output("Dean's_Listers_" . $period . '_' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
     
     public function is_admin()
