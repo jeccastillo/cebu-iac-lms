@@ -22,20 +22,22 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
+                        <div class="pull-right">
+                            <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">More Info</button>
+                        </div>
                         <div class="pull-right" style="margin-left:1rem;">
                             <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
                             </select>
                         </div>
                         <div class="pull-right" style="margin-left:1rem;">
+                            School Year & Term
                             <select class="form-control" @change="selectTerm($event)" v-model="sem">
                                 <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
                         </div>
                         <!-- /.widget-user-image -->
-                        <div class="pull-right">
-                            <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">School Year & Term</button>
-                        </div>
+                        
                         <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
                                 <option value="full">Full Payment</option>
