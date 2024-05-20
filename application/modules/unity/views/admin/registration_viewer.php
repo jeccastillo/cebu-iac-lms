@@ -34,7 +34,7 @@
                         </div>
                         <!-- /.widget-user-image -->
                         <div class="pull-right">
-                            <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
+                            <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">School Year & Term</button>
                         </div>
                         <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
