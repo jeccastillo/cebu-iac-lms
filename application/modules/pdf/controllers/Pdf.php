@@ -2195,11 +2195,17 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+
+        if($userlevel != 2 && $userlevel != 6)
+		  redirect(base_url()."unity");
+
         $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
                         ->get('tb_mas_printed_or')
                         ->first_row();
 
-        if($printed){
+        if($printed && $role <= 1){
             echo "This OR has already been printed";
             return;
         }
