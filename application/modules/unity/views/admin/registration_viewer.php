@@ -26,6 +26,7 @@
                             <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">More Info</button>
                         </div>
                         <div class="pull-right" style="margin-left:1rem;">
+                            Tuition Year
                             <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
                             </select>
@@ -39,6 +40,7 @@
                         <!-- /.widget-user-image -->
                         
                         <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Payment Type
                             <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>                                
@@ -46,6 +48,7 @@
                             
                         </div>
                         <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Enrollment Status
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>                                
