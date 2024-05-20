@@ -542,21 +542,22 @@
             <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
              style="margin-left: 10px;" href="<?php echo base_url() ?>finance/view_all_students"><i
                   class="ion ion-cash"></i>
-                <span>Payments</span> </a></li>
+                <span>Payment</span> </a></li>
+            <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a
+            style="margin-left: 10px;" href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i>
+                <span>Online Payment</span> </a></li>
+            <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a
+            style="margin-left: 10px;" href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i>
+                <span>NS Payment (Non-student)</span> </a></li>
             <li class="<?php echo (isset($page) && $page=="view_payees_cashier")?'active':''; ?>"><a
             style="margin-left: 10px;" href="<?php echo base_url() ?>finance/view_payees_cashier"><i
                   class="fa fa-users"></i>
-                <span>NS Payees</span> </a></li>
-
+                <span>NS Payee List (Non-student)</span> </a></li>
             <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a
             style="margin-left: 10px;" href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i>
                 <span>Collection Report</span></a></li>
-            <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a
-            style="margin-left: 10px;" href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i>
-                <span>Online Payments</span> </a></li>
-            <li class="<?php echo (isset($page) && $page=="other_payments")?'active':''; ?>"><a
-            style="margin-left: 10px;" href="<?php echo base_url() ?>finance/other_payments"><i class="ion ion-cash"></i>
-                <span>NS Payment</span> </a></li>
+            
+            
             <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
@@ -582,11 +583,21 @@
               <a href="<?php echo base_url() ?>finance/student_account_report/"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                 <span>Student Account Report</span> </a>
+            </li>                 
+            <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
+                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Tuition Fee
+              </a>
             </li>
-            <li class="<?php echo (isset($page) && $page=="student_account")?'active':''; ?>"><a
-              style="margin-left: 10px;" href="#"><i class="ion"></i>
-                <span>Student Account</span> </a>
-            </li>            
+            <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
+            </li>
+            <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
+                href="<?php echo base_url() ?>finance/edit_ay/"
+                style="margin-left: 10px;"><i class="fa fa-calendar"></i>
+                <span>Term Date Setup</span> </a>
+            </li>        
             <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
@@ -601,27 +612,12 @@
             <i class="fa fa-circle text-green"></i> <span>Finance Admin </span>
             <i class="fa pull-right fa-angle-left"></i>
           </a>
-          <ul class="treeview-menu">
-            <li class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
-                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add New Tuition
-                Fee
-              </a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Tuition Fee List</a>
-            </li>
+          <ul class="treeview-menu">                        
             <li class="<?php echo (isset($page) && $page=="override_payment")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>finance/override_payment"
                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Override Payment
               </a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/edit_ay/"
-                style="margin-left: 10px;"><i class="fa fa-calendar"></i>
-                <span>Edit Dates</span> </a>
-            </li>            
+            </li>                
             <?php if($user['special_role'] >= 2): ?>
             <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
                 href="<?php echo base_url() ?>finance/view_payees"
