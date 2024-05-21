@@ -21,22 +21,23 @@
             <div class="col-sm-12">
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-red">
+                    <div class="widget-user-header bg-red">                        
                         <div class="pull-right" style="margin-left:1rem;">
+                            Tuition Year
                             <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
                             </select>
                         </div>
                         <div class="pull-right" style="margin-left:1rem;">
+                            School Year & Term
                             <select class="form-control" @change="selectTerm($event)" v-model="sem">
                                 <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
                             </select>
                         </div>
                         <!-- /.widget-user-image -->
-                        <div class="pull-right">
-                            <button class="btn btn-default" data-toggle="collapse" data-target="#student-info">Info</button>
-                        </div>
+                        
                         <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Payment Type
                             <select v-model="change_payment_type" @change="changeType($event)" class="form-control">                                
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>                                
@@ -44,13 +45,16 @@
                             
                         </div>
                         <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Enrollment Status
                             <select v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>                                
                             </select>
                             
                         </div>
-                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>
+                        <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
+                            &nbsp;<button class="btn btn-default" data-toggle="collapse" data-target="#student-info">More Info</button>                        
+                        </h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">{{ student.strProgramDescription }}  {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</h5>
                     </div>
                     <div class="collapse" class="box-footer no-padding" id="student-info">
