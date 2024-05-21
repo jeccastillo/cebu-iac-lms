@@ -1242,7 +1242,7 @@ class Unity extends CI_Controller {
                             $temp_rec['color'] = "#f2f2f2";
                     }                             
     
-                    if($temp_rec['include_gwa']){
+                    if($temp_rec['include_gwa'] && $grade != "OW"){                        
                         $assessment_units += $temp_rec['strUnits'];   
                         $assessment_sum += $grade * $temp_rec['strUnits'];         
                     }
@@ -1337,8 +1337,10 @@ class Unity extends CI_Controller {
                         break;
                         default:
                             $v3 = $record['v3'];
-                    }                    
-                    $sum_grades += $v3 * $record['strUnits'];
+                    }                  
+                    if($v3 != "OW")  
+                        $sum_grades += $v3 * $record['strUnits'];
+                    
                     $total += $record['strUnits'];
                 }
 
