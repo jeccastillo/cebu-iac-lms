@@ -2367,9 +2367,8 @@ class Data_fetcher extends CI_Model {
     function getTuition($id,$sem,$sch = 0,$discount = 0)
     {
         
-        
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                          
-
+        
         $classes =  $this->db
                             ->select("tb_mas_subjects.intID as subjectID")
                             ->from("tb_mas_classlist_student")
@@ -2434,7 +2433,6 @@ class Data_fetcher extends CI_Model {
 
     function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01")
     {
-
         $tuition = 0;
         $total_lab = 0;
         $total_misc = 0;
@@ -2464,6 +2462,10 @@ class Data_fetcher extends CI_Model {
         $late_enrollment_fee = 0;
         if(!isset($dr))
             $dr = date("Y-m-d");
+
+        if($stype == 'new'){
+            $nsf = 0;
+        }
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
@@ -2533,6 +2535,7 @@ class Data_fetcher extends CI_Model {
             }
         }   
         elseif($dr >= $sem['reconf_start']){
+
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
@@ -2687,9 +2690,8 @@ class Data_fetcher extends CI_Model {
         $scholarships_for_ledger = [];
         $scholar_type = '';
 
-        $tuition_fee_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
+        $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
-        
         
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
@@ -2738,7 +2740,7 @@ class Data_fetcher extends CI_Model {
                         $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_rate = $tuition * ($scholar->tuition_fee_rate/100);
-
+                        $tuition_fee_installment_rate = $tuition_scholarship_installment * ($scholar->tuition_fee_rate/100);
                     }
                     elseif($scholar->tuition_fee_fixed > 0){
                         if($scholar->tuition_fee_fixed > $tuition){
@@ -2749,7 +2751,7 @@ class Data_fetcher extends CI_Model {
                         else{
                             $tuition_scholarship_current = $scholar->tuition_fee_fixed;
                             $tuition_scholarship += $scholar->tuition_fee_fixed;   
-                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                            
+                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                    
                         }
 
                         $tuition_scholarship_installment_current = $tuition_scholarship;
@@ -2758,12 +2760,11 @@ class Data_fetcher extends CI_Model {
 
                     $total_scholarship_temp += $tuition_scholarship_current;
                     $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
-                
+
                     if($scholar->misc_fee_rate > 0){
                         $misc_scholarship_current = $total_misc * ($scholar->misc_fee_rate/100);
                         $misc_scholarship += $total_misc * ($scholar->misc_fee_rate/100);
                         $misc_fee_rate = $total_misc * ($scholar->misc_fee_rate/100);
-
                     }
                     elseif($scholar->misc_fee_fixed > 0){
                         if($scholar->misc_fee_fixed > $total_misc){
@@ -2774,7 +2775,7 @@ class Data_fetcher extends CI_Model {
                         else{
                             $misc_scholarship_current = $scholar->misc_fee_fixed;
                             $misc_scholarship += $scholar->misc_fee_fixed; 
-                            $misc_fee_fixed = $scholar->misc_fee_fixed;                     
+                            $misc_fee_fixed = $scholar->misc_fee_fixed;                      
                         }
                     }
 
@@ -2859,6 +2860,7 @@ class Data_fetcher extends CI_Model {
                 $other_scholarship_current = 0;
                 $total_scholarship_temp = 0;
                 $total_scholarship_installment_temp = 0;
+                $scholar_type = $scholar->name;
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
@@ -2894,7 +2896,7 @@ class Data_fetcher extends CI_Model {
                         $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_discount += $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_rate = $tuition * ($scholar->tuition_fee_rate/100);
-
+                        $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
                     }
                     elseif($scholar->tuition_fee_fixed > 0){
                         if($scholar->tuition_fee_fixed > $tuition){
@@ -3049,6 +3051,7 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_deductions_installment_dc_array'] = $total_discount_installment; 
         $data['scholarship_deductions_installment_dc'] = $discount_installment_grand_total;
         $data['scholarship_tuition_fee_rate'] = $tuition_fee_rate;
+        $data['scholarship_tuition_fee_installment_rate'] = $tuition_fee_installment_rate;
         $data['scholarship_tuition_fee_fixed'] = $tuition_fee_fixed;
         $data['scholarship_lab_fee_rate'] = $lab_fee_rate;
         $data['scholarship_lab_fee_fixed'] = $lab_fee_fixed;
