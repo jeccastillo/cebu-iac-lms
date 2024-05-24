@@ -156,7 +156,7 @@
                     <?php if($userlevel == "2"):  ?>
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Date Enrolled</strong>
-                        <input type="text" class="form-control" v-model="request.date_enrolled"
+                        <input type="date" class="form-control" v-model="request.date_enrolled"
                             @blur="updateField('date_enrolled',$event)" />
 
                         <hr>
