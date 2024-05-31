@@ -4744,13 +4744,16 @@ class Excel extends CI_Controller {
             if($reg){
                 $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
-                $assessment_discount_rate = $assessment_discount_fixed = 0;
+                $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
                 if($reg['paymentType'] == 'full'){
                     if($tuition['scholarship_total_assessment_rate'] > 0){
                         $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
                     }
                     if($tuition['scholarship_total_assessment_fixed'] > 0){
                         $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                    }
+                    if($tuition['scholarship_tuition_fee_rate'] > 0){
+                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
                     }
                 }else{ 
                     if($tuition['scholarship_total_assessment_rate_installment'] > 0){
@@ -4759,21 +4762,25 @@ class Excel extends CI_Controller {
                     if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
                         $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
                     }
+                    if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                    }
                 }
 
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
-                $tuition_discount = '';
+                $tuition_discount = $total_discount = '';
 
-                $total_discount = $tuition['scholarship_tuition_fee_rate'] + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] +
-                                $tuition['scholarship_misc_fee_rate'] + $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
-                
                 if($date_enrolled < $sy->reconf_start){
                     if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
-                        $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
+                    $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
                     if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
-                        $tuition_discount = $tuition['scholarship_tuition_fee_installment_rate'];
+                    $tuition_discount = $tuition['scholarship_tuition_fee_installment_rate'];
+                }else{
+                    $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
+                                        $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
                 }
-
+                
+                
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count)

@@ -2469,7 +2469,7 @@ class Data_fetcher extends CI_Model {
         
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
-    
+
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
         
         if($discount == 0)
@@ -2993,8 +2993,6 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-                    
-        
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
@@ -3051,7 +3049,7 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_deductions_installment_dc_array'] = $total_discount_installment; 
         $data['scholarship_deductions_installment_dc'] = $discount_installment_grand_total;
         $data['scholarship_tuition_fee_rate'] = $tuition_fee_rate;
-        $data['scholarship_tuition_fee_installment_rate'] = $tuition_fee_installment_rate;
+        $data['scholarship_tuition_fee_installment_rate'] = $tuition_scholarship_installment;
         $data['scholarship_tuition_fee_fixed'] = $tuition_fee_fixed;
         $data['scholarship_lab_fee_rate'] = $lab_fee_rate;
         $data['scholarship_lab_fee_fixed'] = $lab_fee_fixed;
