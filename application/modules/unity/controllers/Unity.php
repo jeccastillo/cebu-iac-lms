@@ -1063,7 +1063,8 @@ class Unity extends CI_Controller {
     
     public function delete_registration($id,$sem)
     {
-        if($this->is_super_admin())
+        $role = $this->session->userdata('special_role');
+        if($this->is_super_admin() || ($this->is_registrar() && $role == 2))
         {
             $this->data['sem'] = $sem;
             $this->data['student'] = $this->data_fetcher->getStudent($id);
