@@ -2611,7 +2611,7 @@ class Data_fetcher extends CI_Model {
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                 
                 if($class['strLabClassification'] != "none"){
-                    $lab_term = $this->db->get_where('tb_mas_subjects_labtype',array('subject_id'=>$class['intID'],'term_id'=>$syid))->first();
+                    $lab_term = $this->db->get_where('tb_mas_subjects_labtype',array('subject_id'=>$class['intID'],'term_id'=>$syid))->first_row('array');
                     $lab_class = $lab_term?$lab_term['lab_classification']:$class['strLabClassification'];
                     $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $lab_class))
                                                 ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
