@@ -3073,6 +3073,76 @@ class Unity extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    public function enhanced_list_data($sem)
+    {
+        $students_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $sy['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_registration.current_curriculum')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_curriculum.isEnhanced' => '1'))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        for($index = 0; $index < count($students); $index++){
+            $course = $this->data_fetcher->getProgramDetails($students[$index]['intProgramID']);
+            // $students[$index]['course'] = $course;
+
+            $student['studentNumber'] = $students[$index]['strStudentNumber'];
+            $student['name'] = ucfirst($students[$index]['strLastname']) . ', ' . ucfirst($students[$index]['strFirstname']) . ' ' . ucfirst($students[$index]['strMiddlename']);
+            $student['course'] = $course['strProgramCode'];
+            $students_array[] = $student;
+        }
+
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
+    
+    public function regular_list_data($sem)
+    {
+        $students_array = array();
+        
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $sy['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_registration.current_curriculum')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_curriculum.isEnhanced' => '0'))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        for($index = 0; $index < count($students); $index++){
+            $course = $this->data_fetcher->getProgramDetails($students[$index]['intProgramID']);
+            // $students[$index]['course'] = $course;
+
+            $student['studentNumber'] = $students[$index]['strStudentNumber'];
+            $student['name'] = ucfirst($students[$index]['strLastname']) . ', ' . ucfirst($students[$index]['strFirstname']) . ' ' . ucfirst($students[$index]['strMiddlename']);
+            $student['course'] = $course['strProgramCode'];
+            $students_array[] = $student;
+        }
+
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
     
     public function delete_classlist()
     {

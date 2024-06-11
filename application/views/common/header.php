@@ -605,7 +605,7 @@
           </ul>
         </li>
         <?php endif; ?>
-        <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
+        <?php if(($user['special_role'] >= 2 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
           <a href="#">
