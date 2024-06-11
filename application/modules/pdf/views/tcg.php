@@ -250,46 +250,46 @@ foreach($records as $record){
         foreach($record['records'] as $item){                
             
        
-            if($item['intFinalized'] >= 2){
-                $ctr++;
-                $page_ctr++;
-                $page_footer_margin -= 15;
-                $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
-                if($item['include_gwa']){
-                    $units = number_format($item['strUnits'],1);
-                    $term_units += $item['strUnits'];
-                    $total_units += $item['strUnits'];
+            
+            $ctr++;
+            $page_ctr++;
+            $page_footer_margin -= 15;
+            $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
+            if($item['include_gwa']){
+                $units = number_format($item['strUnits'],1);
+                $term_units += $item['strUnits'];
+                $total_units += $item['strUnits'];
 
-                    switch($item['v3']){
-                        case 'FA':
-                            $grade = 5;
-                        break;
-                        case 'UD':
-                            $grade = 5;                    
-                        break;
-                        default:
-                            $grade = $item['v3'];                    
-                    }                             
-                            
-                    $grades_sum += $grade * $item['strUnits'];
-                    $total_grades_sum += $grade * $item['strUnits'];
-                }
-                else{
-                    $units = "(".number_format($item['strUnits'],1).")";
-                    $units_earned = "(".$units_earned.")";
-                }
-                
-                $html .= '            
-                    <tr>
-                        <td style="font-size:9px;">'.$item['strCode'].'</td>
-                        <td style="font-size:9px;">'.$item['strDescription'].'</td>
-                        <td style="font-size:9px;text-align:center;">'.$units.'</td>
-                        <td style="font-size:9px;text-align:center;">'.$item['v3'].'</td>
-                        <td style="font-size:9px;text-align:center;"></td>                        
-                        <td style="font-size:9px;text-align:center;">'.$units_earned.'</td>
-                    </tr>            
-                    ';
+                switch($item['v3']){
+                    case 'FA':
+                        $grade = 5;
+                    break;
+                    case 'UD':
+                        $grade = 5;                    
+                    break;
+                    default:
+                        $grade = $item['v3'];                    
+                }                             
+                        
+                $grades_sum += $grade * $item['strUnits'];
+                $total_grades_sum += $grade * $item['strUnits'];
             }
+            else{
+                $units = "(".number_format($item['strUnits'],1).")";
+                $units_earned = "(".$units_earned.")";
+            }
+            
+            $html .= '            
+                <tr>
+                    <td style="font-size:9px;">'.$item['strCode'].'</td>
+                    <td style="font-size:9px;">'.$item['strDescription'].'</td>
+                    <td style="font-size:9px;text-align:center;">'.$units.'</td>
+                    <td style="font-size:9px;text-align:center;">'.$item['v3'].'</td>
+                    <td style="font-size:9px;text-align:center;"></td>                        
+                    <td style="font-size:9px;text-align:center;">'.$units_earned.'</td>
+                </tr>            
+                ';
+            
 
             if(($page_ctr == 20 && $page == 1) || $page_ctr == 25){
                 
