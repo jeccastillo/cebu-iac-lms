@@ -137,6 +137,30 @@ class AdmissionsV1 extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
+    public function view_interviewed_leads($term = 0)
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);                  
+            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "view_interviewed";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/interviewed_students",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/interviewed_students_conf",$this->data); 
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
+
     public function admissions_report($term = 0,$start = 0,$end=0)    
     {
         if($term == 0)
