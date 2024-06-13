@@ -73,13 +73,13 @@
                     </tr>
                     <tr>
                         <th>Reserved</th>
-                        <td>{{ stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end }}</td>
-                        <td>{{ (((stats.reserved  + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled + stats.enrolled_reserved)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled + stats.enrolled_reserved + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
+                        <td>{{ stats.reserved }}</td>
+                        <td>{{ (((stats.reserved)/(stats.for_reservation + stats.reserved + stats.confirmed + stats.for_enrollment + stats.enlisted + stats.enrolled + stats.enrolled_reserved + stats.withdrawn_before + stats.withdrawn_after + stats.withdrawn_end))*100).toFixed(2) }}%</td>
                     </tr>                    
                     <tr>
                         <th>Enrolled</th>
                         <td>{{ stats.enrolled }}</td>
-                        <td>{{ ((stats.enrolled/(stats.reserved + stats.confirmed + stats.enlisted + stats.for_enrollment + stats.enrolled))*100).toFixed(2) }}%</td>
+                        <td>{{ ((stats.enrolled/(stats.reserved))*100).toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <th>Withdrawn Enrollment Before Opening of SY</th>
@@ -150,8 +150,7 @@ new Vue({
             .then((data) => {       
                 // console.log(data);           
                 this.stats = data.data;  
-                this.total = this.stats.enrolled + this.stats.enlisted + this.stats.confirmed + this.stats.will_not_proceed +
-                            this.stats.for_enrollment + this.stats.reserved + this.stats.floating +
+                this.total =this.stats.will_not_proceed + this.stats.reserved + this.stats.floating +
                             this.stats.for_reservation + this.stats.for_interview + this.stats.waiting + this.stats.new + 
                             this.stats.did_not_reserve + this.stats.rejected + this.stats.cancelled +
                             this.stats.withdrawn_before + this.stats.withdrawn_after + this.stats.withdrawn_end;
