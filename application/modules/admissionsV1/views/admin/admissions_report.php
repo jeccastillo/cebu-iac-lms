@@ -13,7 +13,7 @@
                 <?php if($start == $end): ?>
                     <?php echo date('M j, Y',strtotime($start)); ?>
                 <?php else: ?>
-                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime("-1 days",strtotime($end))); ?>
+                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime($end)); ?>
                 <?php endif; ?>
             <?php endif; ?>
             
@@ -187,7 +187,7 @@ $(document).ready(function(){
         endDate: moment()
     },
     function(start, end) {
-        document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
+        document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
         
     }
     );
