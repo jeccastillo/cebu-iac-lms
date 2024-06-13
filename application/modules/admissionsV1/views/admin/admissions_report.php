@@ -13,7 +13,7 @@
                 <?php if($start == $end): ?>
                     <?php echo date('M j, Y',strtotime($start)); ?>
                 <?php else: ?>
-                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime($end)); ?>
+                from <?php echo date('M j, Y',strtotime($start))." to ".date('M j, Y',strtotime("-1 days",$end)); ?>
                 <?php endif; ?>
             <?php endif; ?>
             
