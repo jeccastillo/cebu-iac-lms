@@ -2038,6 +2038,9 @@ class Unity extends CI_Controller {
         
         
     }
+
+
+   
     
     public function add_subjects_curriculum()
     {
@@ -3074,6 +3077,55 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
+    public function enhanced_list($term = 0)
+    {
+        
+        if($this->is_registrar() || $this->is_super_admin())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+          
+                                   
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_enhanced_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/enhanced_list_conf",$this->data); 
+            
+        }
+        else
+            redirect(base_url()."unity");                
+    }
+
+    public function regular_list($term = 0)
+    {
+        
+        if($this->is_registrar() || $this->is_super_admin())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+          
+                                   
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_regular_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/regular_list_conf",$this->data); 
+            
+        }
+        else
+            redirect(base_url()."unity");                
+    }
+
+
     public function enhanced_list_data($sem)
     {
         $students_array = array();
@@ -3103,11 +3155,14 @@ class Unity extends CI_Controller {
             $student['course'] = $course['strProgramCode'];
             $students_array[] = $student;
         }
+      
+    
 
         $data['data'] = $students_array;
 
         echo json_encode($data);
     }
+    
     
     public function regular_list_data($sem)
     {
