@@ -386,9 +386,17 @@
                 href="<?php echo base_url(); ?>unity/logs/null/null/Leave%20of%20Abscences"
                 style="margin-left: 10px;"><i class="fa fa-file"></i> LOA Logs</a></li>
             <?php endif; ?>
+    
             <li class="<?php echo (isset($page) && $page=="view_students")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>student/view_all_students"
                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students</a></li>
+                <li class="<?php echo (isset($page) && $page=="enhanced_list")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>unity/enhanced_list"
+                style="margin-left: 10px;"><i class="fa fa-user"></i> View Enhanced List</a></li>
+                <li class="<?php echo (isset($page) && $page=="regular_list")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>unity/regular_list"
+                style="margin-left: 10px;"><i class="fa fa-user"></i> View Regular List</a></li>
+                
 
             <!--                            <li class="<?php echo (isset($page) && $page=="view_students2")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_students2" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students' Pass</a></li> -->
 
