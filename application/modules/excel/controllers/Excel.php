@@ -4676,6 +4676,7 @@ class Excel extends CI_Controller {
                                         array_splice($payments, $current_index, 0, $data);
                                     }
                                     else{
+                                        $current_index = count($payments);
                                         array_splice($payments, count($payments), 0, $data);
                                     }
                                 }
