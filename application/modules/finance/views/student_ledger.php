@@ -32,7 +32,7 @@
                     </h4>                     
                 </div>                
             </div>                            
-            <div class="box box-primary">
+            <!-- <div class="box box-primary">
                 <div class="box-header">Add Ledger Item</div>
                 <div class="box-body">
                     <form @submit.prevent="submitLedgerItem" method="post">
@@ -72,7 +72,7 @@
                         </table>
                     </form>  
                 </div>
-            </div>
+            </div> -->
             <div class="box box-primary">
                 <div class="box-header">Ledger</div>
                 <div class="box-body">
