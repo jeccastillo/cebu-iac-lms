@@ -162,7 +162,7 @@
                                                     <div class="form-group">
                                                         <label>Payment For</label>
                                                         <select class="form-control" v-model="description">
-                                                            <option v-if="remaining_amount > 0" value="Tuition Fee">Tuition Fee</option>                                                            
+                                                            <option value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
