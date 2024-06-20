@@ -1206,6 +1206,42 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function shs_by_grade_level_data($sem, $year_level)
+    {
+        $students_array = array();
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*, tb_mas_registration.intYearLevel, tb_mas_programs.strProgramCode, tb_mas_classlist.strSection')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->join('tb_mas_classlist_student','tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
+                    ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                    ->where(array('tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $student){
+            $data['student_number'] = str_replace("-", "", $student['strStudentNumber']);
+            $data['last_name'] = ucfirst($student['strLastname']);
+            $data['first_name'] = ucfirst($student['strFirstname']);
+            $data['middle_name'] = ucfirst($student['strMiddlename']);
+            $data['course'] = $student['strProgramCode'];
+            $data['year_level'] = $student['intYearLevel'];
+            $data['section'] = $student['strSection'];
+            $students_array[] = $data;
+        }
+
+        echo json_encode($students_array);
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        

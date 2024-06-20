@@ -2919,7 +2919,7 @@ class Pdf extends CI_Controller {
         $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Regular List");
+        $pdf->SetTitle("SHS List Grade");
         
         // set margins
         $pdf->SetMargins(0.5, .25, 0.5);
@@ -2938,6 +2938,56 @@ class Pdf extends CI_Controller {
         $pdf->writeHTML($html, true, false, true, false, '');
           
         $pdf->Output("List_of_Regular_" . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
+    
+    public function shs_by_grade_level($sem = 0, $year_level)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $sy['intID'];
+        }
+        $students = $this->db->select('tb_mas_users.*, tb_mas_registration.intYearLevel, tb_mas_programs.strProgramCode, tb_mas_classlist.strSection')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->join('tb_mas_classlist_student','tb_mas_users.intID = tb_mas_classlist_student.intStudentID')
+                    ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+        
+        $this->data['students'] = $students;
+        $this->data['year_level'] = $year_level;
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("SHS List Grade " . $year_level);
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("shs_by_grade_level",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('SHS List Grade  ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
     
     public function is_admin()
