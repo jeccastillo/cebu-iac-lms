@@ -568,9 +568,28 @@
             
             <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
-                                <span>Non Student Payment Report</span> </a></li> -->
-            <li
-              class="treeview <?php echo (isset($opentree) && $opentree=="tuitionyear")?'active':''; ?>">
+                                <span>Non Student Payment Report</span> </a></li> -->            
+          </ul>
+        </li>
+        <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+          <a href="#">
+            <i class="fa fa-circle text-green"></i> <span>Cashier Admin</span>
+            <i class="fa pull-right fa-angle-left"></i>
+          </a>
+          <ul class="treeview-menu">
+             <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
+                href="<?php echo base_url() ?>finance/view_payees"
+                style="margin-left: 10px;"><i class="fa fa-users"></i>
+                <span>Payee Set-up</span> </a>
+            </li>
+            <li class="<?php echo (isset($page) && $page=="logs_cashier")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
+            </li>
+            <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
+                href="<?php echo base_url() ?>finance/cashier"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                <span>OR Assignment</span> </a></li>
           </ul>
         </li>
         <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
@@ -626,25 +645,12 @@
                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Override Payment
               </a>
             </li>                
-            <?php if($user['special_role'] >= 2): ?>
-            <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/view_payees"
-                style="margin-left: 10px;"><i class="fa fa-users"></i>
-                <span>Payee Set-up</span> </a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/cashier"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                <span>OR Assignment</span> </a></li>
+            <?php if($user['special_role'] >= 2): ?>                        
             <li class="<?php echo (isset($page) && $page=="logs_forwarded")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded
                 Payments</a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="logs_cashier")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
-            </li>
+            </li>            
             <?php endif; ?>
             <!--                        
                         <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
