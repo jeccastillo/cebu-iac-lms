@@ -2899,6 +2899,30 @@ class Unity extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    public function update_allow_enroll(){
+        if($this->is_registrar() || $this->is_super_admin() || $this->is_accounting())
+        {
+            
+            $post = $this->input->post();
+                        
+
+            $this->data_poster->post_data('tb_mas_registration',$post,$post['intRegistrationID']);
+            
+            $st = $this->db
+                 ->query("SELECT * FROM tb_mas_registration JOIN tb_mas_users ON tb_mas_registration.intStudentID = tb_mas_users.intID WHERE tb_mas_registration.intRegistrationID =".$post['intRegistrationID'])
+                 ->first_row();
+            
+            $this->data_poster->log_action('Allow Enroll','Updated Allow Enroll:  '.$st->strFirstname." ".$st->strLastname." to ".$post['allow_enroll'],'green');
+            $data['message'] = "Success";
+            $data['success'] = true;
+        }
+        else{
+            $data['message'] = "Failed";
+            $data['success'] = false;
+        }
+        echo json_encode($data);
+    }
     
     public function update_graduate_status()
     {

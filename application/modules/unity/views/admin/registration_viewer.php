@@ -52,6 +52,14 @@
                             </select>
                             
                         </div>
+                        <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Allow Enroll
+                            <select v-model="allow_enroll" @change="changeAllowEnroll" class="form-control">
+                                <option value="0">Yes</option>
+                                <option value="1">No</option>                                
+                            </select>
+                            
+                        </div>
                         <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
                             &nbsp;<button class="btn btn-default" data-toggle="collapse" data-target="#student-info">More Info</button>                        
                         </h3>
@@ -591,6 +599,7 @@ new Vue({
         reservation_payments: [],
         application_payment: undefined,
         registration_status: 0,
+        allow_enroll: 0,
         remaining_amount: 0,
         amount_paid: 0,
         amount_paid_formatted: 0,
@@ -633,7 +642,8 @@ new Vue({
                         
                         if(data.data.registration){         
                             this.registration = data.data.registration;
-                            this.registration_status = data.data.registration.intROG;                            
+                            this.registration_status = data.data.registration.intROG;  
+                            this.allow_enroll = data.data.registration.allow_enroll;                          
                             this.tuition = data.data.tuition;
                             this.tuition_data = data.data.tuition_data;                                               
                             this.payment_type = this.registration.paymentType;
@@ -1473,7 +1483,50 @@ new Vue({
            
             
             
+        },
+        changeAllowEnroll: function(){
+            let url = this.base_url + 'unity/update_allow_enroll';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("allow_enroll",this.allow_enroll);
+            var missing_fields = false;
+            this.loader_spinner = true;
+            
+            //validate description
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                if(data.data.success){
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        //location.reload();
+                    });
+
+                    
+                   
+                }
+                else
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
+                    }).then(function() {
+                        //location.reload();
+                    });
+            });
+           
+            
+            
         }
+
     }
 
 })
