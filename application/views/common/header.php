@@ -571,27 +571,29 @@
                                 <span>Non Student Payment Report</span> </a></li> -->            
           </ul>
         </li>
-        <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
-          <a href="#">
-            <i class="fa fa-circle text-green"></i> <span>Cashier Admin</span>
-            <i class="fa pull-right fa-angle-left"></i>
-          </a>
-          <ul class="treeview-menu">
-             <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/view_payees"
-                style="margin-left: 10px;"><i class="fa fa-users"></i>
-                <span>Payee Set-up</span> </a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="logs_cashier")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
-            </li>
-            <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
-                href="<?php echo base_url() ?>finance/cashier"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                <span>OR Assignment</span> </a></li>
-          </ul>
-        </li>
+        <?php if($user['cashier_admin'] || $user['special_role'] >= 2 ): ?>
+          <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+            <a href="#">
+              <i class="fa fa-circle text-green"></i> <span>Cashier Admin</span>
+              <i class="fa pull-right fa-angle-left"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li class="<?php echo (isset($page) && $page=="payee_setup")?'active':''; ?>"><a
+                  href="<?php echo base_url() ?>finance/view_payees"
+                  style="margin-left: 10px;"><i class="fa fa-users"></i>
+                  <span>Payee Set-up</span> </a>
+              </li>
+              <li class="<?php echo (isset($page) && $page=="logs_cashier")?'active':''; ?>"><a
+                  href="<?php echo base_url(); ?>unity/logs/null/null/Cashier"
+                  style="margin-left: 10px;"><i class="ion ion-android-list"></i> Cashier Logs</a>
+              </li>
+              <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
+                  href="<?php echo base_url() ?>finance/cashier"
+                  style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                  <span>OR Assignment</span> </a></li>
+            </ul>
+          </li>
+        <?php endif; ?>
         <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
