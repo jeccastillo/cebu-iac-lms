@@ -14,12 +14,12 @@
             class="btn btn-app"
             :href="base_url + 'unity/student_records/' + student.intID"><i
               class="fa fa-user"></i>Records</a>
-          <a v-if="user_level == 2 || user_level == 3" :disabled="show_alert" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+          <a v-if="user_level == 2 || user_level == 3" :disabled="show_alert && !registration.allow_enroll" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
               <i class="ion ion-printer"></i>RF Print
           </a>                     
-          <a target="_blank" :disabled="show_alert"
+          <a target="_blank" 
             v-if="registration && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
+            class="btn btn-app" :disabled="show_alert && !registration.allow_enroll"
             href="#"
             @click.prevent="printRF">
             <i class="ion ion-printer"></i>RF No Header
