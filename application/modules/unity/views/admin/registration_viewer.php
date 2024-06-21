@@ -55,8 +55,8 @@
                         <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             Allow Enroll
                             <select v-model="allow_enroll" @change="changeAllowEnroll" class="form-control">
-                                <option value="0">Yes</option>
-                                <option value="1">No</option>                                
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>                                
                             </select>
                             
                         </div>
