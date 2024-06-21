@@ -1460,6 +1460,8 @@ class Unity extends CI_Controller {
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
             }
 
+            $sem_id = $ret['active_sem']['intID'];
+
             $ret['selected_ay'] = $ret['active_sem']['intID'];
 
             $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
@@ -1720,7 +1722,7 @@ class Unity extends CI_Controller {
             
             $term_balances = [];
             foreach($registrations as $reg){     
-                if($reg['intID'] != $sem){
+                if($reg['intID'] != $sem_id){
                     $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
                     $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = '".$ret['student']['slug']."' AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
                                                 ->result_array();   
