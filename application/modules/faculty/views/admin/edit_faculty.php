@@ -124,8 +124,8 @@
                     </select>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="isActive">Cashier Admin</label>
-                    <select class="form-control" name="isActive" > 
+                    <label for="cashier_admin">Cashier Admin</label>
+                    <select class="form-control" name="cashier_admin" > 
                         <option <?php echo ($faculty['cashier_admin'] == 0)?'selected':'' ?> value="0">No</option>
                         <option <?php echo ($faculty['cashier_admin'] == 1)?'selected':'' ?> value="1">Yes</option>
                     </select>
