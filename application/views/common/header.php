@@ -627,10 +627,10 @@
                 style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                 <span>Term Date Setup</span> </a>
             </li>        
-            <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
+            <!-- <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
-            </li>
+            </li> -->
           </ul>
         </li>
         <?php endif; ?>
