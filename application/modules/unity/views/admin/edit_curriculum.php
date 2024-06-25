@@ -32,8 +32,14 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>                        
-
-                         
+                        <div class="form-group col-xs-6">
+                            <label for="isEnhanced">Enhanced</label>
+                            <select class="form-control" name="isEnhanced" id="isEnhanced" >
+                                <option <?php echo ($item['isEnhanced'] == 0)?'selected':''; ?> value="0">No</option>
+                                <option <?php echo ($item['isEnhanced'] == 1)?'selected':''; ?> value="1">Yes</option>
+                            </select>
+                        </div>    
+                        
                         <div class="form-group col-xs-12">
                             <input type="submit" value="update" class="btn btn-default  btn-flat">
                         </div>
