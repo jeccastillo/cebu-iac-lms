@@ -810,6 +810,28 @@ class Finance extends CI_Controller {
         $ret['success'] =  true;
         echo json_encode($ret);
     }
+
+    public function view_particulars($type)
+    {
+                       
+        $this->data['type'] = $type;
+        $this->data['opentree'] = ($type=='particular')?"view_particulars":"view_payment_types";
+        $this->data['page'] = "finance_admin";
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("view_particulars",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+    public function view_particulars_data($type){
+                
+       $ret['particular'] = $this->db
+                    ->get_where('tb_mas_particulars',array('type'=>$type))
+                    ->result_array();
+                    
+        echo json_encode($ret);
+        
+    }
     
     public function update_cashier(){
         $post = $this->input->post();                     
