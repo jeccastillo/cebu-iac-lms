@@ -815,8 +815,8 @@ class Finance extends CI_Controller {
     {
                        
         $this->data['type'] = $type;
-        $this->data['opentree'] = ($type=='particular')?"view_particulars":"view_payment_types";
-        $this->data['page'] = "finance_admin";
+        $this->data['page'] = ($type=='particular')?"view_particulars":"view_payment_types";
+        $this->data['opentree'] = "finance_admin";
 
         $this->load->view("common/header",$this->data);
         $this->load->view("view_particulars",$this->data);
