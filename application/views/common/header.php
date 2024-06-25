@@ -649,11 +649,11 @@
             </li>                
             <?php if($user['special_role'] >= 2): ?>                        
               <li class="<?php echo (isset($page) && $page=="view_particulars")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>unity/view_particulars/particular"
+                href="<?php echo base_url(); ?>finance/view_particulars/particular"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Particulars</a>
               </li>            
               <li class="<?php echo (isset($page) && $page=="view_payment_types")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>unity/view_particulars/payment_type"
+                href="<?php echo base_url(); ?>finance/view_particulars/payment_type"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Payment Types</a>
               </li>            
               <li class="<?php echo (isset($page) && $page=="logs_forwarded")?'active':''; ?>"><a
