@@ -21,7 +21,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="type.length == 0">
+                        <tr v-if="items.length == 0">
                             <td colspan='3'>No Items Found</td>
                         </tr>
                         <tr v-else v-for="(item,index) in items">
