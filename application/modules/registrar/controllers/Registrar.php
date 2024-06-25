@@ -1205,6 +1205,26 @@ class Registrar extends CI_Controller {
 
         echo json_encode($data);
     }
+    
+    public function shs_by_grade_level($term = 0, $year = 1)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['postyear'] = $year;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/shs_by_grade_level_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/shs_by_grade_level_list_conf",$this->data);
+        }
+    }
 
     public function shs_by_grade_level_data($sem, $year_level)
     {
