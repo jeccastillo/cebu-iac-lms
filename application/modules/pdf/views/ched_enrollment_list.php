@@ -49,7 +49,7 @@
     </tr>
     <tr>
         <td style="font-size:8px;"><b>Tel No.:</b></td>
-        <td style="font-size:8px;">+63 32 520 4888</td>
+        <td style="font-size:8px;">+63 2 8889 5555</td>
         <td style="font-size:8px;"></td>    
         <td colspan="3" style="font-size:9px;"></td>
     </tr>
