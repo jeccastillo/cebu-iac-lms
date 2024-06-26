@@ -97,10 +97,8 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(this.base_url + 'finance/view_particulars_data/' + this.type)
                 .then((data) => {
-                    this.terms = data.data.sy;
-                    this.sem = data.data.active_sem.intID;
-                    this.active_sem = data.data.active_sem;
-                    this.students = data.data.students;
+                    this.items = data.data.particular;
+                    
                 })
                 .catch((error) => {
                     console.log(error);
