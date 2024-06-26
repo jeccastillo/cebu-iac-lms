@@ -3952,7 +3952,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('V1', 'Source')
                     ->setCellValue('W1', 'Company(SD)')
                     ->setCellValue('X1', 'Position(SD)')
-                    ->setCellValue('Y1', 'Degree(SD)');
+                    ->setCellValue('Y1', 'Degree(SD)')
+                    ->setCellValue('Z1', 'Student Type');
                     
         
         $i = 2;
@@ -4002,7 +4003,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('V'.$i, $d->source)
                     ->setCellValue('W'.$i, $d->sd_company)
                     ->setCellValue('X'.$i, $d->sd_position)
-                    ->setCellValue('Y'.$i, $d->sd_degree);
+                    ->setCellValue('Y'.$i, $d->sd_degree)
+                    ->setCellValue('Z'.$i, $d->tos);
                     
                     
                     
@@ -4035,6 +4037,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(50);
         
                 
          
