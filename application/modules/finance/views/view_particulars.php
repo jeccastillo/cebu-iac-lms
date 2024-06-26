@@ -27,7 +27,7 @@
                         <tr v-else v-for="(item,index) in items">
                             <td>{{ index+1 }}</td>
                             <td>{{ item.name }}</a></td>
-                            <td></td>                          
+                            <td><button class="btn btn-primary">Delete Item</button></td>                          
                         </tr>
                         <tr>
                             <td colspan='3'>
