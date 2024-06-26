@@ -4712,7 +4712,7 @@ class Excel extends CI_Controller {
                             $other[1] = ', ' . $ledger['name'];
                             $other[2] += $ledger['amount'];
                         }
-                    }else if(strpos($ledger['name'], 'APPLIED FROM') !== false){
+                    }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                         if(!$applied_from){
                             $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                             $applied_from[1] = $ledger['name'];
@@ -4722,7 +4722,7 @@ class Excel extends CI_Controller {
                             $applied_from[1] .= ', ' . $ledger['name'];
                             $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                         }
-                    }else if(strpos($ledger['name'], 'APPLIED TO') !== false){
+                    }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                         if(!$applied_from){
                             $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                             $applied_to[1] = $ledger['name'];
