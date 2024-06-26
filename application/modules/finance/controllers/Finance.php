@@ -832,7 +832,7 @@ class Finance extends CI_Controller {
         echo json_encode($ret);
     }
 
-    public function add_particular($page)
+    public function add_particular()
     {
         $post = $this->input->post();
         $this->data_poster->post_data('tb_mas_particulars',$post);
