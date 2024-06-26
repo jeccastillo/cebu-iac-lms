@@ -847,7 +847,7 @@ class Finance extends CI_Controller {
      public function delete_particular($id)
      {
         $post = $this->input->post();            
-        $particular = $this->data_fetcher->fetch_single_entry('tb_mas_particulars',$id);            
+        $particular = $this->db->get_where('tb_mas_particulars',array('id'=>$id));            
         $this->data_poster->deleteItem('tb_mas_particulars',$id,'id');
         $this->data_poster->log_action('Particular','Deleted a particular: '.$particular['name'],'red');
         $data['message'] = "success";
