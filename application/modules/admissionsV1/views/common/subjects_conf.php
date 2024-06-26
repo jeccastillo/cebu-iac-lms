@@ -33,11 +33,14 @@ $(document).ready(function() {
                 break;
                 case 6:
                     s_column = "first_name";
-                break;                
+                break;
                 case 7:
-                    s_column = "program";
+                    s_column = "tos";
                 break;                
                 case 8:
+                    s_column = "program";
+                break;                
+                case 9:
                     s_column = "status"
                 break;
                 
@@ -126,6 +129,9 @@ $(document).ready(function() {
             },
             {
                 data: "first_name"
+            },
+            {
+                data: "tos"
             },
             {
                 data: "program"

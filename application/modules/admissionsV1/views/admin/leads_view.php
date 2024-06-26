@@ -91,7 +91,8 @@
                             <th>Date Reserved</th>
                             <th>Date Enrolled</th>
                             <th>Last Name</th>
-                            <th>First Name</th>                            
+                            <th>First Name</th> 
+                            <th>ST</th>                           
                             <th>Program</th>                            
                             <th>Status</th>
                             <th>Actions</th>
