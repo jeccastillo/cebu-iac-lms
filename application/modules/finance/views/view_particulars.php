@@ -115,7 +115,10 @@ new Vue({
             this.dialogEl.show()
         },
         submit() {
-            axios.post(this.base_url + 'finance/add_particular/' + this.type, this.nameObj)
+            var formdata = new FormData();                    
+            formdata.append('name',this.nameObj.name);
+            formdata.append('type',this.nameObj.type;   
+            axios.post(this.base_url + 'finance/add_particular/' + this.type, formdata)
                 .then((data) => {
                     console.log(data);
                 })
