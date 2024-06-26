@@ -35,7 +35,7 @@
     </tr>
     <tr style="line-height:12px;">
         <td style="font-size:8px;"><b>Name of Institution:</b></td>
-        <td style="font-size:8px;">iACADEMY Cebu</td>
+        <td style="font-size:8px;">iACADEMY</td>
         <td style="font-size:8px;"><b>Course/Program:</b></td>    
         <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['strProgramDescription']." ":''; ?> 
             <?php echo (!empty($students) && $students[0]['strMajor'] != "None" && $students[0]['strMajor'] != "")?"Major in ".$students[0]['strMajor']:''; ?> 
@@ -43,7 +43,7 @@
     </tr>  
     <tr>
         <td style="font-size:8px;"><b>Address:</b></td>
-        <td style="font-size:8px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</td>
+        <td style="font-size:8px;">iACADEMY Nexus, 7434 Yakal St., Makati City</td>
         <td style="font-size:8px;"><b>Year Level:</b></td>    
         <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['intYearLevel']:''; ?></td>
     </tr>
