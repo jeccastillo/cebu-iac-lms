@@ -139,12 +139,31 @@ new Vue({
                     }).then(function() {
                         //location.reload();
                     });
-            });
+            })
+            .catch((error) => {
+                    console.log(error);
+
+                });
         },
         removeItem(index) {
             axios.post(this.base_url + `finance/delete_particular/${index}`)
                 .then((data) => {
-                    console.log(data);
+                    if(data.data.success)
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    else
+                        Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
