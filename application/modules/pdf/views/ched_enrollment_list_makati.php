@@ -7,7 +7,7 @@
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">iACADEMY</font><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+                    <font style="font-family:Calibri Light; font-size: 10;">iACADEMY Nexus, 7434 Yakal St., Makati City</font><br />             
                     <font style="font-family:Calibri Light; font-size: 10;">+63 02 8889 7777</font><br />                                 
                 </td>           
             </tr>
@@ -35,7 +35,7 @@
     </tr>
     <tr style="line-height:12px;">
         <td style="font-size:8px;"><b>Name of Institution:</b></td>
-        <td style="font-size:8px;">iACADEMY Cebu</td>
+        <td style="font-size:8px;">iACADEMY</td>
         <td style="font-size:8px;"><b>Course/Program:</b></td>    
         <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['strProgramDescription']." ":''; ?> 
             <?php echo (!empty($students) && $students[0]['strMajor'] != "None" && $students[0]['strMajor'] != "")?"Major in ".$students[0]['strMajor']:''; ?> 
@@ -43,13 +43,13 @@
     </tr>  
     <tr>
         <td style="font-size:8px;"><b>Address:</b></td>
-        <td style="font-size:8px;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</td>
+        <td style="font-size:8px;">iACADEMY Nexus, 7434 Yakal St., Makati City</td>
         <td style="font-size:8px;"><b>Year Level:</b></td>    
         <td colspan="3" style="font-size:8px;"><?php echo !empty($students)?$students[0]['intYearLevel']:''; ?></td>
     </tr>
     <tr>
         <td style="font-size:8px;"><b>Tel No.:</b></td>
-        <td style="font-size:8px;">+63 32 520 4888</td>
+        <td style="font-size:8px;">+63 2 8889 5555</td>
         <td style="font-size:8px;"></td>    
         <td colspan="3" style="font-size:9px;"></td>
     </tr>

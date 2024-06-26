@@ -1450,6 +1450,7 @@ class Pdf extends CI_Controller {
                 $this->data['male'] = $male;
                 $this->data['female'] = $female;
 
+                $page_c = ($this->data['campus'] == 'Cebu')?"ched_enrollment_list":"ched_enrollment_makati";
                 $per_page = array_chunk($st, 2);
                 $this->data['count_start'] = 1;
                 $chunks_count = 1;
@@ -1458,7 +1459,7 @@ class Pdf extends CI_Controller {
                     $pdf->AddPage();
                     if(count($per_page) == $chunks_count)
                         $this->data['last_page'] = true;
-                    $html = $this->load->view("ched_enrollment_list",$this->data,true);
+                    $html = $this->load->view($page_c,$this->data,true);
                     $pdf->writeHTML($html, true, false, true, false, '');            
                     $this->data['count_start'] += 2;                    
                     $chunks_count++;
