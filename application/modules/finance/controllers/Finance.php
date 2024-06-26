@@ -483,6 +483,7 @@ class Finance extends CI_Controller {
                 'added_by' => $this->session->userdata('intID'),
             ];        
             $this->db->insert('tb_mas_student_ledger',$to);
+            $sy_to = $this->data_fetcher->get_sem_by_id($item->term_to);
             $amount_from += floatval($item->amount);
         }
         
@@ -493,7 +494,7 @@ class Finance extends CI_Controller {
             'syid' => $post['sy_from'],
             'amount' => $amount_from, 
             'type' => 'tuition',   
-            'remarks' => "Transfered payment to different terms",
+            'remarks' => "APPLIED TO ".strtoupper($sy_to['enumSem']." ".$sy_to['term_label']." ".$sy_to['strYearStart']." - ".$sy_to['strYearEnd']),
             'added_by' => $this->session->userdata('intID'),
         ];        
         $this->db->insert('tb_mas_student_ledger',$from);
