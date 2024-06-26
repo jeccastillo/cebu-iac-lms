@@ -91,7 +91,7 @@ $(document).ready(function() {
             );
         },
         "aoColumnDefs": [{
-                "aTargets": [9],
+                "aTargets": [10],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
