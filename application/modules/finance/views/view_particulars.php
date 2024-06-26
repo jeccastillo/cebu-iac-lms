@@ -30,7 +30,7 @@
                             <td>{{ index+1 }}</td>
                             <td>{{ item.name }}</a></td>
                             <td><button class="btn btn-primary"
-                                    @click="removeItem(index)">Delete Item</button></td>
+                                    @click="removeItem(item.id)">Delete Item</button></td>
                         </tr>
                         <tr>
                             <td colspan='3'>
@@ -118,14 +118,19 @@ new Vue({
             var formdata = new FormData();                    
             formdata.append('name',this.nameObj.name);
             formdata.append('type',this.nameObj.type);   
-            axios.post(this.base_url + 'finance/add_particular/' + this.type, formdata)
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((error) => {
-                    console.log(error);
+            url = this.base_url + 'finance/add_particular/' + this.type;
+            return axios.post(url, formdata, {
+            headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })            
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.log(error);
 
-                });
+            });
         },
         removeItem(index) {
             axios.post(this.base_url + `finance/delete_particular/${index}`)
