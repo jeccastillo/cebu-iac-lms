@@ -115,8 +115,7 @@ new Vue({
             this.dialogEl.show()
         },
         submit() {
-            console.log('adsd');
-            axios.post(this.base_url + 'finance/add_particular/' + this.type, nameObj)
+            axios.post(this.base_url + 'finance/add_particular/' + this.type, this.nameObj)
                 .then((data) => {
                     console.log(data);
                 })
