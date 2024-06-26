@@ -838,8 +838,8 @@ class Finance extends CI_Controller {
         $this->data_poster->post_data('tb_mas_particulars',$post);
         $this->data_poster->log_action('Particular','Added a new particular '.$post['name'],'green');        
         
-        $data['message'] = "success";
-        $data['success'] = true;
+        $ret['message'] = "success";
+        $ret['success'] = true;
 
         echo json_encode($ret);
      }
