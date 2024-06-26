@@ -114,9 +114,7 @@ new Vue({
         },
         submit() {
             console.log('adsd');
-            axios.post(this.base_url + 'finance/add_particular/' + this.type, {
-                    name: 'dasd'
-                })
+            axios.post(this.base_url + 'finance/add_particular/' + this.type, nameObj)
                 .then((data) => {
                     console.log(data);
                 })
