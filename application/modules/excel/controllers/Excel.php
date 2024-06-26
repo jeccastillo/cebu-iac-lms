@@ -3954,7 +3954,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('X1', 'Position(SD)')
                     ->setCellValue('Y1', 'Degree(SD)')
                     ->setCellValue('Z1', 'Student Type')
-                    ->setCellValue('AA1', 'Citizenship')
+                    ->setCellValue('AA1', 'Country of Citizenship')
                     ->setCellValue('AB1', 'Date of Birth');
                     
         
