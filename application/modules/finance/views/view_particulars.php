@@ -125,11 +125,22 @@ new Vue({
                 }
             })            
             .then((data) => {
-                console.log(data);
-            })
-            .catch((error) => {
-                console.log(error);
-
+                if(data.data.success)
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                else
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
+                    }).then(function() {
+                        //location.reload();
+                    });
             });
         },
         removeItem(index) {
