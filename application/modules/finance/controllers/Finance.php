@@ -821,8 +821,8 @@ class Finance extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("view_particulars",$this->data);
         $this->load->view("common/footer",$this->data);
-
     }
+
     public function view_particulars_data($type){
                 
        $ret['particular'] = $this->db
@@ -830,8 +830,29 @@ class Finance extends CI_Controller {
                     ->result_array();
                     
         echo json_encode($ret);
-        
     }
+
+
+    public function add_particular()
+    {
+        $post = $this->input->post();
+        $this->data_poster->log_action('Particular','Added a new particular '.$post['name'],'green');
+        $this->data_poster->post_data('tb_mas_particulars',$post);
+        
+        redirect(base_url()."view_particulars/particular");
+     }
+
+     public function delete_particular()
+     {
+        $post = $this->input->post();            
+        $info = $this->data_fetcher->fetch_single_entry('tb_mas_particulars',$post['id']);            
+        $this->data_poster->deleteItem('tb_mas_particulars',$post['id'],'intID');
+        $this->data_poster->log_action('Particular','Deleted a particular: '.$info['name'],'red');
+        $data['message'] = "success";
+        $data['success'] = true;
+        echo json_encode($data);
+     }
+
     
     public function update_cashier(){
         $post = $this->input->post();                     
