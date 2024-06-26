@@ -835,10 +835,13 @@ class Finance extends CI_Controller {
     public function add_particular($page)
     {
         $post = $this->input->post();
-        $this->data_poster->log_action('Particular','Added a new particular '.$post['name'],'green');
         $this->data_poster->post_data('tb_mas_particulars',$post);
+        $this->data_poster->log_action('Particular','Added a new particular '.$post['name'],'green');        
         
-        redirect(base_url()."view_particulars/" . $page);
+        $data['message'] = "success";
+        $data['success'] = true;
+
+        echo json_encode($ret);
      }
 
      public function delete_particular($id)
