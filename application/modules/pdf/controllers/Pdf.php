@@ -1450,7 +1450,7 @@ class Pdf extends CI_Controller {
                 $this->data['male'] = $male;
                 $this->data['female'] = $female;
 
-                $page_c = ($this->data['campus'] == 'Cebu')?"ched_enrollment_list":"ched_enrollment_makati";
+                $page_c = ($this->data['campus'] == 'Cebu')?"ched_enrollment_list":"ched_enrollment_list_makati";
                 $per_page = array_chunk($st, 2);
                 $this->data['count_start'] = 1;
                 $chunks_count = 1;
