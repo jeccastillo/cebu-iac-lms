@@ -117,7 +117,7 @@ new Vue({
         submit() {
             var formdata = new FormData();                    
             formdata.append('name',this.nameObj.name);
-            formdata.append('type',this.nameObj.type;   
+            formdata.append('type',this.nameObj.type);   
             axios.post(this.base_url + 'finance/add_particular/' + this.type, formdata)
                 .then((data) => {
                     console.log(data);
