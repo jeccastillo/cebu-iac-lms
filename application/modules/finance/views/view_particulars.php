@@ -46,7 +46,8 @@
             <div>
                 <form v-on:submit.prevent="submit()">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
+                        <label for="name">Name</label>
+                        <input type="hidden" class="form-control" v-model="nameObj.type" >
                         <input type="text"
                             class="form-control"
                             v-model="nameObj.name"
@@ -81,7 +82,8 @@ new Vue({
         items: [],
         dialogEl: '',
         nameObj: {
-            name: ''
+            name: '',
+            type: '<?php echo $type; ?>'
         }
 
 
