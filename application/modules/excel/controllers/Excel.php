@@ -3953,7 +3953,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('W1', 'Company(SD)')
                     ->setCellValue('X1', 'Position(SD)')
                     ->setCellValue('Y1', 'Degree(SD)')
-                    ->setCellValue('Z1', 'Student Type');
+                    ->setCellValue('Z1', 'Student Type')
+                    ->setCellValue('AA1', 'Citizenship')
+                    ->setCellValue('AB1', 'Date of Birth');
                     
         
         $i = 2;
@@ -4004,7 +4006,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('W'.$i, $d->sd_company)
                     ->setCellValue('X'.$i, $d->sd_position)
                     ->setCellValue('Y'.$i, $d->sd_degree)
-                    ->setCellValue('Z'.$i, $d->tos);
+                    ->setCellValue('Z'.$i, $d->tos)
+                    ->setCellValue('AA'.$i, $d->citizenship)
+                    ->setCellValue('AB'.$i, $d->date_of_birth);
                     
                     
                     
@@ -4038,6 +4042,8 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(50);
         
                 
          
