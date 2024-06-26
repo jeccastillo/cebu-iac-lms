@@ -647,15 +647,7 @@ new Vue({
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
-            if(this.request.description == "Reservation Payment" && this.reservation_payment && this.reservation_payment.status == "Paid")
-                Swal.fire({
-                    title: "Failed",
-                    text: "Reservation Payment already exists",
-                    icon: "error"
-                }).then(function() {
-                    //location.reload();
-                });
-            else if(this.request.description == "Application Payment" && this.application_payment && this.application_payment.status == "Paid")
+            if(this.request.description == "Application Payment" && this.application_payment && this.application_payment.status == "Paid")
                 Swal.fire({
                     title: "Failed",
                     text: "Application Payment already exists",
