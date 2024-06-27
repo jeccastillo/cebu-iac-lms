@@ -1863,7 +1863,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );        
     }
     
-    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0)
+    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0,$student_type=0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
