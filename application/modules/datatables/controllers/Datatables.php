@@ -2083,12 +2083,39 @@ class Datatables extends CI_Controller {
         }
         
         
+        if($student_type != 0 && $table =='tb_mas_users'){
+            if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 || $level != 0 )
+            {
+                switch($student_type){
+                    case 1:
+                        $sWhere .= "AND ".$table.".student_type = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "AND ".$table.".student_type = 'college' ";
+                    break;                   
+                }
+            }
+            else
+            {
+                switch($student_type){
+                    case 1:
+                        $sWhere .= "WHERE ".$table.".student_type = 'shs' ";
+                    break;
+                    case 2:
+                        $sWhere .= "WHERE ".$table.".student_type = 'college' ";
+                    break;                    
+                }
+            }
+            
+        }
 
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
                 $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
             else
                 $sWhere .= "WHERE tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
+
+        
             
         if($trashed!=null && $table == 'tb_mas_message_user')
         {

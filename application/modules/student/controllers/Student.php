@@ -167,7 +167,7 @@ class Student extends CI_Controller {
         
     }
     
-    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0,$level=0)
+    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0,$level=0,$student_type=0)
     {
         if($this->faculty_logged_in())
         {
@@ -199,6 +199,7 @@ class Student extends CI_Controller {
             $this->data['graduate'] = $graduate;
             $this->data['scholarship'] = $scholarship;
             $this->data['registered'] = $registered;
+            $this->data['student_type'] = $student_type;
             $this->data['sem'] = $sem;
             $this->data['level'] = $level;
             
