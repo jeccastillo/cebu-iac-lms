@@ -4703,8 +4703,8 @@ class Excel extends CI_Controller {
         {
             $applied_from = $applied_to = $other = array();
 
-            $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 11:59:59'))->result_array();
-            
+            $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
+
             if($ledger_data){
                 foreach($ledger_data as $ledger){
                     
