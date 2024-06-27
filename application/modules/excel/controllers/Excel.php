@@ -3964,11 +3964,9 @@ class Excel extends CI_Controller {
         $i = 2;
         
         foreach($data as $d){      
-            $student = $this->db->get_where('tb_mas_users',array('slug'=> $d->slug))->first_row('array');
-            if($student)
-                $studnum = preg_replace("/[^a-zA-Z]+/", "", $student['strStudentNumber']);
-            else
-                $studnum = "";
+            $student = $this->db->get_where('tb_mas_users',array('slug'=> $d->slug))->first_row('array');                        
+            $studnum = isset($student)?preg_replace("/[^a-zA-Z]+/", "", $student['strStudentNumber']):'';
+            
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
