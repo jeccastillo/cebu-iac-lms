@@ -2083,31 +2083,31 @@ class Datatables extends CI_Controller {
         }
         
         
-        if($student_type != 0 && $table =='tb_mas_users'){
-            if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 || $level != 0 )
-            {
-                switch($student_type){
-                    case 'shs':
-                        $sWhere .= "AND ".$table.".student_type = 'shs' ";
-                    break;
-                    case 'college':
-                        $sWhere .= "AND ".$table.".student_type = 'college' ";
-                    break;                   
-                }
-            }
-            else
-            {
-                switch($student_type){
-                    case 'shs':
-                        $sWhere .= "WHERE ".$table.".student_type = 'shs' ";
-                    break;
-                    case 'collge':
-                        $sWhere .= "WHERE ".$table.".student_type = 'college' ";
-                    break;                    
-                }
-            }
+        // if($student_type != 0 && $table =='tb_mas_users'){
+        //     if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 || $level != 0 )
+        //     {
+        //         switch($student_type){
+        //             case 'shs':
+        //                 $sWhere .= "AND ".$table.".student_type = 'shs' ";
+        //             break;
+        //             case 'college':
+        //                 $sWhere .= "AND ".$table.".student_type = 'college' ";
+        //             break;                   
+        //         }
+        //     }
+        //     else
+        //     {
+        //         switch($student_type){
+        //             case 'shs':
+        //                 $sWhere .= "WHERE ".$table.".student_type = 'shs' ";
+        //             break;
+        //             case 'collge':
+        //                 $sWhere .= "WHERE ".$table.".student_type = 'college' ";
+        //             break;                    
+        //         }
+        //     }
             
-        }
+        // }
 
         if($sem!=0 && $table =='tb_mas_room_schedule')
             if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
