@@ -2087,10 +2087,10 @@ class Datatables extends CI_Controller {
             if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 || $level != 0 )
             {
                 switch($student_type){
-                    case 1:
+                    case 'shs':
                         $sWhere .= "AND ".$table.".student_type = 'shs' ";
                     break;
-                    case 2:
+                    case 'college':
                         $sWhere .= "AND ".$table.".student_type = 'college' ";
                     break;                   
                 }
@@ -2098,10 +2098,10 @@ class Datatables extends CI_Controller {
             else
             {
                 switch($student_type){
-                    case 1:
+                    case 'shs':
                         $sWhere .= "WHERE ".$table.".student_type = 'shs' ";
                     break;
-                    case 2:
+                    case 'collge':
                         $sWhere .= "WHERE ".$table.".student_type = 'college' ";
                     break;                    
                 }
