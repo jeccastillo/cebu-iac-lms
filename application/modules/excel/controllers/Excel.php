@@ -3956,13 +3956,19 @@ class Excel extends CI_Controller {
                     ->setCellValue('Z1', 'Student Type')
                     ->setCellValue('AA1', 'Country of Citizenship')
                     ->setCellValue('AB1', 'Date of Birth')
-                    ->setCellValue('AC1', 'Date Enrolled');
+                    ->setCellValue('AC1', 'Date Enrolled')
+                    ->setCellValue('AD1', 'Student Number');
                     
                     
         
         $i = 2;
         
         foreach($data as $d){      
+            $student = $this->db->get_where('tb_mas_users',array('slug'=> $d->slug))->first_row('array');
+            if($student)
+                $studnum = preg_replace("/[^a-zA-Z]+/", "", $student['strStudentNumber']);
+            else
+                $studnum = "";
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
@@ -3982,7 +3988,7 @@ class Excel extends CI_Controller {
             $d->guardian_contact = str_replace('-', '', $d->guardian_contact);
             $d->guardian_contact = str_replace(' ', '', $d->guardian_contact);
 
-            $objPHPExcel->setActiveSheetIndex(0)
+            $objPHPExcel->setActiveSheetIndex(0)                                
                     ->setCellValue('A'.$i, strtoupper($d->last_name))
                     ->setCellValue('B'.$i, strtoupper($d->first_name))
                     ->setCellValue('C'.$i, strtoupper($d->middle_name))
@@ -4011,7 +4017,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('Z'.$i, $d->tos)
                     ->setCellValue('AA'.$i, $d->citizenship)
                     ->setCellValue('AB'.$i, $d->date_of_birth)
-                    ->setCellValue('AC'.$i, $d->date_enrolled);
+                    ->setCellValue('AC'.$i, $d->date_enrolled)
+                    ->setCellValue('AD'.$i, $studnum);
+                    ;
                     
                     
                     
@@ -4048,6 +4056,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(50);
         
                 
          
