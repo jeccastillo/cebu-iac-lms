@@ -13,10 +13,9 @@
         var sem = $("#sem").val();
         var scholarship = 0;
         var registered = $("#registered").val();
-        var student_type = $("#student_type").val();
         var level = $("#level").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level+'/'+student_type;
+        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level;
         
     });
 
@@ -40,7 +39,7 @@
             "bServerSide": true,
             "ordering": false,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/0/0/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem."/0/".$level."/".$student_type; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_users/0/0/<?php echo $course."/".$postreg."/".$postyear."/".$gender."/".$graduate."/".$scholarship."/".$registered."/".$sem."/0/".$level; ?>",
             "aoColumnDefs":[
                 {
                     "aTargets":[8],

@@ -92,14 +92,6 @@
                         </select>
                     </div> 
                     <div class="col-sm-4">
-                        <label for="student_type">Student Type:</label>
-                        <select id="student_type" class="form-control">
-                            <option <?php echo ($student_type == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
-                            <option <?php echo ($student_type == "shs")?'selected':''; ?> value="shs">shs</option>
-                            <option <?php echo ($student_type == "college")?'selected':''; ?> value="college">college</option>                            
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
                         <label for="level">Student Type:</label>
                         <select id="level" class="form-control select2">
                             <option <?php echo ($level == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>                            
