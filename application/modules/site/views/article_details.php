@@ -147,7 +147,7 @@ new Vue({
         var url = new URL(url_string);
         var param = url.searchParams.get("id");
 
-        // https://portalv2.iacademy.edu.ph/api/v1/osea/
+        // https://employeeportal.iacademy.edu.ph/api/v1/osea/
         // http://222.127.137.134:8081/api/v1/osea/
 
         this.loader_spinner = true;
@@ -174,7 +174,7 @@ new Vue({
         filterNews: function(type) {
             this.all_news = [];
             this.loader_spinner = true;
-            axios.get('https://portalv2.iacademy.edu.ph/api/v1/osea/exhibits/49/courses/20/artworks')
+            axios.get('https://employeeportal.iacademy.edu.ph/api/v1/osea/exhibits/49/courses/20/artworks')
                 .then((data) => {
                     this.all_news = data.data.courses;
                     this.loader_spinner = false;

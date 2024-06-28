@@ -27,7 +27,7 @@
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati (Main Campus) click
             <a style="text-decoration: underline;"
-                href="https://portalv2.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a> for
+                href="https://employeeportal.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a> for
             SY23 and
             <a style="text-decoration: underline;" href="http://sms-makati.iacademy.edu.ph/">here</a> for SY24.
         </p>
