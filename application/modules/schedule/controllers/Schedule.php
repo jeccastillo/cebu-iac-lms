@@ -71,7 +71,7 @@ class Schedule extends CI_Controller {
             
             $this->data['page'] = "add_schedule";
             $this->data['opentree'] = "schedule";
-            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
+            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat','7'=>'-');
             $this->data['schema'] = Array('0'=>'None','1 3 5'=>'M W F','2 4'=>'T TH','1 3'=>'M W','3 5'=>'W F','2 4 6'=>'T TH S', '1 4' =>'M TH','3 6'=> 'W S', '2 5'=>'T F', '3 6'=>'W S');
             $this->data['types'] = Array('lect','lab');
             $this->data['timeslots'] = Array('7:00','7:10','7:15','7:20','7:25','7:30','7:35','7:40','7:45','7:50','7:55',
@@ -88,7 +88,7 @@ class Schedule extends CI_Controller {
                                             '18:00','18:10','18:15','18:20','18:25','18:30','18:35','18:40','18:45','18:50','18:55',        
                                             '19:00','19:10','19:15','19:20','19:25','19:30','19:35','19:40','19:45','19:50','19:55',        
                                             '20:00','20:10','20:15','20:20','20:25','20:30','20:35','20:40','20:45','20:50','20:55',        
-                                            '21:00'        
+                                            '21:00','21:30'        
                                             );
             
             $this->data['classlists'] = $this->data_fetcher->getAllClasslistAssigned($active_sem['intID'],$this->session->userdata('strDepartment'),$this->is_super_admin());
@@ -116,7 +116,7 @@ class Schedule extends CI_Controller {
             $this->data['alert'] = $this->session->flashdata('alert');
 
 
-            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat');
+            $this->data['days'] = Array('1'=>'Mon','2'=>'Tue','3'=>'Wed','4'=>'Thu','5'=>'Fri','6'=>'Sat','7'=>'-');
 
             $this->data['types'] = Array('lect','lab');
 
@@ -134,7 +134,7 @@ class Schedule extends CI_Controller {
                                             '18:00','18:10','18:15','18:20','18:25','18:30','18:35','18:40','18:45','18:50','18:55',        
                                             '19:00','19:10','19:15','19:20','19:25','19:30','19:35','19:40','19:45','19:50','19:55',        
                                             '20:00','20:10','20:15','20:20','20:25','20:30','20:35','20:40','20:45','20:50','20:55',        
-                                            '21:00'        
+                                            '21:00','21:30' 
                                             );
             $active_sem = $this->data_fetcher->get_active_sem();
             
