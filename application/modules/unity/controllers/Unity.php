@@ -2485,8 +2485,8 @@ class Unity extends CI_Controller {
                 $active_sem['enumGradingPeriod'] = "active";
         
         $data['active_sem'] = $active_sem;
-
-        if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
+        //|| ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) 
+        if($this->is_super_admin() || $this->is_registrar())
         {            
             
             $data['classlist'] = $clist;
