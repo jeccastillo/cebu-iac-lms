@@ -232,7 +232,7 @@ new Vue({
                 this.disable_submit = data.data.disable_submit;
             }
             else{
-                document.location = base_url + 'unity';
+                //document.location = base_url + 'unity';
             }
             
         })
