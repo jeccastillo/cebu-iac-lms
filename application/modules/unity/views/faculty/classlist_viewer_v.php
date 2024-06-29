@@ -384,7 +384,7 @@ new Vue({
                         
             var formdata= new FormData();
             formdata.append("intClasslistID",this.classlist.intID);   
-            formdata.append("intStudentID",selected_student)                                                                             
+            formdata.append("intStudentID",this.selected_student)                                                                             
             this.loader_spinner = true;
             
                 Swal.fire({
