@@ -121,7 +121,7 @@
                                     </td>
                                     <td><span v-if="record.adjustments">{{ record.adjustments.adjustment_type }}</span></td>
                                     <td>    
-                                    <button v-if="reg_status == 'Enrolled' || reg_status == 'Enlisted'"                                                
+                                    <button v-if="reg_status == 'Enrolled' || reg_status == 'Registered'"                                                
                                             @click="dropSubject(record.classlistID,false)"  class="btn btn-danger">
                                             Drop
                                     </button>                                                                                                    
@@ -130,7 +130,7 @@
                             </tbody>
                         </table>
                         <hr />
-                        <div v-if="reg_status == 'Enrolled' || reg_status == 'Enlisted'">
+                        <div v-if="reg_status == 'Enrolled' || reg_status == 'Registered'">
                             <button data-toggle="modal"            
                                     value = 0                                    
                                     @click="loadAvailableSubjects($event,'add-subject')" 
