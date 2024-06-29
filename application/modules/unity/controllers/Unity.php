@@ -2584,7 +2584,7 @@ class Unity extends CI_Controller {
             $data['all_students'] = $this->db->select("tb_mas_users.intID, strFirstname, strMiddlename, strLastname")
                                          ->from('tb_mas_users')
                                          ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                                         ->where(array("tb_mas_registration.intAYID"=>$clist_sy_id))
+                                         ->where(array("tb_mas_registration.intAYID"=>$clist_sy_id,'intROG <'=>1))
                                          ->get()
                                          ->result_array();
 

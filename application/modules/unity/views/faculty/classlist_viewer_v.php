@@ -151,7 +151,8 @@
                                     {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}                                                                           
                                 </td>                             
                                 <td v-else> {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}</td>                                                                                  
-                                <td>{{ student.strRemarks }}</td>                                
+                                <td>{{ student.strRemarks }}</td> 
+                                <td></td>                               
                             </tr>
                         </tbody>                        
                     </table>
