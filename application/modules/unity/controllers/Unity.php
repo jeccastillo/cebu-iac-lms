@@ -2485,8 +2485,8 @@ class Unity extends CI_Controller {
                 $active_sem['enumGradingPeriod'] = "active";
         
         $data['active_sem'] = $active_sem;
-        //|| ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) 
-        if($this->is_super_admin() || $this->is_registrar())
+
+        if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID']) || ($this->is_department_head() && $clist['strDepartment'] == $this->session->userdata['strDepartment']) || $this->is_registrar())
         {            
             
             $data['classlist'] = $clist;
@@ -2582,7 +2582,7 @@ class Unity extends CI_Controller {
             $st = [];
             
             
-
+            $pre_req = [];
             $prereq_array = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$clist['intSubjectID']))->result_array();
             
             $passed_pre_req = true;
