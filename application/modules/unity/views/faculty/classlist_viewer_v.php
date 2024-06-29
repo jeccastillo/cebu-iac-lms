@@ -102,6 +102,9 @@
                                 </div>                                
                             </form>
                             <div class="col-sm-4">
+                                <a v-if="classlist.intFinalized <= 0" href="#" data-target="#addModal" data-toggle="modal" class="btn btn-success">
+                                    Add Student
+                                </a>
                                 <a v-if="classlist.intFinalized < 2 && !disable_submit" href="#" data-target="#myModal" data-toggle="modal" class="btn btn-success">
                                     {{ label }}
                                 </a>
@@ -160,6 +163,27 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="addModal" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Student</h4>
+                </div>
+                <div class="modal-body">
+                    <select v-model="selected_student" class="form-control select2" >                                                          
+                        <option v-for="student in all_students" :value="student.intID">
+                            {{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}
+                        </option>                                        
+                    </select>                                
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="button" :disabled="disable_submit" @click="addStudent" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -188,12 +212,15 @@ new Vue({
         is_admin: false,
         is_registrar: false,
         is_super_admin: false,
-        subject: undefined,        
+        subject: undefined,    
+        students: [],    
+        all_students: [],    
         cdate: undefined,
         label: 'Submit',
         disable_submit: true,
         legend: undefined,
         section:undefined,
+        selected_student: undefined,
 
     },
 
@@ -226,6 +253,7 @@ new Vue({
                 this.is_super_admin = data.data.is_super_admin;
                 this.show_all = data.data.showall;
                 this.students = data.data.students;
+                this.all_students = data.data.all_students;
                 this.subject = data.data.subject;            
                 this.label = data.data.label;
                 this.pre_req =  data.data.pre_req;
@@ -333,6 +361,44 @@ new Vue({
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {
                         axios.post(base_url + 'unity/remove_student_classlist', formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        });
+                    
+                    }
+                    
+                });                                        
+        },
+        addStudent: function(){            
+                        
+            var formdata= new FormData();
+            formdata.append("intClasslistID",this.classlist.intID);   
+            formdata.append("intStudentID",selected_student)                                                                             
+            this.loader_spinner = true;
+            
+                Swal.fire({
+                    title: 'Remove Student?',
+                    text: "Are you sure you want to add Student?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    imageWidth: 100,
+                    icon: "question",
+                    cancelButtonText: "No, cancel!",
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        axios.post(base_url + 'unity/add_to_classlist', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }

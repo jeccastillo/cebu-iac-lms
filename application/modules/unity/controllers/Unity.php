@@ -2581,7 +2581,13 @@ class Unity extends CI_Controller {
                             
             $st = [];
             
-            
+            $data['students'] = $this->db->select("tb_mas_users.intID, strFirstname, strMiddlename, strLastname")
+                                         ->from('tb_mas_users')
+                                         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                                         ->where(array("tb_mas_registration.intAYID"=>$sid))
+                                         ->get()
+                                         ->result_array();
+
             $pre_req = [];
             $prereq_array = $this->db->get_where('tb_mas_prerequisites',array('intSubjectID'=>$clist['intSubjectID']))->result_array();
             
