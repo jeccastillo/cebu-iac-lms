@@ -383,12 +383,12 @@ new Vue({
         addStudent: function(){            
                         
             var formdata= new FormData();
-            formdata.append("intClasslistID",this.classlist.intID);   
+            formdata.append("intClassListID",this.classlist.intID);   
             formdata.append("intStudentID",this.selected_student)                                                                             
             this.loader_spinner = true;
             
                 Swal.fire({
-                    title: 'Remove Student?',
+                    title: 'Add Student?',
                     text: "Are you sure you want to add Student?",
                     showCancelButton: true,
                     confirmButtonText: "Yes",
