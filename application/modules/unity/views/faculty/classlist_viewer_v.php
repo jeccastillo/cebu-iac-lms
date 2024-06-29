@@ -171,7 +171,7 @@
                     <h4 class="modal-title">Add Student</h4>
                 </div>
                 <div class="modal-body">
-                    <select style="width:70%" v-model="selected_student" class="form-control select2" >                                                          
+                    <select style="width:100%" v-model="selected_student" class="form-control select2" >                                                          
                         <option v-for="student in all_students" :value="student.intID">
                             {{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}
                         </option>                                        
