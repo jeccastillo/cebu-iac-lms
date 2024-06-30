@@ -4167,8 +4167,14 @@ class Data_fetcher extends CI_Model {
                 $query .= " AND intRoomSchedID != ".$id;
             }
 
+            
             if($d == null)
-                $query .=" AND strDay = '".$post['strDay']."' AND intRoomID = '".$post['intRoomID']."' AND tb_mas_room_schedule.intSem = ".$sem."
+                if($post['strDay'] == 7){
+                    $query .=" AND intRoomID = '".$post['intRoomID']."' AND tb_mas_room_schedule.intSem = ".$sem."
+                        ";
+                }
+                else
+                    $query .=" AND strDay = '".$post['strDay']."' AND intRoomID = '".$post['intRoomID']."' AND tb_mas_room_schedule.intSem = ".$sem."
                     ";
             else
             {
@@ -4209,8 +4215,14 @@ class Data_fetcher extends CI_Model {
         {
             $query .= " AND intRoomSchedID != ".$id;
         }
+        
         if($d == null)
-            $query .=" AND strDay = ".$post['strDay']." AND blockSectionID = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
+            if($post['strDay'] == 7){
+                $query .=" AND intRoomID = '".$post['intRoomID']."' AND tb_mas_room_schedule.intSem = ".$sem."
+                    ";
+            }
+            else
+                $query .=" AND strDay = ".$post['strDay']." AND blockSectionID = '".$section."' AND tb_mas_room_schedule.intSem = ".$sem;
         else
         {
             $query .=" AND ( ";
@@ -4246,7 +4258,12 @@ class Data_fetcher extends CI_Model {
             $query .= " AND intRoomSchedID != ".$id;
         }
         if($d == null)
-            $query .=" AND strDay = '".$post['strDay']."' AND `intFacultyID` = ".$faculty_id." AND tb_mas_room_schedule.intSem = ".$sem." ";
+            if($post['strDay'] == 7){
+                $query .=" AND intRoomID = '".$post['intRoomID']."' AND tb_mas_room_schedule.intSem = ".$sem."
+                    ";
+            }
+            else
+                $query .=" AND strDay = '".$post['strDay']."' AND `intFacultyID` = ".$faculty_id." AND tb_mas_room_schedule.intSem = ".$sem." ";
         else
         {
             $query .=" AND ( ";
