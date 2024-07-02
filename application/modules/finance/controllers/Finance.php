@@ -595,7 +595,8 @@ class Finance extends CI_Controller {
         
         unset($post['sy']);
         
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();        
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
+        $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->row();        
         
         if($post['or_used'] == $data['or_current']){
             if($data['or_current'] >= $cashier->or_end)
@@ -631,6 +632,7 @@ class Finance extends CI_Controller {
             
            
             $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->row();
            
             if(!empty($update)){
                 $this->db
@@ -655,6 +657,9 @@ class Finance extends CI_Controller {
             if($post['description'] == "Tuition Fee" && $registration['intROG'] == 0){
                 $ret['message'] = "First Tuition Payment";
                 $ret['send_notif'] = true;
+                if($student['strStudentNumber'][0] == "T"){
+                    $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                }
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d H:i:s"),
                     "intROG" => 1,                    
