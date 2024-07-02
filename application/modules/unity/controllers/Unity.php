@@ -2896,7 +2896,10 @@ class Unity extends CI_Controller {
             if($post['intROG'] == 1){
                 $post['dteRegistered'] = date("Y-m-d H:i:s");
                 if($student['strStudentNumber'][0] == "T"){
-                    $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                    $temp['strStudentNumber'] = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                    $this->db
+                        ->where('intID',$student['intID'])
+                        ->update('tb_mas_users',$temp);
                 }
             }
                             
