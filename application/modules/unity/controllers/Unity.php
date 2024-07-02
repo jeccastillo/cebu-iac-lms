@@ -1151,7 +1151,12 @@ class Unity extends CI_Controller {
     }
 
     public function get_student_records($id,$term){
-        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$term);
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$term);
+        $units_enlisted = 0;
+        foreach($records as $item){
+            $units_enlisted += $item['strUnits'];
+        }
+        $data['total_units'] = $units_enlisted;
         $data['success'] = true;
         echo json_encode($data);
     }
