@@ -595,8 +595,7 @@ class Finance extends CI_Controller {
         
         unset($post['sy']);
         
-        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
-        $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->row();        
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();        
         
         if($post['or_used'] == $data['or_current']){
             if($data['or_current'] >= $cashier->or_end)
