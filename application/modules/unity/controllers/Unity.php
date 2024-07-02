@@ -1150,6 +1150,12 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function get_student_records($id,$term){
+        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$term);
+        $data['success'] = true;
+        echo json_encode($data);
+    }
+
     public function student_records($id){
         
         $this->data['id'] = $id;

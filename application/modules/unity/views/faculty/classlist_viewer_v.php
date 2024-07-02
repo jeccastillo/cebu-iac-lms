@@ -398,22 +398,26 @@ new Vue({
                     cancelButtonText: "No, cancel!",
                     showCloseButton: true,
                     showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        axios.post(base_url + 'unity/add_to_classlist', formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
+                    preConfirm: (login) => {                        
+                        axios.get(base_url + 'unity/get_student_records/'+this.selected_student+'/'+this.classlist.term_id)
                         .then(data => {
-                            this.loader_spinner = false;
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
+                            axios.post(base_url + 'unity/add_to_classlist', formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
                             });
                         });
+                        
                     
                     }
                     
