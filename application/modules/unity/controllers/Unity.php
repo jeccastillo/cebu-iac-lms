@@ -2890,14 +2890,24 @@ class Unity extends CI_Controller {
             
             $post = $this->input->post();
             
-            if($post['intROG'] == 2)
+            $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['intRegistrationID']))->first_row('array');
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->first_row('array');
+            
+            if($post['intROG'] == 1){
                 $post['dteRegistered'] = date("Y-m-d H:i:s");
+                if($student['strStudentNumber'][0] == "T"){
+                    $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                }
+            }
+                            
 
             $this->data_poster->post_data('tb_mas_registration',$post,$post['intRegistrationID']);
             
             $st = $this->db
                  ->query("SELECT * FROM tb_mas_registration JOIN tb_mas_users ON tb_mas_registration.intStudentID = tb_mas_users.intID WHERE tb_mas_registration.intRegistrationID =".$post['intRegistrationID'])
                  ->first_row();
+
+            
             
             $this->data_poster->log_action('Registration Status','Updated Registration Status of:  '.$st->strFirstname." ".$st->strLastname." to ".$st->intROG,'green');
             $data['message'] = "Success";

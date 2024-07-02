@@ -632,7 +632,7 @@ class Finance extends CI_Controller {
             
            
             $registration = $this->db->get_where('tb_mas_registration',array('intRegistrationID' => $post['registration_id']))->first_row('array');
-            $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->row();
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$registration['intStudentID']))->first_row('array');
            
             if(!empty($update)){
                 $this->db
