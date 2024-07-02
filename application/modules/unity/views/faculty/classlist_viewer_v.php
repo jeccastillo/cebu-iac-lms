@@ -401,7 +401,7 @@ new Vue({
                     preConfirm: (login) => {                        
                         axios.get(base_url + 'unity/get_student_records/'+this.selected_student+'/'+this.classlist.term_id)
                         .then(data => {
-                            console.log(data.data.total_units);
+                            console.log(data.total_units);
                             if(data.data.total_units >= 21)
                                 Swal.fire({
                                     title: 'Overload',
