@@ -658,7 +658,10 @@ class Finance extends CI_Controller {
                 $ret['message'] = "First Tuition Payment";
                 $ret['send_notif'] = true;
                 if($student['strStudentNumber'][0] == "T"){
-                    $tempNum = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                    $temp['strStudentNumber'] = $this->data_fetcher->generateNewStudentNumber($this->data['campus'],$registration['intAYID'],get_stype($student['level']));
+                    $this->db
+                        ->where('intID',$student['intID'])
+                        ->update('tb_mas_users',$temp);
                 }
                 $reg_update = [
                     "dteRegistered" => date("Y-m-d H:i:s"),
