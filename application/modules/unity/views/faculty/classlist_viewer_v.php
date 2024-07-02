@@ -401,21 +401,51 @@ new Vue({
                     preConfirm: (login) => {                        
                         axios.get(base_url + 'unity/get_student_records/'+this.selected_student+'/'+this.classlist.term_id)
                         .then(data => {
-                            axios.post(base_url + 'unity/add_to_classlist', formdata, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                            .then(data => {
-                                this.loader_spinner = false;
+                            if(data.data.total_units >= 21)
                                 Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
+                                    title: 'Overload',
+                                    text: "Are you sure you want to continue?",
+                                    showCancelButton: true,
+                                    confirmButtonText: "Yes",
+                                    imageWidth: 100,
+                                    icon: "question",
+                                    cancelButtonText: "No, cancel!",
+                                    showCloseButton: true,
+                                    showLoaderOnConfirm: true,
+                                    preConfirm: (login) => {
+                                        axios.post(base_url + 'unity/add_to_classlist', formdata, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        })
+                                        .then(data => {
+                                            this.loader_spinner = false;
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data.data.message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location.reload();
+                                            });
+                                        });
+                                    }
                                 });
-                            });
+                            else
+                                axios.post(base_url + 'unity/add_to_classlist', formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.data.message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                });
                         });
                         
                     
