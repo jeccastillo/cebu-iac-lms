@@ -570,7 +570,7 @@
   display: block !important;
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
 <script type="text/javascript"
   src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script>
