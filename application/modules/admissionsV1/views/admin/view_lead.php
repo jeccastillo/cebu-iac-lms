@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/default/css/datepicker.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/datepicker.min.js"></script>
 
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
