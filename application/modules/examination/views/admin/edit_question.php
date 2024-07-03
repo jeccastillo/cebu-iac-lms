@@ -200,7 +200,7 @@
     </div>
 </aside>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
 <script src="https://cdn.ckeditor.com/4.4.7/standard-all/ckeditor.js"></script>
 <script>
 const choicesBox = $("#choices_container");

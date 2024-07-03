@@ -38,7 +38,7 @@
     </div>
 </aside>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"

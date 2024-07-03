@@ -1,4 +1,4 @@
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
 <script src="<?php echo $js_dir?>script.js"></script>
 <script src="<?php echo $js_dir?>flickity.js"></script>
 <script src="<?php echo $js_dir?>owl.carousel.min.js"></script>

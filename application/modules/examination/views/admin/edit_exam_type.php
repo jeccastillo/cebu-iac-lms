@@ -186,7 +186,7 @@
     -webkit-box-orient: vertical;
 }
 </style>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
 <!-- <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script> -->
 <script src="https://cdn.ckeditor.com/4.4.7/standard-all/ckeditor.js"></script>
 
