@@ -65,7 +65,7 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript"
     src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous"
