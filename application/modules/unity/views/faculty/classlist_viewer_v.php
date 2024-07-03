@@ -188,7 +188,7 @@
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -400,8 +400,7 @@ new Vue({
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {                        
                         axios.get(base_url + 'unity/get_student_records/'+this.selected_student+'/'+this.classlist.term_id)
-                        .then(data => {
-                            console.log(data.total_units);
+                        .then(data => {                            
                             if(data.data.total_units >= 21)
                                 Swal.fire({
                                     title: 'Overload',
