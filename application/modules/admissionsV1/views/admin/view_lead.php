@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vuejs-datepicker/1.6.2/vuejs-datepicker.min.js">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1/index.min.js"></script>
 
