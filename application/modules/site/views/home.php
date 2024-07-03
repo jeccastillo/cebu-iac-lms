@@ -371,7 +371,7 @@
         <!-- end join game changer section -->
 
         <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
         <script>
         new Vue({
             el: "#article-section",
