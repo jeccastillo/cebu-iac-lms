@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/default/css/datepicker.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" integrity="sha512-aY1i9Nq6hY6NeQCAZRzyR5v0c5Sh8nLr6odaEZUHr5MTr35rQ2shu+ZGwPHfXRjXjVTYUF8pRVRKNRoSrsvOiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/datepicker.min.js"></script>
 
 <div class="content-wrapper " id="applicant-container">
