@@ -162,31 +162,6 @@ new Vue({
                 
         }
 
-        $(document).ready(function(){
-            $('#daterange-btn-admissions').daterangepicker(
-            {
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                    'Last 7 Days': [moment().subtract('days', 6), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
-                },
-                startDate: moment().subtract('days', 29),
-                endDate: moment()
-            },
-            function(start, end) {
-                document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
-                
-            }
-            );
-            
-            $("#select-term-leads").on('change', function(e){
-                const term = $(this).val();
-                document.location = "<?php echo base_url()."admissionsV1/admissions_report/"; ?>"+term;
-            });
-        });
-
     },
 
     methods: {      
@@ -196,6 +171,29 @@ new Vue({
 
 });
 
-
+$(document).ready(function(){
+    $('#daterange-btn-admissions').daterangepicker(
+    {
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
+        },
+        startDate: moment().subtract('days', 29),
+        endDate: moment()
+    },
+    function(start, end) {
+        document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
+        
+    }
+    );
+    
+    $("#select-term-leads").on('change', function(e){
+        const term = $(this).val();
+        document.location = "<?php echo base_url()."admissionsV1/admissions_report/"; ?>"+term;
+    });
+});
 </script>
 
