@@ -5,7 +5,7 @@
                 <div class="box-header">
                     <h3>Name :{{ student.strFirstname }} {{ student.strLastname }} <br />
                     </h3>
-                    <h4>Please confirm your selected program and fill in additional information.</h4>
+                    <!-- <h4>Please confirm your selected program and fill in additional information.</h4> -->
                 </div>
                 <div class="box-body">
                     <form @submit.prevent="confirmProgram" method="post">
@@ -23,7 +23,7 @@
                                     <td></td>
                                 </tr>
 
-                                <tr v-if="sections.length > 0">
+                                <!-- <tr v-if="sections.length > 0">
                                     <th>Select Section/Schedule</th>
                                     <td>
                                         <select v-model="request.preferedSection" @change="changeSection"
@@ -37,7 +37,7 @@
                                             :href="base_url + 'unity/schedule_viewer/' + section.intID"
                                             target="_blank">View Schedule</a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
 
