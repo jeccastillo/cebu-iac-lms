@@ -626,7 +626,15 @@
                 href="<?php echo base_url() ?>finance/edit_ay/"
                 style="margin-left: 10px;"><i class="fa fa-calendar"></i>
                 <span>Term Date Setup</span> </a>
-            </li>        
+            </li>       
+            <li class="<?php echo (isset($page) && $page=="view_particulars")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>finance/view_particulars/particular"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Particulars</a>
+              </li>            
+              <li class="<?php echo (isset($page) && $page=="view_payment_types")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>finance/view_particulars/payment_type"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Payment Types</a>
+              </li>             
             <!-- <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
@@ -647,15 +655,7 @@
                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Override Payment
               </a>
             </li>                
-            <?php if($user['special_role'] >= 2): ?>                        
-              <li class="<?php echo (isset($page) && $page=="view_particulars")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>finance/view_particulars/particular"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Particulars</a>
-              </li>            
-              <li class="<?php echo (isset($page) && $page=="view_payment_types")?'active':''; ?>"><a
-                href="<?php echo base_url(); ?>finance/view_particulars/payment_type"
-                style="margin-left: 10px;"><i class="ion ion-android-list"></i> Payment Types</a>
-              </li>            
+            <?php if($user['special_role'] >= 2): ?>                                      
               <li class="<?php echo (isset($page) && $page=="logs_forwarded")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded
