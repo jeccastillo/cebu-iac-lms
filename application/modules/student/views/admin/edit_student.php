@@ -86,6 +86,11 @@
                                 class="form-control" id="strEmail" placeholder="Enter Email Address">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label for="strCitizenship">Citizenship</label>
+                            <input type="text" value="<?php echo $student['strCitizenship']; ?>" name="strCitizenship"
+                                class="form-control" id="strCitizenship" placeholder="Enter Citizenship">
+                        </div>
+                        <div class="form-group col-xs-6">
                             <label for="dteBirthDate">Birthdate</label>
                             <input type="date" name="dteBirthDate"
                                     value="<?php echo date('Y-m-d',strtotime($student['dteBirthDate'])); ?>"
