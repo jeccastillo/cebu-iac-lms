@@ -224,6 +224,8 @@ class AdmissionsV1 extends CI_Controller {
             
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['current_sem'] = $term['intID'];
+        $this->data['page'] = "awareness_stats";
+        $this->data['opentree'] = "leads";
                    
         $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         $this->load->view("common/header",$this->data);
