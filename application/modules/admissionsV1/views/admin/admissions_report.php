@@ -169,7 +169,7 @@ new Vue({
                                        
     }
 
-})
+});
 
 $(document).ready(function(){
     $('#daterange-btn-admissions').daterangepicker(
