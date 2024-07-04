@@ -1262,6 +1262,118 @@ class Registrar extends CI_Controller {
         echo json_encode($students_array);
     }
 
+    public function shs_student_grades_data($sem = 0, $year_level = 0)
+    {
+        $students_array = array();
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $students = $this->db->select('tb_mas_users.*, tb_mas_registration.dteRegistered')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($year_level != 0){
+            $students = $this->db->select('tb_mas_users.*, tb_mas_registration.dteRegistered')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->get()
+                        ->result_array();
+        }
+
+        foreach($students as $index => $student){
+            $subjects = $this->db->select('tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_subjects.strUnits, tb_mas_classlist.strSection, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalGrade, 
+                                            tb_mas_room_schedule.strDay, tb_mas_room_schedule.dteStart, tb_mas_room_schedule.dteEnd, tb_mas_room_schedule.strDay, tb_mas_room_schedule.dteStart, tb_mas_room_schedule.dteEnd,tb_mas_faculty.strLastname, tb_mas_faculty.strFirstname')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->join('tb_mas_room_subject', 'tb_mas_subjects.intID = tb_mas_room_subject.intSubjectID')
+            ->join('tb_mas_classrooms', 'tb_mas_room_subject.intRoomID = tb_mas_classrooms.intID')
+            ->join('tb_mas_room_schedule', 'tb_mas_classrooms.intID = tb_mas_room_schedule.intRoomID')
+            ->join('tb_mas_faculty', 'tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+            ->get()
+            ->result_array();
+
+
+            foreach($subjects as $subject){
+                $subjects_array = array();
+                $days = [ 1 => 'S', 2 => 'M', 3 => 'T', 4 => 'W', 5 => 'TH', 6 => 'F', 7 => 'S'];
+                $subjects_array['section'] = $subject['strSection'];
+                $subjects_array['subject'] = $subject['strCode'];
+                $subjects_array['day'] = $days[$subject['strDay']];
+                $subjects_array['time'] = date('h:i A', strtotime($subject['dteStart'])) . '-' . date('h:i A', strtotime($subject['dteEnd']));
+                $subjects_array['grade'] = $subject['floatFinalGrade'];
+                $subjects_array['professor'] = $subject['strLastname'] . ', ' . $subject['strFirstname'];
+            }
+            
+            $data['count'] = $index + 1;
+            $data['student_number'] = str_replace("-", "", $student['strStudentNumber']);
+            $data['name'] = strtoupper($student['strLastname']) . ', ' . strtoupper($student['strFirstname']) . ' ' . strtoupper($student['strMiddlename']);
+            $data['date_registered'] = date("M j, Y", strtotime($student['dteRegistered']));
+            $data['subjects'] = $subjects_array;
+            $students_array[] = $data;
+        }
+
+        echo json_encode($students_array);
+    }
+
+    public function student_track_and_course_data($sem = 0, $year_level = 0)
+    {
+        $students_array = array();
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $gradeLevel = 'All Year Level';
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($year_level != 0){
+            $gradeLevel = 'Grade/Year Level:' . $year_level;
+            $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intYearLevel'=>$year_level))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->get()
+                        ->result_array();
+        }
+
+        foreach($students as $index => $student){
+            $data['count'] = $index + 1;
+            $data['student_number'] = str_replace("-", "", $student['strStudentNumber']);
+            $data['last_name'] = strtoupper($student['strLastname']);
+            $data['first_name'] = strtoupper($student['strFirstname']);
+            $data['middle_name'] = strtoupper($student['strMiddlename']);
+            $data['course'] = $student['strProgramCode'];
+            $students_array[] = $data;
+        }
+
+        echo json_encode($students_array);
+    }
+
     public function advising_done(){
 
         $data = $this->session->userdata('from_advising');        

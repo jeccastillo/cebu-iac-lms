@@ -2990,6 +2990,160 @@ class Pdf extends CI_Controller {
           
         $pdf->Output('SHS List Grade  ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
+
+    public function student_track_and_course($sem = 0, $year_level = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $gradeLevel = 'All Year Level';
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($year_level != 0){
+            $gradeLevel = 'Grade/Year Level:' . $year_level;
+            $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intYearLevel'=>$year_level))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->get()
+                        ->result_array();
+        }
+        
+        $this->data['students'] = $students;
+        $this->data['year_level'] = $gradeLevel;
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Student List with Track and College Course " . $gradeLevel);
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("student_track_and_course",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('Student List with Track and College Course - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
+
+    public function shs_gwa_rank($sem = 0, $year_level = 0, $campus)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $gradeLevel = 'All Grade Level';
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($year_level != 0){
+            $gradeLevel = 'Grade ' . $year_level;
+            $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->get()
+                        ->result_array();
+        }
+        
+        $gwa_ranks = array();
+        foreach($students as $student){
+            $totalGrades = 0;
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatPrelimGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->get()
+            ->result_array();
+
+            foreach($subjects as $subject){
+                $average = getAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
+                $totalGrades += $average;
+            }
+            $gwa = $totalGrades / count($subjects);
+
+            $student_data = array();
+            $student_data['student_number'] = $student['strStudentNumber'];
+            $student_data['last_name'] = strtoupper($student['strLastname']);
+            $student_data['first_name'] = strtoupper($student['strFirstname']);
+            $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+            $student_data['track'] = $student['strProgramCode'];
+            $student_data['gwa'] = $gwa;
+            $student_data['year_level'] = $student['intYearLevel'];
+            $gwa_ranks[] = $student_data;
+        }
+
+        //sort by GWA
+        usort($gwa_ranks, function($a, $b) {
+            return $a['gwa'] < $b['gwa'];
+        });
+
+        $this->data['students'] = $gwa_ranks;
+        $this->data['year_level'] = $gradeLevel;
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("SHS GWA Rank " . $gradeLevel);
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("shs_gwa_rank",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('SHS GWA Rank - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
     
     public function is_admin()
     {
