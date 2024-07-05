@@ -104,9 +104,13 @@ class Tuitionyear extends CI_Controller {
             $data['data']['lab_fees'] = [];
         }
 
-        $data['shs_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'shs'))->result_array();
+        $data['shs_programs'] = $this->db->where(array('type'=>'shs'))
+                                         ->order_by('strProgramCode','asc')       
+                                         ->get('tb_mas_programs')
+                                         ->result_array();
         $data['college_programs'] = $this->db->where('type','college')
                                              ->or_where('type','other')    
+                                             ->order_by('strProgramCode','asc')
                                              ->get('tb_mas_programs')
                                              ->result_array();
         $data['success'] = true;        
