@@ -105,7 +105,10 @@ class Tuitionyear extends CI_Controller {
         }
 
         $data['shs_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'shs'))->result_array();
-        $data['college_programs'] = $this->db->get_where('tb_mas_programs',array('type'=>'college'))->result_array();
+        $data['college_programs'] = $this->db->where('type','college')
+                                             ->or_where('type','other')    
+                                             ->get('tb_mas_programs')
+                                             ->result_array();
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
         echo json_encode($data);
