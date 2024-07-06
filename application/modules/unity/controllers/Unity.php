@@ -1472,8 +1472,8 @@ class Unity extends CI_Controller {
             }
 
             $data['student_link'] = base_url()."unity/student_viewer/".$ret['student']['intID'];
-            $data['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$ret['student']['slug'];
-
+            $ret['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$ret['student']['slug'];
+            $ret['notif_message'] = "Congratulations, you have been registered for ".$ret['active_sem']['enumSem']." ".$ret['active_sem']['']." S.Y. ".$ret['active_sem']['strYearStart']."-".$ret['active_sem']['strYearEnd'];
             $sem_id = $ret['active_sem']['intID'];
 
             $ret['selected_ay'] = $ret['active_sem']['intID'];
