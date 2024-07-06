@@ -334,8 +334,8 @@ new Vue({
                                     Authorization: `Bearer ${window.token}`
                                 }
                             })
-                        .then(data => {                                                                                        
-                                document.location = student_link;                                        
+                        .then(data => {                                                                                                                              
+                            document.location = data.data.student_link;                                        
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
