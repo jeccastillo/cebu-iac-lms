@@ -334,44 +334,8 @@ new Vue({
                                     Authorization: `Bearer ${window.token}`
                                 }
                             })
-                        .then(data => {                            
-                            if (data.data.success) {
-                                let student_link = data.data.student_link;
-                                if(this.request.enumStudentType == "new"){
-                                    let url = api_url + 'registrar/send_notif_registered/' + this.student_data.slug;                                    
-                                    let payload = {'message': data.data.message, 'payment_link':data.data.tuition_payment_link}
-                                    
-                                    Swal.fire({
-                                        showCancelButton: false,
-                                        showCloseButton: false,
-                                        allowEscapeKey: false,
-                                        title: 'Loading',
-                                        text: 'Processing Data do not leave page',
-                                        icon: 'info',
-                                    })
-                                    Swal.showLoading();
-                                    axios.post(url, payload, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    })
-                                    .then(data => {
-                                        this.loader_spinner = false;                                                                        
-                                        document.location = student_link;
-                                        
-                                    });   
-                                }                             
-                                else{
-                                    this.loader_spinner = false;                                                                        
-                                    document.location = student_link;
-                                }
-                            } else {
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
+                        .then(data => {                                                                                        
+                                document.location = student_link;                                        
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()

@@ -70,6 +70,10 @@
             data-target="#loa-modal">
             <i class="fa fa-book"></i>LOA
           </a>
+          <a v-if="(user_level == 2 || user_level == 7) && registration"
+            class="btn btn-app" @click="sendEnlistedNotification">
+            <i class="fa fa-book"></i>Send Enlistment Notification
+          </a>          
         </small>
 
         <div class="box-tools pull-right">
@@ -157,7 +161,7 @@
                       <span style="color:#900000;"
                         v-else>N/A</span>
                   </a>
-                </li>
+                </li>                
                 <li v-if="registration"><a style="font-size:13px;"
                     href="#">Scholarship <span class="pull-right">{{ scholarship.name }}</span></a>
                 </li>
@@ -626,6 +630,8 @@ new Vue({
     loader_spinner: true,
     change_grade: [],
     total_units: 0,
+    tuition_payment_link: undefined,
+    notif_message: undefined,
     picture: undefined,
     lab_units: 0,
     gpa: 0,
@@ -723,6 +729,8 @@ new Vue({
                     this.selected_ay = data.data.selected_ay;
                     this.curriculum_subjects = data.data.curriculum_subjects;
                     this.sections = data.data.sections;
+                    this.tuition_payment_link =  data.data.tuition_payment_link;
+                    this.notif_message = data.data.notif_message;
 
                     if (this.sections)
                       this.add_subject.section = (this.sections.length > 0) ? this
@@ -806,6 +814,35 @@ new Vue({
           document.location = reset_url;
         }
       });
+    },
+    sendEnlistedNotification: function(){
+      let url = api_url + 'registrar/send_notif_registered/' + this.student.slug;                                    
+      let payload = {'message': this.notif_message, 'payment_link':this.tuition_payment_link}
+      
+      Swal.fire({
+          showCancelButton: false,
+          showCloseButton: false,
+          allowEscapeKey: false,
+          title: 'Loading',
+          text: 'Processing Data do not leave page',
+          icon: 'info',
+      })
+      Swal.showLoading();
+      axios.post(url, payload, {
+          headers: {
+              Authorization: `Bearer ${window.token}`
+          }
+      })
+      .then(data => {
+          Swal.fire({
+              title: "Success",
+              text: data.data.message,
+              icon: "success"
+          }).then(function() {
+            Swal.hideLoading();
+          });
+          
+      });   
     },
     removeFromClasslist: function(classlistID) {
       Swal.fire({

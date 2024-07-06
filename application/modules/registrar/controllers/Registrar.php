@@ -1429,7 +1429,7 @@ class Registrar extends CI_Controller {
             $reg['current_curriculum'] =$student['intCurriculumID'];
             $reg['tuition_year'] = $student['intTuitionYear'];
             $s = $this->data_fetcher->get_sem_by_id($data['ayid']);
-            $data['message'] = "Congratulations, you have been registered for ".$s['enumSem']." Term S.Y. ".$s['strYearStart']."-".$s['strYearEnd'];
+            $data['message'] = "Success";
             $data['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$student['slug'];
             $data['success'] = true;
             $this->data_poster->post_data('tb_mas_registration',$reg);

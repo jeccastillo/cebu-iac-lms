@@ -1471,6 +1471,9 @@ class Unity extends CI_Controller {
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
             }
 
+            $data['student_link'] = base_url()."unity/student_viewer/".$ret['student']['intID'];
+            $data['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$ret['student']['slug'];
+
             $sem_id = $ret['active_sem']['intID'];
 
             $ret['selected_ay'] = $ret['active_sem']['intID'];
@@ -2596,6 +2599,7 @@ class Unity extends CI_Controller {
                                          ->from('tb_mas_users')
                                          ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                                          ->where(array("tb_mas_registration.intAYID"=>$clist_sy_id,'intROG <'=>1))
+                                         ->order_by('strLastname','asc')
                                          ->get()
                                          ->result_array();
 
