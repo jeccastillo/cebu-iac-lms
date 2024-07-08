@@ -90,6 +90,13 @@
                             <option <?php echo ($registered == 1)?'selected':''; ?> value="1">enlisted</option>
                             <option <?php echo ($registered == 2)?'selected':''; ?> value="2">enrolled</option>                            
                         </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="inactive">Active Student:</label>
+                        <select id="inactive" class="form-control select2">
+                            <option <?php echo ($inactive == 0)?'selected':''; ?> value="0">active</option>                            
+                            <option <?php echo ($inactive == 1)?'selected':''; ?> value="1">inactive</option>                            
+                        </select>
                     </div> 
                     <div class="col-sm-4">
                         <label for="level">Student Type:</label>
