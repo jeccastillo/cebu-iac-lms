@@ -94,8 +94,10 @@
                     <div class="col-sm-4">
                         <label for="inactive">Active Student:</label>
                         <select id="inactive" class="form-control select2">
-                            <option <?php echo ($inactive == 'active')?'selected':''; ?> value="0">active</option>                            
-                            <option <?php echo ($inactive == 'inactive')?'selected':''; ?> value="1">inactive</option>                            
+                            <option <?php echo ($inactive == 'active')?'selected':''; ?> value="active">active</option>                            
+                            <option <?php echo ($inactive == 'inactive')?'selected':''; ?> value="inactive">inactive</option>
+                            <option <?php echo ($inactive == 'loa')?'selected':''; ?> value="loa">loa</option>                            
+                            <option <?php echo ($inactive == 'awol')?'selected':''; ?> value="awol">awol</option>                            
                         </select>
                     </div> 
                     <div class="col-sm-4">
