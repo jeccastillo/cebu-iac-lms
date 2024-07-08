@@ -64,13 +64,13 @@
             :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
             <i class="fa fa-book"></i>Scholarship/Discount
           </a>
-          <a v-if="user_level == 2 || user_level == 7"
+          <a v-if="user_level == 2 || user_level == 3"
             class="btn btn-app"
             data-toggle="modal"
             data-target="#loa-modal">
             <i class="fa fa-book"></i>LOA
           </a>
-          <a v-if="(user_level == 2 || user_level == 7) && registration"
+          <a v-if="(user_level == 2 || user_level == 3) && registration"
             class="btn btn-app" @click="sendEnlistedNotification">
             <i class="fa fa-book"></i>Send Enlistment Notification
           </a>          
