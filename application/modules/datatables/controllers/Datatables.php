@@ -1934,77 +1934,36 @@ class Datatables extends CI_Controller {
         //if($user!=null && $table !='tb_mas_registration' && $table!='tb_mas_room_schedule')
             $sWhere = "WHERE $table.blockSectionID = '".$filter_section."' ";
         
-        // if($scholarship!=0 && $table =='tb_mas_users')
-        // //if($scholarship!=0 && $table =='tb_mas_registration')
-        //     if($scholarship == 1)
-        //         $sWhere .= "WHERE tb_mas_registration.enumScholarship = 'paying' ";
-        //     elseif($scholarship == 2)
-        //         $sWhere .= "WHERE tb_mas_registration.enumScholarship = 'resident scholar' ";
-        //     elseif($scholarship == 3)
-        //             $sWhere .= "WHERE tb_mas_registration.enumScholarship = '7th district' ";
-        //     elseif($scholarship == 4)
-        //             $sWhere .= "WHERE tb_mas_registration.enumScholarship = 'DILG scholar' ";
-        //     elseif($scholarship == 5) 
-        //             $sWhere .= "WHERE tb_mas_registration.enumScholarship = 'tagaytay resident' ";
-        //     elseif($scholarship == 6)
-        //             $sWhere .= "WHERE tb_mas_registration.enumScholarship = 'FREE HIGHER EDUCATION PROGRAM (R.A. 10931)' ";
-        
-        // if($astatus!=0  && $table =='tb_mas_users'){
-        //     if($scholarship!=0)
-        //         if($astatus == 1)
-        //             $sWhere .= "AND $table.strAcademicStanding = 'regular' ";
-        //         elseif($astatus == 2)
-        //             $sWhere .= "AND $table.strAcademicStanding = 'irregular' ";
-        //         else
-        //             $sWhere .= "AND $table.strAcademicStanding = 'new' ";
-        //     else
-        //         if($astatus == 1)
-        //             $sWhere .= "WHERE $table.strAcademicStanding = 'regular' ";
-        //         elseif($astatus == 2)
-        //             $sWhere .= "WHERE $table.strAcademicStanding = 'irregular' ";
-        //         else
-        //             $sWhere .= "WHERE $table.strAcademicStanding = 'new' ";
-        // }
-        
+       
+        if($table =='tb_mas_users'){
+            $sWhere = "WHERE $table.status = 'active' ";
+        }
         if($gender!=0  && $table =='tb_mas_users'){
-            if($astatus != 0 || $scholarship!=0)
-                if($gender == 1)
-                    $sWhere .= "AND $table.enumGender = 'male' ";
-                else
-                    $sWhere .= "AND $table.enumGender = 'female' ";
+            
+            if($gender == 1)
+                $sWhere .= "AND $table.enumGender = 'male' ";
             else
-                if($gender == 1)
-                    $sWhere .= "WHERE $table.enumGender = 'male' ";
-                else
-                    $sWhere .= "WHERE $table.enumGender = 'female' ";
+                $sWhere .= "AND $table.enumGender = 'female' ";
+            
             
         }
         if($graduate!=0  && $table =='tb_mas_users'){
-            if($astatus != 0 || $gender != 0 || $scholarship!=0)
-                if($graduate == 1)
-                    $sWhere .= "AND $table.isGraduate = 1 ";
-                else
-                    $sWhere .= "AND $table.isGraduate = 0 ";
+            
+            if($graduate == 1)
+                $sWhere .= "AND $table.isGraduate = 1 ";
             else
-                if($graduate == 1)
-                    $sWhere .= "WHERE $table.isGraduate = 1 ";
-                else
-                    $sWhere .= "WHERE $table.isGraduate = 0 ";
+                $sWhere .= "AND $table.isGraduate = 0 ";            
             
         }
         
-        if($yearlevel!=0 && $table =='tb_mas_users')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $scholarship!=0)
-                $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
-            else
-                $sWhere .= "WHERE tb_mas_registration.intYearLevel = ".$yearlevel." ";
+        if($yearlevel!=0 && $table =='tb_mas_users')            
+            $sWhere .= "AND tb_mas_registration.intYearLevel = ".$yearlevel." ";
+            
         
         
         if($course!=0 && $table =='tb_mas_users')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 )
-                $sWhere .= "AND $table.intProgramID = '".$course."' ";
-            else
-                $sWhere .= "WHERE $table.intProgramID = '".$course."' ";
+            $sWhere .= "AND $table.intProgramID = '".$course."' ";
+            
        
         
         if($sem == 0)
@@ -2012,108 +1971,55 @@ class Datatables extends CI_Controller {
         else
             $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         
-        if($registered != 0 && $table =='tb_mas_users')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
-            {
-                switch($registered)
-                {                   
-                    case 1:
-                    $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 0 ";
-                    break;
-                    case 2:
-                    $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 1 ";
-                    break;
-                    case 3:
-                    $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 2 ";
-                    break;
-                }
-            }
-            else
-            {
-                switch($registered){
-                    case 1:
-                        $sWhere .= "WHERE tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 0 ";
-                    break;
-                    case 2:
-                        $sWhere .= "WHERE tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 1 ";
-                    break;
-                    case 3:
-                        $sWhere .= "WHERE tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 2 ";
-                    break;
-                    
-                }
-            }
-            
-        if($level != 0 && $table =='tb_mas_users'){
-            if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 )
-            {
-                switch($level){
-                    case 1:
-                        $sWhere .= "AND ".$table.".level = 'shs' ";
-                    break;
-                    case 2:
-                        $sWhere .= "AND ".$table.".level = 'college' ";
-                    break;
-                    case 3:
-                        $sWhere .= "AND ".$table.".level = 'sd' ";
-                    break;
-                    case 4:
-                        $sWhere .= "AND ".$table.".level = 'drive' ";
-                    break;
-                }
-            }
-            else
-            {
-                switch($level){
-                    case 1:
-                        $sWhere .= "WHERE ".$table.".level = 'shs' ";
-                    break;
-                    case 2:
-                        $sWhere .= "WHERE ".$table.".level = 'college' ";
-                    break;
-                    case 3:
-                        $sWhere .= "WHERE ".$table.".level = 'sd' ";
-                    break;
-                    case 4:
-                        $sWhere .= "WHERE ".$table.".level = 'drive' ";
-                    break;
-                }
+        if($registered != 0 && $table =='tb_mas_users'){           
+            switch($registered)
+            {                   
+                case 1:
+                $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 0 ";
+                break;
+                case 2:
+                $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 1 ";
+                break;
+                case 3:
+                $sWhere .= "AND tb_mas_registration.intAYID = ".$active_sem['intID']." AND tb_mas_registration.intROG = 2 ";
+                break;
             }
             
         }
-        
-        
-        if($student_type != 0 && $table =='tb_mas_users'){
-            if($registered != 0 || $gender!=0 || $astatus!=0 || $graduate!=0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0 || $level != 0 )
-            {
-                switch($student_type){
-                    case 'shs':
-                        $sWhere .= "AND ".$table.".student_type = 'shs' ";
-                    break;
-                    case 'college':
-                        $sWhere .= "AND ".$table.".student_type = 'college' ";
-                    break;                   
-                }
+        if($level != 0 && $table =='tb_mas_users'){            
+            switch($level){
+                case 1:
+                    $sWhere .= "AND ".$table.".level = 'shs' ";
+                break;
+                case 2:
+                    $sWhere .= "AND ".$table.".level = 'college' ";
+                break;
+                case 3:
+                    $sWhere .= "AND ".$table.".level = 'sd' ";
+                break;
+                case 4:
+                    $sWhere .= "AND ".$table.".level = 'drive' ";
+                break;
             }
-            else
-            {
-                switch($student_type){
-                    case 'shs':
-                        $sWhere .= "WHERE ".$table.".student_type = 'shs' ";
-                    break;
-                    case 'collge':
-                        $sWhere .= "WHERE ".$table.".student_type = 'college' ";
-                    break;                    
-                }
+               
+        }
+        
+        
+        if($student_type != 0 && $table =='tb_mas_users'){        
+            switch($student_type){
+                case 'shs':
+                    $sWhere .= "AND ".$table.".student_type = 'shs' ";
+                break;
+                case 'college':
+                    $sWhere .= "AND ".$table.".student_type = 'college' ";
+                break;                   
             }
             
         }
 
-        if($sem!=0 && $table =='tb_mas_room_schedule')
-            if($gender!=0 || $astatus!=0 || $graduate!=0 || $registered != 0 || $yearlevel!=0 || $scholarship!=0 || $course!=0 || $filter_section != 0)
-                $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
-            else
-                $sWhere .= "WHERE tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
+        if($sem!=0 && $table =='tb_mas_room_schedule')            
+            $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
+            
 
         
             
