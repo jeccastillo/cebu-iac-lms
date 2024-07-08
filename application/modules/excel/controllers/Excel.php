@@ -4805,7 +4805,7 @@ class Excel extends CI_Controller {
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count)
-                    ->setCellValue('B'.$i, str_replace("T-", "",$user['strStudentNumber']))
+                    ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
                     ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['dteRegistered'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
