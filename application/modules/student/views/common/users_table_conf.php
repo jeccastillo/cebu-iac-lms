@@ -15,7 +15,7 @@
         var registered = $("#registered").val();
         var level = $("#level").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level;
+        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level+'/'+$inactive;
         
     });
 
