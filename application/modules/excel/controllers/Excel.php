@@ -4947,8 +4947,6 @@ class Excel extends CI_Controller {
                 $count++;
             }
         }
-        print('x');
-        die();
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NO.')
