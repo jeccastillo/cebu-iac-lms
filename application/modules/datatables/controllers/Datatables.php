@@ -1863,7 +1863,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );        
     }
     
-    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0,$student_type=0)
+    public function data_tables_ajax($table,$user=null,$trashed=null,$course=0,$astatus=0,$yearlevel=0,$gender=0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$filter_section=0,$level=0,$student_type='active')
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -1936,7 +1936,7 @@ class Datatables extends CI_Controller {
         
        
         if($table =='tb_mas_users'){
-            $sWhere = "WHERE $table.student_status = 'active' ";
+            $sWhere = "WHERE $table.student_status = $student_type ";
         }
         if($gender!=0  && $table =='tb_mas_users'){
             
@@ -2004,18 +2004,6 @@ class Datatables extends CI_Controller {
                
         }
         
-        
-        if($student_type != 0 && $table =='tb_mas_users'){        
-            switch($student_type){
-                case 'shs':
-                    $sWhere .= "AND ".$table.".student_type = 'shs' ";
-                break;
-                case 'college':
-                    $sWhere .= "AND ".$table.".student_type = 'college' ";
-                break;                   
-            }
-            
-        }
 
         if($sem!=0 && $table =='tb_mas_room_schedule')            
             $sWhere .= "AND tb_mas_room_schedule.intSem = ".$active_sem['intID']." ";
