@@ -46,11 +46,13 @@
                         </div>
                         <div v-if="registration" style="margin-right:1rem;" class="pull-right">                                                                         
                             Enrollment Status
-                            <select v-model="registration_status" @change="changeRegStatus" class="form-control">
+                            <select v-if="registration_status!=1" v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>                                
                             </select>
-                            
+                            <div v-else>
+                                Enrolled
+                            </div>
                         </div>
                         <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             Allow To Print RF
