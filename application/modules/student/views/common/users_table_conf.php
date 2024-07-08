@@ -14,8 +14,9 @@
         var scholarship = 0;
         var registered = $("#registered").val();
         var level = $("#level").val();
+        var inactive = $("#inactive").val();
         
-        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level+'/'+$inactive;
+        document.location = "<?php echo base_url(); ?>student/view_all_students/"+course+"/"+status+"/"+year+"/"+gender+"/"+graduate+"/"+sem+"/"+scholarship+'/'+registered+'/'+level+'/'+inactive;
         
     });
 
