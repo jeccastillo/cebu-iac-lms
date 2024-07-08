@@ -4732,21 +4732,21 @@ class Excel extends CI_Controller {
                     }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                         if(!$applied_from){
                             $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_from[1] = $ledger['name'];
+                            $applied_from[1] = $ledger['remarks'];
                             $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                         }else{
                             $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
-                            $applied_from[1] .= ', ' . $ledger['name'];
+                            $applied_from[1] .= ', ' . $ledger['remarks'];
                             $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                         }
                     }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                         if(!$applied_from){
                             $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_to[1] = $ledger['name'];
+                            $applied_to[1] = $ledger['remarks'];
                             $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                         }else{
                             $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_to[1] = $ledger['name'];
+                            $applied_to[1] = $ledger['remarks'];
                             $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                         }
                     }
@@ -4755,7 +4755,7 @@ class Excel extends CI_Controller {
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
-                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
+                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
@@ -4805,9 +4805,9 @@ class Excel extends CI_Controller {
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count)
-                    ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
+                    ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                    ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['dteRegistered'])))
+                    ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                     ->setCellValue('F'.$i, $course['strProgramCode'])
                     ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
