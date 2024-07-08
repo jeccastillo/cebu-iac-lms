@@ -167,7 +167,7 @@ class Student extends CI_Controller {
         
     }
     
-    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0,$level=0,$inactive=0)
+    public function view_all_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$sem=0,$scholarship=0,$registered=0,$level=0,$inactive='active')
     {
         if($this->faculty_logged_in())
         {
