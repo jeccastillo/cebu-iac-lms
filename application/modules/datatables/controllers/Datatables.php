@@ -2092,9 +2092,7 @@ class Datatables extends CI_Controller {
         
                     
             }
-        }
-
-        $output['search2'] = $st;
+        }        
 
         if($registered == -1){
             if($sWhere)
