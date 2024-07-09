@@ -1153,7 +1153,7 @@ class Datatables extends CI_Controller {
                             if($ct == 5 || $ct == 7)
                                 $st .= "-";
                         else
-                            if($ct == 4 || ($_GET['sSearch_'.$i][0] == "T" && $ct == 5) || $ct == 7)
+                            if(($_GET['sSearch_'.$i][0] != "T" && ($ct == 4 || $ct == 6)) || ($_GET['sSearch_'.$i][0] == "T" && ($ct == 5 || $ct == 7)) )
                                 $st .= "-";
 
                         $st .= $letter;
