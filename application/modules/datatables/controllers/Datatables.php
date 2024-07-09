@@ -2076,13 +2076,9 @@ class Datatables extends CI_Controller {
                     $st = "";
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
-                    foreach($str as $letter){                        
-                        if($this->data['campus'] == "Cebu")
-                            if($ct == 5 || $ct == 7)
-                                $st .= "-";
-                        else
-                            if(($str[0] != "T" && ($ct == 4 || $ct == 6)) || ($str[0] == "T" && ($ct == 5 || $ct == 7)) )
-                                $st .= "-";
+                    foreach($str as $letter){                                                                        
+                        if(($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
+                            $st .= "-";
 
                         $st .= $letter;
                         $ct++;
