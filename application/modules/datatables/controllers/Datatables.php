@@ -1124,7 +1124,7 @@ class Datatables extends CI_Controller {
             $sWhere .= ')';
             
         }
-        
+        $st ="";
         /* Individual column filtering */
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
@@ -2077,8 +2077,12 @@ class Datatables extends CI_Controller {
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){                        
-                        if($ct == 4 || $ct == 6)                                                       
-                            $st .= "-";
+                        if($this->data['campus'] == "Cebu")
+                            if($ct == 5 || $ct == 7)
+                                $st .= "-";
+                        else
+                            if(($_GET['sSearch_'.$i][0] != "T" && ($ct == 4 || $ct == 6)) || ($_GET['sSearch_'.$i][0] == "T" && ($ct == 5 || $ct == 7)) )
+                                $st .= "-";
 
                         $st .= $letter;
                         $ct++;
