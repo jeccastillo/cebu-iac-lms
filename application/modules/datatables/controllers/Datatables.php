@@ -1257,8 +1257,9 @@ class Datatables extends CI_Controller {
                 }
                 
             }
-            $output['aaData'][] = $row;
+            $output['aaData'][] = $row;            
         }
+        $output['campus'] = $this->data['campus'];
         
 	   echo json_encode( $output );
     }
