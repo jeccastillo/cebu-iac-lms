@@ -1149,7 +1149,11 @@ class Datatables extends CI_Controller {
                     $ct = 0;                    
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){
-                        if(($ct > 3 && $str[4] == "S" && ($ct == 7 || $ct == 9)) ||  ($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
+                        if($ct > 3 && $str[4] == "S" && ($ct == 7 || $ct == 9))
+                            $st .= "-";
+                        elseif($str[0] != "T" && ($ct == 4 || $ct == 6))
+                            $st .= "-";
+                        elseif(($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7))
                             $st .= "-";
 
                         $st .= $letter;
@@ -2073,7 +2077,11 @@ class Datatables extends CI_Controller {
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){                                                                        
-                        if(($ct > 3 && $str[4] == "S" && ($ct == 7 || $ct == 9)) ||  ($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
+                        if($ct > 3 && $str[4] == "S" && ($ct == 7 || $ct == 9))
+                            $st .= "-";
+                        elseif($str[0] != "T" && ($ct == 4 || $ct == 6))
+                            $st .= "-";
+                        elseif(($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7))
                             $st .= "-";
 
                         $st .= $letter;
