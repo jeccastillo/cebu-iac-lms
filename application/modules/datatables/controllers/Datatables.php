@@ -13,6 +13,9 @@ class Datatables extends CI_Controller {
         //$this->config->load('courses');
         $this->data["user"] = $this->session->all_userdata();
         $this->load->helper("cms_form");
+        $this->config->load('themes');		
+        $this->config->load('courses');		        
+        $this->data['campus'] = $this->config->item('campus');
 		
 	}
     
@@ -1143,11 +1146,16 @@ class Datatables extends CI_Controller {
                 
                 if($table == "tb_mas_users" && $i  == 2){                        
                     $st = "";
-                    $ct = 0;
+                    $ct = 0;                    
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){
-                        if($ct == 5 || $ct == 7)
-                            $st .= "-";
+                        if($this->data['campus'] == "Cebu")
+                            if($ct == 5 || $ct == 7)
+                                $st .= "-";
+                        else
+                            if($ct == 4 || ($_GET['sSearch_'.$i][0] == "T" && $ct == 5) || $ct == 7)
+                                $st .= "-";
+
                         $st .= $letter;
                         $ct++;
                     }                    
