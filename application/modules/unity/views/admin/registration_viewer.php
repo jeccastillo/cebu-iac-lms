@@ -612,6 +612,8 @@ new Vue({
         loader_spinner: true, 
         installments: [],    
         installment_dates:[],  
+        applicant_id: undefined,
+        current_term: undefined,
         user:{
             special_role: 0,
         },                 
@@ -633,7 +635,7 @@ new Vue({
                         for (i in this.term_balances)
                         if (this.term_balances[i].balance > 0)
                             this.show_alert = true;
-                        
+                        this.current_term = data.data.active_sem;
                         this.installment_dates.push(data.data.active_sem.installment1);
                         this.installment_dates.push(data.data.active_sem.installment2);
                         this.installment_dates.push(data.data.active_sem.installment3);
@@ -692,7 +694,7 @@ new Vue({
                             this.payments = data.data.data;
                             this.other_payments = data.data.other;   
                             this.applicant_data = data.data.student;                         
-                                                                
+                            this.applicant_id = "A"+this.current_term.strYearStart+"-"+String(this.applicant_data.id).padStart(4, '0');                                     
                             if(this.registration && this.registration.paymentType == 'partial')
                                 this.has_partial = true;
                                                                                     
@@ -1088,7 +1090,10 @@ new Vue({
                         this.or_print.remarks = payment.remarks;
                         this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
                         this.or_print.student_address = this.student.strAddress;
-                        this.or_print.student_id = this.student.strStudentNumber;
+                        if(this.student.strStudentNumber.charAt(0) != "T")
+                            this.or_print.student_id = this.student.strStudentNumber;
+                        else
+                            this.or_print.student_id = this.applicant_id;
                         this.or_print.is_cash = payment.is_cash;
                         this.or_print.check_number = payment.check_number;
                         this.or_print.sem = payment.sy_reference;
