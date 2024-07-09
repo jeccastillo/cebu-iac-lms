@@ -2077,7 +2077,7 @@ class Datatables extends CI_Controller {
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){                                                                        
-                        if(strlen($_GET['sSearch_'.$i]) >= 5 && $str[4] == "S" && ($ct == 7 || $ct == 9))
+                        if(count($str) >= 5 && $str[4] == "S" && ($ct == 7 || $ct == 9))
                             $st .= "-";
                         elseif($str[0] != "T" && ($ct == 4 || $ct == 6))
                             $st .= "-";
