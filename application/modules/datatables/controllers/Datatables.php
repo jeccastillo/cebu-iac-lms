@@ -1149,12 +1149,8 @@ class Datatables extends CI_Controller {
                     $ct = 0;                    
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){
-                        if($this->data['campus'] == "Cebu")
-                            if($ct == 5 || $ct == 7)
-                                $st .= "-";
-                        else
-                            if(($_GET['sSearch_'.$i][0] != "T" && ($ct == 4 || $ct == 6)) || ($_GET['sSearch_'.$i][0] == "T" && ($ct == 5 || $ct == 7)) )
-                                $st .= "-";
+                        if(($str[4] != "S" && ($ct == 7 || $ct == 9)) ||  ($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
+                            $st .= "-";
 
                         $st .= $letter;
                         $ct++;
@@ -2077,7 +2073,7 @@ class Datatables extends CI_Controller {
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
                     foreach($str as $letter){                                                                        
-                        if(($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
+                        if(($str[4] != "S" && ($ct == 7 || $ct == 9)) ||  ($str[0] != "T" && ($ct == 4 || $ct == 6)) || (($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7)) )
                             $st .= "-";
 
                         $st .= $letter;
