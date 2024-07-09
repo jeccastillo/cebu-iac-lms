@@ -2052,7 +2052,7 @@ class Datatables extends CI_Controller {
             $sWhere .= ')';
             
         }
-        
+        $st = "";
         /* Individual column filtering */
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
@@ -2095,7 +2095,7 @@ class Datatables extends CI_Controller {
         }
 
         $output['search2'] = $st;
-        
+
         if($registered == -1){
             if($sWhere)
                 $sWhere .= "AND tb_mas_advised.intStudentID  NOT IN (SELECT tb_mas_registration.`intStudentID` FROM tb_mas_registration WHERE tb_mas_registration.`intAYID`=".$active_sem['intID'].") ";
