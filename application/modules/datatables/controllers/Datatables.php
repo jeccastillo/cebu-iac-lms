@@ -2081,7 +2081,7 @@ class Datatables extends CI_Controller {
                             if($ct == 5 || $ct == 7)
                                 $st .= "-";
                         else
-                            if($ct == 4 || $ct == 6)
+                            if($ct == 4 || $ct == 7)
                                 $st .= "-";
 
                         $st .= $letter;
