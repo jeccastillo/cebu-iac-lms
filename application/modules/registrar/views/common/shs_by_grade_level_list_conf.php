@@ -3,31 +3,39 @@ $(document).ready(function() {
 
     var table = $('#shs-grade-table').DataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
-        "bProcessing": true,
+        "bProcessing": false,
         "bServerSide": false,
         "ordering": false,
         "paging": true,
         "sAjaxSource": "<?php echo base_url(); ?>registrar/shs_by_grade_level_data/" +
             "<?php echo $current_sem; ?>" + '/' + "<?php echo $postyear; ?>",
         "columns": [{
-                data: 'studentNumber',
+                data: 'student_number',
                 title: 'Student Number'
             },
             {
-                data: 'strLastname',
+                data: 'last_name',
                 title: 'Last Name'
-            }, {
-                data: 'strFirstname',
+            },
+            {
+                data: 'first_name',
                 title: 'Fist Name'
-            }, , {
-                data: 'strMiddlename',
+            },
+            {
+                data: 'middle_name',
                 title: 'Middle Name'
-            }, , {
-                data: 'intStudentYear',
+            },
+            {
+                data: 'year_level',
                 title: 'Year Level'
-            }, , {
+            },
+            {
                 data: 'section',
                 title: 'Section'
+            },
+            {
+                data: 'course',
+                title: 'Course'
             }
 
         ]
@@ -55,7 +63,7 @@ $(document).ready(function() {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
         var url = base_url + 'excel/shs_by_grade_level/' + $("#select-term-leads")
-            .val() + '/' + campus;
+            .val() + '/' + $("#int-year-level").val();
         window.open(url, '_blank');
     })
 
