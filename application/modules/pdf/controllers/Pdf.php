@@ -3052,7 +3052,7 @@ class Pdf extends CI_Controller {
         $pdf->Output('Student List with Track and College Course - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
 
-    public function shs_gwa_rank($sem = 0, $year_level = 0, $campus)
+    public function shs_gwa_rank($sem = 0, $year_level = 0)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
@@ -3097,17 +3097,20 @@ class Pdf extends CI_Controller {
                 $average = getAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
                 $totalGrades += $average;
             }
-            $gwa = $totalGrades / count($subjects);
 
-            $student_data = array();
-            $student_data['student_number'] = $student['strStudentNumber'];
-            $student_data['last_name'] = strtoupper($student['strLastname']);
-            $student_data['first_name'] = strtoupper($student['strFirstname']);
-            $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-            $student_data['track'] = $student['strProgramCode'];
-            $student_data['gwa'] = $gwa;
-            $student_data['year_level'] = $student['intYearLevel'];
-            $gwa_ranks[] = $student_data;
+            if(count($subjects) > 0){
+                $gwa = $totalGrades / count($subjects);
+                
+                $student_data = array();
+                $student_data['student_number'] = $student['strStudentNumber'];
+                $student_data['last_name'] = strtoupper($student['strLastname']);
+                $student_data['first_name'] = strtoupper($student['strFirstname']);
+                $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                $student_data['track'] = $student['strProgramCode'];
+                $student_data['gwa'] = $gwa;
+                $student_data['year_level'] = $student['intYearLevel'];
+                $gwa_ranks[] = $student_data;
+            }
         }
 
         //sort by GWA
