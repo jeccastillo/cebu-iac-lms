@@ -2076,13 +2076,9 @@ class Datatables extends CI_Controller {
                     $st = "";
                     $ct = 0;
                     $str = str_split($_GET['sSearch_'.$i]);
-                    foreach($str as $letter){
-                        if($this->data['campus'] == "Cebu")
-                            if($ct == 5 || $ct == 7)
-                                $st .= "-";
-                        else
-                            if($ct == 5 || $ct == 7)
-                                $st .= "-";
+                    foreach($str as $letter){                        
+                        if($ct == 4 || $ct == 6)                                                       
+                            $st .= "-";
 
                         $st .= $letter;
                         $ct++;
@@ -2098,6 +2094,8 @@ class Datatables extends CI_Controller {
             }
         }
 
+        $output['search2'] = $st;
+        
         if($registered == -1){
             if($sWhere)
                 $sWhere .= "AND tb_mas_advised.intStudentID  NOT IN (SELECT tb_mas_registration.`intStudentID` FROM tb_mas_registration WHERE tb_mas_registration.`intAYID`=".$active_sem['intID'].") ";
