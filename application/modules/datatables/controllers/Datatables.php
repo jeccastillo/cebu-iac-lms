@@ -2054,7 +2054,6 @@ class Datatables extends CI_Controller {
         }
         $st = "";
         /* Individual column filtering */
-        echo $this->data['campus'];
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
         {
             if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
