@@ -2082,7 +2082,7 @@ class Datatables extends CI_Controller {
                                 $st .= "-";                        
                     else
                         foreach($str as $letter){                                                                                                
-                            elseif($str[0] != "T" && ($ct == 4 || $ct == 6))
+                            if($str[0] != "T" && ($ct == 4 || $ct == 6))
                                 $st .= "-";
                             elseif(($str[0] == "T" || $str[0] == "C") && ($ct == 5 || $ct == 7))
                                 $st .= "-";
