@@ -186,6 +186,9 @@
                                                     </div>
                                                     <div v-else class="form-group">
                                                         <label>Particulars:</label>
+                                                        <select class="form-control" v-model="description_other">
+                                                            <!-- <option v-for="i in particulars" value=""></option> -->
+                                                        </select>
                                                         <input type="text" required class="form-control" v-model="description_other" />
                                                     </div>
                                                     <input type="hidden" v-model="request.status" value="Paid" />                                                
@@ -599,6 +602,7 @@ new Vue({
         tuition_data: {},
         tuition_years: [],
         reservation_payments: [],
+        particulars: [],
         application_payment: undefined,
         registration_status: 0,
         allow_enroll: 0,
@@ -634,6 +638,7 @@ new Vue({
                         this.sy = data.data.sy;
                         this.ledger_items = data.data.ledger;
                         this.term_balances = data.data.term_balances;
+                        this.particulars = data.data.particulars;
                         for (i in this.term_balances)
                         if (this.term_balances[i].balance > 0)
                             this.show_alert = true;
