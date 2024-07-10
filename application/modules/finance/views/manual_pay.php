@@ -339,6 +339,7 @@ new Vue({
         refunded_payments: [],    
         amount_to_pay: 0,
         sms_account: undefined,
+        particulars: [],
         description_other: '', 
         cashier: undefined,
         request:{
@@ -422,6 +423,7 @@ new Vue({
                 this.request.sy_reference = data.data.current_sem;
                 this.or_update.sy_reference = data.data.current_sem;   
                 this.user = data.data.user;  
+                this.particulars =  data.data.particulars;
                 this.sms_account = data.data.data;
                 this.or_update.student_campus = this.request.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
