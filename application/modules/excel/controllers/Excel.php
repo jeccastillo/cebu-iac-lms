@@ -4588,7 +4588,6 @@ class Excel extends CI_Controller {
     
     public function student_account_report($sem, $campus, $report_date)
     {
-        $campus = 'Makati';
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     ->order_by('tb_mas_users.strLastname', 'ASC')
