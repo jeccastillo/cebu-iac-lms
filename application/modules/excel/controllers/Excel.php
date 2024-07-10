@@ -4977,7 +4977,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('Y2', 'LAB')
                     ->setCellValue('AA2', 'MISC')
                     ->setCellValue('AC2', 'NSF')
-                    ->setCellValue('AE2', 'TOTAL ASSESSMENT')
+                    ->setCellValue('AE2', 'REFERRAL DISCOUNT')
                     ->setCellValue('W3', 'RATE')
                     ->setCellValue('X3', 'FIX')
                     ->setCellValue('Y3', 'RATE')
