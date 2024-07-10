@@ -4961,7 +4961,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('J2', 'THESIS FEE')
                     ->setCellValue('K2', 'NSF')
                     ->setCellValue('L2', 'LEF')
-                    ->setCellValue('M2', 'TOTAL')
+                    ->setCellValue('M2', 'TOTAL FP')
                     ->setCellValue('N1', 'INSTALLMENT')
                     ->setCellValue('N2', 'TF')
                     ->setCellValue('O2', 'LABORATORY')
@@ -4969,7 +4969,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('Q2', 'THESIS FEE')
                     ->setCellValue('R2', 'NSF')
                     ->setCellValue('S2', 'LEF')
-                    ->setCellValue('T2', 'TOTAL')
+                    ->setCellValue('T2', 'TOTAL INSTALLMENT')
                     ->setCellValue('U1', 'TUITION FEE GRAND TOTAL')
                     ->setCellValue('V1', 'SCHOLARSHIPS/ DISCOUNTS RATE')
                     ->setCellValue('V2', 'TYPE')
@@ -5135,7 +5135,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
