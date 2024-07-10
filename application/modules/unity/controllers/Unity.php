@@ -635,8 +635,7 @@ class Unity extends CI_Controller {
             }
 
             $ret['term_balances'] = $term_balances;
-            $ret['particulars'] = $this->db
-                                        ->get_where('tb_mas_particulars',array('type'=>'particular'))
+            $ret['particulars'] = $this->db->get_where('tb_mas_particulars',array('type'=>'particular'))
                                         ->result_array();
             
             $ret['success']= true;

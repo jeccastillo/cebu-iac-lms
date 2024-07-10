@@ -187,9 +187,9 @@
                                                     <div v-else class="form-group">
                                                         <label>Particulars:</label>
                                                         <select class="form-control" v-model="description_other">
-                                                            <!-- <option v-for="i in particulars" value=""></option> -->
+                                                            <option v-for="p in particulars" :value="p.name">{{p.name}}</option>
                                                         </select>
-                                                        <input type="text" required class="form-control" v-model="description_other" />
+                                                        <!-- <input type="text" required class="form-control" v-model="description_other" /> -->
                                                     </div>
                                                     <input type="hidden" v-model="request.status" value="Paid" />                                                
                                                     <div class="form-group">
