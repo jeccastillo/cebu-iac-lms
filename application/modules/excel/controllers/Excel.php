@@ -5016,6 +5016,7 @@ class Excel extends CI_Controller {
                     ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')');
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) .  '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B4:F' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
         if($studentsEnrolled){
             $objPHPExcel->setActiveSheetIndex(0)
