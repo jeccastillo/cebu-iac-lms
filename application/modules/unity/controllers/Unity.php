@@ -568,9 +568,7 @@ class Unity extends CI_Controller {
                 $data['tuition'] = "";
 
             
-            $ret['particulars'] = $this->db
-                                        ->get_where('tb_mas_particulars',array('type'=>'particular'))
-                                        ->result_array();
+            
 
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['tuition_years'] = $this->db->get_where('tb_mas_tuition_year')->result_array();
@@ -637,7 +635,9 @@ class Unity extends CI_Controller {
             }
 
             $ret['term_balances'] = $term_balances;
-
+            $ret['particulars'] = $this->db
+                                        ->get_where('tb_mas_particulars',array('type'=>'particular'))
+                                        ->result_array();
             
             $ret['success']= true;
         }
