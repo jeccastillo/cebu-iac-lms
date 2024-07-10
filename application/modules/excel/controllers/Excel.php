@@ -5196,7 +5196,6 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('U1:U3');
         $sheet->mergeCells('V1:AF1');
         $sheet->mergeCells('V2:V3');
-        $sheet->mergeCells('W2:Y2');
         $sheet->mergeCells('W2:X2');
         $sheet->mergeCells('Y2:Z2');
         $sheet->mergeCells('AA2:AB2');
