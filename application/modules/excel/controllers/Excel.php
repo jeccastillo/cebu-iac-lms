@@ -4801,7 +4801,8 @@ class Excel extends CI_Controller {
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count)
-                    ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
+                    // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
+                    ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
                     ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
@@ -4960,7 +4961,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('J2', 'THESIS FEE')
                     ->setCellValue('K2', 'NSF')
                     ->setCellValue('L2', 'LEF')
-                    ->setCellValue('M2', 'TOTAL')
+                    ->setCellValue('M2', 'TOTAL FP')
                     ->setCellValue('N1', 'INSTALLMENT')
                     ->setCellValue('N2', 'TF')
                     ->setCellValue('O2', 'LABORATORY')
@@ -4968,7 +4969,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('Q2', 'THESIS FEE')
                     ->setCellValue('R2', 'NSF')
                     ->setCellValue('S2', 'LEF')
-                    ->setCellValue('T2', 'TOTAL')
+                    ->setCellValue('T2', 'TOTAL INSTALLMENT')
                     ->setCellValue('U1', 'TUITION FEE GRAND TOTAL')
                     ->setCellValue('V1', 'SCHOLARSHIPS/ DISCOUNTS RATE')
                     ->setCellValue('V2', 'TYPE')
@@ -4976,7 +4977,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('Y2', 'LAB')
                     ->setCellValue('AA2', 'MISC')
                     ->setCellValue('AC2', 'NSF')
-                    ->setCellValue('AE2', 'TOTAL ASSESSMENT')
+                    ->setCellValue('AE2', 'REFERRAL DISCOUNT')
                     ->setCellValue('W3', 'RATE')
                     ->setCellValue('X3', 'FIX')
                     ->setCellValue('Y3', 'RATE')
@@ -5016,6 +5017,7 @@ class Excel extends CI_Controller {
                     ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')');
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) .  '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B4:F' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 
         if($studentsEnrolled){
             $objPHPExcel->setActiveSheetIndex(0)
@@ -5133,7 +5135,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
@@ -5196,7 +5198,6 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('U1:U3');
         $sheet->mergeCells('V1:AF1');
         $sheet->mergeCells('V2:V3');
-        $sheet->mergeCells('W2:Y2');
         $sheet->mergeCells('W2:X2');
         $sheet->mergeCells('Y2:Z2');
         $sheet->mergeCells('AA2:AB2');
