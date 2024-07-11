@@ -96,7 +96,7 @@ new Vue({
             else{                
                 this.request.intProgramID = this.programs[0].intProgramID;
             }
-            console.log(data.data);
+            console.log(this.sy);
             
         })
         .catch((error) => {
