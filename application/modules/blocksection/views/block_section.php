@@ -27,12 +27,12 @@
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramCode }}</option>                                        
                                     </select>
                                 </div>
-                                <div class="form-group col-xs-6">
+                                <!-- <div class="form-group col-xs-6">
                                     <label for="intSYID">Program</label>
                                     <select class="form-control" name="intSYID" v-model="request.intSYID">                                        
                                         <option v-for="s in sy" :value="s.intID">{{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' s.strYearStart + ' - ' + s.strYearEnd }}</option>                                        
                                     </select>
-                                </div>                                
+                                </div>                                 -->
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Year</label>
                                     <select class="form-control" name="year" v-model="request.year">                                        
