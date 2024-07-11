@@ -26,6 +26,12 @@
                                     <select class="form-control" name="intProgramID" v-model="request.intProgramID">                                        
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramCode }}</option>                                        
                                     </select>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label for="intSYID">Program</label>
+                                    <select class="form-control" name="intSYID" v-model="request.intSYID">                                        
+                                        <option v-for="s in sy" :value="s.intID">{{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' s.strYearStart + ' - ' + s.strYearEnd }}</option>                                        
+                                    </select>
                                 </div>                                
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Year</label>
@@ -69,6 +75,7 @@ new Vue({
             year: undefined,
         },                  
         programs:[],
+        sy: [],
         active_sem: {},
     },
 
@@ -83,10 +90,10 @@ new Vue({
         .then((data) => {                       
             this.programs = data.data.data.programs;
             this.active_sem = data.data.data.active_sem;
+            this.sy = data.data.sy;
             if(data.data.data.section)
                 this.request = data.data.data.section;
-            else{
-                this.request.intSYID = this.active_sem.intID;
+            else{                
                 this.request.intProgramID = this.programs[0].intProgramID;
             }
             console.log(data.data);

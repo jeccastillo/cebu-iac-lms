@@ -73,6 +73,7 @@ class Blocksection extends CI_Controller {
 
         $ret['data']['section'] = $section;        
         $ret['data']['active_sem'] = $active_sem;
+        $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['data']['programs'] = $programs;
         $ret['success'] = true;
         $ret['message'] = "success"; 
