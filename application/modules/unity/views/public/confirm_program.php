@@ -22,7 +22,6 @@
                                     </td>
                                     <td></td>
                                 </tr>
-
                                 <!-- <tr v-if="sections.length > 0">
                                     <th>Select Section/Schedule</th>
                                     <td>

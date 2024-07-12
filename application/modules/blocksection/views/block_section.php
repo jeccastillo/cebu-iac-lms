@@ -28,6 +28,13 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-6">
+                                    <label for="intYearLevel">Enhanced</label>
+                                    <select class="form-control" name="enhanced" v-model="request.enhanced">                                        
+                                        <option value="0">No</option>                                        
+                                        <option value="1">Yes</option>                                        
+                                    </select>
+                                </div>
+                                <div class="form-group col-xs-6">
                                     <label for="intSYID">Choose Term</label>
                                     <select class="form-control" name="intSYID" v-model="request.intSYID">                                        
                                         <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{s.strYearStart }} - {{ s.strYearEnd }}</option>                                        
@@ -73,6 +80,7 @@ new Vue({
             intProgramID: undefined,
             intSYID: undefined,
             year: undefined,
+            enhanced: 0,
         },                  
         programs:[],
         sy: [],

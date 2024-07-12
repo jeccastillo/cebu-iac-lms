@@ -877,8 +877,7 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Program</h3>
-                    </div>
-
+                    </div>                    
                     <!-- for cebu applicant -->
                     <div v-if="request.campus == 'Cebu'" class="box-body" style="padding:2rem">
                         <div>
@@ -913,6 +912,15 @@
 
                     <!-- for Makati applicant -->
                     <div v-if="request.campus == 'Makati'" class="box-body" style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Enhanced Curriculum</strong>
+                            <select class="form-control" @change="updateField('enhanced_curriculum',$event)"
+                                v-model="request.enhanced_curriculum">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <hr>
+                        </div>
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 1st Choice</strong>
                             <p class="text-muted">
@@ -1178,6 +1186,7 @@ new Vue({
             waive_app_fee: 0,
             reserve_enroll: 0,
             waive_reason: undefined,
+            enhanced_curriculum: 0,
         },
         request_sched: {
             from: "",
