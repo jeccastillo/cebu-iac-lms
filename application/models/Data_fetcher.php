@@ -2709,10 +2709,13 @@ class Data_fetcher extends CI_Model {
                 $scholar_type = $scholar->name;
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
-                    //$total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                    $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
                     $total_assessment_installment_temp += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
                                                 + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+
+                    $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
+                    $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
 
                     if($scholar->total_assessment_rate > 0){
                         $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
@@ -2870,6 +2873,8 @@ class Data_fetcher extends CI_Model {
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
                                                 + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
 
+                    $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
+                    $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);                                                
                     if($scholar->total_assessment_rate > 0){
                         $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
