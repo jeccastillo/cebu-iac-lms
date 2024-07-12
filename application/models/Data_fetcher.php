@@ -2717,6 +2717,7 @@ class Data_fetcher extends CI_Model {
                     $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
                     $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
 
+                    $data['sc_rate'] = $scholar->total_assessment_rate;
                     if($scholar->total_assessment_rate > 0){
                         $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
