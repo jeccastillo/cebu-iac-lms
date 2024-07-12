@@ -2694,7 +2694,11 @@ class Data_fetcher extends CI_Model {
 
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
-        
+        $total_assessment += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                    $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
+                                                + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
+                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                                                
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
@@ -2709,10 +2713,7 @@ class Data_fetcher extends CI_Model {
                 $scholar_type = $scholar->name;
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
-                    $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-                    $total_assessment_installment_temp += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
-                                                + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                    
 
                     $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
                     $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
@@ -2869,11 +2870,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp = 0;
                 $scholar_type = $scholar->name;
 
-                if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
-                    $total_scholarship_temp += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-                    $total_assessment_installment_temp += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
-                                                + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                                    
 
                     $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
                     $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);                                                
