@@ -654,7 +654,14 @@ class Registrar extends CI_Controller {
 
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $type = $active_sem['term_student_type'];
-        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        else
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+                                 
         $data['programs'] = $programs;
         $ret = [];        
 
