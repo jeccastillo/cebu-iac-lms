@@ -4818,18 +4818,17 @@ class Excel extends CI_Controller {
                         }
                     }
                     
-                    $total_installment = $tuition['total_installment'] - $tuition['down_payment'];
-                    $installment_balance = $tuition['total_installment'] - $total_amount_paid;
-
-                    if(count($applied_to) > 0){
-                        $installment_balance = $installment_balance - $applied_to[2];
-                    }
-                    
-                    if(count($applied_from) > 0){
-                        $installment_balance = $installment_balance - $applied_from[2];
-                    }
+                    $total_installment = $tuition['ti_before_deductions'] - $tuition['down_payment'];
+                    $installment_balance = $tuition['ti_before_deductions'] - $total_amount_paid;
 
                     if($date_enrolled >= $sy->reconf_start){
+                        if(count($applied_to) > 0){
+                            $installment_balance = $installment_balance - $applied_to[2];
+                        }
+                        
+                        if(count($applied_from) > 0){
+                            $installment_balance = $installment_balance - $applied_from[2];
+                        }
                         $installment_balance -= $total_discount;
                     }
                     // else{
