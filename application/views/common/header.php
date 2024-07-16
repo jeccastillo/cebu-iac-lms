@@ -260,9 +260,8 @@
                 href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Applicants</a></li>
             <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
-              <a href="<?php echo base_url()."admissionsV1/view_classlist_archive_admin" ?>"><i
-                  class="fa fa-user"></i>
-                Slot Monitoring</a>
+              <a href="<?php echo base_url()."admissionsV1/view_classlist_archive_admin" ?>" 
+              style="margin-left: 10px;"><i class="fa fa-user"></i>Slot Monitoring</a>
             </li>
             <li class="<?php echo (isset($page) && $page=="awareness_stats")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>admissionsV1/awareness_stats"
