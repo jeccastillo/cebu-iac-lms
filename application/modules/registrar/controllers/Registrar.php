@@ -1269,6 +1269,26 @@ class Registrar extends CI_Controller {
         echo json_encode($students_array);
     }
 
+    public function shs_student_grades($term = 0, $year = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['postyear'] = $year;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/shs_list_of_student_grade",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/shs_list_of_student_grade_conf",$this->data);
+        }
+    }
+
     public function shs_student_grades_data($sem = 0, $year_level = 0)
     {
         $students_array = array();
@@ -1335,6 +1355,26 @@ class Registrar extends CI_Controller {
         }
 
         echo json_encode($students_array);
+    }
+
+    public function shs_gwa_rank($term = 0, $year = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['postyear'] = $year;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/shs_gwa_rank_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/shs_gwa_rank_list_conf",$this->data);
+        }
     }
 
     public function shs_gwa_rank_data($sem = 0, $year_level = 0)
