@@ -87,7 +87,7 @@ class AdmissionsV1 extends CI_Controller {
             $this->data['has_faculty'] = $has_faculty;
            
             $this->data['page'] = "classlist_archive";
-            $this->data['opentree'] = "classlist_archive";
+            $this->data['opentree'] = "leads";
             // $this->data['opentree'] = "registrar";
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/classlist_view_admin",$this->data);
