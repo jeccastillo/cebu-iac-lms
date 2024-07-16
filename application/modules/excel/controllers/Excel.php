@@ -6944,7 +6944,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function shs_gwa_rank($sem = 0, $year_level = 0)
+    public function shs_gwa_rank($sem = 0, $year_level = 0, $campus)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
