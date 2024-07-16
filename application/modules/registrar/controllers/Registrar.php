@@ -1313,24 +1313,25 @@ class Registrar extends CI_Controller {
             ->get()
             ->result_array();
 
-
-            foreach($subjects as $subject){
-                $subjects_array = array();
-                $days = [ 1 => 'S', 2 => 'M', 3 => 'T', 4 => 'W', 5 => 'TH', 6 => 'F', 7 => 'S'];
-                $subjects_array['section'] = $subject['strSection'];
-                $subjects_array['subject'] = $subject['strCode'];
-                $subjects_array['day'] = $days[$subject['strDay']];
-                $subjects_array['time'] = date('h:i A', strtotime($subject['dteStart'])) . '-' . date('h:i A', strtotime($subject['dteEnd']));
-                $subjects_array['grade'] = $subject['floatFinalGrade'];
-                $subjects_array['professor'] = $subject['strLastname'] . ', ' . $subject['strFirstname'];
+            if($subjects){
+                foreach($subjects as $subject){
+                    $subjects_array = array();
+                    $days = [ 1 => 'S', 2 => 'M', 3 => 'T', 4 => 'W', 5 => 'TH', 6 => 'F', 7 => 'S'];
+                    $subjects_array['section'] = $subject['strSection'];
+                    $subjects_array['subject'] = $subject['strCode'];
+                    $subjects_array['day'] = $days[$subject['strDay']];
+                    $subjects_array['time'] = date('h:i A', strtotime($subject['dteStart'])) . '-' . date('h:i A', strtotime($subject['dteEnd']));
+                    $subjects_array['grade'] = $subject['floatFinalGrade'];
+                    $subjects_array['professor'] = $subject['strLastname'] . ', ' . $subject['strFirstname'];
+                }
+                
+                $data['count'] = $index + 1;
+                $data['student_number'] = str_replace("-", "", $student['strStudentNumber']);
+                $data['name'] = strtoupper($student['strLastname']) . ', ' . strtoupper($student['strFirstname']) . ' ' . strtoupper($student['strMiddlename']);
+                $data['date_registered'] = date("M j, Y", strtotime($student['dteRegistered']));
+                $data['subjects'] = $subjects_array;
+                $students_array[] = $data;
             }
-            
-            $data['count'] = $index + 1;
-            $data['student_number'] = str_replace("-", "", $student['strStudentNumber']);
-            $data['name'] = strtoupper($student['strLastname']) . ', ' . strtoupper($student['strFirstname']) . ' ' . strtoupper($student['strMiddlename']);
-            $data['date_registered'] = date("M j, Y", strtotime($student['dteRegistered']));
-            $data['subjects'] = $subjects_array;
-            $students_array[] = $data;
         }
 
         echo json_encode($students_array);

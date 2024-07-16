@@ -4709,45 +4709,6 @@ class Excel extends CI_Controller {
         {
             $applied_from = $applied_to = $other = array();
 
-            $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
-
-            if($ledger_data){
-                foreach($ledger_data as $ledger){
-                    
-                    if($ledger['type'] == 'other'){
-                        if(!$other){
-                            $other[0] = date("M d,Y",strtotime($ledger['date']));
-                            $other[1] = $ledger['name'];
-                            $other[2] = $ledger['amount'];
-                        }else{
-                            $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
-                            $other[1] = ', ' . $ledger['name'];
-                            $other[2] += $ledger['amount'];
-                        }
-                    }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                        if(!$applied_from){
-                            $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_from[1] = $ledger['remarks'];
-                            $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                        }else{
-                            $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
-                            $applied_from[1] .= ', ' . $ledger['remarks'];
-                            $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                        }
-                    }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                        if(!$applied_from){
-                            $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_to[1] = $ledger['remarks'];
-                            $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                        }else{
-                            $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                            $applied_to[1] = $ledger['remarks'];
-                            $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                        }
-                    }
-                }
-            }
-
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
                     ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
@@ -4758,6 +4719,46 @@ class Excel extends CI_Controller {
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
             if($reg){
+
+                $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
+
+                if($ledger_data){
+                    foreach($ledger_data as $ledger){
+                        
+                        if($ledger['type'] == 'other'){
+                            if(!$other){
+                                $other[0] = date("M d,Y",strtotime($ledger['date']));
+                                $other[1] = $ledger['name'];
+                                $other[2] = $ledger['amount'];
+                            }else{
+                                $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+                                $other[1] = ', ' . $ledger['name'];
+                                $other[2] += $ledger['amount'];
+                            }
+                        }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
+                            if(!$applied_from){
+                                $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
+                                $applied_from[1] = $ledger['remarks'];
+                                $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                            }else{
+                                $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
+                                $applied_from[1] .= ', ' . $ledger['remarks'];
+                                $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                            }
+                        }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
+                            if(!$applied_from){
+                                $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                                $applied_to[1] = $ledger['remarks'];
+                                $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                            }else{
+                                $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                                $applied_to[1] = $ledger['remarks'];
+                                $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                            }
+                        }
+                    }
+                }
+
                 $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
