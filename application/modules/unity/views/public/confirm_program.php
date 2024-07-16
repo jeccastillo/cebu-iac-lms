@@ -22,7 +22,7 @@
                                     </td>
                                     <td></td>
                                 </tr>
-                                <!-- <tr v-if="sections.length > 0">
+                                <tr v-if="sections.length > 0">
                                     <th>Select Section/Schedule</th>
                                     <td>
                                         <select v-model="request.preferedSection" @change="changeSection"
@@ -36,7 +36,7 @@
                                             :href="base_url + 'unity/schedule_viewer/' + section.intID"
                                             target="_blank">View Schedule</a>
                                     </td>
-                                </tr> -->
+                                </tr>
                             </tbody>
                         </table>
 
@@ -345,18 +345,24 @@ new Vue({
 
 
 
-                if (data.data.sections.length > 0) {
-                    this.sections = data.data.sections;
-                    this.section = data.data.sections[0];
-                    this.request.preferedSection = data.data.sections[0].intID;
-                }
+               
                 axios.get(api_url + 'admissions/student-info/' + data.data.student.slug)
                     .then((data) => {
                         this.api_data = data.data.data;
                         if (this.api_data.status == "Confirmed")
                             document.location = this.base_url;
-                        else
-                            this.loaded = true;
+                        else{
+                            axios.get(this.base_url + 'unity/program_confirmation_sub_data/' + this.request.intProgramID + '/' + data.data.data.sy_reference +'/' + data.data.data.enhanced_curriculum)
+                            .then((data) => {
+                                if (data.data.sections.length > 0) {
+                                    this.sections = data.data.sections;
+                                    this.section = data.data.sections[0];
+                                    this.request.preferedSection = data.data.sections[0].intID;
+                                }
+                                this.loaded = true;
+                            });
+                            
+                        }
 
                     })
                     .catch((error) => {

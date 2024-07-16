@@ -899,9 +899,8 @@ class Unity extends CI_Controller {
         echo json_encode($ret);
     }
 
-    public function program_confirmation_sub_data($programId){
-        $active_sem = $this->data_fetcher->get_active_sem();
-        $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$active_sem['intID']);                      
+    public function program_confirmation_sub_data($programId,$sem,$enhanced){        
+        $sections = $this->data_fetcher->getBlockSectionsPerProgram($programId,$sem,$enhanced);                      
         $ret['sections'] = $sections;
         $ret['success']= true;
         
@@ -910,10 +909,8 @@ class Unity extends CI_Controller {
 
     public function program_confirmation_data($id){
         $active_sem = $this->data_fetcher->get_active_sem();        
-        $ret['student'] = $this->data_fetcher->getStudent($id);        
-        $sections = $this->data_fetcher->getBlockSectionsPerProgram($ret['student']['intProgramID'],$active_sem['intID']);              
-        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true); 
-        $ret['sections'] = $sections;
+        $ret['student'] = $this->data_fetcher->getStudent($id);                
+        $ret['sched_table'] = $this->load->view('sched_table', $this->data, true);         
         $selected = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$ret['student']['intProgramID']))->first_row();
         $ret['selected'] = $selected->strProgramDescription;
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
@@ -921,6 +918,7 @@ class Unity extends CI_Controller {
         
         echo json_encode($ret);
     }
+    
     
     public function student_confirm_program(){
         

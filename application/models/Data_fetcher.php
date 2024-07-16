@@ -1516,7 +1516,7 @@ class Data_fetcher extends CI_Model {
     function getStudent($id,$field = "intID")
     {
         $ret =  $this->db
-                     ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName, tb_mas_block_sections.name as block')
+                     ->select('tb_mas_users.*,tb_mas_programs.*,tb_mas_curriculum.strName, tb_mas_block_sections.name as block, tb_mas_curriculum.isEnhanced')
                      ->from('tb_mas_users')
                      ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID','left')
                      ->join('tb_mas_block_sections','tb_mas_block_sections.intID = tb_mas_users.preferedSection','left')   
@@ -3893,8 +3893,8 @@ class Data_fetcher extends CI_Model {
         
     }
 
-    function getBlockSectionsPerProgram($program, $sem, $year = 1){
-        return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem, 'year' => $year))
+    function getBlockSectionsPerProgram($program, $sem, $enhanced = 0){
+        return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem, 'enhanced' => $enhanced))
                         ->result_array();
     }
 
