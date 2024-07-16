@@ -70,6 +70,37 @@ class AdmissionsV1 extends CI_Controller {
             
     }
 
+    public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0)
+    {
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            
+            $active_sem = $this->data_fetcher->get_active_sem();
+            if($sem!=null)
+                $this->data['selected_ay'] = $sem;
+            else
+                $this->data['selected_ay'] = $active_sem['intID'];
+            
+            $this->data['program'] = $program;
+            $this->data['dissolved'] = $dissolved;
+            $this->data['has_faculty'] = $has_faculty;
+           
+            $this->data['page'] = "classlist_archive";
+            $this->data['opentree'] = "classlist_archive";
+            // $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/classlist_view_admin",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/classlist_view_conf",$this->data); 
+            //print_r($this->data['classlist']);
+            
+        }
+        else
+            redirect(base_url()."unity");   
+    
+    }
+
     public function edit_ay($id = 0){
 
         if($id == 0)
