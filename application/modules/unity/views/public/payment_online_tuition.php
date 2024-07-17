@@ -162,7 +162,7 @@
                                                     <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
-                                                    <td><input v-if="inst > 0" type="checkbox" v-model="checkedValues" :value="inst" @change="updatePayment" class="form-check-input"></input></td>
+                                                    <td><input v-if="inst > 0" type="checkbox" v-model="checkedValues" value="inst" @change="updatePayment" class="form-check-input"></input></td>
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
@@ -518,6 +518,7 @@ new Vue({
                         this.item_details.price = this.remaining_amount;
                     } 
                     else if(this.registration.downpayment == 1){
+                        this.item_details.price = 0;
                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
@@ -537,6 +538,7 @@ new Vue({
                         console.log(this.installments[0]);
                     }
                     else{
+                        this.item_details.price = 0;
                         for(i=0; i < 5; i++)
                             this.installments.push(this.tuition_data.installment_fee); 
 
@@ -580,6 +582,7 @@ new Vue({
                         this.item_details.price = this.remaining_amount;
                     } 
                     else if(this.registration.downpayment == 1){
+                        this.item_details.price = 0;
                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
@@ -597,6 +600,7 @@ new Vue({
                         
                     }
                     else{
+                        this.item_details.price = 0;
                         for(i=0; i < 5; i++)
                             this.installments.push(this.tuition_data.installment_fee);                             
                     }                       
