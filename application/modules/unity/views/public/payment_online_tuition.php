@@ -526,13 +526,13 @@ new Vue({
                             }
                         
                         }                        
-                        this.item_details.price = temp;
+                        this.item_details.price = this.installments[0];
                     }
                     else{
                         for(i=0; i < 5; i++)
                             this.installments.push(this.tuition_data.installment_fee); 
 
-                        this.item_details.price = this.tuition_data.installment_fee;
+                            this.item_details.price = this.installments[0];
                     }
                             
                         
