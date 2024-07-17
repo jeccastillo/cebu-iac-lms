@@ -4711,7 +4711,7 @@ class Excel extends CI_Controller {
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
-                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
@@ -4818,18 +4818,17 @@ class Excel extends CI_Controller {
                         }
                     }
                     
-                    $total_installment = $tuition['total_installment'] - $tuition['down_payment'];
-                    $installment_balance = $tuition['total_installment'] - $total_amount_paid;
-
-                    if(count($applied_to) > 0){
-                        $installment_balance = $installment_balance - $applied_to[2];
-                    }
-                    
-                    if(count($applied_from) > 0){
-                        $installment_balance = $installment_balance - $applied_from[2];
-                    }
+                    $total_installment = $tuition['ti_before_deductions'] - $tuition['down_payment'];
+                    $installment_balance = $tuition['ti_before_deductions'] - $total_amount_paid;
 
                     if($date_enrolled >= $sy->reconf_start){
+                        if(count($applied_to) > 0){
+                            $installment_balance = $installment_balance - $applied_to[2];
+                        }
+                        
+                        if(count($applied_from) > 0){
+                            $installment_balance = $installment_balance - $applied_from[2];
+                        }
                         $installment_balance -= $total_discount;
                     }
                     // else{
@@ -6945,7 +6944,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function shs_gwa_rank($sem = 0, $year_level = 0)
+    public function shs_gwa_rank($sem = 0, $year_level = 0, $campus)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
