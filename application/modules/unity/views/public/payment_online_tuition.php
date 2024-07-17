@@ -571,7 +571,7 @@ new Vue({
                         
                         this.item_details.price = this.remaining_amount;
                     } 
-                    else else if(this.registration.downpayment == 1){
+                    else if(this.registration.downpayment == 1){
                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
                         for(i=0; i < 5; i++){
                             if(this.tuition_data.installment_fee > temp){
