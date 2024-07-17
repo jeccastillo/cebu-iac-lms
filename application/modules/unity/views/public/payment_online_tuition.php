@@ -526,10 +526,16 @@ new Vue({
                             }
                         
                         }
+                        this.item_details.price = temp;
                     }
-                    else
+                    else{
                         for(i=0; i < 5; i++)
                             this.installments.push(this.tuition_data.installment_fee); 
+
+                        this.item_details.price = this.tuition_data.installment_fee;
+                    }
+                            
+                        
 
                     axios.get(api_url + 'admissions/student-info/' + this.slug)
                     .then((data) => {
