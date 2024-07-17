@@ -162,7 +162,7 @@
                                                     <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
-                                                    <td><input v-if="inst > 0" type="checkbox" class="form-check-input"></input></td>
+                                                    <td><input v-if="inst > 0" type="checkbox" v-model="checkedValues" value="inst" @change="updatePayment" class="form-check-input"></input></td>
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
@@ -312,6 +312,7 @@ new Vue({
         desc: 'Tuition Fee',
         payment_modes: [],
         down_payment: 0,
+        checkedValues: [],
         mode_of_releases: [],
         area_delivery: [],
         city_delivery: [],
@@ -488,6 +489,9 @@ new Vue({
                     console.log(error);
                 })
         },   
+        updatePayment: function(event){
+            console.log(this.checkedValues);
+        },
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
