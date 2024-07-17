@@ -156,11 +156,13 @@
                                             </table>
                                             <table class="table table-striped" v-else>
                                                 <tr>
+                                                    <td>&nbsp;</td>
                                                     <td>Down Payment</td>
                                                     <td v-if="registration.downpayment == 0 && down_payment != 0">{{ tuition_data.down_payment }}</td>                                                        
                                                     <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
+                                                    <td><input type="checkbox" class="form-check-input"></input></td>
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
@@ -587,15 +589,12 @@ new Vue({
                                 temp = temp - this.tuition_data.installment_fee;
                             }
                         
-                        }                        
-                        this.item_details.price = this.installments[0];
-                        console.log("Array Installment",this.installments[0]);
+                        }                                                
+                        
                     }
                     else{
                         for(i=0; i < 5; i++)
-                            this.installments.push(this.tuition_data.installment_fee); 
-
-                            this.item_details.price = this.installments[0];
+                            this.installments.push(this.tuition_data.installment_fee);                             
                     }                       
                     
                 axios.get(api_url + 'admissions/student-info/' + this.slug)
