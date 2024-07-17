@@ -3896,6 +3896,8 @@ class Data_fetcher extends CI_Model {
     function getBlockSectionsPerProgram($program, $sem, $enhanced = 0){
         return $this->db->get_where('tb_mas_block_sections',array('intProgramID'=> $program, 'intSYID' => $sem, 'enhanced' => $enhanced, 'year' => 1))
                         ->result_array();
+
+                        //countRemainingSlotsClasslist
     }
 
     function getScheduleBySectionNew($section, $sem){
