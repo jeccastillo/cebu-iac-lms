@@ -494,6 +494,9 @@ new Vue({
                 this.item_details.price += parseFloat(event.target.value);
             else
                 this.item_details.price -= parseFloat(event.target.value);
+                    
+            if(this.selected_mode_of_payment.id)
+                this.selectPayment(this.selected_mode_of_payment);
         },
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
