@@ -162,7 +162,7 @@
                                                     <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
-                                                    <td><input type="checkbox" class="form-check-input"></input></td>
+                                                    <td><input v-if="inst > 0" type="checkbox" class="form-check-input"></input></td>
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
