@@ -490,7 +490,10 @@ new Vue({
                 })
         },   
         updatePayment: function(event){
-            console.log(event.target.checked);
+            if(event.target.checked)
+                this.item_details.price += event.target.value;
+            else
+                this.item_details.price -= event.target.value;
         },
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
