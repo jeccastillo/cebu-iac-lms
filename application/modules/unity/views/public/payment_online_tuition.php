@@ -527,6 +527,8 @@ new Vue({
                         
                         }                        
                         this.item_details.price = this.installments[0];
+
+                        console.log(this.installments[0]);
                     }
                     else{
                         for(i=0; i < 5; i++)
